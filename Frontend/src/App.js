@@ -4,6 +4,7 @@ import Layout from './components/NavigationComponents/Layout';
 
 import DietView from './components/DietComponents/DietView';
 import HomeView from './components/HomeComponents/HomeView';
+import AddTrainingSchema from './components/TrainingComponents/AddTrainingSchema';
 
 class App extends Component {
   render () {
@@ -12,8 +13,8 @@ class App extends Component {
           <Layout>
             <Switch>
               <Route path="/diet" component={DietView} />
-              {/* <Route path="/training" component={Training} />
-              <Route path="/settings" component={Settings} /> */}
+              <Route path="/training" component={AddTrainingSchema} />
+              {/* <Route path="/settings" component={Settings} /> */}
               <Route path="/" exact component={HomeView} />
             </Switch> 
           </Layout>
