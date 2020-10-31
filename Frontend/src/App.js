@@ -5,6 +5,7 @@ import Layout from './components/NavigationComponents/Layout';
 import DietView from './components/DietComponents/DietView';
 import HomeView from './components/HomeComponents/HomeView';
 import AddTrainingSchema from './components/TrainingComponents/AddTrainingSchema';
+import AddMealSchema from './components/DietComponents/AddMealSchema';
 
 class App extends Component {
   render () {
@@ -12,7 +13,7 @@ class App extends Component {
       <div class="container">
           <Layout>
             <Switch>
-              <Route path="/diet" component={DietView} />
+              <Route path="/diet" component={AddMealSchema} />
               <Route path="/training" component={AddTrainingSchema} />
               {/* <Route path="/settings" component={Settings} /> */}
               <Route path="/" exact component={HomeView} />
