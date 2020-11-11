@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Layout from './components/NavigationComponents/Layout';
 
-import DietView from './components/DietComponents/DietView';
+import LoginPanel from './components/Login&Register/LoginPanel';
+import RegisterPanel from './components/Login&Register/RegisterPanel';
 import HomeView from './components/HomeComponents/HomeView';
 import AddTrainingSchema from './components/TrainingComponents/AddTrainingSchema';
 import AddMealSchema from './components/DietComponents/AddMealSchema';
@@ -15,7 +16,8 @@ class App extends Component {
             <Switch>
               <Route path="/diet" component={AddMealSchema} />
               <Route path="/training" component={AddTrainingSchema} />
-              {/* <Route path="/settings" component={Settings} /> */}
+              <Route path="/login-panel" component={LoginPanel} />
+              <Route path="/register-panel" component={RegisterPanel} />
               <Route path="/" exact component={HomeView} />
             </Switch> 
           </Layout>
