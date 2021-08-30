@@ -16,7 +16,7 @@ const imgStyle = {
 };
 
 const Logo = (props) => (
-    <div class="mr-auto" style={divStyle}>
+    <div className="mr-auto" style={divStyle}>
         <a href="/">
             <img src={appLogo} alt="MyApp" style={imgStyle}/>
         </a>

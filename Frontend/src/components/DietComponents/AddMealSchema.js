@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Formik, Form, Field, FieldArray } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+// import axios from 'axios';
 
 const initialValues = {
   meal: ''

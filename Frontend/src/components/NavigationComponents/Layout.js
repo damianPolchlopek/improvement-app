@@ -17,10 +17,10 @@ class Layout extends Component {
 
     render () {
         return (
-            <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
+            <div className="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
                 <Toolbar drawerToggleClicked={this.sideDrawerToggleHandler} />
 
-                <div id="navbarTogglerDemo01" class="bmd-layout-drawer bg-faded">
+                <div id="navbarTogglerDemo01" className="bmd-layout-drawer bg-faded">
                     <header>
                         <Logo/>
                     </header>

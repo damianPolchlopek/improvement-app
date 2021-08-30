@@ -6,12 +6,12 @@ import './Toolbar.css';
 
 const toolbar = ( props ) => (
     <div>
-        <nav class="container navbar-expand-lg navbar-dark bg-dark ">
-            <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#navbarTogglerDemo01" >
+        <nav className="container navbar-expand-lg navbar-dark bg-dark ">
+            <button className="navbar-toggler" type="button" data-toggle="drawer" data-target="#navbarTogglerDemo01" >
                 <DrawerToggle class="navbar-expand-sm" clicked={props.drawerToggleClicked} />
             </button>
             
-            <div class="collapse navbar-collapse"> 
+            <div className="collapse navbar-collapse"> 
                 <Logo />
                 <NavigationItems />
             </div>

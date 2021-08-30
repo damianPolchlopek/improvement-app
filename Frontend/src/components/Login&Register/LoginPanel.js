@@ -2,13 +2,13 @@ import React from 'react';
 
 import './LoginPanel.css';
 
-const btnStyle = {
-    width: '50%',
-    borderRadius: 'rem',
-    padding: '1.5%',
-    border: 'none',
-    cursor: 'pointer'
-};
+// const btnStyle = {
+//     width: '50%',
+//     borderRadius: 'rem',
+//     padding: '1.5%',
+//     border: 'none',
+//     cursor: 'pointer'
+// };
 
 const LoginPanel = () => {
       return (
@@ -26,7 +26,7 @@ const LoginPanel = () => {
                         <input type="submit" className="btnSubmit" value="Login" />
                     </div>
                     <div className="form-group text-center">
-                        <a href="#" className="ForgetPwd" value="Login">Forget Password?</a>
+                        <a href="/" className="ForgetPwd" value="Login">Forget Password?</a>
                     </div>
                 </form>
             </div>
