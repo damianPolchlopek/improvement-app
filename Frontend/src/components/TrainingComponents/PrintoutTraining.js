@@ -39,6 +39,10 @@ class PrintoutTraining  extends Component  {
 
     }
 
+    modifyExercise = (exerciseId) => {
+        console.log(exerciseId);
+    }
+
     render () {
         // {console.log(this.state.exercises)}
         return (
@@ -70,12 +74,14 @@ class PrintoutTraining  extends Component  {
                                             <Td>{exercise.series}</Td>
                                             <Td>{exercise.repetition}</Td>
                                             <Td>
-                                                <button className="btn btn-primary">
-                                                    Modify
+                                                <button 
+                                                    className="btn btn-success"
+                                                    onClick={() => this.modifyExercise(exercise.id)}>
+                                                        Modify
                                                 </button>
                                             </Td>
                                             <Td><button 
-                                                    className="btn btn-warning" 
+                                                    className="btn btn-danger" 
                                                     onClick={() => this.removeExercise(exercise.id)}>
                                                         Remove
                                                 </button>
