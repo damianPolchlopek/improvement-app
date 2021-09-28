@@ -3,17 +3,18 @@ package com.improvementApp.workouts.controllers;
 import com.improvementApp.workouts.entity.Exercise;
 import com.improvementApp.workouts.repository.ExerciseRepository;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ExerciseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExerciseController.class);
+    private static final Logger LOGGER = Logger.getLogger(ExerciseController.class);
 
     @Autowired
     private ExerciseRepository repository;
@@ -43,5 +44,4 @@ public class ExerciseController {
         repository.deleteById(exerciseId);
     }
     
-
 }
