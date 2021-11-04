@@ -15,7 +15,7 @@ public class TrainingSchema {
     @Generated
     private String id;
 
-    List<Exercise> exerciseList;
+    List<Exercise2> exercise2List;
 
 
 

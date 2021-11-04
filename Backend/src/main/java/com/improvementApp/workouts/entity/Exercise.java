@@ -1,39 +1,62 @@
 package com.improvementApp.workouts.entity;
 
-import lombok.Data;
-import lombok.Generated;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.improvementApp.workouts.DTO.RepAndWeight;
 
-@Data
-@Document
+import java.util.List;
+
 public class Exercise {
-
-    @Id
-    @Generated
-    private String id;
+    private String exerciseType;
+    private String exercisePlace;
     private String name;
-    private int series;
-    private int repetition;
+    private List<RepAndWeight> repAndWeightList;
+    private String progress;
 
-    public Exercise(String id, String name) {
-        this.id = id;
+    public Exercise(String exerciseType, String exercisePlace, String name, List<RepAndWeight> repAndWeightList, String progress) {
+        this.exerciseType = exerciseType;
+        this.exercisePlace = exercisePlace;
+        this.name = name;
+        this.repAndWeightList = repAndWeightList;
+        this.progress = progress;
+    }
+
+    public String getExerciseType() {
+        return exerciseType;
+    }
+
+    public void setExerciseType(String exerciseType) {
+        this.exerciseType = exerciseType;
+    }
+
+    public String getExercisePlace() {
+        return exercisePlace;
+    }
+
+    public void setExercisePlace(String exercisePlace) {
+        this.exercisePlace = exercisePlace;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public Exercise(String id, String name, int series, int repetition) {
-        this.id = id;
-        this.name = name;
-        this.series = series;
-        this.repetition = repetition;
+    public List<RepAndWeight> getRepAndWeightList() {
+        return repAndWeightList;
     }
 
-    public Exercise(String name, int series, int repetition) {
-        this.name = name;
-        this.series = series;
-        this.repetition = repetition;
+    public void setRepAndWeightList(List<RepAndWeight> repAndWeightList) {
+        this.repAndWeightList = repAndWeightList;
     }
 
-    public Exercise() {
+    public String getProgress() {
+        return progress;
     }
+
+    public void setProgress(String progress) {
+        this.progress = progress;
+    }
+
 }
