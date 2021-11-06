@@ -1,14 +1,15 @@
 package com.improvementApp.workouts.services;
 
 import com.improvementApp.workouts.DTO.DriveFileItemDTO;
+import com.improvementApp.workouts.entity.Exercise;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface GoogleDriveService {
-    public List<DriveFileItemDTO> listFiles(final String folderName) throws Exception;
+    List<DriveFileItemDTO> listFiles(final String folderName) throws Exception;
 
-    public void downloadFile(final String fileId) throws IOException;
+    void downloadFile(final DriveFileItemDTO file) throws IOException;
 
-    public String getFolderId(final String folderName) throws Exception;
+    List<Exercise> saveAllExercisesToDB(final String folderName) throws Exception;
 }

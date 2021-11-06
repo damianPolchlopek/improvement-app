@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table, Tbody, Tr, Th, Td} from 'react-super-responsive-table'
+import {Table, Tbody, Thead, Tr, Th, Td} from 'react-super-responsive-table'
 import axios from 'axios';
 
 class PrintoutTraining  extends Component  {
@@ -18,7 +18,21 @@ class PrintoutTraining  extends Component  {
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
+                console.log('Pobrane cwiczenie - ' + response.data);
+                console.log(response.data[0]);
                 this.setState({exercises: response.data});
+            })
+    }
+
+    getExercisesByDate = (date) => {
+        console.log('Pobrane cwiczenie - ' + date);
+        const printExercisesUrl = 'http://localhost:8080/getExercises/' + date;
+        axios.get(printExercisesUrl)
+            .then(response => {
+                // handle success
+                console.log('Pobrane cwiczenie - ' + date);
+                console.log(date);
+                // this.setState({exercises: response.data});
             })
     }
 
@@ -56,10 +70,10 @@ class PrintoutTraining  extends Component  {
                         <Table className="table table-striped">
                             {/* <Thead className="thead-dark"> */}
                                 <Tr>
-                                    <Th></Th>
+                                    <Th>Date</Th>
                                     <Th>Name</Th>
-                                    <Th>Series</Th>
                                     <Th>Repetition</Th>
+                                    <Th>Weight</Th>
                                     <Th>Modify</Th>
                                     <Th>Remove</Th>
                                 </Tr>
@@ -69,10 +83,10 @@ class PrintoutTraining  extends Component  {
                                 {this.state.exercises.map(exercise => {
                                     
                                     return <Tr key={exercise.id}>
-                                            <Td>{exercise.id}</Td>
+                                            <Td onClick={() => this.getExercisesByDate(exercise.date)}>{exercise.date}</Td>
                                             <Td>{exercise.name}</Td>
-                                            <Td>{exercise.series}</Td>
-                                            <Td>{exercise.repetition}</Td>
+                                            <Td>{exercise.reps}</Td>
+                                            <Td>{exercise.weight}</Td>
                                             <Td>
                                                 <button 
                                                     className="btn btn-success"

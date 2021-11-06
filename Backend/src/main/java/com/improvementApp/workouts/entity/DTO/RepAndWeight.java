@@ -1,4 +1,4 @@
-package com.improvementApp.workouts.DTO;
+package com.improvementApp.workouts.entity.DTO;
 
 public class RepAndWeight {
     private Double repetition;

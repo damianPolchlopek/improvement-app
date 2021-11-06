@@ -1,6 +1,6 @@
 package com.improvementApp.workouts.helpers.parseRepAndWeightStrategy;
 
-import com.improvementApp.workouts.DTO.RepAndWeight;
+import com.improvementApp.workouts.entity.DTO.RepAndWeight;
 
 import java.util.ArrayList;
 import java.util.List;
