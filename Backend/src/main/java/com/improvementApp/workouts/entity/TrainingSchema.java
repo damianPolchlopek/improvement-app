@@ -15,8 +15,5 @@ public class TrainingSchema {
     @Generated
     private String id;
 
-    List<Exercise> exerciseList;
-
-
 
 }

@@ -2,14 +2,11 @@ package com.improvementApp.workouts.controllers;
 
 import com.improvementApp.workouts.entity.Exercise;
 import com.improvementApp.workouts.repository.ExerciseRepository;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class ExerciseController {
@@ -20,28 +17,34 @@ public class ExerciseController {
     private ExerciseRepository repository;
 
     @PostMapping("/addTrainingSchema")
-    public void saveExercise(@RequestBody List<Exercise> exercises){
+    public void saveExercise(@RequestBody List<Exercise> exercises) {
         LOGGER.info("Dodaje ćwiczenia: " + exercises);
         repository.saveAll(exercises);
     }
 
     @PostMapping("/addExercise")
-    public void saveExercise(@RequestBody Exercise exercise){
+    public void saveExercise(@RequestBody Exercise exercise) {
         LOGGER.info("Dodaje ćwiczenie: " + exercise.toString());
         repository.save(exercise);
     }
 
     @GetMapping("/getExercises")
-    public List<Exercise> getExercise(){
+    public List<Exercise> getExercise() {
         List<Exercise> result = repository.findAll();
         LOGGER.info("Pobieram wszystkie cwiczenia: " + result);
         return result;
     }
 
+    @GetMapping("/getExercises/{exerciseDate}")
+    public void getExercisesByDate(@PathVariable String exerciseDate) {
+        LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
+//        repository.findById();
+    }
+
     @DeleteMapping("/deleteExercise/{exerciseId}")
-    public void deleteExercise(@PathVariable String exerciseId){
+    public void deleteExercise(@PathVariable String exerciseId) {
         LOGGER.info("Usuwam cwiczenie o id: " + exerciseId);
         repository.deleteById(exerciseId);
     }
-    
+
 }

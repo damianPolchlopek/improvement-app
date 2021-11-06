@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+
+
 ### STS ###
 .apt_generated
 .classpath
@@ -18,6 +20,8 @@ target/
 *.iws
 *.iml
 *.ipr
+**/src/main/resources/tmp_files/
+**/src/main/resources/keys/
 
 ### NetBeans ###
 /nbproject/private/
@@ -32,4 +36,4 @@ build/
 ### VS Code ###
 .vscode/
 
-/src/main/java/resource/client_secret_311421201302-b64o4lkrfkdcp408is0s3anb0ams588c.apps.googleusercontent.com.json
+src/main/resources/keys/client_secret_311421201302-mh3ef3hlh1sos0pbqch5lneirdl1u9ij.apps.googleusercontent.com.json
