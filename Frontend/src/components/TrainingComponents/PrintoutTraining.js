@@ -18,33 +18,34 @@ class PrintoutTraining  extends Component  {
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
-                console.log('Pobrane cwiczenie - ' + response.data);
-                console.log(response.data[0]);
                 this.setState({exercises: response.data});
             })
     }
 
     getExercisesByDate = (date) => {
-        console.log('Pobrane cwiczenie - ' + date);
-        const printExercisesUrl = 'http://localhost:8080/getExercises/' + date;
+        const printExercisesUrl = 'http://localhost:8080/getExercise/date/' + date;
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
-                console.log('Pobrane cwiczenie - ' + date);
-                console.log(date);
-                // this.setState({exercises: response.data});
+                this.setState({exercises: response.data});
+            })
+    }
+
+    getExercisesByName = (name) => {
+        const printExercisesUrl = 'http://localhost:8080/getExercise/name/' + name;
+        axios.get(printExercisesUrl)
+            .then(response => {
+                // handle success
+                this.setState({exercises: response.data});
             })
     }
 
     removeExercise = (exerciseId) => {
-        console.log('Delete Exercise - ' + exerciseId);
         const deleteExercisesUrl = 'http://localhost:8080/deleteExercise/' + exerciseId;
         axios.delete(deleteExercisesUrl)
             .then(response => {
-                console.log('Delete Exercise - ' + exerciseId);
                 var tmp = !this.state.tmpRemoved;
                 this.setState({tmpRemoved: tmp});
-                console.log(this.state.tmpRemoved);
 
                 // todo: zmienic sposob przeladowywania strony
                 this.props.history.push("/")
@@ -84,7 +85,7 @@ class PrintoutTraining  extends Component  {
                                     
                                     return <Tr key={exercise.id}>
                                             <Td onClick={() => this.getExercisesByDate(exercise.date)}>{exercise.date}</Td>
-                                            <Td>{exercise.name}</Td>
+                                            <Td onClick={() => this.getExercisesByName(exercise.name)}>{exercise.name}</Td>
                                             <Td>{exercise.reps}</Td>
                                             <Td>{exercise.weight}</Td>
                                             <Td>

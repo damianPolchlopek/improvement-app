@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -35,10 +36,16 @@ public class ExerciseController {
         return result;
     }
 
-    @GetMapping("/getExercises/{exerciseDate}")
-    public void getExercisesByDate(@PathVariable String exerciseDate) {
+    @GetMapping("/getExercise/date/{exerciseDate}")
+    public List<Exercise> getExercisesByDate(@PathVariable String exerciseDate) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
-//        repository.findById();
+        return repository.findByDate(LocalDate.parse(exerciseDate));
+    }
+
+    @GetMapping("/getExercise/name/{exerciseName}")
+    public List<Exercise> getExercisesByName(@PathVariable String exerciseName) {
+        LOGGER.info("Pobieram cwiczenia o nazwie: " + exerciseName);
+        return repository.findByName(exerciseName);
     }
 
     @DeleteMapping("/deleteExercise/{exerciseId}")
