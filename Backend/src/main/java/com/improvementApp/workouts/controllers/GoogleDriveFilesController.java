@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -46,6 +47,16 @@ public class GoogleDriveFilesController {
         googleDriveService.downloadFile(file);
     }
 
+    @GetMapping(value = {"/uploadFile"}, produces = {"application/json"})
+    public void upload() throws Exception {
+        LOGGER.info("Wrzucam plik na dysk googlea");
+        File file = new File("src/main/resources/tmp_files/test.xlsx");
+        System.out.println(file.getName());
+        googleDriveService.uploadFileInFolder(TRAININGS_FOLDER_NAME, file, "tessssst");
 
+//        String na = googleDriveService.generateFileName(exercises);
+//        System.out.println(na);
+
+    }
 
 }

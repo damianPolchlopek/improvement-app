@@ -12,4 +12,10 @@ public interface GoogleDriveService {
     void downloadFile(final DriveFileItemDTO file) throws IOException;
 
     List<Exercise> saveAllExercisesToDB(final String folderName) throws Exception;
+
+    void uploadFileInFolder(final String folderName,
+                            final java.io.File fileToUpload,
+                            final String fileName) throws Exception;
+
+    String generateFileName(List<Exercise> exercises);
 }
