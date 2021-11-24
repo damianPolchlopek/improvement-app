@@ -10,4 +10,7 @@ public interface ExerciseRepository extends MongoRepository<Exercise, String> {
     List<Exercise> findByDate(LocalDate date);
 
     List<Exercise> findByName(String name);
+
+    List<Exercise> findByTrainingName(String trainingName);
+
 }

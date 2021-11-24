@@ -17,12 +17,13 @@ public class Exercise {
     private List<RepAndWeight> repAndWeightList;
     private String progress;
     private LocalDate date;
+    private String trainingName;
 
     private String reps;
     private String weight;
 
     public Exercise(String exerciseType, String exercisePlace, String name, List<RepAndWeight> repAndWeightList,
-                    String progress, LocalDate date, String reps, String weight) {
+                    String progress, LocalDate date, String reps, String weight, String trainingName) {
         this.exerciseType = exerciseType;
         this.exercisePlace = exercisePlace;
         this.name = name;
@@ -31,6 +32,7 @@ public class Exercise {
         this.date = date;
         this.reps = reps;
         this.weight = weight;
+        this.trainingName = trainingName;
     }
 
     public String getId() {
@@ -103,6 +105,14 @@ public class Exercise {
 
     public void setWeight(String weight) {
         this.weight = weight;
+    }
+
+    public String getTrainingName() {
+        return trainingName;
+    }
+
+    public void setTrainingName(String trainingName) {
+        this.trainingName = trainingName;
     }
 
     @Override

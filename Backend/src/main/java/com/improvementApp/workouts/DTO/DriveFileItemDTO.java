@@ -1,5 +1,7 @@
 package com.improvementApp.workouts.DTO;
 
+import com.google.api.services.drive.model.File;
+
 import java.io.Serializable;
 
 public class DriveFileItemDTO implements Serializable {
@@ -8,6 +10,12 @@ public class DriveFileItemDTO implements Serializable {
     private String id;
     private String parentId;
     private String thumbnailLink;
+
+    public DriveFileItemDTO(File file) {
+        this.name = file.getName();
+        this.id = file.getId();
+        this.mimeType = file.getMimeType();
+    }
 
     public String getParentId() {
         return parentId;

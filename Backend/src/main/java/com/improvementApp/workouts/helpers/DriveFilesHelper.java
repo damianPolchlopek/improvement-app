@@ -6,14 +6,12 @@ import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.ExerciseStr
 import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.HypertrophicExercise;
 import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.KardioExercise;
 import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.StrengthExercise;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +35,10 @@ public class DriveFilesHelper {
         List<Exercise> exerciseList = new ArrayList<>();
         for (final Row row : sheet) {
             Cell cell = row.getCell(EXERCISE_TYPE_INDEX);
+
+            if (cell == null)
+                continue;
+
             String exerciseType = cell.getStringCellValue();
 
             if (exerciseType.isEmpty())
@@ -53,12 +55,13 @@ public class DriveFilesHelper {
             cell = row.getCell(PROGRESS_INDEX);
             final String progress = cell.getStringCellValue();
             final LocalDate localDate = getLocalDate(file.getName());
+            final String trainingName = file.getName();
 
             final ExerciseStrategy exerciseStrategy = getExerciseParseStrategy(exerciseType, reps, weight);
             final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
 
             final Exercise exercise = new Exercise(exerciseType,
-                    exerciseArea, exerciseName, repAndWeightList, progress, localDate, reps, weight);
+                    exerciseArea, exerciseName, repAndWeightList, progress, localDate, reps, weight, trainingName);
 
             exerciseList.add(exercise);
         }
@@ -66,7 +69,7 @@ public class DriveFilesHelper {
         return exerciseList;
     }
 
-    private static ExerciseStrategy getExerciseParseStrategy(final String exerciseType, final String reps, final String weight) {
+    public static ExerciseStrategy getExerciseParseStrategy(final String exerciseType, final String reps, final String weight) {
         final String STRENGTH_TRAINING_NAME = "Siłowy";
         final String HYPERTROPHIC_TRAINING_NAME = "Hipertroficzny";
         final String KARDIO_TRAINING_NAME = "Kardio";
@@ -100,4 +103,68 @@ public class DriveFilesHelper {
 
         return LocalDate.parse(dateConcatenation);
     }
+
+    public static void createExcelFile(final List<Exercise> exercises, final String fileName) throws IOException {
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Arkusz 1");
+        sheet.setColumnWidth(0, 6000);
+        sheet.setColumnWidth(1, 4000);
+        sheet.setColumnWidth(2, 10000);
+        sheet.setColumnWidth(3, 3000);
+        sheet.setColumnWidth(4, 6000);
+        sheet.setColumnWidth(5, 3000);
+
+        XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+        font.setFontName("Times New Roman");
+        font.setFontHeightInPoints((short) 12);
+        CellStyle style = workbook.createCellStyle();
+        style.setFont(font);
+        style.setWrapText(true);
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        for (int i = 0; i < exercises.size(); ++i) {
+            final Exercise exercise = exercises.get(i);
+            final String exerciseType = exercise.getExerciseType();
+            final String exercisePlace = exercise.getExercisePlace();
+            final String exerciseName = exercise.getName();
+            final String exerciseReps = exercise.getReps();
+            final String exerciseWeight = exercise.getWeight();
+            final String exerciseProgress = exercise.getProgress();
+
+            final Row row = sheet.createRow(i);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(exerciseType);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(1);
+            cell.setCellValue(exercisePlace);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(2);
+            cell.setCellValue(exerciseName);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(3);
+            cell.setCellValue(exerciseReps);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(4);
+            cell.setCellValue(exerciseWeight);
+            cell.setCellStyle(style);
+
+            cell = row.createCell(5);
+            cell.setCellValue(exerciseProgress);
+            cell.setCellStyle(style);
+        }
+
+        File currDir = new File(ApplicationVariables.TMP_FILES_PATH);
+        String path = currDir.getAbsolutePath();
+        String fileLocation = path + "/" + fileName;
+
+        FileOutputStream outputStream = new FileOutputStream(fileLocation);
+        workbook.write(outputStream);
+        workbook.close();
+    }
+
 }
