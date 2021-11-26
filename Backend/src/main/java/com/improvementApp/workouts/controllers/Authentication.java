@@ -11,6 +11,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.DriveScopes;
+import com.improvementApp.workouts.helpers.ApplicationVariables;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class Authentication {
     private final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
 
     private final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
-    private final String USER_IDENTIFIER_KEY = "MY_DUMMY_USER";
+    private final String USER_IDENTIFIER_KEY = ApplicationVariables.USER_IDENTIFIER_KEY;
 
     @Value("${google.oauth.callback.uri}")
     private String CALLBACK_URI;

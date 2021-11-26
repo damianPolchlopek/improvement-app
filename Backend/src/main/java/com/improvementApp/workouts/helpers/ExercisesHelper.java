@@ -6,6 +6,7 @@ import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.ExerciseStr
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,7 +15,14 @@ public class ExercisesHelper {
         return exercises
                 .stream()
                 .filter(e -> !e.getTrainingName().contains("Kopia"))
-//                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList());
+    }
+
+    public static List<String> filterExerciseNameList(List<String> exercises){
+        return exercises
+                .stream()
+                .filter(e -> !e.contains("Kopia"))
+                .sorted(Collections.reverseOrder())
                 .collect(Collectors.toList());
     }
 
@@ -28,8 +36,9 @@ public class ExercisesHelper {
     public static List<Exercise> updateExercises(List<Exercise> exercises){
         List<Exercise> newExercises = new ArrayList<>();
         for (Exercise exercise: exercises) {
+
             final ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
-                        exercise.getExerciseType(), exercise.getReps(), exercise.getWeight());
+                    exercise.getExerciseType(), exercise.getReps(), exercise.getWeight());
             final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
 
             newExercises.add(new Exercise(

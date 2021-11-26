@@ -1,46 +1,40 @@
 package com.improvementApp.workouts.controllers;
 
 import com.improvementApp.workouts.entity.Exercise;
-import com.improvementApp.workouts.entity.TrainingNameList;
 import com.improvementApp.workouts.helpers.ApplicationVariables;
 import com.improvementApp.workouts.helpers.DriveFilesHelper;
 import com.improvementApp.workouts.helpers.ExercisesHelper;
-import com.improvementApp.workouts.repository.AllTrainingNamesRepository;
-import com.improvementApp.workouts.repository.ExerciseRepository;
+import com.improvementApp.workouts.services.ExerciseService;
+import com.improvementApp.workouts.services.ExerciseServiceImpl;
 import com.improvementApp.workouts.services.GoogleDriveService;
 import com.improvementApp.workouts.services.GoogleDriveServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class ExerciseController {
 
     private static final Logger LOGGER = Logger.getLogger(ExerciseController.class);
 
-    private final ExerciseRepository exerciseRepository;
-
-    private final AllTrainingNamesRepository allTrainingNamesRepository;
+    private final ExerciseService exerciseService;
 
     private final GoogleDriveService googleDriveService;
 
     @Autowired
-    public ExerciseController(ExerciseRepository exerciseRepository,
-                              AllTrainingNamesRepository allTrainingNamesRepository,
+    public ExerciseController(ExerciseServiceImpl exerciseService,
                               GoogleDriveServiceImpl googleDriveService) {
-        this.exerciseRepository = exerciseRepository;
-        this.allTrainingNamesRepository = allTrainingNamesRepository;
+        this.exerciseService = exerciseService;
         this.googleDriveService = googleDriveService;
     }
 
     @PostMapping("/addTraining")
-    public void saveExercise(@RequestBody List<Exercise> exercises) throws Exception {
+    public Response saveExercise(@RequestBody List<Exercise> exercises) throws Exception {
         LOGGER.info("Dodaje ćwiczenia: " + exercises);
 
         final String trainingName = googleDriveService.generateFileName(exercises);
@@ -48,69 +42,66 @@ public class ExerciseController {
         DriveFilesHelper.createExcelFile(exercises, trainingNameExcelFile);
 
         final File file = new File(ApplicationVariables.TMP_FILES_PATH + trainingNameExcelFile);
-        googleDriveService.uploadFileInFolder(ApplicationVariables.GOOGLE_DRIVE_FOLDER, file, trainingName);
+        googleDriveService.uploadFileInFolder(ApplicationVariables.TRAININGS_FOLDER_NAME, file, trainingName);
 
         List<Exercise> newExercises = ExercisesHelper.updateExercises(exercises);
-        exerciseRepository.saveAll(newExercises);
+        exerciseService.saveAll(newExercises);
+
+        return Response.ok().build();
     }
 
     @PostMapping("/addExercise")
-    public void saveExercise(@RequestBody Exercise exercise) {
+    public Response saveExercise(@RequestBody Exercise exercise) {
         LOGGER.info("Dodaje ćwiczenie: " + exercise.toString());
-        exerciseRepository.save(exercise);
+        exerciseService.save(exercise);
+        return Response.ok().build();
     }
 
     @GetMapping("/getLastTypeTraining/{trainingType}")
-    public List<Exercise> getLastTraining(@PathVariable String trainingType) {
-        TrainingNameList trainingNameList = allTrainingNamesRepository.findAll().get(0);
+    public Response getLastTraining(@PathVariable String trainingType) {
+        LOGGER.info("Pobieram ostatnie cwiczenia o typie: " + trainingType);
 
-        List<String> newTrainingList = trainingNameList.getTrainingNames()
-                                    .stream()
-                                    .filter(e -> !e.contains("Kopia"))
-                                    .sorted(Collections.reverseOrder())
-                                    .collect(Collectors.toList());
+        List<String> trainingNameList = exerciseService.getAllTrainingNames();
+        List<String> filteredTrainingList = ExercisesHelper.filterExerciseNameList(trainingNameList);
 
-        trainingNameList.setTrainingNames(newTrainingList);
+        String trainingName = filteredTrainingList.stream()
+                .filter(name -> name.contains(trainingType))
+                .findFirst()
+                .orElse("Nie znalazlem treningu");
 
-        String lastSimilarTraining = "-1";
-        for (String training: newTrainingList){
-            if (training.contains(trainingType)){
-                lastSimilarTraining = training;
-                break;
-            }
-        }
-
-        return exerciseRepository.findByTrainingName(lastSimilarTraining + ".xlsx");
+        List<Exercise> result =  exerciseService.findByTrainingName(trainingName);
+        return Response.ok(result).build();
     }
 
     @GetMapping("/getExercises")
-    public List<Exercise> getExercise() {
-        List<Exercise> result = exerciseRepository.findAll();
+    public Response getExercise() {
+        LOGGER.info("Pobieram wszystkie cwiczenia");
+        List<Exercise> result = exerciseService.findAll();
         ExercisesHelper.sortExerciseListByDate(result);
-        LOGGER.info("Pobieram wszystkie cwiczenia: " + result);
-        return result;
+        return Response.ok(result).build();
     }
 
     @GetMapping("/getExercise/date/{exerciseDate}")
-    public List<Exercise> getExercisesByDate(@PathVariable String exerciseDate) {
+    public Response getExercisesByDate(@PathVariable String exerciseDate) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
-        List<Exercise> result = exerciseRepository.findByDate(LocalDate.parse(exerciseDate));
+        List<Exercise> result = exerciseService.findByDate(LocalDate.parse(exerciseDate));
         ExercisesHelper.sortExerciseListByDate(result);
-        return result;
+        return Response.ok(result).build();
     }
 
     @GetMapping("/getExercise/name/{exerciseName}")
-    public List<Exercise> getExercisesByName(@PathVariable String exerciseName) {
+    public Response getExercisesByName(@PathVariable String exerciseName) {
         LOGGER.info("Pobieram cwiczenia o nazwie: " + exerciseName);
-        List<Exercise> result = exerciseRepository.findByName(exerciseName);
+        List<Exercise> result = exerciseService.findByName(exerciseName);
         ExercisesHelper.sortExerciseListByDate(result);
-        return result;
+        return Response.ok(result).build();
     }
 
     @DeleteMapping("/deleteExercise/{exerciseId}")
-    public void deleteExercise(@PathVariable String exerciseId) {
+    public Response deleteExercise(@PathVariable String exerciseId) {
         LOGGER.info("Usuwam cwiczenie o id: " + exerciseId);
-        exerciseRepository.deleteById(exerciseId);
+        exerciseService.deleteById(exerciseId);
+        return Response.ok().build();
     }
 
 }
