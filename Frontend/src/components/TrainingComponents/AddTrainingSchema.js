@@ -21,7 +21,7 @@ class AddTrainingSchema extends Component {
     const getLastExercisesWithType = 'http://localhost:8080/getLastTypeTraining/' + values.type;
     axios.get(getLastExercisesWithType)
     .then(response => {
-        this.initialValues.exercises = response.data;
+        this.initialValues.exercises = response.data.entity;
         this.setState({isUpdated: true});
     })
 

@@ -18,7 +18,7 @@ class PrintoutTraining  extends Component  {
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
-                this.setState({exercises: response.data});
+                this.setState({exercises: response.data.entity});
             })
     }
 
@@ -27,7 +27,7 @@ class PrintoutTraining  extends Component  {
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
-                this.setState({exercises: response.data});
+                this.setState({exercises: response.data.entity});
             })
     }
 
@@ -36,7 +36,7 @@ class PrintoutTraining  extends Component  {
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
-                this.setState({exercises: response.data});
+                this.setState({exercises: response.data.entity});
             })
     }
 
@@ -59,14 +59,13 @@ class PrintoutTraining  extends Component  {
     }
 
     render () {
-        // {console.log(this.state.exercises)}
         return (
             <div>
                 {( this.state.exercises[0] != null )
                     &&
                     <div className="container">
                 
-                        <h1>Printout Trening: {this.state.exercises[0].id}</h1>
+                        <h1>Printout Traning: {this.state.exercises[0].id}</h1>
                         
                         <Table className="table table-striped">
                             {/* <Thead className="thead-dark"> */}

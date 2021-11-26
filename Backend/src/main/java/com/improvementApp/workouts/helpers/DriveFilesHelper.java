@@ -34,13 +34,12 @@ public class DriveFilesHelper {
 
         List<Exercise> exerciseList = new ArrayList<>();
         for (final Row row : sheet) {
-            Cell cell = row.getCell(EXERCISE_TYPE_INDEX);
 
+            Cell cell = row.getCell(EXERCISE_TYPE_INDEX);
             if (cell == null)
                 continue;
 
             String exerciseType = cell.getStringCellValue();
-
             if (exerciseType.isEmpty())
                 continue;
 
@@ -69,16 +68,18 @@ public class DriveFilesHelper {
         return exerciseList;
     }
 
-    public static ExerciseStrategy getExerciseParseStrategy(final String exerciseType, final String reps, final String weight) {
+    public static ExerciseStrategy getExerciseParseStrategy(final String exerciseType,
+                                                            final String reps,
+                                                            final String weight) {
         final String STRENGTH_TRAINING_NAME = "Siłowy";
-        final String HYPERTROPHIC_TRAINING_NAME = "Hipertroficzny";
-        final String KARDIO_TRAINING_NAME = "Kardio";
+        final String HYPERTROPHIED_TRAINING_NAME = "Hipertroficzny";
+        final String CARDIO_TRAINING_NAME = "Kardio";
 
         if (exerciseType.contains(STRENGTH_TRAINING_NAME)) {
             return new StrengthExercise(reps, weight);
-        } else if (exerciseType.contains(HYPERTROPHIC_TRAINING_NAME)) {
+        } else if (exerciseType.contains(HYPERTROPHIED_TRAINING_NAME)) {
             return new HypertrophicExercise(reps, weight);
-        } else if (exerciseType.contains(KARDIO_TRAINING_NAME)) {
+        } else if (exerciseType.contains(CARDIO_TRAINING_NAME)) {
             return new KardioExercise(reps, weight);
         } else {
             throw new RuntimeException("Unknown training type: " + exerciseType);
@@ -86,7 +87,7 @@ public class DriveFilesHelper {
     }
 
     private static LocalDate getLocalDate(final String dateToParse){
-        final String regex = "-?[0-9.?[0-9]*]+ - ([0-9]{2}).([0-9]{2}).([0-9]{4})r. - [A-Z].xlsx";
+        final String regex          = "-?[0-9.?[0-9]*]+ - ([0-9]{2}).([0-9]{2}).([0-9]{4})r. - [A-Z].xlsx";
         final Pattern pattern       = Pattern.compile(regex);
         final Matcher matcher       = pattern.matcher(dateToParse);
         final boolean isMatchFound  = matcher.find();
@@ -104,8 +105,9 @@ public class DriveFilesHelper {
         return LocalDate.parse(dateConcatenation);
     }
 
-    public static void createExcelFile(final List<Exercise> exercises, final String fileName) throws IOException {
-        Workbook workbook = new XSSFWorkbook();
+    public static void createExcelFile(final List<Exercise> exercises,
+                                       final String fileName) throws IOException {
+        XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Arkusz 1");
         sheet.setColumnWidth(0, 6000);
         sheet.setColumnWidth(1, 4000);
@@ -114,7 +116,7 @@ public class DriveFilesHelper {
         sheet.setColumnWidth(4, 6000);
         sheet.setColumnWidth(5, 3000);
 
-        XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+        XSSFFont font = workbook.createFont();
         font.setFontName("Times New Roman");
         font.setFontHeightInPoints((short) 12);
         CellStyle style = workbook.createCellStyle();

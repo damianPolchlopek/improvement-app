@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Exercise {
+
     @Id
     @Generated
     private String id;
