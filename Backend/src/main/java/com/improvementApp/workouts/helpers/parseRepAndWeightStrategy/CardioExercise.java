@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class KardioExercise implements ExerciseStrategy {
+public class CardioExercise implements ExerciseStrategy {
 
     final String distance_regex = "([0-9]+.?[0-9]*) km";
     final String speed_regex    = "([0-9]+.?[0-9]*) km/h";
     final String distance;
     final String speed;
 
-    public KardioExercise(String distance, String speed) {
+    public CardioExercise(String distance, String speed) {
         this.distance   = distance;
         this.speed      = speed;
     }

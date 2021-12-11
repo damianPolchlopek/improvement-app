@@ -11,7 +11,7 @@ public enum MimeType {
 
     private String type;
 
-    private MimeType(String fileType) {
+    MimeType(String fileType) {
         type = fileType;
     }
 

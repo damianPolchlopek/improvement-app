@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 public class Exercise {
 
@@ -126,6 +127,31 @@ public class Exercise {
                 ", repAndWeightList=" + repAndWeightList +
                 ", progress='" + progress + '\'' +
                 ", date=" + date +
+                ", trainingName='" + trainingName + '\'' +
+                ", reps='" + reps + '\'' +
+                ", weight='" + weight + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Exercise exercise = (Exercise) o;
+        return Objects.equals(id, exercise.id) &&
+                Objects.equals(exerciseType, exercise.exerciseType) &&
+                Objects.equals(exercisePlace, exercise.exercisePlace) &&
+                Objects.equals(name, exercise.name) &&
+                Objects.equals(repAndWeightList, exercise.repAndWeightList) &&
+                Objects.equals(progress, exercise.progress) &&
+                Objects.equals(date, exercise.date) &&
+                Objects.equals(trainingName, exercise.trainingName) &&
+                Objects.equals(reps, exercise.reps) &&
+                Objects.equals(weight, exercise.weight);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, exerciseType, exercisePlace, name, repAndWeightList, progress, date, trainingName, reps, weight);
     }
 }
