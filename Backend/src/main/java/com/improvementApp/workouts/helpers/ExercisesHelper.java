@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ExercisesHelper {
@@ -18,7 +20,7 @@ public class ExercisesHelper {
                 .collect(Collectors.toList());
     }
 
-    public static List<String> filterExerciseNameList(List<String> exercises){
+    public static List<String> filterAndSortExerciseNameList(List<String> exercises){
         return exercises
                 .stream()
                 .filter(e -> !e.contains("Kopia"))
@@ -33,7 +35,7 @@ public class ExercisesHelper {
         });
     }
 
-    public static List<Exercise> updateExercises(List<Exercise> exercises){
+    public static List<Exercise> updateExercises(List<Exercise> exercises, String trainingName){
         List<Exercise> newExercises = new ArrayList<>();
         for (Exercise exercise: exercises) {
 
@@ -50,9 +52,11 @@ public class ExercisesHelper {
                     LocalDate.now(),
                     exercise.getReps(),
                     exercise.getWeight(),
-                    exercise.getTrainingName()));
+                    trainingName));
         }
 
         return newExercises;
     }
+
+
 }

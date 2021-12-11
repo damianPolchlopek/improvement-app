@@ -34,7 +34,7 @@ public class ExerciseController {
     }
 
     @PostMapping("/addTraining")
-    public Response saveExercise(@RequestBody List<Exercise> exercises) throws Exception {
+    public Response saveTraining(@RequestBody List<Exercise> exercises) throws Exception {
         LOGGER.info("Dodaje ćwiczenia: " + exercises);
 
         final String trainingName = googleDriveService.generateFileName(exercises);
@@ -44,7 +44,10 @@ public class ExerciseController {
         final File file = new File(ApplicationVariables.TMP_FILES_PATH + trainingNameExcelFile);
         googleDriveService.uploadFileInFolder(ApplicationVariables.TRAININGS_FOLDER_NAME, file, trainingName);
 
-        List<Exercise> newExercises = ExercisesHelper.updateExercises(exercises);
+        List<Exercise> exercisesFromDb = exerciseService.findAll();
+        ExercisesHelper.sortExerciseListByDate(exercisesFromDb);
+
+        List<Exercise> newExercises = ExercisesHelper.updateExercises(exercises, trainingName);
         exerciseService.saveAll(newExercises);
 
         return Response.ok().build();
@@ -58,11 +61,11 @@ public class ExerciseController {
     }
 
     @GetMapping("/getLastTypeTraining/{trainingType}")
-    public Response getLastTraining(@PathVariable String trainingType) {
+    public Response getLastTrainingWithType(@PathVariable String trainingType) {
         LOGGER.info("Pobieram ostatnie cwiczenia o typie: " + trainingType);
 
         List<String> trainingNameList = exerciseService.getAllTrainingNames();
-        List<String> filteredTrainingList = ExercisesHelper.filterExerciseNameList(trainingNameList);
+        List<String> filteredTrainingList = ExercisesHelper.filterAndSortExerciseNameList(trainingNameList);
 
         String trainingName = filteredTrainingList.stream()
                 .filter(name -> name.contains(trainingType))
@@ -74,7 +77,7 @@ public class ExerciseController {
     }
 
     @GetMapping("/getExercises")
-    public Response getExercise() {
+    public Response getExercises() {
         LOGGER.info("Pobieram wszystkie cwiczenia");
         List<Exercise> result = exerciseService.findAll();
         ExercisesHelper.sortExerciseListByDate(result);

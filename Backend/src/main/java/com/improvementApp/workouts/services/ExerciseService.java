@@ -1,7 +1,6 @@
 package com.improvementApp.workouts.services;
 
 import com.improvementApp.workouts.entity.Exercise;
-import com.improvementApp.workouts.entity.TrainingNameList;
 
 import java.time.LocalDate;
 import java.util.List;

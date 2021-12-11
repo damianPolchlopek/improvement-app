@@ -178,7 +178,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         final List<String> trainingsName = exerciseService.getAllTrainingNames();
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
 
-            final String trainingName = driveFileItemDTO.getName() + EXCEL_EXTENSION;
+            final String trainingName = driveFileItemDTO.getName();
 
             if(!trainingsName.contains(trainingName)){
                 downloadFile(driveFileItemDTO);
@@ -186,7 +186,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
                 LOGGER.info("Dodaje do bazy danych trening o nazwie: " + trainingName);
 
-                String fileName = TMP_FILES_PATH + trainingName;
+                final String fileName = TMP_FILES_PATH + trainingName + EXCEL_EXTENSION;
                 java.io.File file = new java.io.File(fileName);
                 exercises.addAll(DriveFilesHelper.parseExcelFile(file));
             } else {
@@ -239,10 +239,9 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
         final String lastExerciseName = exercises.get(0).getTrainingName();
         final String lastTrainingNumber = parseTrainingName(lastExerciseName, 1);
-        int lastExercise = Integer.parseInt(lastTrainingNumber);
+        final int lastExercise = Integer.parseInt(lastTrainingNumber);
+        final String incrementedLastExerciseNumber = String.valueOf(lastExercise + 1);
 
-        // TODO: zmienic na inkrementacje
-        final String incrementedLastExerciseNumber = String.valueOf(++lastExercise);
         final String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         final String lastTypeExercise = lastExerciseThatType.get(0).getTrainingName();
@@ -253,14 +252,14 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     private String parseTrainingName(String trainingName, int groupIndex){
         final String regex = "([0-9.?[0-9]*]+) - " +
-                        "([0-9]+.[0-9]+.[0-9]+r.) - " +
-                        "([A-Z]).xlsx";
+                "([0-9]+.[0-9]+.[0-9]+r.) - " +
+                "([A-Z])";
         final Pattern pattern       = Pattern.compile(regex);
         final Matcher matcher       = pattern.matcher(trainingName);
         final boolean isMatchFound  = matcher.find();
 
         if (!isMatchFound)
-            throw new RuntimeException("Incorrect training name");
+            throw new RuntimeException("Incorrect training name: " + trainingName);
 
         return matcher.group(groupIndex);
     }

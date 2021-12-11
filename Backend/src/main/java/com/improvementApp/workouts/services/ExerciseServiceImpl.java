@@ -66,12 +66,10 @@ public class ExerciseServiceImpl implements ExerciseService {
     public List<String> getAllTrainingNames() {
         LOGGER.info("Pobieram nazwy wszystkich treningow");
         List<Exercise> exercises = exerciseRepository.findAll();
-        List<String> result = exercises.stream()
+
+        return exercises.stream()
                     .map(Exercise::getTrainingName)
                     .distinct()
                     .collect(Collectors.toList());
-
-        System.out.println(result);
-        return result;
     }
 }
