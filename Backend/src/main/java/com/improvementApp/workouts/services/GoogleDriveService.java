@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface GoogleDriveService {
-    List<DriveFileItemDTO> listFiles(final String folderName) throws Exception;
+    List<DriveFileItemDTO> getDriveFiles(final String folderName) throws Exception;
 
     void downloadFile(final DriveFileItemDTO file) throws IOException;
 
@@ -18,4 +18,6 @@ public interface GoogleDriveService {
                             final String fileName) throws Exception;
 
     String generateFileName(List<Exercise> exercises);
+
+    void initApplication() throws Exception;
 }

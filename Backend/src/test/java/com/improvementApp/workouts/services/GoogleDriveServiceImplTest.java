@@ -40,8 +40,10 @@ class GoogleDriveServiceImplTest {
     @InjectMocks
     GoogleDriveServiceImpl googleDriveService;
 
+    //TODO: sprawdzic czy trzeba jakies testy do tej klasy dopisac
+
     @Test
-    void should_list_files() {
+    void should_get_drive_files() {
 
     }
 
@@ -78,5 +80,10 @@ class GoogleDriveServiceImplTest {
     private List<Exercise> generateThreeTrainings() {
         return new ArrayList<>(Arrays.asList(exercise1, exercise2, exercise3, exercise4, exercise5, exercise6,
                 exercise7, exercise8, exercise9));
+    }
+
+    @Test
+    void should_init_application() {
+
     }
 }

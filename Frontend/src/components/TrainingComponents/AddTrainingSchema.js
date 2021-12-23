@@ -2,14 +2,62 @@ import React, { Component } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import axios from 'axios';
 
+const originName = 'http://localhost:8080/exercise/';
+
 class AddTrainingSchema extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      
+      exerciseNames: [],
+      exerciseProgresses: [],
+      exercisePlaces: [],
+      exerciseTypes: []
     };
+  }
+
+  componentDidMount(){
+    this.getExerciseNames();
+    this.getExercisePlaces();
+    this.getExerciseProgresses();
+    this.getExerciseTypes();
+  }
+
+  getExerciseNames = () => {
+    const getExerciseName = originName + 'getExerciseNames';
+    axios.get(getExerciseName)
+    .then(response => {
+        this.setState({exerciseNames: response.data.entity});
+        console.log(response.data.entity)
+    })
+  }
+
+  getExerciseProgresses = () => {
+    const getExerciseProgresses = originName + 'getExerciseProgresses';
+    axios.get(getExerciseProgresses)
+    .then(response => {
+        this.setState({exerciseProgresses: response.data.entity});
+        console.log(response.data.entity)
+    })
+  }
+
+  getExercisePlaces = () => {
+    const getExercisePlaces = originName + 'getExercisePlaces';
+    axios.get(getExercisePlaces)
+    .then(response => {
+        this.setState({exercisePlaces: response.data.entity});
+        console.log(response.data.entity)
+    })
+  }
+
+  getExerciseTypes = () => {
+    const getExerciseTypes = originName + 'getExerciseTypes';
+    axios.get(getExerciseTypes)
+    .then(response => {
+        this.setState({exerciseTypes: response.data.entity});
+        console.log(response.data.entity)
+    })
   }
 
   initialValuesExercisesType = {
@@ -18,7 +66,7 @@ class AddTrainingSchema extends Component {
 
   onSubmitExercisesType = values => {
     console.log(values.type)
-    const getLastExercisesWithType = 'http://localhost:8080/getLastTypeTraining/' + values.type;
+    const getLastExercisesWithType = originName + 'getLastTypeTraining/' + values.type;
     axios.get(getLastExercisesWithType)
     .then(response => {
         this.initialValues.exercises = response.data.entity;
@@ -41,15 +89,13 @@ class AddTrainingSchema extends Component {
   };
 
   onSubmit = values => {
-    const addExercisesUrl = 'http://localhost:8080/addTraining';
+    const addExercisesUrl = originName + 'addTraining';
     axios.post(addExercisesUrl, values.exercises)
     .then(res => {
         console.log('Result POST: ');
         console.log(res);
     })
-    
   };
-
 
   render () {
     return (
@@ -78,7 +124,6 @@ class AddTrainingSchema extends Component {
 
             </Form>
           </Formik>
-
 
           <h3 className="text-center">Training Schema</h3>
       
@@ -114,16 +159,82 @@ class AddTrainingSchema extends Component {
 
                         <tbody>
 
-
                           {exercises.map((singleExercise, index) => (
                           <tr>
                             <th scope="row">{index}</th>
-                            <td><Field className="form-control" name={`exercises[${index}].exerciseType`} /></td>
-                            <td><Field className="form-control" name={`exercises[${index}].exercisePlace`} /></td>
-                            <td><Field className="form-control" name={`exercises[${index}].name`} /></td>
+
+                            <td>
+                              <Field className="form-control" 
+                                name={`exercises[${index}].exerciseType`} 
+                                as="select"
+                                value={exercises[index].exerciseType}
+                              >
+                                {this.state.exerciseTypes.map(exerciseType => {
+                                  return(
+                                  <option key={exerciseType.type} value={exerciseType.type}>
+                                    {exerciseType.type}
+                                  </option>
+                                  );
+                                })}
+                              </Field>
+                            </td>
+
+                            <td>
+                              <Field className="form-control" 
+                                name={`exercises[${index}].exercisePlace`}
+                                as="select"
+                                value={exercises[index].exercisePlace}
+                              >
+                                {this.state.exercisePlaces.map(exercisePlace => {
+                                  return(
+                                  <option key={exercisePlace.place} value={exercisePlace.place}>
+                                    {exercisePlace.place}
+                                  </option>
+                                  );
+                                })}
+                              </Field>
+                            
+                            </td>
+                            <td>
+                              <Field className="form-control" 
+                                name={`exercises[${index}].name`} 
+                                as="select"
+                                value={exercises[index].name}
+                              >
+                                {this.state.exerciseNames.map(exerciseName => {
+                                  return(
+                                  <option key={exerciseName.name} value={exerciseName.name}>
+                                    {exerciseName.name}
+                                  </option>
+                                  );
+                                })}
+                              </Field>
+                            
+                            </td>
+
+
                             <td><Field className="form-control" name={`exercises[${index}].reps`} /></td>
                             <td><Field className="form-control" name={`exercises[${index}].weight`} /></td>
-                            <td><Field className="form-control" name={`exercises[${index}].progress`} /></td>
+
+                            <td>
+                              <Field className="form-control" 
+                                name={`exercises[${index}].progress`} 
+                                as="select"
+                                value={exercises[index].progress}
+                              >
+                                {this.state.exerciseProgresses.map(progress => {
+                                  return(
+                                  <option key={progress.progress} value={progress.progress}>
+                                    {progress.progress}
+                                  </option>
+                                  );
+                                  
+                                })}
+
+                              </Field>
+                            </td>
+
+
                             <td>
                             <button className="btn btn-success" type='button' onClick={() => push('')}>
                               Add

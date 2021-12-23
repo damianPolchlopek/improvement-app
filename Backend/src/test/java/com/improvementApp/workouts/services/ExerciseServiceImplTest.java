@@ -51,7 +51,6 @@ class ExerciseServiceImplTest {
 
         //then
         Assert.assertEquals(expectedExercisesName, serviceResult);
-
     }
 
     private List<String> expectedLastTrainingWithType() {
@@ -106,6 +105,78 @@ class ExerciseServiceImplTest {
 
     @Test
     void should_delete_by_id() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_get_exercise_names() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_get_exercise_places() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_get_exercise_progress() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_get_exercise_types() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_save_all_exercise_names() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_delete_all_exercise_names() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_save_all_exercise_places() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_delete_all_exercise_places() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_save_all_exercise_progresses() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_delete_all_exercise_progresses() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_save_all_exercise_types() {
+        // test is not necessary.
+        // function transmits data
+    }
+
+    @Test
+    void should_delete_all_exercise_types() {
         // test is not necessary.
         // function transmits data
     }

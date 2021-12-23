@@ -28,7 +28,7 @@ class DriveFilesHelperTest {
         //when
 
         //then
-        Assert.assertEquals(listAfter, DriveFilesHelper.parseExcelFile(file));
+        Assert.assertEquals(listAfter, DriveFilesHelper.parseExcelTrainingFile(file));
     }
 
     private List<Exercise> generateExpectedTraining(){
@@ -121,7 +121,13 @@ class DriveFilesHelperTest {
     }
 
     @Test
+    void getTrainingName() {
+        //TODO: test do napisania
+    }
+
+    @Test
     void should_create_excel_file() {
         //TODO: test do napisania
     }
+
 }

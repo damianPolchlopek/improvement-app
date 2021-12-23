@@ -16,6 +16,10 @@ import com.google.api.services.drive.model.FileList;
 import com.improvementApp.workouts.DTO.DriveFileItemDTO;
 import com.improvementApp.workouts.controllers.ExerciseController;
 import com.improvementApp.workouts.entity.Exercise;
+import com.improvementApp.workouts.entity.ExercisesFields.Name;
+import com.improvementApp.workouts.entity.ExercisesFields.Place;
+import com.improvementApp.workouts.entity.ExercisesFields.Progress;
+import com.improvementApp.workouts.entity.ExercisesFields.Type;
 import com.improvementApp.workouts.helpers.ApplicationVariables;
 import com.improvementApp.workouts.helpers.DriveFilesHelper;
 import com.improvementApp.workouts.helpers.ExercisesHelper;
@@ -38,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
@@ -61,8 +66,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Value("${google.credentials.folder.path}")
     private Resource credentialsFolder;
 
-    private GoogleAuthorizationCodeFlow flow;
-
+    private Drive drive;
     private final ExerciseService exerciseService;
 
     @Autowired
@@ -73,44 +77,89 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @PostConstruct
     public void init() throws IOException {
         GoogleClientSecrets secrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(gdSecretKeys.getInputStream()));
-        flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, secrets, SCOPES)
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, secrets, SCOPES)
                 .setDataStoreFactory(
                         new FileDataStoreFactory(credentialsFolder.getFile()))
                 .build();
+
+        Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
+        drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
+                .setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
     }
 
     @Override
-    public List<DriveFileItemDTO> listFiles(final String folderName) throws Exception {
-        LOGGER.info("Pobieram pliki z folderu: " + folderName);
+    public List<Exercise> saveAllExercisesToDB(final String folderName) throws Exception {
+        LOGGER.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: " + folderName);
 
-        Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
-        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
+        final List<DriveFileItemDTO> responseList = getDriveFiles(folderName);
 
+        // TODO: wywalac wszystkie cwiczenia i jeszcze raz dodawać !!!
+        final List<Exercise> exercises = new ArrayList<>();
+        final List<String> trainingsName = exerciseService.getAllTrainingNames();
+
+        for (DriveFileItemDTO driveFileItemDTO : responseList) {
+
+            final String trainingName = driveFileItemDTO.getName();
+
+            if(!trainingsName.contains(trainingName)){
+                downloadFile(driveFileItemDTO);
+                trainingsName.add(trainingName);
+
+                LOGGER.info("Dodaje do bazy danych trening o nazwie: " + trainingName);
+
+                final String fileName = TMP_FILES_PATH + trainingName + EXCEL_EXTENSION;
+                java.io.File file = new java.io.File(fileName);
+                exercises.addAll(DriveFilesHelper.parseExcelTrainingFile(file));
+            } else {
+                LOGGER.info("Trening o nazwie: " + trainingName + ", juz istnieje w bazie danych");
+            }
+        }
+
+        List<Exercise> filterExercise = ExercisesHelper.filterExerciseList(exercises);
+        exerciseService.saveAll(filterExercise);
+
+        return exercises;
+    }
+
+    @Override
+    public void initApplication() throws Exception {
+        final String folderName = ApplicationVariables.CATEGORIES_FOLDER_NAME;
+        final List<DriveFileItemDTO> responseList = getDriveFiles(folderName);
+
+        for (DriveFileItemDTO driveFileItemDTO : responseList) {
+            downloadFile(driveFileItemDTO);
+
+            final String fileName = TMP_FILES_PATH + driveFileItemDTO.getName() + EXCEL_EXTENSION;
+            final java.io.File file = new java.io.File(fileName);
+
+            final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
+            saveDataToDatabase(values, fileName);
+        }
+    }
+
+    @Override
+    public List<DriveFileItemDTO> getDriveFiles(final String folderName) throws Exception {
         final String folderId = getFolderId(folderName);
-        final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType() + "' and '" + folderId + "' in parents ";
+        final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
+                    + "' and '" + folderId + "' in parents ";
 
         Drive.Files.List request = drive
                 .files()
                 .list()
                 .setQ(query);
 
-        List<File> allFiles = getAllFiles(request);
-        List<DriveFileItemDTO> responseList = new ArrayList<>();
-        for (File file : allFiles) {
-            DriveFileItemDTO item = new DriveFileItemDTO(file);
-            responseList.add(item);
-        }
+        final List<File> allFiles = getAllFiles(request);
+
+        final List<DriveFileItemDTO> responseList = allFiles.stream()
+                .map(DriveFileItemDTO::new)
+                .collect(Collectors.toList());
 
         return responseList;
     }
 
     private String getFolderId(final String folderName) throws Exception {
-        Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
-        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
-
-        final String query = "mimeType='" + MimeType.DRIVE_FOLDER.getType() + "' and name contains '" + folderName + "' ";
+        final String query = "mimeType='" + MimeType.DRIVE_FOLDER.getType()
+                + "' and name contains '" + folderName + "' ";
 
         Drive.Files.List request = drive
                 .files()
@@ -122,11 +171,9 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         if (allFiles.size() > 1)
             throw new Exception("Return more than one folder");
 
-        List<DriveFileItemDTO> responseList = new ArrayList<>();
-        for (File file : allFiles) {
-            DriveFileItemDTO item = new DriveFileItemDTO(file);
-            responseList.add(item);
-        }
+        final List<DriveFileItemDTO> responseList = allFiles.stream()
+                .map(DriveFileItemDTO::new)
+                .collect(Collectors.toList());
 
         return responseList.get(0).getId();
     }
@@ -149,63 +196,47 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         return result;
     }
 
-    @Override
-    public List<Exercise> saveAllExercisesToDB(final String folderName) throws Exception {
-        LOGGER.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: " + folderName);
+    private void saveDataToDatabase(List<String> values, String fileName){
+        final String NAMES = "Names";
+        final String PLACES = "Places";
+        final String PROGRESSES = "Progresses";
+        final String TYPES = "Types";
 
-        final Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
-        final Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
+        if (fileName.contains(NAMES)){
+            exerciseService.deleteAllExerciseNames();
+            List<Name> nameList = values.stream()
+                    .map(Name::new)
+                    .collect(Collectors.toList());
 
-        final MimeType mimeType = MimeType.DRIVE_SHEETS;
-        final String folderId = getFolderId(folderName);
-        final String query = "mimeType='" + mimeType.getType() + "' and '" + folderId + "' in parents ";
+            exerciseService.saveAllExerciseNames(nameList);
+        } else if (fileName.contains(PLACES)){
+            exerciseService.deleteAllExercisePlaces();
+            List<Place> placeList = values.stream()
+                    .map(Place::new)
+                    .collect(Collectors.toList());
 
-        final Drive.Files.List request = drive
-                .files()
-                .list()
-                .setQ(query);
+            exerciseService.saveAllExercisePlaces(placeList);
+        } else if (fileName.contains(PROGRESSES)){
+            exerciseService.deleteAllExerciseProgresses();
+            List<Progress> progressList = values.stream()
+                    .map(Progress::new)
+                    .collect(Collectors.toList());
 
-        final List<File> allFiles = getAllFiles(request);
-        final List<DriveFileItemDTO> responseList = new ArrayList<>();
-        for (File file : allFiles) {
-            DriveFileItemDTO item = new DriveFileItemDTO(file);
-            responseList.add(item);
+            exerciseService.saveAllExerciseProgresses(progressList);
+        } else if (fileName.contains(TYPES)){
+            exerciseService.deleteAllExerciseTypes();
+            List<Type> typeList = values.stream()
+                    .map(Type::new)
+                    .collect(Collectors.toList());
+
+            exerciseService.saveAllExerciseTypes(typeList);
         }
-
-        final List<Exercise> exercises = new ArrayList<>();
-
-        final List<String> trainingsName = exerciseService.getAllTrainingNames();
-        for (DriveFileItemDTO driveFileItemDTO : responseList) {
-
-            final String trainingName = driveFileItemDTO.getName();
-
-            if(!trainingsName.contains(trainingName)){
-                downloadFile(driveFileItemDTO);
-                trainingsName.add(trainingName);
-
-                LOGGER.info("Dodaje do bazy danych trening o nazwie: " + trainingName);
-
-                final String fileName = TMP_FILES_PATH + trainingName + EXCEL_EXTENSION;
-                java.io.File file = new java.io.File(fileName);
-                exercises.addAll(DriveFilesHelper.parseExcelFile(file));
-            } else {
-                LOGGER.info("Trening o nazwie: " + trainingName + ", juz istnieje w bazie danych");
-            }
-        }
-
-        List<Exercise> filterExercise = ExercisesHelper.filterExerciseList(exercises);
-        exerciseService.saveAll(filterExercise);
-
-        return exercises;
     }
 
     public void downloadFile(final DriveFileItemDTO file) throws IOException {
-        Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
-        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred).setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
-
+        final String fileName = TMP_FILES_PATH + file.getName() + EXCEL_EXTENSION;
         drive.files().export(file.getId(), MimeType.EXCEL.getType())
-                .executeMediaAndDownloadTo(new FileOutputStream(TMP_FILES_PATH + file.getName() + EXCEL_EXTENSION));
+                .executeMediaAndDownloadTo(new FileOutputStream(fileName));
     }
 
     public void uploadFileInFolder(final String folderName,
@@ -213,21 +244,15 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
                                    final String fileName) throws Exception {
         LOGGER.info("Przesylam na google drive plik: " + fileName);
 
-        Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
-        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred).setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
-
         final String folderId = getFolderId(folderName);
 
-        File file = new File();
+        final File file = new File();
         file.setName(fileName);
         file.setMimeType(MimeType.DRIVE_SHEETS.getType());
         file.setParents(Arrays.asList(folderId));
 
-        FileContent content = new FileContent(MimeType.EXCEL_DOWNLOAD.getType(), fileToUpload);
-        File uploadedFile = drive.files().create(file, content).setFields("id").execute();
-
-//        String fileReference = String.format("{fileID: '%s'}", uploadedFile.getId());
-//        response.getWriter().write(fileReference);
+        final FileContent content = new FileContent(MimeType.EXCEL_DOWNLOAD.getType(), fileToUpload);
+        drive.files().create(file, content).setFields("id").execute();
     }
 
     @Override
