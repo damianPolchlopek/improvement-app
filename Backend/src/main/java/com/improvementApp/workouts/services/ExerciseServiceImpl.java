@@ -1,7 +1,11 @@
 package com.improvementApp.workouts.services;
 
 import com.improvementApp.workouts.entity.Exercise;
-import com.improvementApp.workouts.repository.ExerciseRepository;
+import com.improvementApp.workouts.entity.ExercisesFields.Name;
+import com.improvementApp.workouts.entity.ExercisesFields.Place;
+import com.improvementApp.workouts.entity.ExercisesFields.Progress;
+import com.improvementApp.workouts.entity.ExercisesFields.Type;
+import com.improvementApp.workouts.repository.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +17,19 @@ import java.util.stream.Collectors;
 public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+    private final NameRepository nameRepository;
+    private final PlaceRepository placeRepository;
+    private final ProgressRepository progressRepository;
+    private final TypeRepository typeRepository;
 
-    public ExerciseServiceImpl(ExerciseRepository exerciseRepository) {
+    public ExerciseServiceImpl(ExerciseRepository exerciseRepository, NameRepository nameRepository,
+                               PlaceRepository placeRepository, ProgressRepository progressRepository,
+                               TypeRepository typeRepository) {
         this.exerciseRepository = exerciseRepository;
+        this.nameRepository = nameRepository;
+        this.placeRepository = placeRepository;
+        this.progressRepository = progressRepository;
+        this.typeRepository = typeRepository;
     }
 
     private static final Logger LOGGER = Logger.getLogger(ExerciseServiceImpl.class);
@@ -72,4 +86,69 @@ public class ExerciseServiceImpl implements ExerciseService {
                     .distinct()
                     .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Name> getExerciseNames() {
+        LOGGER.info("Pobieram wszystkie nazwy cwiczen");
+        return nameRepository.findAll();
+    }
+
+    @Override
+    public List<Name> saveAllExerciseNames(List<Name> nameList) {
+        return nameRepository.saveAll(nameList);
+    }
+
+    @Override
+    public void deleteAllExerciseNames() {
+        nameRepository.deleteAll();
+    }
+
+    @Override
+    public List<Place> getExercisePlaces() {
+        LOGGER.info("Pobieram wszystkie miejsca cwiczen");
+        return placeRepository.findAll();
+    }
+
+    @Override
+    public List<Place> saveAllExercisePlaces(List<Place> placeList) {
+        return placeRepository.saveAll(placeList);
+    }
+
+    @Override
+    public void deleteAllExercisePlaces() {
+        placeRepository.deleteAll();
+    }
+
+    @Override
+    public List<Progress> getExerciseProgress() {
+        LOGGER.info("Pobieram wszystkie progressy cwiczen");
+        return progressRepository.findAll();
+    }
+
+    @Override
+    public List<Progress> saveAllExerciseProgresses(List<Progress> progressList) {
+        return progressRepository.saveAll(progressList);
+    }
+
+    @Override
+    public void deleteAllExerciseProgresses() {
+        progressRepository.deleteAll();
+    }
+
+    @Override
+    public List<Type> getExerciseTypes() {
+        LOGGER.info("Pobieram wszystkie typy cwiczen");
+        return typeRepository.findAll();
+    }
+
+    @Override
+    public List<Type> saveAllExerciseTypes(List<Type> typeList) {
+        return typeRepository.saveAll(typeList);
+    }
+
+    @Override
+    public void deleteAllExerciseTypes() {
+        typeRepository.deleteAll();
+    }
+
 }

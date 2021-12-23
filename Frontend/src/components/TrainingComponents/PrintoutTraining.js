@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Table, Tbody, Thead, Tr, Th, Td} from 'react-super-responsive-table'
 import axios from 'axios';
 
+const originName = 'http://localhost:8080/exercise/';
+
 class PrintoutTraining  extends Component  {
 
     constructor(props) {
@@ -14,7 +16,7 @@ class PrintoutTraining  extends Component  {
     }
 
     componentDidMount(){
-        const printExercisesUrl = 'http://localhost:8080/getExercises';
+        const printExercisesUrl = originName + 'getExercises';
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
@@ -23,7 +25,7 @@ class PrintoutTraining  extends Component  {
     }
 
     getExercisesByDate = (date) => {
-        const printExercisesUrl = 'http://localhost:8080/getExercise/date/' + date;
+        const printExercisesUrl = originName + 'getExercise/date/' + date;
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
@@ -32,7 +34,7 @@ class PrintoutTraining  extends Component  {
     }
 
     getExercisesByName = (name) => {
-        const printExercisesUrl = 'http://localhost:8080/getExercise/name/' + name;
+        const printExercisesUrl = originName + 'getExercise/name/' + name;
         axios.get(printExercisesUrl)
             .then(response => {
                 // handle success
@@ -41,7 +43,7 @@ class PrintoutTraining  extends Component  {
     }
 
     removeExercise = (exerciseId) => {
-        const deleteExercisesUrl = 'http://localhost:8080/deleteExercise/' + exerciseId;
+        const deleteExercisesUrl = originName + 'deleteExercise/' + exerciseId;
         axios.delete(deleteExercisesUrl)
             .then(response => {
                 var tmp = !this.state.tmpRemoved;
@@ -65,7 +67,9 @@ class PrintoutTraining  extends Component  {
                     &&
                     <div className="container">
                 
-                        <h1>Printout Traning: {this.state.exercises[0].id}</h1>
+                        <br />
+                        <h1>Trainings: </h1>
+                        <br />
                         
                         <Table className="table table-striped">
                             {/* <Thead className="thead-dark"> */}

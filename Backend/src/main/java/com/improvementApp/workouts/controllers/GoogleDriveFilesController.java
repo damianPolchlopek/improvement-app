@@ -8,12 +8,14 @@ import com.improvementApp.workouts.services.GoogleDriveServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/drive")
 public class GoogleDriveFilesController {
 
     private static final Logger LOGGER = Logger.getLogger(GoogleDriveFilesController.class);
@@ -26,20 +28,25 @@ public class GoogleDriveFilesController {
         this.googleDriveService = googleDriveService;
     }
 
-    @GetMapping(value = {"/drive/uploadAllExercisesFromDriveToDatabase"}, produces = {"application/json"})
+    @GetMapping(value = {"/uploadAllExercisesFromDriveToDatabase"}, produces = {"application/json"})
     public @ResponseBody
     List<Exercise> uploadAllExercisesFromDriveToDatabase() throws Exception {
         LOGGER.info("Zapisuje wszystkie cwiczenia do bazy danych");
         return googleDriveService.saveAllExercisesToDB(TRAININGS_FOLDER_NAME);
     }
 
-    @GetMapping(value = {"/drive/getFiles"}, produces = {"application/json"})
+    @GetMapping(value = {"/getFiles"}, produces = {"application/json"})
     public @ResponseBody
     List<DriveFileItemDTO> getFiles() throws Exception {
         LOGGER.info("CONTROLLER:    START - get files");
-        List<DriveFileItemDTO> result = googleDriveService.listFiles(TRAININGS_FOLDER_NAME);
+        List<DriveFileItemDTO> result = googleDriveService.getDriveFiles(TRAININGS_FOLDER_NAME);
         LOGGER.info("CONTROLLER:    END - get files");
         return result;
+    }
+
+    @GetMapping("/initApplication")
+    public void initApplication() throws Exception {
+        googleDriveService.initApplication();
     }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-
+//TODO: zmienic nazwy exerciseType i exercisePlace na type i place !!!
 public class Exercise {
 
     @Id

@@ -1,6 +1,10 @@
 package com.improvementApp.workouts.controllers;
 
 import com.improvementApp.workouts.entity.Exercise;
+import com.improvementApp.workouts.entity.ExercisesFields.Name;
+import com.improvementApp.workouts.entity.ExercisesFields.Place;
+import com.improvementApp.workouts.entity.ExercisesFields.Progress;
+import com.improvementApp.workouts.entity.ExercisesFields.Type;
 import com.improvementApp.workouts.helpers.ApplicationVariables;
 import com.improvementApp.workouts.helpers.DriveFilesHelper;
 import com.improvementApp.workouts.helpers.ExercisesHelper;
@@ -18,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@RequestMapping("/exercise")
 public class ExerciseController {
 
     private static final Logger LOGGER = Logger.getLogger(ExerciseController.class);
@@ -48,16 +53,16 @@ public class ExerciseController {
         ExercisesHelper.sortExerciseListByDate(exercisesFromDb);
 
         List<Exercise> newExercises = ExercisesHelper.updateExercises(exercises, trainingName);
-        exerciseService.saveAll(newExercises);
+        List<Exercise> savedExercises = exerciseService.saveAll(newExercises);
 
-        return Response.ok().build();
+        return Response.ok(savedExercises).build();
     }
 
     @PostMapping("/addExercise")
     public Response saveExercise(@RequestBody Exercise exercise) {
         LOGGER.info("Dodaje ćwiczenie: " + exercise.toString());
-        exerciseService.save(exercise);
-        return Response.ok().build();
+        Exercise savedExercise = exerciseService.save(exercise);
+        return Response.ok(savedExercise).build();
     }
 
     @GetMapping("/getLastTypeTraining/{trainingType}")
@@ -105,6 +110,30 @@ public class ExerciseController {
         LOGGER.info("Usuwam cwiczenie o id: " + exerciseId);
         exerciseService.deleteById(exerciseId);
         return Response.ok().build();
+    }
+
+    @GetMapping("/getExerciseNames")
+    public Response getExerciseNames(){
+        List<Name> exerciseNames = exerciseService.getExerciseNames();
+        return Response.ok(exerciseNames).build();
+    }
+
+    @GetMapping("/getExercisePlaces")
+    public Response getExercisePlaces(){
+        List<Place> exercisePlaces = exerciseService.getExercisePlaces();
+        return Response.ok(exercisePlaces).build();
+    }
+
+    @GetMapping("/getExerciseProgresses")
+    public Response getExerciseProgresses(){
+        List<Progress> exerciseProgresses = exerciseService.getExerciseProgress();
+        return Response.ok(exerciseProgresses).build();
+    }
+
+    @GetMapping("/getExerciseTypes")
+    public Response getExerciseTypes(){
+        List<Type> exerciseTypes = exerciseService.getExerciseTypes();
+        return Response.ok(exerciseTypes).build();
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class DriveFilesHelper {
 
-    public static List<Exercise> parseExcelFile(final File file) throws IOException {
+    public static List<Exercise> parseExcelTrainingFile(final File file) throws IOException {
         FileInputStream fis = new FileInputStream(file);
         XSSFWorkbook wb = new XSSFWorkbook(fis);
         XSSFSheet sheet = wb.getSheetAt(0);
@@ -66,6 +66,30 @@ public class DriveFilesHelper {
         }
 
         return exerciseList;
+    }
+
+    public static List<String> parseExcelSimpleFile(final File file) throws IOException {
+        FileInputStream fis = new FileInputStream(file);
+        XSSFWorkbook wb = new XSSFWorkbook(fis);
+        XSSFSheet sheet = wb.getSheetAt(0);
+
+        final int DATA_INDEX = 0;
+
+        List<String> dataList = new ArrayList<>();
+        for (final Row row : sheet) {
+
+            Cell cell = row.getCell(DATA_INDEX);
+            if (cell == null)
+                continue;
+
+            String data = cell.getStringCellValue();
+            if (data.isEmpty())
+                continue;
+
+            dataList.add(data);
+        }
+
+        return dataList;
     }
 
     public static ExerciseStrategy getExerciseParseStrategy(final String exerciseType,
