@@ -23,6 +23,7 @@ target/
 **/src/main/resources/tmp_files/
 **/src/main/resources/tmp_test_dir/
 **/src/main/resources/keys/
+**/src/main/resources/credentials/
 
 ### NetBeans ###
 /nbproject/private/
