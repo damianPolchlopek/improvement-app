@@ -5,6 +5,7 @@ import com.improvementApp.workouts.entity.ExercisesFields.Name;
 import com.improvementApp.workouts.entity.ExercisesFields.Place;
 import com.improvementApp.workouts.entity.ExercisesFields.Progress;
 import com.improvementApp.workouts.entity.ExercisesFields.Type;
+import com.improvementApp.workouts.helpers.ExercisesHelper;
 import com.improvementApp.workouts.repository.*;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -37,13 +38,17 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<Exercise> findByDate(LocalDate date) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + date);
-        return exerciseRepository.findByDate(date);
+        List<Exercise> exercises = exerciseRepository.findByDate(date);
+        ExercisesHelper.sortExerciseListByDate(exercises);
+        return exercises;
     }
 
     @Override
     public List<Exercise> findByName(String name) {
         LOGGER.info("Pobieram cwiczenia o nazwie: " + name);
-        return exerciseRepository.findByName(name);
+        List<Exercise> exercises = exerciseRepository.findByName(name);
+        ExercisesHelper.sortExerciseListByDate(exercises);
+        return exercises;
     }
 
     @Override
@@ -67,7 +72,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<Exercise> findAll() {
         LOGGER.info("Pobieram wszystkie cwiczenia");
-        return exerciseRepository.findAll();
+        List<Exercise> exercises = exerciseRepository.findAll();
+        ExercisesHelper.sortExerciseListByDate(exercises);
+        return exercises;
     }
 
     @Override

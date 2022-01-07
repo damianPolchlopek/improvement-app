@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.core.Response;
 import java.io.File;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -39,7 +40,7 @@ public class ExerciseController {
     }
 
     @PostMapping("/addTraining")
-    public Response saveTraining(@RequestBody List<Exercise> exercises) throws Exception {
+    public Response addTraining(@RequestBody List<Exercise> exercises) throws Exception {
         LOGGER.info("Dodaje ćwiczenia: " + exercises);
 
         final String trainingName = googleDriveService.generateFileName(exercises);
@@ -59,7 +60,7 @@ public class ExerciseController {
     }
 
     @PostMapping("/addExercise")
-    public Response saveExercise(@RequestBody Exercise exercise) {
+    public Response addExercise(@RequestBody Exercise exercise) {
         LOGGER.info("Dodaje ćwiczenie: " + exercise.toString());
         Exercise savedExercise = exerciseService.save(exercise);
         return Response.ok(savedExercise).build();
@@ -85,7 +86,6 @@ public class ExerciseController {
     public Response getExercises() {
         LOGGER.info("Pobieram wszystkie cwiczenia");
         List<Exercise> result = exerciseService.findAll();
-        ExercisesHelper.sortExerciseListByDate(result);
         return Response.ok(result).build();
     }
 
@@ -93,7 +93,6 @@ public class ExerciseController {
     public Response getExercisesByDate(@PathVariable String exerciseDate) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
         List<Exercise> result = exerciseService.findByDate(LocalDate.parse(exerciseDate));
-        ExercisesHelper.sortExerciseListByDate(result);
         return Response.ok(result).build();
     }
 
@@ -101,7 +100,14 @@ public class ExerciseController {
     public Response getExercisesByName(@PathVariable String exerciseName) {
         LOGGER.info("Pobieram cwiczenia o nazwie: " + exerciseName);
         List<Exercise> result = exerciseService.findByName(exerciseName);
-        ExercisesHelper.sortExerciseListByDate(result);
+        return Response.ok(result).build();
+    }
+
+    @GetMapping("/getExercise/trainingName/{trainingName}")
+    public Response getExercisesByTrainingName(@PathVariable String trainingName) {
+        trainingName = trainingName.replace("_", " ");
+        LOGGER.info("Pobieram cwiczenia z treningu: " + trainingName);
+        List<Exercise> result =  exerciseService.findByTrainingName(trainingName);
         return Response.ok(result).build();
     }
 
@@ -134,6 +140,13 @@ public class ExerciseController {
     public Response getExerciseTypes(){
         List<Type> exerciseTypes = exerciseService.getExerciseTypes();
         return Response.ok(exerciseTypes).build();
+    }
+
+    @GetMapping("/getTrainingNames")
+    public Response getTrainingNames(){
+        List<String> trainingNames = exerciseService.getAllTrainingNames();
+        trainingNames.sort(Collections.reverseOrder());
+        return Response.ok(trainingNames).build();
     }
 
 }

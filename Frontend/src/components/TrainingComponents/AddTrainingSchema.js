@@ -13,7 +13,8 @@ class AddTrainingSchema extends Component {
       exerciseNames: [],
       exerciseProgresses: [],
       exercisePlaces: [],
-      exerciseTypes: []
+      exerciseTypes: [],
+      isSimpleForm: true
     };
   }
 
@@ -29,7 +30,6 @@ class AddTrainingSchema extends Component {
     axios.get(getExerciseName)
     .then(response => {
         this.setState({exerciseNames: response.data.entity});
-        console.log(response.data.entity)
     })
   }
 
@@ -38,7 +38,6 @@ class AddTrainingSchema extends Component {
     axios.get(getExerciseProgresses)
     .then(response => {
         this.setState({exerciseProgresses: response.data.entity});
-        console.log(response.data.entity)
     })
   }
 
@@ -47,7 +46,6 @@ class AddTrainingSchema extends Component {
     axios.get(getExercisePlaces)
     .then(response => {
         this.setState({exercisePlaces: response.data.entity});
-        console.log(response.data.entity)
     })
   }
 
@@ -56,7 +54,6 @@ class AddTrainingSchema extends Component {
     axios.get(getExerciseTypes)
     .then(response => {
         this.setState({exerciseTypes: response.data.entity});
-        console.log(response.data.entity)
     })
   }
 
@@ -65,7 +62,6 @@ class AddTrainingSchema extends Component {
   }
 
   onSubmitExercisesType = values => {
-    console.log(values.type)
     const getLastExercisesWithType = originName + 'getLastTypeTraining/' + values.type;
     axios.get(getLastExercisesWithType)
     .then(response => {
@@ -97,20 +93,23 @@ class AddTrainingSchema extends Component {
     })
   };
 
+  changeFormViewFunction = () => {
+    var oppositeValue = !this.state.isSimpleForm;
+    this.setState({isSimpleForm: oppositeValue})
+  }
+
   render () {
     return (
 
         <div>
-
           <br/>
           <h2>Choose training type to add </h2>
 
           <Formik
-          initialValues={this.initialValuesExercisesType}
-          onSubmit={this.onSubmitExercisesType}
+            initialValues={this.initialValuesExercisesType}
+            onSubmit={this.onSubmitExercisesType}
           >
             <Form>
-
               <div className="form-group">
                 <Field as="select" className="form-control form-control-lg" name="type">
                   <option value="A">Siłowy A</option>
@@ -123,7 +122,18 @@ class AddTrainingSchema extends Component {
             <button className="form-control form-control-lg" type='submit'>Load last Training</button>
 
             </Form>
+
           </Formik>
+
+      
+          <br/>     
+          <div className="form-check form-switch">
+            <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" 
+                    onClick={() => this.changeFormViewFunction()}/>
+            <label className="form-check-label" htmlFor="flexSwitchCheckDefault">
+              <h4>Enable a more accurate form</h4>
+            </label>
+          </div>
 
           <h3 className="text-center">Training Schema</h3>
       
@@ -146,14 +156,14 @@ class AddTrainingSchema extends Component {
                       <table className="table">
                         <thead className="thead-light">
                           <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Type</th>
-                            <th scope="col">Place</th>
+                            <th scope="col" hidden={this.state.isSimpleForm}>#</th>
+                            <th scope="col" hidden={this.state.isSimpleForm}>Type</th>
+                            <th scope="col" hidden={this.state.isSimpleForm}>Place</th>
                             <th scope="col">Name</th>
                             <th scope="col">Reps</th>
                             <th scope="col">Weight</th>
                             <th scope="col">Progress</th>
-                            <th scope="col">Options</th>
+                            <th scope="col" hidden={this.state.isSimpleForm}>Options</th>
                           </tr>
                         </thead>
 
@@ -161,9 +171,9 @@ class AddTrainingSchema extends Component {
 
                           {exercises.map((singleExercise, index) => (
                           <tr>
-                            <th scope="row">{index}</th>
+                            <th scope="row" hidden={this.state.isSimpleForm}>{index}</th>
 
-                            <td>
+                            <td hidden={this.state.isSimpleForm}>
                               <Field className="form-control" 
                                 name={`exercises[${index}].exerciseType`} 
                                 as="select"
@@ -179,7 +189,7 @@ class AddTrainingSchema extends Component {
                               </Field>
                             </td>
 
-                            <td>
+                            <td hidden={this.state.isSimpleForm}>
                               <Field className="form-control" 
                                 name={`exercises[${index}].exercisePlace`}
                                 as="select"
@@ -212,7 +222,6 @@ class AddTrainingSchema extends Component {
                             
                             </td>
 
-
                             <td><Field className="form-control" name={`exercises[${index}].reps`} /></td>
                             <td><Field className="form-control" name={`exercises[${index}].weight`} /></td>
 
@@ -234,16 +243,15 @@ class AddTrainingSchema extends Component {
                               </Field>
                             </td>
 
-
-                            <td>
-                            <button className="btn btn-success" type='button' onClick={() => push('')}>
-                              Add
-                            </button>
-                            {index > 0 && (
-                              <button className="btn btn-danger" type='button' onClick={() => remove(index)}> 
-                              Delete
+                            <td hidden={this.state.isSimpleForm}>
+                              <button className="btn btn-success" type='button' onClick={() => push('')}>
+                                Add
                               </button>
-                            )}  
+                              {index > 0 && (
+                                <button className="btn btn-danger" type='button' onClick={() => remove(index)}> 
+                                Delete
+                                </button>
+                              )}  
                             </td>
                           </tr>
                           ))}
