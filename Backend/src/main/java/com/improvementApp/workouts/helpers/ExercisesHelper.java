@@ -8,8 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ExercisesHelper {
@@ -40,12 +38,12 @@ public class ExercisesHelper {
         for (Exercise exercise: exercises) {
 
             final ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
-                    exercise.getExerciseType(), exercise.getReps(), exercise.getWeight());
+                    exercise.getType(), exercise.getReps(), exercise.getWeight());
             final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
 
             newExercises.add(new Exercise(
-                    exercise.getExerciseType(),
-                    exercise.getExercisePlace(),
+                    exercise.getType(),
+                    exercise.getPlace(),
                     exercise.getName(),
                     repAndWeightList,
                     exercise.getProgress(),

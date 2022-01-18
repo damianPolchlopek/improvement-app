@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import axios from 'axios';
+import Constants from '../Constants';
 
-const originName = 'http://localhost:8080/exercise/';
+const originName =  Constants.BASE_URL + 'exercise/';
 
 class AddTrainingSchema extends Component {
 
@@ -88,7 +89,6 @@ class AddTrainingSchema extends Component {
     const addExercisesUrl = originName + 'addTraining';
     axios.post(addExercisesUrl, values.exercises)
     .then(res => {
-        console.log('Result POST: ');
         console.log(res);
     })
   };

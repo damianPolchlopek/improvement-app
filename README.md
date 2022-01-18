@@ -8,6 +8,7 @@ formik
 yup
 axios
 react-super-responsive-table
+universal-cookie
 
 npm install --save bootstrap@^4.0.0-alpha.6  react-bootstrap@^0.32.1
 
@@ -19,7 +20,7 @@ Docker:
 # tworzenie obrazu
 docker build -f Dockerfile -t react_proj:v1 .
 
-#wyswietlanie obrazow
+#wyswietlanie obrazow \n
 docker images
 
 #uruchamianie obrazu

@@ -88,7 +88,7 @@ class ExercisesHelperTest {
 
     private Exercise createExpectedExercise(){
         final ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
-                exercise1.getExerciseType(), exercise1.getReps(), exercise1.getWeight());
+                exercise1.getType(), exercise1.getReps(), exercise1.getWeight());
         final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
 
         final LocalDate date = LocalDate.now();

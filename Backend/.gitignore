@@ -24,6 +24,7 @@ target/
 **/src/main/resources/tmp_test_dir/
 **/src/main/resources/keys/
 **/src/main/resources/credentials/
+**/src/main/resources/serviceAccount.json
 
 ### NetBeans ###
 /nbproject/private/

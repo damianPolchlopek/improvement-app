@@ -7,14 +7,14 @@ import org.springframework.data.annotation.Id;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-//TODO: zmienic nazwy exerciseType i exercisePlace na type i place !!!
+
 public class Exercise {
 
     @Id
     @Generated
     private String id;
-    private String exerciseType;
-    private String exercisePlace;
+    private String type;
+    private String place;
     private String name;
     private List<RepAndWeight> repAndWeightList;
     private String progress;
@@ -24,10 +24,10 @@ public class Exercise {
     private String reps;
     private String weight;
 
-    public Exercise(String exerciseType, String exercisePlace, String name, List<RepAndWeight> repAndWeightList,
+    public Exercise(String type, String place, String name, List<RepAndWeight> repAndWeightList,
                     String progress, LocalDate date, String reps, String weight, String trainingName) {
-        this.exerciseType = exerciseType;
-        this.exercisePlace = exercisePlace;
+        this.type = type;
+        this.place = place;
         this.name = name;
         this.repAndWeightList = repAndWeightList;
         this.progress = progress;
@@ -45,20 +45,20 @@ public class Exercise {
         this.id = id;
     }
 
-    public String getExerciseType() {
-        return exerciseType;
+    public String getType() {
+        return type;
     }
 
-    public void setExerciseType(String exerciseType) {
-        this.exerciseType = exerciseType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getExercisePlace() {
-        return exercisePlace;
+    public String getPlace() {
+        return place;
     }
 
-    public void setExercisePlace(String exercisePlace) {
-        this.exercisePlace = exercisePlace;
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public String getName() {
@@ -121,8 +121,8 @@ public class Exercise {
     public String toString() {
         return "Exercise{" +
                 "id='" + id + '\'' +
-                ", exerciseType='" + exerciseType + '\'' +
-                ", exercisePlace='" + exercisePlace + '\'' +
+                ", exerciseType='" + type + '\'' +
+                ", exercisePlace='" + place + '\'' +
                 ", name='" + name + '\'' +
                 ", repAndWeightList=" + repAndWeightList +
                 ", progress='" + progress + '\'' +
@@ -139,8 +139,8 @@ public class Exercise {
         if (o == null || getClass() != o.getClass()) return false;
         Exercise exercise = (Exercise) o;
         return Objects.equals(id, exercise.id) &&
-                Objects.equals(exerciseType, exercise.exerciseType) &&
-                Objects.equals(exercisePlace, exercise.exercisePlace) &&
+                Objects.equals(type, exercise.type) &&
+                Objects.equals(place, exercise.place) &&
                 Objects.equals(name, exercise.name) &&
                 Objects.equals(repAndWeightList, exercise.repAndWeightList) &&
                 Objects.equals(progress, exercise.progress) &&
@@ -152,6 +152,6 @@ public class Exercise {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, exerciseType, exercisePlace, name, repAndWeightList, progress, date, trainingName, reps, weight);
+        return Objects.hash(id, type, place, name, repAndWeightList, progress, date, trainingName, reps, weight);
     }
 }

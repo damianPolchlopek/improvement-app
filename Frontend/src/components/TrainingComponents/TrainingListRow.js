@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {Table, Tbody, Thead, Tr, Th, Td} from 'react-super-responsive-table'
 import axios from 'axios';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import Constants from '../Constants';
 
-const originName = 'http://localhost:8080/exercise/';
+const originName = Constants.BASE_URL + 'exercise/';
 
 class TrainingListRow  extends Component  {
 

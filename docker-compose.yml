@@ -18,5 +18,9 @@ services:
     image: mongo:latest
     container_name: "database"
     restart: always
+    environment:
+            MONGO_INITDB_ROOT_USERNAME: admin
+            MONGO_INITDB_ROOT_PASSWORD: admin
+            MONGO_INITDB_DATABASE: workout-app
     ports:
       - 27017:27017

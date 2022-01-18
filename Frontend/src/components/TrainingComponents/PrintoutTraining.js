@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Table, Tbody, Thead, Tr, Th, Td} from 'react-super-responsive-table'
+import {Table, Tbody, Tr, Td} from 'react-super-responsive-table'
 import axios from 'axios';
 import TrainingListRow from './TrainingListRow';
+import Constants from '../Constants';
 
-const originName = 'http://localhost:8080/exercise/';
+const originName = Constants.BASE_URL + 'exercise/';
 
 class PrintoutTraining  extends Component  {
 
@@ -15,13 +16,14 @@ class PrintoutTraining  extends Component  {
         };
     }
 
-    componentDidMount(){        
+    componentDidMount(){       
+
         const printTrainingUrl = originName + 'getTrainingNames';
+       
         axios.get(printTrainingUrl)
             .then(response => {
                 // handle success
                 this.setState({trainingNames: response.data.entity});
-                // console.log(response.data.entity);
             })
     }
 

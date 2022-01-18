@@ -165,8 +165,8 @@ public class DriveFilesHelper {
 
         for (int i = 0; i < exercises.size(); ++i) {
             final Exercise exercise = exercises.get(i);
-            final String exerciseType = exercise.getExerciseType();
-            final String exercisePlace = exercise.getExercisePlace();
+            final String exerciseType = exercise.getType();
+            final String exercisePlace = exercise.getPlace();
             final String exerciseName = exercise.getName();
             final String exerciseReps = exercise.getReps();
             final String exerciseWeight = exercise.getWeight();

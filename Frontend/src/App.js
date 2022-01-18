@@ -3,13 +3,13 @@ import { Switch, Route } from 'react-router-dom';
 import Layout from './components/NavigationComponents/Layout';
 
 import LoginPanel from './components/Login&Register/LoginPanel';
-import RegisterPanel from './components/Login&Register/RegisterPanel';
 import HomeView from './components/HomeComponents/HomeView';
 import AddTrainingSchema from './components/TrainingComponents/AddTrainingSchema';
 import PrintoutTraining from './components/TrainingComponents/PrintoutTraining';
 import AddMealSchema from './components/DietComponents/AddMealSchema';
 
 class App extends Component {
+
   render () {
     return (
       <div className="container">
@@ -19,7 +19,6 @@ class App extends Component {
               <Route path="/training" component={AddTrainingSchema} />
               <Route path="/printout-training" component={PrintoutTraining} />
               <Route path="/login-panel" component={LoginPanel} />
-              <Route path="/register-panel" component={RegisterPanel} />
               <Route path="/" exact component={HomeView} />
             </Switch> 
           </Layout>
