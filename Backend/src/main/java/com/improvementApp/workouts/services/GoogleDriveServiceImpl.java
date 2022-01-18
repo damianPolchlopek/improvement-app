@@ -93,7 +93,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
         final List<DriveFileItemDTO> responseList = getDriveFiles(folderName);
 
-        // TODO: wywalac wszystkie cwiczenia i jeszcze raz dodawać !!!
+        // TODO: usuwać wszystkie cwiczenia i jeszcze raz dodawać !!!
         final List<Exercise> exercises = new ArrayList<>();
         final List<String> trainingsName = exerciseService.getAllTrainingNames();
 

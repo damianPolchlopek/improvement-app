@@ -1,8 +1,9 @@
 import React from 'react';
 
 const navigationItems = () => (
+    
     <div>
-        <ul className="navbar-nav mr-auto mt-2 mt-lg-0">
+        <ul className="navbar-nav mr-auto mt-2 mt-lg-0" >
             <li className="nav-item text-muted">
                 <a className="nav-link" href="/">
                     <h5>Home</h5>
@@ -26,8 +27,16 @@ const navigationItems = () => (
                     <h5>View Training</h5>
                 </a>
             </li>
+
+            <li className="nav-item text-muted">
+                <a className="nav-link" href="/login-panel">
+                    <h5>Login</h5>
+                </a>
+            </li>
+            
         </ul>
     </div>
+    
 );
 
 export default navigationItems;
