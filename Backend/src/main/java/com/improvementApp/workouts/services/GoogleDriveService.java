@@ -19,5 +19,7 @@ public interface GoogleDriveService {
 
     String generateFileName(List<Exercise> exercises);
 
-    void initApplication() throws Exception;
+    void initApplicationCategories() throws Exception;
+
+    void initApplicationExercises() throws Exception;
 }

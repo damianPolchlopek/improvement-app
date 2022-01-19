@@ -46,7 +46,8 @@ public class GoogleDriveFilesController {
 
     @GetMapping("/initApplication")
     public void initApplication() throws Exception {
-        googleDriveService.initApplication();
+        googleDriveService.initApplicationCategories();
+        googleDriveService.initApplicationExercises();
     }
 
 }

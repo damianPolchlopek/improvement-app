@@ -24,6 +24,11 @@ public class Exercise {
     private String reps;
     private String weight;
 
+    private int index;
+
+    public Exercise() {
+    }
+
     public Exercise(String type, String place, String name, List<RepAndWeight> repAndWeightList,
                     String progress, LocalDate date, String reps, String weight, String trainingName) {
         this.type = type;
@@ -35,6 +40,21 @@ public class Exercise {
         this.reps = reps;
         this.weight = weight;
         this.trainingName = trainingName;
+    }
+
+    public Exercise(String type, String place, String name, List<RepAndWeight> repAndWeightList,
+                    String progress, LocalDate date, String reps, String weight, String trainingName,
+                    int index) {
+        this.type = type;
+        this.place = place;
+        this.name = name;
+        this.repAndWeightList = repAndWeightList;
+        this.progress = progress;
+        this.date = date;
+        this.trainingName = trainingName;
+        this.reps = reps;
+        this.weight = weight;
+        this.index = index;
     }
 
     public String getId() {
@@ -115,6 +135,14 @@ public class Exercise {
 
     public void setTrainingName(String trainingName) {
         this.trainingName = trainingName;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     @Override

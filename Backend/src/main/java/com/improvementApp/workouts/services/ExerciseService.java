@@ -46,4 +46,6 @@ public interface ExerciseService {
     List<Type> saveAllExerciseTypes(List<Type> typeList);
 
     void deleteAllExerciseTypes();
+
+    void deleteAllExercises();
 }

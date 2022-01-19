@@ -44,6 +44,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.improvementApp.workouts.helpers.ApplicationVariables.TRAININGS_FOLDER_NAME;
+
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
 
@@ -122,7 +124,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     }
 
     @Override
-    public void initApplication() throws Exception {
+    public void initApplicationCategories() throws Exception {
         final String folderName = ApplicationVariables.CATEGORIES_FOLDER_NAME;
         final List<DriveFileItemDTO> responseList = getDriveFiles(folderName);
 
@@ -135,6 +137,12 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
             saveDataToDatabase(values, fileName);
         }
+    }
+
+    @Override
+    public void initApplicationExercises() throws Exception {
+        exerciseService.deleteAllExercises();
+        saveAllExercisesToDB(TRAININGS_FOLDER_NAME);
     }
 
     @Override
