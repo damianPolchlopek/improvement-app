@@ -17,9 +17,7 @@ class PrintoutTraining  extends Component  {
     }
 
     componentDidMount(){       
-
         const printTrainingUrl = originName + 'getTrainingNames';
-       
         axios.get(printTrainingUrl)
             .then(response => {
                 // handle success

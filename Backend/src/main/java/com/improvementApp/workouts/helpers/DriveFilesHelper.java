@@ -32,6 +32,7 @@ public class DriveFilesHelper {
         final int WEIGHT_INDEX = 4;
         final int PROGRESS_INDEX = 5;
 
+        int exerciseIndex = 0;
         List<Exercise> exerciseList = new ArrayList<>();
         for (final Row row : sheet) {
 
@@ -59,10 +60,11 @@ public class DriveFilesHelper {
             final ExerciseStrategy exerciseStrategy = getExerciseParseStrategy(exerciseType, reps, weight);
             final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
 
-            final Exercise exercise = new Exercise(exerciseType,
-                    exerciseArea, exerciseName, repAndWeightList, progress, localDate, reps, weight, trainingName);
+            final Exercise exercise = new Exercise(exerciseType, exerciseArea, exerciseName, repAndWeightList,
+                    progress, localDate, reps, weight, trainingName, exerciseIndex);
 
             exerciseList.add(exercise);
+            exerciseIndex++;
         }
 
         return exerciseList;

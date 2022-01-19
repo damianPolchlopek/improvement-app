@@ -30,6 +30,25 @@ public class ExercisesHelper {
         exercises.sort((e1, e2) -> {
             boolean res =  e1.getDate().isBefore(e2.getDate());
             return res ? 1 : -1;
+//            if(e1.getDate().isBefore(e1.getDate()) ){
+//                return 1;
+//            } else if (e1.getDate().isAfter(e1.getDate())){
+//                return -1;
+//            } else {
+//                return 0;
+//            }
+        });
+    }
+
+    public static void sortExerciseListByIndex(List<Exercise> exercises) {
+        exercises.sort((e1, e2) -> {
+            if(e1.getIndex() > e2.getIndex()){
+                return 1;
+            } else if (e1.getIndex() < e2.getIndex()){
+                return -1;
+            } else {
+                return 0;
+            }
         });
     }
 
@@ -50,11 +69,11 @@ public class ExercisesHelper {
                     LocalDate.now(),
                     exercise.getReps(),
                     exercise.getWeight(),
-                    trainingName));
+                    trainingName,
+                    exercise.getIndex()));
         }
 
         return newExercises;
     }
-
 
 }

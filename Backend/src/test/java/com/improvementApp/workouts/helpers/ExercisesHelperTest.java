@@ -25,7 +25,7 @@ class ExercisesHelperTest {
     final String exerciseType = "Hipertroficzny";
     Exercise exercise1 = new Exercise(exerciseType, "testPlace", "testName1",
         null, "testProgress", LocalDate.parse("2021-11-05"), "1/1/1/1", "2/2/2/2",
-            trainingName);
+            trainingName, 0);
     Exercise exercise2 = new Exercise("testType", "testPlace", "testName2",
             null, "testProgress", LocalDate.parse("2021-11-06"), "testReps", "testWeight",
             "102 - 12.11.2011r. - A");

@@ -54,7 +54,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<Exercise> findByTrainingName(String trainingName) {
         LOGGER.info("Pobieram cwiczenia z treningu : " + trainingName);
-        return exerciseRepository.findByTrainingName(trainingName);
+        List<Exercise> exercises = exerciseRepository.findByTrainingName(trainingName);
+        ExercisesHelper.sortExerciseListByIndex(exercises);
+        return exercises;
     }
 
     @Override
@@ -156,6 +158,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public void deleteAllExerciseTypes() {
         typeRepository.deleteAll();
+    }
+
+    @Override
+    public void deleteAllExercises() {
+        exerciseRepository.deleteAll();
     }
 
 }
