@@ -4,6 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -14,6 +15,7 @@ public class GoogleDriveConfig {
     private final NetHttpTransport netHttpTransport;
     private final JacksonFactory jacksonFactory;
 
+    @Autowired
     public GoogleDriveConfig(
             GoogleCredential googleCredential,
             NetHttpTransport netHttpTransport,
@@ -23,11 +25,6 @@ public class GoogleDriveConfig {
         this.jacksonFactory = jacksonFactory;
     }
 
-    /**
-     * Provides a Google Drive client.
-     *
-     * @return {@link Drive}
-     */
     @Bean
     public Drive googleDrive() {
         return new Drive(netHttpTransport, jacksonFactory, googleCredential);
