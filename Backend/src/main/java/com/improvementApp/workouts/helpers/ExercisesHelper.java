@@ -7,6 +7,7 @@ import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.ExerciseStr
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,15 +42,7 @@ public class ExercisesHelper {
     }
 
     public static void sortExerciseListByIndex(List<Exercise> exercises) {
-        exercises.sort((e1, e2) -> {
-            if(e1.getIndex() > e2.getIndex()){
-                return 1;
-            } else if (e1.getIndex() < e2.getIndex()){
-                return -1;
-            } else {
-                return 0;
-            }
-        });
+        exercises.sort(Comparator.comparingInt(Exercise::getIndex));
     }
 
     public static List<Exercise> updateExercises(List<Exercise> exercises, String trainingName){

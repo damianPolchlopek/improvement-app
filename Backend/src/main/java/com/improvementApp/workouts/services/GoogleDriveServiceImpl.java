@@ -1,16 +1,7 @@
 package com.improvementApp.workouts.services;
 
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.http.FileContent;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.improvementApp.workouts.DTO.DriveFileItemDTO;
@@ -26,19 +17,14 @@ import com.improvementApp.workouts.helpers.ExercisesHelper;
 import com.improvementApp.workouts.types.MimeType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,44 +35,18 @@ import static com.improvementApp.workouts.helpers.ApplicationVariables.TRAININGS
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
 
-    private static final HttpTransport HTTP_TRANSPORT       = new NetHttpTransport();
-    private static final JsonFactory JSON_FACTORY           = JacksonFactory.getDefaultInstance();
-    private static final List<String> SCOPES                = Collections.singletonList(DriveScopes.DRIVE);
-    private static final String USER_IDENTIFIER_KEY         = ApplicationVariables.USER_IDENTIFIER_KEY;
-    private static final String GOOGLE_DRIVE_PROJECT_NAME   = ApplicationVariables.GOOGLE_DRIVE_PROJECT_NAME;
-    private static final String TMP_FILES_PATH              = ApplicationVariables.TMP_FILES_PATH;
-    private static final String EXCEL_EXTENSION             = ApplicationVariables.EXCEL_EXTENSION;
+    private static final String TMP_FILES_PATH = ApplicationVariables.TMP_FILES_PATH;
+    private static final String EXCEL_EXTENSION = ApplicationVariables.EXCEL_EXTENSION;
 
     private static final Logger LOGGER = Logger.getLogger(ExerciseController.class);
 
-    @Value("${google.oauth.callback.uri}")
-    private String CALLBACK_URI;
-
-    @Value("${google.secret.key.path}")
-    private Resource gdSecretKeys;
-
-    @Value("${google.credentials.folder.path}")
-    private Resource credentialsFolder;
-
-    private Drive drive;
+    private final Drive drive;
     private final ExerciseService exerciseService;
 
     @Autowired
-    public GoogleDriveServiceImpl(ExerciseService exerciseService) {
+    public GoogleDriveServiceImpl(ExerciseService exerciseService, Drive drive) {
         this.exerciseService = exerciseService;
-    }
-
-    @PostConstruct
-    public void init() throws IOException {
-        GoogleClientSecrets secrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(gdSecretKeys.getInputStream()));
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY, secrets, SCOPES)
-                .setDataStoreFactory(
-                        new FileDataStoreFactory(credentialsFolder.getFile()))
-                .build();
-
-        Credential cred = flow.loadCredential(USER_IDENTIFIER_KEY);
-        drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, cred)
-                .setApplicationName(GOOGLE_DRIVE_PROJECT_NAME).build();
+        this.drive = drive;
     }
 
     @Override
@@ -103,7 +63,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
             final String trainingName = driveFileItemDTO.getName();
 
-            if(!trainingsName.contains(trainingName)){
+            if (!trainingsName.contains(trainingName)) {
                 downloadFile(driveFileItemDTO);
                 trainingsName.add(trainingName);
 
@@ -149,7 +109,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public List<DriveFileItemDTO> getDriveFiles(final String folderName) throws Exception {
         final String folderId = getFolderId(folderName);
         final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
-                    + "' and '" + folderId + "' in parents ";
+                + "' and '" + folderId + "' in parents ";
 
         Drive.Files.List request = drive
                 .files()
@@ -158,11 +118,9 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
         final List<File> allFiles = getAllFiles(request);
 
-        final List<DriveFileItemDTO> responseList = allFiles.stream()
+        return allFiles.stream()
                 .map(DriveFileItemDTO::new)
                 .collect(Collectors.toList());
-
-        return responseList;
     }
 
     private String getFolderId(final String folderName) throws Exception {
@@ -204,34 +162,34 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         return result;
     }
 
-    private void saveDataToDatabase(List<String> values, String fileName){
+    private void saveDataToDatabase(List<String> values, String fileName) {
         final String NAMES = "Names";
         final String PLACES = "Places";
         final String PROGRESSES = "Progresses";
         final String TYPES = "Types";
 
-        if (fileName.contains(NAMES)){
+        if (fileName.contains(NAMES)) {
             exerciseService.deleteAllExerciseNames();
             List<Name> nameList = values.stream()
                     .map(Name::new)
                     .collect(Collectors.toList());
 
             exerciseService.saveAllExerciseNames(nameList);
-        } else if (fileName.contains(PLACES)){
+        } else if (fileName.contains(PLACES)) {
             exerciseService.deleteAllExercisePlaces();
             List<Place> placeList = values.stream()
                     .map(Place::new)
                     .collect(Collectors.toList());
 
             exerciseService.saveAllExercisePlaces(placeList);
-        } else if (fileName.contains(PROGRESSES)){
+        } else if (fileName.contains(PROGRESSES)) {
             exerciseService.deleteAllExerciseProgresses();
             List<Progress> progressList = values.stream()
                     .map(Progress::new)
                     .collect(Collectors.toList());
 
             exerciseService.saveAllExerciseProgresses(progressList);
-        } else if (fileName.contains(TYPES)){
+        } else if (fileName.contains(TYPES)) {
             exerciseService.deleteAllExerciseTypes();
             List<Type> typeList = values.stream()
                     .map(Type::new)
@@ -283,13 +241,13 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         return incrementedLastExerciseNumber + " - " + dateString + "r." + " - " + lastTrainingType;
     }
 
-    private String parseTrainingName(String trainingName, int groupIndex){
+    private String parseTrainingName(String trainingName, int groupIndex) {
         final String regex = "([0-9.?[0-9]*]+) - " +
                 "([0-9]+.[0-9]+.[0-9]+r.) - " +
                 "([A-Z])";
-        final Pattern pattern       = Pattern.compile(regex);
-        final Matcher matcher       = pattern.matcher(trainingName);
-        final boolean isMatchFound  = matcher.find();
+        final Pattern pattern = Pattern.compile(regex);
+        final Matcher matcher = pattern.matcher(trainingName);
+        final boolean isMatchFound = matcher.find();
 
         if (!isMatchFound)
             throw new RuntimeException("Incorrect training name: " + trainingName);
