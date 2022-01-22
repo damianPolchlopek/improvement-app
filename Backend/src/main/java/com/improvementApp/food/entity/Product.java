@@ -3,7 +3,7 @@ package com.improvementApp.food.entity;
 import lombok.Data;
 
 @Data
-public class Product extends Meal{
+public class Product{
     private int id;
     private String name;
     private int kcal;

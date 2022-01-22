@@ -8,11 +8,8 @@ import com.google.api.services.drive.DriveScopes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -22,20 +19,17 @@ import java.util.Set;
 @Configuration
 public class GoogleApiClientConfig {
 
+    @Value("${google.credentials.folder.path}")
+    Resource filePath;
+
     private Set<String> googleOAuth2Scopes() {
         Set<String> googleOAuth2Scopes = new HashSet<>();
         googleOAuth2Scopes.add(DriveScopes.DRIVE);
         return Collections.unmodifiableSet(googleOAuth2Scopes);
     }
 
-    @Value("${google.credentials.folder.path}")
-    Resource filePath;
-
     @Bean
     public GoogleCredential googleCredential() throws IOException {
-//        File serviceAccount = new ClassPathResource("classpath:filename").getFile();
-////        File serviceAccount = new File("rsrc:serviceAccount.json");
-//        FileInputStream fileInputStream = new FileInputStream(serviceAccount);
         return GoogleCredential.fromStream(filePath.getInputStream())
                 .createScoped(googleOAuth2Scopes());
     }
