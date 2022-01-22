@@ -18,7 +18,7 @@ const navigationItems = () => (
 
             <li className="nav-item text-muted">
                 <a className="nav-link" href="/training">
-                    <h5>Training</h5>
+                    <h5>Add Training</h5>
                 </a>
             </li>
 
