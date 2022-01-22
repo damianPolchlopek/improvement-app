@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 
-class Constants extends React.Component {
-    static BASE_URL = "http://localhost:8080/";
+class Constants extends Component {
+    static BASE_URL = "https://improvement-app-backend.herokuapp.com/";
+    // static BASE_URL = "http://localhost:8080/";
 }
 
   

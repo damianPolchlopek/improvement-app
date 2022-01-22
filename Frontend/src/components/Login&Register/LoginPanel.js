@@ -6,6 +6,9 @@ import Cookies from 'universal-cookie';
 import axios from 'axios';
 import TextError from './TextError';
 // import 'font-awesome/css/font-awesome.min.css';
+import Constants from '../Constants';
+
+const originName = Constants.BASE_URL;
 
 const initialValues = {
   username: '',
@@ -32,7 +35,8 @@ class LoginPanel extends Component {
                     onSubmit={values => {
                         console.log('Submit: ', values)
                     
-                        axios.post('http://localhost:8080/api/auth/signin', values)
+                        const loginUrl = originName + 'api/auth/signin';
+                        axios.post(loginUrl, values)
                         .then(res => {
                     
                         console.log(res.data);

@@ -25,6 +25,7 @@ target/
 **/src/main/resources/keys/
 **/src/main/resources/credentials/
 **/src/main/resources/serviceAccount.json
+**/src/main/resources/token/serviceAccount.json
 
 ### NetBeans ###
 /nbproject/private/
