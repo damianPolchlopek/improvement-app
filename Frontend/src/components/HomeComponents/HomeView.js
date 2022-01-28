@@ -5,6 +5,21 @@ class HomeView extends Component {
     return (
       <div>
           <h1>Home Component</h1>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
       </div>
     );
   }

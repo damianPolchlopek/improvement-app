@@ -15,8 +15,20 @@ class AddTrainingSchema extends Component {
       exerciseProgresses: [],
       exercisePlaces: [],
       exerciseTypes: [],
-      isSimpleForm: true
+      isSimpleForm: true,
+      isBigWindow: true,
+      isSmallWindow: false
     };
+
+    if(window.innerWidth < 1000){
+      this.state.isBigWindow = false;
+      this.state.isSmallWindow = true;
+    } else {
+      this.state.isBigWindow = true;
+      this.state.isSmallWindow = false;
+    }
+
+    console.log(window.innerWidth)
   }
 
   componentDidMount(){
@@ -137,7 +149,7 @@ class AddTrainingSchema extends Component {
 
           <h3 className="text-center">Training Schema</h3>
       
-          <Formik
+            <Formik
               enableReinitialize={true}
               initialValues={this.initialValues}
               onSubmit={this.onSubmit}
@@ -153,111 +165,208 @@ class AddTrainingSchema extends Component {
                       const { exercises } = values
                       return <div>
 
-                      <table className="table">
-                        <thead className="thead-light">
-                          <tr>
-                            <th scope="col" hidden={this.state.isSimpleForm}>#</th>
-                            <th scope="col" hidden={this.state.isSimpleForm}>Type</th>
-                            <th scope="col" hidden={this.state.isSimpleForm}>Place</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Reps</th>
-                            <th scope="col">Weight</th>
-                            <th scope="col">Progress</th>
-                            <th scope="col" hidden={this.state.isSimpleForm}>Options</th>
-                          </tr>
-                        </thead>
+                        <div hidden={!this.state.isBigWindow}>
+                          <table className="table">
+                            <thead className="thead-light">
+                              <tr>
+                                <th scope="col" hidden={this.state.isSimpleForm}>#</th>
+                                <th scope="col" hidden={this.state.isSimpleForm}>Type</th>
+                                <th scope="col" hidden={this.state.isSimpleForm}>Place</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Reps</th>
+                                <th scope="col">Weight</th>
+                                <th scope="col">Progress</th>
+                                <th scope="col" hidden={this.state.isSimpleForm}>Options</th>
+                              </tr>
+                            </thead>
 
-                        <tbody>
+                            <tbody>
 
+                              {exercises.map((singleExercise, index) => (
+                              <tr>
+                                <th scope="row" hidden={this.state.isSimpleForm}>{index}</th>
+
+                                <td hidden={this.state.isSimpleForm}>
+                                  <Field className="form-control" 
+                                    name={`exercises[${index}].exerciseType`} 
+                                    as="select"
+                                    value={exercises[index].exerciseType}
+                                  >
+                                    {this.state.exerciseTypes.map(exerciseType => {
+                                      return(
+                                      <option key={exerciseType.type} value={exerciseType.type}>
+                                        {exerciseType.type}
+                                      </option>
+                                      );
+                                    })}
+                                  </Field>
+                                </td>
+
+                                <td hidden={this.state.isSimpleForm}>
+                                  <Field className="form-control" 
+                                    name={`exercises[${index}].exercisePlace`}
+                                    as="select"
+                                    value={exercises[index].exercisePlace}
+                                  >
+                                    {this.state.exercisePlaces.map(exercisePlace => {
+                                      return(
+                                      <option key={exercisePlace.place} value={exercisePlace.place}>
+                                        {exercisePlace.place}
+                                      </option>
+                                      );
+                                    })}
+                                  </Field>
+                                
+                                </td>
+                                <td>
+                                  <Field className="form-control" 
+                                    name={`exercises[${index}].name`} 
+                                    as="select"
+                                    value={exercises[index].name}
+                                  >
+                                    {this.state.exerciseNames.map(exerciseName => {
+                                      return(
+                                      <option key={exerciseName.name} value={exerciseName.name}>
+                                        {exerciseName.name}
+                                      </option>
+                                      );
+                                    })}
+                                  </Field>
+                                
+                                </td>
+
+                                <td><Field className="form-control" name={`exercises[${index}].reps`} /></td>
+                                <td><Field className="form-control" name={`exercises[${index}].weight`} /></td>
+
+                                <td>
+                                  <Field className="form-control" 
+                                    name={`exercises[${index}].progress`} 
+                                    as="select"
+                                    value={exercises[index].progress}
+                                  >
+                                    {this.state.exerciseProgresses.map(progress => {
+                                      return(
+                                      <option key={progress.progress} value={progress.progress}>
+                                        {progress.progress}
+                                      </option>
+                                      );
+                                      
+                                    })}
+
+                                  </Field>
+                                </td>
+
+                                <td hidden={this.state.isSimpleForm}>
+                                  <button className="btn btn-success" type='button' onClick={() => push('')}>
+                                    Add
+                                  </button>
+                                  {index > 0 && (
+                                    <button className="btn btn-danger" type='button' onClick={() => remove(index)}> 
+                                    Delete
+                                    </button>
+                                  )}  
+                                </td>
+                              </tr>
+                              
+                              ))}
+
+                            </tbody>
+                          </table>  
+                        </div>
+
+
+                        <div hidden={!this.state.isSmallWindow}>
                           {exercises.map((singleExercise, index) => (
-                          <tr>
-                            <th scope="row" hidden={this.state.isSimpleForm}>{index}</th>
+                          <table className="table">
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <td>{index}</td>
+                                </tr>
 
-                            <td hidden={this.state.isSimpleForm}>
-                              <Field className="form-control" 
-                                name={`exercises[${index}].exerciseType`} 
-                                as="select"
-                                value={exercises[index].exerciseType}
-                              >
-                                {this.state.exerciseTypes.map(exerciseType => {
-                                  return(
-                                  <option key={exerciseType.type} value={exerciseType.type}>
-                                    {exerciseType.type}
-                                  </option>
-                                  );
-                                })}
-                              </Field>
-                            </td>
-
-                            <td hidden={this.state.isSimpleForm}>
-                              <Field className="form-control" 
-                                name={`exercises[${index}].exercisePlace`}
-                                as="select"
-                                value={exercises[index].exercisePlace}
-                              >
-                                {this.state.exercisePlaces.map(exercisePlace => {
-                                  return(
-                                  <option key={exercisePlace.place} value={exercisePlace.place}>
-                                    {exercisePlace.place}
-                                  </option>
-                                  );
-                                })}
-                              </Field>
-                            
-                            </td>
-                            <td>
-                              <Field className="form-control" 
-                                name={`exercises[${index}].name`} 
-                                as="select"
-                                value={exercises[index].name}
-                              >
-                                {this.state.exerciseNames.map(exerciseName => {
-                                  return(
-                                  <option key={exerciseName.name} value={exerciseName.name}>
-                                    {exerciseName.name}
-                                  </option>
-                                  );
-                                })}
-                              </Field>
-                            
-                            </td>
-
-                            <td><Field className="form-control" name={`exercises[${index}].reps`} /></td>
-                            <td><Field className="form-control" name={`exercises[${index}].weight`} /></td>
-
-                            <td>
-                              <Field className="form-control" 
-                                name={`exercises[${index}].progress`} 
-                                as="select"
-                                value={exercises[index].progress}
-                              >
-                                {this.state.exerciseProgresses.map(progress => {
-                                  return(
-                                  <option key={progress.progress} value={progress.progress}>
-                                    {progress.progress}
-                                  </option>
-                                  );
+                                <tr hidden={this.state.isSimpleForm}>
+                                  <th>Place:</th>
+                                  <td>
+                                    <Field className="form-control" 
+                                      name={`exercises[${index}].exercisePlace`}
+                                      as="select"
+                                      value={exercises[index].exercisePlace}
+                                    >
+                                      {this.state.exercisePlaces.map(exercisePlace => {
+                                        return(
+                                        <option key={exercisePlace.place} value={exercisePlace.place}>
+                                          {exercisePlace.place}
+                                        </option>
+                                        );
+                                      })}
+                                    </Field>
                                   
-                                })}
+                                  </td>
+                                </tr>
 
-                              </Field>
-                            </td>
+                                <tr hidden={this.state.isSimpleForm}>
+                                  <th>Type:</th>
+                                  <td >
+                                    <Field className="form-control" 
+                                      name={`exercises[${index}].exerciseType`} 
+                                      as="select"
+                                      value={exercises[index].exerciseType}
+                                    >
+                                      {this.state.exerciseTypes.map(exerciseType => {
+                                        return(
+                                        <option key={exerciseType.type} value={exerciseType.type}>
+                                          {exerciseType.type}
+                                        </option>
+                                        );
+                                      })}
+                                    </Field>
+                                  </td>
+                                </tr>
 
-                            <td hidden={this.state.isSimpleForm}>
-                              <button className="btn btn-success" type='button' onClick={() => push('')}>
-                                Add
-                              </button>
-                              {index > 0 && (
-                                <button className="btn btn-danger" type='button' onClick={() => remove(index)}> 
-                                Delete
-                                </button>
-                              )}  
-                            </td>
-                          </tr>
+                                <tr>
+                                  <th>Name</th>
+                                  <td>
+                                    <Field className="form-control" 
+                                      name={`exercises[${index}].name`} 
+                                      as="select"
+                                      value={exercises[index].name}
+                                    >
+                                      {this.state.exerciseNames.map(exerciseName => {
+                                        return(
+                                        <option key={exerciseName.name} value={exerciseName.name}>
+                                          {exerciseName.name}
+                                        </option>
+                                        );
+                                      })}
+                                    </Field>
+                                  
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th>Reps:</th>
+                                  <td><Field className="form-control" name={`exercises[${index}].reps`} /></td>
+                                </tr>
+
+                                <tr>
+                                  <th>Weight:</th>
+                                  <td><Field className="form-control" name={`exercises[${index}].weight`} /></td>
+                                </tr>
+
+                                <tr hidden={this.state.isSimpleForm}>
+                                  <th>Options:</th>
+                                  <td>
+                                    <button className="btn btn-success" type='button' onClick={() => push('')}>
+                                      Add
+                                    </button>
+                                    {index > 0 && (
+                                      <button className="btn btn-danger" type='button' onClick={() => remove(index)}> 
+                                      Delete
+                                      </button>
+                                    )}  
+                                  </td>
+                                </tr>
+                              </table>  
                           ))}
-
-                        </tbody>
-                      </table>  
+                        </div>
 
                       </div>
                     }}
