@@ -351,6 +351,27 @@ class AddTrainingSchema extends Component {
                                   <td><Field className="form-control" name={`exercises[${index}].weight`} /></td>
                                 </tr>
 
+                                <tr>
+                                  <th>Progress:</th>
+                                  <td>
+                                    <Field className="form-control" 
+                                      name={`exercises[${index}].progress`} 
+                                      as="select"
+                                      value={exercises[index].progress}
+                                    >
+                                      {this.state.exerciseProgresses.map(progress => {
+                                        return(
+                                        <option key={progress.progress} value={progress.progress}>
+                                          {progress.progress}
+                                        </option>
+                                        );
+                                        
+                                      })}
+
+                                    </Field>
+                                  </td>
+                                </tr>
+
                                 <tr hidden={this.state.isSimpleForm}>
                                   <th>Options:</th>
                                   <td>
