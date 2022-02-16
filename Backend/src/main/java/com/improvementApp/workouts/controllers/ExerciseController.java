@@ -48,7 +48,7 @@ public class ExerciseController {
         DriveFilesHelper.createExcelFile(exercises, trainingNameExcelFile);
 
         final File file = new File(ApplicationVariables.TMP_FILES_PATH + trainingNameExcelFile);
-        googleDriveService.uploadFileInFolder(ApplicationVariables.TRAININGS_FOLDER_NAME, file, trainingName);
+        googleDriveService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
         List<Exercise> exercisesFromDb = exerciseService.findAll();
         ExercisesHelper.sortExerciseListByDate(exercisesFromDb);

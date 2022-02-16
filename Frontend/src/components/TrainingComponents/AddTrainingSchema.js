@@ -11,6 +11,7 @@ class AddTrainingSchema extends Component {
     super(props);
 
     this.state = {
+      exercises: [],
       exerciseNames: [],
       exerciseProgresses: [],
       exercisePlaces: [],
@@ -27,8 +28,6 @@ class AddTrainingSchema extends Component {
       this.state.isBigWindow = true;
       this.state.isSmallWindow = false;
     }
-
-    console.log(window.innerWidth)
   }
 
   componentDidMount(){
@@ -79,6 +78,7 @@ class AddTrainingSchema extends Component {
     axios.get(getLastExercisesWithType)
     .then(response => {
         this.initialValues.exercises = response.data.entity;
+        this.setState({exercises: response.data.entity});
         this.setState({isUpdated: true});
     })
 
@@ -101,7 +101,10 @@ class AddTrainingSchema extends Component {
     const addExercisesUrl = originName + 'addTraining';
     axios.post(addExercisesUrl, values.exercises)
     .then(res => {
+        console.log('Dodano cwiczenie ')
         console.log(res);
+        this.props.history.push('/training')
+        window.location.reload(false)
     })
   };
 
@@ -148,7 +151,99 @@ class AddTrainingSchema extends Component {
           </div>
 
           <h3 className="text-center">Training Schema</h3>
-      
+          {/* <div>
+            <form>
+              {
+                this.state.exercises.map(((exercise, index) => {
+                  return(
+                    <div>
+                      //  type
+                      <div hidden={this.state.isSimpleForm}>
+                        Type: 
+                        <select>
+                          {this.state.exerciseTypes.map(exerciseType => {
+                            return(
+                            <option key={exerciseType.type} value={exerciseType.type}>
+                              {exerciseType.type}
+                            </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+
+                      // place 
+                      <div hidden={this.state.isSimpleForm}>
+                        Place: 
+                        <select>
+                          {this.state.exercisePlaces.map(exercisePlace => {
+                            return(
+                            <option key={exercisePlace.place} value={exercisePlace.place}>
+                              {exercisePlace.place}
+                            </option>
+                            );
+                          })}
+                          </select>
+                      </div>
+                      
+                      // name 
+                      <div>
+                        Name:
+                        <select value={exercise.name}>
+                          {this.state.exerciseNames.map(exerciseName => {
+                            return(
+                            <option key={exerciseName.name} value={exerciseName.name}>
+                              {exerciseName.name}
+                            </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+
+                      // reps
+                      <div>
+                        Reps:
+                        // <Field className="form-control" name={`exercises[${index}].reps`} 
+                        <input />
+                      </div>
+
+                      // weight
+                      <div>
+                        Weight:
+                        <input />
+                      </div>
+
+                      // progress
+                      <div>
+                        Progress:
+                        <select>
+                          {this.state.exerciseProgresses.map(progress => {
+                            return(
+                            <option key={progress.progress} value={progress.progress}>
+                              {progress.progress}
+                            </option>
+                            );
+                            
+                          })}
+                        </select>
+                      </div>
+
+                      // options
+                      <div>
+                        Options:
+                        
+                      </div>
+
+                      <br></br>
+                    </div>
+                  )
+                }))
+              }
+              
+            </form>
+          </div> */}
+
+
+          <div hidden={this.state.isSmallWindow}>
             <Formik
               enableReinitialize={true}
               initialValues={this.initialValues}
@@ -165,7 +260,6 @@ class AddTrainingSchema extends Component {
                       const { exercises } = values
                       return <div>
 
-                        <div hidden={!this.state.isBigWindow}>
                           <table className="table">
                             <thead className="thead-light">
                               <tr>
@@ -272,11 +366,37 @@ class AddTrainingSchema extends Component {
 
                             </tbody>
                           </table>  
-                        </div>
+                      </div>
+                    }}
+                    </FieldArray>
+                </div>
+
+                <button className="col-sm-6 form-control btn btn-success " 
+                        type='submit'>Submit</button>
+              </Form>
+            </Formik>
+
+          </div> 
 
 
-                        <div hidden={!this.state.isSmallWindow}>
+          <div hidden={this.state.isBigWindow}>
+            <Formik
+              enableReinitialize={true}
+              initialValues={this.initialValues}
+              onSubmit={this.onSubmit}
+            >
+              <Form>
+                <div>
+                  <br/>
+  
+                  <FieldArray name='exercises'>
+                    {(fieldArrayProps) => {
+                      const { push, remove, form } = fieldArrayProps;
+                      const { values } = form
+                      const { exercises } = values
+                      return <div>
                           {exercises.map((singleExercise, index) => (
+                            
                           <table className="table">
                                 <tr>
                                   <th scope="col">#</th>
@@ -387,7 +507,6 @@ class AddTrainingSchema extends Component {
                                 </tr>
                               </table>  
                           ))}
-                        </div>
 
                       </div>
                     }}
@@ -399,7 +518,8 @@ class AddTrainingSchema extends Component {
               </Form>
             </Formik>
 
-        
+          </div> 
+          
       </div>
     );
   }

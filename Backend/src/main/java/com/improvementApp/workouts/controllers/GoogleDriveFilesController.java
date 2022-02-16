@@ -19,7 +19,7 @@ import java.util.List;
 public class GoogleDriveFilesController {
 
     private static final Logger LOGGER = Logger.getLogger(GoogleDriveFilesController.class);
-    private final String TRAININGS_FOLDER_NAME = ApplicationVariables.TRAININGS_FOLDER_NAME;
+    private final String TRAININGS_FOLDER_NAME = ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
     private final GoogleDriveService googleDriveService;
 
