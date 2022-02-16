@@ -1,17 +1,20 @@
 package com.improvementApp.workouts.helpers;
 
-import com.improvementApp.workouts.entity.Exercise;
 import com.improvementApp.workouts.entity.DTO.RepAndWeight;
+import com.improvementApp.workouts.entity.Exercise;
+import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.CardioExercise;
 import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.ExerciseStrategy;
 import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.HypertrophicExercise;
-import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.CardioExercise;
 import com.improvementApp.workouts.helpers.parseRepAndWeightStrategy.StrengthExercise;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -200,13 +203,10 @@ public class DriveFilesHelper {
             cell.setCellStyle(style);
         }
 
-        File currDir = new File(ApplicationVariables.TMP_FILES_PATH);
-        String path = currDir.getAbsolutePath();
-        String fileLocation = path + "/" + fileName;
-
+        final String fileLocation = ApplicationVariables.TMP_FILES_PATH + fileName;
         FileOutputStream outputStream = new FileOutputStream(fileLocation);
         workbook.write(outputStream);
         workbook.close();
-    }
 
+    }
 }

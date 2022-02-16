@@ -17,6 +17,7 @@ import com.improvementApp.workouts.helpers.ExercisesHelper;
 import com.improvementApp.workouts.types.MimeType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
@@ -30,12 +31,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.improvementApp.workouts.helpers.ApplicationVariables.TRAININGS_FOLDER_NAME;
+import static com.improvementApp.workouts.helpers.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Service
 public class GoogleDriveServiceImpl implements GoogleDriveService {
 
-    private static final String TMP_FILES_PATH = ApplicationVariables.TMP_FILES_PATH;
+    private static final Resource TMP_FILES_PATH = ApplicationVariables.TMP_FILES_PATH;
     private static final String EXCEL_EXTENSION = ApplicationVariables.EXCEL_EXTENSION;
 
     private static final Logger LOGGER = Logger.getLogger(ExerciseController.class);
@@ -85,7 +86,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     @Override
     public void initApplicationCategories() throws Exception {
-        final String folderName = ApplicationVariables.CATEGORIES_FOLDER_NAME;
+        final String folderName = ApplicationVariables.DRIVE_CATEGORIES_FOLDER_NAME;
         final List<DriveFileItemDTO> responseList = getDriveFiles(folderName);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
@@ -102,7 +103,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Override
     public void initApplicationExercises() throws Exception {
         exerciseService.deleteAllExercises();
-        saveAllExercisesToDB(TRAININGS_FOLDER_NAME);
+        saveAllExercisesToDB(DRIVE_TRAININGS_FOLDER_NAME);
     }
 
     @Override
