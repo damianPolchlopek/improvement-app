@@ -60,6 +60,11 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
+    public void deleteByTrainingName(String trainingName) {
+        exerciseRepository.deleteByTrainingName(trainingName);
+    }
+
+    @Override
     public List<Exercise> saveAll(List<Exercise> exercises) {
         LOGGER.info("Zapisuje cwiczenia: " + exercises);
         return exerciseRepository.saveAll(exercises);

@@ -14,6 +14,7 @@ class PrintoutTraining  extends Component  {
         this.state = {
             trainingNames: []
         };
+
     }
 
     componentDidMount(){       
@@ -24,6 +25,12 @@ class PrintoutTraining  extends Component  {
                 this.setState({trainingNames: response.data.entity});
             })
     }
+
+    handler = () => {
+        console.log('Parent handler')
+        this.props.history.push('/printout-training')
+        window.location.reload(false)
+      }
 
     render () {
         return (
@@ -43,7 +50,9 @@ class PrintoutTraining  extends Component  {
                                         <Td key={trainingName + '2'}>
                                             <TrainingListRow 
                                                 key={trainingName}
-                                                trainingName={trainingName} />
+                                                trainingName={trainingName} 
+                                                handler={this.handler}
+                                                />
                                         </Td>
                                     </Tr>
                                     

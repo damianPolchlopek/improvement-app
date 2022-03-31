@@ -19,7 +19,6 @@ class TrainingListRow  extends Component  {
 
     getExercisesByTrainingName = (trainingName) => {
         trainingName = trainingName.replace(/ /g,"_");
-        console.log(trainingName);
 
         const printExercisesUrl = originName + 'getExercise/trainingName/' + trainingName;
         axios.get(printExercisesUrl)
@@ -67,6 +66,18 @@ class TrainingListRow  extends Component  {
             })
     }
 
+    deleteTraining = (trainingName) => {
+        console.log("Delete training: " + trainingName);
+
+        const deleteTrainingUrl = originName + 'deleteTraining/' + trainingName;
+        axios.delete(deleteTrainingUrl)
+            .then(response => {
+                
+                console.log("Delete training: " + trainingName);
+                this.props.handler()
+            })
+    }
+
     handleClick = () => {
         var oldState = this.state.isClicked;
         this.setState({isClicked: !oldState})
@@ -80,6 +91,10 @@ class TrainingListRow  extends Component  {
                 <div onClick={()=> this.handleClick()} 
                     style={{display: 'flex', justifyContent: 'center'}}>
                     {this.props.trainingName}
+                    <button 
+                        className="btn-danger"
+                        onClick={() =>this.deleteTraining(this.props.trainingName)}
+                    > Delete </button>
                 </div>
 
                 {( this.state.isClicked )

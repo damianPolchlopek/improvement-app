@@ -59,6 +59,14 @@ public class ExerciseController {
         return Response.ok(savedExercises).build();
     }
 
+    @DeleteMapping("/deleteTraining/{trainingName}")
+    public Response deleteTraining(@PathVariable String trainingName) throws Exception {
+        System.out.println("Usuwam trening");
+        exerciseService.deleteByTrainingName(trainingName);
+        googleDriveService.deleteTraining(trainingName);
+        return Response.ok().build();
+    }
+
     @PostMapping("/addExercise")
     public Response addExercise(@RequestBody Exercise exercise) {
         LOGGER.info("Dodaje ćwiczenie: " + exercise.toString());
