@@ -22,4 +22,6 @@ public interface GoogleDriveService {
     void initApplicationCategories() throws Exception;
 
     void initApplicationExercises() throws Exception;
+
+    void deleteTraining(String trainingName) throws Exception;
 }

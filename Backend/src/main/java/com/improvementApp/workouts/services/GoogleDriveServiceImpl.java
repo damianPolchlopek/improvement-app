@@ -107,6 +107,33 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     }
 
     @Override
+    public void deleteTraining(String trainingName) throws Exception {
+        final String fileId = getFileId(trainingName);
+        drive.files().delete(fileId).execute();
+    }
+
+    private String getFileId(String trainingName) throws Exception {
+        final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
+                + "' and name contains '" + trainingName + "' ";
+
+        Drive.Files.List request = drive
+                .files()
+                .list()
+                .setQ(query);
+
+        List<File> allFiles = getAllFiles(request);
+
+        if (allFiles.size() > 1)
+            throw new Exception("Return more than one folder");
+
+        final List<DriveFileItemDTO> responseList = allFiles.stream()
+                .map(DriveFileItemDTO::new)
+                .collect(Collectors.toList());
+
+        return responseList.get(0).getId();
+    }
+
+    @Override
     public List<DriveFileItemDTO> getDriveFiles(final String folderName) throws Exception {
         final String folderId = getFolderId(folderName);
         final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()

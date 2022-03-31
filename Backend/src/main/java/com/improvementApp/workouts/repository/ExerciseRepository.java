@@ -13,4 +13,6 @@ public interface ExerciseRepository extends MongoRepository<Exercise, String> {
 
     List<Exercise> findByTrainingName(String trainingName);
 
+    void deleteByTrainingName(String trainingName);
+
 }

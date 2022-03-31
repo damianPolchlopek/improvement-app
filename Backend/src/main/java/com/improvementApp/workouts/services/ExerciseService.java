@@ -13,6 +13,8 @@ public interface ExerciseService {
 
     List<Exercise> findByTrainingName(String trainingName);
 
+    void deleteByTrainingName(String trainingName);
+
     List<Exercise> saveAll(List<Exercise> newExercises);
 
     Exercise save(Exercise exercise);
