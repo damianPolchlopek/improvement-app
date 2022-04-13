@@ -39,7 +39,6 @@ public class ExerciseServiceImpl implements ExerciseService {
     public List<Exercise> findByDate(LocalDate date) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + date);
         List<Exercise> exercises = exerciseRepository.findByDate(date);
-        ExercisesHelper.sortExerciseListByDate(exercises);
         return exercises;
     }
 

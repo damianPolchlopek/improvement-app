@@ -101,6 +101,7 @@ public class ExerciseController {
     public Response getExercisesByDate(@PathVariable String exerciseDate) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
         List<Exercise> result = exerciseService.findByDate(LocalDate.parse(exerciseDate));
+        LOGGER.info("Pobieram cwiczenia o dacie: " + result);
         return Response.ok(result).build();
     }
 
