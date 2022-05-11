@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,8 +40,7 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<Exercise> findByDate(LocalDate date) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + date);
-        List<Exercise> exercises = exerciseRepository.findByDate(date);
-        return exercises;
+        return exerciseRepository.findByDate(date);
     }
 
     @Override
@@ -151,7 +152,9 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<Type> getExerciseTypes() {
         LOGGER.info("Pobieram wszystkie typy cwiczen");
-        return typeRepository.findAll();
+        List<Type> types = typeRepository.findAll();
+        Collections.sort(types, Comparator.comparing(Type::getType).reversed());
+        return types;
     }
 
     @Override

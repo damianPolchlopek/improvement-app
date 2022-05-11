@@ -7,12 +7,12 @@ function Layout(props) {
   return (
     <div>
     
-      <div className="layout">
+      <div className='topBar'>
         <Logo />
         <NavigationItems />
       </div>    
 
-      <main>
+      <main className='body'>
         {props.children}
       </main>
 

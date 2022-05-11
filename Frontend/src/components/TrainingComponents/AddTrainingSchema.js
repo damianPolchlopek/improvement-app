@@ -81,7 +81,6 @@ class AddTrainingSchema extends Component {
         this.setState({exercises: response.data.entity});
         this.setState({isUpdated: true});
     })
-
   }
 
   initialValues = {

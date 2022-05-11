@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './SingleTraining.css';
-import REST from '../utils/REST';
+import REST from '../../utils/REST';
 
 export default function SingleTraining(props){
   const [exercises, setExercises] = useState(null);
@@ -35,7 +35,7 @@ export default function SingleTraining(props){
   }
 
   return (
-    <div className='single-training-container'>
+    <React.Fragment>
       <div className='single-training-header'>
         <span   onClick={() => handleClick()}>{props.trainingName}</span>
         <button onClick={() => props.deleteTraining(props.trainingName)}>Delete</button>
@@ -63,6 +63,6 @@ export default function SingleTraining(props){
           }) : null}
         </tbody>
       </table>
-    </div>
+    </React.Fragment>
   );
 }

@@ -46,6 +46,7 @@ public class GoogleDriveFilesController {
 
     @GetMapping("/initApplication")
     public void initApplication() throws Exception {
+        LOGGER.info("Usuwam i dodaje nowe dane do bazy danych treningowej");
         googleDriveService.initApplicationCategories();
         googleDriveService.initApplicationExercises();
     }

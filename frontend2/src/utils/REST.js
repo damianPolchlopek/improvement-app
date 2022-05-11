@@ -4,12 +4,19 @@ import axios from "axios";
 // static BASE_URL = "http://localhost:8080/";
 const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercise/';
+const drive = 'drive/';
 
 const get = (url) => {
     return axios.get(url).then((response) => {
         console.log(response)
         return response.data;
     });
+}
+
+const post = (url, data) => {
+    return axios.post(url, data).then((response) => {
+        return response.data;
+    })
 }
 
 export default class REST {
@@ -44,6 +51,20 @@ export default class REST {
 
     static getExercisesByName(name){
         return get(serverUrl + exercise + 'getExercise/name/' + name);
+    }
+
+    static getTrainingByType(type){
+        return get(serverUrl + exercise + 'getLastTypeTraining/' + type);
+    }
+
+    static addTraining(data){
+        return post(serverUrl + exercise + 'addTraining', data);
+    }
+
+
+
+    static initTrainingModule(){
+        return get(serverUrl + drive + 'initApplication');
     }
 
 }

@@ -1,5 +1,11 @@
-.layout {
+.topBar {
     display: flex; 
     flex-direction: row;
     /* justify-content: flex-start; */
+}
+
+.body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
