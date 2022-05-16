@@ -8,7 +8,6 @@ function HomeView() {
       
       <button onClick={() => REST.initTrainingModule()}>Init Training Module</button>
 
-      Home View
     </div>
   );
 }

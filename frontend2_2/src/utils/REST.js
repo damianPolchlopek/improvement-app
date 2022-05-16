@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from 'universal-cookie';
 
 // static BASE_URL = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
@@ -18,6 +19,17 @@ const post = (url, data) => {
         return response.data;
     })
 }
+
+axios.interceptors.request.use(
+    (req) => {
+      const cookies = new Cookies();
+      req.headers.common.Authorization = cookies.get('authorization');
+       return req;
+    },
+    (err) => {
+       return Promise.reject(err);
+    }
+  );
 
 export default class REST {
 
@@ -61,8 +73,10 @@ export default class REST {
         return post(serverUrl + exercise + 'addTraining', data);
     }
 
-
-
+    static loginUser(user){
+        return post(serverUrl + 'api/auth/signin', user);
+    }
+    
     static initTrainingModule(){
         return get(serverUrl + drive + 'initApplication');
     }

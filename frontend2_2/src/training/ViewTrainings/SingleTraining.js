@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import './SingleTraining.css';
 import REST from '../../utils/REST';
+import TrainingForm from '../AddTraining/TrainingForm';
 
 export default function SingleTraining(props){
   const [exercises, setExercises] = useState(null);
   const [isClicked, setIsClicked] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
   function handleClick() {
     setIsClicked(!isClicked);
   
+    setExercises([])
     getExercisesByTrainingName(props.trainingName);
   }
   
@@ -34,13 +37,39 @@ export default function SingleTraining(props){
     });
   }
 
+  function updateTraining(trainingName) {
+    console.log("Update training: ");
+    console.log(trainingName);
+
+    setIsUpdated(!isUpdated);
+    setIsClicked(false);
+
+    setExercises([])
+    getExercisesByTrainingName(props.trainingName);
+  }
+
+  function deleteTraining(trainingName) {
+    console.log("Delete training: ");
+    console.log(trainingName);
+  }
+
+  function modify() {
+    console.log("Modify function clicked !!!");
+    
+  }
+
   return (
     <React.Fragment>
       <div className='single-training-header'>
         <span   onClick={() => handleClick()}>{props.trainingName}</span>
-        <button onClick={() => props.deleteTraining(props.trainingName)}>Delete</button>
-        <button onClick={() => props.updateTraining(props.trainingName)}>Modify</button>
+        <button onClick={() => deleteTraining(props.trainingName)}>Delete</button>
+        <button onClick={() => updateTraining(props.trainingName)}>Modify</button>
       </div>
+
+      {isUpdated ? <TrainingForm isSimpleForm={false}
+                                      exercises={exercises}
+                                      submitFunction={modify}/> 
+                      : null}
 
       <table hidden={!isClicked}>
         <thead>
@@ -53,7 +82,7 @@ export default function SingleTraining(props){
         </thead>
     
         <tbody>
-          {exercises ? exercises.map(exercise => {
+          {(exercises) ? exercises.map(exercise => {
               return <tr key={exercise.name + exercise.date}>
                   <td onClick={() => {getExercisesByDate(exercise.date)}}>{exercise.date}</td>
                   <td onClick={() => {getExercisesByName(exercise.name)}}>{exercise.name}</td>

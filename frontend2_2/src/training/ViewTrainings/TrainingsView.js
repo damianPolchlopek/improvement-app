@@ -12,16 +12,6 @@ export default function TrainingsView() {
     });
   }, []);
 
-  function deleteTraining(trainingName) {
-    console.log("Delete training: ");
-    console.log(trainingName)
-  }
-
-  function updateTraining(trainingName) {
-      console.log("Update training: ");
-      console.log(trainingName)
-  }
-
   return (
     // <div className='training-list-container'>
     <React.Fragment>
@@ -32,9 +22,6 @@ export default function TrainingsView() {
             return <SingleTraining 
                 key={trainingName}
                 trainingName={trainingName}
-                
-                deleteTraining={deleteTraining}
-                updateTraining={updateTraining}
                 />
             })}
 
