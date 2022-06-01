@@ -1,8 +1,12 @@
 package com.improvementApp.workouts.entity.ExercisesFields;
 
+import lombok.Data;
 import lombok.Generated;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
+@Document
 public class Place {
     @Id
     @Generated
@@ -13,19 +17,4 @@ public class Place {
         this.place = place;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
 }
