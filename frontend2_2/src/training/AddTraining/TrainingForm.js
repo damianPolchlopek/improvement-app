@@ -35,83 +35,83 @@ export default function TrainingForm(props) {
 
     return(
       <div>
-      <h3>Training Schema</h3>
-      <form onSubmit={() => {console.log(exercises)}}>
-        <table>
-          <thead>
-            <tr>
-              <th hidden={props.isSimpleForm}>#</th>
-              <th hidden={props.isSimpleForm}>Type</th>
-              <th hidden={props.isSimpleForm}>Place</th>
-              <th>Name</th>
-              <th>Reps</th>
-              <th>Weight</th>
-              <th>Progress</th>
-              <th hidden={props.isSimpleForm}>Options</th>
-            </tr>
-          </thead>
-          <tbody>
-            {exercises ? exercises.map((exercise, index) => (
-              <tr key={index}>
-                <td hidden={props.isSimpleForm}>{index}</td>
-                <td hidden={props.isSimpleForm}>
-                  <select name='type' defaultValue={exercises[index].type}>
-                    {exerciseTypes ? exerciseTypes.map(exerciseType => {
-                      return(
-                        <option key={exerciseType.type} value={exerciseType.type}>
-                          {exerciseType.type}
-                        </option>
-                      );
-                    }) : null}
-                  </select>
-                </td>
-                <td hidden={props.isSimpleForm}>
-                  <select name='place' defaultValue={exercises[index].place}>
-                    {exercisePlaces ? exercisePlaces.map(exercisePlace => {
-                      return(
-                        <option key={exercisePlace.place} value={exercisePlace.place}>
-                          {exercisePlace.place}
-                        </option>
-                      );
-                    }) : null}
-                  </select>
-                </td>
-                <td>
-                  <select name='name' defaultValue={exercises[index].name}>
-                    {exerciseNames ? exerciseNames.map(exerciseName => {
-                      return(
-                        <option key={exerciseName.name} value={exerciseName.name}>
-                          {exerciseName.name}
-                        </option>
-                      );
-                    }) : null}
-                  </select>
-                </td>
-                <td><input name={`exercises[${index}].reps`} defaultValue={exercises[index].reps}/></td>
-                <td><input name={`exercises[${index}].weight`} defaultValue={exercises[index].weight}/></td>
-                <td>
-                  <select name='progress' defaultValue={exercises[index].progress}>
-                    {exerciseProgresses ? exerciseProgresses.map(exerciseProgress => {
-                      return(
-                        <option key={exerciseProgress.progress} value={exerciseProgress.progress}>
-                          {exerciseProgress.progress}
-                        </option>
-                      );
-                    }) : null}
-                  </select>
-                </td>
-                <td>
-                  <button>Add</button>
-                  <button>Remove</button>
-                </td>
-
+        <h3>Training Schema</h3>
+        <form>
+          <table>
+            <thead>
+              <tr>
+                <th hidden={props.isSimpleForm}>#</th>
+                <th hidden={props.isSimpleForm}>Type</th>
+                <th hidden={props.isSimpleForm}>Place</th>
+                <th>Name</th>
+                <th>Reps</th>
+                <th>Weight</th>
+                <th>Progress</th>
+                <th hidden={props.isSimpleForm}>Options</th>
               </tr>
-            )) : null}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {exercises ? exercises.map((exercise, index) => (
+                <tr key={index}>
+                  <td hidden={props.isSimpleForm}>{index}</td>
+                  <td hidden={props.isSimpleForm}>
+                    <select name='type' defaultValue={exercises[index].type}>
+                      {exerciseTypes ? exerciseTypes.map(exerciseType => {
+                        return(
+                          <option key={exerciseType.type} value={exerciseType.type}>
+                            {exerciseType.type}
+                          </option>
+                        );
+                      }) : null}
+                    </select>
+                  </td>
+                  <td hidden={props.isSimpleForm}>
+                    <select name='place' defaultValue={exercises[index].place}>
+                      {exercisePlaces ? exercisePlaces.map(exercisePlace => {
+                        return(
+                          <option key={exercisePlace.place} value={exercisePlace.place}>
+                            {exercisePlace.place}
+                          </option>
+                        );
+                      }) : null}
+                    </select>
+                  </td>
+                  <td>
+                    <select name='name' defaultValue={exercises[index].name}>
+                      {exerciseNames ? exerciseNames.map(exerciseName => {
+                        return(
+                          <option key={exerciseName.name} value={exerciseName.name}>
+                            {exerciseName.name}
+                          </option>
+                        );
+                      }) : null}
+                    </select>
+                  </td>
+                  <td><input name={`exercises[${index}].reps`} defaultValue={exercises[index].reps}/></td>
+                  <td><input name={`exercises[${index}].weight`} defaultValue={exercises[index].weight}/></td>
+                  <td>
+                    <select name='progress' defaultValue={exercises[index].progress}>
+                      {exerciseProgresses ? exerciseProgresses.map(exerciseProgress => {
+                        return(
+                          <option key={exerciseProgress.progress} value={exerciseProgress.progress}>
+                            {exerciseProgress.progress}
+                          </option>
+                        );
+                      }) : null}
+                    </select>
+                  </td>
+                  <td>
+                    <button>Add</button>
+                    <button>Remove</button>
+                  </td>
 
-      </form>
-      <button onClick={() => props.submitFunction(exercises)}>Submit</button>
+                </tr>
+              )) : null}
+            </tbody>
+          </table>
+
+        </form>
+        <button onClick={() => props.submitFunction(exercises)}>Submit</button>
       </div>
     )
 }

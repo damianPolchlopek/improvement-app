@@ -1,3 +1,4 @@
+import React from 'react';
 import "./Logo.css"
 import appLogo from '../assets/app-logo.png';
 

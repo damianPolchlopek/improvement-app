@@ -13,7 +13,6 @@ export default function TrainingsView() {
   }, []);
 
   return (
-    // <div className='training-list-container'>
     <React.Fragment>
       {trainingNames ? 
       <div className='training-list'>
@@ -26,8 +25,7 @@ export default function TrainingsView() {
             })}
 
       </div> : null}
-      </React.Fragment>
-      //  </div>
+    </React.Fragment>
   );
   
 }

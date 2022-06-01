@@ -1,3 +1,4 @@
+import React from 'react';
 import './HomeView.css';
 import REST from '../utils/REST';
 

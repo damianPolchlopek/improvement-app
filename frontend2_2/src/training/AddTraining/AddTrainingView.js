@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import './AddTrainingView.css';
 import REST from '../../utils/REST';
 import TrainingForm from './TrainingForm';
+import TrainingFormSmallScreen from "./TrainingFormSmallScreen";
+import "./AddTrainingView.css";
 
 function AddTrainingView(props) {
   var exercisess = [{name: 'aaa', reps: '1/1/1', place: 'Siłownia'}, 
@@ -9,6 +11,15 @@ function AddTrainingView(props) {
   const [exercises, setExercises] = useState(exercisess);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
+  const [isBigWindow, setIsBigWindow] = useState(true);
+
+  useEffect(() => {
+    if(window.innerWidth < 1000){
+      setIsBigWindow(false);
+    } else {
+      setIsBigWindow(true);
+    }
+  }, [exercises]);
 
   function loadLastTraining() {
     setExercises([]);
@@ -26,7 +37,7 @@ function AddTrainingView(props) {
   }
 
   return (
-    <div>
+    <div className="container">
       <div>
         <h2>Choose training type to add </h2>
         <form>
@@ -46,11 +57,18 @@ function AddTrainingView(props) {
         <label>Enable a more accurate form</label>
       </div>
 
-      <TrainingForm
-        isSimpleForm={isSimpleForm}
-        exercises={exercises}
-        submitFunction={addTraining}
-      />
+      {isBigWindow ? 
+        <TrainingForm
+          isSimpleForm={isSimpleForm}
+          exercises={exercises}
+          submitFunction={addTraining}
+        /> : 
+        <TrainingFormSmallScreen
+          isSimpleForm={isSimpleForm}
+          exercises={exercises}
+          submitFunction={addTraining}
+        />
+      }
         
     </div>
   );
