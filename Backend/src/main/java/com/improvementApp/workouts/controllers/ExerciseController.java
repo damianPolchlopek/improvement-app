@@ -57,11 +57,12 @@ public class ExerciseController {
         List<Exercise> savedExercises = exerciseService.saveAll(newExercises);
 
         return Response.ok(savedExercises).build();
+//        return Response.ok().build();
     }
 
     @DeleteMapping("/deleteTraining/{trainingName}")
     public Response deleteTraining(@PathVariable String trainingName) throws Exception {
-        System.out.println("Usuwam trening");
+        LOGGER.info("Usuwam trening: " + trainingName);
         exerciseService.deleteByTrainingName(trainingName);
         googleDriveService.deleteTraining(trainingName);
         return Response.ok().build();
@@ -101,6 +102,7 @@ public class ExerciseController {
     public Response getExercisesByDate(@PathVariable String exerciseDate) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
         List<Exercise> result = exerciseService.findByDate(LocalDate.parse(exerciseDate));
+        LOGGER.info("Pobieram cwiczenia o dacie: " + result);
         return Response.ok(result).build();
     }
 

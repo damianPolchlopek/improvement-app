@@ -7,6 +7,7 @@ import com.improvementApp.workouts.services.GoogleDriveService;
 import com.improvementApp.workouts.services.GoogleDriveServiceImpl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,8 +45,10 @@ public class GoogleDriveFilesController {
         return result;
     }
 
+    @Transactional
     @GetMapping("/initApplication")
     public void initApplication() throws Exception {
+        LOGGER.info("Usuwam i dodaje nowe dane do bazy danych treningowej");
         googleDriveService.initApplicationCategories();
         googleDriveService.initApplicationExercises();
     }
