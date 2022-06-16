@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from 'universal-cookie';
 
-// static BASE_URL = "https://improvement-app-backend.herokuapp.com/";
+// const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
 const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercise/';
