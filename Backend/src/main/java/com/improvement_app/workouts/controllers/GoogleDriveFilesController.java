@@ -4,9 +4,8 @@ import com.improvement_app.workouts.dto.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.helpers.ApplicationVariables;
 import com.improvement_app.workouts.services.GoogleDriveService;
-import com.improvement_app.workouts.services.GoogleDriveServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/drive")
 public class GoogleDriveFilesController {
 
@@ -24,11 +24,6 @@ public class GoogleDriveFilesController {
     private static final String TRAININGS_FOLDER_NAME = ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
     private final GoogleDriveService googleDriveService;
-
-    @Autowired
-    public GoogleDriveFilesController(GoogleDriveServiceImpl googleDriveService) {
-        this.googleDriveService = googleDriveService;
-    }
 
     @GetMapping(value = {"/uploadAllExercisesFromDriveToDatabase"}, produces = {"application/json"})
     public @ResponseBody

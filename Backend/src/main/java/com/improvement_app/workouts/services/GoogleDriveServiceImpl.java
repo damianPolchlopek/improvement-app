@@ -205,7 +205,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public void uploadFileInFolder(final String folderName,
                                    final java.io.File fileToUpload,
                                    final String fileName) throws IOException {
-        LOGGER.info("Przesylam na google drive plik: " + fileName);
 
         final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
 
