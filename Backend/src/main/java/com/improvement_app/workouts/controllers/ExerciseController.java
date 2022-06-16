@@ -9,11 +9,9 @@ import com.improvement_app.workouts.helpers.ApplicationVariables;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.services.ExerciseService;
-import com.improvement_app.workouts.services.ExerciseServiceImpl;
 import com.improvement_app.workouts.services.GoogleDriveService;
-import com.improvement_app.workouts.services.GoogleDriveServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.Response;
@@ -24,25 +22,19 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/exercise")
 public class ExerciseController {
 
     private static final Logger LOGGER = Logger.getLogger(ExerciseController.class);
 
     private final ExerciseService exerciseService;
-
     private final GoogleDriveService googleDriveService;
-
-    @Autowired
-    public ExerciseController(ExerciseServiceImpl exerciseService,
-                              GoogleDriveServiceImpl googleDriveService) {
-        this.exerciseService = exerciseService;
-        this.googleDriveService = googleDriveService;
-    }
 
     @PostMapping("/addTraining")
     public Response addTraining(@RequestBody List<Exercise> exercises) throws IOException {
-        LOGGER.info("Dodaje ćwiczenia: " + exercises);
+        LOGGER.info("Dodaje trening: " + exercises.get(0).getTrainingName());
+        LOGGER.info("Dodaje trening z cwiczeniami: " + exercises);
 
         List<Exercise> exercisesFromDb = exerciseService.findAll();
         ExercisesHelper.sortExerciseListByDate(exercisesFromDb);
@@ -102,7 +94,6 @@ public class ExerciseController {
     public Response getExercisesByDate(@PathVariable String exerciseDate) {
         LOGGER.info("Pobieram cwiczenia o dacie: " + exerciseDate);
         List<Exercise> result = exerciseService.findByDate(LocalDate.parse(exerciseDate));
-        LOGGER.info("Pobieram cwiczenia o dacie: " + result);
         return Response.ok(result).build();
     }
 
@@ -130,30 +121,35 @@ public class ExerciseController {
 
     @GetMapping("/getExerciseNames")
     public Response getExerciseNames(){
+        LOGGER.info("Poberam nazwy cwiczen");
         List<Name> exerciseNames = exerciseService.getExerciseNames();
         return Response.ok(exerciseNames).build();
     }
 
     @GetMapping("/getExercisePlaces")
     public Response getExercisePlaces(){
+        LOGGER.info("Poberam miejsca cwiczen");
         List<Place> exercisePlaces = exerciseService.getExercisePlaces();
         return Response.ok(exercisePlaces).build();
     }
 
     @GetMapping("/getExerciseProgresses")
     public Response getExerciseProgresses(){
+        LOGGER.info("Poberam progress cwiczen");
         List<Progress> exerciseProgresses = exerciseService.getExerciseProgress();
         return Response.ok(exerciseProgresses).build();
     }
 
     @GetMapping("/getExerciseTypes")
     public Response getExerciseTypes(){
+        LOGGER.info("Poberam typy cwiczen");
         List<Type> exerciseTypes = exerciseService.getExerciseTypes();
         return Response.ok(exerciseTypes).build();
     }
 
     @GetMapping("/getTrainingNames")
     public Response getTrainingNames(){
+        LOGGER.info("Poberam nazwy treningow");
         List<String> trainingNames = exerciseService.getAllTrainingNames();
         trainingNames.sort(Collections.reverseOrder());
         return Response.ok(trainingNames).build();
