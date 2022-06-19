@@ -2,7 +2,7 @@ package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.workouts.dto.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.helpers.ApplicationVariables;
+import com.improvement_app.workouts.ApplicationVariables;
 import com.improvement_app.workouts.services.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
@@ -35,10 +35,8 @@ public class GoogleDriveFilesController {
     @GetMapping(value = {"/getFiles"}, produces = {"application/json"})
     public @ResponseBody
     List<DriveFileItemDTO> getFiles() throws IOException {
-        LOGGER.info("CONTROLLER:    START - get files");
-        List<DriveFileItemDTO> result = googleDriveService.getDriveFiles(TRAININGS_FOLDER_NAME);
-        LOGGER.info("CONTROLLER:    END - get files");
-        return result;
+        LOGGER.info("Pobieram nazwy plikow treningowych");
+        return googleDriveService.getDriveFiles(TRAININGS_FOLDER_NAME);
     }
 
     @Transactional

@@ -2,7 +2,9 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.DataForTests;
 import com.improvement_app.workouts.entity.Exercise;
+import com.improvement_app.workouts.entity.exercises_fields.Type;
 import com.improvement_app.workouts.repository.ExerciseRepository;
+import com.improvement_app.workouts.repository.TypeRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,8 +35,15 @@ class ExerciseServiceImplTest {
     final Exercise exercise5 = DataForTests.generateSecondExerciseSecondTraining();
     final Exercise exercise6 = DataForTests.generateThirdExerciseSecondTraining();
 
+    final Type type1 = new Type("Kardio");
+    final Type type2 = new Type("Siłowy#1-A");
+    final Type type3 = new Type("Hipertroficzny#1-C");
+
     @Mock
     ExerciseRepository exerciseRepository;
+
+    @Mock
+    TypeRepository typeRepository;
 
     @InjectMocks
     ExerciseServiceImpl exerciseService;
@@ -44,16 +53,38 @@ class ExerciseServiceImplTest {
         Mockito.lenient().when(exerciseRepository.findAll()).thenReturn(generateTwoTrainings());
         Mockito.lenient().when(exerciseRepository.findByDate(any())).thenReturn(generateTrainingWithTheSameDate());
         Mockito.lenient().when(exerciseRepository.findByName(any())).thenReturn(generateTrainingWithTheSameName());
+        Mockito.lenient().when(exerciseRepository.findByTrainingName(any())).thenReturn(generateTrainingWithTheSameDate());
+        Mockito.lenient().when(typeRepository.findAll()).thenReturn(generateExerciseTypes());
+    }
+
+    private List<Exercise> generateTwoTrainings(){
+        return new ArrayList<>(Arrays.asList(exercise1, exercise2, exercise3, exercise4, exercise5, exercise6));
+    }
+
+    private List<Exercise> generateTrainingWithTheSameDate() {
+        return Arrays.asList(exercise3, exercise2, exercise1);
+    }
+
+    private List<Exercise> generateTrainingWithTheSameName() {
+        return Arrays.asList(exercise1, exercise4);
+    }
+
+    private List<Type> generateExerciseTypes() {
+        return Arrays.asList(type1, type2, type3);
     }
 
     @Test
     void should_find_by_date() {
         //when
-        List<Exercise> sortedExercises = expectedTrainingWithTheSameDate();
+        List<Exercise> expectedExercises = expectedTrainingWithTheSameDate();
         List<Exercise> serviceResult = exerciseService.findByDate(LocalDate.parse("2021-09-21"));
 
         //then
-        Assert.assertEquals(sortedExercises, serviceResult);
+        Assert.assertEquals(expectedExercises, serviceResult);
+    }
+
+    private List<Exercise> expectedTrainingWithTheSameDate() {
+        return Arrays.asList(exercise1, exercise2, exercise3);
     }
 
     @Test
@@ -66,22 +97,18 @@ class ExerciseServiceImplTest {
         Assert.assertEquals(sortedExercises, serviceResult);
     }
 
+    private List<Exercise> expectedTrainingWithTheSameName(){
+        return Arrays.asList(exercise4, exercise1);
+    }
+
     @Test
     void should_find_by_training_name() {
-        // test is not necessary.
-        // function transmits data
-    }
+        //when
+        List<Exercise> sortedExercises = expectedTrainingWithTheSameDate();
+        List<Exercise> serviceResult = exerciseService.findByTrainingName("trainingName");
 
-    @Test
-    void should_save_all() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_save() {
-        // test is not necessary.
-        // function transmits data
+        //then
+        Assert.assertEquals(sortedExercises, serviceResult);
     }
 
     @Test
@@ -94,10 +121,8 @@ class ExerciseServiceImplTest {
         Assert.assertEquals(sortedExercises, serviceResult);
     }
 
-    @Test
-    void should_delete_by_id() {
-        // test is not necessary.
-        // function transmits data
+    private List<Exercise> sortedTwoTrainings(){
+        return new ArrayList<>(Arrays.asList(exercise6, exercise5, exercise4, exercise3, exercise2, exercise1));
     }
 
     @Test
@@ -108,82 +133,6 @@ class ExerciseServiceImplTest {
 
         //then
         Assert.assertEquals(expectedExercisesName, serviceResult);
-    }
-
-    @Test
-    void should_get_exercise_names() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_save_all_exercise_names() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_delete_all_exercise_names() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_get_exercise_places() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_save_all_exercise_places() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_delete_all_exercise_places() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_get_exercise_progress() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_save_all_exercise_progresses() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_delete_all_exercise_progresses() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_get_exercise_types() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_save_all_exercise_types() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    @Test
-    void should_delete_all_exercise_types() {
-        // test is not necessary.
-        // function transmits data
-    }
-
-    private List<Exercise> expectedTrainingWithTheSameDate() {
-        return Arrays.asList(exercise3, exercise2, exercise1);
     }
 
     private List<String> expectedLastTrainingWithType() {
@@ -197,26 +146,19 @@ class ExerciseServiceImplTest {
         trainingDate = "18.11.2011";
         String trainingName2 = firstExerciseIndex + " - " + trainingDate +"r. - " + trainingType;
 
-        return new ArrayList<>(Arrays.asList(trainingName, trainingName2));
+        return new ArrayList<>(Arrays.asList(trainingName2, trainingName));
     }
 
-    private List<Exercise> generateTwoTrainings(){
-        return new ArrayList<>(Arrays.asList(exercise1, exercise2, exercise3, exercise4, exercise5, exercise6));
+    @Test
+    void should_get_exercise_types() {
+        List<Type> expectedTypes = expectedExerciseTypes();
+        List<Type> serviceResult = exerciseService.getExerciseTypes();
+
+        Assert.assertEquals(expectedTypes, serviceResult);
     }
 
-    private List<Exercise> generateTrainingWithTheSameDate() {
-        return Arrays.asList(exercise1, exercise2, exercise3);
+    private List<Type> expectedExerciseTypes() {
+        return List.of(type2, type1, type3);
     }
 
-    private List<Exercise> generateTrainingWithTheSameName() {
-        return Arrays.asList(exercise1, exercise4);
-    }
-
-    private List<Exercise> expectedTrainingWithTheSameName(){
-        return Arrays.asList(exercise4, exercise1);
-    }
-
-    private List<Exercise> sortedTwoTrainings(){
-        return new ArrayList<>(Arrays.asList(exercise6, exercise5, exercise4, exercise3, exercise2, exercise1));
-    }
 }

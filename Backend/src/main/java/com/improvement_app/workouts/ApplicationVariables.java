@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.helpers;
+package com.improvement_app.workouts;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ApplicationVariables {
 
+    //TODO ogarnac to !!!
     @Value("${path.to.excel}")
     public static final Resource pathToExcelsFiles = null;
 

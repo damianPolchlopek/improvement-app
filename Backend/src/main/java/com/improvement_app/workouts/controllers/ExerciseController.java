@@ -1,11 +1,11 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.workouts.ApplicationVariables;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
 import com.improvement_app.workouts.entity.exercises_fields.Progress;
 import com.improvement_app.workouts.entity.exercises_fields.Type;
-import com.improvement_app.workouts.helpers.ApplicationVariables;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.services.ExerciseService;
@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -30,6 +29,9 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
     private final GoogleDriveService googleDriveService;
+
+//    @Value("${path.to.excel}")
+//    public Resource pathToExcelsFiles;
 
     @PostMapping("/addTraining")
     public Response addTraining(@RequestBody List<Exercise> exercises) throws IOException {
@@ -46,7 +48,7 @@ public class ExerciseController {
         final File file = new File(ApplicationVariables.pathToExcelsFiles + trainingNameExcelFile);
         googleDriveService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
-        List<Exercise> newExercises = ExercisesHelper.updateExercises(exercises, trainingName);
+        List<Exercise> newExercises = ExercisesHelper.fillMissingFieldForExercise(exercises, trainingName);
         List<Exercise> savedExercises = exerciseService.saveAll(newExercises);
 
         return Response.ok(savedExercises).build();
@@ -151,7 +153,6 @@ public class ExerciseController {
     public Response getTrainingNames(){
         LOGGER.info("Poberam nazwy treningow");
         List<String> trainingNames = exerciseService.getAllTrainingNames();
-        trainingNames.sort(Collections.reverseOrder());
         return Response.ok(trainingNames).build();
     }
 
