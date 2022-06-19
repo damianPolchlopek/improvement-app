@@ -6,7 +6,6 @@ import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.Cardio
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.ExerciseStrategy;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.HypertrophicExercise;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.StrengthExercise;
-import org.dbunit.dataset.DataSetException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 
@@ -160,7 +159,7 @@ class DriveFilesHelperTest {
     }
 
     @Test
-    void should_create_excel_file() throws IOException, DataSetException {
+    void should_create_excel_file() throws IOException {
         //TODO: test do napisania
 //        final String fileName = "newFile" + ApplicationVariables.EXCEL_EXTENSION;
 //        final String fileLocation = ApplicationVariables.pathToExcelsFiles + fileName;

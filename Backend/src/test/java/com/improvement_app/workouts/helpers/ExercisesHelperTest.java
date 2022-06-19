@@ -78,7 +78,6 @@ class ExercisesHelperTest {
         List<Exercise> actualExercises = Arrays.asList(exercise2, exercise1);
         List<Exercise> expectedExercises = Arrays.asList(exercise1, exercise2);
 
-
         //when
         ExercisesHelper.sortExerciseListByIndex(actualExercises);
 
