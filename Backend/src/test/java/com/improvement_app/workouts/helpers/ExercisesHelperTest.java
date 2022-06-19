@@ -8,14 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 class ExercisesHelperTest {
 
 //    public Exercise(String exerciseType, String exercisePlace, String name, List<RepAndWeight> repAndWeightList,
-//                    String progress, LocalDate date, String reps, String weight, String trainingName) {
+//                    String progress, LocalDate date, String reps, String weight, String trainingName, int index) {
 
 //    Local date format - 2007-12-03
 
@@ -28,10 +27,10 @@ class ExercisesHelperTest {
             trainingName, 0);
     Exercise exercise2 = new Exercise("testType", "testPlace", "testName2",
             null, "testProgress", LocalDate.parse("2021-11-06"), "testReps", "testWeight",
-            "102 - 12.11.2011r. - A");
+            "102 - 12.11.2011r. - A", 1);
     Exercise incorrectExerciseName = new Exercise("testType", "testPlace", "testName3",
             null, "testProgress", LocalDate.parse("2021-11-07"), "testReps", "testWeight",
-            "Kopia 101 - 11.11.2011r. - A");
+            "Kopia 101 - 11.11.2011r. - A", 2);
 
     @Test
     void should_filter_exercise_list() {
@@ -63,27 +62,42 @@ class ExercisesHelperTest {
     @Test
     void should_sort_exercise_list_by_date() {
         //given
-        List<Exercise> listBefore = Arrays.asList(exercise1, exercise2, incorrectExerciseName);
-        List<Exercise> listAfter = Arrays.asList(incorrectExerciseName, exercise2, exercise1);
+        List<Exercise> actualExercises = Arrays.asList(exercise1, exercise2, incorrectExerciseName);
+        List<Exercise> expectedExercises = Arrays.asList(incorrectExerciseName, exercise2, exercise1);
 
         //when
+        ExercisesHelper.sortExerciseListByDate(actualExercises);
 
         //then
-        ExercisesHelper.sortExerciseListByDate(listBefore);
-        Assert.assertEquals(listAfter, listBefore);
+        Assert.assertEquals(expectedExercises, actualExercises);
+    }
+
+    @Test
+    void should_sort_exercise_list_by_index() {
+        //given
+        List<Exercise> actualExercises = Arrays.asList(exercise2, exercise1);
+        List<Exercise> expectedExercises = Arrays.asList(exercise1, exercise2);
+
+
+        //when
+        ExercisesHelper.sortExerciseListByIndex(actualExercises);
+
+        //then
+        Assert.assertEquals(expectedExercises, actualExercises);
     }
 
     @Test
     void should_update_exercises() {
         //given
         Exercise expectedExercise = createExpectedExercise();
-        List<Exercise> listBefore = Arrays.asList(exercise1);
-        List<Exercise> listAfter = new ArrayList<>(Arrays.asList(expectedExercise));
-
+        List<Exercise> actualExercises = List.of(exercise1);
+        List<Exercise> expectedExercises = List.of(expectedExercise);
+        final String trainingName = generateTrainingName();
         //when
 
         //then
-        Assert.assertEquals(listAfter, ExercisesHelper.updateExercises(listBefore, generateTrainingName()));
+        Assert.assertEquals(expectedExercises,
+                ExercisesHelper.fillMissingFieldForExercise(actualExercises, trainingName));
     }
 
     private Exercise createExpectedExercise(){
@@ -105,6 +119,5 @@ class ExercisesHelperTest {
         final String dateString = date.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         return  incrementedLastExerciseNumber + " - " + dateString + "r." + " - " + lastTrainingType;
     }
-
 
 }

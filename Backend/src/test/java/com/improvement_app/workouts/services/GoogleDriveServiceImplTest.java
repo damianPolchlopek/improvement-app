@@ -42,6 +42,7 @@ class GoogleDriveServiceImplTest {
     GoogleDriveServiceImpl googleDriveService;
 
     //TODO: sprawdzic czy trzeba jakies testy do tej klasy dopisac
+    //TODO [17.06.2022] prawdopodobnie klasa do usuniecia - albo do pisania integracyjnych testow
 
     @Test
     void should_get_drive_files() {

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,9 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     @Override
     public List<Exercise> findByDate(LocalDate date) {
-        return exerciseRepository.findByDate(date);
+        List<Exercise> exercises = exerciseRepository.findByDate(date);
+        ExercisesHelper.sortExerciseListByIndex(exercises);
+        return exercises;
     }
 
     @Override
@@ -78,6 +81,7 @@ public class ExerciseServiceImpl implements ExerciseService {
         return exercises.stream()
                     .map(Exercise::getTrainingName)
                     .distinct()
+                    .sorted(Collections.reverseOrder())
                     .collect(Collectors.toList());
     }
 

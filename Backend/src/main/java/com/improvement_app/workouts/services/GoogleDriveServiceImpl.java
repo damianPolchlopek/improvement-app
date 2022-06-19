@@ -11,12 +11,13 @@ import com.improvement_app.workouts.entity.exercises_fields.Place;
 import com.improvement_app.workouts.entity.exercises_fields.Progress;
 import com.improvement_app.workouts.entity.exercises_fields.Type;
 import com.improvement_app.workouts.exceptions.TooMuchGoogleDriveFilesException;
-import com.improvement_app.workouts.helpers.ApplicationVariables;
+import com.improvement_app.workouts.ApplicationVariables;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.types.MimeType;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.internal.util.Producer;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.improvement_app.workouts.helpers.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
+import static com.improvement_app.workouts.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +70,64 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         exerciseService.saveAll(filterExercise);
 
         return exercises;
+    }
+
+    @Override
+    public List<DriveFileItemDTO> getDriveFiles(final String folderName) throws IOException {
+        final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
+        final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
+                + "' and '" + folderId + "' in parents ";
+
+        Drive.Files.List request = drive
+                .files()
+                .list()
+                .setQ(query);
+
+        final List<File> allFiles = getAllFiles(request);
+
+        return allFiles.stream()
+                .map(DriveFileItemDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    private String getGoogleDriveObjectId(final String googleDriveFileName,
+                                          final MimeType type) throws IOException {
+        final String query = "mimeType='" + type.getType()
+                + "' and name contains '" + googleDriveFileName + "' ";
+
+        Drive.Files.List request = drive
+                .files()
+                .list()
+                .setQ(query);
+
+        List<File> allFiles = getAllFiles(request);
+
+        if (allFiles.size() > 1)
+            throw new TooMuchGoogleDriveFilesException("Return more than one folder");
+
+        final List<DriveFileItemDTO> responseList = allFiles.stream()
+                .map(DriveFileItemDTO::new)
+                .collect(Collectors.toList());
+
+        return responseList.get(0).getId();
+    }
+
+    private List<File> getAllFiles(final Drive.Files.List request) {
+        List<File> result = new ArrayList<>();
+        do {
+            try {
+                FileList files = request.execute();
+
+                result.addAll(files.getFiles());
+                request.setPageToken(files.getNextPageToken());
+            } catch (IOException e) {
+                LOGGER.error("An error occurred: " + e);
+                request.setPageToken(null);
+            }
+        } while (request.getPageToken() != null &&
+                request.getPageToken().length() > 0);
+
+        return result;
     }
 
     @Override
@@ -134,64 +193,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public void deleteTraining(String trainingName) throws IOException{
         final String fileId = getGoogleDriveObjectId(trainingName, MimeType.DRIVE_SHEETS);
         drive.files().delete(fileId).execute();
-    }
-
-    private String getGoogleDriveObjectId(final String googleDriveFileName,
-                                          final MimeType type) throws IOException {
-        final String query = "mimeType='" + type.getType()
-                + "' and name contains '" + googleDriveFileName + "' ";
-
-        Drive.Files.List request = drive
-                .files()
-                .list()
-                .setQ(query);
-
-        List<File> allFiles = getAllFiles(request);
-
-        if (allFiles.size() > 1)
-            throw new TooMuchGoogleDriveFilesException("Return more than one folder");
-
-        final List<DriveFileItemDTO> responseList = allFiles.stream()
-                .map(DriveFileItemDTO::new)
-                .collect(Collectors.toList());
-
-        return responseList.get(0).getId();
-    }
-
-    @Override
-    public List<DriveFileItemDTO> getDriveFiles(final String folderName) throws IOException {
-        final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
-        final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
-                + "' and '" + folderId + "' in parents ";
-
-        Drive.Files.List request = drive
-                .files()
-                .list()
-                .setQ(query);
-
-        final List<File> allFiles = getAllFiles(request);
-
-        return allFiles.stream()
-                .map(DriveFileItemDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    private List<File> getAllFiles(final Drive.Files.List request) {
-        List<File> result = new ArrayList<>();
-        do {
-            try {
-                FileList files = request.execute();
-
-                result.addAll(files.getFiles());
-                request.setPageToken(files.getNextPageToken());
-            } catch (IOException e) {
-                LOGGER.error("An error occurred: " + e);
-                request.setPageToken(null);
-            }
-        } while (request.getPageToken() != null &&
-                request.getPageToken().length() > 0);
-
-        return result;
     }
 
     @Override

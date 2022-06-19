@@ -48,7 +48,7 @@ public class ExercisesHelper {
         exercises.sort(Comparator.comparingInt(Exercise::getIndex));
     }
 
-    public static List<Exercise> updateExercises(List<Exercise> exercises, String trainingName){
+    public static List<Exercise> fillMissingFieldForExercise(List<Exercise> exercises, String trainingName){
         List<Exercise> newExercises = new ArrayList<>();
         for (Exercise exercise: exercises) {
 

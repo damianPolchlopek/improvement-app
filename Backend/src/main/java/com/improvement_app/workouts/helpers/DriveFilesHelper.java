@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.helpers;
 
+import com.improvement_app.workouts.ApplicationVariables;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
@@ -168,7 +169,7 @@ public class DriveFilesHelper {
     }
 
     private static String parseTrainingName(String trainingName, int groupIndex) {
-        final String regex = "([0-9]{3}) - ([0-9]{2}).([0-9]{2}).([0-9]{4})r. - ([A-Z]).xlsx";
+        final String regex = "([0-9]{3}) - ([0-9]{2}).([0-9]{2}).([0-9]{4})r. - ([A-Z])";
 
         final Pattern pattern = Pattern.compile(regex);
         final Matcher matcher = pattern.matcher(trainingName);
@@ -241,7 +242,6 @@ public class DriveFilesHelper {
             FileOutputStream outputStream = new FileOutputStream(fileLocation);
             workbook.write(outputStream);
         }
-
-
     }
+
 }
