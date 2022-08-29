@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+
 **/src/main/resources/tmp_files/
 **/src/main/resources/tmp_test_dir/
 **/src/main/resources/keys/
@@ -37,5 +38,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-src/main/resources/keys/client_secret_311421201302-mh3ef3hlh1sos0pbqch5lneirdl1u9ij.apps.googleusercontent.com.json
