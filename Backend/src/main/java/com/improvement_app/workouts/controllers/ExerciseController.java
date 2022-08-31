@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.workouts.ApplicationVariables;
+import com.improvement_app.common.ApplicationVariables;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;

@@ -10,8 +10,6 @@ public interface GoogleDriveService {
 
     List<Exercise> saveAllExercisesToDB(final String folderName) throws IOException;
 
-    List<DriveFileItemDTO> getDriveFiles(final String folderName) throws IOException;
-
     void initApplicationCategories() throws IOException;
 
     void initApplicationExercises() throws IOException;

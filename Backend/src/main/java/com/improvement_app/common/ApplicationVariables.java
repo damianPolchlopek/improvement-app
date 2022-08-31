@@ -1,4 +1,4 @@
-package com.improvement_app.workouts;
+package com.improvement_app.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,4 +16,5 @@ public class ApplicationVariables {
     public static final String DRIVE_CATEGORIES_FOLDER_NAME = "Categories";
     public static final String EXCEL_EXTENSION = ".xlsx";
 
+    public static final String DRIVE_PRODUCTS_SHEET_NAME = "Products";
 }

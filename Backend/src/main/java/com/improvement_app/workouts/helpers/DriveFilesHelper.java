@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.helpers;
 
-import com.improvement_app.workouts.ApplicationVariables;
+import com.improvement_app.common.ApplicationVariables;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
@@ -57,7 +57,7 @@ public class DriveFilesHelper {
                     continue;
 
                 Cell cell = row.getCell(EXERCISE_TYPE_INDEX);
-                String exerciseType = cell.getStringCellValue();
+                final String exerciseType = cell.getStringCellValue();
                 cell = row.getCell(EXERCISE_AREA_INDEX);
                 final String exerciseArea = cell.getStringCellValue();
                 cell = row.getCell(NAME_INDEX);
