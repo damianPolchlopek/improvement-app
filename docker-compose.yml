@@ -2,25 +2,45 @@ version: '3'
 services:
   backend:
     build: ./Backend
-    container_name: "backend"
+    container_name: backend
     ports:
       - "8080:8080"
     depends_on:
-      - database
+      - mongo
+      - my-sql
+    environment:
+      MYSQL_HOST: my-sql
+      
   frontend:
-    build: ./Frontend
-    container_name: "frontend"
+    build: ./Frontend2
+    container_name: frontend
     ports:
       - "3000:3000"
     depends_on:
       - backend
-  database:
+      
+  mongo:
     image: mongo:latest
-    container_name: "database"
-    restart: always
+    container_name: mongo
     environment:
-            MONGO_INITDB_ROOT_USERNAME: admin
-            MONGO_INITDB_ROOT_PASSWORD: admin
-            MONGO_INITDB_DATABASE: workout-app
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: workout-app
     ports:
-      - 27017:27017
+      - "27017:27017"
+
+  my-sql:
+    image: mysql:latest
+    environment:
+      MYSQL_USERNAME: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: food-mysql
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3308:3306"
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 3s
+      retries: 5
+      start_period: 30s
