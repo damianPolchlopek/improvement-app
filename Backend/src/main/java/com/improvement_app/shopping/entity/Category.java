@@ -5,5 +5,6 @@ public enum Category {
     SklepSpożywczy,
     Ubrania,
     Elektornika,
-    Apteka
+    Apteka,
+    Other
 }

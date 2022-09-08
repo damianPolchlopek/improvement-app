@@ -7,6 +7,7 @@ export default function ShoppingListView() {
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
   const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
+  const [isAddProductIsHidden, setIsAddProductIsHidden] = useState(false);
     
   useEffect(() => {
     REST.getShoppingList().then(response => {
@@ -38,6 +39,11 @@ export default function ShoppingListView() {
     });
   }
 
+  function changeAddProductState(){
+    var tmpState = isAddProductIsHidden
+    setIsAddProductIsHidden(!tmpState);
+  }
+
   return (
     <React.Fragment>
       {allCategoryTypes.length > 3 ? 
@@ -57,34 +63,40 @@ export default function ShoppingListView() {
         </select>
         <button onClick={() => {loadProductsFromSelectedCategory()}}>Load Shopping List</button>
 
-        <h2>Add Products</h2>
-        <div>
-          <label>Name: </label>
-          <input defaultValue={item.name}
-                onChange={(e)=> setItem({name: e.target.value, category: item.category})}></input>
+        <h2 onClick={() => changeAddProductState()}>Add Products</h2>
+        <div className="add-shopping-list">
+          <div hidden={isAddProductIsHidden}>
+            <div>
+              <label>Name: </label>
+              <input defaultValue={item.name}
+                    onChange={(e)=> setItem({name: e.target.value, category: item.category})}></input>
+            </div>
+            <div>
+              <label>Category: </label>
+              <select name='item.category' defaultValue={allCategoryTypes[1]} 
+                      onChange={(e)=> setItem({name: item.name, category: e.target.value})}>
+                {allCategoryTypes ? allCategoryTypes.map(categoryType => {
+                  return(
+                    <option key={categoryType} value={categoryType}>
+                      {categoryType}
+                    </option>
+                  );
+                }) : null}
+              </select>
+            </div>
+            <button onClick={() => addProductToShoppingList()}>Add Product</button>
+          </div>
         </div>
-        <div>
-          <label>Category: </label>
-          <select name='item.category' defaultValue={allCategoryTypes[1]} 
-                  onChange={(e)=> setItem({name: item.name, category: e.target.value})}>
-            {allCategoryTypes ? allCategoryTypes.map(categoryType => {
-              return(
-                <option key={categoryType} value={categoryType}>
-                  {categoryType}
-                </option>
-              );
-            }) : null}
-          </select>
-        </div>
-        <button onClick={() => addProductToShoppingList()}>Add Product</button>
-
+        
         <h2>Shopping List</h2>
+        <div>
           {shoppingList.map(product => {
-            return <div>
-                {product.name}
+            return <div className="shopping-list">
+                <span className="span-element">{product.name}</span>
                 <button onClick={() => {deleteProductFromShoppingList(product.id)}}>Delete</button>
               </div>
             })}
+        </div>
       </div> : null}
     </React.Fragment>
   );
