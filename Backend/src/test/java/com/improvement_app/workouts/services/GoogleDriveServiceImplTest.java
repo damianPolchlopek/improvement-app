@@ -44,25 +44,6 @@ class GoogleDriveServiceImplTest {
     //TODO: sprawdzic czy trzeba jakies testy do tej klasy dopisac
     //TODO [17.06.2022] prawdopodobnie klasa do usuniecia - albo do pisania integracyjnych testow
 
-    @Test
-    void should_get_drive_files() {
-
-    }
-
-    @Test
-    void should_save_all_exercises_to_db() {
-
-    }
-
-    @Test
-    void should_download_file() {
-
-    }
-
-    @Test
-    void should_upload_file_in_folder() {
-
-    }
 
     @Test
     void should_generate_file_name() {
@@ -84,8 +65,4 @@ class GoogleDriveServiceImplTest {
                 exercise7, exercise8, exercise9));
     }
 
-    @Test
-    void should_init_application() {
-
-    }
 }

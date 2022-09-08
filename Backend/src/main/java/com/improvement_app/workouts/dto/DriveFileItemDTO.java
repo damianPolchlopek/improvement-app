@@ -19,4 +19,10 @@ public class DriveFileItemDTO implements Serializable {
         this.id = file.getId();
         this.mimeType = file.getMimeType();
     }
+
+    public DriveFileItemDTO(String name, String id, String mimeType) {
+        this.name = name;
+        this.id = id;
+        this.mimeType = mimeType;
+    }
 }

@@ -6,6 +6,7 @@ import Cookies from 'universal-cookie';
 const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercise/';
 const drive = 'drive/';
+const shopping = 'shopping/'
 
 const get = (url) => {
     return axios.get(url).then((response) => {
@@ -18,6 +19,13 @@ const post = (url, data) => {
     return axios.post(url, data).then((response) => {
         return response.data;
     })
+}
+
+const deleteMethod = (url) => {
+    return axios.delete(url).then((response) => {
+        console.log(response)
+        return response.data;
+    });
 }
 
 axios.interceptors.request.use(
@@ -79,6 +87,26 @@ export default class REST {
     
     static initTrainingModule(){
         return get(serverUrl + drive + 'initApplication');
+    }
+
+    static getShoppingList(){
+        return get(serverUrl + shopping + 'showList');
+    }
+
+    static getAllCategoryProducts(){
+        return get(serverUrl + shopping + 'getAllCategoryType');
+    }
+
+    static getShoppingListByCategory(category){
+        return get(serverUrl + shopping + 'getShoppingList/' + category);
+    }
+
+    static deleteProductFromShoppingList(productId){
+        return deleteMethod(serverUrl + shopping + 'deleteItem/' + productId);
+    }
+
+    static addProductToShoppingList(product){
+        return post(serverUrl + shopping + 'addItem', product);
     }
 
 }
