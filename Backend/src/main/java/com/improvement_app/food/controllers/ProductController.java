@@ -22,7 +22,6 @@ public class ProductController {
     public void qqq() {
         Product product = new Product("Damian");
         productRepository.save(product);
-        System.out.println("hello");
     }
 
     @GetMapping("/show")
