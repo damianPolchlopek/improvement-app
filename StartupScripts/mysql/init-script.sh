@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+export PGPASSWORD=$POSTGRES_PASSWORD
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+	\connect $POSTGRES_DB $POSTGRES_USER
+	BEGIN;
+		CREATE USER user_app WITH PASSWORD 'user_app';
+		GRANT INSERT, SELECT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO user_app;
+  COMMIT;
+EOSQL
