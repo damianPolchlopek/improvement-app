@@ -1,46 +1,82 @@
-version: '3'
+version: '3.9'
 services:
+
   backend:
     build: ./Backend
-    container_name: backend
+    environment:
+      SPRING_PROFILES_ACTIVE: compose
     ports:
       - "8080:8080"
     depends_on:
-      - mongo
-      - my-sql
-    environment:
-      MYSQL_HOST: my-sql
-      
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - webnet
+
   frontend:
     build: ./Frontend2
-    container_name: frontend
     ports:
       - "3000:3000"
     depends_on:
       - backend
-      
+    networks:
+      - webnet
+
   mongo:
     image: mongo:latest
-    container_name: mongo
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
       MONGO_INITDB_DATABASE: workout-app
     ports:
       - "27017:27017"
-
-  my-sql:
-    image: mysql:latest
-    environment:
-      MYSQL_USERNAME: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: food-mysql
-      MYSQL_ROOT_PASSWORD: password
-    ports:
-      - "3308:3306"
-    restart: always
+    volumes:
+      - ./StartupScripts/mongodb/:/docker-entrypoint-initdb.d/:ro
+    networks:
+      - webnet
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
-      interval: 3s
+      test: echo 'db.runCommand({serverStatus:1}).ok'
+      interval: 10s
+      timeout: 10s
       retries: 5
-      start_period: 30s
+      start_period: 40s
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres-food
+      PGUSER: postgres
+      PGDATA: /data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - webnet
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 2s
+      retries: 10
+    volumes:
+      - ./StartupScripts/mysql/:/docker-entrypoint-initdb.d/:ro
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@zzz.pl
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    depends_on:
+      - postgres
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    name: webnet
+    driver: bridge
