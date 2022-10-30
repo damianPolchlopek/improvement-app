@@ -19,9 +19,9 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/drive")
-public class GoogleDriveFilesController {
+public class GoogleDriveTrainingFilesController {
 
-    private static final Logger LOGGER = Logger.getLogger(GoogleDriveFilesController.class);
+    private static final Logger LOGGER = Logger.getLogger(GoogleDriveTrainingFilesController.class);
     private static final String TRAININGS_FOLDER_NAME = ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
     private final GoogleDriveService googleDriveService;

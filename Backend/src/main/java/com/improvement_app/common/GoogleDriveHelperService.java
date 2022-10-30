@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -92,5 +93,20 @@ public class GoogleDriveHelperService {
 
     public void createFile(final File file, final FileContent content) throws IOException {
         drive.files().create(file, content).setFields("id").execute();
+    }
+
+    public void uploadFileInFolder(final String folderName,
+                                   final java.io.File fileToUpload,
+                                   final String fileName) throws IOException {
+
+        final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
+
+        final File file = new File();
+        file.setName(fileName);
+        file.setMimeType(MimeType.DRIVE_SHEETS.getType());
+        file.setParents(Arrays.asList(folderId));
+
+        final FileContent content = new FileContent(MimeType.EXCEL_DOWNLOAD.getType(), fileToUpload);
+        createFile(file, content);
     }
 }

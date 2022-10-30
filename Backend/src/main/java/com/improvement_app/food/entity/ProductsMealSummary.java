@@ -1,6 +1,5 @@
 package com.improvement_app.food.entity;
 
-import com.improvement_app.food.entity.enums.ProductCategory;
 import com.improvement_app.food.entity.enums.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,24 +14,21 @@ import javax.persistence.Id;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product{
+public class ProductsMealSummary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int productId;
     private String name;
-    private double kcal;
-    private double protein;
-    private double carbohydrates;
-    private double fat;
     private double amount;
     private Unit unit;
-    private ProductCategory productCategory;
 
-
-    public Product(String name) {
+    public ProductsMealSummary(int productId, String name, double amount, Unit unit) {
+        this.productId = productId;
         this.name = name;
+        this.amount = amount;
+        this.unit = unit;
     }
-
 }

@@ -5,11 +5,10 @@ import REST from '../utils/REST';
 
 function HomeView() {
   return (
-    <div>
-      
+    <React.Fragment>
       <button onClick={() => REST.initTrainingModule()}>Init Training Module</button>
-
-    </div>
+      <button onClick={() => REST.initFoodModule()}>Init Food Module</button>
+    </React.Fragment>
   );
 }
 

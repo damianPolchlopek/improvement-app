@@ -1,18 +1,16 @@
 package com.improvement_app.workouts.services;
 
-import com.google.api.client.http.FileContent;
-import com.google.api.services.drive.model.File;
+import com.improvement_app.common.ApplicationVariables;
 import com.improvement_app.common.GoogleDriveHelperService;
+import com.improvement_app.common.types.MimeType;
 import com.improvement_app.workouts.dto.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
 import com.improvement_app.workouts.entity.exercises_fields.Progress;
 import com.improvement_app.workouts.entity.exercises_fields.Type;
-import com.improvement_app.common.ApplicationVariables;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
-import com.improvement_app.common.types.MimeType;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,20 +40,22 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
         final List<DriveFileItemDTO> responseList = googleDriveHelperService.getDriveFiles(folderName);
         final List<Exercise> exercises = new ArrayList<>();
+        // TODO: sprawdzic czy to mozna usunac (trainingsName)
         final List<String> trainingsName = exerciseService.getAllTrainingNames();
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             final String trainingName = driveFileItemDTO.getName();
 
             if (!trainingsName.contains(trainingName)) {
-                downloadFile(driveFileItemDTO);
+                googleDriveHelperService.downloadFile(driveFileItemDTO);
                 trainingsName.add(trainingName);
 
                 LOGGER.info("Dodaje do bazy danych trening o nazwie: " + trainingName);
 
                 final String fileName = TMP_FILES_PATH + trainingName + EXCEL_EXTENSION;
                 java.io.File file = new java.io.File(fileName);
-                exercises.addAll(DriveFilesHelper.parseExcelTrainingFile(file));
+                List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
+                exercises.addAll(parsedExercises);
             } else {
                 LOGGER.info("Trening o nazwie: " + trainingName + ", juz istnieje w bazie danych");
             }
@@ -74,7 +73,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         final List<DriveFileItemDTO> responseList = googleDriveHelperService.getDriveFiles(folderName);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
-            downloadFile(driveFileItemDTO);
+            googleDriveHelperService.downloadFile(driveFileItemDTO);
 
             final String fileName = TMP_FILES_PATH + driveFileItemDTO.getName() + EXCEL_EXTENSION;
             final java.io.File file = new java.io.File(fileName);
@@ -131,27 +130,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     public void deleteTraining(String trainingName) throws IOException{
         final String fileId = googleDriveHelperService.getGoogleDriveObjectId(trainingName, MimeType.DRIVE_SHEETS);
         googleDriveHelperService.deleteFile(fileId);
-    }
-
-    @Override
-    public void downloadFile(final DriveFileItemDTO file) throws IOException {
-        googleDriveHelperService.downloadFile(file);
-    }
-
-    @Override
-    public void uploadFileInFolder(final String folderName,
-                                   final java.io.File fileToUpload,
-                                   final String fileName) throws IOException {
-
-        final String folderId = googleDriveHelperService.getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
-
-        final File file = new File();
-        file.setName(fileName);
-        file.setMimeType(MimeType.DRIVE_SHEETS.getType());
-        file.setParents(Arrays.asList(folderId));
-
-        final FileContent content = new FileContent(MimeType.EXCEL_DOWNLOAD.getType(), fileToUpload);
-        googleDriveHelperService.createFile(file, content);
     }
 
 }
