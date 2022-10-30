@@ -7,6 +7,7 @@ const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercise/';
 const drive = 'drive/';
 const shopping = 'shopping/'
+const food = 'food/'
 
 const get = (url) => {
     return axios.get(url).then((response) => {
@@ -107,6 +108,24 @@ export default class REST {
 
     static addProductToShoppingList(product){
         return post(serverUrl + shopping + 'addItem', product);
+    }
+
+
+
+
+
+
+    // food module
+    static initFoodModule(){
+        return get(serverUrl + drive + 'initProducts');
+    }
+
+    static getProductList(){
+        return get(serverUrl + food + 'getProducts');
+    }
+
+    static getMealList(){
+        return get(serverUrl + food + 'getMeals');
     }
 
 }

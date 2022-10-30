@@ -1,6 +1,7 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.common.ApplicationVariables;
+import com.improvement_app.common.GoogleDriveHelperService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
@@ -29,6 +30,7 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
     private final GoogleDriveService googleDriveService;
+    private final GoogleDriveHelperService googleDriveHelperService;
 
 //    @Value("${path.to.excel}")
 //    public Resource pathToExcelsFiles;
@@ -46,7 +48,7 @@ public class ExerciseController {
         DriveFilesHelper.createExcelFile(exercises, trainingNameExcelFile);
 
         final File file = new File(ApplicationVariables.pathToExcelsFiles + trainingNameExcelFile);
-        googleDriveService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
+        googleDriveHelperService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
         List<Exercise> newExercises = ExercisesHelper.fillMissingFieldForExercise(exercises, trainingName);
         List<Exercise> savedExercises = exerciseService.saveAll(newExercises);

@@ -7,7 +7,9 @@ import Layout from './navigation/Layout';
 import AddTrainingView from "./training/AddTraining/AddTrainingView";
 import TrainingsView from "./training/ViewTrainings/TrainingsView";
 import LoginView from "./login/LoginView";
-import ShoppingList from "./shopping/ShoppingListView";
+import ShoppingListView from "./shopping/ShoppingListView";
+import ProductView from "./food/ProductView";
+import Test from './test/NestedList';
 
 function App() {
   return (
@@ -18,8 +20,10 @@ function App() {
             <Route path="/" exact component={HomeView} />
             <Route path="/add-training" exact component={AddTrainingView} />
             <Route path="/view-training" exact component={TrainingsView} />
-            <Route path="/shopping-list" exact component={ShoppingList} />
+            <Route path="/shopping-list" exact component={ShoppingListView} />
+            <Route path="/product-list" exact component={ProductView} />
             <Route path="/login-panel" exact component={LoginView} />
+            <Route path="/test" exact component={Test} />
         </BrowserRouter>
       </Layout>
 

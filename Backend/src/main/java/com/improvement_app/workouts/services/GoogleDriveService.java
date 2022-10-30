@@ -16,13 +16,4 @@ public interface GoogleDriveService {
 
     void deleteTraining(String trainingName) throws IOException;
 
-    void downloadFile(final DriveFileItemDTO file) throws IOException;
-
-    void uploadFileInFolder(final String folderName,
-                            final java.io.File fileToUpload,
-                            final String fileName) throws IOException;
-
-
-
-
 }
