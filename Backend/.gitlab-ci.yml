@@ -1,0 +1,25 @@
+image: maven:3.8.3-openjdk-17
+
+stages:          # List of stages for jobs, and their order of execution
+  - test
+  - build
+  - deploy
+
+maven-test:
+  stage: test
+  script: mvn test
+
+maven-build:
+  stage: build
+  script: mvn package
+  artifacts:
+    paths:
+      - target/*.jar
+
+#app-deploy:
+#  image: ubuntu:18.04
+#  stage: deploy
+#  script:
+#    - apt-get update
+#    - apt-get install -y lftp
+#    - lftp -u $FTP_USER,$FTP_PASSWORD $FTP_HOST -e "set ftp:ssl-allow off mirror -R target /app"

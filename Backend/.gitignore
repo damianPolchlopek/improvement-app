@@ -20,7 +20,6 @@ target/
 *.ipr
 
 **/src/main/resources/tmp_files/
-**/src/main/resources/tmp_test_dir/
 **/src/main/resources/keys/
 **/src/main/resources/credentials/
 **/src/main/resources/serviceAccount.json
