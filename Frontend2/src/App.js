@@ -9,7 +9,7 @@ import TrainingsView from "./training/ViewTrainings/TrainingsView";
 import LoginView from "./login/LoginView";
 import ShoppingListView from "./shopping/ShoppingListView";
 import ProductView from "./food/ProductView";
-import Test from './test/NestedList';
+// import Test from './test/NestedList';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
             <Route path="/shopping-list" exact component={ShoppingListView} />
             <Route path="/product-list" exact component={ProductView} />
             <Route path="/login-panel" exact component={LoginView} />
-            <Route path="/test" exact component={Test} />
+            {/* <Route path="/test" exact component={Test} /> */}
         </BrowserRouter>
       </Layout>
 

@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.configuration;
+package com.improvement_app.googleDrive.config;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.http.javanet.NetHttpTransport;

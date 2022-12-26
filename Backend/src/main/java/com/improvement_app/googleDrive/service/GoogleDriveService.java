@@ -1,6 +1,5 @@
-package com.improvement_app.workouts.services;
+package com.improvement_app.googleDrive.service;
 
-import com.improvement_app.workouts.dto.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 
 import java.io.IOException;

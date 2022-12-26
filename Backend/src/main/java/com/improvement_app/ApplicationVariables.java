@@ -1,4 +1,4 @@
-package com.improvement_app.common;
+package com.improvement_app;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

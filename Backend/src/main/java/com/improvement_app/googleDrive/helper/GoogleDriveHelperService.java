@@ -1,11 +1,12 @@
-package com.improvement_app.common;
+package com.improvement_app.googleDrive.helper;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.improvement_app.common.types.MimeType;
-import com.improvement_app.workouts.dto.DriveFileItemDTO;
+import com.improvement_app.ApplicationVariables;
+import com.improvement_app.googleDrive.types.MimeType;
+import com.improvement_app.googleDrive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.exceptions.TooMuchGoogleDriveFilesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
