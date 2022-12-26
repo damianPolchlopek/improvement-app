@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.common.ApplicationVariables;
-import com.improvement_app.common.GoogleDriveHelperService;
+import com.improvement_app.ApplicationVariables;
+import com.improvement_app.googleDrive.helper.GoogleDriveHelperService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
@@ -10,7 +10,7 @@ import com.improvement_app.workouts.entity.exercises_fields.Type;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.services.ExerciseService;
-import com.improvement_app.workouts.services.GoogleDriveService;
+import com.improvement_app.googleDrive.service.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.*;

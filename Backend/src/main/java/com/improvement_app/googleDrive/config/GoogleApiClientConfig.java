@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.configuration;
+package com.improvement_app.googleDrive.config;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -28,6 +28,7 @@ public class GoogleApiClientConfig {
     public GoogleCredential googleCredential() throws IOException {
         return GoogleCredential.fromStream(filePath.getInputStream())
                 .createScoped(googleOAuth2Scopes());
+//        return new GoogleCredential();
     }
 
     @Bean

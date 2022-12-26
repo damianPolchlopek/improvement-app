@@ -1,9 +1,9 @@
-package com.improvement_app.workouts.services;
+package com.improvement_app.googleDrive.service;
 
-import com.improvement_app.common.ApplicationVariables;
-import com.improvement_app.common.GoogleDriveHelperService;
-import com.improvement_app.common.types.MimeType;
-import com.improvement_app.workouts.dto.DriveFileItemDTO;
+import com.improvement_app.ApplicationVariables;
+import com.improvement_app.googleDrive.helper.GoogleDriveHelperService;
+import com.improvement_app.googleDrive.types.MimeType;
+import com.improvement_app.googleDrive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
@@ -11,6 +11,7 @@ import com.improvement_app.workouts.entity.exercises_fields.Progress;
 import com.improvement_app.workouts.entity.exercises_fields.Type;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
+import com.improvement_app.workouts.services.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.improvement_app.common.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
+import static com.improvement_app.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Service
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.helpers;
 
-import com.improvement_app.common.ApplicationVariables;
+import com.improvement_app.ApplicationVariables;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;

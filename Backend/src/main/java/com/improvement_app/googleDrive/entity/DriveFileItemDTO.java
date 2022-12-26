@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.dto;
+package com.improvement_app.googleDrive.entity;
 
 import com.google.api.services.drive.model.File;
 import lombok.Data;

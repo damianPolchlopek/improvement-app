@@ -1,10 +1,10 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.common.GoogleDriveHelperService;
-import com.improvement_app.workouts.dto.DriveFileItemDTO;
+import com.improvement_app.googleDrive.helper.GoogleDriveHelperService;
+import com.improvement_app.googleDrive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.common.ApplicationVariables;
-import com.improvement_app.workouts.services.GoogleDriveService;
+import com.improvement_app.ApplicationVariables;
+import com.improvement_app.googleDrive.service.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
