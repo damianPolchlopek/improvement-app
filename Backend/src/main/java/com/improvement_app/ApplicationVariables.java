@@ -10,7 +10,7 @@ public class ApplicationVariables {
 
     //TODO ogarnac to !!!
     @Value("${path.to.excel}")
-    public static final Resource pathToExcelsFiles = null;
+    public static final String pathToExcelsFiles = "src/main/resources/tmp_files/";
 
     public static final String DRIVE_TRAININGS_FOLDER_NAME = "PlikiPliki";
     public static final String DRIVE_CATEGORIES_FOLDER_NAME = "Categories";

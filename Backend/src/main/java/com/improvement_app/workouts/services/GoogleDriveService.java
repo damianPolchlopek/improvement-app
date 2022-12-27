@@ -1,4 +1,4 @@
-package com.improvement_app.googleDrive.service;
+package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.entity.Exercise;
 

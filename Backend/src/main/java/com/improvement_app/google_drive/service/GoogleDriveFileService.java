@@ -1,14 +1,16 @@
-package com.improvement_app.googleDrive.helper;
+package com.improvement_app.google_drive.service;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.googleDrive.types.MimeType;
-import com.improvement_app.googleDrive.entity.DriveFileItemDTO;
+import com.improvement_app.google_drive.types.MimeType;
+import com.improvement_app.google_drive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.exceptions.TooMuchGoogleDriveFilesException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
@@ -20,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class GoogleDriveHelperService {
+public class GoogleDriveFileService {
 
     private final Drive drive;
 

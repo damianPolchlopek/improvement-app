@@ -1,9 +1,9 @@
-package com.improvement_app.googleDrive.service;
+package com.improvement_app.workouts.services;
 
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.googleDrive.helper.GoogleDriveHelperService;
-import com.improvement_app.googleDrive.types.MimeType;
-import com.improvement_app.googleDrive.entity.DriveFileItemDTO;
+import com.improvement_app.google_drive.service.GoogleDriveFileService;
+import com.improvement_app.google_drive.types.MimeType;
+import com.improvement_app.google_drive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
@@ -11,7 +11,6 @@ import com.improvement_app.workouts.entity.exercises_fields.Progress;
 import com.improvement_app.workouts.entity.exercises_fields.Type;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
-import com.improvement_app.workouts.services.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;
@@ -28,18 +27,18 @@ import static com.improvement_app.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NA
 @RequiredArgsConstructor
 public class GoogleDriveServiceImpl implements GoogleDriveService {
 
-    private static final Resource TMP_FILES_PATH = ApplicationVariables.pathToExcelsFiles;
+    private static final String TMP_FILES_PATH = ApplicationVariables.pathToExcelsFiles;
     private static final String EXCEL_EXTENSION = ApplicationVariables.EXCEL_EXTENSION;
     private static final Logger LOGGER = Logger.getLogger(GoogleDriveServiceImpl.class);
 
-    private final GoogleDriveHelperService googleDriveHelperService;
+    private final GoogleDriveFileService googleDriveFileService;
     private final ExerciseService exerciseService;
 
     @Override
     public List<Exercise> saveAllExercisesToDB(final String folderName) throws IOException{
         LOGGER.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: " + folderName);
 
-        final List<DriveFileItemDTO> responseList = googleDriveHelperService.getDriveFiles(folderName);
+        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
         final List<Exercise> exercises = new ArrayList<>();
         // TODO: sprawdzic czy to mozna usunac (trainingsName)
         final List<String> trainingsName = exerciseService.getAllTrainingNames();
@@ -48,7 +47,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
             final String trainingName = driveFileItemDTO.getName();
 
             if (!trainingsName.contains(trainingName)) {
-                googleDriveHelperService.downloadFile(driveFileItemDTO);
+                googleDriveFileService.downloadFile(driveFileItemDTO);
                 trainingsName.add(trainingName);
 
                 LOGGER.info("Dodaje do bazy danych trening o nazwie: " + trainingName);
@@ -71,10 +70,10 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Override
     public void initApplicationCategories() throws IOException {
         final String folderName = ApplicationVariables.DRIVE_CATEGORIES_FOLDER_NAME;
-        final List<DriveFileItemDTO> responseList = googleDriveHelperService.getDriveFiles(folderName);
+        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
-            googleDriveHelperService.downloadFile(driveFileItemDTO);
+            googleDriveFileService.downloadFile(driveFileItemDTO);
 
             final String fileName = TMP_FILES_PATH + driveFileItemDTO.getName() + EXCEL_EXTENSION;
             final java.io.File file = new java.io.File(fileName);
@@ -129,8 +128,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     @Override
     public void deleteTraining(String trainingName) throws IOException{
-        final String fileId = googleDriveHelperService.getGoogleDriveObjectId(trainingName, MimeType.DRIVE_SHEETS);
-        googleDriveHelperService.deleteFile(fileId);
+        final String fileId = googleDriveFileService.getGoogleDriveObjectId(trainingName, MimeType.DRIVE_SHEETS);
+        googleDriveFileService.deleteFile(fileId);
     }
 
 }
