@@ -15,6 +15,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -182,7 +184,7 @@ public class DriveFilesHelper {
     }
 
     public static void createExcelFile(final List<Exercise> exercises,
-                                       final String fileName) throws IOException {
+                                       final String fileLocation) throws IOException {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
@@ -238,7 +240,6 @@ public class DriveFilesHelper {
                 cell.setCellStyle(style);
             }
 
-            final String fileLocation = ApplicationVariables.pathToExcelsFiles + fileName;
             FileOutputStream outputStream = new FileOutputStream(fileLocation);
             workbook.write(outputStream);
         }

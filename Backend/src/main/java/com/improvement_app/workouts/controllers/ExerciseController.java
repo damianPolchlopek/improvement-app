@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.googleDrive.helper.GoogleDriveHelperService;
+import com.improvement_app.google_drive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
@@ -10,7 +10,7 @@ import com.improvement_app.workouts.entity.exercises_fields.Type;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.services.ExerciseService;
-import com.improvement_app.googleDrive.service.GoogleDriveService;
+import com.improvement_app.workouts.services.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +30,7 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
     private final GoogleDriveService googleDriveService;
-    private final GoogleDriveHelperService googleDriveHelperService;
-
-//    @Value("${path.to.excel}")
-//    public Resource pathToExcelsFiles;
+    private final GoogleDriveFileService googleDriveFileService;
 
     @PostMapping("/addTraining")
     public Response addTraining(@RequestBody List<Exercise> exercises) throws IOException {
@@ -45,10 +42,12 @@ public class ExerciseController {
 
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
         final String trainingNameExcelFile = trainingName + ApplicationVariables.EXCEL_EXTENSION;
-        DriveFilesHelper.createExcelFile(exercises, trainingNameExcelFile);
 
-        final File file = new File(ApplicationVariables.pathToExcelsFiles + trainingNameExcelFile);
-        googleDriveHelperService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
+        final String excelFileLocation = ApplicationVariables.pathToExcelsFiles + trainingNameExcelFile;
+        DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
+
+        final File file = new File(excelFileLocation);
+        googleDriveFileService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
         List<Exercise> newExercises = ExercisesHelper.fillMissingFieldForExercise(exercises, trainingName);
         List<Exercise> savedExercises = exerciseService.saveAll(newExercises);
@@ -62,13 +61,6 @@ public class ExerciseController {
         exerciseService.deleteByTrainingName(trainingName);
         googleDriveService.deleteTraining(trainingName);
         return Response.ok().build();
-    }
-
-    @PostMapping("/addExercise")
-    public Response addExercise(@RequestBody Exercise exercise) {
-        LOGGER.info("Dodaje ćwiczenie: " + exercise.toString());
-        Exercise savedExercise = exerciseService.save(exercise);
-        return Response.ok(savedExercise).build();
     }
 
     @GetMapping("/getLastTypeTraining/{trainingType}")

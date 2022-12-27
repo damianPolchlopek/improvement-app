@@ -1,10 +1,10 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.googleDrive.helper.GoogleDriveHelperService;
-import com.improvement_app.googleDrive.entity.DriveFileItemDTO;
+import com.improvement_app.google_drive.service.GoogleDriveFileService;
+import com.improvement_app.google_drive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.googleDrive.service.GoogleDriveService;
+import com.improvement_app.workouts.services.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class GoogleDriveTrainingFilesController {
     private static final String TRAININGS_FOLDER_NAME = ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
     private final GoogleDriveService googleDriveService;
-    private final GoogleDriveHelperService googleDriveHelperService;
+    private final GoogleDriveFileService googleDriveFileService;
 
     @GetMapping(value = {"/uploadAllExercisesFromDriveToDatabase"}, produces = {"application/json"})
     public @ResponseBody
@@ -38,7 +38,7 @@ public class GoogleDriveTrainingFilesController {
     public @ResponseBody
     List<DriveFileItemDTO> getFiles() throws IOException {
         LOGGER.info("Pobieram nazwy plikow treningowych");
-        return googleDriveHelperService.getDriveFiles(TRAININGS_FOLDER_NAME);
+        return googleDriveFileService.getDriveFiles(TRAININGS_FOLDER_NAME);
     }
 
     @Transactional
