@@ -117,7 +117,7 @@ export default class REST {
 
     // food module
     static initFoodModule(){
-        return get(serverUrl + drive + 'initProducts');
+        return get(serverUrl + drive + 'initFoodModule');
     }
 
     static getProductList(){

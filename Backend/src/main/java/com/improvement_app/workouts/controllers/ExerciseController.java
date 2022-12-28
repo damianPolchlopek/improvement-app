@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/exercise")
@@ -43,11 +45,11 @@ public class ExerciseController {
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
         final String trainingNameExcelFile = trainingName + ApplicationVariables.EXCEL_EXTENSION;
 
-        final String excelFileLocation = ApplicationVariables.pathToExcelsFiles + trainingNameExcelFile;
+        final String excelFileLocation = ApplicationVariables.PATH_TO_EXCEL_FILES + trainingNameExcelFile;
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
 
         final File file = new File(excelFileLocation);
-        googleDriveFileService.uploadFileInFolder(ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
+        googleDriveFileService.uploadFileInFolder(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
         List<Exercise> newExercises = ExercisesHelper.fillMissingFieldForExercise(exercises, trainingName);
         List<Exercise> savedExercises = exerciseService.saveAll(newExercises);
