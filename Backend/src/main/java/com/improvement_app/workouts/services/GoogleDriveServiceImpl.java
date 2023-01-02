@@ -1,9 +1,10 @@
 package com.improvement_app.workouts.services;
 
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.google_drive.service.GoogleDriveFileService;
-import com.improvement_app.google_drive.types.MimeType;
-import com.improvement_app.google_drive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.service.GoogleDriveFileService;
+import com.improvement_app.googledrive.types.MimeType;
+import com.improvement_app.workouts.TrainingModuleVariables;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;
 import com.improvement_app.workouts.entity.exercises_fields.Place;
@@ -13,7 +14,6 @@ import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.improvement_app.ApplicationVariables.DRIVE_TRAININGS_FOLDER_NAME;
+import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Service
 @RequiredArgsConstructor
 public class GoogleDriveServiceImpl implements GoogleDriveService {
 
-    private static final String TMP_FILES_PATH = ApplicationVariables.pathToExcelsFiles;
+    private static final String TMP_FILES_PATH = ApplicationVariables.PATH_TO_EXCEL_FILES;
     private static final String EXCEL_EXTENSION = ApplicationVariables.EXCEL_EXTENSION;
     private static final Logger LOGGER = Logger.getLogger(GoogleDriveServiceImpl.class);
 
@@ -69,7 +69,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     @Override
     public void initApplicationCategories() throws IOException {
-        final String folderName = ApplicationVariables.DRIVE_CATEGORIES_FOLDER_NAME;
+        final String folderName = TrainingModuleVariables.DRIVE_CATEGORIES_FOLDER_NAME;
         final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {

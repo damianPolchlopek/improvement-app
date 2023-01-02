@@ -1,8 +1,7 @@
 package com.improvement_app.workouts.helpers;
 
-import com.improvement_app.ApplicationVariables;
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity.Exercise;
+import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.CardioExercise;
@@ -15,8 +14,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 
 import java.io.File;
 import java.io.FileInputStream;
