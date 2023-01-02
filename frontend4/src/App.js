@@ -7,6 +7,7 @@ import LoginView from "./login/LoginView";
 import AddTraining from "./training/trainingForm/AddTraining";
 import TrainingsView from "./training/trainingView/TrainingsView";
 import ShoppingListView from "./shopping/ShoppingListView";
+import FoodView from "./food/FoodView";
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/view-training" exact component={TrainingsView} />
           <Route path="/shopping-list" exact component={ShoppingListView} />
           <Route path="/login-panel" exact component={LoginView} />
+          <Route path="/food-view" exact component={FoodView} />
         </BrowserRouter>
       </Layout>
     </div>

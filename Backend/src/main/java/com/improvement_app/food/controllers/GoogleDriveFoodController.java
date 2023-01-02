@@ -1,9 +1,9 @@
 package com.improvement_app.food.controllers;
 
-import com.improvement_app.food.services.FoodService;
+import com.improvement_app.food.services.MealService;
+import com.improvement_app.food.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,25 +17,24 @@ public class GoogleDriveFoodController {
 
     private static final Logger LOGGER = Logger.getLogger(GoogleDriveFoodController.class);
 
-    private final FoodService foodService;
+    private final MealService mealService;
+    private final ProductService productService;
 
-    @Transactional
     @GetMapping("/initFoodModule")
     public void initProducts() throws IOException {
         LOGGER.info("Usuwam i dodaje nowe produkty i posiłki");
-        foodService.deleteAllProducts();
-        foodService.initProducts();
+        productService.deleteAllProducts();
+        productService.initProducts();
 
-        foodService.deleteAllMeals();
-        foodService.initMeals();
+        mealService.deleteAllMeals();
+        mealService.initMeals();
     }
 
-    @Transactional
     @GetMapping("/initMeals")
     public void initMeals() throws IOException {
         LOGGER.info("Usuwam i dodaje nowe produkty i posiłki");
-        foodService.deleteAllMeals();
-        foodService.initMeals();
+        mealService.deleteAllMeals();
+        mealService.initMeals();
     }
 
 }

@@ -1,9 +1,9 @@
 package com.improvement_app.workouts.services;
 
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.google_drive.entity.DriveFileItemDTO;
-import com.improvement_app.google_drive.service.GoogleDriveFileService;
-import com.improvement_app.google_drive.types.MimeType;
+import com.improvement_app.googledrive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.service.GoogleDriveFileService;
+import com.improvement_app.googledrive.types.MimeType;
 import com.improvement_app.workouts.TrainingModuleVariables;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercises_fields.Name;

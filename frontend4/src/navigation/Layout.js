@@ -11,9 +11,10 @@ export default function Layout(props) {
 
       <Container style={{width:'10%', minHeight: '5vh'}} />
 
-      <Container style={{width:'70%', minHeight: '90vh'}}>
+      {/* <Container style={{width:'70%', minHeight: '90vh'}}> */}
+      {/* <Container style={{minHeight: '90vh'}}> */}
         {props.children}
-      </Container>
+      {/* </Container> */}
       
     </React.Fragment>
   );

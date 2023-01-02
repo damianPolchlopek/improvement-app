@@ -1,4 +1,4 @@
-package com.improvement_app.google_drive.entity;
+package com.improvement_app.googledrive.entity;
 
 import com.google.api.services.drive.model.File;
 import lombok.Data;

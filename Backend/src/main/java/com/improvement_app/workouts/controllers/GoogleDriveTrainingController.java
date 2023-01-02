@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.google_drive.service.GoogleDriveFileService;
-import com.improvement_app.google_drive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.service.GoogleDriveFileService;
+import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.services.GoogleDriveService;
 import lombok.RequiredArgsConstructor;

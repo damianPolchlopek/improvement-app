@@ -98,6 +98,9 @@ export default class REST {
         return get(serverUrl + shopping + 'getAllCategoryType');
     }
 
+
+
+    // Shopping module
     static getShoppingListByCategory(category){
         return get(serverUrl + shopping + 'getShoppingList/' + category);
     }
@@ -115,7 +118,7 @@ export default class REST {
 
 
 
-    // food module
+    // Food module
     static initFoodModule(){
         return get(serverUrl + drive + 'initFoodModule');
     }

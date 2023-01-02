@@ -1,4 +1,4 @@
-package com.improvement_app.google_drive.config;
+package com.improvement_app.googledrive.config;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;

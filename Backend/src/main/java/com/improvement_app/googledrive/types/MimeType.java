@@ -1,4 +1,4 @@
-package com.improvement_app.google_drive.types;
+package com.improvement_app.googledrive.types;
 
 public enum MimeType {
     DRIVE_SHEETS("application/vnd.google-apps.spreadsheet"),

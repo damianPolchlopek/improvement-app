@@ -24,6 +24,24 @@ import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriveFilesHelper {
+
+    public static List<String> getProductCategories(final File file) throws IOException {
+        List<String> categories = new ArrayList<>();
+
+        try (FileInputStream fis = new FileInputStream(file);
+             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
+
+            final int sheetNumber = wb.getNumberOfSheets();
+            for (int i = 0; i < sheetNumber; i++) {
+                XSSFSheet sheet = wb.getSheetAt(i);
+                String sheetName = sheet.getSheetName();
+                categories.add(sheetName);
+            }
+        }
+
+        return categories;
+    }
+
     public static List<Product> parseExcelProductsFile(final File file) throws IOException {
         List<Product> productList = new ArrayList<>();
 

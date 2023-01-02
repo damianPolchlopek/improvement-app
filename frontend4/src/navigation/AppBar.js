@@ -32,7 +32,7 @@ export default function NavigationItems() {
             <Button color="inherit" href="/add-training">Add Training</Button>
             <Button color="inherit" href="/view-training">View Training</Button>
             <Button color="inherit" href="/shopping-list">Shopping List</Button>
-            <Button color="inherit" href="/product-list">Product List</Button>
+            <Button color="inherit" href="/food-view">Food View</Button>
             
           </Typography>
 

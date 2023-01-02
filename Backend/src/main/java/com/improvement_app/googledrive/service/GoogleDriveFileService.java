@@ -1,12 +1,12 @@
-package com.improvement_app.google_drive.service;
+package com.improvement_app.googledrive.service;
 
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.improvement_app.ApplicationVariables;
-import com.improvement_app.google_drive.types.MimeType;
-import com.improvement_app.google_drive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.types.MimeType;
+import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.workouts.exceptions.TooMuchGoogleDriveFilesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -86,10 +86,10 @@ public class GoogleDriveFileService {
     }
 
     public void downloadFile(final DriveFileItemDTO file) throws IOException {
-        final String fileName = ApplicationVariables.PATH_TO_EXCEL_FILES + file.getName() +
+        final String filePath = ApplicationVariables.PATH_TO_EXCEL_FILES + file.getName() +
                 ApplicationVariables.EXCEL_EXTENSION;
         drive.files().export(file.getId(), MimeType.EXCEL.getType())
-                .executeMediaAndDownloadTo(new FileOutputStream(fileName));
+                .executeMediaAndDownloadTo(new FileOutputStream(filePath));
     }
 
     public void createFile(final File file, final FileContent content) throws IOException {
