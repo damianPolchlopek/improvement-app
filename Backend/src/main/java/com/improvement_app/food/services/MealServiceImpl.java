@@ -2,6 +2,8 @@ package com.improvement_app.food.services;
 
 
 import com.improvement_app.food.entity.Meal;
+import com.improvement_app.food.entity.enums.MealCategory;
+import com.improvement_app.food.entity.enums.MealType;
 import com.improvement_app.food.helpers.DriveFilesHelper;
 import com.improvement_app.food.FoodModuleVariable;
 import com.improvement_app.food.repository.MealRepository;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.improvement_app.ApplicationVariables.EXCEL_EXTENSION;
 import static com.improvement_app.ApplicationVariables.PATH_TO_EXCEL_FILES;
@@ -59,6 +62,25 @@ public class MealServiceImpl implements MealService {
     @Transactional
     public List<Meal> getMeals() {
         return mealRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public List<Meal> getMeals(MealCategory mealCategory, MealType mealType) {
+        List<Meal> meals = mealRepository.findAll();
+
+        if (mealCategory != MealCategory.All){
+            meals = meals.stream().filter(meal -> meal.getCategory() == mealCategory).collect(Collectors.toList());
+        }
+
+        if (mealType != MealType.All){
+            meals = meals.stream().filter(meal -> meal.getType() == mealType).collect(Collectors.toList());
+        }
+
+        System.out.println(mealCategory);
+        System.out.println(mealType);
+        System.out.println(meals);
+        return meals;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.improvement_app.food.services;
 
 import com.improvement_app.food.entity.Product;
+import com.improvement_app.food.entity.enums.ProductCategory;
 import com.improvement_app.food.helpers.DriveFilesHelper;
 import com.improvement_app.food.repository.ProductRepository;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
@@ -48,6 +49,12 @@ public class ProductServiceImpl implements ProductService{
     @Transactional
     public List<Product> getProducts() {
         return productRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public List<Product> getProducts(ProductCategory category) {
+        return productRepository.findByProductCategory(category);
     }
 
     @Override
