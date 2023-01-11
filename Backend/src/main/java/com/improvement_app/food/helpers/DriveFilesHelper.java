@@ -225,10 +225,6 @@ public class DriveFilesHelper {
                 return MealType.wieprzowina;
             case "owsianka":
                 return MealType.owsianka;
-            case "kanapka":
-                return MealType.kanapka;
-            case "tortilla":
-                return MealType.tortilla;
             default:
                 throw new RuntimeException("Bad Meal Type !!!");
         }

@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import REST from '../utils/REST';
 
 import PropTypes from 'prop-types';
-
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 
-import ProductView from './product/ProductView';
+import ProductView from './ProductView';
 import MealView from './MealView';
 
 function TabPanel(props) {
@@ -44,13 +43,14 @@ function a11yProps(index) {
   };
 }
 
-export default function FoodView() {
+export default function TrainingStatistic() {
 
 const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
 
   return (
     <React.Fragment>
@@ -67,24 +67,25 @@ const [value, setValue] = React.useState(0);
             aria-label="Vertical tabs example"
             sx={{ borderRight: 1, borderColor: 'divider' }}
           >
+
             <Tab label="Products" {...a11yProps(0)} />
             <Tab label="Meals" {...a11yProps(1)} />
+            <Tab label="Recipes" {...a11yProps(2)} />
             <Tab label="Statistics" {...a11yProps(2)} />
           </Tabs>
         </Box>
-        
-        <Container>
-          <TabPanel value={value} index={0}>
-            <ProductView />
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <MealView />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Statistics
-          </TabPanel>
-        </Container>
-       
+        <TabPanel value={value} index={0}>
+          <ProductView />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <MealView />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          Recipes
+        </TabPanel>
+        <TabPanel value={value} index={3}>
+          Statistics
+        </TabPanel>
       </Box>
     </React.Fragment>
   );

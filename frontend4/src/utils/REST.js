@@ -41,7 +41,7 @@ const deleteMethod = (url) => {
 //   );
 
 export default class REST {
-
+    // Training module
     static getAllTrainingNames() {
         return get(serverUrl + exercise + 'getTrainingNames');
     }
@@ -117,18 +117,34 @@ export default class REST {
 
 
 
-
     // Food module
     static initFoodModule(){
         return get(serverUrl + drive + 'initFoodModule');
     }
 
-    static getProductList(){
-        return get(serverUrl + food + 'getProducts');
+    static getProductList(productCategory){
+        return get(serverUrl + food + 'getProducts/' + productCategory);
+    }
+
+    static getProductCategoryList(){
+        return get(serverUrl + food + 'getProductCategories');
     }
 
     static getMealList(){
         return get(serverUrl + food + 'getMeals');
     }
+
+    static getMealList(mealCategory, mealType){
+        return get(serverUrl + food + 'getMeals/' + mealCategory + '/' + mealType);
+    }
+
+    static getMealCategoryList(){
+        return get(serverUrl + food + 'getMealCategories');
+    }
+
+    static getMealTypeList(){
+        return get(serverUrl + food + 'getMealTypes');
+    }
+
 
 }

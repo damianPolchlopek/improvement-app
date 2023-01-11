@@ -1,11 +1,11 @@
 package com.improvement_app.food.controllers;
 
-import com.improvement_app.food.entity.Meal;
 import com.improvement_app.food.entity.Product;
-import com.improvement_app.food.services.MealService;
+import com.improvement_app.food.entity.enums.ProductCategory;
 import com.improvement_app.food.services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,16 +20,21 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/getProducts")
-    public Response getProducts() {
-        return Response.ok(productService.getProducts()).build();
+//    @GetMapping("/getProducts")
+//    public Response getProducts() {
+//        return Response.ok(productService.getProducts()).build();
+//    }
+
+    @GetMapping("/getProducts/{productCategory}")
+    public Response getProducts(@PathVariable String productCategory) {
+        ProductCategory productCategory2 = ProductCategory.valueOf(productCategory);
+        return Response.ok(productService.getProducts(productCategory2)).build();
     }
 
     @GetMapping("/getProductCategories")
     public Response getProductsCategories() throws IOException {
         return Response.ok(productService.getProductCategories()).build();
     }
-
 
 
 
