@@ -4,6 +4,9 @@ import REST from '../utils/REST';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
+import TrainingNavigation from '../training/TrainingNavigation';
+
 function HomeView() {
   return (
     <Grid container rowSpacing={1} columnSpacing={1}>
@@ -26,7 +29,12 @@ function HomeView() {
           Init Food Module
         </Button>
       </Grid>
+      <Grid xs={12}>
+        <TrainingStatistic />
+      </Grid>
       
+
+      <TrainingNavigation />
     </Grid>
 
   );

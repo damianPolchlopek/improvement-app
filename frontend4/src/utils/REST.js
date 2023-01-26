@@ -6,8 +6,10 @@ import Cookies from 'universal-cookie';
 const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercise/';
 const drive = 'drive/';
-const shopping = 'shopping/'
-const food = 'food/'
+const shopping = 'shopping/';
+const food = 'food/';
+
+const statistic = 'statistic/';
 
 const get = (url) => {
     return axios.get(url).then((response) => {
@@ -90,12 +92,15 @@ export default class REST {
         return get(serverUrl + drive + 'initApplication');
     }
 
-    static getShoppingList(){
-        return get(serverUrl + shopping + 'showList');
+
+
+
+    static getTestStatistic(exerciseName){
+        return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
     }
 
-    static getAllCategoryProducts(){
-        return get(serverUrl + shopping + 'getAllCategoryType');
+    static getWeightStatistic(exerciseName){
+        return get(serverUrl + exercise + statistic + 'weight/statistic/' + exerciseName);
     }
 
 
@@ -111,6 +116,14 @@ export default class REST {
 
     static addProductToShoppingList(product){
         return post(serverUrl + shopping + 'addItem', product);
+    }
+
+    static getShoppingList(){
+        return get(serverUrl + shopping + 'showList');
+    }
+
+    static getAllCategoryProducts(){
+        return get(serverUrl + shopping + 'getAllCategoryType');
     }
 
 

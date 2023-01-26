@@ -54,7 +54,7 @@ export default function TrainingForm(props) {
     }, [exercises]);
 
     useEffect(() => {
-        setExercises(props.exercises)
+      setExercises(props.exercises)
     });
 
     return(
