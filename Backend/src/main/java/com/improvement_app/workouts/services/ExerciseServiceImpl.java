@@ -34,9 +34,16 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public List<Exercise> findByName(String name) {
+    public List<Exercise> findByNameReverseSorted(String name) {
         List<Exercise> exercises = exerciseRepository.findByName(name);
         ExercisesHelper.sortExerciseListByDate(exercises);
+        return exercises;
+    }
+
+    @Override
+    public List<Exercise> findByName(String name) {
+        List<Exercise> exercises = exerciseRepository.findByName(name);
+        exercises.sort(Comparator.comparing(Exercise::getDate));
         return exercises;
     }
 

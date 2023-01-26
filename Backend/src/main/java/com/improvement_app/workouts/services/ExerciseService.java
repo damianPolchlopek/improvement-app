@@ -9,6 +9,8 @@ import java.util.List;
 public interface ExerciseService {
     List<Exercise> findByDate(LocalDate date);
 
+    List<Exercise> findByNameReverseSorted(String name);
+
     List<Exercise> findByName(String name);
 
     List<Exercise> findByTrainingName(String trainingName);

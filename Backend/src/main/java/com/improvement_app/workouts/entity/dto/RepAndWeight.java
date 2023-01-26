@@ -8,4 +8,8 @@ import lombok.Data;
 public class RepAndWeight {
     private Double repetition;
     private Double weight;
+
+    public Double getCapacity(){
+        return repetition * weight;
+    }
 }

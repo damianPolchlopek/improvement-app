@@ -98,7 +98,7 @@ public class ExerciseController {
     @GetMapping("/getExercise/name/{exerciseName}")
     public Response getExercisesByName(@PathVariable String exerciseName) {
         LOGGER.info("Pobieram cwiczenia o nazwie: " + exerciseName);
-        List<Exercise> result = exerciseService.findByName(exerciseName);
+        List<Exercise> result = exerciseService.findByNameReverseSorted(exerciseName);
         return Response.ok(result).build();
     }
 

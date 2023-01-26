@@ -91,7 +91,7 @@ class ExerciseServiceImplTest {
     void should_find_by_name() {
         //when
         List<Exercise> sortedExercises = expectedTrainingWithTheSameName();
-        List<Exercise> serviceResult = exerciseService.findByName("exerciseName1");
+        List<Exercise> serviceResult = exerciseService.findByNameReverseSorted("exerciseName1");
 
         //then
         Assert.assertEquals(sortedExercises, serviceResult);

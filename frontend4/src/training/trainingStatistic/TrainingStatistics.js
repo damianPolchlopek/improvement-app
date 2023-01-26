@@ -1,92 +1,94 @@
 import React, { useState, useEffect } from 'react';
-import REST from '../utils/REST';
+import REST from '../../utils/REST';
 
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
-import ProductView from './ProductView';
-import MealView from './MealView';
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`vertical-tabpanel-${index}`}
-      aria-labelledby={`vertical-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `vertical-tab-${index}`,
-    'aria-controls': `vertical-tabpanel-${index}`,
-  };
-}
+import ExerciseChart from './ExerciseChart';
 
 export default function TrainingStatistic() {
+  const [exercises, setExercises] = useState();
 
-const [value, setValue] = React.useState(0);
+  const [exerciseNames, setExerciseNames] = useState(0);
+  const [selectedExerciseName, setSelectedExerciseName] = useState('Dipsy');
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const [selectedChartType, setSelectedChartType] = useState('Weight');
+
+
+  useEffect(() => {
+    REST.getTestStatistic(selectedExerciseName).then(response => {
+      setExercises(response.entity);
+    });
+
+    REST.getExerciseNames().then(response => {
+      setExerciseNames(response.entity);
+    });
+
+  }, []);
+  
+  const handleExerciseNameChange = (event) => {
+    setSelectedExerciseName(event.target.value);
+
+    REST.getTestStatistic(event.target.value).then(response => {
+      setExercises(response.entity);
+    });
+
+    // filterMeals(mealCategory, event.target.value);
   };
 
+  const handleChartTypeChange = (event) => {
+    console.log(event.target.value);
+    setSelectedChartType(event.target.value);
+
+
+    REST.getWeightStatistic(selectedExerciseName).then(response => {
+      setExercises(response.entity);
+    });
+
+
+    // filterMeals(mealCategory, event.target.value);
+  };
+
+  const filterExerciseByTypeAndName = (event) => {
+
+  };
 
   return (
     <React.Fragment>
 
-      <Box
-        sx={{ flexGrow: 1, bgcolor: '#202c34', display: 'flex' }}
-      >
-        <Box sx={{ borderColor: 'divider', height: '500px' }}>
-          <Tabs
-            orientation="vertical"
-            variant="scrollable"
-            value={value}
-            onChange={handleChange}
-            aria-label="Vertical tabs example"
-            sx={{ borderRight: 1, borderColor: 'divider' }}
-          >
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
+        <InputLabel id="demo-simple-select-standard-label">Exercise Name</InputLabel>
+          {exerciseNames ? 
+          <Select
+            labelId="demo-simple-select-standard-label"
+            value={selectedExerciseName}
+            onChange={handleExerciseNameChange}
+            label="Exercise Name"
+          > 
+          
+            {exerciseNames.map((exerciseName, index) => 
+              <MenuItem key={index} value={exerciseName.name}>{exerciseName.name}</MenuItem>
+            )}
+          </Select>
+        : null}
+      </FormControl>
+      <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
+        <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-standard-label"
+          value={selectedChartType}
+          onChange={handleChartTypeChange}
+          label="Exercise Name"
+          > 
+            <MenuItem value="Weight">Weight</MenuItem>
+            <MenuItem value="Capacity">Capacity</MenuItem>
+          </Select>
+      </FormControl>
 
-            <Tab label="Products" {...a11yProps(0)} />
-            <Tab label="Meals" {...a11yProps(1)} />
-            <Tab label="Recipes" {...a11yProps(2)} />
-            <Tab label="Statistics" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <ProductView />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <MealView />
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          Recipes
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-          Statistics
-        </TabPanel>
-      </Box>
+      {exercises ? <ExerciseChart exercises={exercises}/> : null}
+      
     </React.Fragment>
   );
   
