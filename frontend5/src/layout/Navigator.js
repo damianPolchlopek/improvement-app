@@ -7,15 +7,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import PeopleIcon from '@mui/icons-material/People';
-import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
-import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
-import PublicIcon from '@mui/icons-material/Public';
-import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
-import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
-import TimerIcon from '@mui/icons-material/Timer';
-import SettingsIcon from '@mui/icons-material/Settings';
-import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
@@ -25,43 +16,49 @@ import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 
-import Logo from '../navigation/Logo';
+import Logo from './Logo';
  
 const categories = [
   {
     id: 'Home',
     icon: <HomeIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon /> },
+      { id: 'View', icon: <VisibilityIcon />, href: "/" },
     ],
   },
   {
     id: 'Training',
     icon: <FitnessCenterIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon /> },
-      { id: 'Add', icon: <AddIcon /> },
-      { id: 'Statistic', icon: <ShowChartIcon /> },
+      { id: 'View', icon: <VisibilityIcon />, href: "/view-training" },
+      { id: 'Add', icon: <AddIcon />, href: "/add-training" },
+      { id: 'Statistic', icon: <ShowChartIcon />, href: "/statistic-training" },
     ],
   },
   {
     id: 'Food',
     icon: <RestaurantIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon /> },
-      { id: 'Add', icon: <AddIcon /> },
-      { id: 'Statistic', icon: <ShowChartIcon /> },
+      { id: 'View', icon: <VisibilityIcon />, href: "/food-view" },
+      { id: 'Add', icon: <AddIcon />, href: "/" },
+      { id: 'Statistic', icon: <ShowChartIcon />, href: "/" },
     ],
   },
   {
     id: 'Shopping',
     icon: <ShoppingBagIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon /> },
-      { id: 'Add', icon: <AddIcon /> },
+      { id: 'View', icon: <VisibilityIcon />, href: "/shopping-list" },
+      { id: 'Add', icon: <AddIcon />, href: "/add-shopping" },
     ],
   },
 ];
+
+const category = { 
+  py: 2, 
+  px: 3, 
+  color: 'rgba(255, 255, 255, 0.7)',
+}
 
 const item = {
   py: '2px',
@@ -89,13 +86,13 @@ export default function TrainingNavigation(props) {
         </ListItem>
         {categories.map(({ id, children, icon }) => (
           <Box key={id} sx={{ bgcolor: '#101F33' }}>
-            <ListItem sx={{ py: 2, px: 3 }}>
+            <ListItem sx={{...category}}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
+            {children.map(({ id: childId, icon, active, href }) => (
               <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
+                <ListItemButton selected={active} sx={item} href={href}>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
