@@ -1,0 +1,11 @@
+.App {
+  /* background-color: #1d2730; */
+  background-color: #202c34;
+  /* background-color: #0A1929; */
+  text-align: center;
+  display: flex; 
+  flex-direction: column;
+  justify-content: center;
+
+  color: white;
+}
