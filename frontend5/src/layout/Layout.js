@@ -15,6 +15,18 @@ import ShoppingListView from "../shopping/ShoppingListView";
 import AddShopping from '../shopping/AddShopping';
 import FoodView from "../food/FoodView";
 
+import {
+  HomeViewUrl, 
+  TrainingViewUrl, 
+  TrainingAddUrl, 
+  TrainingStatisticUrl,
+  FoodViewUrl,
+  FoodAddUrl,
+  FoodStatisticUrl,
+  ShoppingViewUrl,
+  ShoppingAddUrl
+} from "../utils/URLHelper";
+
 
 const drawerWidth = 200;
 
@@ -51,14 +63,18 @@ export default function Layout(props) {
         <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
           <BrowserRouter>
             {/* <Content /> */}
-            <Route path="/" exact component={HomeView} />
-            <Route path="/add-training" exact component={AddTraining} />
-            <Route path="/view-training" exact component={TrainingsView} />
-            <Route path="/statistic-training" exact component={TrainingStatistic} />
+            <Route path={HomeViewUrl} exact component={HomeView} />
+            <Route path={TrainingViewUrl} exact component={TrainingsView} />
+            <Route path={TrainingAddUrl} exact component={AddTraining} />
+            <Route path={TrainingStatisticUrl} exact component={TrainingStatistic} />
 
-            <Route path="/shopping-list" exact component={ShoppingListView} />
-            <Route path="/add-shopping" exact component={AddShopping} />
-            <Route path="/food-view" exact component={FoodView} />
+            <Route path={FoodViewUrl} exact component={FoodView} />
+            <Route path={FoodAddUrl} exact component={FoodView} />
+            <Route path={FoodStatisticUrl} exact component={FoodView} />
+
+            <Route path={ShoppingViewUrl} exact component={ShoppingListView} />
+            <Route path={ShoppingAddUrl} exact component={AddShopping} />
+            
           </BrowserRouter>
         </Box>
       </Box>
