@@ -13,7 +13,9 @@ import TrainingsView from "../training/trainingView/TrainingsView";
 import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
 import ShoppingListView from "../shopping/ShoppingListView";
 import AddShopping from '../shopping/AddShopping';
-import FoodView from "../food/FoodView";
+import FoodView from "../food/foodView/FoodView";
+import FoodStatisticView from "../food/FoodStatisticView";
+import FoodAddView from "../food/FoodAddView";
 
 import {
   HomeViewUrl, 
@@ -64,13 +66,14 @@ export default function Layout(props) {
           <BrowserRouter>
             {/* <Content /> */}
             <Route path={HomeViewUrl} exact component={HomeView} />
+            
             <Route path={TrainingViewUrl} exact component={TrainingsView} />
             <Route path={TrainingAddUrl} exact component={AddTraining} />
             <Route path={TrainingStatisticUrl} exact component={TrainingStatistic} />
 
             <Route path={FoodViewUrl} exact component={FoodView} />
-            <Route path={FoodAddUrl} exact component={FoodView} />
-            <Route path={FoodStatisticUrl} exact component={FoodView} />
+            <Route path={FoodAddUrl} exact component={FoodAddView} />
+            <Route path={FoodStatisticUrl} exact component={FoodStatisticView} />
 
             <Route path={ShoppingViewUrl} exact component={ShoppingListView} />
             <Route path={ShoppingAddUrl} exact component={AddShopping} />

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 
-import ProductView from './product/ProductView';
+import ProductView from './ProductView';
 import MealView from './MealView';
 
 function TabPanel(props) {
@@ -69,7 +69,6 @@ const [value, setValue] = React.useState(0);
           >
             <Tab label="Products" {...a11yProps(0)} />
             <Tab label="Meals" {...a11yProps(1)} />
-            <Tab label="Statistics" {...a11yProps(2)} />
           </Tabs>
         </Box>
         
@@ -79,9 +78,6 @@ const [value, setValue] = React.useState(0);
           </TabPanel>
           <TabPanel value={value} index={1}>
             <MealView />
-          </TabPanel>
-          <TabPanel value={value} index={2}>
-            Statistics
           </TabPanel>
         </Container>
        

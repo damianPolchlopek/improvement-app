@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import REST from '../utils/REST';
+import REST from '../../utils/REST';
 import SingleMeal from './SingleMeal';
 
 import PropTypes from 'prop-types';
