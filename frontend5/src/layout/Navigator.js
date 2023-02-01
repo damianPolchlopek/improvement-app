@@ -17,39 +17,49 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 import Logo from './Logo';
- 
+import {HomeViewUrl, 
+  TrainingViewUrl, 
+  TrainingAddUrl, 
+  TrainingStatisticUrl,
+  FoodViewUrl,
+  FoodAddUrl,
+  FoodStatisticUrl,
+  ShoppingViewUrl,
+  ShoppingAddUrl
+} from "../utils/URLHelper";
+
 const categories = [
   {
     id: 'Home',
     icon: <HomeIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: "/" },
+      { id: 'View', icon: <VisibilityIcon />, href: HomeViewUrl },
     ],
   },
   {
     id: 'Training',
     icon: <FitnessCenterIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: "/view-training" },
-      { id: 'Add', icon: <AddIcon />, href: "/add-training" },
-      { id: 'Statistic', icon: <ShowChartIcon />, href: "/statistic-training" },
+      { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
+      { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
+      { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
     ],
   },
   {
     id: 'Food',
     icon: <RestaurantIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: "/food-view" },
-      { id: 'Add', icon: <AddIcon />, href: "/" },
-      { id: 'Statistic', icon: <ShowChartIcon />, href: "/" },
+      { id: 'View', icon: <VisibilityIcon />, href: FoodViewUrl },
+      { id: 'Add', icon: <AddIcon />, href: FoodAddUrl },
+      { id: 'Statistic', icon: <ShowChartIcon />, href: FoodStatisticUrl },
     ],
   },
   {
     id: 'Shopping',
     icon: <ShoppingBagIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: "/shopping-list" },
-      { id: 'Add', icon: <AddIcon />, href: "/add-shopping" },
+      { id: 'View', icon: <VisibilityIcon />, href: ShoppingViewUrl },
+      { id: 'Add', icon: <AddIcon />, href: ShoppingAddUrl },
     ],
   },
 ];
