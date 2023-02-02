@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import REST from '../../utils/REST';
+import REST from '../utils/REST';
 
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
@@ -49,7 +49,8 @@ function a11yProps(index) {
 export default function ProductView() {
   const [productList, setProductList] = useState([]);
   const [productCategoryList, setProductCategoryList] = useState([]);
-  const [tabIndex, setTabIndex] = React.useState(0);
+  const miesoTabIndex = 0;
+  const [tabIndex, setTabIndex] = React.useState(miesoTabIndex);
     
   useEffect(() => {
 
@@ -83,7 +84,6 @@ export default function ProductView() {
         >
           {productCategoryList ? productCategoryList.map((productCategory, index) => 
             <Tab 
-            
               key={index} 
               label={productCategory} 
               {...a11yProps(0)} 
@@ -130,6 +130,7 @@ export default function ProductView() {
           </TabPanel>
         )} 
       </Box> 
+      
     </React.Fragment>
   );
 }

@@ -84,34 +84,36 @@ export default function SingleMeal(props) {
 
           <TabPanel value={tabIndex} index={0}>  
             <Table>
-              <TableRow>
-                <TableCell variant="head">Name</TableCell>
-                <TableCell>{props.meal.name}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">Kcal</TableCell>
-                <TableCell>{props.meal.kcal}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">Protein</TableCell>
-                <TableCell>{props.meal.protein}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">Carbo</TableCell>
-                <TableCell>{props.meal.carbohydrates}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">Fat</TableCell>
-                <TableCell>{props.meal.fat}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">Portion amount</TableCell>
-                <TableCell>{props.meal.portionAmount}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">URL</TableCell>
-                <TableCell>{props.meal.url}</TableCell>
-              </TableRow>
+              <TableBody>
+                <TableRow>
+                  <TableCell variant="head">Name</TableCell>
+                  <TableCell>{props.meal.name}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">Kcal</TableCell>
+                  <TableCell>{props.meal.kcal}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">Protein</TableCell>
+                  <TableCell>{props.meal.protein}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">Carbo</TableCell>
+                  <TableCell>{props.meal.carbohydrates}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">Fat</TableCell>
+                  <TableCell>{props.meal.fat}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">Portion amount</TableCell>
+                  <TableCell>{props.meal.portionAmount}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">URL</TableCell>
+                  <TableCell>{props.meal.url}</TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
 
           </TabPanel>

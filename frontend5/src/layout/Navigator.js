@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
@@ -24,6 +25,7 @@ import {HomeViewUrl,
   FoodViewUrl,
   FoodAddUrl,
   FoodStatisticUrl,
+  FoodProductUrl,
   ShoppingViewUrl,
   ShoppingAddUrl
 } from "../utils/URLHelper";
@@ -52,6 +54,7 @@ const categories = [
       { id: 'View', icon: <VisibilityIcon />, href: FoodViewUrl },
       { id: 'Add', icon: <AddIcon />, href: FoodAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: FoodStatisticUrl },
+      { id: 'Product', icon: <InventoryIcon />, href: FoodProductUrl },
     ],
   },
   {

@@ -15,21 +15,11 @@ import TrainingForm from "./TrainingForm";
 
 
 export default function AddTraining(props) {
-  var exercisess = [{name: 'aaa', reps: '1/1/1', place: 'Siłownia'}, 
-                    {name: 'sss', place: 'Dom'}];
+  var exercisess = [];
   const [exercises, setExercises] = useState(exercisess);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
-  // const [isBigWindow, setIsBigWindow] = useState(true);
-
-  useEffect(() => {
-    // if(window.innerWidth < 1000){
-    //   setIsBigWindow(false);
-    // } else {
-    //   setIsBigWindow(true);
-    // }
-  }, [exercises]);
-
+  
   function loadLastTraining() {
     setExercises([]);
 
@@ -95,22 +85,6 @@ export default function AddTraining(props) {
           </Grid>
 
         </Grid>
-
-
-
-      {/* {isBigWindow ? 
-        <TrainingForm
-          isSimpleForm={isSimpleForm}
-          exercises={exercises}
-          submitFunction={addTraining}
-        /> : 
-        <TrainingFormSmallScreen
-          isSimpleForm={isSimpleForm}
-          exercises={exercises}
-          submitFunction={addTraining}
-        />
-      } */}
-        
     </React.Fragment>
     
   );

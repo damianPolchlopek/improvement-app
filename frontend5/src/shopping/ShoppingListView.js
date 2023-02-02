@@ -27,8 +27,6 @@ export default function ShoppingListView() {
     
   useEffect(() => {
     REST.getShoppingList().then(response => {
-        console.log("ShoppingList: ");
-        console.log(response.entity);
         setShoppingList(response.entity);
     });
 
@@ -175,8 +173,8 @@ export default function ShoppingListView() {
             </Typography>
           </Grid>
           
-          {shoppingList.map(product => {
-            return <Grid container xs={12}>
+          {shoppingList.map((product, index) => {
+            return <Grid container xs={12} key={index}>
               <Grid xs={6} textAlign='right' hidden={isShoppingListIsVisible}>
                 {product.name}
               </Grid>

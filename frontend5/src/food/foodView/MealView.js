@@ -51,7 +51,7 @@ export default function MealView() {
   const [mealType, setMealType] = React.useState('All');
     
   useEffect(() => {
-    REST.getMealList().then(response => {
+    REST.getAllMealList().then(response => {
       setMealList(response.entity);
     });
 
@@ -91,26 +91,22 @@ export default function MealView() {
       <Container style={{minHeight: '10vh', display: 'flex', justifyContent: 'center'}}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
           <InputLabel id="demo-simple-select-standard-label">Meal Category</InputLabel>
-          {mealCategory ? 
-            <Select
+          {mealCategory ? <Select
               labelId="demo-simple-select-standard-label"
               value={mealCategory}
               onChange={handleMealCategoryChange}
               label="Meal Category"
-              > 
-            
-              {mealCategoryList ? mealCategoryList.map((mealCategory, index) => 
-                <MenuItem key={index} value={mealCategory}>{mealCategory}</MenuItem>
-              ) : null}
+              >
+                {mealCategoryList ? mealCategoryList.map((mealCategory, index) => 
+                  <MenuItem key={index} value={mealCategory}>{mealCategory}</MenuItem>
+                ) : null}
             </Select>
           : null}
         </FormControl>
 
         <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
           <InputLabel id="demo-simple-select-standard-label">Meal Type</InputLabel>
-          
-          {mealType ? 
-            <Select
+          {mealType ? <Select
               labelId="demo-simple-select-standard-label"
               value={mealType}
               onChange={handleMealTypeChange}
@@ -129,8 +125,7 @@ export default function MealView() {
           <Grid key={index} xs={6}>
             <SingleMeal meal={meal} />
           </Grid>
-          ) 
-        : null}
+          ) : null}
       </Grid>
     </React.Fragment>
   );
