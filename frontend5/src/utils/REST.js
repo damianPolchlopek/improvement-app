@@ -143,8 +143,8 @@ export default class REST {
         return get(serverUrl + food + 'getProductCategories');
     }
 
-    static getMealList(){
-        return get(serverUrl + food + 'getMeals');
+    static getAllMealList(){
+        return get(serverUrl + food + 'getAllMeals');
     }
 
     static getMealList(mealCategory, mealType){

@@ -3,7 +3,6 @@ package com.improvement_app.food.controllers;
 import com.improvement_app.food.entity.Meal;
 import com.improvement_app.food.entity.enums.MealCategory;
 import com.improvement_app.food.entity.enums.MealType;
-import com.improvement_app.food.entity.enums.ProductCategory;
 import com.improvement_app.food.services.MealService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,7 @@ public class MealController {
 
     private final MealService mealService;
 
-    @GetMapping("/getMeals")
+    @GetMapping("/getAllMeals")
     public Response getMeals() {
         return Response.ok(mealService.getMeals()).build();
     }
