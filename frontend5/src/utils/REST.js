@@ -83,10 +83,6 @@ export default class REST {
     static addTraining(data){
         return post(serverUrl + exercise + 'addTraining', data);
     }
-
-    static loginUser(user){
-        return post(serverUrl + 'api/auth/signin', user);
-    }
     
     static initTrainingModule(){
         return get(serverUrl + drive + 'initApplication');
@@ -94,13 +90,12 @@ export default class REST {
 
 
 
-
     static getTestStatistic(exerciseName){
         return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
     }
 
-    static getWeightStatistic(exerciseName){
-        return get(serverUrl + exercise + statistic + 'weight/statistic/' + exerciseName);
+    static getTrainingStatistic(exerciseName, chartType, beginDate, endDate){
+        return get(serverUrl + exercise + statistic + exerciseName + '/' + chartType + '/' + beginDate + '/' + endDate);
     }
 
 
@@ -160,4 +155,10 @@ export default class REST {
     }
 
 
+
+
+    // Login module
+    static loginUser(user){
+        return post(serverUrl + 'api/auth/signin', user);
+    }
 }

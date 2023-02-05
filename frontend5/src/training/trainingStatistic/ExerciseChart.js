@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from "react";
+import moment from 'moment/moment';
 
 import {
   XAxis,
@@ -12,71 +13,64 @@ import {
   LineChart
 } from "recharts";
 
-export default function ExerciseChart(props) {
-
-  const [dataExercise, setDataExercise] = useState();
-
-  useEffect(() => {
-
-    setDataExercise(props.exercises)
-   
-  }, []);
-
-    return (
-      <React.Fragment>
-        {dataExercise ? <ResponsiveContainer width="100%" height={400}>
-           <LineChart width={730} height={250} data={props.exercises}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="localDate" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" />
-            </LineChart> 
-        </ResponsiveContainer> : null}
-      </React.Fragment>
-    );
-  
+function formatXAxis(tickItem) {
+  return moment(tickItem).format('DD/MM/YYYY')
 }
 
+function convertLocalDateToEpoch(date){
+  return moment(date).valueOf()
+}
 
- // REST.getExercisesDate(exerciseName).then(response => {
-    //   console.log(exerciseName)
-    //   console.log(response.entity);
-    // });
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div style={{backgroundColor: 'black'}}>
+        <p>Date: {formatXAxis(label)}</p>
+        <p>Value: {`${payload[0].value}`}</p>
+      </div>
+    );
+  }
 
-    // REST.getExercisesCapacity(exerciseName).then(response2 => {
-    //   console.log(response2.entity);
-    // });
+  return null;
+};
 
-    
+export default function ExerciseChart(props) {
+  const [dataExercise, setDataExercise] = useState();
+  const [beginDate, setBeginDate] = useState();
+  const [endDate, setEndDate] = useState();
 
-    // const fetchDatas = async () => {
-    //   const res = await fetch("https://api.coincap.io/v2/assets/?limit=20");
-    //   const data = await res.json();
-    //   console.log(data);
-    //   setdata(data?.data);
-    // };
-    // fetchDatas();
+  useEffect(() => {
+    setDataExercise(props.exercises)
 
+    setBeginDate(props.beginDate);
+    setEndDate(props.endDate)
 
-    {/* <ResponsiveContainer width="100%" height={400}>
-      <BarChart
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="name" fill="#8884d8" />
-        <Bar dataKey="priceUsd" fill="#82ca9d" />
-      </BarChart>
-    </ResponsiveContainer> */}
+    props.exercises.forEach(element => {
+      element.localDate = convertLocalDateToEpoch(element.localDate);
+    });
+  });
+
+  return (
+    <React.Fragment>
+      {dataExercise ? <ResponsiveContainer width="100%" height={400}>
+          <LineChart width={730} height={250} data={props.exercises}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis 
+              dataKey="localDate" 
+              domain={[convertLocalDateToEpoch(beginDate), convertLocalDateToEpoch(endDate)]}
+              scale="time"
+              type="number"
+              tickFormatter={formatXAxis}
+            />
+            <YAxis />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Line type="monotone" dataKey="value" stroke="#8884d8" />
+          </LineChart> 
+      </ResponsiveContainer> : null}
+    </React.Fragment>
+  );
+  
+}
