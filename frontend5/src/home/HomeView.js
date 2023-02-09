@@ -1,40 +1,50 @@
 import React from 'react';
 import REST from '../utils/REST';
 
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
-
-// import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
-// import TrainingNavigation from '../training/TrainingNavigation';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function HomeView() {
+  const [loadingTrainingModule, setLoadingTrainingModule] = React.useState(false);
+  const [loadingFoodModule, setLoadingFoodModule] = React.useState(false);
+
+  function handleClickTrainingModule() {
+    setLoadingTrainingModule(true);
+    REST.initTrainingModule().then(response => {
+      setLoadingTrainingModule(false);
+    })
+  }
+
+  function handleClickFoodModule() {
+    setLoadingFoodModule(true);
+    REST.initFoodModule().then(response => {
+      setLoadingFoodModule(false);
+    })
+  }
+
   return (
     <Grid container rowSpacing={1} columnSpacing={1}>
 
       <Grid xs={6}>
-        <Button 
-          variant="outlined" 
+        <LoadingButton
           size="large"
-          onClick={() => REST.initTrainingModule()}
+          onClick={handleClickTrainingModule}
+          loading={loadingTrainingModule}
+          variant="outlined"
         >
           Init Training Module
-        </Button>
+        </LoadingButton>
       </Grid>
       <Grid xs={6}>
-        <Button 
+        <LoadingButton 
           variant="outlined" 
           size="large"
-          onClick={() => REST.initFoodModule()}
+          onClick={handleClickFoodModule}
+          loading={loadingFoodModule}
         >
           Init Food Module
-        </Button>
+        </LoadingButton>
       </Grid>
-      {/* <Grid xs={12}>
-        <TrainingStatistic />
-      </Grid>
-      
-
-      <TrainingNavigation /> */}
     </Grid>
 
   );

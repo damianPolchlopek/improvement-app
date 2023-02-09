@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import Checkbox from '@mui/material/Checkbox';
-import { FormControlLabel } from "@mui/material";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import Typography from '@mui/material/Typography';
 
 import TrainingForm from "./TrainingForm";
@@ -20,6 +20,10 @@ export default function AddTraining(props) {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
   
+  useEffect(() => {
+    console.log("eeeeeeee");
+  }, [exercises]);
+
   function loadLastTraining() {
     setExercises([]);
 
