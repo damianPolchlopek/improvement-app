@@ -16,6 +16,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 // npm install moment
 // npm install @mui/x-date-pickers
 // npm install dayjs
+// npm install @mui/lab
 
 let theme = createTheme({
   palette: {
