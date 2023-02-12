@@ -11,3 +11,6 @@ export const FoodProductUrl = "/food-product";
 
 export const ShoppingViewUrl = "/shopping-view";
 export const ShoppingAddUrl = "/shopping-add";
+
+export const WeeklyViewUrl = "/weekly-view";
+export const WeeklyAddUrl = "/weekly-add";

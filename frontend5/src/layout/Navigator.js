@@ -16,6 +16,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import Logo from './Logo';
 import {HomeViewUrl, 
@@ -27,7 +28,9 @@ import {HomeViewUrl,
   FoodStatisticUrl,
   FoodProductUrl,
   ShoppingViewUrl,
-  ShoppingAddUrl
+  ShoppingAddUrl,
+  WeeklyViewUrl,
+  WeeklyAddUrl
 } from "../utils/URLHelper";
 
 const categories = [
@@ -65,6 +68,15 @@ const categories = [
       { id: 'Add', icon: <AddIcon />, href: ShoppingAddUrl },
     ],
   },
+  {
+    id: 'Weakly',
+    icon: <CalendarTodayIcon />,
+    children: [
+      { id: 'View', icon: <VisibilityIcon />, href: WeeklyViewUrl },
+      { id: 'Add', icon: <AddIcon />, href: WeeklyAddUrl },
+    ],
+  },
+
 ];
 
 const category = { 

@@ -11,27 +11,34 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-export default function WeeklyAdd() {
+import moment from 'moment';
+
+function formatXAxis(tickItem) {
+  return moment(tickItem).format('DD-MM-YYYY')
+}
+
+export default function AddShopping() {
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
-  const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
+  const [item, setItem] = useState({name: '', category: 'Waga'});
     
   useEffect(() => {
 
-    REST.getAllCategoryProducts().then(response => {
+    REST.getAllCategoryWeeklyRecords().then(response => {
       setAllCategoryTypes(response.entity);
     });
 
   }, []);
 
   function addProductToShoppingList(){
-    REST.addProductToShoppingList(item).then(response => {
+    REST.addProductToWeeklyList(item).then(response => {
+      console.log(item)
       window.location.reload();
     });
   }
 
   return (
     <React.Fragment>
-      {allCategoryTypes.length > 3 ? 
+      {allCategoryTypes.length > 0 ? 
       <React.Fragment>
 
         <Grid container spacing={2}>
@@ -50,7 +57,7 @@ export default function WeeklyAdd() {
               label="Name"
               variant="outlined"
               size="small"
-              onChange={(e)=> setItem({name: e.target.value, category: item.category})}
+              onChange={(e)=> setItem({name: e.target.value, date: formatXAxis(moment().valueOf()), category: item.category})}
               // style={{color: 'white'}}
             />
           </Grid>
@@ -62,7 +69,7 @@ export default function WeeklyAdd() {
               <Select
                 label="Category"
                 defaultValue={allCategoryTypes[0]} 
-                onChange={(e)=> setItem({name: item.name, category: e.target.value})}
+                onChange={(e)=> setItem({name: item.name,  date: formatXAxis(moment().valueOf()), category: e.target.value})}
                 size="small"
               >
                 {allCategoryTypes ? allCategoryTypes.map(categoryType => {

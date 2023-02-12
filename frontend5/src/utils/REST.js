@@ -8,6 +8,7 @@ const exercise = 'exercise/';
 const drive = 'drive/';
 const shopping = 'shopping/';
 const food = 'food/';
+const weekly = 'weekly/';
 
 const statistic = 'statistic/';
 
@@ -152,6 +153,29 @@ export default class REST {
 
     static getMealTypeList(){
         return get(serverUrl + food + 'getMealTypes');
+    }
+
+
+    // Weekly module
+    static getWeeklyListByCategory(category){
+        return get(serverUrl + weekly + 'getWeaklyList/' + category);
+    }
+
+    static deleteProductFromWeeklyList(productId){
+        return deleteMethod(serverUrl + weekly + 'deleteItem/' + productId);
+    }
+
+    static addProductToWeeklyList(product){
+        console.log(product)
+        return post(serverUrl + weekly + 'addItem', product);
+    }
+
+    static getWeeklyList(){
+        return get(serverUrl + weekly + 'showList');
+    }
+
+    static getAllCategoryWeeklyRecords(){
+        return get(serverUrl + weekly + 'getAllCategoryType');
     }
 
 
