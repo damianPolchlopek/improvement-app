@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import REST from '../utils/REST';
 
-
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
-
-import { ExpandLess, ExpandMore }from '@mui/icons-material';
-
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+
+import { ExpandLess, ExpandMore }from '@mui/icons-material';
 
 
 export default function ShoppingListView() {
@@ -21,8 +19,8 @@ export default function ShoppingListView() {
   const [selectedCategory, setSelectedCategory] = useState();
   const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
 
-  const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(true);
-  const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(false);
+  const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
+  const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(true);
   const [isShoppingListIsVisible, setIsShoppingListIsVisible] = useState(false);
     
   useEffect(() => {
@@ -64,7 +62,7 @@ export default function ShoppingListView() {
     <React.Fragment>
       {allCategoryTypes.length > 3 ? 
       <React.Fragment>
-
+       
         <Grid container spacing={2}>
           <Grid xs={12}>
             <Typography 
@@ -91,10 +89,11 @@ export default function ShoppingListView() {
 
           <Grid xs={12} hidden={isAddProductIsVisible}>
             <FormControl sx={{ m: 1, minWidth: 150 }}>
-              <InputLabel>Category:</InputLabel>
+              <InputLabel>Category</InputLabel>
               <Select
                 defaultValue={allCategoryTypes[0]} 
                 onChange={(e)=> setItem({name: item.name, category: e.target.value})}
+                label="Category"
                 size="small"
               >
                 {allCategoryTypes ? allCategoryTypes.map(categoryType => {
