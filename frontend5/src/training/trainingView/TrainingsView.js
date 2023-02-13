@@ -4,6 +4,7 @@ import REST from '../../utils/REST';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import SingleTraining from './SingleTraining';
+import Container from '@mui/material/Container';
 
 export default function TrainingsView() {
   const [trainingNames, setTrainingNames] = useState(null);
@@ -18,7 +19,7 @@ export default function TrainingsView() {
     <React.Fragment>
       {trainingNames ? 
 
-      <div className='training-list'>
+      <Container maxWidth="xl">
         <Typography variant="h4" component="div" style={{color: 'white'}}>
           TrainingView
         </Typography>
@@ -34,7 +35,7 @@ export default function TrainingsView() {
           })}
         </List>
         
-      </div> : null} 
+      </Container> : null} 
     </React.Fragment>
   );
   
