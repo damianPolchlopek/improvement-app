@@ -10,6 +10,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
+import { ExpandLess, ExpandMore }from '@mui/icons-material';
 
 import moment from 'moment';
 
@@ -20,6 +21,7 @@ function formatXAxis(tickItem) {
 export default function AddShopping() {
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
   const [item, setItem] = useState({name: '', category: 'Waga'});
+  const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
     
   useEffect(() => {
 
@@ -41,29 +43,30 @@ export default function AddShopping() {
       {allCategoryTypes.length > 0 ? 
       <React.Fragment>
 
-        <Grid container spacing={2}>
+        <Grid container spacing={2} xs={12}>
           <Grid xs={12}>
             <Typography 
               variant="h5" 
               component="div" 
+              onClick={() => setIsAddProductIsVisible(!isAddProductIsVisible)}
             >
-              Add Products
+              Add Weekly Records
+              {!isAddProductIsVisible ? <ExpandLess /> : <ExpandMore />}
             </Typography>
           </Grid>
 
-          <Grid xs={12}>
+          <Grid xs={12} hidden={isAddProductIsVisible}>
             <TextField
-              placeholder="Product Name ..."
-              label="Name"
+              placeholder="Item ..."
+              label="Weekly Record"
               variant="outlined"
               size="small"
               onChange={(e)=> setItem({name: e.target.value, date: formatXAxis(moment().valueOf()), category: item.category})}
-              // style={{color: 'white'}}
             />
           </Grid>
           
 
-          <Grid xs={12}>
+          <Grid xs={12} hidden={isAddProductIsVisible}>
             <FormControl sx={{ m: 1, minWidth: 150 }}>
               <InputLabel>Category</InputLabel>
               <Select
@@ -83,12 +86,12 @@ export default function AddShopping() {
             </FormControl>
           </Grid>
             
-          <Grid xs={12}>
+          <Grid xs={12} hidden={isAddProductIsVisible}>
             <Button 
               variant="contained" 
               onClick={() => addProductToShoppingList()}
             >
-              Add Product
+              Add Weekly Record
             </Button>
           </Grid>
 

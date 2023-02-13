@@ -11,9 +11,14 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-export default function WeeklyAdd() {
+import { ExpandLess, ExpandMore }from '@mui/icons-material';
+
+
+export default function ShoppingAdd() {
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
   const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
+
+  const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
     
   useEffect(() => {
 
@@ -23,7 +28,7 @@ export default function WeeklyAdd() {
 
   }, []);
 
-  function addProductToShoppingList(){
+  function addProductToShoppingList() {
     REST.addProductToShoppingList(item).then(response => {
       window.location.reload();
     });
@@ -39,12 +44,14 @@ export default function WeeklyAdd() {
             <Typography 
               variant="h5" 
               component="div" 
+              onClick={() => setIsAddProductIsVisible(!isAddProductIsVisible)}
             >
               Add Products
+              {!isAddProductIsVisible ? <ExpandLess /> : <ExpandMore />}
             </Typography>
           </Grid>
 
-          <Grid xs={12}>
+          <Grid xs={12} hidden={isAddProductIsVisible}>
             <TextField
               placeholder="Product Name ..."
               label="Name"
@@ -56,7 +63,7 @@ export default function WeeklyAdd() {
           </Grid>
           
 
-          <Grid xs={12}>
+          <Grid xs={12} hidden={isAddProductIsVisible}>
             <FormControl sx={{ m: 1, minWidth: 150 }}>
               <InputLabel>Category</InputLabel>
               <Select
@@ -76,7 +83,7 @@ export default function WeeklyAdd() {
             </FormControl>
           </Grid>
             
-          <Grid xs={12}>
+          <Grid xs={12} hidden={isAddProductIsVisible}>
             <Button 
               variant="contained" 
               onClick={() => addProductToShoppingList()}

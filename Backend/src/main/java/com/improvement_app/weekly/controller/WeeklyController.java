@@ -30,7 +30,6 @@ public class WeeklyController {
     @GetMapping("/showList")
     public Response showList(){
         List<WeeklyRecord> items = weeklyRepository.findAll();
-        System.out.println("Show List: " + items);
         return Response.ok(items).build();
     }
 

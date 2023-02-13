@@ -12,12 +12,10 @@ import AddTraining from "../training/trainingForm/AddTraining";
 import TrainingsView from "../training/trainingView/TrainingsView";
 import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
 import ShoppingListView from "../shopping/ShoppingListView";
-import AddShopping from '../shopping/AddShopping';
 import MealView from '../food/foodView/MealView.js';
 import FoodStatisticView from "../food/FoodStatisticView";
 import FoodAddView from "../food/FoodAddView";
 import ProductView from '../food/ProductView.js';
-import WeeklyAdd from '../weekly/WeeklyAdd';
 import WeeklyListView from '../weekly/WeeklyListView.js';
 
 import {
@@ -29,9 +27,7 @@ import {
   FoodAddUrl,
   FoodStatisticUrl,
   ShoppingViewUrl,
-  ShoppingAddUrl,
   FoodProductUrl,
-  WeeklyAddUrl,
   WeeklyViewUrl
 } from "../utils/URLHelper";
 
@@ -82,10 +78,8 @@ export default function Layout(props) {
             <Route path={FoodProductUrl} exact component={ProductView} />
 
             <Route path={ShoppingViewUrl} exact component={ShoppingListView} />
-            <Route path={ShoppingAddUrl} exact component={AddShopping} />
 
             <Route path={WeeklyViewUrl} exact component={WeeklyListView} />
-            <Route path={WeeklyAddUrl} exact component={WeeklyAdd} />
           </BrowserRouter>
         </Box>
       </Box>

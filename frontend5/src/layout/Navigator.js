@@ -28,9 +28,7 @@ import {HomeViewUrl,
   FoodStatisticUrl,
   FoodProductUrl,
   ShoppingViewUrl,
-  ShoppingAddUrl,
   WeeklyViewUrl,
-  WeeklyAddUrl
 } from "../utils/URLHelper";
 
 const categories = [
@@ -65,7 +63,6 @@ const categories = [
     icon: <ShoppingBagIcon />,
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: ShoppingViewUrl },
-      { id: 'Add', icon: <AddIcon />, href: ShoppingAddUrl },
     ],
   },
   {
@@ -73,7 +70,6 @@ const categories = [
     icon: <CalendarTodayIcon />,
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: WeeklyViewUrl },
-      { id: 'Add', icon: <AddIcon />, href: WeeklyAddUrl },
     ],
   },
 

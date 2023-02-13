@@ -10,13 +10,15 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { ExpandLess, ExpandMore }from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 
+import WeeklyAdd from './WeeklyAdd';
+
 
 export default function WeeklyListView() {
   const [shoppingList, setShoppingList] = useState([]);
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Waga');
 
-  const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(false);
+  const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(true);
   const [isShoppingListIsVisible, setIsShoppingListIsVisible] = useState(false);
     
   useEffect(() => {
@@ -51,9 +53,10 @@ export default function WeeklyListView() {
   return (
     <React.Fragment>
       {allCategoryTypes.length == 1 ? 
-      <React.Fragment>          
+      <Grid container spacing={3}>          
 
-        <Grid container spacing={2}>
+          <WeeklyAdd />
+
           <Grid xs={12}>
             <Typography 
               variant="h5" 
@@ -61,7 +64,7 @@ export default function WeeklyListView() {
               onClick={() => setIsChooseCategoryIsHidden(!isChooseCategoryIsHidden)}
             >
               Choose Category
-              {!isChooseCategoryIsHidden ? <ExpandLess /> : <ExpandMore />}
+              {isChooseCategoryIsHidden ? <ExpandLess /> : <ExpandMore />}
             </Typography>
           </Grid>
           <Grid xs={12} hidden={isChooseCategoryIsHidden}>
@@ -81,7 +84,6 @@ export default function WeeklyListView() {
                 }) : null}
               </Select>
             </FormControl>
-          </Grid>
 
           {/* style={{textAlign: 'left'}} */}
           <Grid xs={12} hidden={isChooseCategoryIsHidden}>
@@ -95,35 +97,34 @@ export default function WeeklyListView() {
 
         </Grid>
         
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Typography 
-              variant="h5" 
-              component="div"
-              onClick={() => setIsShoppingListIsVisible(!isShoppingListIsVisible)}
-            >
-              Shopping List
-              {!isShoppingListIsVisible ? <ExpandLess /> : <ExpandMore />}
-            </Typography>
-          </Grid>
-          
-          {shoppingList.map((product, index) => {
-            return <Grid container xs={12} key={index}>
-              <Grid xs={4} textAlign='right' hidden={isShoppingListIsVisible}>
-                {product.date}
-              </Grid>
-              <Grid xs={4} textAlign='right' hidden={isShoppingListIsVisible}>
-                {product.name}
-              </Grid>
-              <Grid xs={4} textAlign='left' hidden={isShoppingListIsVisible}>
-                <Button onClick={() => {deleteProductFromShoppingList(product.id)}}>Delete</Button>
-              </Grid>
-            </Grid>
-          })}
-          
+        
+        <Grid xs={12}>
+          <Typography 
+            variant="h5" 
+            component="div"
+            onClick={() => setIsShoppingListIsVisible(!isShoppingListIsVisible)}
+          >
+            Weekly Record List
+            {isShoppingListIsVisible ? <ExpandLess /> : <ExpandMore />}
+          </Typography>
         </Grid>
+        
+        {shoppingList.map((product, index) => {
+          return <Grid container xs={12} key={index}>
+            <Grid xs={4} textAlign='right' hidden={isShoppingListIsVisible}>
+              {product.date}
+            </Grid>
+            <Grid xs={4} textAlign='left' hidden={isShoppingListIsVisible}>               
+              {product.name}
+            </Grid>
+            <Grid xs={4} textAlign='left' hidden={isShoppingListIsVisible}>
+              <Button onClick={() => {deleteProductFromShoppingList(product.id)}}>Delete</Button>
+            </Grid>
+          </Grid>
+        })}
+          
 
-      </React.Fragment> : null}
+      </Grid> : null}
     </React.Fragment>
   );
   
