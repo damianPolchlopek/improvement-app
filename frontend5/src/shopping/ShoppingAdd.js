@@ -11,7 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import { ExpandLess, ExpandMore }from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
 
 export default function ShoppingAdd() {

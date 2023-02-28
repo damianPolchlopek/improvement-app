@@ -6,10 +6,10 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import deepOrange from '@mui/material/colors/deepOrange';
+import Cookies from 'universal-cookie';
+
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -45,16 +45,10 @@ export default function Header(props) {
                 }}
                 rel="noopener noreferrer"
                 target="_blank"
+                onClick={() => new Cookies().remove('authorization')}
               >
-                Go to docs
+                Logout
               </Link>
-            </Grid>
-            <Grid item>
-              <Tooltip title="Alerts • No alerts">
-                <IconButton color="inherit">
-                  <NotificationsIcon />
-                </IconButton>
-              </Tooltip>
             </Grid>
             <Grid item>
               <IconButton color="inherit" sx={{ p: 0.5 }}>

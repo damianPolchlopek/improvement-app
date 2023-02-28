@@ -20,13 +20,12 @@ export default function AddTraining(props) {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
   
-  useEffect(() => {
-    console.log("eeeeeeee");
-  }, [exercises]);
+  // useEffect(() => {
+  //   console.log("eeeeeeee");
+  // }, [exercises]);
 
   function loadLastTraining() {
     setExercises([]);
-
     REST.getTrainingByType(trainingType).then(response => {
       setExercises(response.entity);
     });
