@@ -14,7 +14,7 @@ import InputLabel from "@mui/material/InputLabel";
 
 import Typography from "@mui/material/Typography";
 
-export default function TreiningForm2(props) {
+export default function TrainingForm(props) {
   const [exercisesFields, setExercisesFields] = useState([
     {type: '', place: '', name: '', reps: '', weight: '4/4/4/4', progress: 'Zostawić'},
   ])
@@ -40,7 +40,7 @@ export default function TreiningForm2(props) {
     REST.getExerciseTypes().then(response => {
       setExerciseTypes(response.entity);
     });
-  });
+  }, []);
 
   useEffect(() => {
     setExercisesFields(props.exercises)
@@ -49,7 +49,7 @@ export default function TreiningForm2(props) {
 
   function addTraining(){
     REST.addTraining(exercisesFields).then(response => {
-      props.history.push('/add-training')
+      // props.props.history.push('/add-training')
       window.location.reload(false)
     });
   }

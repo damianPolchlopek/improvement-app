@@ -5,6 +5,10 @@ import Layout from './layout/Layout.js';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import LoginView from './login/LoginView';
+
+import Cookies from 'universal-cookie';
+
 // npm install @mui/material
 // npm install @emotion/react
 // npm install @emotion/styled
@@ -158,11 +162,12 @@ theme = {
 };
 
 function App() {
+
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline />
       <div className="App">
-        <Layout theme={theme}/>
+        {new Cookies().get('authorization') ? <Layout theme={theme}/> : <LoginView />}
       </div>
     </ThemeProvider>
   );

@@ -28,7 +28,7 @@ import {
   FoodStatisticUrl,
   ShoppingViewUrl,
   FoodProductUrl,
-  WeeklyViewUrl
+  WeeklyViewUrl,
 } from "../utils/URLHelper";
 
 
@@ -65,6 +65,7 @@ export default function Layout(props) {
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Header onDrawerToggle={handleDrawerToggle} />
         <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
+       
           <BrowserRouter>
             <Route path={HomeViewUrl} exact component={HomeView} />
             
@@ -81,6 +82,7 @@ export default function Layout(props) {
 
             <Route path={WeeklyViewUrl} exact component={WeeklyListView} />
           </BrowserRouter>
+        
         </Box>
       </Box>
     </Box>

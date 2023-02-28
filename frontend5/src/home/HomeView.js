@@ -46,7 +46,6 @@ function HomeView() {
         </LoadingButton>
       </Grid>
     </Grid>
-
   );
 }
 

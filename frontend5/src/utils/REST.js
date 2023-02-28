@@ -32,16 +32,19 @@ const deleteMethod = (url) => {
     });
 }
 
-// axios.interceptors.request.use(
-//     (req) => {
-//       const cookies = new Cookies();
-//       req.headers.common.Authorization = cookies.get('authorization');
-//        return req;
-//     },
-//     (err) => {
-//        return Promise.reject(err);
-//     }
-//   );
+axios.interceptors.request.use(
+    (req) => {
+      const cookies = new Cookies();
+    //   const token = getToken();
+        console.log("----")
+      console.log(req.headers)
+      req.headers.Authorization = cookies.get('authorization');
+       return req;
+    },
+    (err) => {
+       return Promise.reject(err);
+    }
+  );
 
 export default class REST {
     // Training module
