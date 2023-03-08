@@ -13,6 +13,8 @@ public interface GoogleDriveService {
 
     void initApplicationExercises() throws IOException;
 
+    void initApplicationTrainingTemplates() throws IOException;
+
     void deleteTraining(String trainingName) throws IOException;
 
 }

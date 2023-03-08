@@ -80,8 +80,13 @@ export default class REST {
         return get(serverUrl + exercise + 'getExercise/name/' + name);
     }
 
+    // TODO do usuniecia po stworzeniu pobierania treningow z template
     static getTrainingByType(type){
         return get(serverUrl + exercise + 'getLastTypeTraining/' + type);
+    }
+
+    static getTrainingTemplateByType(type){
+        return get(serverUrl + exercise + 'getTrainingFromTemplate/' + type);
     }
 
     static addTraining(data){

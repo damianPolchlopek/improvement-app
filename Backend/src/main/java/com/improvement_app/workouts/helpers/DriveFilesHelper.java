@@ -56,19 +56,19 @@ public class DriveFilesHelper {
                     continue;
 
                 Cell cell = row.getCell(EXERCISE_TYPE_INDEX);
-                final String exerciseType = cell.getStringCellValue();
+                final String exerciseType = cell.getStringCellValue().trim();
                 cell = row.getCell(EXERCISE_AREA_INDEX);
-                final String exerciseArea = cell.getStringCellValue();
+                final String exerciseArea = cell.getStringCellValue().trim();
                 cell = row.getCell(NAME_INDEX);
-                final String exerciseName = cell.getStringCellValue();
+                final String exerciseName = cell.getStringCellValue().trim();
                 cell = row.getCell(SERIES_INDEX);
-                final String reps = cell.getStringCellValue();
+                final String reps = cell.getStringCellValue().trim();
                 cell = row.getCell(WEIGHT_INDEX);
-                final String weight = cell.getStringCellValue();
+                final String weight = cell.getStringCellValue().trim();
                 cell = row.getCell(PROGRESS_INDEX);
-                final String progress = cell.getStringCellValue();
+                final String progress = cell.getStringCellValue().trim();
                 final LocalDate localDate = getLocalDate(file.getName());
-                final String trainingName = getTrainingName(file.getName());
+                final String trainingName = getTrainingName(file.getName()).trim();
 
                 final ExerciseStrategy exerciseStrategy = getExerciseParseStrategy(exerciseType, reps, weight);
                 final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();

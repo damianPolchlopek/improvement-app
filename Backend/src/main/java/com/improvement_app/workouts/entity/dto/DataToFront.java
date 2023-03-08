@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity.types;
+package com.improvement_app.workouts.entity.dto;
 
 import lombok.Data;
 

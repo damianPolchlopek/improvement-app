@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity.exercises_fields;
+package com.improvement_app.workouts.entity.exercisesfields;
 
 import lombok.Data;
 import lombok.Generated;

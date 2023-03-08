@@ -3,14 +3,19 @@ package com.improvement_app.workouts.controllers;
 import com.improvement_app.ApplicationVariables;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.entity.exercises_fields.Name;
-import com.improvement_app.workouts.entity.exercises_fields.Place;
-import com.improvement_app.workouts.entity.exercises_fields.Progress;
-import com.improvement_app.workouts.entity.exercises_fields.Type;
+import com.improvement_app.workouts.entity.exercisesfields.Name;
+import com.improvement_app.workouts.entity.exercisesfields.Place;
+import com.improvement_app.workouts.entity.exercisesfields.Progress;
+import com.improvement_app.workouts.entity.exercisesfields.Type;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.services.ExerciseService;
 import com.improvement_app.workouts.services.GoogleDriveService;
+import com.improvement_app.workouts.services.TrainingService;
+import com.improvement_app.workouts.services.data.ExerciseNameService;
+import com.improvement_app.workouts.services.data.ExercisePlaceService;
+import com.improvement_app.workouts.services.data.ExerciseProgressService;
+import com.improvement_app.workouts.services.data.ExerciseTypeService;
 import lombok.RequiredArgsConstructor;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +38,13 @@ public class ExerciseController {
     private final ExerciseService exerciseService;
     private final GoogleDriveService googleDriveService;
     private final GoogleDriveFileService googleDriveFileService;
+    private final ExerciseTypeService exerciseTypeService;
+    private final ExerciseProgressService exerciseProgressService;
+    private final ExerciseNameService exerciseNameService;
+    private final ExercisePlaceService exercisePlaceService;
+    private final TrainingService trainingService;
 
+    // trzeba uprościć ta logike
     @PostMapping("/addTraining")
     public Response addTraining(@RequestBody List<Exercise> exercises) throws IOException {
         LOGGER.info("Dodaje trening: " + exercises.get(0).getTrainingName());
@@ -57,6 +68,7 @@ public class ExerciseController {
         return Response.ok(savedExercises).build();
     }
 
+    // currently not used on frontend
     @DeleteMapping("/deleteTraining/{trainingName}")
     public Response deleteTraining(@PathVariable String trainingName) throws IOException {
         LOGGER.info("Usuwam trening: " + trainingName);
@@ -65,6 +77,7 @@ public class ExerciseController {
         return Response.ok().build();
     }
 
+    //TODO do usuniecia prawdopodobnie
     @GetMapping("/getLastTypeTraining/{trainingType}")
     public Response getLastTrainingWithType(@PathVariable String trainingType) {
         LOGGER.info("Pobieram ostatnie cwiczenia o typie: " + trainingType);
@@ -77,8 +90,17 @@ public class ExerciseController {
                 .findFirst()
                 .orElse("Nie znalazlem treningu");
 
-        List<Exercise> result =  exerciseService.findByTrainingName(trainingName);
+        List<Exercise> result = exerciseService.findByTrainingName(trainingName);
         return Response.ok(result).build();
+    }
+
+    @GetMapping("/getTrainingFromTemplate/{trainingType}")
+    public Response getTrainingFromTemplate(@PathVariable String trainingType) {
+        LOGGER.info("Pobieram ostatnie cwiczenia z szablonu: " + trainingType);
+
+        List<Exercise> exercises = trainingService.generateTraining(trainingType);
+
+        return Response.ok(exercises).build();
     }
 
     @GetMapping("/getExercises")
@@ -106,7 +128,7 @@ public class ExerciseController {
     public Response getExercisesByTrainingName(@PathVariable String trainingName) {
         trainingName = trainingName.replace("_", " ");
         LOGGER.info("Pobieram cwiczenia z treningu: " + trainingName);
-        List<Exercise> result =  exerciseService.findByTrainingName(trainingName);
+        List<Exercise> result = exerciseService.findByTrainingName(trainingName);
         return Response.ok(result).build();
     }
 
@@ -118,35 +140,35 @@ public class ExerciseController {
     }
 
     @GetMapping("/getExerciseNames")
-    public Response getExerciseNames(){
+    public Response getExerciseNames() {
         LOGGER.info("Poberam nazwy cwiczen");
-        List<Name> exerciseNames = exerciseService.getExerciseNames();
+        List<Name> exerciseNames = exerciseNameService.getExerciseNames();
         return Response.ok(exerciseNames).build();
     }
 
     @GetMapping("/getExercisePlaces")
-    public Response getExercisePlaces(){
+    public Response getExercisePlaces() {
         LOGGER.info("Poberam miejsca cwiczen");
-        List<Place> exercisePlaces = exerciseService.getExercisePlaces();
+        List<Place> exercisePlaces = exercisePlaceService.getExercisePlaces();
         return Response.ok(exercisePlaces).build();
     }
 
     @GetMapping("/getExerciseProgresses")
-    public Response getExerciseProgresses(){
+    public Response getExerciseProgresses() {
         LOGGER.info("Poberam progress cwiczen");
-        List<Progress> exerciseProgresses = exerciseService.getExerciseProgress();
+        List<Progress> exerciseProgresses = exerciseProgressService.getExerciseProgress();
         return Response.ok(exerciseProgresses).build();
     }
 
     @GetMapping("/getExerciseTypes")
-    public Response getExerciseTypes(){
+    public Response getExerciseTypes() {
         LOGGER.info("Poberam typy cwiczen");
-        List<Type> exerciseTypes = exerciseService.getExerciseTypes();
+        List<Type> exerciseTypes = exerciseTypeService.getExerciseTypes();
         return Response.ok(exerciseTypes).build();
     }
 
     @GetMapping("/getTrainingNames")
-    public Response getTrainingNames(){
+    public Response getTrainingNames() {
         LOGGER.info("Poberam nazwy treningow");
         List<String> trainingNames = exerciseService.getAllTrainingNames();
         return Response.ok(trainingNames).build();

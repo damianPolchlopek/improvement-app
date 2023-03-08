@@ -2,9 +2,11 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.DataForTests;
 import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.entity.exercises_fields.Type;
+import com.improvement_app.workouts.entity.exercisesfields.Type;
 import com.improvement_app.workouts.repository.ExerciseRepository;
 import com.improvement_app.workouts.repository.TypeRepository;
+import com.improvement_app.workouts.services.data.ExerciseTypeService;
+import com.improvement_app.workouts.services.data.ExerciseTypeServiceImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,6 +49,10 @@ class ExerciseServiceImplTest {
 
     @InjectMocks
     ExerciseServiceImpl exerciseService;
+
+
+    @InjectMocks
+    ExerciseTypeServiceImpl exerciseTypeService;
 
     @BeforeEach
     public void init(){
@@ -152,7 +158,7 @@ class ExerciseServiceImplTest {
     @Test
     void should_get_exercise_types() {
         List<Type> expectedTypes = expectedExerciseTypes();
-        List<Type> serviceResult = exerciseService.getExerciseTypes();
+        List<Type> serviceResult = exerciseTypeService.getExerciseTypes();
 
         Assert.assertEquals(expectedTypes, serviceResult);
     }

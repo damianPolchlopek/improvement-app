@@ -45,6 +45,7 @@ public class GoogleDriveTrainingController {
         LOGGER.info("Usuwam i dodaje nowe dane do bazy danych treningowej");
         googleDriveService.initApplicationCategories();
         googleDriveService.initApplicationExercises();
+        googleDriveService.initApplicationTrainingTemplates();
     }
 
 }
