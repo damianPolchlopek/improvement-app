@@ -26,7 +26,10 @@ export default function AddTraining(props) {
 
   function loadLastTraining() {
     setExercises([]);
-    REST.getTrainingByType(trainingType).then(response => {
+    // REST.getTrainingByType(trainingType).then(response => {
+    //   setExercises(response.entity);
+    // });
+    REST.getTrainingTemplateByType(trainingType).then(response => {
       setExercises(response.entity);
     });
   }

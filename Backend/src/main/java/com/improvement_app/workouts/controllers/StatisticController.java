@@ -2,7 +2,7 @@ package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.types.ChartType;
-import com.improvement_app.workouts.entity.types.DataToFront;
+import com.improvement_app.workouts.entity.dto.DataToFront;
 import com.improvement_app.workouts.services.ExerciseService;
 import com.improvement_app.workouts.services.StatisticService;
 import lombok.RequiredArgsConstructor;

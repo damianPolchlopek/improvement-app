@@ -2,7 +2,7 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.types.ChartType;
-import com.improvement_app.workouts.entity.types.DataToFront;
+import com.improvement_app.workouts.entity.dto.DataToFront;
 
 import java.time.LocalDate;
 import java.util.List;

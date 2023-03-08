@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity.exercises_fields;
+package com.improvement_app.workouts.entity.exercisesfields;
 
 import lombok.Data;
 import lombok.Generated;
@@ -7,15 +7,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @Document
-public class Name {
-
+public class Progress {
     @Id
     @Generated
     private String id;
-    private String name;
+    private String progress;
 
-    public Name(String name) {
-        this.name = name;
+    public Progress(String progress) {
+        this.progress = progress;
     }
 
 }
