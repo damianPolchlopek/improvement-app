@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,33 +17,24 @@ public class ExerciseServiceImpl implements ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
 
-
     @Override
-    public List<Exercise> findByDate(LocalDate date) {
-        List<Exercise> exercises = exerciseRepository.findByDate(date);
-        ExercisesHelper.sortExerciseListByIndex(exercises);
-        return exercises;
+    public List<Exercise> findByDateOrderByIndex(LocalDate date) {
+        return exerciseRepository.findByDateOrderByIndex(date);
     }
 
     @Override
     public List<Exercise> findByNameReverseSorted(String name) {
-        List<Exercise> exercises = exerciseRepository.findByName(name);
-        ExercisesHelper.sortExerciseListByDate(exercises);
-        return exercises;
+        return exerciseRepository.findByNameOrderByDateDesc(name);
     }
 
     @Override
-    public List<Exercise> findByName(String name) {
-        List<Exercise> exercises = exerciseRepository.findByName(name);
-        exercises.sort(Comparator.comparing(Exercise::getDate));
-        return exercises;
+    public List<Exercise> findByNameOrderByDate(String name) {
+        return exerciseRepository.findByNameOrderByDate(name);
     }
 
     @Override
-    public List<Exercise> findByTrainingName(String trainingName) {
-        List<Exercise> exercises = exerciseRepository.findByTrainingName(trainingName);
-        ExercisesHelper.sortExerciseListByIndex(exercises);
-        return exercises;
+    public List<Exercise> findByTrainingNameOrderByIndex(String trainingName) {
+        return exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
     }
 
     @Override

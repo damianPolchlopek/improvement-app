@@ -5,7 +5,6 @@ import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.services.ExerciseServiceImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -37,7 +36,7 @@ class ExerciseControllerTest {
     @BeforeEach
     public void init(){
         Mockito.lenient().when(exerciseService.getAllTrainingNames()).thenReturn(generateTwoTrainingsNames());
-        Mockito.lenient().when(exerciseService.findByTrainingName(any())).thenReturn(expectedLastTrainingWithType());
+        Mockito.lenient().when(exerciseService.findByTrainingNameOrderByIndex(any())).thenReturn(expectedLastTrainingWithType());
     }
 
 //    @Test

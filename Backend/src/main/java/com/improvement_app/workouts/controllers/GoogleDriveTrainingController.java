@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.services.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,20 +28,20 @@ public class GoogleDriveTrainingController {
     private final GoogleDriveService googleDriveService;
     private final GoogleDriveFileService googleDriveFileService;
 
-    @GetMapping(value = {"/uploadAllExercisesFromDriveToDatabase"}, produces = {"application/json"})
+    @GetMapping(value = "/uploadAllExercisesFromDriveToDatabase", produces = MediaType.APPLICATION_JSON)
     public @ResponseBody List<Exercise> uploadAllExercisesFromDriveToDatabase() throws IOException {
         LOGGER.info("Zapisuje wszystkie cwiczenia do bazy danych");
         return googleDriveService.saveAllExercisesToDB(DRIVE_TRAININGS_FOLDER_NAME);
     }
 
-    @GetMapping(value = {"/getFiles"}, produces = {"application/json"})
+    @GetMapping(value = "/getFiles", produces = MediaType.APPLICATION_JSON)
     public @ResponseBody List<DriveFileItemDTO> getFiles() throws IOException {
         LOGGER.info("Pobieram nazwy plikow treningowych");
         return googleDriveFileService.getDriveFiles(DRIVE_TRAININGS_FOLDER_NAME);
     }
 
     @Transactional
-    @GetMapping("/initApplication")
+    @GetMapping(value = "/initApplication", produces = MediaType.APPLICATION_JSON)
     public void initApplication() throws IOException {
         LOGGER.info("Usuwam i dodaje nowe dane do bazy danych treningowej");
         googleDriveService.initApplicationCategories();

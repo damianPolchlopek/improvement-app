@@ -5,8 +5,14 @@ import Cookies from 'universal-cookie';
 // static BASE_URL = "http://localhost:8080/";
 const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercise/';
+const exerciseType = 'exerciseType/';
+const exerciseName = 'exerciseName/';
+const exerciseProgress = 'exerciseProgress/';
+const exercisePlace = 'exercisePlace/';
+const training = 'training/';
 const drive = 'drive/';
 const shopping = 'shopping/';
+const shoppingCategory = 'shopping-category/';
 const food = 'food/';
 const weekly = 'weekly/';
 
@@ -35,11 +41,12 @@ const deleteMethod = (url) => {
 axios.interceptors.request.use(
     (req) => {
       const cookies = new Cookies();
-    //   const token = getToken();
-        console.log("----")
-      console.log(req.headers)
       req.headers.Authorization = cookies.get('authorization');
-       return req;
+
+      console.log("----")
+      console.log(req.headers)
+
+      return req;
     },
     (err) => {
        return Promise.reject(err);
@@ -49,49 +56,41 @@ axios.interceptors.request.use(
 export default class REST {
     // Training module
     static getAllTrainingNames() {
-        return get(serverUrl + exercise + 'getTrainingNames');
+        return get(serverUrl + exercise + 'trainingName/');
     }
 
     static getExercises(trainingName) {
-        return get(serverUrl + exercise + 'getExercise/trainingName/' + trainingName);
-    }
-
-    static getExerciseNames(){
-        return get(serverUrl + exercise + 'getExerciseNames');
-    }
-
-    static getExercisePlaces(){
-        return get(serverUrl + exercise + 'getExercisePlaces');
-    }
-
-    static getExerciseProgresses(){
-        return get(serverUrl + exercise + 'getExerciseProgresses');
-    }
-
-    static getExerciseTypes(){
-        return get(serverUrl + exercise + 'getExerciseTypes');
+        return get(serverUrl + exercise + 'trainingName/' + trainingName);
     }
 
     static getExercisesByDate(date){
-        return get(serverUrl + exercise + 'getExercise/date/' + date);
+        return get(serverUrl + exercise + 'date/' + date);
     }
 
     static getExercisesByName(name){
-        return get(serverUrl + exercise + 'getExercise/name/' + name);
+        return get(serverUrl + exercise + 'name/' + name);
     }
 
-    // TODO do usuniecia po stworzeniu pobierania treningow z template
-    static getTrainingByType(type){
-        return get(serverUrl + exercise + 'getLastTypeTraining/' + type);
+
+
+
+    static getExerciseNames(){
+        return get(serverUrl + exerciseName);
     }
 
-    static getTrainingTemplateByType(type){
-        return get(serverUrl + exercise + 'getTrainingFromTemplate/' + type);
+    static getExercisePlaces(){
+        return get(serverUrl + exercisePlace);
     }
 
-    static addTraining(data){
-        return post(serverUrl + exercise + 'addTraining', data);
+    static getExerciseProgresses(){
+        return get(serverUrl + exerciseProgress);
     }
+
+    static getExerciseTypes(){
+        return get(serverUrl + exerciseType);
+    }
+
+
     
     static initTrainingModule(){
         return get(serverUrl + drive + 'initApplication');
@@ -109,25 +108,38 @@ export default class REST {
 
 
 
+    static getTrainingTemplateByType(type){
+        return get(serverUrl + training + 'lastTrainingFromTemplate/' + type);
+    }
+
+    static addTraining(data){
+        return post(serverUrl + training, data);
+    }
+
+
+
+
+
     // Shopping module
     static getShoppingListByCategory(category){
-        return get(serverUrl + shopping + 'getShoppingList/' + category);
+        return get(serverUrl + shopping + 'category/' + category);
     }
 
     static deleteProductFromShoppingList(productId){
-        return deleteMethod(serverUrl + shopping + 'deleteItem/' + productId);
+        return deleteMethod(serverUrl + shopping  + productId);
     }
 
     static addProductToShoppingList(product){
-        return post(serverUrl + shopping + 'addItem', product);
+        return post(serverUrl + shopping, product);
     }
 
     static getShoppingList(){
-        return get(serverUrl + shopping + 'showList');
+        return get(serverUrl + shopping);
     }
 
+
     static getAllCategoryProducts(){
-        return get(serverUrl + shopping + 'getAllCategoryType');
+        return get(serverUrl + shoppingCategory);
     }
 
 

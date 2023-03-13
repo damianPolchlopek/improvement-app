@@ -5,7 +5,6 @@ import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.exercisesfields.Type;
 import com.improvement_app.workouts.repository.ExerciseRepository;
 import com.improvement_app.workouts.repository.TypeRepository;
-import com.improvement_app.workouts.services.data.ExerciseTypeService;
 import com.improvement_app.workouts.services.data.ExerciseTypeServiceImpl;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,8 +57,8 @@ class ExerciseServiceImplTest {
     public void init(){
         Mockito.lenient().when(exerciseRepository.findAll()).thenReturn(generateTwoTrainings());
         Mockito.lenient().when(exerciseRepository.findByDate(any())).thenReturn(generateTrainingWithTheSameDate());
-        Mockito.lenient().when(exerciseRepository.findByName(any())).thenReturn(generateTrainingWithTheSameName());
-        Mockito.lenient().when(exerciseRepository.findByTrainingName(any())).thenReturn(generateTrainingWithTheSameDate());
+        Mockito.lenient().when(exerciseRepository.findByNameOrderByDate(any())).thenReturn(generateTrainingWithTheSameName());
+        Mockito.lenient().when(exerciseRepository.findByTrainingNameOrderByIndex(any())).thenReturn(generateTrainingWithTheSameDate());
         Mockito.lenient().when(typeRepository.findAll()).thenReturn(generateExerciseTypes());
     }
 
@@ -83,7 +82,7 @@ class ExerciseServiceImplTest {
     void should_find_by_date() {
         //when
         List<Exercise> expectedExercises = expectedTrainingWithTheSameDate();
-        List<Exercise> serviceResult = exerciseService.findByDate(LocalDate.parse("2021-09-21"));
+        List<Exercise> serviceResult = exerciseService.findByDateOrderByIndex(LocalDate.parse("2021-09-21"));
 
         //then
         Assert.assertEquals(expectedExercises, serviceResult);
@@ -111,7 +110,7 @@ class ExerciseServiceImplTest {
     void should_find_by_training_name() {
         //when
         List<Exercise> sortedExercises = expectedTrainingWithTheSameDate();
-        List<Exercise> serviceResult = exerciseService.findByTrainingName("trainingName");
+        List<Exercise> serviceResult = exerciseService.findByTrainingNameOrderByIndex("trainingName");
 
         //then
         Assert.assertEquals(sortedExercises, serviceResult);

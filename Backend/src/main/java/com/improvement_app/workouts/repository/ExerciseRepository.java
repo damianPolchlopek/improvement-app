@@ -9,10 +9,16 @@ import java.util.List;
 public interface ExerciseRepository extends MongoRepository<Exercise, String> {
     List<Exercise> findByDate(LocalDate date);
 
-    List<Exercise> findByName(String name);
+    List<Exercise> findByDateOrderByIndex(LocalDate date);
 
-    List<Exercise> findByTrainingName(String trainingName);
+    List<Exercise> findByNameOrderByDate(String name);
 
+    List<Exercise> findByNameOrderByDateDesc(String name);
+
+    List<Exercise> findByTrainingNameOrderByIndex(String trainingName);
+
+    List<Exercise> findAllOrderByDate();
+    
     void deleteByTrainingName(String trainingName);
 
 }

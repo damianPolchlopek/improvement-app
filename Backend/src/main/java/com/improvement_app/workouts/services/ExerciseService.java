@@ -6,13 +6,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ExerciseService {
-    List<Exercise> findByDate(LocalDate date);
+    List<Exercise> findByDateOrderByIndex(LocalDate date);
 
     List<Exercise> findByNameReverseSorted(String name);
 
-    List<Exercise> findByName(String name);
+    List<Exercise> findByNameOrderByDate(String name);
 
-    List<Exercise> findByTrainingName(String trainingName);
+    List<Exercise> findByTrainingNameOrderByIndex(String trainingName);
 
     void deleteByTrainingName(String trainingName);
 

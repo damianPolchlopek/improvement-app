@@ -21,6 +21,7 @@ import Cookies from 'universal-cookie';
 // npm install @mui/x-date-pickers
 // npm install dayjs
 // npm install @mui/lab
+// npm install cors
 
 let theme = createTheme({
   palette: {
