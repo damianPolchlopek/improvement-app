@@ -133,7 +133,8 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     @Override
     public void initApplicationTrainingTemplates() throws IOException {
-        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
+        final List<DriveFileItemDTO> responseList
+                = googleDriveFileService.getDriveFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
 
         List<TrainingTemplate> trainingTemplates = new ArrayList<>();
         for (DriveFileItemDTO driveFileItemDTO : responseList) {

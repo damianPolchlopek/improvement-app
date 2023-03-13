@@ -4,21 +4,48 @@ import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity.types.ChartType;
 import com.improvement_app.workouts.entity.dto.DataToFront;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
 
+    private final ExerciseService exerciseService;
+
     @Override
-    public List<Exercise> getFilteredExercises(List<Exercise> exercises, LocalDate beginDate, LocalDate endDate) {
+    public List<DataToFront> generateStatisticChartData(String exerciseName, String chartType, String beginDate, String endDate) {
+        List<Exercise> filteredExercises = getFilteredExercises(exerciseName, beginDate, endDate);
+
+        ChartType type = ChartType.valueOf(chartType);
+
+        List<Double> values;
+        if (type == ChartType.Capacity) {
+            values = getCapacity(filteredExercises);
+        } else {
+            values = getWeight(filteredExercises);
+        }
+
+        List<LocalDate> localDates = getLocalDates(filteredExercises);
+        return scaleLists(values, localDates);
+    }
+
+    private List<Exercise> getFilteredExercises(String exerciseName, String beginDate, String endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate beginDateLD = LocalDate.parse(beginDate, formatter);
+        LocalDate endDateLD = LocalDate.parse(endDate, formatter);
+
+        List<Exercise> exercises = exerciseService.findByNameOrderByDate(exerciseName);
+
         return exercises.stream()
-                .filter(exercise -> exercise.getDate().isAfter(beginDate))
-                .filter(exercise -> exercise.getDate().isBefore(endDate))
+                .filter(exercise -> exercise.getDate().isAfter(beginDateLD))
+                .filter(exercise -> exercise.getDate().isBefore(endDateLD))
                 .collect(Collectors.toList());
     }
 
@@ -53,19 +80,6 @@ public class StatisticServiceImpl implements StatisticService {
                                 .reduce((double)0, Double::sum))
                 .map(weight -> weight/seriesNumber )
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<DataToFront> createDataToChart(List<Exercise> exercises, ChartType type) {
-        List<LocalDate> localDates = getLocalDates(exercises);
-        List<Double> values;
-        if (type == ChartType.Capacity) {
-            values = getCapacity(exercises);
-        } else {
-            values = getWeight(exercises);
-        }
-
-        return scaleLists(values, localDates);
     }
 
     private List<DataToFront> scaleLists(List<Double> values, List<LocalDate> dates) {
