@@ -48,7 +48,7 @@ class GoogleDriveServiceImplTest {
     @Test
     void should_generate_file_name() {
         //given
-        Mockito.lenient().when(exerciseService.findAll()).thenReturn(generateThreeTrainings());
+        Mockito.lenient().when(exerciseService.findAllOrderByDate()).thenReturn(generateThreeTrainings());
 
         //when
         final String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));

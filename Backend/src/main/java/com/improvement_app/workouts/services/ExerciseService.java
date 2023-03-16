@@ -18,7 +18,7 @@ public interface ExerciseService {
 
     List<Exercise> saveAll(List<Exercise> newExercises);
 
-    List<Exercise> findAll();
+    List<Exercise> findAllOrderByDate();
 
     void deleteById(String id);
 

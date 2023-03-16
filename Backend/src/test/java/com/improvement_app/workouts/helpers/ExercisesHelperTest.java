@@ -60,32 +60,6 @@ class ExercisesHelperTest {
     }
 
     @Test
-    void should_sort_exercise_list_by_date() {
-        //given
-        List<Exercise> actualExercises = Arrays.asList(exercise1, exercise2, incorrectExerciseName);
-        List<Exercise> expectedExercises = Arrays.asList(incorrectExerciseName, exercise2, exercise1);
-
-        //when
-        ExercisesHelper.sortExerciseListByDate(actualExercises);
-
-        //then
-        Assert.assertEquals(expectedExercises, actualExercises);
-    }
-
-    @Test
-    void should_sort_exercise_list_by_index() {
-        //given
-        List<Exercise> actualExercises = Arrays.asList(exercise2, exercise1);
-        List<Exercise> expectedExercises = Arrays.asList(exercise1, exercise2);
-
-        //when
-        ExercisesHelper.sortExerciseListByIndex(actualExercises);
-
-        //then
-        Assert.assertEquals(expectedExercises, actualExercises);
-    }
-
-    @Test
     void should_update_exercises() {
         //given
         Exercise expectedExercise = createExpectedExercise();
