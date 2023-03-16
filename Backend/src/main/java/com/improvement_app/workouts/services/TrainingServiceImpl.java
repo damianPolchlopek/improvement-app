@@ -34,8 +34,7 @@ public class TrainingServiceImpl implements TrainingService {
         TrainingTemplate trainingTemplateByName = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType);
         List<String> templateExercises = trainingTemplateByName.getExercises();
 
-        List<Exercise> allExercises = exerciseService.findAll();
-        ExercisesHelper.sortExerciseListByDate(allExercises);
+        List<Exercise> allExercises = exerciseService.findAllOrderByDate();
 
         return templateExercises.stream()
                 .map(exerciseName -> getLatestExercise(exerciseName, allExercises))
@@ -68,8 +67,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public List<Exercise> addTraining(List<Exercise> exercises) throws IOException {
-        List<Exercise> exercisesFromDb = exerciseService.findAll();
-        ExercisesHelper.sortExerciseListByDate(exercisesFromDb);
+        List<Exercise> exercisesFromDb = exerciseService.findAllOrderByDate();
 
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
         final String trainingNameExcelFile = trainingName + EXCEL_EXTENSION;
@@ -81,8 +79,6 @@ public class TrainingServiceImpl implements TrainingService {
         googleDriveFileService.uploadFileInFolder(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
         List<Exercise> newExercises = ExercisesHelper.fillMissingFieldForExercise(exercises, trainingName);
-        List<Exercise> savedExercises = exerciseService.saveAll(newExercises);
-
-        return savedExercises;
+        return exerciseService.saveAll(newExercises);
     }
 }
