@@ -8,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import LoginView from './login/LoginView';
 
 import Cookies from 'universal-cookie';
+import jwt_decode from "jwt-decode";
 
 // npm install @mui/material
 // npm install @emotion/react
@@ -22,6 +23,7 @@ import Cookies from 'universal-cookie';
 // npm install dayjs
 // npm install @mui/lab
 // npm install cors
+// npm install jwt-decode
 
 let theme = createTheme({
   palette: {
@@ -162,13 +164,30 @@ theme = {
   },
 };
 
+const checkTokenExpirationMiddleware = () => {
+  const cookies = new Cookies();
+  const token = cookies.get('authorization');
+
+  if (token == undefined) {
+    return false;
+  }
+
+  if (jwt_decode(token).exp < Date.now() / 1000) {
+    cookies.remove('authorization');
+    return false;
+  }
+  
+  return true;
+};
+
+
 function App() {
 
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline />
       <div className="App">
-        {new Cookies().get('authorization') ? <Layout theme={theme}/> : <LoginView />}
+        {checkTokenExpirationMiddleware() ? <Layout theme={theme}/> : <LoginView />}
       </div>
     </ThemeProvider>
   );
