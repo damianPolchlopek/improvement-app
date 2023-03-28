@@ -34,7 +34,7 @@ public class TrainingServiceImpl implements TrainingService {
         TrainingTemplate trainingTemplateByName = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType);
         List<String> templateExercises = trainingTemplateByName.getExercises();
 
-        List<Exercise> allExercises = exerciseService.findAllOrderByDate();
+        List<Exercise> allExercises = exerciseService.findAll();
 
         return templateExercises.stream()
                 .map(exerciseName -> getLatestExercise(exerciseName, allExercises))

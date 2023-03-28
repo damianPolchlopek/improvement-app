@@ -25,4 +25,6 @@ public interface ExerciseService {
     List<String> getAllTrainingNames();
 
     void deleteAllExercises();
+
+    List<Exercise> findAll();
 }

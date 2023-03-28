@@ -73,4 +73,10 @@ public class ExerciseServiceImpl implements ExerciseService {
         exerciseRepository.deleteAll();
     }
 
+    @Override
+    public List<Exercise> findAll() {
+        return exerciseRepository.findAll();
+    }
+
+
 }
