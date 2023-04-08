@@ -12,5 +12,6 @@ export const FoodProductUrl = "/food-product";
 export const ShoppingViewUrl = "/shopping-view";
 
 export const WeeklyViewUrl = "/weekly-view";
+export const DailyViewUrl = "/daily-view";
 
 export const LoginUrl = "/login-panel"

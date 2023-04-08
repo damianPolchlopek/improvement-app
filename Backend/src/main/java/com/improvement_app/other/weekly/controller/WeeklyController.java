@@ -1,8 +1,8 @@
-package com.improvement_app.weekly.controller;
+package com.improvement_app.other.weekly.controller;
 
-import com.improvement_app.weekly.entity.Category;
-import com.improvement_app.weekly.entity.WeeklyRecord;
-import com.improvement_app.weekly.repository.WeeklyRepository;
+import com.improvement_app.other.weekly.repository.WeeklyRepository;
+import com.improvement_app.other.weekly.entity.Category;
+import com.improvement_app.other.weekly.entity.WeeklyRecord;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

@@ -16,7 +16,8 @@ import MealView from '../food/foodView/MealView.js';
 import FoodStatisticView from "../food/FoodStatisticView";
 import FoodAddView from "../food/FoodAddView";
 import ProductView from '../food/ProductView.js';
-import WeeklyListView from '../weekly/WeeklyListView.js';
+import WeeklyListView from '../other/weekly/WeeklyListView.js';
+import DailyView from '../other/daily/DailyView.js';
 
 import {
   HomeViewUrl, 
@@ -29,6 +30,7 @@ import {
   ShoppingViewUrl,
   FoodProductUrl,
   WeeklyViewUrl,
+  DailyViewUrl,
 } from "../utils/URLHelper";
 
 
@@ -81,6 +83,7 @@ export default function Layout(props) {
             <Route path={ShoppingViewUrl} exact component={ShoppingListView} />
 
             <Route path={WeeklyViewUrl} exact component={WeeklyListView} />
+            <Route path={DailyViewUrl} exact component={DailyView} />
           </BrowserRouter>
         
         </Box>

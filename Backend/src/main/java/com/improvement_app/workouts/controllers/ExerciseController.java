@@ -21,7 +21,7 @@ public class ExerciseController {
     @ApiOperation("Get all exercises from database")
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON)
     public Response getExercises() {
-        List<Exercise> result = exerciseService.findAllOrderByDate();
+        List<Exercise> result = exerciseService.findAllOrderByDateDesc();
         return Response.ok(result).build();
     }
 
