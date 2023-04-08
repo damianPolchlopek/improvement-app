@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class TrainingServiceImpl implements TrainingService {
         return exercises
                 .stream()
                 .filter(exercise -> exercise.getName().equals(exerciseName))
+                .sorted(Comparator.comparing(Exercise::getDate).reversed())
                 .findFirst().orElseThrow();
     }
 
@@ -67,7 +69,7 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public List<Exercise> addTraining(List<Exercise> exercises) throws IOException {
-        List<Exercise> exercisesFromDb = exerciseService.findAllOrderByDate();
+        List<Exercise> exercisesFromDb = exerciseService.findAllOrderByDateDesc();
 
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
         final String trainingNameExcelFile = trainingName + EXCEL_EXTENSION;

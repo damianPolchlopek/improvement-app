@@ -1,4 +1,4 @@
-package com.improvement_app.weekly.entity;
+package com.improvement_app.other.daily.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -12,20 +12,24 @@ import java.time.LocalDate;
 @Data
 @Document
 @NoArgsConstructor
-public class WeeklyRecord {
-
+public class Daily {
     @Id
     @Generated
     private String id;
-    private String name;
+
+    boolean smoking;
+    boolean exercise;
+    boolean book;
+    boolean work;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate date;
-    private Category category;
+    LocalDate date;
 
-    public WeeklyRecord(String name, LocalDate date, Category category) {
-        this.name = name;
-        this.date = date;
-        this.category = category;
+    public Daily(Daily daily) {
+        this.smoking = daily.isSmoking();
+        this.exercise = daily.isExercise();
+        this.book = daily.isBook();
+        this.work = daily.isWork();
+        this.date = LocalDate.now();
     }
 }

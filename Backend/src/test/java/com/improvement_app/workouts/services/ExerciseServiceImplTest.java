@@ -120,7 +120,7 @@ class ExerciseServiceImplTest {
     void should_find_all() {
         //when
         List<Exercise> sortedExercises = sortedTwoTrainings();
-        List<Exercise> serviceResult =  exerciseService.findAllOrderByDate();
+        List<Exercise> serviceResult =  exerciseService.findAllOrderByDateDesc();
 
         //then
         Assert.assertEquals(sortedExercises, serviceResult);

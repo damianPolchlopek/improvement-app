@@ -15,6 +15,7 @@ const shopping = 'shopping/';
 const shoppingCategory = 'shopping-category/';
 const food = 'food/';
 const weekly = 'weekly/';
+const daily = 'daily/';
 
 const statistic = 'statistic/';
 
@@ -197,6 +198,23 @@ export default class REST {
     static getAllCategoryWeeklyRecords(){
         return get(serverUrl + weekly + 'getAllCategoryType');
     }
+
+
+    // daily
+    static getDaily(){
+        return get(serverUrl + daily);
+    }
+
+    static deleteDaily(id){
+        return deleteMethod(serverUrl + daily + id);
+    }
+
+    static addDaily(data){
+        return post(serverUrl + daily, data);
+    }
+
+
+
 
 
 

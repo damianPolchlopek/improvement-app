@@ -48,8 +48,8 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public List<Exercise> findAllOrderByDate() {
-        return exerciseRepository.findAllOrderByDate();
+    public List<Exercise> findAllOrderByDateDesc() {
+        return exerciseRepository.findAllByOrderByDateDesc();
     }
 
     @Override

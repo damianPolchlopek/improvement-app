@@ -19,7 +19,8 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import Logo from './Logo';
-import {HomeViewUrl, 
+import {
+  HomeViewUrl, 
   TrainingViewUrl, 
   TrainingAddUrl, 
   TrainingStatisticUrl,
@@ -29,6 +30,7 @@ import {HomeViewUrl,
   FoodProductUrl,
   ShoppingViewUrl,
   WeeklyViewUrl,
+  DailyViewUrl,
 } from "../utils/URLHelper";
 
 const categories = [
@@ -66,10 +68,11 @@ const categories = [
     ],
   },
   {
-    id: 'Weakly',
+    id: 'Other',
     icon: <CalendarTodayIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: WeeklyViewUrl },
+      { id: 'Weekly', icon: <VisibilityIcon />, href: WeeklyViewUrl },
+      { id: 'Daily', icon: <VisibilityIcon />, href: DailyViewUrl },
     ],
   },
 
