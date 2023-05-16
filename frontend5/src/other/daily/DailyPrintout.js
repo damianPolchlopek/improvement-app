@@ -20,10 +20,9 @@ export default function DailyPrintout() {
 
   return (
     <React.Fragment>
-        Printout
 
         {dailyList ?
-        <TableContainer container spacing={2}>
+        <TableContainer container spacing={2} style={{marginTop: '100px'}}>
           <Table>
             <TableHead>
               <TableRow>

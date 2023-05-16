@@ -16,6 +16,8 @@ const shoppingCategory = 'shopping-category/';
 const food = 'food/';
 const weekly = 'weekly/';
 const daily = 'daily/';
+const finance = 'finance/';
+const crypto = 'crypto/';
 
 const statistic = 'statistic/';
 
@@ -214,6 +216,15 @@ export default class REST {
     }
 
 
+
+    //finance
+    static getFinanceCryptoPrice(){
+        return get(serverUrl + finance + crypto + "price");
+    }
+
+    static getFinanceCryptoDescription(){
+        return get(serverUrl + finance + crypto + "description");
+    }
 
 
 

@@ -17,6 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 import Logo from './Logo';
 import {
@@ -31,6 +32,8 @@ import {
   ShoppingViewUrl,
   WeeklyViewUrl,
   DailyViewUrl,
+  FinanceConfigUrl,
+  FinanceViewUrl
 } from "../utils/URLHelper";
 
 const categories = [
@@ -58,6 +61,14 @@ const categories = [
       { id: 'Add', icon: <AddIcon />, href: FoodAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: FoodStatisticUrl },
       { id: 'Product', icon: <InventoryIcon />, href: FoodProductUrl },
+    ],
+  },
+  {
+    id: 'Finance',
+    icon: <AttachMoneyIcon />,
+    children: [
+      { id: 'View', icon: <VisibilityIcon />, href: FinanceViewUrl },
+      { id: 'Config', icon: <AddIcon />, href: FinanceConfigUrl },
     ],
   },
   {
