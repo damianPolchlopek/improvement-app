@@ -179,6 +179,7 @@ export default function TrainingForm(props) {
               </FormControl>
               <FormControl {...styleFormControl} >
                 <TextField
+                  sx={{width: '260px'}}
                   label="Weight"
                   name='weight'
                   placeholder='Weight'
