@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import REST from '../utils/REST';
+import REST from '../../utils/REST';
 
-import { Box, CircularProgress, List, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
-import { AttachMoney as MoneyIcon, TrendingUp as TrendingUpIcon, TrendingDown as TrendingDownIcon } from '@mui/icons-material';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { TrendingUp as TrendingUpIcon, TrendingDown as TrendingDownIcon } from '@mui/icons-material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+
+import Grid from '@mui/material/Unstable_Grid2/Grid2';
 
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+function datediff(first, second) {        
+  return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
+
+function calculateDays(prevDate) {
+  let newDate = new Date();
+  var mdy = prevDate.split('-');
+  var firstDate = new Date(mdy[0], mdy[1], mdy[2]);
+  var result = datediff(firstDate, newDate)
+
+  return result
+}
 
 const CryptoPrices = () => {
   const [cryptoData, setCryptoData] = useState(null);
@@ -25,8 +34,6 @@ const CryptoPrices = () => {
     });
 
     REST.getFinanceCryptoDescription().then(response => {
-      console.log('Description')
-      console.log(response)
       setCryptoDescription(response);
       setLoading(false)
     });
@@ -37,10 +44,9 @@ const CryptoPrices = () => {
     return <CircularProgress />;
   }
 
-
   return (
     <Box p={3}>
-      <Typography variant="h5" mb={3}>
+      <Typography variant="h3" mb={3}>
         Crypto Prices
       </Typography>
 
@@ -55,17 +61,14 @@ const CryptoPrices = () => {
             <TableCell>Change 90d</TableCell>
             <TableCell>ATH Date</TableCell>
             <TableCell>ATH</TableCell>
+            <TableCell>Grown From ATH</TableCell>
           </TableRow>
         </TableHead>
       
       
       <TableBody>
-
         {cryptoData !== null && cryptoDescription !== null && Object.keys(cryptoDescription).map((symbol, index) => {
-          // const price = cryptoData[symbol].quote.USD.price.toFixed(2);
-          // const percentChange24h = cryptoData[symbol].quote.USD.percent_change_24h.toFixed(2);
-          // const isPositive = percentChange24h >= 0;
-        const coinPosition = cryptoData[symbol].quote.USD.price.toFixed(2);
+
         const price = cryptoData[symbol].quote.USD.price.toFixed(2);
         const percentChange24h = cryptoData[symbol].quote.USD.percent_change_24h.toFixed(2);
         const isPositive24h = percentChange24h >= 0;
@@ -74,21 +77,14 @@ const CryptoPrices = () => {
         const isPositive7d = percentChange7d >= 0;
 
         const percentChange30d = cryptoData[symbol].quote.USD.percent_change_30d.toFixed(2);
-        const isPositive30d= percentChange30d >= 0;
+        const isPositive30d = percentChange30d >= 0;
 
         const percentChange90d = cryptoData[symbol].quote.USD.percent_change_90d.toFixed(2);
-        const isPositive90d= percentChange90d >= 0;
+        const isPositive90d = percentChange90d >= 0;
 
-        {console.log('Crypto description')}
-        {console.log(cryptoDescription)}
-        {console.log(cryptoData)}
-        {console.log('---------')}
-        {console.log(cryptoDescription[symbol])}
         const coinATH = cryptoDescription[symbol];
-
-        // const high24h = cryptoData[symbol].quote.USD.high_24h.toFixed(2);
-
-        // const percentDownFromAth = ((1 - (price / ath)) * 100).toFixed(2);
+        const percentATH = ((price - coinATH.ath) / coinATH.ath * 100).toFixed(2)
+        const isPositiveATH = percentATH >= 0;
 
           return (
             <TableRow>
@@ -132,12 +128,49 @@ const CryptoPrices = () => {
                   {coinATH.ath}$
                 </Typography> 
               </TableCell>
+              <TableCell>
+                
+
+                <Typography component="span" variant="body2" sx={{ color: isPositiveATH ? 'green' : 'red' }}>
+                  {isPositiveATH ? <TrendingUpIcon /> : <TrendingDownIcon />}
+                  {percentATH}%
+                </Typography>
+              </TableCell>
             </TableRow>
           );
         })}
 
       </TableBody>
       </Table>
+
+      {cryptoData !== null && cryptoDescription !== null &&
+        <div>
+          <br/> <br/> <br/>
+          <Typography variant="h3" mb={3}>
+            Bitcoin statistic
+          </Typography>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography>
+                Weeks from ATH: {(calculateDays(cryptoDescription["BTC"].athDate)/7).toFixed(1)}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                Weeks from Bottom: {(calculateDays("2022-11-21")/7).toFixed(1)}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                Week from last korekta
+              </Typography>
+            </Grid>
+          </Grid>
+
+        </div>
+      }
+      
     </Box>
   );
 };

@@ -18,15 +18,14 @@ public class FinanceController {
     private final CoinMarketCapServiceImpl coinMarketCapService;
 
     @GetMapping("/price")
-    public ResponseEntity sss() {
-        String s = coinMarketCapService.get();
-        return ResponseEntity.ok(s);
+    public ResponseEntity<String> sss() {
+        String cryptoInformations = coinMarketCapService.get();
+        return ResponseEntity.ok(cryptoInformations);
     }
 
     @GetMapping("/description")
     public ResponseEntity<Map<String, CryptoInformation>> getCryptoInformation() {
         Map<String, CryptoInformation> allCryptoInformation = coinMarketCapService.getAllCryptoInformation();
-        System.out.println("[Damian] " + allCryptoInformation);
         return ResponseEntity.ok(allCryptoInformation);
     }
 
