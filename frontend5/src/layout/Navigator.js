@@ -116,8 +116,9 @@ export default function TrainingNavigation(props) {
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
+        <ListItem sx={{ ...item, px: 8, py: 2, fontSize: 22, color: '#fff' }}>
           <Logo />
+
         </ListItem>
         {categories.map(({ id, children, icon }) => (
           <Box key={id} sx={{ bgcolor: '#101F33' }}>

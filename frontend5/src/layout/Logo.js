@@ -1,12 +1,14 @@
 import React from 'react';
 import appLogo from '../assets/app-logo.png';
 
+import { Box } from '@mui/material';
+
 const Logo = () => (
-  <div>
+  <Box component="div" sx={{ width: '50px' }}>
     <a href="/">
       <img src={appLogo} alt="MyApp" />
     </a>
-  </div>
+  </Box>
 );
 
 export default Logo;
