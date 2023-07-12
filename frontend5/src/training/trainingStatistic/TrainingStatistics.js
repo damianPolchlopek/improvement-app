@@ -118,6 +118,7 @@ export default function TrainingStatistic() {
               </Select>
           </FormControl>
         </Grid>
+        
         <Grid xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DesktopDatePicker

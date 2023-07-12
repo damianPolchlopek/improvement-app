@@ -8,8 +8,9 @@ import java.util.Map;
 
 @Repository
 public class CryptoRepository {
-
     private final Map<String, CryptoInformation> cryptocurrenciesInformation = new HashMap<>();
+
+//    https://e-kursy-walut.pl/all-time-high-kryptowalut/
 
     public CryptoRepository() {
         cryptocurrenciesInformation.put("BTC", new CryptoInformation(68744.03, LocalDate.parse("2021-11-10")));
@@ -22,6 +23,8 @@ public class CryptoRepository {
         cryptocurrenciesInformation.put("AVAX", new CryptoInformation(146.21, LocalDate.parse("2021-11-21")));
         cryptocurrenciesInformation.put("ATOM", new CryptoInformation(44.54, LocalDate.parse("2021-11-19")));
         cryptocurrenciesInformation.put("ALGO", new CryptoInformation(2.37, LocalDate.parse("2021-09-12")));
+        cryptocurrenciesInformation.put("ARB", new CryptoInformation(8.67, LocalDate.parse("2023-03-23")));
+        cryptocurrenciesInformation.put("SYN", new CryptoInformation(4.92, LocalDate.parse("2021-10-24")));
     }
 
     public CryptoInformation get(String name) {

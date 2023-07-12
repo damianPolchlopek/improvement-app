@@ -5,6 +5,7 @@ import com.improvement_app.finance.service.CoinMarketCapServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,10 +18,11 @@ public class FinanceController {
 
     private final CoinMarketCapServiceImpl coinMarketCapService;
 
-    @GetMapping("/price")
-    public ResponseEntity<String> sss() {
-        String cryptoInformations = coinMarketCapService.get();
-        return ResponseEntity.ok(cryptoInformations);
+    @GetMapping("/price/{coins}/{currency}")
+    public ResponseEntity<String> getPrices(@PathVariable String coins,
+                                            @PathVariable String currency) {
+        String cryptoInformation = coinMarketCapService.get(coins, currency);
+        return ResponseEntity.ok(cryptoInformation);
     }
 
     @GetMapping("/description")

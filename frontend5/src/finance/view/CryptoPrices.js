@@ -26,9 +26,10 @@ const CryptoPrices = () => {
   const [cryptoDescription, setCryptoDescription] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  var coinList = ["BTC", "ETH", "BNB", "ADA", "SOL", "MATIC", "DOT", "AVAX", "ATOM", "ARB", "ALGO", "SYN"]
 
   useEffect(() => {
-    REST.getFinanceCryptoPrice().then(response => {
+    REST.getFinanceCryptoPrice(coinList.join(","), "USD").then(response => {
       setCryptoData(response.data);
       setLoading(false)
     });
@@ -53,6 +54,7 @@ const CryptoPrices = () => {
       <Table>
         <TableHead>
           <TableRow>
+            <TableCell>#</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Price</TableCell>
             <TableCell>Change 24h</TableCell>
@@ -64,22 +66,25 @@ const CryptoPrices = () => {
             <TableCell>Grown From ATH</TableCell>
           </TableRow>
         </TableHead>
-      
-      
-      <TableBody>
-        {cryptoData !== null && cryptoDescription !== null && Object.keys(cryptoDescription).map((symbol, index) => {
 
-        const price = cryptoData[symbol].quote.USD.price.toFixed(2);
-        const percentChange24h = cryptoData[symbol].quote.USD.percent_change_24h.toFixed(2);
+      <TableBody>
+        {cryptoData !== null && cryptoDescription !== null && coinList.map((symbol, index) => {
+
+        const coinMarketCapIndex = cryptoData[symbol].cmc_rank;
+
+        const coinPrice = cryptoData[symbol].quote.USD;
+
+        const price = coinPrice.price.toFixed(2);
+        const percentChange24h = coinPrice.percent_change_24h.toFixed(2);
         const isPositive24h = percentChange24h >= 0;
 
-        const percentChange7d = cryptoData[symbol].quote.USD.percent_change_7d.toFixed(2);
+        const percentChange7d = coinPrice.percent_change_7d.toFixed(2);
         const isPositive7d = percentChange7d >= 0;
 
-        const percentChange30d = cryptoData[symbol].quote.USD.percent_change_30d.toFixed(2);
+        const percentChange30d = coinPrice.percent_change_30d.toFixed(2);
         const isPositive30d = percentChange30d >= 0;
 
-        const percentChange90d = cryptoData[symbol].quote.USD.percent_change_90d.toFixed(2);
+        const percentChange90d = coinPrice.percent_change_90d.toFixed(2);
         const isPositive90d = percentChange90d >= 0;
 
         const coinATH = cryptoDescription[symbol];
@@ -88,6 +93,7 @@ const CryptoPrices = () => {
 
           return (
             <TableRow>
+              <TableCell>{coinMarketCapIndex}</TableCell>
               <TableCell>{symbol}</TableCell>
               <TableCell>
                 <Typography component="span" variant="subtitle1">
@@ -129,8 +135,6 @@ const CryptoPrices = () => {
                 </Typography> 
               </TableCell>
               <TableCell>
-                
-
                 <Typography component="span" variant="body2" sx={{ color: isPositiveATH ? 'green' : 'red' }}>
                   {isPositiveATH ? <TrendingUpIcon /> : <TrendingDownIcon />}
                   {percentATH}%
@@ -163,7 +167,7 @@ const CryptoPrices = () => {
             </Grid>
             <Grid item xs={12}>
               <Typography>
-                Week from last korekta
+                Week to halving: {( (calculateDays("2024-04-26")/7) * -1 ).toFixed(1)}
               </Typography>
             </Grid>
           </Grid>

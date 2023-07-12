@@ -218,8 +218,8 @@ export default class REST {
 
 
     //finance
-    static getFinanceCryptoPrice(){
-        return get(serverUrl + finance + crypto + "price");
+    static getFinanceCryptoPrice(coins, currency ){
+        return get(serverUrl + finance + crypto + "price" + "/" + coins + "/" + currency);
     }
 
     static getFinanceCryptoDescription(){
