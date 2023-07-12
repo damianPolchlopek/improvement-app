@@ -19,10 +19,6 @@ export default function AddTraining(props) {
   const [exercises, setExercises] = useState(exercisess);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
-  
-  // useEffect(() => {
-  //   console.log("eeeeeeee");
-  // }, [exercises]);
 
   function loadLastTraining() {
     setExercises([]);
