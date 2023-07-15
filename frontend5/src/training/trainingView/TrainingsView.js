@@ -19,7 +19,7 @@ export default function TrainingsView() {
     <React.Fragment>
       {trainingNames ? 
 
-      <Container maxWidth="xl">
+      <Container maxWidth="xl" sx={{ width: '70%'}}>
         <Typography variant="h4" component="div" style={{color: 'white'}}>
           TrainingView
         </Typography>

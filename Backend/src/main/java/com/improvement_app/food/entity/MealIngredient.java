@@ -5,16 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductsMealSummary {
+public class MealIngredient {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +23,7 @@ public class ProductsMealSummary {
     private double amount;
     private Unit unit;
 
-    public ProductsMealSummary(int productId, String name, double amount, Unit unit) {
+    public MealIngredient(int productId, String name, double amount, Unit unit) {
         this.productId = productId;
         this.name = name;
         this.amount = amount;

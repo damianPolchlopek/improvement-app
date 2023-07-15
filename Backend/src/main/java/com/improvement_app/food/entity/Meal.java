@@ -2,9 +2,12 @@ package com.improvement_app.food.entity;
 
 import com.improvement_app.food.entity.enums.MealCategory;
 import com.improvement_app.food.entity.enums.MealType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,6 +16,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Meal {
 
     @Id
@@ -27,14 +31,20 @@ public class Meal {
     private double portionAmount;
 
     private String url;
+
+    @Enumerated(EnumType.STRING)
     private MealCategory category;
+
+    @Enumerated(EnumType.STRING)
     private MealType type;
 
-    @OneToMany(cascade = {CascadeType.ALL})
-    private List<ProductsMealSummary> productList;
 
     @OneToMany(cascade = {CascadeType.ALL})
-    private List<RecipeRow> recipe;
+    @JoinColumn(name = "meal_id")
+    private List<MealIngredient> mealIngredients;
+
+    @Type(type = "jsonb")
+    private List<String> recipe;
 
     public Meal(String name, double kcal, double protein, double carbohydrates,
                 double fat, double portionAmount, String url, MealType type,

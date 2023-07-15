@@ -6,10 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -18,7 +15,6 @@ import javax.persistence.Id;
 public class Product{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -27,9 +23,12 @@ public class Product{
     private double carbohydrates;
     private double fat;
     private double amount;
-    private Unit unit;
-    private ProductCategory productCategory;
 
+    @Enumerated(EnumType.STRING)
+    private Unit unit;
+
+    @Enumerated(EnumType.STRING)
+    private ProductCategory productCategory;
 
     public Product(String name) {
         this.name = name;

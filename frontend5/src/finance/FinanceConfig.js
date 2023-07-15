@@ -132,6 +132,14 @@ const All = () => {
         </Item>
       </Grid>
 
+      <Grid xs={6}>
+        <Item>
+          <Typography variant="body1">
+            PlanB: BTC najlepiej kupić 6 miesięcy przed Halvingiem, a najlepiej sprzedać 18 miesięcy po halvingu.
+          </Typography>
+        </Item>
+      </Grid>
+
     </Grid>
   )
 }
