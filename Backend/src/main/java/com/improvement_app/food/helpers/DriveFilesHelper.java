@@ -2,8 +2,7 @@ package com.improvement_app.food.helpers;
 
 import com.improvement_app.food.entity.Meal;
 import com.improvement_app.food.entity.Product;
-import com.improvement_app.food.entity.ProductsMealSummary;
-import com.improvement_app.food.entity.RecipeRow;
+import com.improvement_app.food.entity.MealIngredient;
 import com.improvement_app.food.entity.enums.MealCategory;
 import com.improvement_app.food.entity.enums.MealType;
 import com.improvement_app.food.entity.enums.ProductCategory;
@@ -179,11 +178,11 @@ public class DriveFilesHelper {
             Meal meal = parseMacroSheet(macroSheet);
 
             XSSFSheet ingredientSheet = wb.getSheetAt(INGREDIENT_SHEET_INDEX);
-            List<ProductsMealSummary> productList = parseIngredientSheet(ingredientSheet);
-            meal.setProductList(productList);
+            List<MealIngredient> mealIngredients = parseIngredientSheet(ingredientSheet);
+            meal.setMealIngredients(mealIngredients);
 
             XSSFSheet recipeSheet = wb.getSheetAt(RECIPE_SHEET_INDEX);
-            List<RecipeRow> recipe = parseRecipeSheet(recipeSheet);
+            List<String> recipe = parseRecipeSheet(recipeSheet);
             meal.setRecipe(recipe);
 
             return meal;
@@ -245,13 +244,13 @@ public class DriveFilesHelper {
         }
     }
 
-    private static List<ProductsMealSummary> parseIngredientSheet(XSSFSheet sheet) {
+    private static List<MealIngredient> parseIngredientSheet(XSSFSheet sheet) {
         final int ID_INDEX = 0;
         final int NAME_INDEX = 1;
         final int AMOUNT_INDEX = 2;
         final int UNIT_INDEX = 3;
 
-        List<ProductsMealSummary> products = new ArrayList<>();
+        List<MealIngredient> products = new ArrayList<>();
         for (final Row row : sheet) {
             if (!checkIfNextRowExists(row))
                 continue;
@@ -265,22 +264,22 @@ public class DriveFilesHelper {
             cell = row.getCell(UNIT_INDEX);
             final Unit unit = parseUnit(cell.getStringCellValue());
 
-            ProductsMealSummary productsMealSummary = new ProductsMealSummary(productId, name, amount, unit);
-            products.add(productsMealSummary);
+            MealIngredient mealIngredient = new MealIngredient(productId, name, amount, unit);
+            products.add(mealIngredient);
         }
 
         return products;
     }
 
-    private static List<RecipeRow> parseRecipeSheet(XSSFSheet sheet) {
+    private static List<String> parseRecipeSheet(XSSFSheet sheet) {
         final int RECIPE_POINT_INDEX = 0;
-        List<RecipeRow> result = new ArrayList<>();
+        List<String> result = new ArrayList<>();
         for (final Row row : sheet) {
             if (!checkIfNextRowExists(row))
                 continue;
 
             Cell cell = row.getCell(RECIPE_POINT_INDEX);
-            result.add(new RecipeRow(cell.getStringCellValue()));
+            result.add(cell.getStringCellValue());
         }
 
         return result;

@@ -124,14 +124,14 @@ export default function SingleMeal(props) {
                 </TableHead>
 
                 <TableBody>
-                  {props.meal.productList.map((product, index) => 
+                  {props.meal.mealIngredients.map((ingredient, index) => 
                     <TableRow
                     key={index}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
-                    <TableCell>{product.name}</TableCell>
-                    <TableCell>{product.amount}</TableCell>
-                    <TableCell>{product.unit}</TableCell>
+                    <TableCell>{ingredient.name}</TableCell>
+                    <TableCell>{ingredient.amount}</TableCell>
+                    <TableCell>{ingredient.unit}</TableCell>
                   </TableRow>
                   )}
                 </TableBody>
@@ -141,7 +141,7 @@ export default function SingleMeal(props) {
 
           <TabPanel value={tabIndex} index={2}>
             {props.meal.recipe.map(( (recipeRow, index) =>
-              <div key={index} textAlign="left">{recipeRow.name}</div>))}
+              <div key={index} textAlign="left">{recipeRow}</div>))}
           </TabPanel>
         </Box>
         

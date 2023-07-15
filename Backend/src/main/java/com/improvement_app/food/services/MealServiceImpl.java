@@ -77,9 +77,6 @@ public class MealServiceImpl implements MealService {
             meals = meals.stream().filter(meal -> meal.getType() == mealType).collect(Collectors.toList());
         }
 
-        System.out.println(mealCategory);
-        System.out.println(mealType);
-        System.out.println(meals);
         return meals;
     }
 
