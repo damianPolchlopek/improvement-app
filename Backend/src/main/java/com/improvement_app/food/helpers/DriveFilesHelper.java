@@ -218,12 +218,12 @@ public class DriveFilesHelper {
 
     private static MealType parseType(final String type) {
         switch (type) {
-            case "kurczak":
-                return MealType.kurczak;
-            case "wieprzowina":
-                return MealType.wieprzowina;
-            case "owsianka":
-                return MealType.owsianka;
+            case "Kurczak":
+                return MealType.CHICKEN;
+            case "Wieprzowina":
+                return MealType.PORK;
+            case "Owsianka":
+                return MealType.OATMEAL;
             default:
                 throw new RuntimeException("Bad Meal Type !!!");
         }
@@ -231,14 +231,14 @@ public class DriveFilesHelper {
 
     private static MealCategory parseCategory(final String category) {
         switch (category) {
-            case "śniadanie":
-                return MealCategory.śniadanie;
-            case "obiad":
-                return MealCategory.obiad;
-            case "kolacja":
-                return MealCategory.kolacja;
-            case "drugiObiad":
-                return MealCategory.drugiObiad;
+            case "Śniadanie":
+                return MealCategory.BREAKFAST;
+            case "Obiad":
+                return MealCategory.LUNCH;
+            case "Kolacja":
+                return MealCategory.DINNER;
+            case "DrugiObiad":
+                return MealCategory.HOT_DISH;
             default:
                 throw new RuntimeException("Bad Meal Category !!!");
         }

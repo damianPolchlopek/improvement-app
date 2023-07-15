@@ -30,6 +30,7 @@ const CryptoPrices = () => {
 
   useEffect(() => {
     REST.getFinanceCryptoPrice(coinList.join(","), "USD").then(response => {
+      console.log(response.data)
       setCryptoData(response.data);
       setLoading(false)
     });
@@ -70,7 +71,7 @@ const CryptoPrices = () => {
       <TableBody>
         {cryptoData !== null && cryptoDescription !== null && coinList.map((symbol, index) => {
 
-        const coinMarketCapIndex = cryptoData[symbol].cmc_rank;
+        const coinMarketCapIndex = cryptoData[symbol.toString()].cmc_rank;
 
         const coinPrice = cryptoData[symbol].quote.USD;
 

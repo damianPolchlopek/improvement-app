@@ -20,11 +20,6 @@ public class ProductController {
 
     private final ProductService productService;
 
-//    @GetMapping("/getProducts")
-//    public Response getProducts() {
-//        return Response.ok(productService.getProducts()).build();
-//    }
-
     @GetMapping("/getProducts/{productCategory}")
     public Response getProducts(@PathVariable String productCategory) {
         ProductCategory productCategory2 = ProductCategory.valueOf(productCategory);
@@ -35,9 +30,6 @@ public class ProductController {
     public Response getProductsCategories() throws IOException {
         return Response.ok(productService.getProductCategories()).build();
     }
-
-
-
 
 
     // DEBUG functions

@@ -69,11 +69,11 @@ public class MealServiceImpl implements MealService {
     public List<Meal> getMeals(MealCategory mealCategory, MealType mealType) {
         List<Meal> meals = mealRepository.findAll();
 
-        if (mealCategory != MealCategory.All){
+        if (mealCategory != MealCategory.ALL){
             meals = meals.stream().filter(meal -> meal.getCategory() == mealCategory).collect(Collectors.toList());
         }
 
-        if (mealType != MealType.All){
+        if (mealType != MealType.ALL){
             meals = meals.stream().filter(meal -> meal.getType() == mealType).collect(Collectors.toList());
         }
 
