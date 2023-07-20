@@ -89,7 +89,7 @@ public class DriveFilesHelper {
             final double amount = cell.getNumericCellValue();
             cell = row.getCell(UNIT_INDEX);
             final Unit unit = parseUnit(cell.getStringCellValue());
-            final ProductCategory productCategory = parseProductCategory(sheet.getSheetName());
+            final ProductCategory productCategory = ProductCategory.fromValue(sheet.getSheetName());
 
             Product product = new Product(id, name, kcal, protein, carbohydrates, fat, amount, unit, productCategory);
             productList.add(product);
@@ -101,8 +101,9 @@ public class DriveFilesHelper {
     private static boolean checkIfNextRowExists(Row row) {
         final int FIRST_CELL_INDEX = 0;
         Cell cell = row.getCell(FIRST_CELL_INDEX);
-        if (cell == null)
+        if (cell == null) {
             return false;
+        }
 
         if (cell.getCellType() == CellType.STRING) {
             String firstCellValue = cell.getStringCellValue();
@@ -112,7 +113,7 @@ public class DriveFilesHelper {
             return !firstCellValue.isEmpty();
         }
 
-        return true;
+        return cell.getCellType() != CellType.BLANK;
     }
 
     private static Unit parseUnit(final String unit) {
@@ -129,40 +130,10 @@ public class DriveFilesHelper {
                 return Unit.łyżeczka;
             case "szczypta":
                 return Unit.szczypta;
+            case "słoik":
+                return Unit.słoik;
             default:
-                throw new RuntimeException("Bad Unit !!!");
-        }
-    }
-
-    private static ProductCategory parseProductCategory(final String productCategoryName){
-        final String MEAT_SHEET_NAME = "Mieso";
-        final String DAIRY_SHEET_NAME = "Nabial";
-        final String CARBO_SHEET_NAME = "Wegle";
-        final String FAT_SHEET_NAME = "Tluszcze";
-        final String FRUIT_VEGETABLES_SHEET_NAME = "OwoceWarzywa";
-        final String SPICES_SHEET_NAME = "Przyprawy";
-        final String SWEET_SHEET_NAME = "Slodycze";
-        final String OTHER_SHEET_NAME = "Inne";
-
-        switch (productCategoryName) {
-            case MEAT_SHEET_NAME:
-                return ProductCategory.Mieso;
-            case DAIRY_SHEET_NAME:
-                return ProductCategory.Nabial;
-            case CARBO_SHEET_NAME:
-                return ProductCategory.Wegle;
-            case FAT_SHEET_NAME:
-                return ProductCategory.Tluszcze;
-            case FRUIT_VEGETABLES_SHEET_NAME:
-                return ProductCategory.OwoceWarzywa;
-            case SPICES_SHEET_NAME:
-                return ProductCategory.Przyprawy;
-            case SWEET_SHEET_NAME:
-                return ProductCategory.Slodycze;
-            case OTHER_SHEET_NAME:
-                return ProductCategory.Inne;
-            default:
-                throw new RuntimeException("Bad Product Category !!!");
+                throw new RuntimeException("Bad Unit " + unit + " !!!");
         }
     }
 
@@ -213,35 +184,7 @@ public class DriveFilesHelper {
         final String category = sheet.getRow(CATEGORY_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
 
         return new Meal(name, kcal, protein, carbohydrates, fat, portionAmount, url,
-                parseType(type), parseCategory(category));
-    }
-
-    private static MealType parseType(final String type) {
-        switch (type) {
-            case "Kurczak":
-                return MealType.CHICKEN;
-            case "Wieprzowina":
-                return MealType.PORK;
-            case "Owsianka":
-                return MealType.OATMEAL;
-            default:
-                throw new RuntimeException("Bad Meal Type !!!");
-        }
-    }
-
-    private static MealCategory parseCategory(final String category) {
-        switch (category) {
-            case "Śniadanie":
-                return MealCategory.BREAKFAST;
-            case "Obiad":
-                return MealCategory.LUNCH;
-            case "Kolacja":
-                return MealCategory.DINNER;
-            case "DrugiObiad":
-                return MealCategory.HOT_DISH;
-            default:
-                throw new RuntimeException("Bad Meal Category !!!");
-        }
+                MealType.fromValue(type), MealCategory.fromValue(category));
     }
 
     private static List<MealIngredient> parseIngredientSheet(XSSFSheet sheet) {

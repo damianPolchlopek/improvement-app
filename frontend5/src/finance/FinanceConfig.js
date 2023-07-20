@@ -140,6 +140,17 @@ const All = () => {
         </Item>
       </Grid>
 
+
+      <Grid xs={6}>
+        <Item>
+          <Typography variant="body1">
+            Jarzombek: TENET - token z 
+
+            Co więcej, pokazuje to również jak silna może stać się narracja na projekty oferujące Re-Staking, które z czasem mogą doświadczyć znacznych wzrostów - nie tylko zainteresowania. Jednym z projektów wpisujących się w narrację Re-Stakingu jest projekt o nazwie Tenet, który można wrzucić na swój krypto-researchowy tapet i zastanowić się, czy oferuje on coś interesującego.
+          </Typography>
+        </Item>
+      </Grid>
+
     </Grid>
   )
 }

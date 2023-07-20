@@ -26,7 +26,7 @@ const CryptoPrices = () => {
   const [cryptoDescription, setCryptoDescription] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  var coinList = ["BTC", "ETH", "BNB", "ADA", "SOL", "MATIC", "DOT", "AVAX", "ATOM", "ARB", "ALGO", "SYN"]
+  var coinList = ["BTC", "ETH", "BNB", "ADA", "SOL", "MATIC", "DOT", "AVAX", "ATOM", "ARB", "SYN"]
 
   useEffect(() => {
     REST.getFinanceCryptoPrice(coinList.join(","), "USD").then(response => {

@@ -6,5 +6,6 @@ public enum Unit {
     sztuk,
     łyżka,
     łyżeczka,
-    szczypta
+    szczypta,
+    słoik
 }

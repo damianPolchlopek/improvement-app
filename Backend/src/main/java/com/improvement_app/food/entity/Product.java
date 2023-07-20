@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product{
+public class Product {
 
     @Id
     private Long id;
@@ -29,9 +29,5 @@ public class Product{
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
-
-    public Product(String name) {
-        this.name = name;
-    }
 
 }

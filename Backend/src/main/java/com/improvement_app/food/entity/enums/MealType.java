@@ -6,7 +6,9 @@ public enum MealType {
     ALL("All"),
     CHICKEN("Kurczak/Indyk"),
     PORK("Wieprzowina"),
-    OATMEAL("Owsianka");
+    OATMEAL("Owsianka"),
+    EGGS("Jajka"),
+    COTTAGE_CHEESE("Twaróg");
 
     final String name;
 
@@ -14,6 +16,8 @@ public enum MealType {
             "All", MealType.ALL,
             "Kurczak/Indyk", MealType.CHICKEN,
             "Wieprzowina", MealType.PORK,
+            "Jajka", MealType.EGGS,
+            "Twaróg", MealType.COTTAGE_CHEESE,
             "Owsianka", MealType.OATMEAL
     );
 
