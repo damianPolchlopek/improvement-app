@@ -51,7 +51,7 @@ export default function MealView() {
   const [mealType, setMealType] = React.useState('All');
     
   useEffect(() => {
-    REST.getAllMealList().then(response => {
+    REST.getMealList(mealCategory, mealType).then(response => {
       setMealList(response.entity);
     });
 
@@ -62,7 +62,6 @@ export default function MealView() {
     REST.getMealTypeList().then(response => {
       setMealTypeList(response.entity);
     });
-
   }, []);
 
   const handleMealCategoryChange = (event) => {

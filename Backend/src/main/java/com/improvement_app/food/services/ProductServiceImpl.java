@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +28,6 @@ public class ProductServiceImpl implements ProductService{
     private static final Logger LOGGER = Logger.getLogger(ProductServiceImpl.class);
 
     private ProductRepository productRepository;
-
     private final GoogleDriveFileService googleDriveFileService;
 
     @Override
@@ -47,20 +47,13 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @Transactional
-    public List<Product> getProducts() {
-        return productRepository.findAll();
-    }
+    public List<Product> getProducts(ProductCategory productCategory, String productName) {
+        final String productNameLower = productName.toLowerCase();
+        if (productCategory == ProductCategory.ALL){
+            return productRepository.findByName(productNameLower);
+        }
 
-    @Override
-    @Transactional
-    public List<Product> getProducts(ProductCategory category) {
-        return productRepository.findByProductCategory(category);
-    }
-
-    @Override
-    @Transactional
-    public Product saveProduct(Product product) {
-        return productRepository.save(product);
+        return productRepository.findProduct(productCategory, productNameLower);
     }
 
     private DriveFileItemDTO downloadNewProductsFile() throws IOException {
@@ -83,17 +76,6 @@ public class ProductServiceImpl implements ProductService{
     @Transactional
     public void deleteAllProducts() {
         productRepository.deleteAll();
-    }
-
-    @Override
-    @Transactional
-    public List<String> getProductCategories() throws IOException {
-        DriveFileItemDTO driveFileItemDTO = downloadNewProductsFile();
-
-        final String filePath = PATH_TO_EXCEL_FILES + driveFileItemDTO.getName() + EXCEL_EXTENSION;
-        final File file = new File(filePath);
-
-        return DriveFilesHelper.getProductCategories(file);
     }
 
 }

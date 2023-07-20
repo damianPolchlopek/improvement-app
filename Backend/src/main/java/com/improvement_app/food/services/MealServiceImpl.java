@@ -60,12 +60,6 @@ public class MealServiceImpl implements MealService {
 
     @Override
     @Transactional
-    public List<Meal> getMeals() {
-        return mealRepository.findAll();
-    }
-
-    @Override
-    @Transactional
     public List<Meal> getMeals(MealCategory mealCategory, MealType mealType) {
         List<Meal> meals = mealRepository.findAll();
 

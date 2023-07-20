@@ -154,31 +154,32 @@ export default class REST {
         return get(serverUrl + drive + 'initFoodModule');
     }
 
-    static getProductList(productCategory){
-        return get(serverUrl + food + 'getProducts/' + productCategory);
+    static getAllProducts() {
+        return get(serverUrl + food + 'getProducts');
+    }
+
+    static getProductFiltredByCategoryAndName(productCategory, productName) {
+        return get(serverUrl + food + 'product?productCategory=' + productCategory + "&productName=" + productName);
     }
 
     static getProductCategoryList(){
-        return get(serverUrl + food + 'getProductCategories');
-    }
-
-    static getAllMealList(){
-        return get(serverUrl + food + 'getAllMeals');
+        return get(serverUrl + food + 'product/categories');
     }
 
     static getMealList(mealCategory, mealType){
-        return get(serverUrl + food + 'getMeals/' + mealCategory + '/' + mealType);
+        return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType);
     }
 
     static getMealCategoryList(){
-        return get(serverUrl + food + 'getMealCategories');
+        return get(serverUrl + food + 'meal/categories');
     }
 
     static getMealTypeList(){
-        return get(serverUrl + food + 'getMealTypes');
+        return get(serverUrl + food + 'meal/types');
     }
 
 
+    
     // Weekly module
     static getWeeklyListByCategory(category){
         return get(serverUrl + weekly + 'getWeaklyList/' + category);

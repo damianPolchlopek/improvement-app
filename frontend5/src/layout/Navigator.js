@@ -25,6 +25,7 @@ import {
   TrainingViewUrl, 
   TrainingAddUrl, 
   TrainingStatisticUrl,
+  TrainingInformationUrl,
   FoodViewUrl,
   FoodAddUrl,
   FoodStatisticUrl,
@@ -51,6 +52,7 @@ const categories = [
       { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
       { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
+      { id: 'Information', icon: <InventoryIcon />, href: TrainingInformationUrl },
     ],
   },
   {
@@ -68,7 +70,7 @@ const categories = [
     icon: <AttachMoneyIcon />,
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: FinanceViewUrl },
-      { id: 'Config', icon: <AddIcon />, href: FinanceConfigUrl },
+      { id: 'Information', icon: <InventoryIcon />, href: FinanceConfigUrl },
     ],
   },
   {

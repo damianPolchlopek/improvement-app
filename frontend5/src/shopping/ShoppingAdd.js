@@ -17,7 +17,6 @@ import { ExpandLess, ExpandMore } from '@mui/icons-material';
 export default function ShoppingAdd() {
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
   const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
-
   const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
     
   useEffect(() => {
@@ -58,11 +57,9 @@ export default function ShoppingAdd() {
               variant="outlined"
               size="small"
               onChange={(e)=> setItem({name: e.target.value, category: item.category})}
-              // style={{color: 'white'}}
             />
           </Grid>
           
-
           <Grid xs={12} hidden={isAddProductIsVisible}>
             <FormControl sx={{ m: 1, minWidth: 150 }}>
               <InputLabel>Category</InputLabel>
