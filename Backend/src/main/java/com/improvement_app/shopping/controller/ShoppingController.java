@@ -31,6 +31,11 @@ public class ShoppingController {
         return Response.ok(res).build();
     }
 
+    @GetMapping("/categories")
+    public Response getAllCategoryType() {
+        return Response.ok(Category.values()).build();
+    }
+
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON)
     public Response addItem(@RequestBody Item item) {
         Item savedItem = itemRepository.save(item);
@@ -41,24 +46,6 @@ public class ShoppingController {
     public Response deleteProduct(@PathVariable String itemId) {
         itemRepository.deleteById(itemId);
         return Response.ok().build();
-    }
-
-    @GetMapping("/")
-    public Response showList() {
-        List<Item> items = itemRepository.findAll();
-        return Response.ok(items).build();
-    }
-
-
-
-
-    @GetMapping("/addList")
-    public void addExampleProducts() {
-        Item p1 = new Item("Kurczak", Category.SklepSpożywczy);
-        Item p2 = new Item("Pepsi", Category.SklepSpożywczy);
-
-        itemRepository.save(p1);
-        itemRepository.save(p2);
     }
 
 }

@@ -23,9 +23,4 @@ public class WeeklyRecord {
     private LocalDate date;
     private Category category;
 
-    public WeeklyRecord(String name, LocalDate date, Category category) {
-        this.name = name;
-        this.date = date;
-        this.category = category;
-    }
 }

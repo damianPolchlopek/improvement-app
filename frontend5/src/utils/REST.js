@@ -12,7 +12,6 @@ const exercisePlace = 'exercisePlace/';
 const training = 'training/';
 const drive = 'drive/';
 const shopping = 'shopping/';
-const shoppingCategory = 'shopping-category/';
 const food = 'food/';
 const weekly = 'weekly/';
 const daily = 'daily/';
@@ -45,10 +44,6 @@ axios.interceptors.request.use(
     (req) => {
       const cookies = new Cookies();
       req.headers.Authorization = cookies.get('authorization');
-
-      console.log("----")
-      console.log(req.headers)
-
       return req;
     },
     (err) => {
@@ -121,34 +116,6 @@ export default class REST {
 
 
 
-
-
-    // Shopping module
-    static getShoppingListByCategory(category){
-        return get(serverUrl + shopping + 'category/' + category);
-    }
-
-    static deleteProductFromShoppingList(productId){
-        return deleteMethod(serverUrl + shopping  + productId);
-    }
-
-    static addProductToShoppingList(product){
-        return post(serverUrl + shopping, product);
-    }
-
-    static getShoppingList(){
-        return get(serverUrl + shopping);
-    }
-
-
-    static getAllCategoryProducts(){
-        return get(serverUrl + shoppingCategory);
-    }
-
-
-
-
-
     // Food module
     static initFoodModule(){
         return get(serverUrl + drive + 'initFoodModule');
@@ -179,27 +146,42 @@ export default class REST {
     }
 
 
+
+
+    // Shopping module
+    static getShoppingListByCategory(category){
+        return get(serverUrl + shopping + 'category/' + category);
+    }
+
+    static deleteProductFromShoppingList(productId){
+        return deleteMethod(serverUrl + shopping  + productId);
+    }
+
+    static addProductToShoppingList(product){
+        return post(serverUrl + shopping, product);
+    }
+
+    static getAllCategoryProducts(){
+        return get(serverUrl + shopping + 'categories');
+    }
+
+
     
     // Weekly module
     static getWeeklyListByCategory(category){
-        return get(serverUrl + weekly + 'getWeaklyList/' + category);
+        return get(serverUrl + weekly + category);
     }
 
     static deleteProductFromWeeklyList(productId){
-        return deleteMethod(serverUrl + weekly + 'deleteItem/' + productId);
+        return deleteMethod(serverUrl + weekly + productId);
     }
 
     static addProductToWeeklyList(product){
-        console.log(product)
-        return post(serverUrl + weekly + 'addItem', product);
-    }
-
-    static getWeeklyList(){
-        return get(serverUrl + weekly + 'showList');
+        return post(serverUrl + weekly, product);
     }
 
     static getAllCategoryWeeklyRecords(){
-        return get(serverUrl + weekly + 'getAllCategoryType');
+        return get(serverUrl + weekly + 'categories');
     }
 
 
