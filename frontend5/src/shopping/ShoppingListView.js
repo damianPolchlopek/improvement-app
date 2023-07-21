@@ -16,16 +16,16 @@ import { ExpandLess, ExpandMore }from '@mui/icons-material';
 export default function ShoppingListView() {
   const [shoppingList, setShoppingList] = useState([]);
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState();
-  const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [item, setItem] = useState({name: '', category: 'All'});
 
   const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
   const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(true);
   const [isShoppingListIsVisible, setIsShoppingListIsVisible] = useState(false);
     
   useEffect(() => {
-    REST.getShoppingList().then(response => {
-        setShoppingList(response.entity);
+    REST.getShoppingListByCategory(selectedCategory).then(response => {
+      setShoppingList(response.entity);
     });
 
     REST.getAllCategoryProducts().then(response => {
@@ -35,19 +35,19 @@ export default function ShoppingListView() {
 
   }, []);
 
-  function loadProductsFromSelectedCategory(){
+  function loadProductsFromSelectedCategory() {
     REST.getShoppingListByCategory(selectedCategory).then(response => {
       setShoppingList(response.entity);
     });
   }
 
-  function deleteProductFromShoppingList(productId){
+  function deleteProductFromShoppingList(productId) {
     REST.deleteProductFromShoppingList(productId).then(response => {
       window.location.reload();
     });
   }
 
-  function addProductToShoppingList(){
+  function addProductToShoppingList() {
     REST.addProductToShoppingList(item).then(response => {
       window.location.reload();
     });

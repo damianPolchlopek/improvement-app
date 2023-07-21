@@ -14,16 +14,16 @@ import WeeklyAdd from './WeeklyAdd';
 
 
 export default function WeeklyListView() {
-  const [shoppingList, setShoppingList] = useState([]);
+  const [weeklyList, setWeeklyList] = useState([]);
   const [allCategoryTypes, setAllCategoryTypes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('Waga');
 
   const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(true);
-  const [isShoppingListIsVisible, setIsShoppingListIsVisible] = useState(false);
+  const [isWeeklyListIsVisible, setIsWeeklyListIsVisible] = useState(false);
     
   useEffect(() => {
-    REST.getWeeklyList().then(response => {
-        setShoppingList(response.entity);
+    REST.getWeeklyListByCategory(selectedCategory).then(response => {
+      setWeeklyList(response.entity);
     });
 
     REST.getAllCategoryWeeklyRecords().then(response => {
@@ -33,13 +33,13 @@ export default function WeeklyListView() {
 
   }, []);
 
-  function loadProductsFromSelectedCategory(){
+  function loadProductsFromSelectedCategory() {
     REST.getWeeklyListByCategory(selectedCategory).then(response => {
-      setShoppingList(response.entity);
+      setWeeklyList(response.entity);
     });
   }
 
-  function deleteProductFromShoppingList(productId){
+  function deleteProductFromShoppingList(productId) {
     REST.deleteProductFromWeeklyList(productId).then(response => {
       window.location.reload();
     });
@@ -102,22 +102,22 @@ export default function WeeklyListView() {
           <Typography 
             variant="h5" 
             component="div"
-            onClick={() => setIsShoppingListIsVisible(!isShoppingListIsVisible)}
+            onClick={() => setIsWeeklyListIsVisible(!isWeeklyListIsVisible)}
           >
             Weekly Record List
-            {isShoppingListIsVisible ? <ExpandLess /> : <ExpandMore />}
+            {isWeeklyListIsVisible ? <ExpandLess /> : <ExpandMore />}
           </Typography>
         </Grid>
         
-        {shoppingList.map((product, index) => {
+        {weeklyList.map((product, index) => {
           return <Grid container xs={12} key={index}>
-            <Grid xs={4} textAlign='right' hidden={isShoppingListIsVisible}>
+            <Grid xs={4} textAlign='right' hidden={isWeeklyListIsVisible}>
               {product.date}
             </Grid>
-            <Grid xs={4} textAlign='left' hidden={isShoppingListIsVisible}>               
+            <Grid xs={4} textAlign='left' hidden={isWeeklyListIsVisible}>               
               {product.name}
             </Grid>
-            <Grid xs={4} textAlign='left' hidden={isShoppingListIsVisible}>
+            <Grid xs={4} textAlign='left' hidden={isWeeklyListIsVisible}>
               <Button onClick={() => {deleteProductFromShoppingList(product.id)}}>Delete</Button>
             </Grid>
           </Grid>
