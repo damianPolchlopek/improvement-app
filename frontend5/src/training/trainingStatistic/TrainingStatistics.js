@@ -14,6 +14,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import ExerciseChart from './ExerciseChart';
 
 import moment from 'moment';
+import Autocomplete from '@mui/material/Autocomplete';
+
 
 function formatXAxis(tickItem) {
   return moment(tickItem).format('DD-MM-YYYY')
@@ -22,7 +24,7 @@ function formatXAxis(tickItem) {
 export default function TrainingStatistic() {
   const [exercises, setExercises] = useState();
 
-  const [exerciseNames, setExerciseNames] = useState(0);
+  const [exerciseNames, setExerciseNames] = useState('Bieżnia');
   const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
 
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
@@ -37,16 +39,20 @@ export default function TrainingStatistic() {
     });
 
     REST.getExerciseNames().then(response => {
+      exeNames = response.entity.map(r => r.name)
+      console.log(exeNames)
+      console.log(response.entity)
       setExerciseNames(response.entity);
     });
 
   }, []);
 
+  var exeNames = [];
 
-  const handleExerciseNameChange = (event) => {
-    setSelectedExerciseName(event.target.value);
+  const handleExerciseNameChange = (event, newValue) => {
+    setSelectedExerciseName(newValue);
 
-    REST.getTrainingStatistic(event.target.value, selectedChartType, 
+    REST.getTrainingStatistic(newValue, selectedChartType, 
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
         setExercises(response.entity)
     });
@@ -90,19 +96,17 @@ export default function TrainingStatistic() {
       >
         <Grid xs={12}>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
-            <InputLabel id="demo-simple-select-standard-label">Exercise Name</InputLabel>
-              {exerciseNames ? 
-              <Select
-                labelId="demo-simple-select-standard-label"
-                value={selectedExerciseName}
+            {Array.isArray(exerciseNames) ? 
+              <Autocomplete
+                disableClearable
+                id="combo-box-demo"
+                // defaultValue="Bieżnia"z
+                options={exerciseNames.map(r => r.name)}
+                // value={selectedExerciseName}
+                // value="Bieżnia"
                 onChange={handleExerciseNameChange}
-                label="Exercise Name"
-              > 
-              
-                {exerciseNames.map((exerciseName, index) => 
-                  <MenuItem key={index} value={exerciseName.name}>{exerciseName.name}</MenuItem>
-                )}
-              </Select>
+                renderInput={(params) => <TextField {...params} label="Exercise Name"  />}
+              />
             : null}
           </FormControl>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
