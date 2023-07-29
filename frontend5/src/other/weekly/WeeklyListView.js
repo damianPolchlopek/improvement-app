@@ -46,7 +46,6 @@ export default function WeeklyListView() {
   }
 
   const handleChangeSelectedCategory = (event) => {
-    console.log(event.target.value)
     setSelectedCategory(event.target.value);
   };
 
