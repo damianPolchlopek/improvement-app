@@ -12,8 +12,10 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { TextField } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
+import CenteredContainer from '../../component/CenteredContainer'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -43,6 +45,7 @@ TabPanel.propTypes = {
 
 export default function MealView() {
   const [mealList, setMealList] = useState([]);
+  const [mealName, setMealName] = useState('');
 
   const [mealCategoryList, setMealCategoryList] = React.useState([]);
   const [mealTypeList, setMealTypeList] = React.useState([]);
@@ -51,7 +54,7 @@ export default function MealView() {
   const [mealType, setMealType] = React.useState('All');
     
   useEffect(() => {
-    REST.getMealList(mealCategory, mealType).then(response => {
+    REST.getMealList(mealCategory, mealType, mealName).then(response => {
       setMealList(response.entity);
     });
 
@@ -64,29 +67,43 @@ export default function MealView() {
     });
   }, []);
 
+  const handleMealNameChange = (event) => {
+    console.log(event.target.value);
+    setMealName(event.target.value);
+
+    filterMeals(mealCategory, mealType, event.target.value);
+  };
+
   const handleMealCategoryChange = (event) => {
     console.log(event.target.value);
     setMealCategory(event.target.value);
 
-    filterMeals(event.target.value, mealType);
+    filterMeals(event.target.value, mealType, mealName);
   };
 
   const handleMealTypeChange = (event) => {
     console.log(event.target.value);
     setMealType(event.target.value);
 
-    filterMeals(mealCategory, event.target.value);
+    filterMeals(mealCategory, event.target.value, mealName);
   };
 
-  const filterMeals = (mealCategory, mealType) => {
-    REST.getMealList(mealCategory, mealType).then(response => {
+  const filterMeals = (mealCategory, mealType, mealName) => {
+    REST.getMealList(mealCategory, mealType, mealName).then(response => {
       setMealList(response.entity);
     });
   };
 
   return (
     <React.Fragment>
-
+        <CenteredContainer>  
+          <TextField  
+            sx={{ width: '30%' }}  
+            // onChange={(e) => handleProductTyped(e)} label="Product" 
+            label="Meal" 
+            onChange={handleMealNameChange}
+          />
+        </CenteredContainer>
       <Container style={{minHeight: '10vh', display: 'flex', justifyContent: 'center'}}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
           <InputLabel id="demo-simple-select-standard-label">Meal Category</InputLabel>

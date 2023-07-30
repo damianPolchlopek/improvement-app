@@ -133,8 +133,12 @@ export default class REST {
         return get(serverUrl + food + 'product/categories');
     }
 
-    static getMealList(mealCategory, mealType){
-        return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType);
+    static getMealList(mealCategory, mealType, mealName) {
+        return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName);
+    }
+
+    static getMealListByCategory(mealCategory, mealType, mealName) {
+        return get(serverUrl + food + 'mealByCategory?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName);
     }
 
     static getMealCategoryList(){
@@ -143,6 +147,10 @@ export default class REST {
 
     static getMealTypeList(){
         return get(serverUrl + food + 'meal/types');
+    }
+
+    static calculateDiet(ids){
+        return post(serverUrl + food + 'diet/calculate', ids);
     }
 
 

@@ -21,10 +21,20 @@ public class MealController {
 
     @GetMapping("/meal")
     public Response getMeals(@RequestParam String mealCategory,
-                             @RequestParam String mealType) {
+                             @RequestParam String mealType,
+                             @RequestParam String mealName) {
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
-        return Response.ok(mealService.getMeals(mealCategoryEnum, mealTypeEnum)).build();
+        return Response.ok(mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealName)).build();
+    }
+
+    @GetMapping("/mealByCategory")
+    public Response getMealsByCategory(@RequestParam String mealCategory,
+                             @RequestParam String mealType,
+                             @RequestParam String mealName) {
+        MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
+        MealType mealTypeEnum = MealType.fromValue(mealType);
+        return Response.ok(mealService.getMealsByCategory(mealCategoryEnum, mealTypeEnum, mealName)).build();
     }
 
     @GetMapping("/meal/categories")

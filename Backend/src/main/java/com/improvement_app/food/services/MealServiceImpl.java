@@ -60,8 +60,23 @@ public class MealServiceImpl implements MealService {
 
     @Override
     @Transactional
-    public List<Meal> getMeals(MealCategory mealCategory, MealType mealType) {
-        List<Meal> meals = mealRepository.findAll();
+    public List<Meal> getMeals(MealCategory mealCategory, MealType mealType, String mealName) {
+        List<Meal> meals = mealRepository.findAllByName(mealName);
+
+        if (mealCategory != MealCategory.ALL){
+            meals = meals.stream().filter(meal -> meal.getCategory() == mealCategory).collect(Collectors.toList());
+        }
+
+        if (mealType != MealType.ALL){
+            meals = meals.stream().filter(meal -> meal.getType() == mealType).collect(Collectors.toList());
+        }
+
+        return meals;
+    }
+
+    @Override
+    public List<Meal> getMealsByCategory(MealCategory mealCategory, MealType mealType, String mealName) {
+        List<Meal> meals = mealRepository.findAllByCategory(mealName);
 
         if (mealCategory != MealCategory.ALL){
             meals = meals.stream().filter(meal -> meal.getCategory() == mealCategory).collect(Collectors.toList());
