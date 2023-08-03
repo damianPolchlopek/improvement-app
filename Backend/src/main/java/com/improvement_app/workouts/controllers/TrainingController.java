@@ -25,7 +25,6 @@ public class TrainingController {
     public Response getTrainingFromTemplate(@PathVariable String trainingType) {
         log.info("Pobieram ostatnie cwiczenia z szablonu: " + trainingType);
         List<Exercise> exercises = trainingService.generateTrainingFromTemplate(trainingType);
-        System.out.println(exercises);
         return Response.ok(exercises).build();
     }
 

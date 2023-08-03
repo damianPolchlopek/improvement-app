@@ -11,10 +11,7 @@ public interface MealService {
 
     List<Meal> initMeals() throws IOException;
 
-    List<Meal> getMeals(MealCategory mealCategory, MealType mealType, String mealName);
-
-    List<Meal> getMealsByCategory(MealCategory mealCategoryEnum, MealType mealTypeEnum, String mealName);
+    List<Meal> getMeals(MealCategory mealCategory, MealType mealType, String mealName, String sortBy);
 
     void deleteAllMeals();
-    
 }

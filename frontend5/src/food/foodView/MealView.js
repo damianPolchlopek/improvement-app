@@ -11,8 +11,7 @@ import Container from '@mui/material/Container';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { TextField } from '@mui/material';
+import { TextField, Select } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import CenteredContainer from '../../component/CenteredContainer'
@@ -89,7 +88,7 @@ export default function MealView() {
   };
 
   const filterMeals = (mealCategory, mealType, mealName) => {
-    REST.getMealList(mealCategory, mealType, mealName).then(response => {
+    REST.getMealList(mealCategory, mealType, mealName, 'name').then(response => {
       setMealList(response.entity);
     });
   };
@@ -99,7 +98,6 @@ export default function MealView() {
         <CenteredContainer>  
           <TextField  
             sx={{ width: '30%' }}  
-            // onChange={(e) => handleProductTyped(e)} label="Product" 
             label="Meal" 
             onChange={handleMealNameChange}
           />

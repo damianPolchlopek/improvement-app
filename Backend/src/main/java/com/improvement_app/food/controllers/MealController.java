@@ -5,7 +5,10 @@ import com.improvement_app.food.entity.enums.MealCategory;
 import com.improvement_app.food.entity.enums.MealType;
 import com.improvement_app.food.services.MealService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -22,19 +25,11 @@ public class MealController {
     @GetMapping("/meal")
     public Response getMeals(@RequestParam String mealCategory,
                              @RequestParam String mealType,
-                             @RequestParam String mealName) {
+                             @RequestParam String mealName,
+                             @RequestParam String sortBy) {
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
-        return Response.ok(mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealName)).build();
-    }
-
-    @GetMapping("/mealByCategory")
-    public Response getMealsByCategory(@RequestParam String mealCategory,
-                             @RequestParam String mealType,
-                             @RequestParam String mealName) {
-        MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
-        MealType mealTypeEnum = MealType.fromValue(mealType);
-        return Response.ok(mealService.getMealsByCategory(mealCategoryEnum, mealTypeEnum, mealName)).build();
+        return Response.ok(mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealName, sortBy)).build();
     }
 
     @GetMapping("/meal/categories")
@@ -46,7 +41,6 @@ public class MealController {
     public Response getMealTypes() {
         return Response.ok(Arrays.stream(MealType.values()).map(MealType::getName).toArray()).build();
     }
-
 
 
     @GetMapping("/initMeals")

@@ -10,9 +10,8 @@ import java.util.List;
 @Repository
 public interface MealRepository extends JpaRepository<Meal, Long> {
 
-    @Query("SELECT m FROM Meal m WHERE LOWER(m.name) LIKE %:mealName% ORDER BY m.name")
-    List<Meal> findAllByName(String mealName);
+    @Query("SELECT m FROM Meal m WHERE LOWER(m.name) LIKE %:mealName% ORDER BY "
+            + "CASE WHEN :order = 'category' THEN m.category ELSE m.name END")
+    List<Meal> findAllByName(String mealName, String order);
 
-    @Query("SELECT m FROM Meal m WHERE LOWER(m.name) LIKE %:mealName% ORDER BY m.category, m.type")
-    List<Meal> findAllByCategory(String mealName);
 }
