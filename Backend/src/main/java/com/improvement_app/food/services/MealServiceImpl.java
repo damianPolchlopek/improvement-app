@@ -1,11 +1,14 @@
 package com.improvement_app.food.services;
 
 
+import com.improvement_app.food.dto.DietSummaryDto;
+import com.improvement_app.food.entity.DietSummary;
 import com.improvement_app.food.entity.Meal;
 import com.improvement_app.food.entity.enums.MealCategory;
 import com.improvement_app.food.entity.enums.MealType;
 import com.improvement_app.food.helpers.DriveFilesHelper;
 import com.improvement_app.food.FoodModuleVariable;
+import com.improvement_app.food.repository.DietSummaryRepository;
 import com.improvement_app.food.repository.MealRepository;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
@@ -60,15 +63,21 @@ public class MealServiceImpl implements MealService {
 
     @Override
     @Transactional
-    public List<Meal> getMeals(MealCategory mealCategory, MealType mealType) {
-        List<Meal> meals = mealRepository.findAll();
+    public List<Meal> getMeals(MealCategory mealCategory, MealType mealType, String mealName, String sortBy) {
+        List<Meal> meals = mealRepository.findAllByName(mealName, sortBy);
 
         if (mealCategory != MealCategory.ALL){
-            meals = meals.stream().filter(meal -> meal.getCategory() == mealCategory).collect(Collectors.toList());
+            meals = meals
+                    .stream()
+                    .filter(meal -> meal.getCategory() == mealCategory)
+                    .collect(Collectors.toList());
         }
 
         if (mealType != MealType.ALL){
-            meals = meals.stream().filter(meal -> meal.getType() == mealType).collect(Collectors.toList());
+            meals = meals
+                    .stream()
+                    .filter(meal -> meal.getType() == mealType)
+                    .collect(Collectors.toList());
         }
 
         return meals;

@@ -24,6 +24,7 @@ import jwt_decode from "jwt-decode";
 // npm install @mui/lab
 // npm install cors
 // npm install jwt-decode
+// npm install @mui/x-data-grid
 
 let theme = createTheme({
   palette: {

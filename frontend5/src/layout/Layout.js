@@ -19,7 +19,7 @@ import FoodAddView from "../food/FoodAddView";
 import ProductView from '../food/ProductView.js';
 import WeeklyListView from '../other/weekly/WeeklyListView.js';
 import DailyView from '../other/daily/DailyView.js';
-import FinanceView from '../finance/FinanceView.js';
+import FinanceView from '../finance/view/FinanceView.js';
 import FinanceConfig from '../finance/FinanceConfig.js';
 
 import {

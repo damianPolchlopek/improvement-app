@@ -102,7 +102,8 @@ export default function ProductView() {
           <CenteredContainer>  
             <TextField  
               sx={{ width: '40%' }}  
-              onChange={(e) => handleProductTyped(e)} label="Product" 
+              onChange={(e) => handleProductTyped(e)} 
+              label="Product" 
             />
           </CenteredContainer>
           
