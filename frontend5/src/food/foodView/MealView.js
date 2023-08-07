@@ -95,14 +95,15 @@ export default function MealView() {
 
   return (
     <React.Fragment>
-        <CenteredContainer>  
-          <TextField  
-            sx={{ width: '30%' }}  
-            label="Meal" 
-            onChange={handleMealNameChange}
-          />
-        </CenteredContainer>
-      <Container style={{minHeight: '10vh', display: 'flex', justifyContent: 'center'}}>
+      <CenteredContainer>  
+        <TextField  
+          sx={{ width: '25%' }}  
+          label="Meal" 
+          onChange={handleMealNameChange}
+        />
+      </CenteredContainer>
+
+      <Container style={{minHeight: '10vh', display: 'flex', justifyContent: 'center', width: '25%'}}>
         <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
           <InputLabel id="demo-simple-select-standard-label">Meal Category</InputLabel>
           {mealCategory ? <Select
@@ -134,13 +135,15 @@ export default function MealView() {
         </FormControl>
       </Container>
 
-      <Grid container rowSpacing={1} columnSpacing={1}>
-        {mealList ? mealList.map((meal, index) => 
-          <Grid key={index} xs={6}>
-            <SingleMeal meal={meal} />
-          </Grid>
-          ) : null}
-      </Grid>
+      <CenteredContainer>
+        <Grid container rowSpacing={1} columnSpacing={1} sx={{ width: '80%' }}  >
+          {mealList ? mealList.map((meal, index) => 
+            <Grid key={index} xs={6}>
+              <SingleMeal meal={meal} />
+            </Grid>
+            ) : null}
+        </Grid>
+      </CenteredContainer>
     </React.Fragment>
   );
 }

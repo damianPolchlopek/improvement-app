@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import REST from "../../utils/REST";
 
 import Grid from '@mui/material/Unstable_Grid2';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import Typography from "@mui/material/Typography";
@@ -17,7 +16,6 @@ export default function DailyForm(props) {
 
   function addDaily() {
     REST.addDaily(dailyFields).then(response => {
-      // props.props.history.push('/add-training')
       window.location.reload(false)
     });
   }
@@ -28,18 +26,6 @@ export default function DailyForm(props) {
     setDailyFields(data);
 
     console.log(dailyFields)
-  }
-
-  // hidden={!props.isSimpleForm}
-  // const variantFormControl = 
-  const styleFormControl = {
-    variant: "standard",
-    sx: {
-      m: 1,
-      // p: 2,
-      // width: "175px"
-    },
-  
   }
 
   return(

@@ -28,4 +28,11 @@ public class MealIngredient {
         this.amount = amount;
         this.unit = unit;
     }
+
+    public MealIngredient(MealIngredient mealIngredient) {
+        this.productId = mealIngredient.getProductId();
+        this.name = mealIngredient.getName();
+        this.amount = mealIngredient.getAmount();
+        this.unit = mealIngredient.getUnit();
+    }
 }
