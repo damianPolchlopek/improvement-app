@@ -8,6 +8,7 @@ public enum MealType {
     PORK("Wieprzowina"),
     OATMEAL("Owsianka"),
     EGGS("Jajka"),
+    FISH("Ryba"),
     COTTAGE_CHEESE("Twaróg");
 
     final String name;
@@ -18,6 +19,7 @@ public enum MealType {
             "Wieprzowina", MealType.PORK,
             "Jajka", MealType.EGGS,
             "Twaróg", MealType.COTTAGE_CHEESE,
+            "Ryba", MealType.FISH,
             "Owsianka", MealType.OATMEAL
     );
 

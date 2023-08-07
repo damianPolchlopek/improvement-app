@@ -35,7 +35,7 @@ export default function FoodStatisticView() {
 
   return (
     <CenteredContainer>
-      <Grid container spacing={2} sx={{ width: '70%'}}>
+      <Grid container spacing={2}>
         <Grid xs={12}>
           <Typography>
             Kcal: {dietSummary.kcal} Protein: {dietSummary.protein} Carbs: {dietSummary.carbohydrates} Fat: {dietSummary.fat}

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import REST from '../../utils/REST';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import { 
+  Table, 
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material';
 
 export default function DailyPrintout() {
   const [dailyList, setDailyList] = useState([]);
@@ -22,7 +24,7 @@ export default function DailyPrintout() {
     <React.Fragment>
 
         {dailyList ?
-        <TableContainer container spacing={2} style={{marginTop: '100px'}}>
+        <TableContainer container spacing={2}>
           <Table>
             <TableHead>
               <TableRow>

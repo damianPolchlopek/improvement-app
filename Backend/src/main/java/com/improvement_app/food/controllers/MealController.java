@@ -1,5 +1,6 @@
 package com.improvement_app.food.controllers;
 
+import com.improvement_app.food.dto.MealDto;
 import com.improvement_app.food.entity.Meal;
 import com.improvement_app.food.entity.enums.MealCategory;
 import com.improvement_app.food.entity.enums.MealType;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +31,18 @@ public class MealController {
                              @RequestParam String sortBy) {
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
-        return Response.ok(mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealName, sortBy)).build();
+
+        System.out.println(mealCategoryEnum);
+        System.out.println(mealTypeEnum);
+
+        List<MealDto> mealDtos = mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealName, sortBy)
+                .stream()
+                .map(MealDto::from)
+                .collect(Collectors.toList());
+
+        System.out.println(mealDtos);
+
+        return Response.ok(mealDtos).build();
     }
 
     @GetMapping("/meal/categories")

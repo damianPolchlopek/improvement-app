@@ -1,8 +1,11 @@
 package com.improvement_app.food.controllers;
 
 import com.improvement_app.food.dto.DietSummaryDto;
+import com.improvement_app.food.dto.MealDto;
 import com.improvement_app.food.entity.DietSummary;
 import com.improvement_app.food.entity.Meal;
+import com.improvement_app.food.entity.MealIngredient;
+import com.improvement_app.food.entity.Product;
 import com.improvement_app.food.repository.MealRepository;
 import com.improvement_app.food.services.DietSummaryService;
 import lombok.RequiredArgsConstructor;
@@ -46,5 +49,13 @@ public class DietController {
     public Response addDietDay(@RequestBody DietSummaryDto dietSummaryDto) {
         DietSummary diet = dietSummaryService.addDietSummary(dietSummaryDto);
         return Response.ok(diet).build();
+    }
+
+    @PostMapping("/sum-product")
+    public Response sumProduct(@RequestBody List<MealDto> mealDtos) {
+
+        List<MealIngredient> products = dietSummaryService.getProducts(mealDtos);
+
+        return Response.ok(products).build();
     }
 }
