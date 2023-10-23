@@ -30,11 +30,11 @@ export default function TrainingStatistic() {
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
 
   const [beginDate, setBeginDate] = React.useState(1633711100000);
-  const [endDate, setEndDate] = React.useState(moment().valueOf());
+  const [endDate, setEndDate] = React.useState(moment().add(1, 'day').valueOf());
 
   useEffect(() => {
     REST.getTrainingStatistic(selectedExerciseName, selectedChartType, 
-      formatXAxis(beginDate), formatXAxis(moment().valueOf())).then(response => {
+      formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
         setExercises(response.entity)
     });
 
@@ -100,7 +100,7 @@ export default function TrainingStatistic() {
               <Autocomplete
                 disableClearable
                 id="combo-box-demo"
-                // defaultValue="Bieżnia"z
+                // defaultValue="Bieżnia"
                 options={exerciseNames.map(r => r.name)}
                 // value={selectedExerciseName}
                 // value="Bieżnia"
