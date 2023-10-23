@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - preConditions:
+      - dbms:
+          type: postgresql
+
+  - include:
+      file: 0001_init_schema/changelog.yaml
+      relativeToChangelogFile: true

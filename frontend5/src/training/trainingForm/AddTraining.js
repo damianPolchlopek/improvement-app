@@ -15,8 +15,7 @@ import TrainingForm from "./TrainingForm";
 
 
 export default function AddTraining(props) {
-  var exercisess = [];
-  const [exercises, setExercises] = useState(exercisess);
+  const [exercises, setExercises] = useState([]);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
 
@@ -58,6 +57,7 @@ export default function AddTraining(props) {
                 <MenuItem value="B">Siłowy B</MenuItem>
                 <MenuItem value="C">Hipertroficzny C</MenuItem>
                 <MenuItem value="D">Hipertroficzny D</MenuItem>
+                <MenuItem value="E">Basen</MenuItem>
               </Select>
             </FormControl>
           </Grid>

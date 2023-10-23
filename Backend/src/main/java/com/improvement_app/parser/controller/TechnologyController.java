@@ -16,9 +16,9 @@ public class TechnologyController {
 
     private final TechnologyService technologyService;
 
-    @Scheduled(cron = "0 0 4 * * ?") // Uruchamia się codziennie o 4:00 rano
+    @Scheduled(cron = "0 0 20 * * ?") // Uruchamia się codziennie o 4:00 rano
     private void addNewJavaOffer() throws IOException {
-        System.out.println("[DPO]Uruchomilem sie");
+        System.out.println("[DPO] Uruchomilem sie");
         technologyService.parseAllJobOffers();
     }
 

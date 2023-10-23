@@ -4,10 +4,7 @@ import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
-import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.CardioExercise;
-import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.ExerciseStrategy;
-import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.HypertrophicExercise;
-import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.StrengthExercise;
+import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
@@ -30,16 +27,16 @@ import java.util.regex.Pattern;
 public class DriveFilesHelper {
 
     private static final int TRAINING_NUMBER_INDEX = 1;
-    private static final int TRAINING_DAY_INDEX    = 2;
-    private static final int TRAINING_MONTH_INDEX  = 3;
-    private static final int TRAINING_YEAR_INDEX   = 4;
-    private static final int TRAINING_TYPE_INDEX   = 5;
+    private static final int TRAINING_DAY_INDEX = 2;
+    private static final int TRAINING_MONTH_INDEX = 3;
+    private static final int TRAINING_YEAR_INDEX = 4;
+    private static final int TRAINING_TYPE_INDEX = 5;
 
     public static List<Exercise> parseExcelTrainingFile(final File file) throws IOException {
         List<Exercise> exerciseList = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(file);
-             XSSFWorkbook wb = new XSSFWorkbook(fis)){
+             XSSFWorkbook wb = new XSSFWorkbook(fis)) {
 
             XSSFSheet sheet = wb.getSheetAt(0);
             final int EXERCISE_TYPE_INDEX = 0;
@@ -62,9 +59,9 @@ public class DriveFilesHelper {
                 cell = row.getCell(NAME_INDEX);
                 final String exerciseName = cell.getStringCellValue().trim();
                 cell = row.getCell(SERIES_INDEX);
-                final String reps = cell.getStringCellValue().trim();
+                final String reps = getCellValue(cell);
                 cell = row.getCell(WEIGHT_INDEX);
-                final String weight = cell.getStringCellValue().trim();
+                final String weight = getCellValue(cell);
                 cell = row.getCell(PROGRESS_INDEX);
                 final String progress = cell.getStringCellValue().trim();
                 final LocalDate localDate = getLocalDate(file.getName());
@@ -84,7 +81,13 @@ public class DriveFilesHelper {
         return exerciseList;
     }
 
-    private static boolean checkIfNextRowExists(Row row){
+    private static String getCellValue(Cell cell) {
+        return cell.getCellType().equals(CellType.STRING) ?
+                cell.getStringCellValue().trim() :
+                String.valueOf(cell.getNumericCellValue());
+    }
+
+    private static boolean checkIfNextRowExists(Row row) {
         final int FIRST_CELL_INDEX = 0;
         Cell cell = row.getCell(FIRST_CELL_INDEX);
         if (cell == null)
@@ -122,6 +125,7 @@ public class DriveFilesHelper {
         final String STRENGTH_TRAINING_NAME = "Siłowy";
         final String HYPERTROPHIED_TRAINING_NAME = "Hipertroficzny";
         final String CARDIO_TRAINING_NAME = "Kardio";
+        final String SWIMMING_POOL_TRAINING_NAME = "Basen";
 
         if (exerciseType.contains(STRENGTH_TRAINING_NAME)) {
             return new StrengthExercise(reps, weight);
@@ -129,12 +133,14 @@ public class DriveFilesHelper {
             return new HypertrophicExercise(reps, weight);
         } else if (exerciseType.contains(CARDIO_TRAINING_NAME)) {
             return new CardioExercise(reps, weight);
+        } else if (exerciseType.contains(SWIMMING_POOL_TRAINING_NAME)) {
+            return new SwimmingPoolExercise(reps, weight);
         } else {
             throw new ExerciseTypeNotFoundException("Unknown training type: " + exerciseType);
         }
     }
 
-    public static LocalDate getLocalDate(final String dateToParse){
+    public static LocalDate getLocalDate(final String dateToParse) {
         final String day = parseTrainingName(dateToParse, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(dateToParse, TRAINING_MONTH_INDEX);
         final String year = parseTrainingName(dateToParse, TRAINING_YEAR_INDEX);
@@ -143,7 +149,7 @@ public class DriveFilesHelper {
         return LocalDate.parse(dateConcatenation);
     }
 
-    public static String getTrainingName(final String fileName){
+    public static String getTrainingName(final String fileName) {
         final String number = parseTrainingName(fileName, TRAINING_NUMBER_INDEX);
         final String day = parseTrainingName(fileName, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(fileName, TRAINING_MONTH_INDEX);
