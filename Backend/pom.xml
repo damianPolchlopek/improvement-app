@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.5.RELEASE</version>
+        <version>2.7.17</version> <!-- Updated Spring Boot version -->
     </parent>
     <groupId>com.improvement_app</groupId>
     <artifactId>improvement-app-backend</artifactId>
@@ -14,8 +14,8 @@
     <description>Backend for food and workout app</description>
 
     <properties>
-        <java.version>11</java.version>
-       <start-class>com.improvement_app.ImprovementAppBackendApplication</start-class>
+        <java.version>17</java.version>
+        <start-class>com.improvement_app.ImprovementAppBackendApplication</start-class>
     </properties>
 
     <dependencies>
@@ -29,22 +29,20 @@
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.security</groupId>-->
+<!--            <artifactId>spring-security-test</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -57,18 +55,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq-codegen</artifactId>
-            <version>3.14.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security.oauth.boot</groupId>
-            <artifactId>spring-security-oauth2-autoconfigure</artifactId>
-            <version>2.1.4.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -86,7 +72,6 @@
             <artifactId>google-api-client-jackson2</artifactId>
             <version>1.30.10</version>
         </dependency>
-
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
@@ -97,7 +82,6 @@
             <artifactId>spring-boot-starter-jersey</artifactId>
             <version>1.2.0.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-inline</artifactId>
@@ -109,14 +93,12 @@
             <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
-
         <!-- For Working with Json Web Tokens (JWT) -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.1</version>
         </dependency>
-
         <!-- For postgres -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -126,33 +108,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.vladmihalcea</groupId>
             <artifactId>hibernate-types-52</artifactId>
             <version>2.21.1</version>
         </dependency>
-
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
         </dependency>
-
         <!-- Swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.9.2</version>
         </dependency>
-
         <!-- parsowanie stronek -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.16.1</version>
         </dependency>
-
     </dependencies>
+
 
     <build>
         <plugins>
@@ -165,5 +143,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

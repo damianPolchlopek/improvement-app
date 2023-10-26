@@ -1,4 +1,4 @@
-package com.improvement_app.mainappcontroller;
+package com.improvement_app.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class CORSConfiguration {
                         .allowedOrigins("http://localhost:3000", "http://localhost:8080")
                         .allowedMethods("*")
                         .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowCredentials(false);
             }
         };
     }

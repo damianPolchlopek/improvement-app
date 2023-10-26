@@ -1,15 +1,13 @@
 package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.helpers.ExercisesHelper;
-import com.improvement_app.workouts.repository.*;
+import com.improvement_app.workouts.repository.ExerciseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -62,10 +60,10 @@ public class ExerciseServiceImpl implements ExerciseService {
         List<Exercise> exercises = exerciseRepository.findAll();
 
         return exercises.stream()
-                    .map(Exercise::getTrainingName)
-                    .distinct()
-                    .sorted(Collections.reverseOrder())
-                    .collect(Collectors.toList());
+                .map(Exercise::getTrainingName)
+                .distinct()
+                .sorted(Collections.reverseOrder())
+                .toList();
     }
 
     @Override
