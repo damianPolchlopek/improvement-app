@@ -2,8 +2,8 @@ package com.improvement_app.security.controllers;
 
 import com.improvement_app.security.payload.request.LoginRequest;
 import com.improvement_app.security.payload.response.JwtResponse;
-import com.improvement_app.security.security.jwt.JwtUtils;
-import com.improvement_app.security.security.services.UserDetailsImpl;
+import com.improvement_app.security.jwt.JwtUtils;
+import com.improvement_app.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

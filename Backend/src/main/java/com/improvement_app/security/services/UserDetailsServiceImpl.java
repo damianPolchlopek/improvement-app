@@ -1,12 +1,12 @@
-package com.improvement_app.security.security.services;
+package com.improvement_app.security.services;
 
 import com.improvement_app.security.models.ERole;
 import com.improvement_app.security.models.Role;
 import com.improvement_app.security.models.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //	@Autowired
 //	UserRepository userRepository;
 
-	@Autowired
-	PasswordEncoder encoder;
+	PasswordEncoder encoder = new BCryptPasswordEncoder();
 
 	@Override
 	@Transactional

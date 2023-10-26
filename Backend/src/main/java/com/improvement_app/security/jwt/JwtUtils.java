@@ -1,6 +1,6 @@
-package com.improvement_app.security.security.jwt;
+package com.improvement_app.security.jwt;
 
-import com.improvement_app.security.security.services.UserDetailsImpl;
+import com.improvement_app.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
