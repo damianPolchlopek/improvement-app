@@ -6,3 +6,7 @@ databaseChangeLog:
   - include:
       file: 0001_init_schema/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0002_init_users/changelog.yaml
+      relativeToChangelogFile: true

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -63,7 +64,7 @@ public class ExerciseServiceImpl implements ExerciseService {
                 .map(Exercise::getTrainingName)
                 .distinct()
                 .sorted(Collections.reverseOrder())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override

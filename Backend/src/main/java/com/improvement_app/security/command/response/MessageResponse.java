@@ -1,4 +1,4 @@
-package com.improvement_app.security.payload.response;
+package com.improvement_app.security.command.response;
 
 public class MessageResponse {
 	private String message;
