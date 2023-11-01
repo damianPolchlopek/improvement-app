@@ -1,48 +1,27 @@
 package com.improvement_app.security.models;
 
-import lombok.Generated;
-import org.springframework.data.annotation.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-//@Entity
-//@Table(name = "roles")
+import javax.persistence.*;
+
+@Data
+@Entity
+@Table(name = "roles", schema = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
+
 	@Id
-	@Generated
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-//	@Enumerated(EnumType.STRING)
-//	@Column(length = 20)
+	@Enumerated(EnumType.STRING)
+	@Column(length = 20)
 	private ERole name;
-
-	public Role() {
-
-	}
 
 	public Role(ERole name) {
 		this.name = name;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public ERole getName() {
-		return name;
-	}
-
-	public void setName(ERole name) {
-		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "Role{" +
-				"id=" + id +
-				", name=" + name +
-				'}';
 	}
 }

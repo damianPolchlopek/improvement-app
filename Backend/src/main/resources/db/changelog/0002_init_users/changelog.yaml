@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0002_init_users/001.create-roles-table.sql
+      sqlFile:
+        path: 001.create-roles-table.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0002_init_users/002.create-users-table.sql
+      sqlFile:
+        path: 002.create-users-table.sql
+        relativeToChangelogFile: true

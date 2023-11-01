@@ -3,6 +3,8 @@ package com.improvement_app.security.services;
 import com.improvement_app.security.models.ERole;
 import com.improvement_app.security.models.Role;
 import com.improvement_app.security.models.User;
+import com.improvement_app.security.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,34 +17,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-//	@Autowired
-//	UserRepository userRepository;
-
-	PasswordEncoder encoder = new BCryptPasswordEncoder();
+	private final UserRepository userRepository;
 
 	@Override
 	@Transactional
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//TODO: Podpiecie logowanie do bazy danych
-//		User user = userRepository.findByUsername(username)
-//				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-
-
-//		public User(Long id, String username, String email, String password, Set< Role > roles)
-		final Long id = 1L;
-		final String username2 = "test";
-		final String email = "test@test.pl";
-		final String password = "test";
-
-		Set<Role> roleSet = new HashSet<>();
-		roleSet.add(new Role(ERole.ROLE_USER));
-		roleSet.add(new Role(ERole.ROLE_ADMIN));
-
-		User user = new User(id, username, email, encoder.encode(password), roleSet);
+		User user = userRepository.findByUsername(username)
+				.orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
 		return UserDetailsImpl.build(user);
 	}
-
 }

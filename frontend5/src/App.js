@@ -169,7 +169,7 @@ const checkTokenExpirationMiddleware = () => {
   const cookies = new Cookies();
   const token = cookies.get('authorization');
 
-  if (token == undefined) {
+  if (token === undefined) {
     return false;
   }
 
