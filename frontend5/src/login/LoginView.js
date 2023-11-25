@@ -17,7 +17,7 @@ import Box from '@mui/material/Box';
 export default function LoginView(props) {
   const [userDetails, setUserDetails] = useState(
     {
-      username: '', 
+      username: '',
       password: ''
     }
   )
@@ -28,24 +28,19 @@ export default function LoginView(props) {
     setUserDetails(new_obj);
   }
 
-  const submit = (e) => {
-    e.preventDefault();
-    console.log(userDetails)
-  }
-
-  const submit2 = () => {
+  const submitLoginReq = () => {
     REST.loginUser(userDetails).then(res => {
-      console.log(res);
 
-      const accessToken = res.accessToken;
-      const tokenType = res.tokenType;
-      var authorization = tokenType + ' ' + accessToken
+      const accessToken = res.token;
+      const tokenType = res.type;
+      const authorization = tokenType + ' ' + accessToken;
+
       const cookies = new Cookies();
       cookies.set('authorization', authorization);
-      cookies.set('role', res.roles[0]);
+      cookies.set('role', res.roles);
 
       // props.history.push('/')
-      window.location.reload(false)
+      window.location.reload()
   });
   }
 
@@ -56,16 +51,16 @@ export default function LoginView(props) {
       alignItems: "center",
       minHeight: "100vh"}}
     >
-      <Paper elevation={18} sx={{width: '70vh', 
-                                height: '70vh', 
-                                alignItems: "center", 
-                                textAlign: 'center', 
+      <Paper elevation={18} sx={{width: '70vh',
+                                height: '70vh',
+                                alignItems: "center",
+                                textAlign: 'center',
                                 display: 'flex'}}>
         <Grid container spacing={4}>
           <Grid xs={12}>
-            <Typography 
-              variant="h5" 
-              component="div" 
+            <Typography
+              variant="h5"
+              component="div"
             >
               Login Panel
             </Typography>
@@ -97,7 +92,7 @@ export default function LoginView(props) {
           </Grid>
 
           <Grid xs={12}>
-            <Button variant="contained" sx={{width: '25vh'}} onClick={submit2}>Submit</Button>
+            <Button variant="contained" sx={{width: '25vh'}} onClick={submitLoginReq}>Submit</Button>
           </Grid>
 
         </Grid>

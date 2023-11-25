@@ -47,13 +47,6 @@ public class ExerciseController {
         return Response.ok(result).build();
     }
 
-    @ApiOperation("Delete exercise with provided ID")
-    @DeleteMapping("/{exerciseId}")
-    public Response deleteExercise(@PathVariable String exerciseId) {
-        exerciseService.deleteById(exerciseId);
-        return Response.ok().build();
-    }
-
     @ApiOperation("Get all training names")
     @GetMapping("/trainingName/")
     public Response getTrainingNames() {

@@ -7,6 +7,7 @@ import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriveFilesHelper {
 
@@ -97,7 +99,7 @@ public class DriveFilesHelper {
         return !exerciseType.isEmpty();
     }
 
-    public static List<String> parseExcelSimpleFile(final File file) throws IOException {
+    public static List<String> parseExcelSimpleFile(final File file) {
         List<String> dataList = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(file);
@@ -114,6 +116,8 @@ public class DriveFilesHelper {
                 String data = cell.getStringCellValue();
                 dataList.add(data);
             }
+        } catch (Exception e){
+            log.error("Nie mozna zparsować pliku: " + e.getMessage());
         }
 
         return dataList;

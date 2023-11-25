@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class ExerciseNameServiceImpl implements ExerciseNameService {
+
     private final NameRepository nameRepository;
 
     @Override

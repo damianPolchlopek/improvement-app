@@ -5,9 +5,12 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 import com.improvement_app.ApplicationVariables;
+import com.improvement_app.googledrive.exceptions.GoogleDriveObjectIdNotFoundException;
+import com.improvement_app.googledrive.exceptions.GoogleDriveRequestException;
 import com.improvement_app.googledrive.types.MimeType;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
-import com.improvement_app.workouts.exceptions.TooMuchGoogleDriveFilesException;
+import com.improvement_app.googledrive.exceptions.GoogleDriveFileNotDownloadedException;
+import com.improvement_app.googledrive.exceptions.TooMuchGoogleDriveFilesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +27,26 @@ public class GoogleDriveFileService {
 
     private final Drive drive;
 
-    public List<DriveFileItemDTO> getDriveFiles(final String folderName) throws IOException {
-        final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
+    public List<DriveFileItemDTO> getDriveFiles(final String folderName) {
+        final String folderId;
+        try {
+            folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
+        } catch (IOException e) {
+            throw new GoogleDriveObjectIdNotFoundException(e);
+        }
+
         final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
                 + "' and '" + folderId + "' in parents ";
 
-        Drive.Files.List request = drive
-                .files()
-                .list()
-                .setQ(query);
+        Drive.Files.List request;
+        try {
+            request = drive
+                    .files()
+                    .list()
+                    .setQ(query);
+        } catch (IOException e) {
+            throw new GoogleDriveRequestException(e);
+        }
 
         final List<File> allFiles = getAllFiles(request);
 
@@ -58,7 +72,7 @@ public class GoogleDriveFileService {
 
         final List<DriveFileItemDTO> responseList = allFiles.stream()
                 .map(DriveFileItemDTO::new)
-                .collect(Collectors.toList());
+                .toList();
 
         return responseList.get(0).getId();
     }
@@ -72,11 +86,10 @@ public class GoogleDriveFileService {
                 result.addAll(files.getFiles());
                 request.setPageToken(files.getNextPageToken());
             } catch (IOException e) {
-//                LOGGER.error("An error occurred: " + e);
                 request.setPageToken(null);
             }
         } while (request.getPageToken() != null &&
-                request.getPageToken().length() > 0);
+                !request.getPageToken().isEmpty());
 
         return result;
     }
@@ -85,11 +98,15 @@ public class GoogleDriveFileService {
         drive.files().delete(fileId).execute();
     }
 
-    public void downloadFile(final DriveFileItemDTO file) throws IOException {
+    public void downloadFile(final DriveFileItemDTO file)  {
         final String filePath = ApplicationVariables.PATH_TO_EXCEL_FILES + file.getName() +
                 ApplicationVariables.EXCEL_EXTENSION;
-        drive.files().export(file.getId(), MimeType.EXCEL.getType())
-                .executeMediaAndDownloadTo(new FileOutputStream(filePath));
+        try {
+            drive.files().export(file.getId(), MimeType.EXCEL.getType())
+                    .executeMediaAndDownloadTo(new FileOutputStream(filePath));
+        } catch (IOException e) {
+            throw new GoogleDriveFileNotDownloadedException(e);
+        }
     }
 
     public void createFile(final File file, final FileContent content) throws IOException {

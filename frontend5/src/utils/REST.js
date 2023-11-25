@@ -47,6 +47,7 @@ axios.interceptors.request.use(
       return req;
     },
     (err) => {
+        console.log('Cookies error')
        return Promise.reject(err);
     }
   );

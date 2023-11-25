@@ -20,6 +20,4 @@ public interface ExerciseRepository extends MongoRepository<Exercise, String> {
 
     List<Exercise> findAllByOrderByDateDesc();
 
-    void deleteByTrainingName(String trainingName);
-
 }
