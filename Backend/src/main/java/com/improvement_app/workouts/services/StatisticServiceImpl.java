@@ -1,9 +1,9 @@
 package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.entity.Exercise;
+import com.improvement_app.workouts.entity.dto.DataToFront;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity.types.ChartType;
-import com.improvement_app.workouts.entity.dto.DataToFront;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,14 +45,14 @@ public class StatisticServiceImpl implements StatisticService {
         return exercises.stream()
                 .filter(exercise -> exercise.getDate().isAfter(beginDateLD))
                 .filter(exercise -> exercise.getDate().isBefore(endDateLD))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<LocalDate> getLocalDates(List<Exercise> exercises) {
         return exercises
                 .stream()
                 .map(Exercise::getDate)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Double> getCapacity(List<Exercise> exercises) {
@@ -64,8 +63,8 @@ public class StatisticServiceImpl implements StatisticService {
                         repAndWeights
                                 .stream()
                                 .map(RepAndWeight::getCapacity)
-                                .reduce((double)0, Double::sum))
-                .collect(Collectors.toList());
+                                .reduce((double) 0, Double::sum))
+                .toList();
     }
 
     private List<Double> getWeight(List<Exercise> exercises) {
@@ -77,9 +76,9 @@ public class StatisticServiceImpl implements StatisticService {
                         repAndWeights
                                 .stream()
                                 .map(RepAndWeight::getWeight)
-                                .reduce((double)0, Double::sum))
-                .map(weight -> weight/seriesNumber )
-                .collect(Collectors.toList());
+                                .reduce((double) 0, Double::sum))
+                .map(weight -> weight / seriesNumber)
+                .toList();
     }
 
     private List<DataToFront> scaleLists(List<Double> values, List<LocalDate> dates) {

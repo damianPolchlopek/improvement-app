@@ -37,11 +37,6 @@ public class ExerciseServiceImpl implements ExerciseService {
     }
 
     @Override
-    public void deleteByTrainingName(String trainingName) {
-        exerciseRepository.deleteByTrainingName(trainingName);
-    }
-
-    @Override
     public List<Exercise> saveAll(List<Exercise> exercises) {
         return exerciseRepository.saveAll(exercises);
     }
@@ -49,11 +44,6 @@ public class ExerciseServiceImpl implements ExerciseService {
     @Override
     public List<Exercise> findAllOrderByDateDesc() {
         return exerciseRepository.findAllByOrderByDateDesc();
-    }
-
-    @Override
-    public void deleteById(String id) {
-        exerciseRepository.deleteById(id);
     }
 
     @Override

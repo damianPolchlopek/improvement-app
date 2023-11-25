@@ -14,13 +14,9 @@ public interface ExerciseService {
 
     List<Exercise> findByTrainingNameOrderByIndex(String trainingName);
 
-    void deleteByTrainingName(String trainingName);
-
     List<Exercise> saveAll(List<Exercise> newExercises);
 
     List<Exercise> findAllOrderByDateDesc();
-
-    void deleteById(String id);
 
     List<String> getAllTrainingNames();
 

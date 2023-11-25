@@ -2,7 +2,7 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
-import com.improvement_app.googledrive.types.MimeType;
+import com.improvement_app.googledrive.service.GoogleFilePathService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity.exercisesfields.Name;
@@ -16,12 +16,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.improvement_app.ApplicationVariables.EXCEL_EXTENSION;
-import static com.improvement_app.ApplicationVariables.PATH_TO_EXCEL_FILES;
 import static com.improvement_app.workouts.TrainingModuleVariables.*;
 
 @Slf4j
@@ -30,6 +29,8 @@ import static com.improvement_app.workouts.TrainingModuleVariables.*;
 public class GoogleDriveServiceImpl implements GoogleDriveService {
 
     private final GoogleDriveFileService googleDriveFileService;
+    private final GoogleFilePathService googleFilePathService;
+
     private final ExerciseService exerciseService;
     private final ExerciseTypeService exerciseTypeService;
     private final ExerciseNameService exerciseNameService;
@@ -38,50 +39,16 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     private final TrainingTemplateService trainingTemplateService;
 
     @Override
-    public List<Exercise> saveAllExercisesToDB(final String folderName) throws IOException {
-        log.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: %s".formatted(folderName));
-
-        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
-        final List<Exercise> exercises = new ArrayList<>();
-        // TODO: sprawdzic czy to mozna usunac (trainingsName)
-        final List<String> trainingsName = exerciseService.getAllTrainingNames();
-
-        for (DriveFileItemDTO driveFileItemDTO : responseList) {
-            final String trainingName = driveFileItemDTO.getName();
-
-            if (!trainingsName.contains(trainingName)) {
-                googleDriveFileService.downloadFile(driveFileItemDTO);
-                trainingsName.add(trainingName);
-
-                log.info("Dodaje do bazy danych trening o nazwie: %s".formatted(trainingName));
-
-                final String fileName = PATH_TO_EXCEL_FILES + trainingName + EXCEL_EXTENSION;
-                java.io.File file = new java.io.File(fileName);
-                List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
-                exercises.addAll(parsedExercises);
-            } else {
-                log.info("Trening o nazwie: %s, juz istnieje w bazie danych".formatted(trainingName));
-            }
-        }
-
-        List<Exercise> filterExercise = ExercisesHelper.filterExerciseList(exercises);
-        exerciseService.saveAll(filterExercise);
-
-        return exercises;
-    }
-
-    @Override
     public void initApplicationCategories() throws IOException {
         final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(DRIVE_CATEGORIES_FOLDER_NAME);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
 
-            final String fileName = PATH_TO_EXCEL_FILES + driveFileItemDTO.getName() + EXCEL_EXTENSION;
-            final java.io.File file = new java.io.File(fileName);
+            final File file = googleFilePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
 
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
-            saveDataToDatabase(values, fileName);
+            saveDataToDatabase(values, file.getPath());
         }
     }
 
@@ -125,7 +92,40 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
     @Override
     public void initApplicationExercises() throws IOException {
         exerciseService.deleteAllExercises();
-        saveAllExercisesToDB(DRIVE_TRAININGS_FOLDER_NAME);
+        List<Exercise> exercises = saveAllExercisesToDB(DRIVE_TRAININGS_FOLDER_NAME);
+        log.info("Dodane cwiczenia: %s".formatted(exercises));
+    }
+
+    private List<Exercise> saveAllExercisesToDB(final String folderName) throws IOException {
+        log.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: %s".formatted(folderName));
+
+        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
+        final List<Exercise> exercises = new ArrayList<>();
+        // TODO: sprawdzic czy to mozna usunac (trainingsName)
+        final List<String> trainingsName = exerciseService.getAllTrainingNames();
+
+        for (DriveFileItemDTO driveFileItemDTO : responseList) {
+            final String trainingName = driveFileItemDTO.getName();
+
+            if (!trainingsName.contains(trainingName)) {
+                googleDriveFileService.downloadFile(driveFileItemDTO);
+                trainingsName.add(trainingName);
+
+                log.info("Dodaje do bazy danych trening o nazwie: %s".formatted(trainingName));
+
+                File file = googleFilePathService.getPathToDownloadedFile(trainingName);
+                List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
+                exercises.addAll(parsedExercises);
+            } else {
+                log.info("Trening o nazwie: %s, juz istnieje w bazie danych".formatted(trainingName));
+            }
+        }
+
+        List<Exercise> filterExercise = ExercisesHelper.filterExerciseList(exercises);
+        exerciseService.saveAll(filterExercise);
+        log.info("Aktualizacja Treningów zakończona :)");
+
+        return exercises;
     }
 
     @Override
@@ -137,9 +137,7 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
 
-            final String fileName = PATH_TO_EXCEL_FILES + driveFileItemDTO.getName() + EXCEL_EXTENSION;
-            final java.io.File file = new java.io.File(fileName);
-
+            final File file = googleFilePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
 
             trainingTemplates.add(new TrainingTemplate(driveFileItemDTO.getName(), values));
@@ -147,12 +145,6 @@ public class GoogleDriveServiceImpl implements GoogleDriveService {
 
         trainingTemplateService.deleteAllTrainingTemplates();
         trainingTemplateService.saveAllTrainingTemplates(trainingTemplates);
-    }
-
-    @Override
-    public void deleteTraining(String trainingName) throws IOException {
-        final String fileId = googleDriveFileService.getGoogleDriveObjectId(trainingName, MimeType.DRIVE_SHEETS);
-        googleDriveFileService.deleteFile(fileId);
     }
 
 }

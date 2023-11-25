@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.exceptions;
+package com.improvement_app.googledrive.exceptions;
 
 public class TooMuchGoogleDriveFilesException extends RuntimeException {
     public TooMuchGoogleDriveFilesException(String message) {

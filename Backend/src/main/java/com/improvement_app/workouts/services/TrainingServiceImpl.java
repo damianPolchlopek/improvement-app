@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.improvement_app.ApplicationVariables.EXCEL_EXTENSION;
 import static com.improvement_app.ApplicationVariables.PATH_TO_EXCEL_FILES;
@@ -39,18 +38,18 @@ public class TrainingServiceImpl implements TrainingService {
 
         return templateExercises.stream()
                 .map(exerciseName -> getLatestExercise(exerciseName, allExercises))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private Exercise getLatestExercise(String exerciseName, List<Exercise> exercises) {
         return exercises
                 .stream()
                 .filter(exercise -> exercise.getName().equals(exerciseName))
-                .sorted(Comparator.comparing(Exercise::getDate).reversed())
-                .findFirst().orElseThrow();
+                .max(Comparator.comparing(Exercise::getDate))
+                .orElseThrow();
     }
 
-    private String convertTrainingTypeToExerciseType(String trainingType){
+    private String convertTrainingTypeToExerciseType(String trainingType) {
 
         if ("A".equals(trainingType))
             return "Siłowy#1-A";
@@ -64,6 +63,9 @@ public class TrainingServiceImpl implements TrainingService {
         if ("D".equals(trainingType))
             return "Hipertroficzny#1-D";
 
+        if ("E".equals(trainingType))
+            return "Basen#1-E";
+
         return "Nie znany typ";
     }
 
@@ -72,9 +74,8 @@ public class TrainingServiceImpl implements TrainingService {
         List<Exercise> exercisesFromDb = exerciseService.findAllOrderByDateDesc();
 
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
-        final String trainingNameExcelFile = trainingName + EXCEL_EXTENSION;
 
-        final String excelFileLocation = PATH_TO_EXCEL_FILES + trainingNameExcelFile;
+        final String excelFileLocation = PATH_TO_EXCEL_FILES + trainingName + EXCEL_EXTENSION;
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
 
         final File file = new File(excelFileLocation);
