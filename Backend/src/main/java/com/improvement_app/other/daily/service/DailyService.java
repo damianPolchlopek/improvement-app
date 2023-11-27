@@ -1,11 +1,25 @@
 package com.improvement_app.other.daily.service;
 
 import com.improvement_app.other.daily.entity.Daily;
+import com.improvement_app.other.daily.repository.DailyRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface DailyService {
-    List<Daily> getDailyList();
+@Service
+@AllArgsConstructor
+public class DailyService {
 
-    Daily addDaily(Daily dailyList);
+    private final DailyRepository dailyRepository;
+
+    public List<Daily> getDailyList() {
+        return dailyRepository.findAll();
+    }
+
+    public Daily addDaily(Daily daily) {
+        Daily newDaily = new Daily(daily);
+        return dailyRepository.save(newDaily);
+    }
+
 }

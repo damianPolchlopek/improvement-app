@@ -38,7 +38,7 @@ public class GoogleDriveService {
     private final ExercisePlaceService exercisePlaceService;
     private final TrainingTemplateService trainingTemplateService;
 
-    public void initApplicationCategories() throws IOException {
+    public void initApplicationCategories() {
         final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(DRIVE_CATEGORIES_FOLDER_NAME);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
@@ -88,13 +88,13 @@ public class GoogleDriveService {
         }
     }
 
-    public void initApplicationExercises() throws IOException {
+    public void initApplicationExercises() {
         exerciseService.deleteAllExercises();
         List<Exercise> exercises = saveAllExercisesToDB(DRIVE_TRAININGS_FOLDER_NAME);
         log.info("Dodane cwiczenia: %s".formatted(exercises));
     }
 
-    private List<Exercise> saveAllExercisesToDB(final String folderName) throws IOException {
+    private List<Exercise> saveAllExercisesToDB(final String folderName) {
         log.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: %s".formatted(folderName));
 
         final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
@@ -126,7 +126,7 @@ public class GoogleDriveService {
         return exercises;
     }
 
-    public void initApplicationTrainingTemplates() throws IOException {
+    public void initApplicationTrainingTemplates() {
         final List<DriveFileItemDTO> responseList
                 = googleDriveFileService.getDriveFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
 

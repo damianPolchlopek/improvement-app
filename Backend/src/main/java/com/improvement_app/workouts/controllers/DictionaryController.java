@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.util.ListResponse;
 import com.improvement_app.workouts.entity.exercisesfields.Name;
 import com.improvement_app.workouts.entity.exercisesfields.Place;
 import com.improvement_app.workouts.entity.exercisesfields.Progress;
@@ -27,26 +28,26 @@ public class DictionaryController {
     private final ExerciseTypeService exerciseTypeService;
 
     @GetMapping("/name")
-    public ResponseEntity<List<Name>> getExerciseNames() {
+    public ListResponse<Name> getExerciseNames() {
         List<Name> exerciseNames = exerciseNameService.getExerciseNames();
-        return ResponseEntity.ok(exerciseNames);
+        return ListResponse.of(exerciseNames);
     }
 
     @GetMapping("/place")
-    public ResponseEntity<List<Place>> getExercisePlaces() {
+    public ListResponse<Place> getExercisePlaces() {
         List<Place> exercisePlaces = exercisePlaceService.getExercisePlaces();
-        return ResponseEntity.ok(exercisePlaces);
+        return ListResponse.of(exercisePlaces);
     }
 
     @GetMapping("/progress")
-    public ResponseEntity<List<Progress>> getExerciseProgresses() {
+    public ListResponse<Progress> getExerciseProgresses() {
         List<Progress> exerciseProgresses = exerciseProgressService.getExerciseProgress();
-        return ResponseEntity.ok(exerciseProgresses);
+        return ListResponse.of(exerciseProgresses);
     }
 
     @GetMapping("/type")
-    public ResponseEntity<List<Type>> getExerciseTypes() {
+    public ListResponse<Type> getExerciseTypes() {
         List<Type> exerciseTypes = exerciseTypeService.getExerciseTypes();
-        return ResponseEntity.ok(exerciseTypes);
+        return ListResponse.of(exerciseTypes);
     }
 }

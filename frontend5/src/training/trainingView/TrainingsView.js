@@ -12,7 +12,7 @@ export default function TrainingsView() {
   useEffect(() => {
     REST.getAllTrainingNames().then(response => {
       console.log(response)
-      setTrainingNames(response);
+      setTrainingNames(response.content);
     });
   }, []);
 

@@ -13,10 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ public class DriveFilesHelper {
     private static final int TRAINING_YEAR_INDEX = 4;
     private static final int TRAINING_TYPE_INDEX = 5;
 
-    public static List<Exercise> parseExcelTrainingFile(final File file) throws IOException {
+    public static List<Exercise> parseExcelTrainingFile(final File file) {
         List<Exercise> exerciseList = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(file);
@@ -78,6 +75,8 @@ public class DriveFilesHelper {
                 exerciseList.add(exercise);
                 exerciseIndex++;
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return exerciseList;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import REST from "../../utils/REST";
 
 import MenuItem from '@mui/material/MenuItem';
@@ -26,19 +26,19 @@ export default function TrainingForm(props) {
 
   useEffect(() => {
     REST.getExerciseNames().then(response => {
-      setExerciseNames(response);
+      setExerciseNames(response.content);
     });
 
     REST.getExercisePlaces().then(response => {
-      setExercisePlaces(response);
+      setExercisePlaces(response.content);
     });
 
     REST.getExerciseProgresses().then(response => {
-      setExerciseProgresses(response);
+      setExerciseProgresses(response.content);
     });
 
     REST.getExerciseTypes().then(response => {
-      setExerciseTypes(response);
+      setExerciseTypes(response.content);
     });
   }, []);
 
@@ -80,7 +80,7 @@ export default function TrainingForm(props) {
   }
 
   // hidden={!props.isSimpleForm}
-  // const variantFormControl = 
+  // const variantFormControl =
   const styleFormControl = {
     variant: "standard",
     sx: {
@@ -88,7 +88,7 @@ export default function TrainingForm(props) {
       // p: 2,
       // width: "175px"
     },
-  
+
   }
 
   return(
@@ -96,9 +96,9 @@ export default function TrainingForm(props) {
       <Grid container spacing={2}>
 
         <Grid xs={12}>
-          <Typography 
-            variant="h5" 
-            component="div" 
+          <Typography
+            variant="h5"
+            component="div"
           >
             Training Schema
           </Typography>
@@ -114,7 +114,7 @@ export default function TrainingForm(props) {
                 {!props.isSimpleForm &&
                 <FormControl {...styleFormControl}>
                   <InputLabel id="input-label-type">Type</InputLabel>
-                  <Select 
+                  <Select
                     name='type'
                     placeholder='Type'
                     value={input.type}
@@ -209,18 +209,18 @@ export default function TrainingForm(props) {
                   </Select>
                 </FormControl>
                 <FormControl {...styleFormControl}>
-                  <Button 
-                    variant="contained" 
-                    color="success" 
+                  <Button
+                    variant="contained"
+                    color="success"
                     onClick={() => addFields(index)}
                   >
                     Add
                   </Button>
                 </FormControl>
                 <FormControl {...styleFormControl}>
-                  <Button 
-                    variant="contained" 
-                    color="error" 
+                  <Button
+                    variant="contained"
+                    color="error"
                     onClick={() => removeFields(index)}
                   >
                     Remove
@@ -228,13 +228,13 @@ export default function TrainingForm(props) {
                 </FormControl>
               </div>
             )
-          })} 
-        </Grid> 
+          })}
+        </Grid>
 
         <Grid xs={12}>
           <Button variant="contained" onClick={addTraining}>Submit</Button>
         </Grid>
-        
+
       </Grid>
     </React.Fragment>
   )

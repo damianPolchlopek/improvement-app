@@ -1,6 +1,5 @@
 import axios from "axios";
 import Cookies from 'universal-cookie';
-import {type} from "@testing-library/user-event/dist/type";
 
 // const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
@@ -45,15 +44,15 @@ const deleteMethod = (url) => {
 
 axios.interceptors.request.use(
     (req) => {
-      const cookies = new Cookies();
-      req.headers.Authorization = cookies.get('authorization');
-      return req;
+        const cookies = new Cookies();
+        req.headers.Authorization = cookies.get('authorization');
+        return req;
     },
     (err) => {
         console.log('Cookies error')
-       return Promise.reject(err);
+        return Promise.reject(err);
     }
-  );
+);
 
 export default class REST {
     // Training module
@@ -65,63 +64,57 @@ export default class REST {
         return get(serverUrl + exercise + 'trainingName/' + trainingName);
     }
 
-    static getExercisesByDate(date){
+    static getExercisesByDate(date) {
         return get(serverUrl + exercise + 'date/' + date);
     }
 
-    static getExercisesByName(name){
+    static getExercisesByName(name) {
         return get(serverUrl + exercise + 'name/' + name);
     }
 
 
-
-
-    static getExerciseNames(){
+    static getExerciseNames() {
         return get(serverUrl + exercise + dictionary + exerciseName);
     }
 
-    static getExercisePlaces(){
+    static getExercisePlaces() {
         return get(serverUrl + exercise + dictionary + exercisePlace);
     }
 
-    static getExerciseProgresses(){
+    static getExerciseProgresses() {
         return get(serverUrl + exercise + dictionary + exerciseProgress);
     }
 
-    static getExerciseTypes(){
+    static getExerciseTypes() {
         return get(serverUrl + exercise + dictionary + exerciseType);
     }
 
 
-    
-    static initTrainingModule(){
+    static initTrainingModule() {
         return get(serverUrl + drive + 'initApplication');
     }
 
 
-
-    static getTestStatistic(exerciseName){
+    static getTestStatistic(exerciseName) {
         return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
     }
 
-    static getTrainingStatistic(exerciseName, chartType, beginDate, endDate){
+    static getTrainingStatistic(exerciseName, chartType, beginDate, endDate) {
         return get(serverUrl + exercise + statistic + exerciseName + '/' + chartType + '/' + beginDate + '/' + endDate);
     }
 
 
-
-    static getTrainingTemplateByType(type){
+    static getTrainingTemplateByType(type) {
         return get(serverUrl + training + 'lastTrainingFromTemplate/' + type);
     }
 
-    static addTraining(data){
+    static addTraining(data) {
         return post(serverUrl + training, data);
     }
 
 
-
     // Food module
-    static initFoodModule(){
+    static initFoodModule() {
         return get(serverUrl + drive + 'initFoodModule');
     }
 
@@ -133,7 +126,7 @@ export default class REST {
         return get(serverUrl + food + 'product?productCategory=' + productCategory + "&productName=" + productName);
     }
 
-    static getProductCategoryList(){
+    static getProductCategoryList() {
         return get(serverUrl + food + 'product/categories');
     }
 
@@ -142,96 +135,89 @@ export default class REST {
         return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName + "&sortBy=" + sortBy);
     }
 
-    static getMealCategoryList(){
+    static getMealCategoryList() {
         return get(serverUrl + food + 'meal/categories');
     }
 
-    static getMealTypeList(){
+    static getMealTypeList() {
         return get(serverUrl + food + 'meal/types');
     }
 
-    static calculateDiet(ids){
+    static calculateDiet(ids) {
         return post(serverUrl + food + 'diet/calculate', ids);
     }
 
-    static addDietSummary(dietSummary){
+    static addDietSummary(dietSummary) {
         return post(serverUrl + food + 'diet/', dietSummary);
     }
 
-    static checkProduct(selectedMeals){
+    static checkProduct(selectedMeals) {
         return post(serverUrl + food + 'diet/sum-product', selectedMeals);
     }
 
 
-
-
     // Shopping module
-    static getShoppingListByCategory(category){
+    static getShoppingListByCategory(category) {
         return get(serverUrl + shopping + 'category/' + category);
     }
 
-    static deleteProductFromShoppingList(productId){
-        return deleteMethod(serverUrl + shopping  + productId);
+    static deleteProductFromShoppingList(productId) {
+        return deleteMethod(serverUrl + shopping + productId);
     }
 
-    static addProductToShoppingList(product){
+    static addProductToShoppingList(product) {
         return post(serverUrl + shopping, product);
     }
 
-    static getAllCategoryProducts(){
+    static getAllCategoryProducts() {
         return get(serverUrl + shopping + 'categories');
     }
 
 
-    
     // Weekly module
-    static getWeeklyListByCategory(category){
+    static getWeeklyListByCategory(category) {
         return get(serverUrl + weekly + category);
     }
 
-    static deleteProductFromWeeklyList(productId){
+    static deleteProductFromWeeklyList(productId) {
         return deleteMethod(serverUrl + weekly + productId);
     }
 
-    static addProductToWeeklyList(product){
+    static addProductToWeeklyList(product) {
         return post(serverUrl + weekly, product);
     }
 
-    static getAllCategoryWeeklyRecords(){
+    static getAllCategoryWeeklyRecords() {
         return get(serverUrl + weekly + 'categories');
     }
 
 
     // daily
-    static getDaily(){
+    static getDaily() {
         return get(serverUrl + daily);
     }
 
-    static deleteDaily(id){
+    static deleteDaily(id) {
         return deleteMethod(serverUrl + daily + id);
     }
 
-    static addDaily(data){
+    static addDaily(data) {
         return post(serverUrl + daily, data);
     }
 
 
-
     //finance
-    static getFinanceCryptoPrice(coins, currency ){
+    static getFinanceCryptoPrice(coins, currency) {
         return get(serverUrl + finance + crypto + "price" + "/" + coins + "/" + currency);
     }
 
-    static getFinanceCryptoDescription(){
+    static getFinanceCryptoDescription() {
         return get(serverUrl + finance + crypto + "description");
     }
 
 
-
-
-
     // Login module
-    static loginUser(user){
+    static loginUser(user) {
         return post(serverUrl + 'api/auth/signin', user);
     }
 }

@@ -1,15 +1,28 @@
 package com.improvement_app.workouts.services.data;
 
 import com.improvement_app.workouts.entity.exercisesfields.Progress;
+import com.improvement_app.workouts.repository.ProgressRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface ExerciseProgressService {
+@Service
+@AllArgsConstructor
+public class ExerciseProgressService {
 
-    List<Progress> getExerciseProgress();
+    private final ProgressRepository progressRepository;
 
-    List<Progress> saveAllExerciseProgresses(List<Progress> progressList);
+    public List<Progress> getExerciseProgress() {
+        return progressRepository.findAll();
+    }
 
-    void deleteAllExerciseProgresses();
+    public List<Progress> saveAllExerciseProgresses(List<Progress> progressList) {
+        return progressRepository.saveAll(progressList);
+    }
+
+    public void deleteAllExerciseProgresses() {
+        progressRepository.deleteAll();
+    }
 
 }

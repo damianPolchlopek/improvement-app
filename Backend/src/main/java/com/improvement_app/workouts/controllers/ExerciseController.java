@@ -1,11 +1,11 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.util.ListResponse;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,41 +24,41 @@ public class ExerciseController {
 
     @ApiOperation("Get all exercises from database")
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<Exercise>> getExercises() {
+    public ListResponse<Exercise> getExercises() {
         List<Exercise> result = exerciseService.findAllOrderByDateDesc();
-        return ResponseEntity.ok(result);
+        return ListResponse.of(result);
     }
 
     @ApiOperation("Get all exercises with provided date")
     @GetMapping(value = "/date/{exerciseDate}", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<Exercise>> getExercisesByDate(@PathVariable String exerciseDate) {
+    public ListResponse<Exercise> getExercisesByDate(@PathVariable String exerciseDate) {
         return exerciseService.findByDateOrderByIndex(LocalDate.parse(exerciseDate))
-                .map(ResponseEntity::ok)
+                .map(ListResponse::of)
                 .orElseThrow(() -> new ExercisesNotFoundException("date", exerciseDate));
     }
 
     @ApiOperation("Get all exercises with provided name")
     @GetMapping("/name/{exerciseName}")
-    public ResponseEntity<List<Exercise>> getExercisesByName(@PathVariable String exerciseName) {
+    public ListResponse<Exercise> getExercisesByName(@PathVariable String exerciseName) {
         return exerciseService.findByNameReverseSorted(exerciseName)
-                .map(ResponseEntity::ok)
+                .map(ListResponse::of)
                 .orElseThrow(() -> new ExercisesNotFoundException("name", exerciseName));
     }
 
     @ApiOperation("Get all exercises with provided training name")
     @GetMapping("/trainingName/{trainingName}")
-    public ResponseEntity<List<Exercise>> getExercisesByTrainingName(@PathVariable String trainingName) {
+    public ListResponse<Exercise> getExercisesByTrainingName(@PathVariable String trainingName) {
         final String replacedTrainingName = trainingName.replace("_", " ");
         return exerciseService.findByTrainingNameOrderByIndex(replacedTrainingName)
-                .map(ResponseEntity::ok)
+                .map(ListResponse::of)
                 .orElseThrow(() -> new ExercisesNotFoundException("trainingName", replacedTrainingName));
     }
 
     @ApiOperation("Get all training names")
     @GetMapping("/trainingName/")
-    public ResponseEntity<List<String>> getTrainingNames() {
+    public ListResponse<String> getTrainingNames() {
         List<String> trainingNames = exerciseService.getAllTrainingNames();
-        return ResponseEntity.ok(trainingNames);
+        return ListResponse.of(trainingNames);
     }
 
 }
