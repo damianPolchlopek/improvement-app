@@ -35,19 +35,21 @@ export default function TrainingStatistic() {
   useEffect(() => {
     REST.getTrainingStatistic(selectedExerciseName, selectedChartType, 
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-        setExercises(response.entity)
+        setExercises(response)
     });
 
     REST.getExerciseNames().then(response => {
-      exeNames = response.entity.map(r => r.name)
+      console.log('Exe names: ')
+      console.log(response)
+      const exeNames = response.map(r => r.name)
       console.log(exeNames)
-      console.log(response.entity)
-      setExerciseNames(response.entity);
+
+      setExerciseNames(exeNames);
     });
 
-  }, []);
+  }, [beginDate, endDate, selectedChartType, selectedExerciseName]);
 
-  var exeNames = [];
+
 
   const handleExerciseNameChange = (event, newValue) => {
     setSelectedExerciseName(newValue);
@@ -96,12 +98,12 @@ export default function TrainingStatistic() {
       >
         <Grid xs={12}>
           <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
-            {Array.isArray(exerciseNames) ? 
+            {Array.isArray(exerciseNames) ?
               <Autocomplete
                 disableClearable
                 id="combo-box-demo"
-                // defaultValue="Bieżnia"
-                options={exerciseNames.map(r => r.name)}
+                defaultValue="Bieżnia"
+                options={exerciseNames}
                 // value={selectedExerciseName}
                 // value="Bieżnia"
                 onChange={handleExerciseNameChange}
@@ -109,6 +111,7 @@ export default function TrainingStatistic() {
               />
             : null}
           </FormControl>
+
           <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
             <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
             <Select

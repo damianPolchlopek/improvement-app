@@ -26,19 +26,19 @@ export default function TrainingForm(props) {
 
   useEffect(() => {
     REST.getExerciseNames().then(response => {
-      setExerciseNames(response.entity);
+      setExerciseNames(response);
     });
 
     REST.getExercisePlaces().then(response => {
-      setExercisePlaces(response.entity);
+      setExercisePlaces(response);
     });
 
     REST.getExerciseProgresses().then(response => {
-      setExerciseProgresses(response.entity);
+      setExerciseProgresses(response);
     });
 
     REST.getExerciseTypes().then(response => {
-      setExerciseTypes(response.entity);
+      setExerciseTypes(response);
     });
   }, []);
 

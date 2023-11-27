@@ -21,7 +21,7 @@ import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.class)
-class GoogleDriveServiceImplTest {
+class GoogleDriveServiceTest {
 
     final Exercise exercise1 = DataForTests.generateFirstExerciseFirstTraining();
     final Exercise exercise2 = DataForTests.generateSecondExerciseFirstTraining();
@@ -39,7 +39,7 @@ class GoogleDriveServiceImplTest {
     ExerciseService exerciseService;
 
     @InjectMocks
-    GoogleDriveServiceImpl googleDriveService;
+    GoogleDriveService googleDriveService;
 
     //TODO: sprawdzic czy trzeba jakies testy do tej klasy dopisac
     //TODO [17.06.2022] prawdopodobnie klasa do usuniecia - albo do pisania integracyjnych testow

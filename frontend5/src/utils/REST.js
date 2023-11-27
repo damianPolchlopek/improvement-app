@@ -1,14 +1,17 @@
 import axios from "axios";
 import Cookies from 'universal-cookie';
+import {type} from "@testing-library/user-event/dist/type";
 
 // const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
 const serverUrl = 'http://localhost:8080/';
-const exercise = 'exercise/';
-const exerciseType = 'exerciseType/';
-const exerciseName = 'exerciseName/';
-const exerciseProgress = 'exerciseProgress/';
-const exercisePlace = 'exercisePlace/';
+const exercise = 'exercises/';
+const dictionary = 'dictionary/';
+const exerciseType = 'type/';
+const exerciseName = 'name/';
+const exerciseProgress = 'progress/';
+const exercisePlace = 'place/';
+
 const training = 'training/';
 const drive = 'drive/';
 const shopping = 'shopping/';
@@ -74,19 +77,19 @@ export default class REST {
 
 
     static getExerciseNames(){
-        return get(serverUrl + exerciseName);
+        return get(serverUrl + exercise + dictionary + exerciseName);
     }
 
     static getExercisePlaces(){
-        return get(serverUrl + exercisePlace);
+        return get(serverUrl + exercise + dictionary + exercisePlace);
     }
 
     static getExerciseProgresses(){
-        return get(serverUrl + exerciseProgress);
+        return get(serverUrl + exercise + dictionary + exerciseProgress);
     }
 
     static getExerciseTypes(){
-        return get(serverUrl + exerciseType);
+        return get(serverUrl + exercise + dictionary + exerciseType);
     }
 
 

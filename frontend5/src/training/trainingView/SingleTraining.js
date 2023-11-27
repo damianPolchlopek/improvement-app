@@ -31,19 +31,19 @@ export default function SingleTraining(props){
       trainingName = trainingName.replace(/ /g,"_");
     
       REST.getExercises(trainingName).then(response => {
-        setExercises(response.entity);
+        setExercises(response);
       });
     }
 
     function getExercisesByDate(date){
       REST.getExercisesByDate(date).then(response => {
-        setExercises(response.entity);
+        setExercises(response);
       });
     }
   
     function getExercisesByName(name){
       REST.getExercisesByName(name).then(response => {
-        setExercises(response.entity);
+        setExercises(response);
       });
     }
     

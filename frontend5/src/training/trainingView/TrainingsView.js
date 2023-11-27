@@ -11,7 +11,8 @@ export default function TrainingsView() {
     
   useEffect(() => {
     REST.getAllTrainingNames().then(response => {
-      setTrainingNames(response.entity);
+      console.log(response)
+      setTrainingNames(response);
     });
   }, []);
 
@@ -21,7 +22,7 @@ export default function TrainingsView() {
 
       <Container maxWidth="xl" sx={{ width: '70%'}}>
         <Typography variant="h4" component="div" style={{color: 'white'}}>
-          TrainingView
+          Training View
         </Typography>
 
         <List>

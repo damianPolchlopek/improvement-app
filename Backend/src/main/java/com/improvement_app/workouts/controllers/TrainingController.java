@@ -5,6 +5,7 @@ import com.improvement_app.workouts.services.TrainingService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.MediaType;
@@ -30,20 +31,10 @@ public class TrainingController {
 
     @ApiOperation("Add new training")
     @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON)
-    public Response addTraining(@RequestBody List<Exercise> exercises) throws IOException {
-        log.info("Dodaje trening: " + exercises.get(0).getTrainingName());
+    public ResponseEntity<List<Exercise>> addTraining(@RequestBody List<Exercise> exercises) throws IOException {
         List<Exercise> addedTraining = trainingService.addTraining(exercises);
-        return Response.ok(addedTraining).build();
+        log.info("Dodaje trening: " + addedTraining.get(0).getTrainingName());
+        return ResponseEntity.ok(addedTraining);
     }
-
-//    //TODO: currently not used on frontend
-//    @DeleteMapping(value = "/{trainingName}", produces = MediaType.APPLICATION_JSON)
-//    public Response deleteTraining(@PathVariable String trainingName) throws IOException {
-//        log.info("Usuwam trening: " + trainingName);
-//
-//        exerciseService.deleteByTrainingName(trainingName);
-//        googleDriveService.deleteTraining(trainingName);
-//        return Response.ok().build();
-//    }
 
 }
