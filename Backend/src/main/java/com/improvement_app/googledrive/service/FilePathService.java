@@ -7,7 +7,7 @@ import java.io.File;
 import static com.improvement_app.ApplicationVariables.*;
 
 @Service
-public class GoogleFilePathService {
+public class FilePathService {
     public static final String PATH_TO_EXCEL_FILES = "src/main/resources/tmp_files/";
     public static final String EXCEL_EXTENSION = ".xlsx";
 
@@ -24,8 +24,7 @@ public class GoogleFilePathService {
     }
 
     public File getProductFile() {
-        final String filePath = PATH_TO_EXCEL_FILES + DRIVE_PRODUCTS_SHEET_NAME + EXCEL_EXTENSION;
-        return new File(filePath);
+        return new File(PATH_TO_EXCEL_FILES + DRIVE_PRODUCTS_SHEET_NAME + EXCEL_EXTENSION);
     }
 
 }

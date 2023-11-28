@@ -3,6 +3,7 @@ package com.improvement_app.workouts.helpers;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
+import com.improvement_app.workouts.exceptions.FileNotCreatedException;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
 import lombok.AccessLevel;
@@ -190,7 +191,7 @@ public class DriveFilesHelper {
     }
 
     public static void createExcelFile(final List<Exercise> exercises,
-                                       final String fileLocation) throws IOException {
+                                       final String fileLocation) {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
@@ -248,6 +249,8 @@ public class DriveFilesHelper {
 
             FileOutputStream outputStream = new FileOutputStream(fileLocation);
             workbook.write(outputStream);
+        } catch (IOException e) {
+            throw new FileNotCreatedException(e.getMessage());
         }
     }
 

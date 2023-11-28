@@ -2,7 +2,7 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
-import com.improvement_app.googledrive.service.GoogleFilePathService;
+import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity.exercisesfields.Name;
@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ import static com.improvement_app.workouts.TrainingModuleVariables.*;
 public class GoogleDriveService {
 
     private final GoogleDriveFileService googleDriveFileService;
-    private final GoogleFilePathService googleFilePathService;
+    private final FilePathService filePathService;
 
     private final ExerciseService exerciseService;
     private final ExerciseTypeService exerciseTypeService;
@@ -44,7 +43,7 @@ public class GoogleDriveService {
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
 
-            final File file = googleFilePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
+            final File file = filePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
 
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
             saveDataToDatabase(values, file.getPath());
@@ -111,7 +110,7 @@ public class GoogleDriveService {
 
                 log.info("Dodaje do bazy danych trening o nazwie: %s".formatted(trainingName));
 
-                File file = googleFilePathService.getPathToDownloadedFile(trainingName);
+                File file = filePathService.getPathToDownloadedFile(trainingName);
                 List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
                 exercises.addAll(parsedExercises);
             } else {
@@ -134,7 +133,7 @@ public class GoogleDriveService {
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
 
-            final File file = googleFilePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
+            final File file = filePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
 
             trainingTemplates.add(new TrainingTemplate(driveFileItemDTO.getName(), values));

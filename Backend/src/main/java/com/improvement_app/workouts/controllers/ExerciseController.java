@@ -6,12 +6,12 @@ import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -59,6 +59,23 @@ public class ExerciseController {
     public ListResponse<String> getTrainingNames() {
         List<String> trainingNames = exerciseService.getAllTrainingNames();
         return ListResponse.of(trainingNames);
+    }
+
+
+
+
+    @ApiOperation("Get last training template")
+    @GetMapping(value = "/trainingType/{trainingType}", produces = MediaType.APPLICATION_JSON)
+    public Response getTrainingFromTemplate(@PathVariable String trainingType) {
+        List<Exercise> exercises = exerciseService.generateTrainingFromTemplate(trainingType);
+        return Response.ok(exercises).build();
+    }
+
+    @ApiOperation("Add new training")
+    @PostMapping(value = "/addTraining", produces = MediaType.APPLICATION_JSON)
+    public ResponseEntity<List<Exercise>> addTraining(@RequestBody List<Exercise> exercises) {
+        List<Exercise> addedTraining = exerciseService.addTraining(exercises);
+        return ResponseEntity.ok(addedTraining);
     }
 
 }
