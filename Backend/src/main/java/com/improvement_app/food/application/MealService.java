@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.improvement_app.ApplicationVariables.DRIVE_RECIPES_SHEET_NAME;
+import static com.improvement_app.googledrive.service.GoogleDriveNames.RECIPES_SHEET_NAME;
 
 @Slf4j
 @Service
@@ -27,7 +27,7 @@ public class MealService {
 
     public List<Meal> initMeals() throws IOException {
         final List<Meal> meals = new ArrayList<>();
-        for (DriveFileItemDTO mealName : mealGoogleDriveHandler.findAll(DRIVE_RECIPES_SHEET_NAME)) {
+        for (DriveFileItemDTO mealName : mealGoogleDriveHandler.findAll(RECIPES_SHEET_NAME)) {
             Meal byName = mealGoogleDriveHandler.findByName(mealName);
             meals.add(byName);
         }

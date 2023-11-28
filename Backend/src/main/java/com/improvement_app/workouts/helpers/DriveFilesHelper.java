@@ -4,6 +4,7 @@ import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
 import com.improvement_app.workouts.exceptions.FileNotCreatedException;
+import com.improvement_app.workouts.exceptions.FileNotFoundException;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
 import lombok.AccessLevel;
@@ -14,7 +15,10 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -77,7 +81,7 @@ public class DriveFilesHelper {
                 exerciseIndex++;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new FileNotFoundException(e);
         }
 
         return exerciseList;
@@ -116,8 +120,8 @@ public class DriveFilesHelper {
                 String data = cell.getStringCellValue();
                 dataList.add(data);
             }
-        } catch (Exception e){
-            log.error("Nie mozna zparsować pliku: " + e.getMessage());
+        } catch (Exception e) {
+            throw new FileNotFoundException(e);
         }
 
         return dataList;

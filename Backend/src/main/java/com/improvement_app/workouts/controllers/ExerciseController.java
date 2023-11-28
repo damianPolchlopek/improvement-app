@@ -6,12 +6,9 @@ import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -62,20 +59,18 @@ public class ExerciseController {
     }
 
 
-
-
     @ApiOperation("Get last training template")
     @GetMapping(value = "/trainingType/{trainingType}", produces = MediaType.APPLICATION_JSON)
-    public Response getTrainingFromTemplate(@PathVariable String trainingType) {
+    public ListResponse<Exercise> getTrainingFromTemplate(@PathVariable String trainingType) {
         List<Exercise> exercises = exerciseService.generateTrainingFromTemplate(trainingType);
-        return Response.ok(exercises).build();
+        return ListResponse.of(exercises);
     }
 
     @ApiOperation("Add new training")
     @PostMapping(value = "/addTraining", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<Exercise>> addTraining(@RequestBody List<Exercise> exercises) {
+    public ListResponse<Exercise> addTraining(@RequestBody List<Exercise> exercises) {
         List<Exercise> addedTraining = exerciseService.addTraining(exercises);
-        return ResponseEntity.ok(addedTraining);
+        return ListResponse.of(addedTraining);
     }
 
 }

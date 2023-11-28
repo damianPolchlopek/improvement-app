@@ -11,7 +11,6 @@ const exerciseName = 'name/';
 const exerciseProgress = 'progress/';
 const exercisePlace = 'place/';
 
-const training = 'training/';
 const drive = 'drive/';
 const shopping = 'shopping/';
 const food = 'food/';
@@ -103,13 +102,12 @@ export default class REST {
         return get(serverUrl + exercise + statistic + exerciseName + '/' + chartType + '/' + beginDate + '/' + endDate);
     }
 
-
     static getTrainingTemplateByType(type) {
-        return get(serverUrl + training + 'lastTrainingFromTemplate/' + type);
+        return get(serverUrl + exercise + 'trainingType/' + type);
     }
 
     static addTraining(data) {
-        return post(serverUrl + training, data);
+        return post(serverUrl + exercise + "addTraining", data);
     }
 
 

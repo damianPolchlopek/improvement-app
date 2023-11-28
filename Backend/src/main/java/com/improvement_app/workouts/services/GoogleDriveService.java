@@ -43,7 +43,7 @@ public class GoogleDriveService {
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
 
-            final File file = filePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
+            final File file = filePathService.getDownloadedFile(driveFileItemDTO.getName());
 
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
             saveDataToDatabase(values, file.getPath());
@@ -110,7 +110,7 @@ public class GoogleDriveService {
 
                 log.info("Dodaje do bazy danych trening o nazwie: %s".formatted(trainingName));
 
-                File file = filePathService.getPathToDownloadedFile(trainingName);
+                File file = filePathService.getDownloadedFile(trainingName);
                 List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
                 exercises.addAll(parsedExercises);
             } else {
@@ -133,7 +133,7 @@ public class GoogleDriveService {
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
 
-            final File file = filePathService.getPathToDownloadedFile(driveFileItemDTO.getName());
+            final File file = filePathService.getDownloadedFile(driveFileItemDTO.getName());
             final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
 
             trainingTemplates.add(new TrainingTemplate(driveFileItemDTO.getName(), values));

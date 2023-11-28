@@ -4,7 +4,6 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.improvement_app.ApplicationVariables;
 import com.improvement_app.googledrive.exceptions.GoogleDriveRequestException;
 import com.improvement_app.googledrive.types.MimeType;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
@@ -25,6 +24,7 @@ import java.util.stream.Collectors;
 public class GoogleDriveFileService {
 
     private final Drive drive;
+    private final FilePathService filePathService;
 
     public List<DriveFileItemDTO> getDriveFiles(final String folderName) {
         final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
@@ -94,8 +94,8 @@ public class GoogleDriveFileService {
     }
 
     public void downloadFile(final DriveFileItemDTO file)  {
-        final String filePath = ApplicationVariables.PATH_TO_EXCEL_FILES + file.getName() +
-                ApplicationVariables.EXCEL_EXTENSION;
+        final String filePath = filePathService.getExcelPath(file.getName());
+
         try {
             drive.files().export(file.getId(), MimeType.EXCEL.getType())
                     .executeMediaAndDownloadTo(new FileOutputStream(filePath));

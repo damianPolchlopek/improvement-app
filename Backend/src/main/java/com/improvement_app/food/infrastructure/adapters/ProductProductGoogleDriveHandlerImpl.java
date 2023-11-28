@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static com.improvement_app.ApplicationVariables.*;
+import static com.improvement_app.googledrive.service.GoogleDriveNames.PRODUCTS_SHEET_NAME;
 
 @Slf4j
 @Configuration
@@ -36,9 +36,9 @@ public class ProductProductGoogleDriveHandlerImpl implements ProductGoogleDriveH
         return products;
     }
 
-    private void downloadNewProductsFile() throws IOException {
-        final String fileId = googleDriveFileService.getGoogleDriveObjectId(DRIVE_PRODUCTS_SHEET_NAME, MimeType.DRIVE_SHEETS);
-        final DriveFileItemDTO driveFileItemDTO = new DriveFileItemDTO(DRIVE_PRODUCTS_SHEET_NAME, fileId, MimeType.DRIVE_SHEETS.getType());
+    private void downloadNewProductsFile() {
+        final String fileId = googleDriveFileService.getGoogleDriveObjectId(PRODUCTS_SHEET_NAME, MimeType.DRIVE_SHEETS);
+        final DriveFileItemDTO driveFileItemDTO = new DriveFileItemDTO(PRODUCTS_SHEET_NAME, fileId, MimeType.DRIVE_SHEETS.getType());
 
         final File file = filePathService.getProductFile();
         if (file.exists()) {

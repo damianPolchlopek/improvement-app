@@ -16,4 +16,11 @@ public class TrainingExceptionsHandler {
         return ex.getMessage();
     }
 
+
+    @ResponseBody
+    @ExceptionHandler(TrainingTemplateNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String trainingTemplateNotFoundHandler(TrainingTemplateNotFoundException ex) {
+        return ex.getMessage();
+    }
 }

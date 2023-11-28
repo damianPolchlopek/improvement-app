@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.services.data;
+package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.repository.TrainingTemplateRepository;
@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -14,7 +15,7 @@ public class TrainingTemplateService {
     private TrainingTemplateRepository trainingTemplateRepository;
 
 
-    public TrainingTemplate getTrainingTemplateByName(String trainingTemplate) {
+    public Optional<TrainingTemplate> getTrainingTemplateByName(String trainingTemplate) {
         return trainingTemplateRepository.findByName(trainingTemplate);
     }
 

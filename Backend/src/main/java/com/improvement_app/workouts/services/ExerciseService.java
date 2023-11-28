@@ -4,10 +4,10 @@ import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.TrainingTemplate;
+import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.ExercisesHelper;
 import com.improvement_app.workouts.repository.ExerciseRepository;
-import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -85,7 +85,8 @@ public class ExerciseService {
     public List<Exercise> generateTrainingFromTemplate(String trainingType) {
         String convertedTrainingType = convertTrainingTypeToExerciseType(trainingType);
 
-        TrainingTemplate trainingTemplateByName = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType);
+        TrainingTemplate trainingTemplateByName = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType)
+                .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
         List<String> templateExercises = trainingTemplateByName.getExercises();
 
         List<Exercise> allExercises = exerciseRepository.findAll();
@@ -120,7 +121,7 @@ public class ExerciseService {
         if ("E".equals(trainingType))
             return "Basen#1-E";
 
-        return "Nie znany typ";
+        return trainingType;
     }
 
     public List<Exercise> addTraining(List<Exercise> exercises) {
@@ -128,7 +129,7 @@ public class ExerciseService {
 
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
 
-        final String excelFileLocation = filePathService.getPathToDownloadedFile(trainingName).getPath();
+        final String excelFileLocation = filePathService.getDownloadedFile(trainingName).getPath();
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
 
         final File file = new File(excelFileLocation);
