@@ -4,8 +4,6 @@ import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
-import com.improvement_app.ApplicationVariables;
-import com.improvement_app.googledrive.exceptions.GoogleDriveObjectIdNotFoundException;
 import com.improvement_app.googledrive.exceptions.GoogleDriveRequestException;
 import com.improvement_app.googledrive.types.MimeType;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
@@ -26,14 +24,10 @@ import java.util.stream.Collectors;
 public class GoogleDriveFileService {
 
     private final Drive drive;
+    private final FilePathService filePathService;
 
     public List<DriveFileItemDTO> getDriveFiles(final String folderName) {
-        final String folderId;
-        try {
-            folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
-        } catch (IOException e) {
-            throw new GoogleDriveObjectIdNotFoundException(e);
-        }
+        final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
 
         final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
                 + "' and '" + folderId + "' in parents ";
@@ -56,14 +50,19 @@ public class GoogleDriveFileService {
     }
 
     public String getGoogleDriveObjectId(final String googleDriveFileName,
-                                          final MimeType type) throws IOException {
+                                          final MimeType type) {
         final String query = "mimeType='" + type.getType()
                 + "' and name contains '" + googleDriveFileName + "' ";
 
-        Drive.Files.List request = drive
-                .files()
-                .list()
-                .setQ(query);
+        Drive.Files.List request;
+        try {
+            request = drive
+                    .files()
+                    .list()
+                    .setQ(query);
+        } catch (IOException e) {
+            throw new GoogleDriveRequestException(e);
+        }
 
         List<File> allFiles = getAllFiles(request);
 
@@ -94,13 +93,9 @@ public class GoogleDriveFileService {
         return result;
     }
 
-    public void deleteFile(final String fileId) throws IOException {
-        drive.files().delete(fileId).execute();
-    }
-
     public void downloadFile(final DriveFileItemDTO file)  {
-        final String filePath = ApplicationVariables.PATH_TO_EXCEL_FILES + file.getName() +
-                ApplicationVariables.EXCEL_EXTENSION;
+        final String filePath = filePathService.getExcelPath(file.getName());
+
         try {
             drive.files().export(file.getId(), MimeType.EXCEL.getType())
                     .executeMediaAndDownloadTo(new FileOutputStream(filePath));
@@ -109,13 +104,9 @@ public class GoogleDriveFileService {
         }
     }
 
-    public void createFile(final File file, final FileContent content) throws IOException {
-        drive.files().create(file, content).setFields("id").execute();
-    }
-
-    public void uploadFileInFolder(final String folderName,
-                                   final java.io.File fileToUpload,
-                                   final String fileName) throws IOException {
+    public void uploadFile(final String folderName,
+                           final java.io.File fileToUpload,
+                           final String fileName) {
 
         final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
 
@@ -125,6 +116,11 @@ public class GoogleDriveFileService {
         file.setParents(Arrays.asList(folderId));
 
         final FileContent content = new FileContent(MimeType.EXCEL_DOWNLOAD.getType(), fileToUpload);
-        createFile(file, content);
+
+        try {
+            drive.files().create(file, content).setFields("id").execute();
+        } catch (IOException e) {
+            throw new GoogleDriveRequestException(e);
+        }
     }
 }

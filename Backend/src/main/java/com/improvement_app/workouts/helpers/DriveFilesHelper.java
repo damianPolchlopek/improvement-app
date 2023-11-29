@@ -3,6 +3,8 @@ package com.improvement_app.workouts.helpers;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
+import com.improvement_app.workouts.exceptions.FileNotCreatedException;
+import com.improvement_app.workouts.exceptions.FileNotFoundException;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
 import lombok.AccessLevel;
@@ -34,7 +36,7 @@ public class DriveFilesHelper {
     private static final int TRAINING_YEAR_INDEX = 4;
     private static final int TRAINING_TYPE_INDEX = 5;
 
-    public static List<Exercise> parseExcelTrainingFile(final File file) throws IOException {
+    public static List<Exercise> parseExcelTrainingFile(final File file) {
         List<Exercise> exerciseList = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(file);
@@ -78,6 +80,8 @@ public class DriveFilesHelper {
                 exerciseList.add(exercise);
                 exerciseIndex++;
             }
+        } catch (IOException e) {
+            throw new FileNotFoundException(e);
         }
 
         return exerciseList;
@@ -116,8 +120,8 @@ public class DriveFilesHelper {
                 String data = cell.getStringCellValue();
                 dataList.add(data);
             }
-        } catch (Exception e){
-            log.error("Nie mozna zparsować pliku: " + e.getMessage());
+        } catch (Exception e) {
+            throw new FileNotFoundException(e);
         }
 
         return dataList;
@@ -144,7 +148,7 @@ public class DriveFilesHelper {
         }
     }
 
-    public static LocalDate getLocalDate(final String dateToParse) {
+    private static LocalDate getLocalDate(final String dateToParse) {
         final String day = parseTrainingName(dateToParse, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(dateToParse, TRAINING_MONTH_INDEX);
         final String year = parseTrainingName(dateToParse, TRAINING_YEAR_INDEX);
@@ -153,7 +157,7 @@ public class DriveFilesHelper {
         return LocalDate.parse(dateConcatenation);
     }
 
-    public static String getTrainingName(final String fileName) {
+    private static String getTrainingName(final String fileName) {
         final String number = parseTrainingName(fileName, TRAINING_NUMBER_INDEX);
         final String day = parseTrainingName(fileName, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(fileName, TRAINING_MONTH_INDEX);
@@ -191,7 +195,7 @@ public class DriveFilesHelper {
     }
 
     public static void createExcelFile(final List<Exercise> exercises,
-                                       final String fileLocation) throws IOException {
+                                       final String fileLocation) {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
 
@@ -249,6 +253,8 @@ public class DriveFilesHelper {
 
             FileOutputStream outputStream = new FileOutputStream(fileLocation);
             workbook.write(outputStream);
+        } catch (IOException e) {
+            throw new FileNotCreatedException(e.getMessage());
         }
     }
 

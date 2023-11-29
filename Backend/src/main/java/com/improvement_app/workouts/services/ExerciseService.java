@@ -1,26 +1,165 @@
 package com.improvement_app.workouts.services;
 
+import com.improvement_app.googledrive.service.FilePathService;
+import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
+import com.improvement_app.workouts.entity.TrainingTemplate;
+import com.improvement_app.workouts.entity.dto.RepAndWeight;
+import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
+import com.improvement_app.workouts.helpers.DriveFilesHelper;
+import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.ExerciseStrategy;
+import com.improvement_app.workouts.repository.ExerciseRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public interface ExerciseService {
-    List<Exercise> findByDateOrderByIndex(LocalDate date);
+import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
-    List<Exercise> findByNameReverseSorted(String name);
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class ExerciseService {
 
-    List<Exercise> findByNameOrderByDate(String name);
+    private final ExerciseRepository exerciseRepository;
+    private final TrainingTemplateService trainingTemplateService;
+    private final GoogleDriveFileService googleDriveFileService;
+    private final FilePathService filePathService;
 
-    List<Exercise> findByTrainingNameOrderByIndex(String trainingName);
+    public Optional<List<Exercise>> findByDateOrderByIndex(LocalDate date) {
+        List<Exercise> exercises = exerciseRepository.findByDateOrderByIndex(date);
+        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    }
 
-    List<Exercise> saveAll(List<Exercise> newExercises);
+    public Optional<List<Exercise>> findByNameReverseSorted(String name) {
+        List<Exercise> exercises = exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.DESC, "date"));
+        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    }
 
-    List<Exercise> findAllOrderByDateDesc();
+    public Optional<List<Exercise>> findByNameOrderByDate(String name) {
+        List<Exercise> exercises = exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.ASC, "date"));
+        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    }
 
-    List<String> getAllTrainingNames();
+    public Optional<List<Exercise>> findByTrainingNameOrderByIndex(String trainingName) {
+        List<Exercise> exercises = exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
+        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    }
 
-    void deleteAllExercises();
+    public List<Exercise> saveAll(List<Exercise> exercises) {
+        return exerciseRepository.saveAll(exercises);
+    }
 
-    List<Exercise> findAll();
+    public List<Exercise> findAllOrderByDateDesc() {
+        return exerciseRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+    }
+
+    public List<String> getAllTrainingNames() {
+        List<Exercise> exercises = exerciseRepository.findAll();
+
+        return exercises.stream()
+                .map(Exercise::getTrainingName)
+                .distinct()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList());
+    }
+
+    public void deleteAllExercises() {
+        exerciseRepository.deleteAll();
+    }
+
+
+
+
+
+
+
+
+    public List<Exercise> generateTrainingFromTemplate(String trainingType) {
+        String convertedTrainingType = convertTrainingTypeToExerciseType(trainingType);
+
+        TrainingTemplate trainingTemplateByName = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType)
+                .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
+        List<String> templateExercises = trainingTemplateByName.getExercises();
+
+        List<Exercise> allExercises = exerciseRepository.findAll();
+
+        return templateExercises.stream()
+                .map(exerciseName -> getLatestExercise(exerciseName, allExercises))
+                .toList();
+    }
+
+    private Exercise getLatestExercise(String exerciseName, List<Exercise> exercises) {
+        return exercises
+                .stream()
+                .filter(exercise -> exercise.getName().equals(exerciseName))
+                .max(Comparator.comparing(Exercise::getDate))
+                .orElseThrow();
+    }
+
+    private String convertTrainingTypeToExerciseType(String trainingType) {
+
+        if ("A".equals(trainingType))
+            return "Siłowy#1-A";
+
+        if ("B".equals(trainingType))
+            return "Siłowy#1-B";
+
+        if ("C".equals(trainingType))
+            return "Hipertroficzny#1-C";
+
+        if ("D".equals(trainingType))
+            return "Hipertroficzny#1-D";
+
+        if ("E".equals(trainingType))
+            return "Basen#1-E";
+
+        return trainingType;
+    }
+
+    public List<Exercise> addTraining(List<Exercise> exercises) {
+        List<Exercise> exercisesFromDb = findAllOrderByDateDesc();
+
+        final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
+
+        final String excelFileLocation = filePathService.getExcelPath(trainingName);
+        DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
+
+        final File file = new File(excelFileLocation);
+        googleDriveFileService.uploadFile(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
+
+        List<Exercise> newExercises = fillMissingFieldForExercise(exercises, trainingName);
+        return exerciseRepository.saveAll(newExercises);
+    }
+
+    private List<Exercise> fillMissingFieldForExercise(List<Exercise> exercises, String trainingName) {
+        List<Exercise> newExercises = new ArrayList<>();
+        for (Exercise exercise : exercises) {
+
+            final ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
+                    exercise.getType(), exercise.getReps(), exercise.getWeight());
+            final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
+
+            newExercises.add(new Exercise(
+                    exercise.getType(),
+                    exercise.getPlace(),
+                    exercise.getName(),
+                    repAndWeightList,
+                    exercise.getProgress(),
+                    LocalDate.now(),
+                    exercise.getReps(),
+                    exercise.getWeight(),
+                    trainingName,
+                    exercise.getIndex()));
+        }
+
+        return newExercises;
+    }
+
+
 }

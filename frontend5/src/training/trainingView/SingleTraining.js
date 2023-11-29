@@ -31,39 +31,20 @@ export default function SingleTraining(props){
       trainingName = trainingName.replace(/ /g,"_");
     
       REST.getExercises(trainingName).then(response => {
-        setExercises(response.entity);
+        setExercises(response.content);
       });
     }
 
     function getExercisesByDate(date){
       REST.getExercisesByDate(date).then(response => {
-        setExercises(response.entity);
+        setExercises(response.content);
       });
     }
   
     function getExercisesByName(name){
       REST.getExercisesByName(name).then(response => {
-        setExercises(response.entity);
+        setExercises(response.content);
       });
-    }
-    
-
-
-
-    function updateTraining(trainingName) {
-      console.log("Update training: ");
-      console.log(trainingName);
-  
-      // setIsUpdated(!isUpdated);
-      // setIsClicked(false);
-  
-      // setExercises([])
-      // getExercisesByTrainingName(props.trainingName);
-    }
-  
-    function deleteTraining(trainingName) {
-      console.log("Delete training: ");
-      console.log(trainingName);
     }
 
     return (
@@ -77,8 +58,6 @@ export default function SingleTraining(props){
             <ListItemText id={props.trainingName} primary={props.trainingName} />
           </ListItemButton>
 
-          <Button edge="end" onClick={() => updateTraining(props.trainingName)}>Modify</Button>
-          <Button edge="end" onClick={() => deleteTraining(props.trainingName)}>Delete</Button>
         </ListItem>
 
         <Collapse in={open} timeout="auto" unmountOnExit >

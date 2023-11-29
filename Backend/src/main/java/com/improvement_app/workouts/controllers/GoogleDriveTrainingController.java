@@ -21,7 +21,7 @@ public class GoogleDriveTrainingController {
 
     @Transactional
     @GetMapping(value = "/initApplication", produces = MediaType.APPLICATION_JSON)
-    public void initApplication() throws IOException {
+    public void initApplication() {
         log.info("Usuwam i dodaje nowe dane do bazy danych treningowej");
         googleDriveService.initApplicationCategories();
         googleDriveService.initApplicationExercises();

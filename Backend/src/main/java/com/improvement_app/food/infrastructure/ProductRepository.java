@@ -14,6 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE %:productName% ORDER BY p.name")
     List<Product> findByName(String productName);
 
-    @Query("SELECT p FROM Product p WHERE p.productCategory = :productCategory AND LOWER(p.name) LIKE %:productName% ORDER BY p.name")
+    @Query("SELECT p FROM Product p WHERE p.productCategory = :productCategory AND LOWER(p.name) LIKE %:productName% " +
+            "ORDER BY p.name")
     List<Product> findProduct(ProductCategory productCategory, String productName);
 }
