@@ -1,8 +1,8 @@
 package com.improvement_app.workouts.services;
 
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
-import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.googledrive.service.FilePathService;
+import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity.exercisesfields.Name;
@@ -10,8 +10,10 @@ import com.improvement_app.workouts.entity.exercisesfields.Place;
 import com.improvement_app.workouts.entity.exercisesfields.Progress;
 import com.improvement_app.workouts.entity.exercisesfields.Type;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
-import com.improvement_app.workouts.helpers.ExercisesHelper;
-import com.improvement_app.workouts.services.data.*;
+import com.improvement_app.workouts.services.data.ExerciseNameService;
+import com.improvement_app.workouts.services.data.ExercisePlaceService;
+import com.improvement_app.workouts.services.data.ExerciseProgressService;
+import com.improvement_app.workouts.services.data.ExerciseTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -118,7 +120,11 @@ public class GoogleDriveService {
             }
         }
 
-        List<Exercise> filterExercise = ExercisesHelper.filterExerciseList(exercises);
+        List<Exercise> filterExercise = exercises
+                .stream()
+                .filter(e -> !e.getTrainingName().contains("Kopia"))
+                .toList();
+
         exerciseService.saveAll(filterExercise);
         log.info("Aktualizacja Treningów zakończona :)");
 
@@ -140,7 +146,8 @@ public class GoogleDriveService {
         }
 
         trainingTemplateService.deleteAllTrainingTemplates();
-        trainingTemplateService.saveAllTrainingTemplates(trainingTemplates);
+        List<TrainingTemplate> savedTrainingTemplates = trainingTemplateService.saveAllTrainingTemplates(trainingTemplates);
+        log.info("Zapisane plany cwiczen: " + savedTrainingTemplates);
     }
 
 }

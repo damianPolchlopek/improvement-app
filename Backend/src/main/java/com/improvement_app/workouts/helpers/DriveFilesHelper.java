@@ -148,7 +148,7 @@ public class DriveFilesHelper {
         }
     }
 
-    public static LocalDate getLocalDate(final String dateToParse) {
+    private static LocalDate getLocalDate(final String dateToParse) {
         final String day = parseTrainingName(dateToParse, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(dateToParse, TRAINING_MONTH_INDEX);
         final String year = parseTrainingName(dateToParse, TRAINING_YEAR_INDEX);
@@ -157,7 +157,7 @@ public class DriveFilesHelper {
         return LocalDate.parse(dateConcatenation);
     }
 
-    public static String getTrainingName(final String fileName) {
+    private static String getTrainingName(final String fileName) {
         final String number = parseTrainingName(fileName, TRAINING_NUMBER_INDEX);
         final String day = parseTrainingName(fileName, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(fileName, TRAINING_MONTH_INDEX);

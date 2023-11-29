@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.improvement_app.googledrive.service.GoogleDriveNames.RECIPES_SHEET_NAME;
+import static com.improvement_app.food.FoodModuleVariables.RECIPES_SHEET_NAME;
 
 @Slf4j
 @Service

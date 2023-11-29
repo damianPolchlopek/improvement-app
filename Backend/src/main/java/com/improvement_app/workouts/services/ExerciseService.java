@@ -4,9 +4,10 @@ import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.TrainingTemplate;
+import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
-import com.improvement_app.workouts.helpers.ExercisesHelper;
+import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.ExerciseStrategy;
 import com.improvement_app.workouts.repository.ExerciseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
@@ -129,14 +127,38 @@ public class ExerciseService {
 
         final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
 
-        final String excelFileLocation = filePathService.getDownloadedFile(trainingName).getPath();
+        final String excelFileLocation = filePathService.getExcelPath(trainingName);
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
 
         final File file = new File(excelFileLocation);
         googleDriveFileService.uploadFile(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
 
-        List<Exercise> newExercises = ExercisesHelper.fillMissingFieldForExercise(exercises, trainingName);
+        List<Exercise> newExercises = fillMissingFieldForExercise(exercises, trainingName);
         return exerciseRepository.saveAll(newExercises);
+    }
+
+    private List<Exercise> fillMissingFieldForExercise(List<Exercise> exercises, String trainingName) {
+        List<Exercise> newExercises = new ArrayList<>();
+        for (Exercise exercise : exercises) {
+
+            final ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
+                    exercise.getType(), exercise.getReps(), exercise.getWeight());
+            final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
+
+            newExercises.add(new Exercise(
+                    exercise.getType(),
+                    exercise.getPlace(),
+                    exercise.getName(),
+                    repAndWeightList,
+                    exercise.getProgress(),
+                    LocalDate.now(),
+                    exercise.getReps(),
+                    exercise.getWeight(),
+                    trainingName,
+                    exercise.getIndex()));
+        }
+
+        return newExercises;
     }
 
 

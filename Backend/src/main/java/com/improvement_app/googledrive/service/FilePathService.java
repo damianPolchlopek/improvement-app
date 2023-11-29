@@ -4,8 +4,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 
-import static com.improvement_app.googledrive.service.GoogleDriveNames.PRODUCTS_SHEET_NAME;
-
 
 @Service
 public class FilePathService {
@@ -19,10 +17,6 @@ public class FilePathService {
 
     public String getExcelPath(String fileName) {
         return PATH_TO_EXCEL_FILES + fileName + EXCEL_EXTENSION;
-    }
-
-    public File getProductFile() {
-        return new File(PATH_TO_EXCEL_FILES + PRODUCTS_SHEET_NAME + EXCEL_EXTENSION);
     }
 
 }

@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static com.improvement_app.googledrive.service.GoogleDriveNames.PRODUCTS_SHEET_NAME;
+import static com.improvement_app.food.FoodModuleVariables.PRODUCTS_SHEET_NAME;
 
 @Slf4j
 @Configuration
@@ -29,7 +29,7 @@ public class ProductProductGoogleDriveHandlerImpl implements ProductGoogleDriveH
     @Override
     public List<Product> findAll() throws IOException {
         downloadNewProductsFile();
-        final File file = filePathService.getProductFile();
+        final File file = filePathService.getDownloadedFile(PRODUCTS_SHEET_NAME);
         final List<Product> products = productParser.parseExcelProductsFile(file);
 
         log.info("Dodaje do bazy danych produkty: {}", products);
@@ -40,7 +40,7 @@ public class ProductProductGoogleDriveHandlerImpl implements ProductGoogleDriveH
         final String fileId = googleDriveFileService.getGoogleDriveObjectId(PRODUCTS_SHEET_NAME, MimeType.DRIVE_SHEETS);
         final DriveFileItemDTO driveFileItemDTO = new DriveFileItemDTO(PRODUCTS_SHEET_NAME, fileId, MimeType.DRIVE_SHEETS.getType());
 
-        final File file = filePathService.getProductFile();
+        final File file = filePathService.getDownloadedFile(PRODUCTS_SHEET_NAME);
         if (file.exists()) {
             file.delete();
         }
