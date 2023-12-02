@@ -1,30 +1,14 @@
 import './App.css';
 
 import Layout from './layout/Layout.js';
-
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
 import LoginView from './login/LoginView';
 
-import Cookies from 'universal-cookie';
-import jwt_decode from "jwt-decode";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-// npm install @mui/material
-// npm install @emotion/react
-// npm install @emotion/styled
-// npm install @mui/icons-material
-// npm install react-router-dom@5.3.4
-// npm install axios
-// npm install universal-cookie
-// npm install recharts
-// npm install moment
-// npm install @mui/x-date-pickers
-// npm install dayjs
-// npm install @mui/lab
-// npm install cors
-// npm install jwt-decode
-// npm install @mui/x-data-grid
+import Cookies from 'universal-cookie';
+import jwt_decode from 'jwt-decode';
+
 
 let theme = createTheme({
   palette: {
@@ -177,7 +161,7 @@ const checkTokenExpirationMiddleware = () => {
     cookies.remove('authorization');
     return false;
   }
-  
+
   return true;
 };
 
@@ -186,9 +170,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-    <CssBaseline />
+      <CssBaseline/>
       <div className="App">
-        {checkTokenExpirationMiddleware() ? <Layout theme={theme}/> : <LoginView />}
+        {checkTokenExpirationMiddleware() ? <Layout theme={theme}/> : <LoginView/>}
       </div>
     </ThemeProvider>
   );

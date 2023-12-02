@@ -1,19 +1,18 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import REST from '../utils/REST';
 import CenteredContainer from '../component/CenteredContainer';
 
-import { 
-  Table, 
+import {
+  Button,
+  Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from '@mui/material';
 
-import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
-
 
 export default function FoodAddView() {
   const [mealList, setMealList] = useState([]);
@@ -38,10 +37,10 @@ export default function FoodAddView() {
   return (
     <CenteredContainer>
 
-      <Grid container spacing={2} style={{ width: '70%'}}>
+      <Grid container spacing={2} style={{width: '70%'}}>
         <Grid xs={12}>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={calculateIngredients}
           >
             Calculate Ingredients
@@ -49,18 +48,18 @@ export default function FoodAddView() {
         </Grid>
 
         <Grid xs={12}>
-          <TableContainer >
+          <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Kcal</TableCell>
-                    <TableCell>Protein</TableCell>
-                    <TableCell>Carbs</TableCell>
-                    <TableCell>Fat</TableCell>
-                    <TableCell>Portion</TableCell>
-                    <TableCell>Amount</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Kcal</TableCell>
+                  <TableCell>Protein</TableCell>
+                  <TableCell>Carbs</TableCell>
+                  <TableCell>Fat</TableCell>
+                  <TableCell>Portion</TableCell>
+                  <TableCell>Amount</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -75,14 +74,14 @@ export default function FoodAddView() {
                     <TableCell>{meal.fat}</TableCell>
                     <TableCell>{meal.portionAmount}</TableCell>
                     <TableCell>
-                      <input 
-                        defaultValue={meal.amount} 
+                      <input
+                        defaultValue={meal.amount}
                         onChange={(e) => inputChange(e, index)}
                       />
                     </TableCell>
                   </TableRow>
                 })}
-                
+
               </TableBody>
             </Table>
           </TableContainer>
@@ -93,13 +92,13 @@ export default function FoodAddView() {
         </Grid>
 
         <Grid xs={12}>
-          <TableContainer >
+          <TableContainer>
             <Table>
               <TableHead>
                 <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Amount</TableCell>
-                    <TableCell>Unit</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Unit</TableCell>
                 </TableRow>
               </TableHead>
 

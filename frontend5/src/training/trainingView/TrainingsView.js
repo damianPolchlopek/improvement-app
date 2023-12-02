@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import REST from '../../utils/REST';
-
-import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import SingleTraining from './SingleTraining';
-import Container from '@mui/material/Container';
+
+import {
+  Container,
+  List,
+  Typography
+} from '@mui/material';
+
 
 export default function TrainingsView() {
   const [trainingNames, setTrainingNames] = useState(null);
-    
+
   useEffect(() => {
     REST.getAllTrainingNames().then(response => {
       console.log(response)
@@ -18,26 +21,26 @@ export default function TrainingsView() {
 
   return (
     <React.Fragment>
-      {trainingNames ? 
+      {trainingNames ?
 
-      <Container maxWidth="xl" sx={{ width: '70%'}}>
-        <Typography variant="h4" component="div" style={{color: 'white'}}>
-          Training View
-        </Typography>
+        <Container maxWidth="xl" sx={{width: '70%'}}>
+          <Typography variant="h4" component="div" style={{color: 'white'}}>
+            Training View
+          </Typography>
 
-        <List>
-          {trainingNames.map((trainingName) => {
-            return (
-              <SingleTraining 
+          <List>
+            {trainingNames.map((trainingName) => {
+              return (
+                <SingleTraining
                   key={trainingName}
                   trainingName={trainingName}
                 />
-            );
-          })}
-        </List>
-        
-      </Container> : null} 
+              );
+            })}
+          </List>
+
+        </Container> : null}
     </React.Fragment>
   );
-  
+
 }

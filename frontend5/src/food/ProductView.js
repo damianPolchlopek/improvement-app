@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import REST from '../utils/REST';
+import CenteredContainer from '../component/CenteredContainer';
+
 import PropTypes from 'prop-types';
 
-import { 
+import {
+  Box,
+  Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-
   Tabs,
-  Tab,
-  Box,
-
-  TextField 
+  TextField
 } from '@mui/material';
 
-import CenteredContainer from '../component/CenteredContainer';
 import Grid from '@mui/material/Unstable_Grid2';
 
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, ...other} = props;
 
   return (
     <div
@@ -33,8 +32,8 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-            {children}
+        <Box sx={{p: 3}}>
+          {children}
         </Box>
       )}
     </div>
@@ -61,11 +60,11 @@ export default function ProductView() {
   const [tabIndex, setTabIndex] = useState(miesoTabIndex);
   const [typedProductName, setTypedProductName] = useState(' ');
   const [category, setCategory] = useState('ALL');
-    
+
   useEffect(() => {
     REST.getProductCategoryList().then(response => {
-      setProductCategoryList(response.entity);   
-      handleClickOnTab(response.entity[0]); 
+      setProductCategoryList(response.entity);
+      handleClickOnTab(response.entity[0]);
     });
 
     REST.getProductFiltredByCategoryAndName(category, typedProductName).then(response => {
@@ -97,16 +96,16 @@ export default function ProductView() {
   return (
     <CenteredContainer>
 
-      <Grid container sx={{ width: '70%'}} spacing={2}>
+      <Grid container sx={{width: '70%'}} spacing={2}>
         <Grid xs={12}>
-          <CenteredContainer>  
-            <TextField  
-              sx={{ width: '40%' }}  
-              onChange={(e) => handleProductTyped(e)} 
-              label="Product" 
+          <CenteredContainer>
+            <TextField
+              sx={{width: '40%'}}
+              onChange={(e) => handleProductTyped(e)}
+              label="Product"
             />
           </CenteredContainer>
-          
+
         </Grid>
 
         <Grid sx={{height: '30px'}} xs={12}>
@@ -114,37 +113,37 @@ export default function ProductView() {
         </Grid>
 
         <Grid xs={12}>
-          <Tabs 
-            value={tabIndex} 
-            onChange={handleChange} 
+          <Tabs
+            value={tabIndex}
+            onChange={handleChange}
             indicatorColor="secondary"
             textColor="inherit"
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            {productCategoryList ? productCategoryList.map((productCategory, index) => 
-              <Tab 
-                key={index} 
-                label={productCategory} 
-                {...a11yProps(0)} 
+            {productCategoryList ? productCategoryList.map((productCategory, index) =>
+              <Tab
+                key={index}
+                label={productCategory}
+                {...a11yProps(0)}
                 onClick={() => handleClickOnTab(productCategoryList[index])}
               />
             ) : null}
           </Tabs>
 
-          {productCategoryList.map((productCategory, index) => 
+          {productCategoryList.map((productCategory, index) =>
             <TabPanel key={index} value={tabIndex} index={index} component={'span'}>
               <TableContainer>
                 <Table>
                   <TableHead>
                     <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Kcal</TableCell>
-                        <TableCell>Protein</TableCell>
-                        <TableCell>Carbo</TableCell>
-                        <TableCell>Fat</TableCell>
-                        <TableCell>Amount</TableCell>
-                        <TableCell>Unit</TableCell>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Kcal</TableCell>
+                      <TableCell>Protein</TableCell>
+                      <TableCell>Carbo</TableCell>
+                      <TableCell>Fat</TableCell>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>Unit</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -152,7 +151,7 @@ export default function ProductView() {
                     {productList ? productList.map(product => {
                       return <TableRow
                         key={product.name}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        sx={{'&:last-child td, &:last-child th': {border: 0}}}
                       >
                         <TableCell>{product.name}</TableCell>
                         <TableCell>{product.kcal}</TableCell>
@@ -168,7 +167,7 @@ export default function ProductView() {
                 </Table>
               </TableContainer>
             </TabPanel>
-          )} 
+          )}
         </Grid>
 
       </Grid>

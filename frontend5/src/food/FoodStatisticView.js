@@ -1,13 +1,18 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import REST from '../utils/REST';
+import CenteredContainer from '../component/CenteredContainer';
+
+import {
+  Button,
+  Typography,
+} from '@mui/material';
 
 import { DataGrid } from '@mui/x-data-grid';
-import CenteredContainer from '../component/CenteredContainer';
 
 import { darken, lighten, styled } from '@mui/material/styles';
 
-import { Typography, Button } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+
 
 
 export default function FoodStatisticView() {
@@ -43,18 +48,18 @@ export default function FoodStatisticView() {
         </Grid>
 
         <Grid xs={12}>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={addDayDietSummary}
           >
             Save Diet Day
           </Button>
         </Grid>
-        
+
         <Grid xs={12}>
-          <MealTable 
-            mealList={mealList} 
-            handleSelectionModelChange={handleSelectionModelChange} />
+          <MealTable
+            mealList={mealList}
+            handleSelectionModelChange={handleSelectionModelChange}/>
         </Grid>
       </Grid>
 
@@ -74,7 +79,7 @@ const getSelectedBackgroundColor = (color, mode) =>
 const getSelectedHoverBackgroundColor = (color, mode) =>
   mode === 'dark' ? darken(color, 0.4) : lighten(color, 0.4);
 
-const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+const StyledDataGrid = styled(DataGrid)(({theme}) => ({
   '& .super-app-theme--BREAKFAST': {
     backgroundColor: getBackgroundColor(theme.palette.info.main, theme.palette.mode),
     '&:hover': {
@@ -170,27 +175,27 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   },
 }));
 
-const MealTable = memo(function MealTable({mealList, handleSelectionModelChange }) {
+const MealTable = memo(function MealTable({mealList, handleSelectionModelChange}) {
   const columns = [
-    { field: 'category', headerName: 'Category', width: 150 },
-    { field: 'name', headerName: 'Name', width: 250 },
-    { field: 'kcal', headerName: 'Kcal', type: 'number', width: 100 },
-    { field: 'protein', headerName: 'Protein', type: 'number', width: 100 },
-    { field: 'carbohydrates', headerName: 'Carbs', type: 'number', width: 100 },
-    { field: 'fat', headerName: 'Fat', type: 'number', width: 100 }
+    {field: 'category', headerName: 'Category', width: 150},
+    {field: 'name', headerName: 'Name', width: 250},
+    {field: 'kcal', headerName: 'Kcal', type: 'number', width: 100},
+    {field: 'protein', headerName: 'Protein', type: 'number', width: 100},
+    {field: 'carbohydrates', headerName: 'Carbs', type: 'number', width: 100},
+    {field: 'fat', headerName: 'Fat', type: 'number', width: 100}
   ];
 
   return <StyledDataGrid
-            rows={mealList}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 15 },
-              },
-            }}
-            pageSizeOptions={[0, 5, 10, 15]}
-            onRowSelectionModelChange={handleSelectionModelChange}
-            getRowClassName={(params) => `super-app-theme--${params.row.category}`}
-            checkboxSelection
-          />
+    rows={mealList}
+    columns={columns}
+    initialState={{
+      pagination: {
+        paginationModel: {page: 0, pageSize: 15},
+      },
+    }}
+    pageSizeOptions={[0, 5, 10, 15]}
+    onRowSelectionModelChange={handleSelectionModelChange}
+    getRowClassName={(params) => `super-app-theme--${params.row.category}`}
+    checkboxSelection
+  />
 })
