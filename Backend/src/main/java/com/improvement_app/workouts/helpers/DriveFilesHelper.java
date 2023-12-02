@@ -144,7 +144,7 @@ public class DriveFilesHelper {
         } else if (exerciseType.contains(SWIMMING_POOL_TRAINING_NAME)) {
             return new SwimmingPoolExercise(reps, weight);
         } else {
-            throw new ExerciseTypeNotFoundException("Unknown training type: " + exerciseType);
+            throw new ExerciseTypeNotFoundException(exerciseType);
         }
     }
 
