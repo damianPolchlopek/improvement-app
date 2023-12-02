@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
-
 import REST from '../utils/REST';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 
-import TextField from '@mui/material/TextField';
-import Typography from "@mui/material/Typography";
-
-import FormControl from "@mui/material/FormControl";
-
-import Button from '@mui/material/Button';
-import { Paper } from '@mui/material';
-import Box from '@mui/material/Box';
 
 export default function LoginView(props) {
   const [userDetails, setUserDetails] = useState(
@@ -41,7 +40,7 @@ export default function LoginView(props) {
 
       // props.history.push('/')
       window.location.reload()
-  });
+    });
   }
 
   return (
@@ -49,13 +48,16 @@ export default function LoginView(props) {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      minHeight: "100vh"}}
+      minHeight: "100vh"
+    }}
     >
-      <Paper elevation={18} sx={{width: '70vh',
-                                height: '70vh',
-                                alignItems: "center",
-                                textAlign: 'center',
-                                display: 'flex'}}>
+      <Paper elevation={18} sx={{
+        width: '70vh',
+        height: '70vh',
+        alignItems: "center",
+        textAlign: 'center',
+        display: 'flex'
+      }}>
         <Grid container spacing={4}>
           <Grid xs={12}>
             <Typography

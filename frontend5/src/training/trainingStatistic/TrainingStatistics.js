@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
-
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import { TextField } from '@mui/material';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Grid from '@mui/material/Unstable_Grid2';
-
 import ExerciseChart from './ExerciseChart';
 
+import {
+  Autocomplete,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
+
+import {
+  DesktopDatePicker,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
+
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import moment from 'moment';
-import Autocomplete from '@mui/material/Autocomplete';
+import Grid from '@mui/material/Unstable_Grid2';
 
 
 function formatXAxis(tickItem) {
@@ -33,15 +38,15 @@ export default function TrainingStatistic() {
   const [endDate, setEndDate] = React.useState(moment().add(1, 'day').valueOf());
 
   useEffect(() => {
-    REST.getTrainingStatistic(selectedExerciseName, selectedChartType, 
+    REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-        setExercises(response)
+      setExercises(response)
     });
 
     REST.getExerciseNames().then(response => {
       console.log('Exe names: ')
-      console.log(response)
-      const exeNames = response.map(r => r.name)
+      console.log(response.content)
+      const exeNames = response.content.map(r => r.name)
       console.log(exeNames)
 
       setExerciseNames(exeNames);
@@ -50,54 +55,53 @@ export default function TrainingStatistic() {
   }, [beginDate, endDate, selectedChartType, selectedExerciseName]);
 
 
-
   const handleExerciseNameChange = (event, newValue) => {
     setSelectedExerciseName(newValue);
 
-    REST.getTrainingStatistic(newValue, selectedChartType, 
+    REST.getTrainingStatistic(newValue, selectedChartType,
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-        setExercises(response.entity)
+      setExercises(response.entity)
     });
   };
 
   const handleChartTypeChange = (event) => {
     setSelectedChartType(event.target.value);
 
-    REST.getTrainingStatistic(selectedExerciseName, event.target.value, 
+    REST.getTrainingStatistic(selectedExerciseName, event.target.value,
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-        setExercises(response.entity)
+      setExercises(response.entity)
     });
   };
 
   const handleChangeBeginDate = (newValue) => {
     setBeginDate(newValue.$d);
 
-    REST.getTrainingStatistic(selectedExerciseName, selectedChartType, 
+    REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
       formatXAxis(newValue.$d), formatXAxis(endDate)).then(response => {
-        setExercises(response.entity)
+      setExercises(response.entity)
     });
   };
 
   const handleChangeEndDate = (newValue) => {
     setEndDate(newValue.$d);
 
-    REST.getTrainingStatistic(selectedExerciseName, selectedChartType, 
+    REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
       formatXAxis(beginDate), formatXAxis(newValue.$d)).then(response => {
-        setExercises(response.entity)
+      setExercises(response.entity)
     });
   };
 
   return (
     <React.Fragment>
-      <Grid container centered 
-        rowSpacing={3} 
-        columnSpacing={3} 
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
+      <Grid container centered
+            rowSpacing={3}
+            columnSpacing={3}
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
       >
         <Grid xs={12}>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
+          <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
             {Array.isArray(exerciseNames) ?
               <Autocomplete
                 disableClearable
@@ -107,25 +111,25 @@ export default function TrainingStatistic() {
                 // value={selectedExerciseName}
                 // value="Bieżnia"
                 onChange={handleExerciseNameChange}
-                renderInput={(params) => <TextField {...params} label="Exercise Name"  />}
+                renderInput={(params) => <TextField {...params} label="Exercise Name"/>}
               />
-            : null}
+              : null}
           </FormControl>
 
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 150 }}>
+          <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
             <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
             <Select
               labelId="demo-simple-select-standard-label"
               value={selectedChartType}
               onChange={handleChartTypeChange}
               label="Exercise Name"
-              > 
-                <MenuItem value="Weight">Weight</MenuItem>
-                <MenuItem value="Capacity">Capacity</MenuItem>
-              </Select>
+            >
+              <MenuItem value="Weight">Weight</MenuItem>
+              <MenuItem value="Capacity">Capacity</MenuItem>
+            </Select>
           </FormControl>
         </Grid>
-        
+
         <Grid xs={12}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DesktopDatePicker
@@ -147,15 +151,15 @@ export default function TrainingStatistic() {
         </Grid>
       </Grid>
 
-      {exercises ? 
-        <ExerciseChart 
+      {exercises ?
+        <ExerciseChart
           exercises={exercises}
           beginDate={beginDate}
           endDate={endDate}
-        /> 
-      : null}
-      
+        />
+        : null}
+
     </React.Fragment>
   );
-  
+
 }

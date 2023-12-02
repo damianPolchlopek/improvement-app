@@ -1,23 +1,24 @@
 import React from 'react';
-
-import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-
 import Item from '../../component/Item';
 
+import {
+  Box,
+  Tab,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tabs,
+  Typography,
+} from '@mui/material';
+
+import PropTypes from 'prop-types';
+
+
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, ...other} = props;
 
   return (
     <div
@@ -28,7 +29,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
+        <Box sx={{p: 3}}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -48,7 +49,7 @@ function a11yProps(index) {
     'aria-controls': `full-width-tabpanel-${index}`,
   };
 }
-  
+
 export default function SingleMeal(props) {
   const [tabIndex, setTabIndex] = React.useState(0);
 
@@ -60,9 +61,9 @@ export default function SingleMeal(props) {
     <React.Fragment>
       <Item>
         <Box>
-          <Tabs 
-            value={tabIndex} 
-            onChange={handleTabIndexChange} 
+          <Tabs
+            value={tabIndex}
+            onChange={handleTabIndexChange}
             indicatorColor="secondary"
             textColor="inherit"
             variant="fullWidth"
@@ -73,7 +74,7 @@ export default function SingleMeal(props) {
             <Tab label="Recipes" {...a11yProps(0)} />
           </Tabs>
 
-          <TabPanel value={tabIndex} index={0}>  
+          <TabPanel value={tabIndex} index={0}>
             <Table>
               <TableBody>
                 <TableRow>
@@ -121,15 +122,15 @@ export default function SingleMeal(props) {
                 </TableHead>
 
                 <TableBody>
-                  {props.meal.mealIngredients.map((ingredient, index) => 
+                  {props.meal.mealIngredients.map((ingredient, index) =>
                     <TableRow
-                    key={index}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell>{ingredient.name}</TableCell>
-                    <TableCell>{ingredient.amount}</TableCell>
-                    <TableCell>{ingredient.unit}</TableCell>
-                  </TableRow>
+                      key={index}
+                      sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                    >
+                      <TableCell>{ingredient.name}</TableCell>
+                      <TableCell>{ingredient.amount}</TableCell>
+                      <TableCell>{ingredient.unit}</TableCell>
+                    </TableRow>
                   )}
                 </TableBody>
               </Table>
@@ -137,12 +138,12 @@ export default function SingleMeal(props) {
           </TabPanel>
 
           <TabPanel value={tabIndex} index={2}>
-            {props.meal.recipe.map(( (recipeRow, index) =>
+            {props.meal.recipe.map(((recipeRow, index) =>
               <div key={index} textAlign="left">{recipeRow}</div>))}
           </TabPanel>
         </Box>
-        
-      </Item>          
+
+      </Item>
     </React.Fragment>
   );
 }

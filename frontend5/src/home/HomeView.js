@@ -36,8 +36,8 @@ function HomeView() {
         </LoadingButton>
       </Grid>
       <Grid xs={6}>
-        <LoadingButton 
-          variant="outlined" 
+        <LoadingButton
+          variant="outlined"
           size="large"
           onClick={handleClickFoodModule}
           loading={loadingFoodModule}
