@@ -54,7 +54,11 @@ public class ExerciseController {
     @ApiOperation("Get all training names")
     @GetMapping("/trainingName/")
     public ListResponse<String> getTrainingNames() {
-        List<String> trainingNames = exerciseService.getAllTrainingNames();
+        List<String> trainingNames = exerciseService.getAllTrainingNames()
+                .stream()
+                .limit(25)
+                .toList();
+
         return ListResponse.of(trainingNames);
     }
 
