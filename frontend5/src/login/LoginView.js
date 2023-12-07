@@ -6,12 +6,12 @@ import {
   Box,
   Button,
   FormControl,
-  Grid,
   Paper,
   TextField,
   Typography,
 } from '@mui/material';
 
+import Grid from '@mui/material/Unstable_Grid2';
 
 export default function LoginView(props) {
   const [userDetails, setUserDetails] = useState(

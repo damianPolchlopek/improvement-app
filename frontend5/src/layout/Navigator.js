@@ -1,23 +1,27 @@
 import * as React from 'react';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import Box from '@mui/material/Box';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import {
+  Box,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import RestaurantIcon from '@mui/icons-material/Restaurant';
-import InventoryIcon from '@mui/icons-material/Inventory';
-import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
-import HomeIcon from '@mui/icons-material/Home';
-import AddIcon from '@mui/icons-material/Add';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import ShowChartIcon from '@mui/icons-material/ShowChart';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import {
+  FitnessCenter as FitnessCenterIcon,
+  Restaurant as RestaurantIcon,
+  Inventory as InventoryIcon,
+  ShoppingBag as ShoppingBagIcon,
+  Home as HomeIcon,
+  Add as AddIcon,
+  Visibility as VisibilityIcon,
+  ShowChart as ShowChartIcon,
+  CalendarToday as CalendarTodayIcon,
+  AttachMoney as AttachMoneyIcon,
+} from '@mui/icons-material';
 
 import Logo from './Logo';
 import {
@@ -104,12 +108,6 @@ const item = {
   '&:hover, &:focus': {
     bgcolor: 'rgba(255, 255, 255, 0.08)',
   },
-};
-
-const itemCategory = {
-  boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
-  py: 2,
-  px: 6,
 };
 
 export default function TrainingNavigation(props) {

@@ -7,11 +7,12 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  Grid,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
+
+import Grid from '@mui/material/Unstable_Grid2';
 
 
 export default function AddTraining(props) {

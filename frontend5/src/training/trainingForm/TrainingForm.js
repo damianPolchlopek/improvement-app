@@ -4,7 +4,6 @@ import REST from "../../utils/REST";
 import {
   Button,
   FormControl,
-  Grid,
   InputLabel,
   MenuItem,
   Select,
@@ -12,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 
+import Grid from '@mui/material/Unstable_Grid2';
 
 
 export default function TrainingForm(props) {
