@@ -3,7 +3,7 @@ package com.improvement_app.finance.entity;
 import lombok.Data;
 
 @Data
-public class MarketCapResponse {
+public class MarketCapResponse extends Object {
     private Status status;
     private DataObject data;
 

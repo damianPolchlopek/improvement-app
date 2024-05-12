@@ -10,3 +10,7 @@ databaseChangeLog:
   - include:
       file: 0002_init_users/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0003_alter_diet_summary/changelog.yaml
+      relativeToChangelogFile: true

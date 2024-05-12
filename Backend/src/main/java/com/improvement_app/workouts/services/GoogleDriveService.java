@@ -103,14 +103,15 @@ public class GoogleDriveService {
         // TODO: sprawdzic czy to mozna usunac (trainingsName)
         final List<String> trainingsName = exerciseService.getAllTrainingNames();
 
-        for (DriveFileItemDTO driveFileItemDTO : responseList) {
-            final String trainingName = driveFileItemDTO.getName();
+        for (int i = 0; i < responseList.size(); ++i) {
+            DriveFileItemDTO driveFileItemDTOLoop = responseList.get(i);
+            final String trainingName = driveFileItemDTOLoop.getName();
 
             if (!trainingsName.contains(trainingName)) {
-                googleDriveFileService.downloadFile(driveFileItemDTO);
+                googleDriveFileService.downloadFile(driveFileItemDTOLoop);
                 trainingsName.add(trainingName);
 
-                log.info("Dodaje do bazy danych trening o nazwie: %s".formatted(trainingName));
+                log.info("(%d/%d) Dodaje do bazy danych trening o nazwie: %s".formatted(i, responseList.size(), trainingName));
 
                 File file = filePathService.getDownloadedFile(trainingName);
                 List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);

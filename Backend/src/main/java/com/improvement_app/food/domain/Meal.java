@@ -21,7 +21,6 @@ import java.util.List;
 public class Meal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -45,9 +44,10 @@ public class Meal {
     @Type(type = "jsonb")
     private List<String> recipe;
 
-    public Meal(String name, double kcal, double protein, double carbohydrates,
+    public Meal(Long id, String name, double kcal, double protein, double carbohydrates,
                 double fat, double portionAmount, String url, MealType type,
                 MealCategory category) {
+        this.id = id;
         this.name = name;
         this.kcal = kcal;
         this.protein = protein;

@@ -14,7 +14,7 @@ import {
 
 import Grid from '@mui/material/Unstable_Grid2';
 
-export default function FoodAddView() {
+export default function CalculateIngredientsView() {
   const [mealList, setMealList] = useState([]);
   const [mealIngredient, setMealIngredient] = useState([]);
 

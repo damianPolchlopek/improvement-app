@@ -54,6 +54,7 @@ public class MealParser extends GoogleDriveFilesHandler {
         final int URL_INDEX = 6;
         final int TYPE_INDEX = 7;
         final int CATEGORY_INDEX = 8;
+        final int ID_INDEX = 9;
 
         final String name = sheet.getRow(NAME_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
         final double kcal = sheet.getRow(KCAL_INDEX).getCell(DATA_ROW_INDEX).getNumericCellValue();
@@ -64,8 +65,9 @@ public class MealParser extends GoogleDriveFilesHandler {
         final String url = sheet.getRow(URL_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
         final String type = sheet.getRow(TYPE_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
         final String category = sheet.getRow(CATEGORY_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
+        final Long id = (long) sheet.getRow(ID_INDEX).getCell(DATA_ROW_INDEX).getNumericCellValue();
 
-        return new Meal(name, kcal, protein, carbohydrates, fat, portionAmount, url,
+        return new Meal(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
                 MealType.fromValue(type), MealCategory.fromValue(category));
     }
 
