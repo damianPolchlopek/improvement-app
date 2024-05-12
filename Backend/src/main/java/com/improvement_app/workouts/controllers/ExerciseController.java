@@ -9,13 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.MediaType;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/exercises")
-public class ExerciseController {
+public class ExerciseController implements Serializable {
 
     private final ExerciseService exerciseService;
 

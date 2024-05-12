@@ -141,12 +141,12 @@ export default class REST {
         return get(serverUrl + food + 'meal/types');
     }
 
-    static calculateDiet(ids) {
-        return post(serverUrl + food + 'diet/calculate', ids);
+    static calculateDiet(selectedMealsId) {
+        return post(serverUrl + food + 'diet/calculate', selectedMealsId);
     }
 
-    static addDietSummary(dietSummary) {
-        return post(serverUrl + food + 'diet/', dietSummary);
+    static addDietSummary(selectedMealsId) {
+        return post(serverUrl + food + 'diet/save-diet-day', selectedMealsId);
     }
 
     static checkProduct(selectedMeals) {

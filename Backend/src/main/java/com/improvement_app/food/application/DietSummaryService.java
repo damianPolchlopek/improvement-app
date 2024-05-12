@@ -2,8 +2,8 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.Meal;
 import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.ui.dto.DietSummaryDto;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,29 @@ import java.util.stream.Collectors;
 public class DietSummaryService {
 
     private final DietSummaryHandler dietSummaryHandler;
+    private final MealService mealService;
 
     @Transactional
-    public DietSummary addDietSummary(DietSummaryDto dietSummaryDto) {
-        DietSummary dietSummary = DietSummary.from(dietSummaryDto);
+    public DietSummary addDietSummary(DietSummary dietSummary) {
         return dietSummaryHandler.save(dietSummary);
+    }
+
+    public DietSummary calculateDietSummary(List<Long> mealsId) {
+        List<Meal> allById = mealService.findAllById(mealsId);
+
+        double kcal = 0;
+        double protein = 0;
+        double carbs = 0;
+        double fat = 0;
+
+        for (Meal meal : allById) {
+            kcal += meal.getKcal();
+            protein += meal.getProtein();
+            carbs += meal.getCarbohydrates();
+            fat += meal.getFat();
+        }
+
+        return new DietSummary(kcal, protein, carbs, fat, allById);
     }
 
     @Transactional
@@ -41,7 +59,8 @@ public class DietSummaryService {
         }
 
         // grupowanie produktami
-        Map<String, List<MealIngredient>> groupingIngredients = allIngredients.stream().collect(Collectors.groupingBy(MealIngredient::getName));
+        Map<String, List<MealIngredient>> groupingIngredients = allIngredients.stream()
+                .collect(Collectors.groupingBy(MealIngredient::getName));
 
         // TODO: dodac obslugie roznych unitow: łyzeczka/gram itp.
         // sumowanie list składników

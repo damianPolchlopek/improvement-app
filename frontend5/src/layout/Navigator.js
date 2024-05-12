@@ -32,7 +32,7 @@ import {
   TrainingInformationUrl,
   FoodViewUrl,
   FoodAddUrl,
-  FoodStatisticUrl,
+  CalculateIngredientsUrl,
   FoodProductUrl,
   ShoppingViewUrl,
   WeeklyViewUrl,
@@ -65,7 +65,7 @@ const categories = [
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: FoodViewUrl },
       { id: 'Add', icon: <AddIcon />, href: FoodAddUrl },
-      { id: 'Statistic', icon: <ShowChartIcon />, href: FoodStatisticUrl },
+      { id: 'Statistic', icon: <ShowChartIcon />, href: CalculateIngredientsUrl },
       { id: 'Product', icon: <InventoryIcon />, href: FoodProductUrl },
     ],
   },

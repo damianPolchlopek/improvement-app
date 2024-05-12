@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="9c07b73d-832a-4f66-8daf-d1cba1683d49" name="Changes" comment="Refactor frontend">
+      <change afterPath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/0003_alter_diet_summary/001.add-meals-column.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/0003_alter_diet_summary/changelog.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/finance/entity/MarketCapResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/finance/entity/MarketCapResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/DietSummaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/DietSummaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/DietSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/DietSummary.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/Meal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/Meal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/adapters/ProductHandlerImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/adapters/ProductHandlerImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/googledrivefileparser/MealParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/googledrivefileparser/MealParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/DietController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/DietController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/GoogleDriveFoodController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/GoogleDriveFoodController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/dto/DietSummaryDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/workouts/controllers/ExerciseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/workouts/controllers/ExerciseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/workouts/services/GoogleDriveService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/workouts/services/GoogleDriveService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/changelog.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/changelog.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/food/FoodAddView.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/food/FoodStatisticView.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/Navigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Navigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/REST.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/REST.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/URLHelper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/URLHelper.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2WvsJ6p7eGiSHz0CUY9skX8Rcnf" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "AddAddMealDaily",
+    "last_opened_file_path": "D:/Aplikacja_Webowa/improvement-app/frontend5/src/food/addDietDay",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2023.2.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Aplikacja_Webowa\improvement-app\frontend5\src\food\addDietDay" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Aplikacja_Webowa\improvement-app\frontend5\src\food\addDietDay" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.start" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9c07b73d-832a-4f66-8daf-d1cba1683d49" name="Changes" comment="" />
+      <created>1697624322617</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1697624322617</updated>
+      <workItem from="1697624323686" duration="5083000" />
+      <workItem from="1697898853134" duration="4767000" />
+      <workItem from="1698251017466" duration="8360000" />
+      <workItem from="1699135562118" duration="379000" />
+      <workItem from="1700841408215" duration="10930000" />
+      <workItem from="1701185613593" duration="3081000" />
+      <workItem from="1701286600701" duration="1668000" />
+      <workItem from="1701537367004" duration="4945000" />
+      <workItem from="1701776607628" duration="5404000" />
+      <workItem from="1701967682223" duration="2635000" />
+      <workItem from="1702058204266" duration="1662000" />
+      <workItem from="1702732343877" duration="1854000" />
+      <workItem from="1704298861828" duration="602000" />
+      <workItem from="1704537095265" duration="1348000" />
+      <workItem from="1704916551512" duration="844000" />
+      <workItem from="1704992567637" duration="184000" />
+      <workItem from="1705255367973" duration="3956000" />
+      <workItem from="1705602820647" duration="612000" />
+      <workItem from="1705763878891" duration="2430000" />
+      <workItem from="1706203095101" duration="1761000" />
+      <workItem from="1706635231723" duration="614000" />
+      <workItem from="1707152364101" duration="627000" />
+      <workItem from="1708016298590" duration="655000" />
+      <workItem from="1708707853901" duration="1212000" />
+      <workItem from="1708887459814" duration="606000" />
+      <workItem from="1709140090778" duration="455000" />
+      <workItem from="1709470341293" duration="640000" />
+      <workItem from="1709589042678" duration="898000" />
+      <workItem from="1710343897968" duration="612000" />
+      <workItem from="1710524347413" duration="609000" />
+      <workItem from="1710783323601" duration="638000" />
+      <workItem from="1710946179923" duration="600000" />
+      <workItem from="1712070826478" duration="2552000" />
+      <workItem from="1712331597671" duration="187000" />
+      <workItem from="1712670598917" duration="396000" />
+      <workItem from="1712770199713" duration="697000" />
+      <workItem from="1713376464381" duration="4000" />
+      <workItem from="1713376516499" duration="1936000" />
+      <workItem from="1713467961602" duration="388000" />
+      <workItem from="1713897376098" duration="988000" />
+      <workItem from="1714150670639" duration="210000" />
+      <workItem from="1715004450578" duration="23327000" />
+    </task>
+    <task id="LOCAL-00001" summary="Refactor frontend">
+      <option name="closed" value="true" />
+      <created>1701550831340</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1701550831340</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Refactor frontend" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor frontend" />
+  </component>
+</project>

@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0003_alter_diet_summary/001.add-meals-column.sql
+      sqlFile:
+        path: 001.add-meals-column.sql
+        relativeToChangelogFile: true
