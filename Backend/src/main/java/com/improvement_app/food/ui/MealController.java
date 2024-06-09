@@ -4,6 +4,7 @@ package com.improvement_app.food.ui;
 import com.improvement_app.food.application.MealService;
 import com.improvement_app.food.domain.Meal;
 import com.improvement_app.food.domain.enums.MealCategory;
+import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
@@ -29,16 +30,19 @@ public class MealController {
     public Response getMeals(@RequestParam String mealCategory,
                              @RequestParam String mealType,
                              @RequestParam String mealName,
+                             @RequestParam String mealPopularity,
                              @RequestParam String sortBy) {
+
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
+        MealPopularity mealPopularityEnum = MealPopularity.valueOf(mealPopularity);
 
-        List<MealDto> mealDtos = mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealName, sortBy)
+        List<MealDto> mealDTOs = mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealPopularityEnum, mealName, sortBy)
                 .stream()
                 .map(MealDto::from)
                 .collect(Collectors.toList());
 
-        return Response.ok(mealDtos).build();
+        return Response.ok(mealDTOs).build();
     }
 
     @GetMapping("/meal/categories")

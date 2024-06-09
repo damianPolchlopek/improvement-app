@@ -31,19 +31,6 @@ public class Exercise {
     private int index;
 
     public Exercise(String type, String place, String name, List<RepAndWeight> repAndWeightList,
-                    String progress, LocalDate date, String reps, String weight, String trainingName) {
-        this.type = type;
-        this.place = place;
-        this.name = name;
-        this.repAndWeightList = repAndWeightList;
-        this.progress = progress;
-        this.date = date;
-        this.reps = reps;
-        this.weight = weight;
-        this.trainingName = trainingName;
-    }
-
-    public Exercise(String type, String place, String name, List<RepAndWeight> repAndWeightList,
                     String progress, LocalDate date, String reps, String weight, String trainingName,
                     int index) {
         this.type = type;
@@ -58,4 +45,7 @@ public class Exercise {
         this.index = index;
     }
 
+    public Exercise(String exerciseName) {
+        this.name = exerciseName;
+    }
 }

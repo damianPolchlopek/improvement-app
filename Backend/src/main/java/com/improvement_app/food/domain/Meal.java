@@ -2,6 +2,7 @@ package com.improvement_app.food.domain;
 
 
 import com.improvement_app.food.domain.enums.MealCategory;
+import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
@@ -44,9 +45,12 @@ public class Meal {
     @Type(type = "jsonb")
     private List<String> recipe;
 
+    @Enumerated(EnumType.STRING)
+    private MealPopularity popularity;
+
     public Meal(Long id, String name, double kcal, double protein, double carbohydrates,
                 double fat, double portionAmount, String url, MealType type,
-                MealCategory category) {
+                MealCategory category, MealPopularity popularity) {
         this.id = id;
         this.name = name;
         this.kcal = kcal;
@@ -57,6 +61,7 @@ public class Meal {
         this.url = url;
         this.type = type;
         this.category = category;
+        this.popularity = popularity;
     }
 
 }
