@@ -3,6 +3,7 @@ package com.improvement_app.food.infrastructure.googledrivefileparser;
 import com.improvement_app.food.domain.Meal;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.domain.enums.MealCategory;
+import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.food.domain.enums.Unit;
 import org.apache.poi.ss.usermodel.Cell;
@@ -55,6 +56,7 @@ public class MealParser extends GoogleDriveFilesHandler {
         final int TYPE_INDEX = 7;
         final int CATEGORY_INDEX = 8;
         final int ID_INDEX = 9;
+        final int POPULARITY_INDEX = 10;
 
         final String name = sheet.getRow(NAME_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
         final double kcal = sheet.getRow(KCAL_INDEX).getCell(DATA_ROW_INDEX).getNumericCellValue();
@@ -66,9 +68,10 @@ public class MealParser extends GoogleDriveFilesHandler {
         final String type = sheet.getRow(TYPE_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
         final String category = sheet.getRow(CATEGORY_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
         final Long id = (long) sheet.getRow(ID_INDEX).getCell(DATA_ROW_INDEX).getNumericCellValue();
+        final String popularity = sheet.getRow(POPULARITY_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
 
         return new Meal(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
-                MealType.fromValue(type), MealCategory.fromValue(category));
+                MealType.fromValue(type), MealCategory.fromValue(category), MealPopularity.fromValue(popularity));
     }
 
     private List<MealIngredient> parseIngredientSheet(XSSFSheet sheet) {

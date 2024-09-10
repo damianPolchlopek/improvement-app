@@ -3,8 +3,6 @@ export const HomeViewUrl = "/";
 export const TrainingViewUrl = "/training-view";
 export const TrainingAddUrl = "/training-add";
 export const TrainingStatisticUrl = "/training-statistic";
-export const TrainingInformationUrl = "/training-information";
-
 
 export const FoodViewUrl = "/food-view";
 export const FoodAddUrl = "/food-add";

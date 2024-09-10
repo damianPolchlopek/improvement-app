@@ -12,7 +12,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Checkbox
+  Checkbox, Typography, Toolbar, MenuItem, Select
 } from '@mui/material';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -24,10 +24,15 @@ function Row(props) {
   const [mealList, setMealList] = useState([]);
 
   useEffect(() => {
-    REST.getMealList(translateFunction(row), 'ALL', '', 'category').then(response => {
-      setMealList(response.entity);
-    });
+    refreshMeals();
   }, []);
+
+  const refreshMeals = () => {
+    REST.getMealList(translateFunction(row), 'ALL', '', props.mealPopularity, 'category')
+      .then(response => {
+        setMealList(response.entity);
+      });
+  }
 
   const translateFunction = (arg) => {
     const categoryTranslation = new Map([
@@ -43,7 +48,7 @@ function Row(props) {
 
   return (
     <React.Fragment>
-      <TableRow onClick={() => setOpen(!open)}>
+      <TableRow onClick={() => {refreshMeals(); setOpen(!open);}}>
         <TableCell sx={{width: '50px'}} >
           <IconButton
             aria-label="expand row"
@@ -58,43 +63,47 @@ function Row(props) {
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox"></TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Kcal</TableCell>
-                    <TableCell>Protein</TableCell>
-                    <TableCell>Carbs</TableCell>
-                    <TableCell>Fat</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {mealList.map((meal) => {
-                    const isItemSelected = props.isSelected(meal.id);
+          <Collapse
+            in={open}
+            timeout="auto"
+            unmountOnExit
+          >
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell padding="checkbox"></TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Kcal</TableCell>
+                  <TableCell>Protein</TableCell>
+                  <TableCell>Carbs</TableCell>
+                  <TableCell>Fat</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {mealList.map((meal) => {
+                  const isItemSelected = props.isSelected(meal.id);
 
-                    return (
-                      <TableRow
-                        onClick={(event) => props.handleClick(event, meal.id)}
-                        key={meal.name}
-                        selected={isItemSelected}
-                      >
-                        <TableCell>
-                          <Checkbox
-                            color="primary"
-                            checked={isItemSelected}
-                          />
-                        </TableCell>
-                        <TableCell>{meal.name}</TableCell>
-                        <TableCell>{meal.kcal}</TableCell>
-                        <TableCell>{meal.protein}</TableCell>
-                        <TableCell>{meal.carbohydrates}</TableCell>
-                        <TableCell>{meal.fat}</TableCell>
-                      </TableRow>
-                  )})}
-                </TableBody>
-              </Table>
+                  return (
+                    <TableRow
+                      onClick={(event) => props.handleClick(event, meal.id)}
+                      key={meal.name}
+                      selected={isItemSelected}
+                    >
+                      <TableCell>
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                        />
+                      </TableCell>
+                      <TableCell>{meal.name}</TableCell>
+                      <TableCell>{meal.kcal}</TableCell>
+                      <TableCell>{meal.protein}</TableCell>
+                      <TableCell>{meal.carbohydrates}</TableCell>
+                      <TableCell>{meal.fat}</TableCell>
+                    </TableRow>
+                )})}
+              </TableBody>
+            </Table>
           </Collapse>
         </TableCell>
       </TableRow>
@@ -110,23 +119,53 @@ const rows = [
   'OTHER'
 ];
 
-export default function MealTable(props) {
+function MyToolbar(props) {
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table" style={{ minWidth: '700px' }}>
-        <TableBody>
-          {rows.map((row) => (
-            <Row
-              key={row}
-              row={row}
-              style={{textAlign: 'left'}}
-              isSelected={props.isSelected}
-              handleClick={props.handleClick}
-            />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Toolbar>
+        <Typography
+          sx={{ align: 'left' }}
+        >
+          Meal Popularity
+        </Typography>
+
+      <Select
+        onChange={(e => props.setMealPopularity(e.target.value))}
+        defaultValue="HIGH"
+      >
+        <MenuItem value="ALL">ALL</MenuItem>
+        <MenuItem value="HIGH">Popular</MenuItem>
+        <MenuItem value="LOW">Rare</MenuItem>
+      </Select>
+    </Toolbar>
+  );
+}
+
+export default function MealTable(props) {
+  const [mealPopularity, setMealPopularity] = React.useState('HIGH');
+
+  return (
+    <Paper style={{ minWidth: '700px' }}>
+      <MyToolbar
+        mealPopularity={mealPopularity}
+        setMealPopularity={setMealPopularity}
+      />
+      <TableContainer>
+        <Table aria-label="collapsible table" style={{ minWidth: '700px' }}>
+          <TableBody>
+            {rows.map((row) => (
+              <Row
+                key={row}
+                row={row}
+                style={{textAlign: 'left'}}
+                isSelected={props.isSelected}
+                handleClick={props.handleClick}
+                mealPopularity={mealPopularity}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 }

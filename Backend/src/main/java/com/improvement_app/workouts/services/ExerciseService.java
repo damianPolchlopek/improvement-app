@@ -99,7 +99,7 @@ public class ExerciseService {
                 .stream()
                 .filter(exercise -> exercise.getName().equals(exerciseName))
                 .max(Comparator.comparing(Exercise::getDate))
-                .orElseThrow();
+                .orElseGet(() -> new Exercise(exerciseName));
     }
 
     private String convertTrainingTypeToExerciseType(String trainingType) {

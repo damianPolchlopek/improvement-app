@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0004_add_meal_popularity/001.add-popularity-column.sql
+      sqlFile:
+        path: 001.add-popularity-column.sql
+        relativeToChangelogFile: true

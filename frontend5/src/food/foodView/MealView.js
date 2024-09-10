@@ -91,7 +91,7 @@ export default function MealView() {
   };
 
   const filterMeals = (mealCategory, mealType, mealName) => {
-    REST.getMealList(mealCategory, mealType, mealName, 'name').then(response => {
+    REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name').then(response => {
       setMealList(response.entity);
     });
   };

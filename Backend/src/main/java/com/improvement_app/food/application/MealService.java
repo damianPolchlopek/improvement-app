@@ -4,6 +4,7 @@ import com.improvement_app.food.application.ports.MealGoogleDriveHandler;
 import com.improvement_app.food.application.ports.MealHandler;
 import com.improvement_app.food.domain.Meal;
 import com.improvement_app.food.domain.enums.MealCategory;
+import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,12 @@ public class MealService {
         return meals;
     }
 
-    public List<Meal> getMeals(MealCategory mealCategory, MealType mealType, String mealName, String sortBy) {
+    public List<Meal> getMeals(MealCategory mealCategory,
+                               MealType mealType,
+                               MealPopularity mealPopularity,
+                               String mealName,
+                               String sortBy) {
+
         List<Meal> meals = mealHandler.findAllByName(mealName, sortBy);
 
         if (mealCategory != MealCategory.ALL) {
@@ -52,6 +58,13 @@ public class MealService {
             meals = meals
                     .stream()
                     .filter(meal -> meal.getType() == mealType)
+                    .collect(Collectors.toList());
+        }
+
+        if (mealPopularity != MealPopularity.ALL) {
+            meals = meals
+                    .stream()
+                    .filter(meal -> meal.getPopularity() == mealPopularity)
                     .collect(Collectors.toList());
         }
 

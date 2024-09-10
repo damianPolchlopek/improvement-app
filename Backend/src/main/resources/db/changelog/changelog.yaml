@@ -14,3 +14,7 @@ databaseChangeLog:
   - include:
       file: 0003_alter_diet_summary/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0004_add_meal_popularity/changelog.yaml
+      relativeToChangelogFile: true

@@ -128,9 +128,10 @@ export default class REST {
         return get(serverUrl + food + 'product/categories');
     }
 
-    //mealCategory=All&mealType=All&mealName=&sortBy=
-    static getMealList(mealCategory, mealType, mealName, sortBy) {
-        return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName + "&sortBy=" + sortBy);
+    //mealCategory=All&mealType=All&mealName=&mealPopularity=&sortBy=
+    static getMealList(mealCategory, mealType, mealName, mealPopularity, sortBy) {
+        return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName
+                                            + "&mealPopularity=" + mealPopularity + "&sortBy=" + sortBy);
     }
 
     static getMealCategoryList() {
