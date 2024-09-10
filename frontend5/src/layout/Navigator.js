@@ -29,7 +29,6 @@ import {
   TrainingViewUrl, 
   TrainingAddUrl, 
   TrainingStatisticUrl,
-  TrainingInformationUrl,
   FoodViewUrl,
   FoodAddUrl,
   CalculateIngredientsUrl,
@@ -56,7 +55,6 @@ const categories = [
       { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
       { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
-      { id: 'Information', icon: <InventoryIcon />, href: TrainingInformationUrl },
     ],
   },
   {

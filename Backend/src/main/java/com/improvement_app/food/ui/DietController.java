@@ -34,8 +34,8 @@ public class DietController {
     }
 
     @PostMapping("/sum-product")
-    public Response sumProduct(@RequestBody List<MealDto> mealDtos) {
-        List<MealIngredient> products = dietSummaryService.getProducts(mealDtos);
+    public Response sumProduct(@RequestBody List<MealDto> mealDTOs) {
+        List<MealIngredient> products = dietSummaryService.getProducts(mealDTOs);
         return Response.ok(products).build();
     }
 }

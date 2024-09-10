@@ -7,7 +7,9 @@ import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.food.ui.dto.MealDto;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +37,7 @@ public class MealController {
 
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
-        MealPopularity mealPopularityEnum = MealPopularity.valueOf(mealPopularity);
+        MealPopularity mealPopularityEnum = MealPopularity.fromValue(mealPopularity);
 
         List<MealDto> mealDTOs = mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealPopularityEnum, mealName, sortBy)
                 .stream()

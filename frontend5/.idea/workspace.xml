@@ -5,19 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c07b73d-832a-4f66-8daf-d1cba1683d49" name="Changes" comment="Refactor frontend">
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealPopularity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/0004_add_meal_popularity/001.add-popularity-column.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/0004_add_meal_popularity/changelog.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/MealService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/MealService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/Meal.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/Meal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/googledrivefileparser/MealParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/googledrivefileparser/MealParser.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/MealController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/MealController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/workouts/entity/Exercise.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/workouts/entity/Exercise.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/changelog.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/resources/db/changelog/changelog.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/food/addDietDay/MealTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/addDietDay/MealTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/food/foodView/MealView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/foodView/MealView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/layout/Navigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Navigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/training/trainingData/TrainingInformation.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/REST.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/REST.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/URLHelper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/URLHelper.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,6 +133,13 @@
       <workItem from="1715692989443" duration="1914000" />
       <workItem from="1715793010371" duration="1289000" />
       <workItem from="1716993434079" duration="1839000" />
+      <workItem from="1718375712826" duration="1196000" />
+      <workItem from="1718636559423" duration="2610000" />
+      <workItem from="1721144159909" duration="613000" />
+      <workItem from="1722268850736" duration="2015000" />
+      <workItem from="1723747758015" duration="409000" />
+      <workItem from="1724168938778" duration="1192000" />
+      <workItem from="1725982437669" duration="2802000" />
     </task>
     <task id="LOCAL-00001" summary="Refactor frontend">
       <option name="closed" value="true" />

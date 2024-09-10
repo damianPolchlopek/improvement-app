@@ -11,7 +11,6 @@ import HomeView from '../home/HomeView';
 import AddTraining from "../training/trainingForm/AddTraining";
 import TrainingsView from "../training/trainingView/TrainingsView";
 import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
-import TrainingInformation from '../training/trainingData/TrainingInformation.js';
 import ShoppingListView from "../shopping/ShoppingListView";
 import MealView from '../food/foodView/MealView.js';
 import AddDietDay from "../food/addDietDay/AddDietDay";
@@ -27,7 +26,6 @@ import {
   TrainingViewUrl, 
   TrainingAddUrl, 
   TrainingStatisticUrl,
-  TrainingInformationUrl,
   FoodViewUrl,
   FoodAddUrl,
   CalculateIngredientsUrl,
@@ -80,7 +78,6 @@ export default function Layout(props) {
             <Route path={TrainingViewUrl} exact component={TrainingsView} />
             <Route path={TrainingAddUrl} exact component={AddTraining} />
             <Route path={TrainingStatisticUrl} exact component={TrainingStatistic} />
-            <Route path={TrainingInformationUrl} exact component={TrainingInformation} />
 
             <Route path={FoodViewUrl} exact component={MealView} />
             <Route path={FoodAddUrl} exact component={AddDietDay} />
