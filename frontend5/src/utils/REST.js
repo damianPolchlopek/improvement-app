@@ -116,10 +116,6 @@ export default class REST {
         return get(serverUrl + drive + 'initFoodModule');
     }
 
-    static getAllProducts() {
-        return get(serverUrl + food + 'getProducts');
-    }
-
     static getProductFiltredByCategoryAndName(productCategory, productName) {
         return get(serverUrl + food + 'product?productCategory=' + productCategory + "&productName=" + productName);
     }
@@ -153,6 +149,11 @@ export default class REST {
     static checkProduct(selectedMeals) {
         return post(serverUrl + food + 'diet/sum-product', selectedMeals);
     }
+
+    static getDietSummaries(page, size) {
+        return get(serverUrl + food + 'diet/day-summary?page=' + page + '&size=' + size);
+    }
+
 
 
     // Shopping module

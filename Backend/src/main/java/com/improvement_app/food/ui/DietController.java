@@ -5,10 +5,11 @@ import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -19,6 +20,18 @@ import java.util.List;
 public class DietController {
 
     private final DietSummaryService dietSummaryService;
+
+    @GetMapping("/day-summary")
+    public Page<DietSummary> getDayDietSummary(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "date") String sortField,
+            @RequestParam(defaultValue = "DESC") String direction) {
+
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by(Sort.Direction.valueOf(direction), sortField));
+        return dietSummaryService.getDietSummaries(pageable);
+    }
 
     @PostMapping("/calculate")
     public Response getMealCategories(@RequestBody List<Long> ids) {

@@ -52,8 +52,8 @@ export default function MealView() {
   const [mealCategoryList, setMealCategoryList] = React.useState([]);
   const [mealTypeList, setMealTypeList] = React.useState([]);
 
-  const [mealCategory, setMealCategory] = React.useState('All');
-  const [mealType, setMealType] = React.useState('All');
+  const [mealCategory, setMealCategory] = React.useState('ALL');
+  const [mealType, setMealType] = React.useState('ALL');
 
   useEffect(() => {
     REST.getMealList(mealCategory, mealType, mealName).then(response => {
