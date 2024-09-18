@@ -7,9 +7,7 @@ import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.food.ui.dto.MealDto;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,7 +47,9 @@ public class MealController {
 
     @GetMapping("/meal/categories")
     public Response getMealCategories() {
-        return Response.ok(Arrays.stream(MealCategory.values()).map(MealCategory::getName).toArray()).build();
+        return Response.ok(Arrays.stream(MealCategory.values())
+                        .map(MealCategory::getName).toArray())
+                .build();
     }
 
     @GetMapping("/meal/types")

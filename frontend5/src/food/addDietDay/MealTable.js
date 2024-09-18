@@ -28,22 +28,10 @@ function Row(props) {
   }, []);
 
   const refreshMeals = () => {
-    REST.getMealList(translateFunction(row), 'ALL', '', props.mealPopularity, 'category')
+    REST.getMealList(row, 'ALL', '', props.mealPopularity, 'category')
       .then(response => {
         setMealList(response.entity);
       });
-  }
-
-  const translateFunction = (arg) => {
-    const categoryTranslation = new Map([
-      ['ALL', 'All'],
-      ['LUNCH', 'Obiad'],
-      ['BREAKFAST', 'Śniadanie'],
-      ['HOT_DISH', 'Ciepły Posiłek'],
-      ['DINNER', 'Kolacja'],
-    ]);
-
-    return categoryTranslation.get(arg);
   }
 
   return (
@@ -116,10 +104,11 @@ const rows = [
   'LUNCH',
   'HOT_DISH',
   'DINNER',
+  'SWEETS',
   'OTHER'
 ];
 
-function MyToolbar(props) {
+function MealFilter(props) {
 
   return (
     <Toolbar>
@@ -146,7 +135,7 @@ export default function MealTable(props) {
 
   return (
     <Paper style={{ minWidth: '700px' }}>
-      <MyToolbar
+      <MealFilter
         mealPopularity={mealPopularity}
         setMealPopularity={setMealPopularity}
       />

@@ -14,7 +14,7 @@ import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics'
 import ShoppingListView from "../shopping/ShoppingListView";
 import MealView from '../food/foodView/MealView.js';
 import AddDietDay from "../food/addDietDay/AddDietDay";
-import CalculateIngredientsView from "../food/CalculateIngredientsView";
+import DietStatisticView from "../food/statistic/DietStatisticView";
 import ProductView from '../food/ProductView.js';
 import WeeklyListView from '../other/weekly/WeeklyListView.js';
 import DailyView from '../other/daily/DailyView.js';
@@ -81,7 +81,7 @@ export default function Layout(props) {
 
             <Route path={FoodViewUrl} exact component={MealView} />
             <Route path={FoodAddUrl} exact component={AddDietDay} />
-            <Route path={CalculateIngredientsUrl} exact component={CalculateIngredientsView} />
+            <Route path={CalculateIngredientsUrl} exact component={DietStatisticView} />
             <Route path={FoodProductUrl} exact component={ProductView} />
 
             <Route path={ShoppingViewUrl} exact component={ShoppingListView} />
