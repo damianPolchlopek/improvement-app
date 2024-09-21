@@ -6,20 +6,22 @@ import java.util.Map;
 
 @Getter
 public enum MealCategory {
-    ALL("ALL"),
-    BREAKFAST("BREAKFAST"),
-    LUNCH("LUNCH"),
-    HOT_DISH("HOT_DISH"),
-    DINNER("DINNER");
+    ALL("All"),
+    BREAKFAST("Śniadanie"),
+    LUNCH("Obiad"),
+    HOT_DISH("Ciepły Posiłek"),
+    SWEETS("Słodycze"),
+    DINNER("Kolacja");
 
     final String name;
 
     static final Map<String, MealCategory> TYPE_DEFINITION = Map.of(
-            "ALL", MealCategory.ALL,
-            "LUNCH", MealCategory.LUNCH,
-            "BREAKFAST", MealCategory.BREAKFAST,
-            "HOT_DISH", MealCategory.HOT_DISH,
-            "DINNER", MealCategory.DINNER
+            "All", MealCategory.ALL,
+            "Obiad", MealCategory.LUNCH,
+            "Śniadanie", MealCategory.BREAKFAST,
+            "Ciepły Posiłek", MealCategory.HOT_DISH,
+            "Słodycze", MealCategory.SWEETS,
+            "Kolacja", MealCategory.DINNER
     );
 
     MealCategory(String name) {

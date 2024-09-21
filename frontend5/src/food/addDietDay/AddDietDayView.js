@@ -6,12 +6,12 @@ import {
   Button
 } from '@mui/material';
 
-import DaySummary from './DaySummary';
-import MealTable from './MealTable';
+import DaySummary from './MealsDaySummary';
+import MealsTable from './MealsTable';
 
 import Grid from '@mui/material/Unstable_Grid2';
 
-export default function AddDietDay() {
+export default function AddDietDayView() {
   const [dietSummary, setDietSummary] = useState({kcal: 0, protein: 0, carbohydrates: 0, fat: 0});
   const [selected, setSelected] = React.useState([]);
 
@@ -67,7 +67,7 @@ export default function AddDietDay() {
         </Grid>
 
         <Grid xs={12}>
-          <MealTable
+          <MealsTable
             isSelected={isSelected}
             handleClick={handleAddMealToDiet}
           />

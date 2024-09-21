@@ -2,6 +2,8 @@ import * as React from 'react';
 import {useEffect, useState} from "react";
 import REST from "../../utils/REST";
 
+import MealFilter from "./mealTableComponent/MealFilter";
+
 import {
   Collapse,
   IconButton,
@@ -12,7 +14,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Checkbox, Typography, Toolbar, MenuItem, Select
+  Checkbox
 } from '@mui/material';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -28,10 +30,34 @@ function Row(props) {
   }, []);
 
   const refreshMeals = () => {
-    REST.getMealList(row, 'ALL', '', props.mealPopularity, 'category')
+    REST.getMealList(translateMealCategory(row), 'ALL', '',
+                      translateMealPopularity(props.mealPopularity), 'category')
       .then(response => {
         setMealList(response.entity);
       });
+  }
+
+  const translateMealCategory = (arg) => {
+    const categoryTranslation = new Map([
+      ['ALL', 'All'],
+      ['LUNCH', 'Obiad'],
+      ['BREAKFAST', 'Śniadanie'],
+      ['HOT_DISH', 'Ciepły Posiłek'],
+      ['SWEETS', 'Słodycze'],
+      ['DINNER', 'Kolacja'],
+    ]);
+
+    return categoryTranslation.get(arg);
+  }
+
+  const translateMealPopularity = (arg) => {
+    const categoryTranslation = new Map([
+      ['ALL', 'All'],
+      ['HIGH', 'Wysoka'],
+      ['LOW', 'Niska']
+    ]);
+
+    return categoryTranslation.get(arg);
   }
 
   return (
@@ -108,29 +134,7 @@ const rows = [
   'OTHER'
 ];
 
-function MealFilter(props) {
-
-  return (
-    <Toolbar>
-        <Typography
-          sx={{ align: 'left' }}
-        >
-          Meal Popularity
-        </Typography>
-
-      <Select
-        onChange={(e => props.setMealPopularity(e.target.value))}
-        defaultValue="HIGH"
-      >
-        <MenuItem value="ALL">ALL</MenuItem>
-        <MenuItem value="HIGH">Popular</MenuItem>
-        <MenuItem value="LOW">Rare</MenuItem>
-      </Select>
-    </Toolbar>
-  );
-}
-
-export default function MealTable(props) {
+export default function MealsTable(props) {
   const [mealPopularity, setMealPopularity] = React.useState('HIGH');
 
   return (

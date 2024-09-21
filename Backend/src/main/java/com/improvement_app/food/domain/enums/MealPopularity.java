@@ -6,15 +6,15 @@ import java.util.Map;
 
 @Getter
 public enum MealPopularity {
-    HIGH("HIGH"),
-    LOW("LOW"),
+    HIGH("Wysoka"),
+    LOW("Niska"),
     ALL("ALL");
 
     final String name;
 
     static final Map<String, MealPopularity> TYPE_DEFINITION = Map.of(
-            "HIGH", MealPopularity.HIGH,
-            "LOW", MealPopularity.LOW
+            "Wysoka", MealPopularity.HIGH,
+            "Niska", MealPopularity.LOW
     );
 
     MealPopularity(String name) {
