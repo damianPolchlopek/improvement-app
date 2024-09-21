@@ -2,6 +2,7 @@ package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.MealService;
 import com.improvement_app.food.application.ProductService;
+import com.improvement_app.food.application.SweetsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
@@ -18,6 +19,7 @@ import java.io.IOException;
 public class GoogleDriveFoodController {
     private final MealService mealService;
     private final ProductService productService;
+    private final SweetsService sweetsService;
 
     @GetMapping("/initFoodModule")
     public void initProducts() throws IOException {
@@ -27,6 +29,8 @@ public class GoogleDriveFoodController {
 
         mealService.deleteAll();
         mealService.initMeals();
+
+        sweetsService.initSweets();
     }
 
 }

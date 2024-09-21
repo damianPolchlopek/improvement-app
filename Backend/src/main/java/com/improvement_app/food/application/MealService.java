@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.improvement_app.food.FoodModuleVariables.RECIPES_SHEET_NAME;
+import static com.improvement_app.food.FoodModuleVariables.SWEETS_SHEET_NAME;
 
 @Slf4j
 @Service
@@ -38,6 +39,8 @@ public class MealService {
 
         return meals;
     }
+
+
 
     public List<Meal> getMeals(MealCategory mealCategory,
                                MealType mealType,
@@ -78,4 +81,5 @@ public class MealService {
     public List<Meal> findAllById(List<Long> ids) {
         return mealHandler.findAllById(ids);
     }
+
 }
