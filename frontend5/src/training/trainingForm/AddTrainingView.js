@@ -15,7 +15,7 @@ import {
 import Grid from '@mui/material/Unstable_Grid2';
 
 
-export default function AddTraining(props) {
+export default function AddTrainingView(props) {
   const [exercises, setExercises] = useState([]);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
@@ -57,6 +57,10 @@ export default function AddTraining(props) {
               <MenuItem value="C">Hipertroficzny C</MenuItem>
               <MenuItem value="D">Hipertroficzny D</MenuItem>
               <MenuItem value="E">Basen</MenuItem>
+              <MenuItem value="A1">Siłowy A1</MenuItem>
+              <MenuItem value="B1">Siłowy B1</MenuItem>
+              <MenuItem value="C1">Hipertroficzny C1</MenuItem>
+              <MenuItem value="D1">Hipertroficzny D1</MenuItem>
             </Select>
           </FormControl>
         </Grid>

@@ -8,7 +8,7 @@ import Header from './Header.js';
 import {BrowserRouter, Route} from "react-router-dom";
 
 import HomeView from '../home/HomeView';
-import AddTraining from "../training/trainingForm/AddTraining";
+import AddTrainingView from "../training/trainingForm/AddTrainingView";
 import TrainingsView from "../training/trainingView/TrainingsView";
 import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
 import ShoppingListView from "../shopping/ShoppingListView";
@@ -76,7 +76,7 @@ export default function Layout(props) {
             <Route path={HomeViewUrl} exact component={HomeView} />
             
             <Route path={TrainingViewUrl} exact component={TrainingsView} />
-            <Route path={TrainingAddUrl} exact component={AddTraining} />
+            <Route path={TrainingAddUrl} exact component={AddTrainingView} />
             <Route path={TrainingStatisticUrl} exact component={TrainingStatistic} />
 
             <Route path={FoodViewUrl} exact component={MealView} />
