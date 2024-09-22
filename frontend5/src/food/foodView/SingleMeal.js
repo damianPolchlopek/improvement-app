@@ -10,12 +10,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tabs,
-  Typography,
+  Tabs, Typography,
 } from '@mui/material';
-
-import PropTypes from 'prop-types';
-
 
 function TabPanel(props) {
   const {children, value, index, ...other} = props;
@@ -29,26 +25,18 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{p: 3}}>
-          <Typography>{children}</Typography>
+        <Box>
+          {children}
         </Box>
       )}
     </div>
   );
 }
 
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `full-width-tab-${index}`,
-    'aria-controls': `full-width-tabpanel-${index}`,
-  };
-}
+const a11yProps = (index) => ({
+  id: `full-width-tab-${index}`,
+  'aria-controls': `full-width-tabpanel-${index}`,
+});
 
 export default function SingleMeal(props) {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -57,60 +45,61 @@ export default function SingleMeal(props) {
     setTabIndex(newValue);
   };
 
+  const tabs = ['Summary', 'Products', 'Recipes'];
+
   return (
-    <React.Fragment>
       <Item>
-        <Box>
-          <Tabs
-            value={tabIndex}
-            onChange={handleTabIndexChange}
-            indicatorColor="secondary"
-            textColor="inherit"
-            variant="fullWidth"
-            aria-label="full width tabs example"
-          >
-            <Tab label="Sumary" {...a11yProps(0)} />
-            <Tab label="Products" {...a11yProps(0)} />
-            <Tab label="Recipes" {...a11yProps(0)} />
-          </Tabs>
+        <Tabs
+          value={tabIndex}
+          onChange={handleTabIndexChange}
+          indicatorColor="secondary"
+          textColor="inherit"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+        >
+          {tabs.map((label, index) => (
+            <Tab key={index} label={label} {...a11yProps(index)} />
+          ))}
+        </Tabs>
 
-          <TabPanel value={tabIndex} index={0}>
-            <Table>
-              <TableBody>
-                <TableRow>
-                  <TableCell variant="head">Name</TableCell>
-                  <TableCell>{props.meal.name}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell variant="head">Kcal</TableCell>
-                  <TableCell>{props.meal.kcal}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell variant="head">Protein</TableCell>
-                  <TableCell>{props.meal.protein}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell variant="head">Carbo</TableCell>
-                  <TableCell>{props.meal.carbohydrates}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell variant="head">Fat</TableCell>
-                  <TableCell>{props.meal.fat}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell variant="head">Portion amount</TableCell>
-                  <TableCell>{props.meal.portionAmount}</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell variant="head">URL</TableCell>
-                  <TableCell>{props.meal.url}</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+        <TabPanel value={tabIndex} index={0}>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell variant="head">Name</TableCell>
+                <TableCell>{props.meal.name}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell variant="head">Kcal</TableCell>
+                <TableCell>{props.meal.kcal}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell variant="head">Protein</TableCell>
+                <TableCell>{props.meal.protein}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell variant="head">Carbo</TableCell>
+                <TableCell>{props.meal.carbohydrates}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell variant="head">Fat</TableCell>
+                <TableCell>{props.meal.fat}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell variant="head">Portion amount</TableCell>
+                <TableCell>{props.meal.portionAmount}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell variant="head">URL</TableCell>
+                <TableCell>{props.meal.url}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
 
-          </TabPanel>
+        </TabPanel>
 
-          <TabPanel value={tabIndex} index={1}>
+        <TabPanel value={tabIndex} index={1}>
+          {props.meal.mealIngredients > 0 ? (
             <TableContainer>
               <Table>
                 <TableHead>
@@ -122,7 +111,7 @@ export default function SingleMeal(props) {
                 </TableHead>
 
                 <TableBody>
-                  {props.meal.mealIngredients.map((ingredient, index) =>
+                  {props.meal.mealIngredients?.map((ingredient, index) =>
                     <TableRow
                       key={index}
                       sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -130,20 +119,23 @@ export default function SingleMeal(props) {
                       <TableCell>{ingredient.name}</TableCell>
                       <TableCell>{ingredient.amount}</TableCell>
                       <TableCell>{ingredient.unit}</TableCell>
-                    </TableRow>
-                  )}
+                    </TableRow>)}
                 </TableBody>
               </Table>
             </TableContainer>
-          </TabPanel>
+          ): (
+            <Typography>No products available</Typography>
+          )}
+        </TabPanel>
 
-          <TabPanel value={tabIndex} index={2}>
-            {props.meal.recipe.map(((recipeRow, index) =>
-              <div key={index} textAlign="left">{recipeRow}</div>))}
-          </TabPanel>
-        </Box>
+        <TabPanel value={tabIndex} index={2}>
+          {props.meal.recipe?.length > 0 ? (
+            props.meal.recipe.map((recipeRow, index) => <div key={index}>{recipeRow}</div>)
+          ) : (
+            <Typography>No recipes available</Typography>
+          )}
+        </TabPanel>
 
       </Item>
-    </React.Fragment>
   );
 }

@@ -116,6 +116,18 @@ public class ExerciseService {
         if ("D".equals(trainingType))
             return "Hipertroficzny#1-D";
 
+        if ("A1".equals(trainingType))
+            return "Siłowy#1-A1";
+
+        if ("B1".equals(trainingType))
+            return "Siłowy#1-B1";
+
+        if ("C1".equals(trainingType))
+            return "Hipertroficzny#1-C1";
+
+        if ("D1".equals(trainingType))
+            return "Hipertroficzny#1-D1";
+
         if ("E".equals(trainingType))
             return "Basen#1-E";
 

@@ -5,23 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c07b73d-832a-4f66-8daf-d1cba1683d49" name="Changes" comment="Refactor frontend">
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/SweetsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/ports/SweetsGoogleDriveHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/adapters/SweetsGoogleDriveHandlerImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/infrastructure/googledrivefileparser/SweetsParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/food/addDietDay/mealTableComponent/MealFilter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/FoodModuleVariables.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/FoodModuleVariables.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/MealService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/application/MealService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealCategory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealCategory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealPopularity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealPopularity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealType.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/domain/enums/MealType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/GoogleDriveFoodController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Backend/src/main/java/com/improvement_app/food/ui/GoogleDriveFoodController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/food/addDietDay/AddDietDay.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/addDietDay/AddDietDayView.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/food/addDietDay/DaySummary.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/addDietDay/MealsDaySummary.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/food/addDietDay/MealTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/addDietDay/MealsTable.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/food/foodView/MealView.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/foodView/MealView.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/food/foodView/SingleMeal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/food/foodView/SingleMeal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/layout/Layout.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/layout/Layout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/training/trainingForm/AddTraining.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/training/trainingForm/AddTrainingView.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,22 +36,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;AddSweetsToFoodAddView&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Aplikacja_Webowa/improvement-app/frontend5/src/food&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2023.2.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "AddFlexibleAddingNewTraining",
+    "last_opened_file_path": "D:/Aplikacja_Webowa/improvement-app/frontend5/src/food",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2023.2.2\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Aplikacja_Webowa\improvement-app\frontend5\src\food" />
@@ -155,7 +142,7 @@
       <workItem from="1725982437669" duration="4997000" />
       <workItem from="1726063314644" duration="24576000" />
       <workItem from="1726776195341" duration="616000" />
-      <workItem from="1726857270292" duration="2543000" />
+      <workItem from="1726857270292" duration="7668000" />
     </task>
     <task id="LOCAL-00001" summary="Refactor frontend">
       <option name="closed" value="true" />
