@@ -8,13 +8,9 @@ export default function DietStatisticTableRow(props) {
 
   return (
     <React.Fragment>
-      <TableRow onClick={() => { setOpen(!open);}}>
-
+      <TableRow onClick={() => setOpen(prev => !prev)}>
         <TableCell sx={{width: '50px'}} >
-          <IconButton
-            aria-label="expand row"
-            size="small"
-          >
+          <IconButton aria-label="expand row" size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell >
@@ -27,7 +23,7 @@ export default function DietStatisticTableRow(props) {
       </TableRow>
 
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse
             in={open}
             timeout="auto"
@@ -45,10 +41,9 @@ export default function DietStatisticTableRow(props) {
               </TableHead>
               <TableBody>
                 {props.mealsFromDay.map((meal) => {
-
                   return (
                     <TableRow
-                      key={meal.name}
+                      key={meal.id}
                     >
                       <TableCell>{meal.name}</TableCell>
                       <TableCell>{meal.kcal}</TableCell>

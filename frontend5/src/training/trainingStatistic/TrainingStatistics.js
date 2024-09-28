@@ -29,7 +29,7 @@ function formatXAxis(tickItem) {
 export default function TrainingStatistic() {
   const [exercises, setExercises] = useState();
 
-  const [exerciseNames, setExerciseNames] = useState('Bieżnia');
+  const [exerciseNames, setExerciseNames] = useState([]);
   const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
 
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
@@ -38,18 +38,17 @@ export default function TrainingStatistic() {
   const [endDate, setEndDate] = React.useState(moment().add(1, 'day').valueOf());
 
   useEffect(() => {
+    REST.getExerciseNames().then(response => {
+      const exeNames = response.content.map(r => r.name)
+      setExerciseNames(exeNames);
+    });
+
+  }, []);
+
+  useEffect(() => {
     REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
       setExercises(response)
-    });
-
-    REST.getExerciseNames().then(response => {
-      console.log('Exe names: ')
-      console.log(response.content)
-      const exeNames = response.content.map(r => r.name)
-      console.log(exeNames)
-
-      setExerciseNames(exeNames);
     });
 
   }, [beginDate, endDate, selectedChartType, selectedExerciseName]);
@@ -57,38 +56,18 @@ export default function TrainingStatistic() {
 
   const handleExerciseNameChange = (event, newValue) => {
     setSelectedExerciseName(newValue);
-
-    REST.getTrainingStatistic(newValue, selectedChartType,
-      formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-      setExercises(response.entity)
-    });
   };
 
   const handleChartTypeChange = (event) => {
     setSelectedChartType(event.target.value);
-
-    REST.getTrainingStatistic(selectedExerciseName, event.target.value,
-      formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-      setExercises(response.entity)
-    });
   };
 
   const handleChangeBeginDate = (newValue) => {
     setBeginDate(newValue.$d);
-
-    REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
-      formatXAxis(newValue.$d), formatXAxis(endDate)).then(response => {
-      setExercises(response.entity)
-    });
   };
 
   const handleChangeEndDate = (newValue) => {
     setEndDate(newValue.$d);
-
-    REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
-      formatXAxis(beginDate), formatXAxis(newValue.$d)).then(response => {
-      setExercises(response.entity)
-    });
   };
 
   return (
@@ -102,14 +81,12 @@ export default function TrainingStatistic() {
       >
         <Grid xs={12}>
           <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-            {Array.isArray(exerciseNames) ?
+            {exerciseNames.length > 0 ?
               <Autocomplete
                 disableClearable
                 id="combo-box-demo"
                 defaultValue="Bieżnia"
                 options={exerciseNames}
-                // value={selectedExerciseName}
-                // value="Bieżnia"
                 onChange={handleExerciseNameChange}
                 renderInput={(params) => <TextField {...params} label="Exercise Name"/>}
               />
@@ -151,13 +128,12 @@ export default function TrainingStatistic() {
         </Grid>
       </Grid>
 
-      {exercises ?
+      {exercises &&
         <ExerciseChart
           exercises={exercises}
           beginDate={beginDate}
           endDate={endDate}
-        />
-        : null}
+        />}
 
     </React.Fragment>
   );

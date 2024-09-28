@@ -15,7 +15,7 @@ import ShoppingListView from "../shopping/ShoppingListView";
 import MealView from '../food/foodView/MealView.js';
 import AddDietDayView from "../food/addDietDay/AddDietDayView";
 import DietStatisticView from "../food/statistic/DietStatisticView";
-import ProductView from '../food/ProductView.js';
+import ProductView from '../food/ProductView/ProductView.js';
 import WeeklyListView from '../other/weekly/WeeklyListView.js';
 import DailyView from '../other/daily/DailyView.js';
 import FinanceView from '../finance/view/FinanceView.js';

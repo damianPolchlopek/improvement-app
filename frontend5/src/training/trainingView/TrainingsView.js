@@ -3,6 +3,7 @@ import REST from '../../utils/REST';
 import SingleTraining from './SingleTraining';
 
 import {
+  CircularProgress,
   Container,
   List,
   Typography
@@ -10,37 +11,35 @@ import {
 
 
 export default function TrainingsView() {
-  const [trainingNames, setTrainingNames] = useState(null);
+  const [trainingNames, setTrainingNames] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    REST.getAllTrainingNames().then(response => {
-      console.log(response)
-      setTrainingNames(response.content);
-    });
+    REST.getAllTrainingNames()
+      .then(response => {
+        setTrainingNames(response.content);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Failed to fetch training names', error);
+        setLoading(false);
+      });
   }, []);
 
   return (
     <React.Fragment>
-      {trainingNames ?
-
-        <Container maxWidth="xl" sx={{width: '70%'}}>
-          <Typography variant="h4" component="div" style={{color: 'white'}}>
+        <Container maxWidth="xl" sx={{ width: '70%' }}>
+          <Typography variant="h4" component="div" style={{ color: 'white' }}>
             Training View
           </Typography>
 
-          <List>
-            {trainingNames.map((trainingName) => {
-              return (
-                <SingleTraining
-                  key={trainingName}
-                  trainingName={trainingName}
-                />
-              );
-            })}
-          </List>
-
-        </Container> : null}
+          {loading ? <CircularProgress /> :
+            <List>
+              {trainingNames.map((trainingName) => (
+                <SingleTraining key={trainingName} trainingName={trainingName} />
+              ))}
+            </List>}
+        </Container>
     </React.Fragment>
   );
-
 }

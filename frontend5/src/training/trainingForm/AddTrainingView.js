@@ -23,16 +23,20 @@ export default function AddTrainingView(props) {
   function loadLastTraining() {
     setExercises([]);
 
-    REST.getTrainingTemplateByType(trainingType).then(response => {
+    REST.getTrainingTemplateByType(trainingType)
+    .then(response => {
       setExercises(response.content);
-    });
+    })
+    .catch(error => console.error("Error loading training:", error));
   }
 
   function addTraining() {
-    REST.addTraining(exercises).then(response => {
+    REST.addTraining(exercises)
+    .then(response => {
       props.history.push('/add-training')
       window.location.reload(false)
-    });
+    })
+    .catch(error => console.error("Error adding training:", error));
   }
 
   return (

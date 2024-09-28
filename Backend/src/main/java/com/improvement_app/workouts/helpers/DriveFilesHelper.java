@@ -138,7 +138,7 @@ public class DriveFilesHelper {
         if (exerciseType.contains(STRENGTH_TRAINING_NAME)) {
             return new StrengthExercise(reps, weight);
         } else if (exerciseType.contains(HYPERTROPHIED_TRAINING_NAME)) {
-            return new HypertrophicExercise(reps, weight);
+            return new StrengthExercise(reps, weight);
         } else if (exerciseType.contains(CARDIO_TRAINING_NAME)) {
             return new CardioExercise(reps, weight);
         } else if (exerciseType.contains(SWIMMING_POOL_TRAINING_NAME)) {
