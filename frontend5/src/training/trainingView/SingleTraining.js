@@ -18,12 +18,16 @@ import {
 export default function SingleTraining(props) {
   const [exercises, setExercises] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [dataFetched, setDataFetched] = useState(false);
 
   const handleClick = () => {
     setOpen(!open);
-
-    getExercisesByTrainingName(props.trainingName);
+    if (!dataFetched) {
+      getExercisesByTrainingName(props.trainingName);
+      setDataFetched(true);
+    }
   };
+
 
   function getExercisesByTrainingName(trainingName) {
     trainingName = trainingName.replace(/ /g, "_");
@@ -52,7 +56,7 @@ export default function SingleTraining(props) {
         disablePadding
         onClick={() => handleClick()}
       >
-        <ListItemButton role={undefined} onClick={() => handleClick()} dense>
+        <ListItemButton role={undefined} dense>
           <ListItemText id={props.trainingName} primary={props.trainingName}/>
         </ListItemButton>
 
@@ -71,7 +75,7 @@ export default function SingleTraining(props) {
             </TableHead>
 
             <TableBody>
-              {exercises ? exercises.map((exercise) => (
+              {exercises.map((exercise) => (
                 <TableRow
                   key={exercise.name}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -85,7 +89,7 @@ export default function SingleTraining(props) {
                   <TableCell align="right">{exercise.reps}</TableCell>
                   <TableCell align="right">{exercise.weight}</TableCell>
                 </TableRow>
-              )) : null}
+              ))}
             </TableBody>
           </Table>
         </TableContainer>

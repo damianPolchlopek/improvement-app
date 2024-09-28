@@ -26,39 +26,39 @@ function Row(props) {
   const [mealList, setMealList] = useState([]);
 
   useEffect(() => {
-    refreshMeals();
+    if (!mealList.length) {
+      refreshMeals();
+    }
   }, []);
 
   const refreshMeals = () => {
     REST.getMealList(translateMealCategory(row), 'ALL', '',
-                      translateMealPopularity(props.mealPopularity), 'category')
+      translateMealPopularity(props.mealPopularity), 'category')
       .then(response => {
         setMealList(response.entity);
+      })
+      .catch(error => {
+        console.error("Error fetching meals:", error);
       });
-  }
+  };
 
-  const translateMealCategory = (arg) => {
-    const categoryTranslation = new Map([
-      ['ALL', 'All'],
-      ['LUNCH', 'Obiad'],
-      ['BREAKFAST', 'Śniadanie'],
-      ['HOT_DISH', 'Ciepły Posiłek'],
-      ['SWEETS', 'Słodycze'],
-      ['DINNER', 'Kolacja'],
-    ]);
+  const categoryTranslation = new Map([
+    ['ALL', 'All'],
+    ['LUNCH', 'Obiad'],
+    ['BREAKFAST', 'Śniadanie'],
+    ['HOT_DISH', 'Ciepły Posiłek'],
+    ['SWEETS', 'Słodycze'],
+    ['DINNER', 'Kolacja'],
+  ]);
 
-    return categoryTranslation.get(arg);
-  }
+  const popularityTranslation = new Map([
+    ['ALL', 'All'],
+    ['HIGH', 'Wysoka'],
+    ['LOW', 'Niska'],
+  ]);
 
-  const translateMealPopularity = (arg) => {
-    const categoryTranslation = new Map([
-      ['ALL', 'All'],
-      ['HIGH', 'Wysoka'],
-      ['LOW', 'Niska']
-    ]);
-
-    return categoryTranslation.get(arg);
-  }
+  const translateMealCategory = (arg) => categoryTranslation.get(arg);
+  const translateMealPopularity = (arg) => popularityTranslation.get(arg);
 
   return (
     <React.Fragment>
@@ -76,7 +76,7 @@ function Row(props) {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse
             in={open}
             timeout="auto"
@@ -138,19 +138,19 @@ export default function MealsTable(props) {
   const [mealPopularity, setMealPopularity] = React.useState('HIGH');
 
   return (
-    <Paper style={{ minWidth: '700px' }}>
+    <Paper sx={{ minWidth: 700 }}>
       <MealFilter
         mealPopularity={mealPopularity}
         setMealPopularity={setMealPopularity}
       />
       <TableContainer>
-        <Table aria-label="collapsible table" style={{ minWidth: '700px' }}>
+        <Table aria-label="collapsible table" sx={{ minWidth: 700 }}>
           <TableBody>
             {rows.map((row) => (
               <Row
                 key={row}
                 row={row}
-                style={{textAlign: 'left'}}
+                sx={{textAlign: 'left'}}
                 isSelected={props.isSelected}
                 handleClick={props.handleClick}
                 mealPopularity={mealPopularity}

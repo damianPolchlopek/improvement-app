@@ -17,38 +17,40 @@ export default function AddDietDayView() {
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
-  const handleAddMealToDiet = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
+  const handleAddMealToDiet = React.useCallback((event, id) => {
+    const newSelected = new Set(selected);
 
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
+    if (newSelected.has(id)) {
+      newSelected.delete(id);
+    } else {
+      newSelected.add(id);
     }
-    setSelected(newSelected);
 
-    handleSelectionModelChange(newSelected);
-  };
+    const newSelectedArray = Array.from(newSelected);
+    setSelected(newSelectedArray);
+
+    handleSelectionModelChange(newSelectedArray);
+  }, [selected]);
 
   const handleSelectionModelChange = (selectionModel) => {
-    REST.calculateDiet(selectionModel).then(response => {
-      setDietSummary(response.entity);
-    });
+    REST.calculateDiet(selectionModel)
+      .then(response => {
+        setDietSummary(response.entity);
+      })
+      .catch(error => {
+        console.error("Error calculating diet:", error);
+      });
   };
 
-  const addDayDietSummary = () => {
-    REST.addDietSummary(selected).then(response => {
-      window.location.reload(false)
-    });
-  };
+  const addDayDietSummary = React.useCallback(() => {
+    REST.addDietSummary(selected)
+      .then(response => {
+        window.location.reload(false);
+      })
+      .catch(error => {
+        console.error("Error adding diet summary:", error);
+      });
+  }, [selected]);
 
   return (
     <CenteredContainer>

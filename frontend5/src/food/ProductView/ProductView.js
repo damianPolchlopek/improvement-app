@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import REST from '../utils/REST';
-import CenteredContainer from '../component/CenteredContainer';
+import REST from '../../utils/REST';
+import CenteredContainer from '../../component/CenteredContainer';
 
 import PropTypes from 'prop-types';
 
 import {
-  Box,
+  Box, Paper,
   Tab,
   Table,
   TableBody,
@@ -64,14 +64,17 @@ export default function ProductView() {
   useEffect(() => {
     REST.getProductCategoryList().then(response => {
       setProductCategoryList(response.entity);
-      handleClickOnTab(response.entity[0]);
+      if (response.entity.length > 0) {
+        handleClickOnTab(response.entity[0]);
+      }
     });
+  }, []);
 
+  useEffect(() => {
     REST.getProductFiltredByCategoryAndName(category, typedProductName).then(response => {
       setProductList(response.entity);
     });
-
-  }, []);
+  }, [category, typedProductName]);
 
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -113,6 +116,7 @@ export default function ProductView() {
         </Grid>
 
         <Grid xs={12}>
+          <Paper>
           <Tabs
             value={tabIndex}
             onChange={handleChange}
@@ -121,14 +125,14 @@ export default function ProductView() {
             variant="fullWidth"
             aria-label="full width tabs example"
           >
-            {productCategoryList ? productCategoryList.map((productCategory, index) =>
+            {productCategoryList.map((productCategory, index) =>
               <Tab
                 key={index}
                 label={productCategory}
                 {...a11yProps(0)}
                 onClick={() => handleClickOnTab(productCategoryList[index])}
               />
-            ) : null}
+            )}
           </Tabs>
 
           {productCategoryList.map((productCategory, index) =>
@@ -150,7 +154,7 @@ export default function ProductView() {
                   <TableBody>
                     {productList ? productList.map(product => {
                       return <TableRow
-                        key={product.name}
+                        key={product.id}
                         sx={{'&:last-child td, &:last-child th': {border: 0}}}
                       >
                         <TableCell>{product.name}</TableCell>
@@ -168,7 +172,9 @@ export default function ProductView() {
               </TableContainer>
             </TabPanel>
           )}
+          </Paper>
         </Grid>
+
 
       </Grid>
     </CenteredContainer>

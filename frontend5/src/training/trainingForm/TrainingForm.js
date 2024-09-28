@@ -16,7 +16,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 
 export default function TrainingForm(props) {
   const [exercisesFields, setExercisesFields] = useState([
-    {type: '', place: '', name: '', reps: '', weight: '4/4/4/4', progress: 'Zostawić'},
+    {type: '', place: '', name: '', reps: '', weight: '', progress: ''},
   ])
 
   const [exerciseNames, setExerciseNames] = useState([]);

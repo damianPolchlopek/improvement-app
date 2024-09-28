@@ -20,14 +20,16 @@ public class StrengthExercise implements ExerciseStrategy {
 
     @Override
     public List<RepAndWeight> parseExercise() {
-        final Matcher repsMatcher   = parseString(reps);
-        final Matcher weightMatcher = parseString(weight);
+        validateRepsAndWeight(reps, weight);
+
+        String[] repsArray = reps.split(String.valueOf(SERIES_DELIMITER));
+        String[] weightArray = weight.split(String.valueOf(SERIES_DELIMITER));
 
         List<RepAndWeight> result = new ArrayList<>();
-        final int REPS_AMOUNT = 5;
-        for (int i = 1; i < REPS_AMOUNT + 1; i++) {
-            final String parsedRep      = repsMatcher.group(i);
-            final String parsedWeight   = weightMatcher.group(i);
+
+        for (int i = 0; i < repsArray.length; i++) {
+            final String parsedRep = repsArray[i];
+            final String parsedWeight = weightArray[i];
             final RepAndWeight singleRepAndWeight = new RepAndWeight(
                     Double.parseDouble(parsedRep),
                     Double.parseDouble(parsedWeight));
@@ -36,23 +38,5 @@ public class StrengthExercise implements ExerciseStrategy {
         }
 
         return result;
-    }
-
-    private Matcher parseString(final String stringToParse){
-        final String regex = SINGLE_EXERCISE_REGEX +
-                SINGLE_EXERCISE_REGEX +
-                SINGLE_EXERCISE_REGEX +
-                SINGLE_EXERCISE_REGEX +
-                SINGLE_EXERCISE_REGEX;
-        final Pattern pattern       = Pattern.compile(regex);
-        final Matcher matcher       = pattern.matcher(stringToParse);
-        final boolean isMatchFound  = matcher.find();
-
-        if (!isMatchFound){
-            throw new TrainingRegexNotFoundException("Incorrect string: " + stringToParse
-                    + ", for following regex: " + regex);
-        }
-
-        return matcher;
     }
 }

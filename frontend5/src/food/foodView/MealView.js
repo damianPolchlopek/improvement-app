@@ -56,45 +56,41 @@ export default function MealView() {
   const [mealType, setMealType] = React.useState('All');
 
   useEffect(() => {
-    REST.getMealList(mealCategory, mealType, mealName).then(response => {
-      setMealList(response.entity);
-    });
-
-    REST.getMealCategoryList().then(response => {
-      setMealCategoryList(response.entity);
-    });
-
-    REST.getMealTypeList().then(response => {
-      setMealTypeList(response.entity);
+    Promise.all([
+      REST.getMealCategoryList(),
+      REST.getMealTypeList()
+    ]).then(([categoryResponse, typeResponse]) => {
+      setMealCategoryList(categoryResponse.entity);
+      setMealTypeList(typeResponse.entity);
     });
   }, []);
 
-  const handleMealNameChange = (event) => {
-    console.log(event.target.value);
-    setMealName(event.target.value);
-
-    filterMeals(mealCategory, mealType, event.target.value);
-  };
-
-  const handleMealCategoryChange = (event) => {
-    console.log(event.target.value);
-    setMealCategory(event.target.value);
-
-    filterMeals(event.target.value, mealType, mealName);
-  };
-
-  const handleMealTypeChange = (event) => {
-    console.log(event.target.value);
-    setMealType(event.target.value);
-
-    filterMeals(mealCategory, event.target.value, mealName);
-  };
-
-  const filterMeals = (mealCategory, mealType, mealName) => {
+  useEffect(() => {
     REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name').then(response => {
       setMealList(response.entity);
     });
+  }, [mealCategory, mealType, mealName]);
+
+  const handleChange = (event, field) => {
+    const value = event.target.value;
+
+    switch(field) {
+      case 'mealName':
+        setMealName(value);
+        break;
+      case 'mealCategory':
+        setMealCategory(value);
+        break;
+      case 'mealType':
+        setMealType(value);
+        break;
+      default:
+        break;
+    }
   };
+
+  const labelIdCategory = "meal-category-select";
+  const labelIdType = "meal-type-select";
 
   return (
     <React.Fragment>
@@ -102,49 +98,47 @@ export default function MealView() {
         <TextField
           sx={{width: '25%'}}
           label="Meal"
-          onChange={handleMealNameChange}
+          onChange={(event) => handleChange(event, 'mealName')}
         />
       </CenteredContainer>
 
-      <Container style={{minHeight: '10vh', display: 'flex', justifyContent: 'center', width: '25%'}}>
+      <Container sx={{minHeight: '10vh', display: 'flex', justifyContent: 'center', width: '25%'}}>
         <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-          <InputLabel id="demo-simple-select-standard-label">Meal Category</InputLabel>
-          {mealCategory ? <Select
-              labelId="demo-simple-select-standard-label"
+          <InputLabel id={labelIdCategory}>Meal Category</InputLabel>
+            <Select
+              labelId={labelIdCategory}
               value={mealCategory}
-              onChange={handleMealCategoryChange}
+              onChange={(event) => handleChange(event, 'mealCategory')}
               label="Meal Category"
             >
-              {mealCategoryList ? mealCategoryList.map((mealCategory, index) =>
+              {mealCategoryList.map((mealCategory, index) =>
                 <MenuItem key={index} value={mealCategory}>{mealCategory}</MenuItem>
-              ) : null}
+              )}
             </Select>
-            : null}
         </FormControl>
 
         <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-          <InputLabel id="demo-simple-select-standard-label">Meal Type</InputLabel>
-          {mealType ? <Select
-              labelId="demo-simple-select-standard-label"
+          <InputLabel id={labelIdType}>Meal Type</InputLabel>
+            <Select
+              labelId={labelIdType}
               value={mealType}
-              onChange={handleMealTypeChange}
+              onChange={(event) => handleChange(event, 'mealType')}
               label="Meal Type"
             >
-              {mealTypeList ? mealTypeList.map((mealType, index) =>
+              {mealTypeList.map((mealType, index) =>
                 <MenuItem key={index} value={mealType}>{mealType}</MenuItem>
-              ) : null}
+              )}
             </Select>
-            : null}
         </FormControl>
       </Container>
 
       <CenteredContainer>
         <Grid container rowSpacing={1} columnSpacing={1} sx={{width: '80%'}}>
-          {mealList ? mealList.map((meal, index) =>
+          {mealList.map((meal, index) =>
             <Grid key={index} xs={6}>
               <SingleMeal meal={meal}/>
             </Grid>
-          ) : null}
+          )}
         </Grid>
       </CenteredContainer>
     </React.Fragment>
