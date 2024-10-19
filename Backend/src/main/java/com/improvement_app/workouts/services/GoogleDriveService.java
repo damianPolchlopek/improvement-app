@@ -40,7 +40,7 @@ public class GoogleDriveService {
     private final TrainingTemplateService trainingTemplateService;
 
     public void initApplicationCategories() {
-        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(DRIVE_CATEGORIES_FOLDER_NAME);
+        final List<DriveFileItemDTO> responseList = googleDriveFileService.listFiles(DRIVE_CATEGORIES_FOLDER_NAME);
 
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
             googleDriveFileService.downloadFile(driveFileItemDTO);
@@ -96,9 +96,9 @@ public class GoogleDriveService {
     }
 
     private List<Exercise> saveAllExercisesToDB(final String folderName) {
-        log.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: %s".formatted(folderName));
+        log.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: {}", folderName);
 
-        final List<DriveFileItemDTO> responseList = googleDriveFileService.getDriveFiles(folderName);
+        final List<DriveFileItemDTO> responseList = googleDriveFileService.listFiles(folderName);
         final List<Exercise> exercises = new ArrayList<>();
         // TODO: sprawdzic czy to mozna usunac (trainingsName)
         final List<String> trainingsName = exerciseService.getAllTrainingNames();
@@ -111,13 +111,14 @@ public class GoogleDriveService {
                 googleDriveFileService.downloadFile(driveFileItemDTOLoop);
                 trainingsName.add(trainingName);
 
-                log.info("(%d/%d) Dodaje do bazy danych trening o nazwie: %s".formatted(i, responseList.size(), trainingName));
+                log.info("({}/{}) Dodaje do bazy danych trening o nazwie: {} ",
+                        i+1, responseList.size(), trainingName);
 
                 File file = filePathService.getDownloadedFile(trainingName);
                 List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
                 exercises.addAll(parsedExercises);
             } else {
-                log.info("Trening o nazwie: %s, juz istnieje w bazie danych".formatted(trainingName));
+                log.info("Trening o nazwie: {}, juz istnieje w bazie danych", trainingName);
             }
         }
 
@@ -134,7 +135,7 @@ public class GoogleDriveService {
 
     public void initApplicationTrainingTemplates() {
         final List<DriveFileItemDTO> responseList
-                = googleDriveFileService.getDriveFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
+                = googleDriveFileService.listFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
 
         List<TrainingTemplate> trainingTemplates = new ArrayList<>();
         for (DriveFileItemDTO driveFileItemDTO : responseList) {
@@ -148,7 +149,7 @@ public class GoogleDriveService {
 
         trainingTemplateService.deleteAllTrainingTemplates();
         List<TrainingTemplate> savedTrainingTemplates = trainingTemplateService.saveAllTrainingTemplates(trainingTemplates);
-        log.info("Zapisane plany cwiczen: " + savedTrainingTemplates);
+        log.info("Zapisane plany cwiczen: {}", savedTrainingTemplates);
     }
 
 }
