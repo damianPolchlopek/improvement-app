@@ -25,7 +25,7 @@ public class MealGoogleDriveHandlerImpl implements MealGoogleDriveHandler {
 
     @Override
     public List<DriveFileItemDTO> findAll(String mealFolder) throws IOException {
-        return googleDriveFileService.getDriveFiles(mealFolder);
+        return googleDriveFileService.listFiles(mealFolder);
     }
 
     @Override

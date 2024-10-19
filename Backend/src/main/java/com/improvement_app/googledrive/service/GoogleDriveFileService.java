@@ -10,6 +10,7 @@ import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.exceptions.GoogleDriveFileNotDownloadedException;
 import com.improvement_app.googledrive.exceptions.TooMuchGoogleDriveFilesException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class GoogleDriveFileService {
@@ -26,7 +28,7 @@ public class GoogleDriveFileService {
     private final Drive drive;
     private final FilePathService filePathService;
 
-    public List<DriveFileItemDTO> getDriveFiles(final String folderName) {
+    public List<DriveFileItemDTO> listFiles(final String folderName) {
         final String folderId = getGoogleDriveObjectId(folderName, MimeType.DRIVE_FOLDER);
 
         final String query = "mimeType='" + MimeType.DRIVE_SHEETS.getType()
@@ -100,6 +102,7 @@ public class GoogleDriveFileService {
             drive.files().export(file.getId(), MimeType.EXCEL.getType())
                     .executeMediaAndDownloadTo(new FileOutputStream(filePath));
         } catch (IOException e) {
+            log.error("Nie udało się pobrać pliku {} z Google Drive: {}", file.getName(), e.getMessage(), e);
             throw new GoogleDriveFileNotDownloadedException(e);
         }
     }
@@ -120,6 +123,7 @@ public class GoogleDriveFileService {
         try {
             drive.files().create(file, content).setFields("id").execute();
         } catch (IOException e) {
+            log.error("Nie udało się przesłać pliku {} do Google Drive: {}", fileName, e.getMessage(), e);
             throw new GoogleDriveRequestException(e);
         }
     }

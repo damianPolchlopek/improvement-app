@@ -40,8 +40,7 @@ public class StatisticService {
         LocalDate beginDateLD = LocalDate.parse(beginDate, formatter);
         LocalDate endDateLD = LocalDate.parse(endDate, formatter);
 
-        List<Exercise> exercises = exerciseService.findByNameOrderByDate(exerciseName)
-                .orElseThrow(() -> new ExercisesNotFoundException("name", exerciseName));
+        List<Exercise> exercises = exerciseService.findByNameOrderByDate(exerciseName);
 
         return exercises.stream()
                 .filter(exercise -> exercise.getDate().isAfter(beginDateLD))

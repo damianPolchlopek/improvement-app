@@ -31,24 +31,20 @@ public class ExerciseService {
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
 
-    public Optional<List<Exercise>> findByDateOrderByIndex(LocalDate date) {
-        List<Exercise> exercises = exerciseRepository.findByDateOrderByIndex(date);
-        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    public List<Exercise> findByDateOrderByIndex(LocalDate date) {
+        return exerciseRepository.findByDateOrderByIndex(date);
     }
 
-    public Optional<List<Exercise>> findByNameReverseSorted(String name) {
-        List<Exercise> exercises = exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.DESC, "date"));
-        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    public List<Exercise> findByNameReverseSorted(String name) {
+        return exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.DESC, "date"));
     }
 
-    public Optional<List<Exercise>> findByNameOrderByDate(String name) {
-        List<Exercise> exercises = exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.ASC, "date"));
-        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    public List<Exercise> findByNameOrderByDate(String name) {
+        return exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.ASC, "date"));
     }
 
-    public Optional<List<Exercise>> findByTrainingNameOrderByIndex(String trainingName) {
-        List<Exercise> exercises = exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
-        return !exercises.isEmpty() ? Optional.of(exercises) : Optional.empty();
+    public List<Exercise> findByTrainingNameOrderByIndex(String trainingName) {
+        return exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
     }
 
     public List<Exercise> saveAll(List<Exercise> exercises) {
@@ -73,91 +69,75 @@ public class ExerciseService {
         exerciseRepository.deleteAll();
     }
 
-
-
-
-
-
-
-
     public List<Exercise> generateTrainingFromTemplate(String trainingType) {
         String convertedTrainingType = convertTrainingTypeToExerciseType(trainingType);
 
-        TrainingTemplate trainingTemplateByName = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType)
+        TrainingTemplate trainingTemplate = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType)
                 .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
-        List<String> templateExercises = trainingTemplateByName.getExercises();
 
         List<Exercise> allExercises = exerciseRepository.findAll();
 
-        return templateExercises.stream()
+        return trainingTemplate.getExercises().stream()
                 .map(exerciseName -> getLatestExercise(exerciseName, allExercises))
                 .toList();
     }
 
     private Exercise getLatestExercise(String exerciseName, List<Exercise> exercises) {
-        return exercises
-                .stream()
+        return exercises.stream()
                 .filter(exercise -> exercise.getName().equals(exerciseName))
                 .max(Comparator.comparing(Exercise::getDate))
-                .orElseGet(() -> new Exercise(exerciseName));
+                .orElseGet(() -> new Exercise(exerciseName)); // Tworzenie nowego ćwiczenia, jeśli brak w historii
     }
 
+    private static final Map<String, String> trainingTypeMap = Map.of(
+            "A", "Siłowy#1-A",
+            "B", "Siłowy#1-B",
+            "C", "Hipertroficzny#1-C",
+            "D", "Hipertroficzny#1-D",
+            "A1", "Siłowy#1-A1",
+            "B1", "Siłowy#1-B1",
+            "C1", "Hipertroficzny#1-C1",
+            "D1", "Hipertroficzny#1-D1",
+            "E", "Basen#1-E"
+    );
+
     private String convertTrainingTypeToExerciseType(String trainingType) {
-
-        if ("A".equals(trainingType))
-            return "Siłowy#1-A";
-
-        if ("B".equals(trainingType))
-            return "Siłowy#1-B";
-
-        if ("C".equals(trainingType))
-            return "Hipertroficzny#1-C";
-
-        if ("D".equals(trainingType))
-            return "Hipertroficzny#1-D";
-
-        if ("A1".equals(trainingType))
-            return "Siłowy#1-A1";
-
-        if ("B1".equals(trainingType))
-            return "Siłowy#1-B1";
-
-        if ("C1".equals(trainingType))
-            return "Hipertroficzny#1-C1";
-
-        if ("D1".equals(trainingType))
-            return "Hipertroficzny#1-D1";
-
-        if ("E".equals(trainingType))
-            return "Basen#1-E";
-
-        return trainingType;
+        return trainingTypeMap.getOrDefault(trainingType, trainingType);
     }
 
     public List<Exercise> addTraining(List<Exercise> exercises) {
         List<Exercise> exercisesFromDb = findAllOrderByDateDesc();
 
-        final String trainingName = DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
+        String trainingName = generateTrainingName(exercises, exercisesFromDb);
+        String excelFileLocation = createTrainingExcelFile(exercises, trainingName);
+        uploadTrainingToGoogleDrive(excelFileLocation, trainingName);
 
-        final String excelFileLocation = filePathService.getExcelPath(trainingName);
-        DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
-
-        final File file = new File(excelFileLocation);
-        googleDriveFileService.uploadFile(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
-
-        List<Exercise> newExercises = fillMissingFieldForExercise(exercises, trainingName);
-        return exerciseRepository.saveAll(newExercises);
+        List<Exercise> filledExercises = fillMissingFieldsForExercises(exercises, trainingName);
+        return exerciseRepository.saveAll(filledExercises);
     }
 
-    private List<Exercise> fillMissingFieldForExercise(List<Exercise> exercises, String trainingName) {
-        List<Exercise> newExercises = new ArrayList<>();
-        for (Exercise exercise : exercises) {
+    private String generateTrainingName(List<Exercise> exercises, List<Exercise> exercisesFromDb) {
+        return DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
+    }
 
-            final ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
+    private String createTrainingExcelFile(List<Exercise> exercises, String trainingName) {
+        String excelFileLocation = filePathService.getExcelPath(trainingName);
+        DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
+        return excelFileLocation;
+    }
+
+    private void uploadTrainingToGoogleDrive(String excelFileLocation, String trainingName) {
+        File file = new File(excelFileLocation);
+        googleDriveFileService.uploadFile(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
+    }
+
+    private List<Exercise> fillMissingFieldsForExercises(List<Exercise> exercises, String trainingName) {
+        return exercises.stream().map(exercise -> {
+            ExerciseStrategy exerciseStrategy = DriveFilesHelper.getExerciseParseStrategy(
                     exercise.getType(), exercise.getReps(), exercise.getWeight());
-            final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
+            List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
 
-            newExercises.add(new Exercise(
+            return new Exercise(
                     exercise.getType(),
                     exercise.getPlace(),
                     exercise.getName(),
@@ -167,11 +147,7 @@ public class ExerciseService {
                     exercise.getReps(),
                     exercise.getWeight(),
                     trainingName,
-                    exercise.getIndex()));
-        }
-
-        return newExercises;
+                    exercise.getIndex());
+        }).collect(Collectors.toList());
     }
-
-
 }

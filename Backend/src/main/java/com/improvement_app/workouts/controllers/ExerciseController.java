@@ -30,26 +30,38 @@ public class ExerciseController implements Serializable {
     @ApiOperation("Get all exercises with provided date")
     @GetMapping(value = "/date/{exerciseDate}", produces = MediaType.APPLICATION_JSON)
     public ListResponse<Exercise> getExercisesByDate(@PathVariable String exerciseDate) {
-        return exerciseService.findByDateOrderByIndex(LocalDate.parse(exerciseDate))
-                .map(ListResponse::of)
-                .orElseThrow(() -> new ExercisesNotFoundException("date", exerciseDate));
+        List<Exercise> exercises = exerciseService.findByDateOrderByIndex(LocalDate.parse(exerciseDate));
+
+        if (exercises.isEmpty()) {
+            throw new ExercisesNotFoundException("date", exerciseDate);
+        }
+
+        return ListResponse.of(exercises);
     }
 
     @ApiOperation("Get all exercises with provided name")
     @GetMapping("/name/{exerciseName}")
     public ListResponse<Exercise> getExercisesByName(@PathVariable String exerciseName) {
-        return exerciseService.findByNameReverseSorted(exerciseName)
-                .map(ListResponse::of)
-                .orElseThrow(() -> new ExercisesNotFoundException("name", exerciseName));
+        List<Exercise> exercises = exerciseService.findByNameReverseSorted(exerciseName);
+
+        if (exercises.isEmpty()) {
+            throw new ExercisesNotFoundException("name", exerciseName);
+        }
+
+        return ListResponse.of(exercises);
     }
 
     @ApiOperation("Get all exercises with provided training name")
     @GetMapping("/trainingName/{trainingName}")
     public ListResponse<Exercise> getExercisesByTrainingName(@PathVariable String trainingName) {
         final String replacedTrainingName = trainingName.replace("_", " ");
-        return exerciseService.findByTrainingNameOrderByIndex(replacedTrainingName)
-                .map(ListResponse::of)
-                .orElseThrow(() -> new ExercisesNotFoundException("trainingName", replacedTrainingName));
+        List<Exercise> exercises = exerciseService.findByTrainingNameOrderByIndex(replacedTrainingName);
+
+        if (exercises.isEmpty()) {
+            throw new ExercisesNotFoundException("trainingName", replacedTrainingName);
+        }
+
+        return ListResponse.of(exercises);
     }
 
     @ApiOperation("Get all training names")
