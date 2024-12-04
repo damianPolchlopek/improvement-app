@@ -1,20 +1,17 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
+import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity.exercisesfields.Name;
 import com.improvement_app.workouts.entity.exercisesfields.Place;
 import com.improvement_app.workouts.entity.exercisesfields.Progress;
 import com.improvement_app.workouts.entity.exercisesfields.Type;
-import com.improvement_app.workouts.services.data.ExerciseNameService;
-import com.improvement_app.workouts.services.data.ExercisePlaceService;
-import com.improvement_app.workouts.services.data.ExerciseProgressService;
-import com.improvement_app.workouts.services.data.ExerciseTypeService;
+import com.improvement_app.workouts.services.data.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @RestController
@@ -26,6 +23,7 @@ public class DictionaryController {
     private final ExercisePlaceService exercisePlaceService;
     private final ExerciseProgressService exerciseProgressService;
     private final ExerciseTypeService exerciseTypeService;
+    private final TrainingTemplateService trainingTemplateService;
 
     @GetMapping("/name")
     public ListResponse<Name> getExerciseNames() {
@@ -49,5 +47,14 @@ public class DictionaryController {
     public ListResponse<Type> getExerciseTypes() {
         List<Type> exerciseTypes = exerciseTypeService.getExerciseTypes();
         return ListResponse.of(exerciseTypes);
+    }
+
+    @ApiOperation("Get training template")
+    @GetMapping(value = "/training/{template}", produces = MediaType.APPLICATION_JSON)
+    public TrainingTemplate getTrainingTemplate(@PathVariable String template) {
+        TrainingTemplate addedTraining = trainingTemplateService.getTrainingTemplate(template)
+                .orElseThrow(() -> new RuntimeException("Training template not found"));
+
+        return addedTraining;
     }
 }

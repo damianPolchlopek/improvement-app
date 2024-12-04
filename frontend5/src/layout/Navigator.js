@@ -37,7 +37,8 @@ import {
   WeeklyViewUrl,
   DailyViewUrl,
   FinanceConfigUrl,
-  FinanceViewUrl
+  FinanceViewUrl,
+  ExerciseViewUrl
 } from "../utils/URLHelper";
 
 const categories = [
@@ -53,6 +54,7 @@ const categories = [
     icon: <FitnessCenterIcon />,
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
+      { id: 'View', icon: <VisibilityIcon />, href: ExerciseViewUrl },
       { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
     ],

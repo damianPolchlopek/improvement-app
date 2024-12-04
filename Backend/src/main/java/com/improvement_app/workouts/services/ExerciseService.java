@@ -9,6 +9,7 @@ import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.ExerciseStrategy;
 import com.improvement_app.workouts.repository.ExerciseRepository;
+import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -69,10 +70,10 @@ public class ExerciseService {
         exerciseRepository.deleteAll();
     }
 
-    public List<Exercise> generateTrainingFromTemplate(String trainingType) {
-        String convertedTrainingType = convertTrainingTypeToExerciseType(trainingType);
+    public List<Exercise> generateTrainingFromTemplate(String trainingTypeShortcut) {
+        String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
 
-        TrainingTemplate trainingTemplate = trainingTemplateService.getTrainingTemplateByName(convertedTrainingType)
+        TrainingTemplate trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut)
                 .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
 
         List<Exercise> allExercises = exerciseRepository.findAll();
@@ -82,27 +83,34 @@ public class ExerciseService {
                 .toList();
     }
 
+    public List<Map<String, Exercise>> getLastTrainings(String type) {
+        String longerTrainingType = TrainingTypeConverter.convert(type);
+        List<Exercise> exercises = exerciseRepository.findAll();
+
+        List<String> byName = exercises.stream()
+                .filter(e -> e.getType().equals(longerTrainingType))
+                .map(Exercise::getTrainingName)
+                .distinct()
+                .toList();
+
+        List<Exercise> byDate = exerciseRepository.findByTrainingNameIn(byName);
+
+        return byDate.stream()
+                // Sortowanie ćwiczeń według daty malejąco (LocalDate jest porównywalny)
+                .sorted(Comparator.comparing(Exercise::getDate).reversed())
+                // Grupowanie według dnia, następnie grupowanie według nazwy
+                .collect(Collectors.groupingBy(Exercise::getDate, LinkedHashMap::new,
+                        Collectors.toMap(Exercise::getName, e -> e, (e1, e2) -> e1, LinkedHashMap::new)))
+                // Przekształcenie mapy do listy map
+                .values().stream()
+                .collect(Collectors.toList());
+    }
+
     private Exercise getLatestExercise(String exerciseName, List<Exercise> exercises) {
         return exercises.stream()
                 .filter(exercise -> exercise.getName().equals(exerciseName))
                 .max(Comparator.comparing(Exercise::getDate))
                 .orElseGet(() -> new Exercise(exerciseName)); // Tworzenie nowego ćwiczenia, jeśli brak w historii
-    }
-
-    private static final Map<String, String> trainingTypeMap = Map.of(
-            "A", "Siłowy#1-A",
-            "B", "Siłowy#1-B",
-            "C", "Hipertroficzny#1-C",
-            "D", "Hipertroficzny#1-D",
-            "A1", "Siłowy#1-A1",
-            "B1", "Siłowy#1-B1",
-            "C1", "Hipertroficzny#1-C1",
-            "D1", "Hipertroficzny#1-D1",
-            "E", "Basen#1-E"
-    );
-
-    private String convertTrainingTypeToExerciseType(String trainingType) {
-        return trainingTypeMap.getOrDefault(trainingType, trainingType);
     }
 
     public List<Exercise> addTraining(List<Exercise> exercises) {

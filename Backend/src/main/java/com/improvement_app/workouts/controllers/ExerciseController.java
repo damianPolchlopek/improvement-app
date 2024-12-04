@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -80,6 +81,13 @@ public class ExerciseController implements Serializable {
     @GetMapping(value = "/trainingType/{trainingType}", produces = MediaType.APPLICATION_JSON)
     public ListResponse<Exercise> getTrainingFromTemplate(@PathVariable String trainingType) {
         List<Exercise> exercises = exerciseService.generateTrainingFromTemplate(trainingType);
+        return ListResponse.of(exercises);
+    }
+
+    @ApiOperation("Get last trainings by type")
+    @GetMapping(value = "/training/{trainingType}", produces = MediaType.APPLICATION_JSON)
+    public ListResponse<Map<String, Exercise>> getLastTrainingsType(@PathVariable String trainingType) {
+        List<Map<String, Exercise>> exercises = exerciseService.getLastTrainings(trainingType);
         return ListResponse.of(exercises);
     }
 

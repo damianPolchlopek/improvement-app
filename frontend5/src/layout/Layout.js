@@ -10,6 +10,7 @@ import {BrowserRouter, Route} from "react-router-dom";
 import HomeView from '../home/HomeView';
 import AddTrainingView from "../training/trainingForm/AddTrainingView";
 import TrainingsView from "../training/trainingView/TrainingsView";
+import ExerciseView from '../training/trainingView/ExerciseView';
 import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
 import ShoppingListView from "../shopping/ShoppingListView";
 import MealView from '../food/foodView/MealView.js';
@@ -24,6 +25,7 @@ import FinanceConfig from '../finance/FinanceConfig.js';
 import {
   HomeViewUrl, 
   TrainingViewUrl, 
+  ExerciseViewUrl,
   TrainingAddUrl, 
   TrainingStatisticUrl,
   FoodViewUrl,
@@ -36,6 +38,7 @@ import {
   FinanceConfigUrl,
   FinanceViewUrl
 } from "../utils/URLHelper";
+
 
 
 const drawerWidth = 200;
@@ -76,6 +79,7 @@ export default function Layout(props) {
             <Route path={HomeViewUrl} exact component={HomeView} />
             
             <Route path={TrainingViewUrl} exact component={TrainingsView} />
+            <Route path={ExerciseViewUrl} exact component={ExerciseView} />
             <Route path={TrainingAddUrl} exact component={AddTrainingView} />
             <Route path={TrainingStatisticUrl} exact component={TrainingStatistic} />
 
