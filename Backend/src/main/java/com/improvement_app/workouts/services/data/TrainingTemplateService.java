@@ -1,7 +1,8 @@
-package com.improvement_app.workouts.services;
+package com.improvement_app.workouts.services.data;
 
 import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.repository.TrainingTemplateRepository;
+import com.improvement_app.workouts.services.TrainingTypeConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +16,9 @@ public class TrainingTemplateService {
     private TrainingTemplateRepository trainingTemplateRepository;
 
 
-    public Optional<TrainingTemplate> getTrainingTemplateByName(String trainingTemplate) {
-        return trainingTemplateRepository.findByName(trainingTemplate);
+    public Optional<TrainingTemplate> getTrainingTemplate(String trainingTypeShortcut) {
+        String trainingTypeName = TrainingTypeConverter.convert(trainingTypeShortcut);
+        return trainingTemplateRepository.findByName(trainingTypeName);
     }
 
     public List<TrainingTemplate> saveAllTrainingTemplates(List<TrainingTemplate> trainingTemplateList) {

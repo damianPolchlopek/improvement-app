@@ -88,6 +88,10 @@ export default class REST {
         return get(serverUrl + exercise + dictionary + exerciseType);
     }
 
+    static getTrainingTemplate(type) {
+        return get(serverUrl + exercise + dictionary + 'training/' + type);
+    }
+
 
     static initTrainingModule() {
         return get(serverUrl + drive + 'initApplication');
@@ -104,6 +108,10 @@ export default class REST {
 
     static getTrainingTemplateByType(type) {
         return get(serverUrl + exercise + 'trainingType/' + type);
+    }
+
+    static getTrainingByType(type) {
+        return get(serverUrl + exercise + 'training/' + type);
     }
 
     static addTraining(data) {

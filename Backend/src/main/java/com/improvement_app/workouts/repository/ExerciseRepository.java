@@ -11,6 +11,8 @@ public interface ExerciseRepository extends MongoRepository<Exercise, String> {
 
     List<Exercise> findByDateOrderByIndex(LocalDate date);
 
+    List<Exercise> findByTrainingNameIn(List<String> trainingNames);
+
     List<Exercise> findByNameOrderByDate(String name, Sort sort);
 
     List<Exercise> findByTrainingNameOrderByIndex(String trainingName);
