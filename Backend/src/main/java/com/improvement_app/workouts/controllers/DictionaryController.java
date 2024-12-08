@@ -7,13 +7,16 @@ import com.improvement_app.workouts.entity.exercisesfields.Place;
 import com.improvement_app.workouts.entity.exercisesfields.Progress;
 import com.improvement_app.workouts.entity.exercisesfields.Type;
 import com.improvement_app.workouts.services.data.*;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.MediaType;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
+@Tag(name = "Dictionary API", description = "Example API operations")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("exercises/dictionary")
@@ -49,7 +52,7 @@ public class DictionaryController {
         return ListResponse.of(exerciseTypes);
     }
 
-    @ApiOperation("Get training template")
+    @Operation(description = "Get training template")
     @GetMapping(value = "/training/{template}", produces = MediaType.APPLICATION_JSON)
     public TrainingTemplate getTrainingTemplate(@PathVariable String template) {
         TrainingTemplate addedTraining = trainingTemplateService.getTrainingTemplate(template)

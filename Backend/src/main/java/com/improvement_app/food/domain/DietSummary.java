@@ -1,14 +1,12 @@
 package com.improvement_app.food.domain;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -29,7 +27,8 @@ public class DietSummary {
 
     private LocalDate date;
 
-    @Type(type = "jsonb")
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
     private List<Meal> meals;
 
     public DietSummary(double kcal, double protein, double carbohydrates, double fat, List<Meal> meals) {
