@@ -1,0 +1,54 @@
+# MongoDB
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://newUser:damian@cluster0.glh4o.mongodb.net/WorkoutApp?retryWrites=true&w=majority
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    username: improvement-app-backend_postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://postgresql-improvement-app-backend.alwaysdata.net:5432/improvement-app-backend_postgresfood
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/changelog.yaml
+
+
+# Aplikacja
+path:
+  to:
+    excel: src/main/resources/tmp_files/
+
+# Logging
+#logging:
+#  level:
+#    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
+# Postgres - lokalnie
+#spring:
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#  datasource:
+#    username: postgres
+#    password: postgres
+#    driverClassName: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5433/postgresfood
+#  liquibase:
+#    enabled: false
+
+# Docker Postgres
+# docker run -d -p 5433:5432 --name some-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=postgresfood postgres
+
+# MySQL
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/db?createDatabaseIfNotExist=true&useSSL=false
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://localhost:3307/db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+
+# Docker MySQL
+# docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=db -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -v /my/own/datadir:/var/lib/mysql -p 3307:3306 -d mysql:latest

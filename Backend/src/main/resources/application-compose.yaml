@@ -1,0 +1,23 @@
+# MongoDB
+spring:
+  data:
+    mongodb:
+      host: mongo
+      port: 27017
+      database: workout-app
+      username: user_app
+      password: user_app
+
+  # Postgres
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    username: user_app
+    password: user_app
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/postgresfood
+
+  liquibase:
+    change-log: classpath:db/changelog/changelog.yaml
+    enabled: true
