@@ -80,10 +80,15 @@ export default function SingleTraining(props) {
                   key={exercise.name}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
                 >
-                  <TableCell align="right" onClick={() => {
+                  <TableCell 
+                    align="right" 
+                    key={exercise.name}
+                    onClick={() => {
                     getExercisesByDate(exercise.date)
                   }}>{exercise.date}</TableCell>
-                  <TableCell onClick={() => {
+                  <TableCell 
+                    key={exercise.id}
+                    onClick={() => {
                     getExercisesByName(exercise.name)
                   }}>{exercise.name}</TableCell>
                   <TableCell align="right">{exercise.reps}</TableCell>

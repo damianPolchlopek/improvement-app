@@ -72,7 +72,7 @@ export default function TrainingsView() {
                   <TableRow>
                     <TableCell>Data</TableCell>
                     {trainingTemplate.map((value, index) => {
-                      return <TableCell>
+                      return <TableCell key={index}>
                         {value}
                         </TableCell>})}
                   </TableRow>
