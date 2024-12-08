@@ -4,7 +4,7 @@ import com.improvement_app.finance.util.MarketCapUrlBuilder;
 import com.improvement_app.finance.repository.CryptoInformation;
 import com.improvement_app.finance.repository.CryptoRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -21,7 +21,7 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 @Service
-@Log4j
+@Slf4j
 @RequiredArgsConstructor
 public class CoinMarketCapServiceImpl implements CoinMarketCapService {
     @Value("${coinmarketcap.api.key}")

@@ -5,7 +5,7 @@ import com.improvement_app.other.daily.service.DailyService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;

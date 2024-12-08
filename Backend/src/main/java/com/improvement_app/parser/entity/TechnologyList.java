@@ -1,13 +1,12 @@
 package com.improvement_app.parser.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 @Table(name = "technology_list", schema = "technologies")
 public class TechnologyList {
 
@@ -25,7 +23,8 @@ public class TechnologyList {
 
     private LocalDate date;
 
-    @Type(type = "jsonb")
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
     List<Technology> technologyList;
 
     public TechnologyList(List<Technology> technologies) {

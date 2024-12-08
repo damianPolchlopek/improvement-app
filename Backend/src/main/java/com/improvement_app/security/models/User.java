@@ -7,8 +7,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 

@@ -6,10 +6,10 @@ import Cookies from 'universal-cookie';
 const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercises/';
 const dictionary = 'dictionary/';
-const exerciseType = 'type/';
-const exerciseName = 'name/';
-const exerciseProgress = 'progress/';
-const exercisePlace = 'place/';
+const exerciseType = 'type';
+const exerciseName = 'name';
+const exerciseProgress = 'progress';
+const exercisePlace = 'place';
 
 const drive = 'drive/';
 const shopping = 'shopping/';

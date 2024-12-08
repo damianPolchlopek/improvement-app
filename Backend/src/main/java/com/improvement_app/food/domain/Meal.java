@@ -5,20 +5,19 @@ import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class Meal {
 
     @Id
@@ -39,10 +38,12 @@ public class Meal {
     @Enumerated(EnumType.STRING)
     private MealType type;
 
-    @Type(type = "jsonb")
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
     private List<MealIngredient> mealIngredients;
 
-    @Type(type = "jsonb")
+    @Type(JsonType.class)
+    @Column(columnDefinition = "jsonb")
     private List<String> recipe;
 
     @Enumerated(EnumType.STRING)
