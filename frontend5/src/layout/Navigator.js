@@ -54,7 +54,7 @@ const categories = [
     icon: <FitnessCenterIcon />,
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
-      { id: 'View', icon: <VisibilityIcon />, href: ExerciseViewUrl },
+      { id: 'Exercises', icon: <VisibilityIcon />, href: ExerciseViewUrl },
       { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
     ],
