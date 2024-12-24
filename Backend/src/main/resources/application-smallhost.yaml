@@ -2,20 +2,13 @@ spring:
   data:
     mongodb:
       uri: mongodb://mo2222_workout:kO-TBI9_!$yJaVK7uT9zYkXL1r1lwy@mongo2.small.pl/mo2222_workout?retryWrites=true&w=majority&tls=false&tlsAllowInvalidCertificates=true
-#      uri: mongodb+srv://newUser:damian@cluster0.glh4o.mongodb.net/WorkoutApp?retryWrites=true&w=majority
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-#  datasource:
-#    username: improvement-app-backend_postgres
-#    password: postgres
-#    driverClassName: org.postgresql.Driver
-#    url: jdbc:postgresql://postgresql-improvement-app-backend.alwaysdata.net:5432/improvement-app-backend_postgresfood
   datasource:
     username: p2222_food
     password: 9bJpou&'X99BGfT?.Z18h6jVSBk8cK
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://pgsql2.small.pl/p2222_food
-
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog.yaml
@@ -28,5 +21,6 @@ server:
     key-store-type: PKCS12
     key-alias: alias_name
 
-tmp:
-  path: /home/mutarexx/tmp
+path:
+  file:
+    excel: /home/mutarexx/tmp

@@ -3,8 +3,8 @@ import Cookies from 'universal-cookie';
 
 // const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
-const serverUrl = 'https://mutarexx.smallhost.pl:24568/';
-// const serverUrl = 'http://localhost:8080/';
+// const serverUrl = 'https://mutarexx.smallhost.pl:24568/';
+const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercises/';
 const dictionary = 'dictionary/';
 const exerciseType = 'type';

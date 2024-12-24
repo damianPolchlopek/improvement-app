@@ -1,5 +1,6 @@
 package com.improvement_app.googledrive.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -9,11 +10,9 @@ import java.io.File;
 public class FilePathService {
 
     private final String EXCEL_EXTENSION = ".xlsx";
-    private final String fileDir;
 
-    public FilePathService() {
-        fileDir = System.getProperty("java.io.tmpdir");
-    }
+    @Value("${path.file.excel}")
+    private String fileDir;
 
     public File getDownloadedFile(String fileName) {
         return new File(fileDir + fileName + EXCEL_EXTENSION);

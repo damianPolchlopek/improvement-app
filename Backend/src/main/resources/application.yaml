@@ -14,10 +14,13 @@ google:
     folder:
       path: classpath:token/serviceAccount.json
 
-
 coinmarketcap:
   api:
     key: 90c48b1c-81a5-4e96-801f-493d4a30784b
+
+path:
+  file:
+    excel: src/main/resources/tmp_files/
 
 # logging:
 #   level:

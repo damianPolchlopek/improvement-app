@@ -18,7 +18,7 @@ spring:
 
 # Aplikacja
 path:
-  to:
+  file:
     excel: src/main/resources/tmp_files/
 
 # Logging
