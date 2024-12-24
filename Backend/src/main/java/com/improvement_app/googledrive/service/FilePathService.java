@@ -7,16 +7,20 @@ import java.io.File;
 
 @Service
 public class FilePathService {
-    public static final String PATH_TO_EXCEL_FILES = "src/main/resources/tmp_files/";
-    public static final String EXCEL_EXTENSION = ".xlsx";
 
+    private final String EXCEL_EXTENSION = ".xlsx";
+    private final String fileDir;
+
+    public FilePathService() {
+        fileDir = System.getProperty("java.io.tmpdir");
+    }
 
     public File getDownloadedFile(String fileName) {
-        return new File(PATH_TO_EXCEL_FILES + fileName + EXCEL_EXTENSION);
+        return new File(fileDir + fileName + EXCEL_EXTENSION);
     }
 
     public String getExcelPath(String fileName) {
-        return PATH_TO_EXCEL_FILES + fileName + EXCEL_EXTENSION;
+        return fileDir + fileName + EXCEL_EXTENSION;
     }
 
 }

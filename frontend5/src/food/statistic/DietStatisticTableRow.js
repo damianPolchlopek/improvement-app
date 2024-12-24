@@ -3,26 +3,29 @@ import {Collapse, IconButton, Table, TableBody, TableCell, TableHead, TableRow} 
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
+import StyledTableCell  from '../../component/table/StyledTableCell'
+import StyledTableRow  from '../../component/table/StyledTableRow'
+
 export default function DietStatisticTableRow(props) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <React.Fragment>
-      <TableRow onClick={() => setOpen(prev => !prev)}>
-        <TableCell sx={{width: '50px'}} >
+      <StyledTableRow onClick={() => setOpen(prev => !prev)}>
+        <StyledTableCell sx={{width: '50px'}} >
           <IconButton aria-label="expand row" size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </TableCell >
+        </StyledTableCell >
 
-        <TableCell>{props.dietSummary.date}</TableCell>
-        <TableCell>{props.dietSummary.kcal}</TableCell>
-        <TableCell>{props.dietSummary.protein}</TableCell>
-        <TableCell>{props.dietSummary.carbohydrates}</TableCell>
-        <TableCell>{props.dietSummary.fat}</TableCell>
-      </TableRow>
+        <StyledTableCell>{props.dietSummary.date}</StyledTableCell>
+        <StyledTableCell>{props.dietSummary.kcal}</StyledTableCell>
+        <StyledTableCell>{props.dietSummary.protein}</StyledTableCell>
+        <StyledTableCell>{props.dietSummary.carbohydrates}</StyledTableCell>
+        <StyledTableCell>{props.dietSummary.fat}</StyledTableCell>
+      </StyledTableRow>
 
-      <TableRow>
+      <StyledTableRow>
         <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse
             in={open}
@@ -56,7 +59,7 @@ export default function DietStatisticTableRow(props) {
             </Table>
           </Collapse>
         </TableCell>
-      </TableRow>
+      </StyledTableRow>
     </React.Fragment>
   );
 }

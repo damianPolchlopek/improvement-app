@@ -14,9 +14,6 @@ google:
     folder:
       path: classpath:token/serviceAccount.json
 
-path:
-  to:
-    excel: classpath*:tmp_files
 
 coinmarketcap:
   api:

@@ -55,7 +55,6 @@ public class AuthController {
 		User user = new User(id, username, email, encoder.encode(password), roleSet);
 
 		userRepository.save(user);
-
 	}
 
 	@PostMapping("/signin")
@@ -72,6 +71,7 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
 				.toList();
+
 
 		log.info("Wysłany user: " + new JwtResponse(jwt,
 				userDetails.getId(),

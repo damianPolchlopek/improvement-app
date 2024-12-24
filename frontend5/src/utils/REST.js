@@ -3,7 +3,8 @@ import Cookies from 'universal-cookie';
 
 // const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
-const serverUrl = 'http://localhost:8080/';
+const serverUrl = 'https://mutarexx.smallhost.pl:24568/';
+// const serverUrl = 'http://localhost:8080/';
 const exercise = 'exercises/';
 const dictionary = 'dictionary/';
 const exerciseType = 'type';
@@ -20,6 +21,13 @@ const finance = 'finance/';
 const crypto = 'crypto/';
 
 const statistic = 'statistic/';
+
+// const axiosInstance = axios.create({
+//     baseURL: 'https://mutarexx.smallhost.pl:24568',
+//     httpsAgent: new (require('https').Agent)({
+//       rejectUnauthorized: false, // Ignorowanie błędów certyfikatu
+//     }),
+//   });
 
 const get = (url) => {
     return axios.get(url).then((response) => {

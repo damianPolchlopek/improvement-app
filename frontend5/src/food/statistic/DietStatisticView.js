@@ -2,15 +2,17 @@ import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
 
+import StyledTableCell  from '../../component/table/StyledTableCell'
+import StyledTableRow  from '../../component/table/StyledTableRow'
+
 import {
   Table,
   TablePagination,
   TableFooter,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
-  TableRow, Paper,
+  Paper,
 } from '@mui/material';
 import DietStatisticTableRow from "./DietStatisticTableRow";
 
@@ -40,14 +42,14 @@ export default function DietStatisticView() {
         <TableContainer>
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Kcal</TableCell>
-                <TableCell>Protein</TableCell>
-                <TableCell>Carbs</TableCell>
-                <TableCell>Fat</TableCell>
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Kcal</StyledTableCell>
+                <StyledTableCell>Protein</StyledTableCell>
+                <StyledTableCell>Carbs</StyledTableCell>
+                <StyledTableCell>Fat</StyledTableCell>
+              </StyledTableRow>
             </TableHead>
 
             <TableBody>
@@ -63,8 +65,8 @@ export default function DietStatisticView() {
             </TableBody>
 
             <TableFooter>
-              <TableRow>
-                <TableCell colSpan={7}>
+              <StyledTableRow>
+                <StyledTableCell colSpan={7}>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     count={dietSummaryList.length}
@@ -74,8 +76,8 @@ export default function DietStatisticView() {
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
-                </TableCell>
-              </TableRow>
+                </StyledTableCell>
+              </StyledTableRow>
             </TableFooter>
           </Table>
         </TableContainer>

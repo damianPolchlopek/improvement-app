@@ -5,9 +5,6 @@ import ExerciseChart from './ExerciseChart';
 import {
   Autocomplete,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
 } from '@mui/material';
 
@@ -21,9 +18,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import Grid from '@mui/material/Unstable_Grid2';
 
-
 function formatXAxis(tickItem) {
-  return moment(tickItem).format('DD-MM-YYYY')
+  return moment(tickItem).format('DD-MM-YYYY');
 }
 
 export default function TrainingStatistic() {
@@ -32,6 +28,7 @@ export default function TrainingStatistic() {
   const [exerciseNames, setExerciseNames] = useState([]);
   const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
 
+  const chartTypes = ['Weight', 'Capacity'];
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
 
   const [beginDate, setBeginDate] = React.useState(1633711100000);
@@ -39,27 +36,24 @@ export default function TrainingStatistic() {
 
   useEffect(() => {
     REST.getExerciseNames().then(response => {
-      const exeNames = response.content.map(r => r.name)
+      const exeNames = response.content.map(r => r.name);
       setExerciseNames(exeNames);
     });
-
   }, []);
 
   useEffect(() => {
     REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
       formatXAxis(beginDate), formatXAxis(endDate)).then(response => {
-      setExercises(response)
+      setExercises(response);
     });
-
   }, [beginDate, endDate, selectedChartType, selectedExerciseName]);
-
 
   const handleExerciseNameChange = (event, newValue) => {
     setSelectedExerciseName(newValue);
   };
 
-  const handleChartTypeChange = (event) => {
-    setSelectedChartType(event.target.value);
+  const handleChartTypeChange = (event, newValue) => {
+    setSelectedChartType(newValue);
   };
 
   const handleChangeBeginDate = (newValue) => {
@@ -72,70 +66,77 @@ export default function TrainingStatistic() {
 
   return (
     <React.Fragment>
-      <Grid container centered
-            rowSpacing={3}
-            columnSpacing={3}
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
+      <Grid 
+        container
+        spacing={3}
+        alignItems="center"
+        justifyContent="center"
       >
-        <Grid xs={12}>
-          <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-            {exerciseNames.length > 0 ?
+        {/* Row 1 */}
+        <Grid container item xs={12} spacing={3} justifyContent="center">
+          <Grid item xs={12} sm={6} md={4}>
+            <FormControl variant="standard" sx={{ width: '100%' }}>
+              {exerciseNames.length > 0 &&
+                <Autocomplete
+                  disableClearable
+                  id="exercise-name-autocomplete"
+                  defaultValue="Bieżnia"
+                  options={exerciseNames}
+                  onChange={handleExerciseNameChange}
+                  renderInput={(params) => <TextField {...params} label="Exercise Name" />}
+                />}
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <FormControl variant="standard" sx={{ width: '100%' }}>
               <Autocomplete
                 disableClearable
-                id="combo-box-demo"
-                defaultValue="Bieżnia"
-                options={exerciseNames}
-                onChange={handleExerciseNameChange}
-                renderInput={(params) => <TextField {...params} label="Exercise Name"/>}
+                id="chart-type-autocomplete"
+                defaultValue="Capacity"
+                options={chartTypes}
+                onChange={handleChartTypeChange}
+                renderInput={(params) => <TextField {...params} label="Chart Type" />}
               />
-              : null}
-          </FormControl>
-
-          <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-            <InputLabel id="demo-simple-select-standard-label">Type</InputLabel>
-            <Select
-              labelId="demo-simple-select-standard-label"
-              value={selectedChartType}
-              onChange={handleChartTypeChange}
-              label="Exercise Name"
-            >
-              <MenuItem value="Weight">Weight</MenuItem>
-              <MenuItem value="Capacity">Capacity</MenuItem>
-            </Select>
-          </FormControl>
+            </FormControl>
+          </Grid>
         </Grid>
 
-        <Grid xs={12}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DesktopDatePicker
-              label="Begin date"
-              inputFormat="DD/MM/YYYY"
-              value={beginDate}
-              onChange={handleChangeBeginDate}
-              renderInput={(params) => <TextField {...params} />}
-            />
-
-            <DesktopDatePicker
-              label="End Date"
-              inputFormat="DD/MM/YYYY"
-              value={endDate}
-              onChange={handleChangeEndDate}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+        {/* Row 2 */}
+        <Grid container item xs={12} spacing={3} justifyContent="center">
+          <Grid item xs={12} sm={6} md={4}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
+                label="Begin date"
+                inputFormat="DD/MM/YYYY"
+                value={beginDate}
+                onChange={handleChangeBeginDate}
+                renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
+              />
+            </LocalizationProvider>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DesktopDatePicker
+                label="End Date"
+                inputFormat="DD/MM/YYYY"
+                value={endDate}
+                onChange={handleChangeEndDate}
+                renderInput={(params) => <TextField {...params} sx={{ width: '100%' }} />}
+              />
+            </LocalizationProvider>
+          </Grid>
         </Grid>
       </Grid>
 
-      {exercises &&
-        <ExerciseChart
-          exercises={exercises}
-          beginDate={beginDate}
-          endDate={endDate}
-        />}
-
+      {/* Chart */}
+      <Grid container item xs={12} justifyContent="center" sx={{ marginTop: 3 }}>
+        {exercises &&
+          <ExerciseChart
+            exercises={exercises}
+            beginDate={beginDate}
+            endDate={endDate}
+          />}
+      </Grid>
     </React.Fragment>
   );
-
 }
