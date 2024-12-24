@@ -41,8 +41,6 @@ export default function Header(props) {
                     color: 'common.white',
                   },
                 }}
-                rel="noopener noreferrer"
-                target="_blank"
                 onClick={() => new Cookies().remove('authorization')}
               >
                 Logout

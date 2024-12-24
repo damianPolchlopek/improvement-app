@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS users;
+
 CREATE TABLE users.roles
 (
     id   SERIAL PRIMARY KEY,
