@@ -79,7 +79,6 @@ export default class REST {
         return get(serverUrl + exercise + 'name/' + name);
     }
 
-
     static getExerciseNames() {
         return get(serverUrl + exercise + dictionary + exerciseName);
     }
@@ -112,6 +111,10 @@ export default class REST {
 
     static getTrainingStatistic(exerciseName, chartType, beginDate, endDate) {
         return get(serverUrl + exercise + statistic + exerciseName + '/' + chartType + '/' + beginDate + '/' + endDate);
+    }
+
+    static getATHTraining(type) {
+        return get(serverUrl + exercise + 'trainingType/' + type + '/maximum');
     }
 
     static getTrainingTemplateByType(type) {

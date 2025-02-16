@@ -12,7 +12,12 @@ import com.improvement_app.workouts.repository.ExerciseRepository;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -31,6 +36,8 @@ public class ExerciseService {
     private final TrainingTemplateService trainingTemplateService;
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
+    private final MongoTemplate mongoTemplate;
+
 
     public List<Exercise> findByDateOrderByIndex(LocalDate date) {
         return exerciseRepository.findByDateOrderByIndex(date);
@@ -70,16 +77,44 @@ public class ExerciseService {
         exerciseRepository.deleteAll();
     }
 
+    public List<Exercise> getATHExercise(String trainingTypeShortcut) {
+        String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
+
+        TrainingTemplate trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut)
+                .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
+
+        return trainingTemplate.getExercises().stream()
+                .map(this::getMaximumCapacityExercise)
+                .toList();
+    }
+
+    // TODO: zrobic max capacity
+    public Exercise getMaximumCapacityExercise(String exerciseName) {
+        Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(Criteria.where("name").is(exerciseName)), // Filtruj po nazwie ćwiczenia
+                Aggregation.unwind("repAndWeight", true), // Zachowaj dokumenty, nawet jeśli repAndWeight jest pusty
+//                Aggregation.project("_id", "name", "date", "repAndWeight", "weight", "reps", "product") // Zachowaj wszystkie pola
+//                        .andExpression("repAndWeight.rep * repAndWeight.weight").as("product"), // Oblicz product
+                Aggregation.sort(Sort.Direction.ASC, "date") // Sortuj według obliczonego pola product
+//                Aggregation.limit(1) // Zwróć tylko jeden wynik
+        );
+
+        AggregationResults<Exercise> result = mongoTemplate.aggregate(aggregation, "exercise", Exercise.class);
+
+        return result.getMappedResults().stream().findFirst().orElse(null);
+    }
+
+
+
+
     public List<Exercise> generateTrainingFromTemplate(String trainingTypeShortcut) {
         String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
 
         TrainingTemplate trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut)
                 .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
 
-        List<Exercise> allExercises = exerciseRepository.findAll();
-
         return trainingTemplate.getExercises().stream()
-                .map(exerciseName -> getLatestExercise(exerciseName, allExercises))
+                .map(this::getLatestExercise)
                 .toList();
     }
 
@@ -106,10 +141,8 @@ public class ExerciseService {
                 .collect(Collectors.toList());
     }
 
-    private Exercise getLatestExercise(String exerciseName, List<Exercise> exercises) {
-        return exercises.stream()
-                .filter(exercise -> exercise.getName().equals(exerciseName))
-                .max(Comparator.comparing(Exercise::getDate))
+    private Exercise getLatestExercise(String exerciseName) {
+        return exerciseRepository.findFirstByNameOrderByDateDesc(exerciseName)
                 .orElseGet(() -> new Exercise(exerciseName)); // Tworzenie nowego ćwiczenia, jeśli brak w historii
     }
 

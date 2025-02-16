@@ -137,6 +137,7 @@ export default function MealView() {
           {mealList.map((meal, index) =>
             <Grid key={index} xs={6}>
               <SingleMeal meal={meal}/>
+              {console.log(meal)}
             </Grid>
           )}
         </Grid>
