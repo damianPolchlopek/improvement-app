@@ -1,0 +1,5 @@
+# start prometheus
+./prometheus --config.file=prometheus.yml
+
+# start grafana
+bin\grafana-server.exe

@@ -1,0 +1,18 @@
+Konfiguracja Prometheus:
+
+1. Pobierz Prometheus z oficjalnej strony.
+2. W pliku konfiguracyjnym prometheus.yml dodaj sekcję, która wskazuje na Twój endpoint aplikacji Spring Boot:
+scrape_configs:
+  - job_name: 'spring-boot-app'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:8080']
+ #     - targets: ['mutarexx.smallhost.pl:24568']
+
+3. Uruchom Prometheus za pomocą:
+./prometheus --config.file=prometheus.yml
+
+Konfiguracja Grafany:
+1. Pobierz Grafane z oficjalnej strony.
+2. Uruchom grafana-server.exe

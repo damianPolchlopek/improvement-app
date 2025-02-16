@@ -99,7 +99,7 @@ export default function SingleMeal(props) {
         </TabPanel>
 
         <TabPanel value={tabIndex} index={1}>
-          {props.meal.mealIngredients > 0 ? (
+          {props.meal.mealIngredients?.length > 0 ? (
             <TableContainer>
               <Table>
                 <TableHead>

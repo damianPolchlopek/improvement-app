@@ -78,7 +78,6 @@ public class ExerciseController implements Serializable {
         return ListResponse.of(trainingNames);
     }
 
-
     @Operation(description = "Get last training template")
     @GetMapping(value = "/trainingType/{trainingType}", produces = MediaType.APPLICATION_JSON)
     public ListResponse<Exercise> getTrainingFromTemplate(@PathVariable String trainingType) {
@@ -90,6 +89,13 @@ public class ExerciseController implements Serializable {
     @GetMapping(value = "/training/{trainingType}", produces = MediaType.APPLICATION_JSON)
     public ListResponse<Map<String, Exercise>> getLastTrainingsType(@PathVariable String trainingType) {
         List<Map<String, Exercise>> exercises = exerciseService.getLastTrainings(trainingType);
+        return ListResponse.of(exercises);
+    }
+
+    @Operation(description = "Get maximum exercises from training")
+    @GetMapping(value = "/training/{trainingType}/maximum", produces = MediaType.APPLICATION_JSON)
+    public ListResponse<Exercise> getMaxTrainingExercises(@PathVariable String trainingType) {
+        List<Exercise> exercises = exerciseService.getATHExercise(trainingType);
         return ListResponse.of(exercises);
     }
 

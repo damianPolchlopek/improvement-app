@@ -22,6 +22,15 @@ path:
   file:
     excel: src/main/resources/tmp_files/
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, prometheus, metrics
+  endpoint:
+    prometheus:
+      enabled: true
+
 # logging:
 #   level:
 #     root: INFO
