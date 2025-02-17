@@ -2,6 +2,7 @@ export const HomeViewUrl = "/";
 
 export const TrainingViewUrl = "/training-view";
 export const ExerciseViewUrl = "/exercise-view";
+export const MaximumExerciseViewUrl = "/training-maximum";
 export const TrainingAddUrl = "/training-add";
 export const TrainingStatisticUrl = "/training-statistic";
 

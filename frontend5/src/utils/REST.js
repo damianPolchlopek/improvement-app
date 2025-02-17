@@ -114,7 +114,7 @@ export default class REST {
     }
 
     static getATHTraining(type) {
-        return get(serverUrl + exercise + 'trainingType/' + type + '/maximum');
+        return get(serverUrl + exercise + 'training/' + type + '/maximum');
     }
 
     static getTrainingTemplateByType(type) {

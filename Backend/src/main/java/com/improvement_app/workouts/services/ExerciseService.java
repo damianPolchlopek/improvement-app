@@ -36,7 +36,6 @@ public class ExerciseService {
     private final TrainingTemplateService trainingTemplateService;
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
-    private final MongoTemplate mongoTemplate;
 
 
     public List<Exercise> findByDateOrderByIndex(LocalDate date) {
@@ -88,24 +87,15 @@ public class ExerciseService {
                 .toList();
     }
 
-    // TODO: zrobic max capacity
     public Exercise getMaximumCapacityExercise(String exerciseName) {
-        Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(Criteria.where("name").is(exerciseName)), // Filtruj po nazwie ćwiczenia
-                Aggregation.unwind("repAndWeight", true), // Zachowaj dokumenty, nawet jeśli repAndWeight jest pusty
-//                Aggregation.project("_id", "name", "date", "repAndWeight", "weight", "reps", "product") // Zachowaj wszystkie pola
-//                        .andExpression("repAndWeight.rep * repAndWeight.weight").as("product"), // Oblicz product
-                Aggregation.sort(Sort.Direction.ASC, "date") // Sortuj według obliczonego pola product
-//                Aggregation.limit(1) // Zwróć tylko jeden wynik
-        );
-
-        AggregationResults<Exercise> result = mongoTemplate.aggregate(aggregation, "exercise", Exercise.class);
-
-        return result.getMappedResults().stream().findFirst().orElse(null);
+        return exerciseRepository.findByNameOrderByDate(exerciseName, Sort.by(Sort.Direction.DESC, "date"))
+                .stream()
+                .max(Comparator.comparingDouble(exercise -> exercise.getRepAndWeightList()
+                        .stream()
+                        .map(RepAndWeight::getCapacity)
+                        .reduce((double) 0, Double::sum)))
+                .stream().findFirst().orElse(null);
     }
-
-
-
 
     public List<Exercise> generateTrainingFromTemplate(String trainingTypeShortcut) {
         String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
