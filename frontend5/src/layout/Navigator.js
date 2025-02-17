@@ -27,6 +27,8 @@ import Logo from './Logo';
 import {
   HomeViewUrl, 
   TrainingViewUrl, 
+  ExerciseViewUrl,
+  MaximumExerciseViewUrl,
   TrainingAddUrl, 
   TrainingStatisticUrl,
   FoodViewUrl,
@@ -37,8 +39,7 @@ import {
   WeeklyViewUrl,
   DailyViewUrl,
   FinanceConfigUrl,
-  FinanceViewUrl,
-  ExerciseViewUrl
+  FinanceViewUrl
 } from "../utils/URLHelper";
 
 const categories = [
@@ -55,6 +56,7 @@ const categories = [
     children: [
       { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
       { id: 'Exercises', icon: <VisibilityIcon />, href: ExerciseViewUrl },
+      { id: 'Maximum', icon: <VisibilityIcon />, href: MaximumExerciseViewUrl },
       { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
       { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
     ],

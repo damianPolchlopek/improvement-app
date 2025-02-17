@@ -5,12 +5,13 @@ import Box from '@mui/material/Box';
 import Navigator from './Navigator.js';
 import Header from './Header.js';
 
-import {BrowserRouter, Route} from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 
 import HomeView from '../home/HomeView';
 import AddTrainingView from "../training/trainingForm/AddTrainingView";
 import TrainingsView from "../training/trainingView/TrainingsView";
-import ExerciseView from '../training/trainingView/ExerciseView';
+import ExerciseView from '../training/exerciseView/ExerciseView';
+import MaximumExerciseView from '../training/maximumTrainingView/MaximumExerciseView.js';
 import TrainingStatistic from '../training/trainingStatistic/TrainingStatistics';
 import ShoppingListView from "../shopping/ShoppingListView";
 import MealView from '../food/foodView/MealView.js';
@@ -26,6 +27,7 @@ import {
   HomeViewUrl, 
   TrainingViewUrl, 
   ExerciseViewUrl,
+  MaximumExerciseViewUrl,
   TrainingAddUrl, 
   TrainingStatisticUrl,
   FoodViewUrl,
@@ -80,6 +82,7 @@ export default function Layout(props) {
             
             <Route path={TrainingViewUrl} exact component={TrainingsView} />
             <Route path={ExerciseViewUrl} exact component={ExerciseView} />
+            <Route path={MaximumExerciseViewUrl} exact component={MaximumExerciseView} />
             <Route path={TrainingAddUrl} exact component={AddTrainingView} />
             <Route path={TrainingStatisticUrl} exact component={TrainingStatistic} />
 
