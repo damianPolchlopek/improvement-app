@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
+import { useTranslation } from 'react-i18next';
 
 import {
   Paper,
@@ -14,14 +15,14 @@ import {
   MenuItem,
   FormControl,
   Select,
-  Container,
-  Typography
+  Container
 } from '@mui/material';
 
 export default function MaximumExerciseView() {
   const [exercises, setExercises] = useState(() => []);
   const [loading, setLoading] = useState(() => true);
   const [trainingType, setTrainingType] = useState(() => 'A');
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,10 +68,10 @@ export default function MaximumExerciseView() {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Repetition</TableCell>
-                <TableCell align="right">Weight</TableCell>
+                <TableCell>{t('exercise.date')}</TableCell>
+                <TableCell>{t('exercise.name')}</TableCell>
+                <TableCell align="right">{t('exercise.reps')}</TableCell>
+                <TableCell align="right">{t('exercise.weight')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

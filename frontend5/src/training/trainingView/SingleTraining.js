@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import REST from '../../utils/REST';
+import { useTranslation } from 'react-i18next';
 
 import {
   Collapse,
@@ -17,8 +18,9 @@ import {
 
 export default function SingleTraining(props) {
   const [exercises, setExercises] = useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [dataFetched, setDataFetched] = useState(false);
+  const { t } = useTranslation();
 
   const handleClick = () => {
     setOpen(!open);
@@ -30,22 +32,28 @@ export default function SingleTraining(props) {
 
 
   function getExercisesByTrainingName(trainingName) {
-    trainingName = trainingName.replace(/ /g, "_");
+    const modifiedTrainingName = trainingName.replace(/ /g, "_");
 
-    REST.getExercises(trainingName).then(response => {
+    REST.getExercises(modifiedTrainingName).then(response => {
       setExercises(response.content);
+    }).catch(error => {
+      console.error('Error fetching exercises:', error);
     });
   }
 
   function getExercisesByDate(date) {
     REST.getExercisesByDate(date).then(response => {
       setExercises(response.content);
+    }).catch(error => {
+      console.error("Error fetching exercises by date:", error);
     });
   }
-
+  
   function getExercisesByName(name) {
     REST.getExercisesByName(name).then(response => {
       setExercises(response.content);
+    }).catch(error => {
+      console.error('Error fetching exercises by name:', error);
     });
   }
 
@@ -67,24 +75,24 @@ export default function SingleTraining(props) {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="right">Date</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Repetition</TableCell>
-                <TableCell align="right">Weight</TableCell>
+                <TableCell align="right">{t('exercise.date')}</TableCell>
+                <TableCell>{t('exercise.name')}</TableCell>
+                <TableCell align="right">{t('exercise.reps')}</TableCell>
+                <TableCell align="right">{t('exercise.weight')}</TableCell>
               </TableRow>
             </TableHead>
 
             <TableBody>
               {exercises.map((exercise) => (
                 <TableRow
-                  key={exercise.name}
+                  key={exercise.id}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
                 >
                   <TableCell 
                     align="right" 
                     key={exercise.name}
                     onClick={() => {
-                    getExercisesByDate(exercise.date)
+                      getExercisesByDate(exercise.date)
                   }}>{exercise.date}</TableCell>
                   <TableCell 
                     key={exercise.id}
@@ -100,5 +108,5 @@ export default function SingleTraining(props) {
         </TableContainer>
       </Collapse>
     </React.Fragment>
-  )
+  );
 }

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import REST from '../../utils/REST';
 import TrainingForm from "./TrainingForm";
+import { useTranslation } from 'react-i18next';
 
 import {
   Button,
@@ -19,6 +21,7 @@ export default function AddTrainingView(props) {
   const [exercises, setExercises] = useState([]);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
+  const { t } = useTranslation();
 
   function loadLastTraining() {
     setExercises([]);
@@ -30,11 +33,12 @@ export default function AddTrainingView(props) {
     .catch(error => console.error("Error loading training:", error));
   }
 
+  const history = useHistory();
+
   function addTraining() {
     REST.addTraining(exercises)
     .then(response => {
-      props.history.push('/add-training')
-      window.location.reload(false)
+      history.push('/trainings')
     })
     .catch(error => console.error("Error adding training:", error));
   }
@@ -42,18 +46,18 @@ export default function AddTrainingView(props) {
   return (
     <React.Fragment>
       <Grid container spacing={2}>
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <Typography
             variant="h5"
             component="div"
           >
-            Choose training type to add
+            {t('messages.loadLastTraining')}
           </Typography>
         </Grid>
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <FormControl sx={{m: 1, minWidth: 120}}>
             <Select
-              onChange={(e => setTrainingType(e.target.value))}
+              onChange={e => setTrainingType(e.target.value)}
               defaultValue="A"
             >
               <MenuItem value="A">Siłowy A</MenuItem>
@@ -68,27 +72,27 @@ export default function AddTrainingView(props) {
             </Select>
           </FormControl>
         </Grid>
-
-        <Grid xs={12}>
+        
+        <Grid item xs={12}>
           <Button
             variant="contained"
             onClick={() => loadLastTraining()}
           >
-            Load last training
+            {t('messages.loadLastTraining')}
           </Button>
         </Grid>
 
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox/>}
-            label="Enable a more accurate form"
+            label={t('messages.enableMoreAccurateForm')}
             onClick={() => {
               setIsSimpleForm(!isSimpleForm)
             }}
           />
         </Grid>
 
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <TrainingForm
             isSimpleForm={isSimpleForm}
             exercises={exercises}

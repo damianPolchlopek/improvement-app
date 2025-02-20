@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import REST from '../../utils/REST';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
@@ -17,42 +17,41 @@ import {
   Box
 } from '@mui/material';
 
-export default function TrainingsView() {
+import { useTranslation } from 'react-i18next';
+
+export default function ExerciseView() {
   const [exerciseList, setExerciseList] = useState([]);
-  const [trainingTemplate, setTrainingTemplate] = useState([]);
-  const [trainingType, setTrainingType] = useState('A');
-  const [loading, setLoading] = useState(true);
+  const [exerciseTemplate, setExerciseTemplate] = useState([]);
+  const [selectedTrainingType, setSelectedTrainingType] = useState('A');
+  const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setLoading(true);
-    Promise.all([
-      REST.getTrainingByType(trainingType)
-        .then(response => {
-          setExerciseList(response.content);
-        })
-        .catch(error => {
-          console.error('Failed to fetch training names', error);
-        }),
+    const fetchData = async () => {
+      try {
+        const [trainingResponse, templateResponse] = await Promise.all([
+          REST.getTrainingByType(selectedTrainingType),
+          REST.getTrainingTemplate(selectedTrainingType)
+        ]);
 
-      REST.getTrainingTemplate(trainingType)
-        .then(response => {
-          setTrainingTemplate(response.exercises);
-        })
-        .catch(error => {
-          console.error('Failed to fetch training template', error);
-        })
-    ])
-      .finally(() => {
+        setExerciseList(trainingResponse.content);
+        setExerciseTemplate(templateResponse.exercises);
+      } catch (error) {
+        console.error('Failed to fetch data', error);
+      } finally {
         setLoading(false);
-      });
-  }, [trainingType]);
+      }
+    };
+
+      fetchData();
+    }, [selectedTrainingType]);
 
   return (
     <React.Fragment>
       <Container>
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <Select
-            onChange={e => setTrainingType(e.target.value)}
+            onChange={e => setSelectedTrainingType(e.target.value)}
             defaultValue="A"
           >
             <MenuItem value="A">Siłowy A</MenuItem>
@@ -77,12 +76,11 @@ export default function TrainingsView() {
               <TableHead>
                 <StyledTableRow>
                   <StyledTableCell>Data</StyledTableCell>
-                  {trainingTemplate.map((value, index) => (
+                  {exerciseTemplate.map((value, index) => (
                     <StyledTableCell key={index}>{value}</StyledTableCell>
                   ))}
                 </StyledTableRow>
               </TableHead>
-
               <TableBody>
                 {exerciseList.map((exerciseMap, index) => {
                   const firstAvailableExercise = Object.entries(exerciseMap).find(
@@ -93,15 +91,15 @@ export default function TrainingsView() {
                   return (
                     <StyledTableRow key={index}>
                       <StyledTableCell>{date}</StyledTableCell>
-                      {trainingTemplate.map((exercise, index) => {
+                      {exerciseTemplate.map((exercise, index) => {
                         const exerciseData = exerciseMap?.[exercise] || {};
                         return (
                           <StyledTableCell key={index}>
-                            <div>Weight: {exerciseData.weight || 'N/A'}</div>
-                            <div>Reps: {exerciseData.reps || 'N/A'}</div>
+                          <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
+                          <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
                           </StyledTableCell>
                         );
-                      })}
+                    })}
                     </StyledTableRow>
                   );
                 })}
