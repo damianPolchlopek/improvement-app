@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 import ExerciseChart from './ExerciseChart';
+import { useTranslation } from 'react-i18next';
 
 import {
   Autocomplete,
@@ -23,7 +24,7 @@ function formatXAxis(tickItem) {
 }
 
 export default function TrainingStatistic() {
-  const [exercises, setExercises] = useState();
+  const [exercises, setExercises] = useState([]);
 
   const [exerciseNames, setExerciseNames] = useState([]);
   const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
@@ -31,8 +32,10 @@ export default function TrainingStatistic() {
   const chartTypes = ['Weight', 'Capacity'];
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
 
-  const [beginDate, setBeginDate] = React.useState(1633711100000);
-  const [endDate, setEndDate] = React.useState(moment().add(1, 'day').valueOf());
+  const [beginDate, setBeginDate] = useState(1633711100000);
+  const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     REST.getExerciseNames().then(response => {
@@ -57,11 +60,11 @@ export default function TrainingStatistic() {
   };
 
   const handleChangeBeginDate = (newValue) => {
-    setBeginDate(newValue.$d);
+    setBeginDate(newValue.toDate());
   };
 
   const handleChangeEndDate = (newValue) => {
-    setEndDate(newValue.$d);
+    setEndDate(newValue.toDate());
   };
 
   return (
@@ -80,10 +83,10 @@ export default function TrainingStatistic() {
                 <Autocomplete
                   disableClearable
                   id="exercise-name-autocomplete"
-                  defaultValue="Bieżnia"
+                  value={selectedExerciseName}
                   options={exerciseNames}
                   onChange={handleExerciseNameChange}
-                  renderInput={(params) => <TextField {...params} label="Exercise Name" />}
+                  renderInput={(params) => <TextField {...params} label={t('chart.exerciseName')} />}
                 />}
             </FormControl>
           </Grid>
@@ -92,10 +95,10 @@ export default function TrainingStatistic() {
               <Autocomplete
                 disableClearable
                 id="chart-type-autocomplete"
-                defaultValue="Capacity"
+                value={selectedChartType}
                 options={chartTypes}
                 onChange={handleChartTypeChange}
-                renderInput={(params) => <TextField {...params} label="Chart Type" />}
+                renderInput={(params) => <TextField {...params} label={t('chart.chartType')} />}
               />
             </FormControl>
           </Grid>
@@ -106,7 +109,7 @@ export default function TrainingStatistic() {
           <Grid item xs={12} sm={6} md={4}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                label="Begin date"
+                label={t('chart.beginDate')}
                 inputFormat="DD/MM/YYYY"
                 value={beginDate}
                 onChange={handleChangeBeginDate}
@@ -117,7 +120,7 @@ export default function TrainingStatistic() {
           <Grid item xs={12} sm={6} md={4}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
-                label="End Date"
+                label={t('chart.endDate')}
                 inputFormat="DD/MM/YYYY"
                 value={endDate}
                 onChange={handleChangeEndDate}

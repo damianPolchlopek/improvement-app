@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
+import { useTranslation } from 'react-i18next';
 
 
 export default function TrainingForm(props) {
@@ -23,6 +24,7 @@ export default function TrainingForm(props) {
   const [exercisePlaces, setExercisePlaces] = useState([]);
   const [exerciseProgresses, setExerciseProgresses] = useState([]);
   const [exerciseTypes, setExerciseTypes] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     REST.getExerciseNames().then(response => {
@@ -83,28 +85,28 @@ export default function TrainingForm(props) {
     <React.Fragment>
       <Grid container spacing={2}>
 
-        <Grid xs={12}>
+        <Grid item xs={12}>
           <Typography
             variant="h5"
             component="div"
           >
-            Training Schema
+            {t('messages.trainingSchema')}
           </Typography>
         </Grid>
 
-        <Grid xs={12}>
+        <Grid item xs={12}>
           {exercisesFields.map((input, index) => {
             return (
               <div key={index}>
                 <FormControl {...styleFormControl} sx={{width: '50px'}}>
-                  <Typography display="inline">{index} </Typography>
+                  <Typography display="inline">{index}</Typography>
                 </FormControl>
                 {!props.isSimpleForm &&
                   <FormControl {...styleFormControl}>
-                    <InputLabel id="input-label-type">Type</InputLabel>
+                    <InputLabel id="input-label-type">{t('exercise.type')}</InputLabel>
                     <Select
-                      name='type'
-                      placeholder='Type'
+                      name={t('exercise.type')}
+                      placeholder={t('exercise.type')}
                       value={input.type}
                       onChange={event => handleFormChange(index, event)}
                       size='small'
@@ -120,10 +122,10 @@ export default function TrainingForm(props) {
                   </FormControl>}
                 {!props.isSimpleForm &&
                   <FormControl {...styleFormControl}>
-                    <InputLabel id="input-label-place">Place</InputLabel>
+                    <InputLabel id="input-label-place">{t('exercise.place')}</InputLabel>
                     <Select
-                      name='place'
-                      placeholder='Place'
+                      name={t('exercise.place')}
+                      placeholder={t('exercise.place')}
                       value={input.place}
                       onChange={event => handleFormChange(index, event)}
                       size='small'
@@ -138,10 +140,10 @@ export default function TrainingForm(props) {
                     </Select>
                   </FormControl>}
                 <FormControl {...styleFormControl} sx={{width: '500px'}}>
-                  <InputLabel id="input-label-name">Name</InputLabel>
+                  <InputLabel id="input-label-name">{t('exercise.name')}</InputLabel>
                   <Select
-                    name='name'
-                    placeholder='Name'
+                    name={t('exercise.name')}
+                    placeholder={t('exercise.name')}
                     value={input.name}
                     onChange={event => handleFormChange(index, event)}
                     size='small'
@@ -157,9 +159,9 @@ export default function TrainingForm(props) {
                 </FormControl>
                 <FormControl {...styleFormControl} >
                   <TextField
-                    label="Reps"
+                    label={t('exercise.reps')}
                     name='reps'
-                    placeholder='Reps'
+                    placeholder={t('exercise.reps')}
                     value={input.reps}
                     onChange={event => handleFormChange(index, event)}
                     variant="outlined"
@@ -169,9 +171,9 @@ export default function TrainingForm(props) {
                 <FormControl {...styleFormControl} >
                   <TextField
                     sx={{width: '260px'}}
-                    label="Weight"
+                    label={t('exercise.weight')}
                     name='weight'
-                    placeholder='Weight'
+                    placeholder={t('exercise.weight')}
                     value={input.weight}
                     onChange={event => handleFormChange(index, event)}
                     variant="outlined"
@@ -179,7 +181,7 @@ export default function TrainingForm(props) {
                   />
                 </FormControl>
                 <FormControl {...styleFormControl} sx={{width: '100px'}}>
-                  <InputLabel id="input-label-progress">Progress</InputLabel>
+                  <InputLabel id="input-label-progress">{t('exercise.progress')}</InputLabel>
                   <Select
                     name='progress'
                     placeholder='Progress'
@@ -202,7 +204,7 @@ export default function TrainingForm(props) {
                     color="success"
                     onClick={() => addFields(index)}
                   >
-                    Add
+                    {t('messages.add')}
                   </Button>
                 </FormControl>
                 <FormControl {...styleFormControl}>
@@ -211,7 +213,7 @@ export default function TrainingForm(props) {
                     color="error"
                     onClick={() => removeFields(index)}
                   >
-                    Remove
+                    {t('messages.remove')}
                   </Button>
                 </FormControl>
               </div>
@@ -220,7 +222,7 @@ export default function TrainingForm(props) {
         </Grid>
 
         <Grid xs={12}>
-          <Button variant="contained" onClick={addTraining}>Submit</Button>
+          <Button variant="contained" onClick={addTraining}>{t('messages.submit')}</Button>
         </Grid>
 
       </Grid>

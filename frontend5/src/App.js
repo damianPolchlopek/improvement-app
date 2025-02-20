@@ -8,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import Cookies from 'universal-cookie';
 import jwt_decode from 'jwt-decode';
+import './language/i18n.js';
 
 
 let theme = createTheme({

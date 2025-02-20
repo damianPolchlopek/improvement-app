@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import deepOrange from '@mui/material/colors/deepOrange';
 
 import Cookies from 'universal-cookie';
+import LanguageSwitcher from '../language/LanguageSwitcher';
 
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
@@ -50,6 +51,9 @@ export default function Header(props) {
               <IconButton color="inherit" sx={{p: 0.5}}>
                 <Avatar alt="My Avatar" sx={{bgcolor: deepOrange[500]}}>D</Avatar>
               </IconButton>
+            </Grid>
+            <Grid item>
+            <LanguageSwitcher />
             </Grid>
           </Grid>
         </Toolbar>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import moment from 'moment/moment';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 
 import {
   CartesianGrid,
@@ -23,11 +24,13 @@ function convertLocalDateToEpoch(date) {
 }
 
 const CustomTooltip = ({ active, payload, label }) => {
+  const { t } = useTranslation();
+  
   if (active && payload && payload.length) {
     return (
       <div style={{ backgroundColor: 'black', padding: '5px', color: 'white' }}>
-        <p>Date: {formatXAxis(label)}</p>
-        <p>Value: {payload[0]?.value || 'Brak danych'}</p>
+        <p>{t('chart.date')}: {formatXAxis(label)}</p>
+        <p>{t('chart.value')}: {payload[0]?.value || 'No data'}</p>
       </div>
     );
   }
@@ -38,8 +41,9 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 export default function ExerciseChart(props) {
   const [dataExercise, setDataExercise] = useState([]);
-  const [beginDate, setBeginDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [beginDate, setBeginDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const { t } = useTranslation();
 
   useEffect(() => {
     const updatedExercises = props.exercises.map(element => ({
@@ -78,7 +82,7 @@ export default function ExerciseChart(props) {
           </LineChart>
         </ResponsiveContainer>
       ) : (
-        <p>Ładowanie danych...</p>
+        <p>{t('messages.loading')}</p>
       )}
     </React.Fragment>
   );
