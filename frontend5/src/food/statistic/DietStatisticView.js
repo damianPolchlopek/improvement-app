@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
 
-import StyledTableCell  from '../../component/table/StyledTableCell'
-import StyledTableRow  from '../../component/table/StyledTableRow'
+import StyledTableCell  from '../../component/table/StyledTableCell';
+import StyledTableRow  from '../../component/table/StyledTableRow';
 
 import {
   Table,
@@ -14,16 +14,19 @@ import {
   TableHead,
   Paper,
 } from '@mui/material';
+
 import DietStatisticTableRow from "./DietStatisticTableRow";
 
 export default function DietStatisticView() {
   const [dietSummaryList, setDietSummaryList] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [dietSummaryLength, setDietSummaryLength] = React.useState(0);
 
   useEffect(() => {
     REST.getDietSummaries(page, rowsPerPage).then(response => {
       setDietSummaryList(response.content);
+      setDietSummaryLength(response.totalElements)
     });
   }, [page, rowsPerPage]);
 
@@ -54,10 +57,9 @@ export default function DietStatisticView() {
 
             <TableBody>
               {dietSummaryList
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((dietSummary, index) => {
                   return <DietStatisticTableRow
-                    key={dietSummary.id}
+                    key={index}
                     mealsFromDay={dietSummary.meals}
                     dietSummary={dietSummary}
                   />
@@ -69,7 +71,7 @@ export default function DietStatisticView() {
                 <StyledTableCell colSpan={7}>
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
-                    count={dietSummaryList.length}
+                    count={dietSummaryLength}
                     rowsPerPage={rowsPerPage}
                     component="div"
                     page={page}

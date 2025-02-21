@@ -3,16 +3,16 @@ import {useEffect, useState} from "react";
 import REST from "../../utils/REST";
 
 import MealFilter from "./mealTableComponent/MealFilter";
+import StyledTableCell from '../../component/table/StyledTableCell';
+import StyledTableRow from '../../component/table/StyledTableRow';
 
 import {
   Collapse,
   IconButton,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   Paper,
   Checkbox
 } from '@mui/material';
@@ -62,21 +62,21 @@ function Row(props) {
 
   return (
     <React.Fragment>
-      <TableRow onClick={() => {refreshMeals(); setOpen(!open);}}>
-        <TableCell sx={{width: '50px'}} >
+      <StyledTableRow onClick={() => {refreshMeals(); setOpen(!open);}}>
+        <StyledTableCell sx={{width: '50px'}} >
           <IconButton
             aria-label="expand row"
             size="small"
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </TableCell >
-        <TableCell component="th" scope="row">
+        </StyledTableCell >
+        <StyledTableCell component="th" scope="row">
           {row}
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        </StyledTableCell>
+      </StyledTableRow>
+      <StyledTableRow>
+        <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse
             in={open}
             timeout="auto"
@@ -84,43 +84,43 @@ function Row(props) {
           >
             <Table size="small">
               <TableHead>
-                <TableRow>
-                  <TableCell padding="checkbox"></TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Kcal</TableCell>
-                  <TableCell>Protein</TableCell>
-                  <TableCell>Carbs</TableCell>
-                  <TableCell>Fat</TableCell>
-                </TableRow>
+                <StyledTableRow>
+                  <StyledTableCell padding="checkbox"></StyledTableCell>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Kcal</StyledTableCell>
+                  <StyledTableCell>Protein</StyledTableCell>
+                  <StyledTableCell>Carbs</StyledTableCell>
+                  <StyledTableCell>Fat</StyledTableCell>
+                </StyledTableRow>
               </TableHead>
               <TableBody>
                 {mealList.map((meal) => {
                   const isItemSelected = props.isSelected(meal.id);
 
                   return (
-                    <TableRow
+                    <StyledTableRow
                       onClick={(event) => props.handleClick(event, meal.id)}
                       key={meal.name}
                       selected={isItemSelected}
                     >
-                      <TableCell>
+                      <StyledTableCell>
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
                         />
-                      </TableCell>
-                      <TableCell>{meal.name}</TableCell>
-                      <TableCell>{meal.kcal}</TableCell>
-                      <TableCell>{meal.protein}</TableCell>
-                      <TableCell>{meal.carbohydrates}</TableCell>
-                      <TableCell>{meal.fat}</TableCell>
-                    </TableRow>
+                      </StyledTableCell>
+                      <StyledTableCell>{meal.name}</StyledTableCell>
+                      <StyledTableCell>{meal.kcal}</StyledTableCell>
+                      <StyledTableCell>{meal.protein}</StyledTableCell>
+                      <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
+                      <StyledTableCell>{meal.fat}</StyledTableCell>
+                    </StyledTableRow>
                 )})}
               </TableBody>
             </Table>
           </Collapse>
-        </TableCell>
-      </TableRow>
+        </StyledTableCell>
+      </StyledTableRow>
     </React.Fragment>
   );
 }

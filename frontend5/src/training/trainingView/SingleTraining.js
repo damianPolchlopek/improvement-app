@@ -4,17 +4,17 @@ import { useTranslation } from 'react-i18next';
 
 import {
   Collapse,
-  ListItem,
-  ListItemButton,
-  ListItemText,
+  Typography,
+  Box,
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
-  TableRow
 } from '@mui/material';
+
+import StyledTableRow from '../../component/table/StyledTableRow';
+import StyledTableCell from '../../component/table/StyledTableCell';
 
 export default function SingleTraining(props) {
   const [exercises, setExercises] = useState([]);
@@ -59,49 +59,51 @@ export default function SingleTraining(props) {
 
   return (
     <React.Fragment>
-      <ListItem
+      <Box
         key={props.trainingName}
-        disablePadding
-        onClick={() => handleClick()}
+        onClick={handleClick}
+        sx={{
+          cursor: 'pointer',
+          padding: '10px',
+          backgroundColor: open ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.1)'
+        }}
       >
-        <ListItemButton role={undefined} dense>
-          <ListItemText id={props.trainingName} primary={props.trainingName}/>
-        </ListItemButton>
-
-      </ListItem>
+        <Typography>{props.trainingName}</Typography>
+      </Box>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <TableContainer component={Paper}>
+      <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell align="right">{t('exercise.date')}</TableCell>
-                <TableCell>{t('exercise.name')}</TableCell>
-                <TableCell align="right">{t('exercise.reps')}</TableCell>
-                <TableCell align="right">{t('exercise.weight')}</TableCell>
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell align="right">{t('exercise.date')}</StyledTableCell>
+                <StyledTableCell>{t('exercise.name')}</StyledTableCell>
+                <StyledTableCell align="right">{t('exercise.reps')}</StyledTableCell>
+                <StyledTableCell align="right">{t('exercise.weight')}</StyledTableCell>
+              </StyledTableRow>
             </TableHead>
 
             <TableBody>
               {exercises.map((exercise) => (
-                <TableRow
+                <StyledTableRow
                   key={exercise.id}
                   sx={{'&:last-child td, &:last-child th': {border: 0}}}
                 >
-                  <TableCell 
+                  <StyledTableCell 
                     align="right" 
                     key={exercise.name}
                     onClick={() => {
                       getExercisesByDate(exercise.date)
-                  }}>{exercise.date}</TableCell>
-                  <TableCell 
+                  }}>{exercise.date}</StyledTableCell>
+                  <StyledTableCell 
                     key={exercise.id}
                     onClick={() => {
                     getExercisesByName(exercise.name)
-                  }}>{exercise.name}</TableCell>
-                  <TableCell align="right">{exercise.reps}</TableCell>
-                  <TableCell align="right">{exercise.weight}</TableCell>
-                </TableRow>
+                  }}>{exercise.name}</StyledTableCell>
+                  <StyledTableCell align="right">{exercise.reps}</StyledTableCell>
+                  <StyledTableCell align="right">{exercise.weight}</StyledTableCell>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>

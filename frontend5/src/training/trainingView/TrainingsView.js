@@ -6,9 +6,15 @@ import { useTranslation } from 'react-i18next';
 import {
   CircularProgress,
   Container,
-  List,
-  Typography
+  Table,
+  Typography,
+  TableBody,
+  TablePagination,
+  TableFooter
 } from '@mui/material';
+
+import StyledTableRow from '../../component/table/StyledTableRow';
+import StyledTableCell from '../../component/table/StyledTableCell';
 
 
 export default function TrainingsView() {
@@ -16,17 +22,32 @@ export default function TrainingsView() {
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
+  const [page, setPage] = React.useState(0);
+  const [size, setSize] = React.useState(25);
+  const [trainingLength, setTrainingLength] = React.useState(0);
+
   useEffect(() => {
-    REST.getAllTrainingNames()
+    REST.getAllTrainingNames(page, size)
       .then(response => {
         setTrainingNames(response.content);
+        setTrainingLength(response.totalElements)
+        console.log(response)
         setLoading(false);
       })
       .catch(error => {
         console.error('Failed to fetch training names', error);
         setLoading(false);
       });
-  }, []);
+  }, [page, size]);
+
+  const handleChangeSize = (event) => {
+    setSize(+event.target.value);
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
   return (
     <React.Fragment>
@@ -36,11 +57,32 @@ export default function TrainingsView() {
           </Typography>
 
           {loading ? <CircularProgress /> :
-            <List>
-              {trainingNames.map((training) => (
-                <SingleTraining key={training.id} trainingName={training} />
-              ))}
-            </List>}
+            <Table>
+              <TableBody>
+                <StyledTableRow>
+                  {trainingNames.map((training, index) => (
+                    <SingleTraining key={index} trainingName={training} />
+                  ))}
+                </StyledTableRow>
+              </TableBody>
+
+              <TableFooter>
+                <StyledTableRow>
+                  <StyledTableCell colSpan={7}>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25, 50]}
+                      count={trainingLength}
+                      rowsPerPage={size}
+                      component="div"
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeSize}
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableFooter>
+            </Table>}
+
         </Container>
     </React.Fragment>
   );

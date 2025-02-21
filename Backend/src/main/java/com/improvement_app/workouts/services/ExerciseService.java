@@ -2,6 +2,8 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
+import com.improvement_app.util.Page;
+import com.improvement_app.util.PaginationHelper;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
@@ -12,12 +14,9 @@ import com.improvement_app.workouts.repository.ExerciseRepository;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -60,6 +59,11 @@ public class ExerciseService {
 
     public List<Exercise> findAllOrderByDateDesc() {
         return exerciseRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
+    }
+
+    public Page<String> getAllTrainingNames(Pageable page) {
+        List<String> trainingNames = getAllTrainingNames();
+        return PaginationHelper.getPage(trainingNames, page.getPageNumber() + 1, page.getPageSize());
     }
 
     public List<String> getAllTrainingNames() {

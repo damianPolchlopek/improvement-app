@@ -6,17 +6,17 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   Box,
   CircularProgress,
-  MenuItem,
   FormControl,
-  Select,
   Container
 } from '@mui/material';
+
+import StyledTableRow from '../../component/table/StyledTableRow'
+import StyledTableCell from '../../component/table/StyledTableCell'
+import TrainingTypeSelector from '../component/TrainingTypeSelector';
 
 export default function MaximumExerciseView() {
   const [exercises, setExercises] = useState(() => []);
@@ -42,21 +42,9 @@ export default function MaximumExerciseView() {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <FormControl sx={{ m: 1, minWidth: 200 }}>
-        <Select
-          onChange={e => setTrainingType(e.target.value)}
-          defaultValue="A"
-          displayEmpty
-        >
-          <MenuItem value="A">Siłowy A</MenuItem>
-          <MenuItem value="B">Siłowy B</MenuItem>
-          <MenuItem value="C">Hipertroficzny C</MenuItem>
-          <MenuItem value="D">Hipertroficzny D</MenuItem>
-          <MenuItem value="E">Basen</MenuItem>
-          <MenuItem value="A1">Siłowy A1</MenuItem>
-          <MenuItem value="B1">Siłowy B1</MenuItem>
-          <MenuItem value="C1">Hipertroficzny C1</MenuItem>
-          <MenuItem value="D1">Hipertroficzny D1</MenuItem>
-        </Select>
+        <TrainingTypeSelector 
+          setTrainingType={setTrainingType}
+        />
       </FormControl>
 
       {loading ? (
@@ -67,24 +55,24 @@ export default function MaximumExerciseView() {
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell>{t('exercise.date')}</TableCell>
-                <TableCell>{t('exercise.name')}</TableCell>
-                <TableCell align="right">{t('exercise.reps')}</TableCell>
-                <TableCell align="right">{t('exercise.weight')}</TableCell>
-              </TableRow>
+              <StyledTableRow>
+                <StyledTableCell>{t('exercise.date')}</StyledTableCell>
+                <StyledTableCell>{t('exercise.name')}</StyledTableCell>
+                <StyledTableCell align="right">{t('exercise.reps')}</StyledTableCell>
+                <StyledTableCell align="right">{t('exercise.weight')}</StyledTableCell>
+              </StyledTableRow>
             </TableHead>
             <TableBody>
               {exercises.map((exercise) => (
-                <TableRow
+                <StyledTableRow
                   key={exercise.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
-                  <TableCell>{exercise.date}</TableCell>
-                  <TableCell>{exercise.name}</TableCell>
-                  <TableCell align="right">{exercise.reps}</TableCell>
-                  <TableCell align="right">{exercise.weight}</TableCell>
-                </TableRow>
+                  <StyledTableCell>{exercise.date}</StyledTableCell>
+                  <StyledTableCell>{exercise.name}</StyledTableCell>
+                  <StyledTableCell align="right">{exercise.reps}</StyledTableCell>
+                  <StyledTableCell align="right">{exercise.weight}</StyledTableCell>
+                </StyledTableRow>
               ))}
             </TableBody>
           </Table>

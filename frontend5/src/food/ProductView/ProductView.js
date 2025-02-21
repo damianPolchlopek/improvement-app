@@ -1,18 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
+import StyledTableCell from '../../component/table/StyledTableCell';
+import StyledTableRow from '../../component/table/StyledTableRow';
 
 import PropTypes from 'prop-types';
 
 import {
-  Box, Paper,
+  Box, 
+  Paper,
   Tab,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   Tabs,
   TextField
 } from '@mui/material';
@@ -140,31 +141,31 @@ export default function ProductView() {
               <TableContainer>
                 <Table>
                   <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Kcal</TableCell>
-                      <TableCell>Protein</TableCell>
-                      <TableCell>Carbo</TableCell>
-                      <TableCell>Fat</TableCell>
-                      <TableCell>Amount</TableCell>
-                      <TableCell>Unit</TableCell>
-                    </TableRow>
+                    <StyledTableRow>
+                      <StyledTableCell>Name</StyledTableCell>
+                      <StyledTableCell>Kcal</StyledTableCell>
+                      <StyledTableCell>Protein</StyledTableCell>
+                      <StyledTableCell>Carbo</StyledTableCell>
+                      <StyledTableCell>Fat</StyledTableCell>
+                      <StyledTableCell>Amount</StyledTableCell>
+                      <StyledTableCell>Unit</StyledTableCell>
+                    </StyledTableRow>
                   </TableHead>
 
                   <TableBody>
                     {productList ? productList.map(product => {
-                      return <TableRow
+                      return <StyledTableRow
                         key={product.id}
                         sx={{'&:last-child td, &:last-child th': {border: 0}}}
                       >
-                        <TableCell>{product.name}</TableCell>
-                        <TableCell>{product.kcal}</TableCell>
-                        <TableCell>{product.protein}</TableCell>
-                        <TableCell>{product.carbohydrates}</TableCell>
-                        <TableCell>{product.fat}</TableCell>
-                        <TableCell>{product.amount}</TableCell>
-                        <TableCell>{product.unit}</TableCell>
-                      </TableRow>
+                        <StyledTableCell>{product.name}</StyledTableCell>
+                        <StyledTableCell>{product.kcal}</StyledTableCell>
+                        <StyledTableCell>{product.protein}</StyledTableCell>
+                        <StyledTableCell>{product.carbohydrates}</StyledTableCell>
+                        <StyledTableCell>{product.fat}</StyledTableCell>
+                        <StyledTableCell>{product.amount}</StyledTableCell>
+                        <StyledTableCell>{product.unit}</StyledTableCell>
+                      </StyledTableRow>
                     }) : null}
                   </TableBody>
 
