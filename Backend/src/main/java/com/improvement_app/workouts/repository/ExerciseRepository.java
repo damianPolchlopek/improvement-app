@@ -3,7 +3,6 @@ package com.improvement_app.workouts.repository;
 import com.improvement_app.workouts.entity.Exercise;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 import java.time.LocalDate;
 import java.util.List;

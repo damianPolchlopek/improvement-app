@@ -16,7 +16,7 @@ export default function DietStatisticTableRow(props) {
           <IconButton aria-label="expand row" size="small">
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </StyledTableCell >
+        </StyledTableCell>
 
         <StyledTableCell>{props.dietSummary.date}</StyledTableCell>
         <StyledTableCell>{props.dietSummary.kcal}</StyledTableCell>
@@ -34,26 +34,26 @@ export default function DietStatisticTableRow(props) {
           >
             <Table size="small">
               <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Kcal</TableCell>
-                  <TableCell>Protein</TableCell>
-                  <TableCell>Carbs</TableCell>
-                  <TableCell>Fat</TableCell>
-                </TableRow>
+                <StyledTableRow>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Kcal</StyledTableCell>
+                  <StyledTableCell>Protein</StyledTableCell>
+                  <StyledTableCell>Carbs</StyledTableCell>
+                  <StyledTableCell>Fat</StyledTableCell>
+                </StyledTableRow>
               </TableHead>
               <TableBody>
                 {props.mealsFromDay.map((meal) => {
                   return (
-                    <TableRow
+                    <StyledTableRow
                       key={meal.id}
                     >
-                      <TableCell>{meal.name}</TableCell>
-                      <TableCell>{meal.kcal}</TableCell>
-                      <TableCell>{meal.protein}</TableCell>
-                      <TableCell>{meal.carbohydrates}</TableCell>
-                      <TableCell>{meal.fat}</TableCell>
-                    </TableRow>
+                      <StyledTableCell>{meal.name}</StyledTableCell>
+                      <StyledTableCell>{meal.kcal}</StyledTableCell>
+                      <StyledTableCell>{meal.protein}</StyledTableCell>
+                      <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
+                      <StyledTableCell>{meal.fat}</StyledTableCell>
+                    </StyledTableRow>
                   )})}
               </TableBody>
             </Table>

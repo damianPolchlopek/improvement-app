@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
+import TrainingTypeSelector from '../component/TrainingTypeSelector';
 
 import {
   Container,
@@ -11,8 +12,6 @@ import {
   TableContainer,
   TableHead,
   FormControl,
-  MenuItem,
-  Select,
   CircularProgress,
   Box
 } from '@mui/material';
@@ -50,20 +49,9 @@ export default function ExerciseView() {
     <React.Fragment>
       <Container>
         <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <Select
-            onChange={e => setSelectedTrainingType(e.target.value)}
-            defaultValue="A"
-          >
-            <MenuItem value="A">Siłowy A</MenuItem>
-            <MenuItem value="B">Siłowy B</MenuItem>
-            <MenuItem value="C">Hipertroficzny C</MenuItem>
-            <MenuItem value="D">Hipertroficzny D</MenuItem>
-            <MenuItem value="E">Basen</MenuItem>
-            <MenuItem value="A1">Siłowy A1</MenuItem>
-            <MenuItem value="B1">Siłowy B1</MenuItem>
-            <MenuItem value="C1">Hipertroficzny C1</MenuItem>
-            <MenuItem value="D1">Hipertroficzny D1</MenuItem>
-          </Select>
+          <TrainingTypeSelector 
+            setTrainingType={setSelectedTrainingType}
+          />
         </FormControl>
 
         {loading ? (
@@ -95,8 +83,8 @@ export default function ExerciseView() {
                         const exerciseData = exerciseMap?.[exercise] || {};
                         return (
                           <StyledTableCell key={index}>
-                          <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
-                          <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
+                            <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
+                            <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
                           </StyledTableCell>
                         );
                     })}

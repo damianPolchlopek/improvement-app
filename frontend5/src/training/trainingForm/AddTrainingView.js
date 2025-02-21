@@ -9,15 +9,14 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  MenuItem,
-  Select,
   Typography,
 } from "@mui/material";
 
 import Grid from '@mui/material/Unstable_Grid2';
+import TrainingTypeSelector from "../component/TrainingTypeSelector";
 
 
-export default function AddTrainingView(props) {
+export default function AddTrainingView() {
   const [exercises, setExercises] = useState([]);
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
@@ -56,20 +55,9 @@ export default function AddTrainingView(props) {
         </Grid>
         <Grid item xs={12}>
           <FormControl sx={{m: 1, minWidth: 120}}>
-            <Select
-              onChange={e => setTrainingType(e.target.value)}
-              defaultValue="A"
-            >
-              <MenuItem value="A">Siłowy A</MenuItem>
-              <MenuItem value="B">Siłowy B</MenuItem>
-              <MenuItem value="C">Hipertroficzny C</MenuItem>
-              <MenuItem value="D">Hipertroficzny D</MenuItem>
-              <MenuItem value="E">Basen</MenuItem>
-              <MenuItem value="A1">Siłowy A1</MenuItem>
-              <MenuItem value="B1">Siłowy B1</MenuItem>
-              <MenuItem value="C1">Hipertroficzny C1</MenuItem>
-              <MenuItem value="D1">Hipertroficzny D1</MenuItem>
-            </Select>
+            <TrainingTypeSelector 
+              setTrainingType={setTrainingType}
+            />
           </FormControl>
         </Grid>
         

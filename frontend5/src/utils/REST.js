@@ -63,8 +63,8 @@ axios.interceptors.request.use(
 
 export default class REST {
     // Training module
-    static getAllTrainingNames() {
-        return get(serverUrl + exercise + 'trainingName/');
+    static getAllTrainingNames(page, size) {
+        return get(serverUrl + exercise + 'trainingName?page=' + page + '&size=' + size);
     }
 
     static getExercises(trainingName) {

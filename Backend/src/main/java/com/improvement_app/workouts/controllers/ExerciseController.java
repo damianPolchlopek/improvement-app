@@ -1,12 +1,16 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
+import com.improvement_app.util.Page;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.ws.rs.core.MediaType;
@@ -68,14 +72,16 @@ public class ExerciseController implements Serializable {
     }
 
     @Operation(description = "Get all training names")
-    @GetMapping("/trainingName/")
-    public ListResponse<String> getTrainingNames() {
-        List<String> trainingNames = exerciseService.getAllTrainingNames()
-                .stream()
-                .limit(25)
-                .toList();
+    @GetMapping("/trainingName")
+    public Page<String> getTrainingNames(@RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "10") int size,
+                                         @RequestParam(defaultValue = "date") String sortField,
+                                         @RequestParam(defaultValue = "DESC") String direction) {
 
-        return ListResponse.of(trainingNames);
+        Pageable pageable = PageRequest.of(page, size,
+                Sort.by(Sort.Direction.valueOf(direction), sortField));
+
+        return exerciseService.getAllTrainingNames(pageable);
     }
 
     @Operation(description = "Get last training template")
