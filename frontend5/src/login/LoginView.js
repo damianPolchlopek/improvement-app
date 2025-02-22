@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
 import REST from '../utils/REST';
+import { useTranslation } from 'react-i18next';
 
 import {
   Box,
@@ -19,7 +20,8 @@ export default function LoginView(props) {
       username: '',
       password: ''
     }
-  )
+  );
+  const { t } = useTranslation();
 
   const handleFormChange = (event) => {
     var new_obj = userDetails;
@@ -64,14 +66,14 @@ export default function LoginView(props) {
               variant="h5"
               component="div"
             >
-              Login Panel
+              {t('login.loginPanel')}
             </Typography>
           </Grid>
 
           <Grid xs={12}>
             <FormControl sx={{width: '30vh'}}>
               <TextField
-                label="Username"
+                label={t('login.username')}
                 name='username'
                 placeholder='username'
                 onChange={event => handleFormChange(event)}
@@ -83,7 +85,7 @@ export default function LoginView(props) {
           <Grid xs={12}>
             <FormControl sx={{width: '30vh'}}>
               <TextField
-                label="Password"
+                label={t('login.password')}
                 name='password'
                 placeholder='password'
                 type='password'
@@ -94,7 +96,7 @@ export default function LoginView(props) {
           </Grid>
 
           <Grid xs={12}>
-            <Button variant="contained" sx={{width: '25vh'}} onClick={submitLoginReq}>Submit</Button>
+            <Button variant="contained" sx={{width: '25vh'}} onClick={submitLoginReq}>{t('login.submit')}</Button>
           </Grid>
 
         </Grid>

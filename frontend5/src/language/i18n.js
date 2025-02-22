@@ -51,6 +51,66 @@ i18n.use(initReactI18next).init({
           enableMoreAccurateForm: "Enable a more accurate form",
           trainingSchema: "Training Schema",
           trainingView: "Training View"
+        },
+        header: {
+          logout: "Logout"
+        },
+        home: {
+          initTrainingModule: "Init Training Module",
+          initFoodModule: "Init Food Module"
+        },
+        login: {
+          loginPanel: "Login Panel",
+          username: "Username",
+          password: "Password",
+          submit: "Submit"
+        },
+        mealFilter: {
+          mealPopularity: "Meal Popularity",
+          all: "ALL",
+          popular: "Popular",
+          rare: "Rare"
+        },
+        addDietDay: {
+          saveDietDay: "Save Diet Day",
+          addDietDayView: "Add Diet Day View"
+        },
+        food: {
+          kcal: "Kcal",
+          protein: "Protein",
+          carbs: "Carbs",
+          fat: "Fat",
+          name: "Name",
+          all: "All",
+          lunch: "Lunch",
+          breakfast: "Breakfast",
+          hotDish: "Hot Dish",
+          sweets: "Sweets",
+          dinner: "Dinner",
+          other: "Other",
+          high: "High",
+          low: "Low",
+          mealsTable: {
+            mealName: "Meal Name",
+            calories: "Calories",
+            quantity: "Quantity",
+            totalCalories: "Total Calories"
+          },
+          meal: "Meal",
+          mealCategory: "Meal Category",
+          mealType: "Meal Type",
+          summary: "Summary",
+          products: "Products",
+          recipes: "Recipes",
+          portionAmount: "Portion Amount",
+          url: "URL",
+          amount: "Amount",
+          unit: "Unit",
+          noProducts: "No products available",
+          noRecipes: "No recipes available",
+          product: "Product",
+          dietStatisticTableRow: "Diet Statistic Table Row",
+          date: "Date"
         }
       }
     },
@@ -102,6 +162,60 @@ i18n.use(initReactI18next).init({
           enableMoreAccurateForm: "Włącz dokładnieszy formularz",
           trainingSchema: "Schemat Treningu",
           trainingView: "Widok treningów"
+        },
+        header: {
+          logout: "Wyloguj się"
+        },
+        home: {
+          initTrainingModule: "Zainicjuj moduł treningowy",
+          initFoodModule: "Zainicjuj moduł żywnościowy"
+        },
+        login: {
+          loginPanel: "Panel logowania",
+          username: "Nazwa użytkownika",
+          password: "Hasło",
+          submit: "Zatwierdź"
+        },
+        mealFilter: {
+          mealPopularity: "Popularność posiłków",
+          all: "WSZYSTKIE",
+          popular: "Popularne",
+          rare: "Rzadkie"
+        },
+        addDietDay: {
+          saveDietDay: "Zapisz dzień diety",
+          addDietDayView: "Widok dodawania dnia diety"
+        },
+        food: {
+          kcal: "Kcal",
+          protein: "Białko",
+          carbs: "Węglowodany",
+          fat: "Tłuszcz",
+          name: "Nazwa",
+          all: "Wszystkie",
+          lunch: "Obiad",
+          breakfast: "Śniadanie",
+          hotDish: "Ciepły Posiłek",
+          sweets: "Słodycze",
+          dinner: "Kolacja",
+          other: "Inne",
+          high: "Wysoka",
+          low: "Niska",
+          meal: "Posiłek",
+          mealCategory: "Kategoria posiłku",
+          mealType: "Typ posiłku",
+          summary: "Podsumowanie",
+          products: "Produkty",
+          recipes: "Przepisy",
+          portionAmount: "Ilość porcji",
+          url: "URL",
+          amount: "Ilość",
+          unit: "Jednostka",
+          noProducts: "Brak dostępnych produktów",
+          noRecipes: "Brak dostępnych przepisów",
+          product: "Produkt",
+          dietStatisticTableRow: "Wiersz statystyki diety",
+          date: "Data"
         }
       }
     }

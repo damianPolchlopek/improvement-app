@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 import SingleMeal from './SingleMeal';
 import CenteredContainer from '../../component/CenteredContainer';
+import { useTranslation } from 'react-i18next';
 
 import {
   Box,
@@ -48,6 +49,7 @@ TabPanel.propTypes = {
 export default function MealView() {
   const [mealList, setMealList] = useState([]);
   const [mealName, setMealName] = useState('');
+  const { t } = useTranslation();
 
   const [mealCategoryList, setMealCategoryList] = React.useState([]);
   const [mealTypeList, setMealTypeList] = React.useState([]);
@@ -97,19 +99,19 @@ export default function MealView() {
       <CenteredContainer>
         <TextField
           sx={{width: '25%'}}
-          label="Meal"
+          label={t('food.meal')}
           onChange={(event) => handleChange(event, 'mealName')}
         />
       </CenteredContainer>
 
       <Container sx={{minHeight: '10vh', display: 'flex', justifyContent: 'center', width: '25%'}}>
         <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-          <InputLabel id={labelIdCategory}>Meal Category</InputLabel>
+          <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
             <Select
               labelId={labelIdCategory}
               value={mealCategory}
               onChange={(event) => handleChange(event, 'mealCategory')}
-              label="Meal Category"
+              label={t('food.mealCategory')}
             >
               {mealCategoryList.map((mealCategory, index) =>
                 <MenuItem key={index} value={mealCategory}>{mealCategory}</MenuItem>
@@ -118,12 +120,12 @@ export default function MealView() {
         </FormControl>
 
         <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-          <InputLabel id={labelIdType}>Meal Type</InputLabel>
+          <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
             <Select
               labelId={labelIdType}
               value={mealType}
               onChange={(event) => handleChange(event, 'mealType')}
-              label="Meal Type"
+              label={t('food.mealType')}
             >
               {mealTypeList.map((mealType, index) =>
                 <MenuItem key={index} value={mealType}>{mealType}</MenuItem>

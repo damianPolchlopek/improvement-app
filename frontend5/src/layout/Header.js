@@ -8,12 +8,13 @@ import deepOrange from '@mui/material/colors/deepOrange';
 
 import Cookies from 'universal-cookie';
 import LanguageSwitcher from '../language/LanguageSwitcher';
-
+import { useTranslation } from 'react-i18next';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 export default function Header(props) {
   const {onDrawerToggle} = props;
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>
@@ -44,7 +45,7 @@ export default function Header(props) {
                 }}
                 onClick={() => new Cookies().remove('authorization')}
               >
-                Logout
+                {t('header.logout')}
               </Link>
             </Grid>
             <Grid item>

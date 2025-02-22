@@ -2,12 +2,14 @@ import * as React from "react"
 import {Collapse, IconButton, Table, TableBody, TableCell, TableHead, TableRow} from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useTranslation } from 'react-i18next';
 
 import StyledTableCell  from '../../component/table/StyledTableCell'
 import StyledTableRow  from '../../component/table/StyledTableRow'
 
 export default function DietStatisticTableRow(props) {
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   return (
     <React.Fragment>
@@ -35,11 +37,11 @@ export default function DietStatisticTableRow(props) {
             <Table size="small">
               <TableHead>
                 <StyledTableRow>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Kcal</StyledTableCell>
-                  <StyledTableCell>Protein</StyledTableCell>
-                  <StyledTableCell>Carbs</StyledTableCell>
-                  <StyledTableCell>Fat</StyledTableCell>
+                  <StyledTableCell>{t('food.name')}</StyledTableCell>
+                  <StyledTableCell>{t('food.kcal')}</StyledTableCell>
+                  <StyledTableCell>{t('food.protein')}</StyledTableCell>
+                  <StyledTableCell>{t('food.carbs')}</StyledTableCell>
+                  <StyledTableCell>{t('food.fat')}</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>

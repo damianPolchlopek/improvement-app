@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
+import { useTranslation } from 'react-i18next';
 
 import StyledTableCell  from '../../component/table/StyledTableCell';
 import StyledTableRow  from '../../component/table/StyledTableRow';
@@ -22,6 +23,7 @@ export default function DietStatisticView() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [dietSummaryLength, setDietSummaryLength] = React.useState(0);
+  const { t } = useTranslation();
 
   useEffect(() => {
     REST.getDietSummaries(page, rowsPerPage).then(response => {
@@ -47,11 +49,11 @@ export default function DietStatisticView() {
             <TableHead>
               <StyledTableRow>
                 <StyledTableCell></StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Kcal</StyledTableCell>
-                <StyledTableCell>Protein</StyledTableCell>
-                <StyledTableCell>Carbs</StyledTableCell>
-                <StyledTableCell>Fat</StyledTableCell>
+                <StyledTableCell>{t('food.date')}</StyledTableCell>
+                <StyledTableCell>{t('food.kcal')}</StyledTableCell>
+                <StyledTableCell>{t('food.protein')}</StyledTableCell>
+                <StyledTableCell>{t('food.carbs')}</StyledTableCell>
+                <StyledTableCell>{t('food.fat')}</StyledTableCell>
               </StyledTableRow>
             </TableHead>
 

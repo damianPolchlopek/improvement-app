@@ -3,10 +3,12 @@ import REST from '../utils/REST';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useTranslation } from 'react-i18next';
 
 function HomeView() {
   const [loadingTrainingModule, setLoadingTrainingModule] = React.useState(false);
   const [loadingFoodModule, setLoadingFoodModule] = React.useState(false);
+  const { t } = useTranslation();
 
   function handleClickTrainingModule() {
     setLoadingTrainingModule(true);
@@ -32,7 +34,7 @@ function HomeView() {
           loading={loadingTrainingModule}
           variant="outlined"
         >
-          Init Training Module
+          {t('home.initTrainingModule')}
         </LoadingButton>
       </Grid>
       <Grid xs={6}>
@@ -42,7 +44,7 @@ function HomeView() {
           onClick={handleClickFoodModule}
           loading={loadingFoodModule}
         >
-          Init Food Module
+          {t('home.initFoodModule')}
         </LoadingButton>
       </Grid>
     </Grid>
