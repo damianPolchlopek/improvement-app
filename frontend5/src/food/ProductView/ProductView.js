@@ -3,6 +3,7 @@ import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
+import { useTranslation } from 'react-i18next';
 
 import PropTypes from 'prop-types';
 
@@ -61,6 +62,7 @@ export default function ProductView() {
   const [tabIndex, setTabIndex] = useState(miesoTabIndex);
   const [typedProductName, setTypedProductName] = useState(' ');
   const [category, setCategory] = useState('ALL');
+  const { t } = useTranslation();
 
   useEffect(() => {
     REST.getProductCategoryList().then(response => {
@@ -106,7 +108,7 @@ export default function ProductView() {
             <TextField
               sx={{width: '40%'}}
               onChange={(e) => handleProductTyped(e)}
-              label="Product"
+              label={t('food.product')}
             />
           </CenteredContainer>
 
@@ -142,13 +144,13 @@ export default function ProductView() {
                 <Table>
                   <TableHead>
                     <StyledTableRow>
-                      <StyledTableCell>Name</StyledTableCell>
-                      <StyledTableCell>Kcal</StyledTableCell>
-                      <StyledTableCell>Protein</StyledTableCell>
-                      <StyledTableCell>Carbo</StyledTableCell>
-                      <StyledTableCell>Fat</StyledTableCell>
-                      <StyledTableCell>Amount</StyledTableCell>
-                      <StyledTableCell>Unit</StyledTableCell>
+                      <StyledTableCell>{t('food.name')}</StyledTableCell>
+                      <StyledTableCell>{t('food.kcal')}</StyledTableCell>
+                      <StyledTableCell>{t('food.protein')}</StyledTableCell>
+                      <StyledTableCell>{t('food.carbs')}</StyledTableCell>
+                      <StyledTableCell>{t('food.fat')}</StyledTableCell>
+                      <StyledTableCell>{t('food.amount')}</StyledTableCell>
+                      <StyledTableCell>{t('food.unit')}</StyledTableCell>
                     </StyledTableRow>
                   </TableHead>
 

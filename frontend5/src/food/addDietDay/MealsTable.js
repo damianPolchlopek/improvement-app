@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {useEffect, useState} from "react";
 import REST from "../../utils/REST";
+import { useTranslation } from 'react-i18next';
 
 import MealFilter from "./mealTableComponent/MealFilter";
 import StyledTableCell from '../../component/table/StyledTableCell';
@@ -22,8 +23,9 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function Row(props) {
   const { row } = props;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [mealList, setMealList] = useState([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!mealList.length) {
@@ -49,7 +51,7 @@ function Row(props) {
     ['HOT_DISH', 'Ciepły Posiłek'],
     ['SWEETS', 'Słodycze'],
     ['DINNER', 'Kolacja'],
-  ]);
+      ]);
 
   const popularityTranslation = new Map([
     ['ALL', 'All'],
@@ -86,11 +88,11 @@ function Row(props) {
               <TableHead>
                 <StyledTableRow>
                   <StyledTableCell padding="checkbox"></StyledTableCell>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Kcal</StyledTableCell>
-                  <StyledTableCell>Protein</StyledTableCell>
-                  <StyledTableCell>Carbs</StyledTableCell>
-                  <StyledTableCell>Fat</StyledTableCell>
+                  <StyledTableCell>{t('food.name')}</StyledTableCell>
+                  <StyledTableCell>{t('food.kcal')}</StyledTableCell>
+                  <StyledTableCell>{t('food.protein')}</StyledTableCell>
+                  <StyledTableCell>{t('food.carbs')}</StyledTableCell>
+                  <StyledTableCell>{t('food.fat')}</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -125,17 +127,18 @@ function Row(props) {
   );
 }
 
-const rows = [
-  'BREAKFAST',
-  'LUNCH',
-  'HOT_DISH',
-  'DINNER',
-  'SWEETS',
-  'OTHER'
-];
-
 export default function MealsTable(props) {
-  const [mealPopularity, setMealPopularity] = React.useState('HIGH');
+  const [mealPopularity, setMealPopularity] = useState('HIGH');
+  const { t } = useTranslation();
+
+  const rows = [
+    t('food.breakfast'),
+    t('food.lunch'),
+    t('food.hotDish'),
+    t('food.dinner'),
+    t('food.sweets'),
+    t('food.other')
+  ];
 
   return (
     <Paper sx={{ minWidth: 700 }}>

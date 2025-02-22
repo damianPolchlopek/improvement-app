@@ -2,8 +2,11 @@ import { Typography } from "@mui/material";
 import React from "react";
 import CenteredContainer from "../../component/CenteredContainer";
 import PropTypes from "prop-types";
+import { useTranslation } from 'react-i18next';
 
 export default function FoodStatisticView({ dietSummary }) {
+  const { t } = useTranslation();
+
   if (!dietSummary) return null;
 
   const { kcal, protein, carbohydrates, fat } = dietSummary;
@@ -15,7 +18,7 @@ export default function FoodStatisticView({ dietSummary }) {
           minWidth: { xs: '100%', sm: '400px' },
         }}
       >
-        Kcal: {kcal} Protein: {protein} Carbs: {carbohydrates} Fat: {fat}
+        {t('food.kcal')}: {kcal} {t('food.protein')}: {protein} {t('food.carbs')}: {carbohydrates} {t('food.fat')}: {fat}
       </Typography>
     </CenteredContainer>
   );

@@ -73,7 +73,7 @@ export default function SingleTraining(props) {
       </Box>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
-      <TableContainer component={Paper}>
+        <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
               <StyledTableRow>

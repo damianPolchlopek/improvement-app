@@ -14,7 +14,6 @@ import com.improvement_app.workouts.repository.ExerciseRepository;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -112,8 +111,8 @@ public class ExerciseService {
                 .toList();
     }
 
-    public List<Map<String, Exercise>> getLastTrainings(String type) {
-        String longerTrainingType = TrainingTypeConverter.convert(type);
+    public Page<LinkedHashMap<String, Exercise>> getLastTrainings(String type, Pageable page) {
+        final String longerTrainingType = TrainingTypeConverter.convert(type);
         List<Exercise> exercises = exerciseRepository.findAll();
 
         List<String> byName = exercises.stream()
@@ -124,7 +123,7 @@ public class ExerciseService {
 
         List<Exercise> byDate = exerciseRepository.findByTrainingNameIn(byName);
 
-        return byDate.stream()
+        List<LinkedHashMap<String, Exercise>> collect = byDate.stream()
                 // Sortowanie ćwiczeń według daty malejąco (LocalDate jest porównywalny)
                 .sorted(Comparator.comparing(Exercise::getDate).reversed())
                 // Grupowanie według dnia, następnie grupowanie według nazwy
@@ -133,6 +132,8 @@ public class ExerciseService {
                 // Przekształcenie mapy do listy map
                 .values().stream()
                 .collect(Collectors.toList());
+
+        return PaginationHelper.getPage(collect, page.getPageNumber() + 1, page.getPageSize());
     }
 
     private Exercise getLatestExercise(String exerciseName) {

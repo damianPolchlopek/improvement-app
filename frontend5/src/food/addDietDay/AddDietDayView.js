@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
+import { useTranslation } from 'react-i18next';
 
 import {
   Button
@@ -14,6 +15,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 export default function AddDietDayView() {
   const [dietSummary, setDietSummary] = useState({kcal: 0, protein: 0, carbohydrates: 0, fat: 0});
   const [selected, setSelected] = React.useState([]);
+  const { t } = useTranslation();
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -64,7 +66,7 @@ export default function AddDietDayView() {
             variant="contained"
             onClick={addDayDietSummary}
           >
-            Save Diet Day
+            {t('addDietDay.saveDietDay')}
           </Button>
         </Grid>
 
