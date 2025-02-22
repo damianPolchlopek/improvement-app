@@ -121,8 +121,8 @@ export default class REST {
         return get(serverUrl + exercise + 'trainingType/' + type);
     }
 
-    static getTrainingByType(type) {
-        return get(serverUrl + exercise + 'training/' + type);
+    static getTrainingByType(type, page, size) {
+        return get(serverUrl + exercise + 'training/' + type + '?page=' + page + '&size=' + size);
     }
 
     static addTraining(data) {

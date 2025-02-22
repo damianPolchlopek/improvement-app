@@ -22,15 +22,15 @@ export default function TrainingsView() {
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
-  const [page, setPage] = React.useState(0);
-  const [size, setSize] = React.useState(25);
-  const [trainingLength, setTrainingLength] = React.useState(0);
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(25);
+  const [listLength, setListLength] = useState(0);
 
   useEffect(() => {
     REST.getAllTrainingNames(page, size)
       .then(response => {
         setTrainingNames(response.content);
-        setTrainingLength(response.totalElements)
+        setListLength(response.totalElements)
         console.log(response)
         setLoading(false);
       })
@@ -57,7 +57,7 @@ export default function TrainingsView() {
           </Typography>
 
           {loading ? <CircularProgress /> :
-            <Table>
+            <Table sx={{ mt: 2 }}>
               <TableBody>
                 <StyledTableRow>
                   {trainingNames.map((training, index) => (
@@ -71,7 +71,7 @@ export default function TrainingsView() {
                   <StyledTableCell colSpan={7}>
                     <TablePagination
                       rowsPerPageOptions={[5, 10, 25, 50]}
-                      count={trainingLength}
+                      count={listLength}
                       rowsPerPage={size}
                       component="div"
                       page={page}

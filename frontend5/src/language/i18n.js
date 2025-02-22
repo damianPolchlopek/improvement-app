@@ -19,11 +19,24 @@ i18n.use(initReactI18next).init({
         menu: {
           home: "Home",
           exercises: "Exercises",
-          settings: "Settings"
+          settings: "Settings",
+          view: "View",
+          training: "Training",
+          maximum: "Maximum",
+          add: "Add",
+          statistic: "Statistic",
+          food: "Food",
+          product: "Product",
+          finance: "Finance",
+          information: "Information",
+          shopping: "Shopping",
+          other: "Other",
+          weekly: "Weekly",
+          daily: "Daily"
         },
         chart: {
-          date: "Data",
-          value: "Wartość",
+          date: "Date",
+          value: "Value",
           chartType: "Chart Type",
           exerciseName: "Exercise Name",
           beginDate: "Begin Date",
@@ -57,7 +70,20 @@ i18n.use(initReactI18next).init({
         menu: {
           home: "Strona główna",
           exercises: "Ćwiczenia",
-          settings: "Ustawienia"
+          settings: "Ustawienia",
+          view: "Widok",
+          training: "Trening",
+          maximum: "Maksimum",
+          add: "Dodaj",
+          statistic: "Statystyka",
+          food: "Jedzenie",
+          product: "Produkt",
+          finance: "Finanse",
+          information: "Informacje",
+          shopping: "Zakupy",
+          other: "Inne",
+          weekly: "Tygodniowy",
+          daily: "Dzienny"
         },
         chart: {
           date: "Data",
@@ -80,10 +106,10 @@ i18n.use(initReactI18next).init({
       }
     }
   },
-  lng: "en", // domyślny język
+  lng: "en", // default language
   fallbackLng: "pl",
   interpolation: {
-    escapeValue: false // react już to zabezpiecza
+    escapeValue: false // react already safeguards from XSS
   }
 });
 

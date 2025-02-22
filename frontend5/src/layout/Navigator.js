@@ -42,59 +42,60 @@ import {
   FinanceViewUrl
 } from "../utils/URLHelper";
 
-const categories = [
+import { useTranslation } from 'react-i18next';
+
+const categories = (t) => [
   {
-    id: 'Home',
+    id: t('menu.home'),
     icon: <HomeIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: HomeViewUrl },
+      { id: t('menu.view'), icon: <VisibilityIcon />, href: HomeViewUrl },
     ],
   },
   {
-    id: 'Training',
+    id: t('menu.training'),
     icon: <FitnessCenterIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: TrainingViewUrl },
-      { id: 'Exercises', icon: <VisibilityIcon />, href: ExerciseViewUrl },
-      { id: 'Maximum', icon: <VisibilityIcon />, href: MaximumExerciseViewUrl },
-      { id: 'Add', icon: <AddIcon />, href: TrainingAddUrl },
-      { id: 'Statistic', icon: <ShowChartIcon />, href: TrainingStatisticUrl },
+      { id: t('menu.view'), icon: <VisibilityIcon />, href: TrainingViewUrl },
+      { id: t('menu.exercises'), icon: <VisibilityIcon />, href: ExerciseViewUrl },
+      { id: t('menu.maximum'), icon: <VisibilityIcon />, href: MaximumExerciseViewUrl },
+      { id: t('menu.add'), icon: <AddIcon />, href: TrainingAddUrl },
+      { id: t('menu.statistic'), icon: <ShowChartIcon />, href: TrainingStatisticUrl },
     ],
   },
   {
-    id: 'Food',
+    id: t('menu.food'),
     icon: <RestaurantIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: FoodViewUrl },
-      { id: 'Add', icon: <AddIcon />, href: FoodAddUrl },
-      { id: 'Statistic', icon: <ShowChartIcon />, href: CalculateIngredientsUrl },
-      { id: 'Product', icon: <InventoryIcon />, href: FoodProductUrl },
+      { id: t('menu.view'), icon: <VisibilityIcon />, href: FoodViewUrl },
+      { id: t('menu.add'), icon: <AddIcon />, href: FoodAddUrl },
+      { id: t('menu.statistic'), icon: <ShowChartIcon />, href: CalculateIngredientsUrl },
+      { id: t('menu.product'), icon: <InventoryIcon />, href: FoodProductUrl },
     ],
   },
   {
-    id: 'Finance',
+    id: t('menu.finance'),
     icon: <AttachMoneyIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: FinanceViewUrl },
-      { id: 'Information', icon: <InventoryIcon />, href: FinanceConfigUrl },
+      { id: t('menu.view'), icon: <VisibilityIcon />, href: FinanceViewUrl },
+      { id: t('menu.information'), icon: <InventoryIcon />, href: FinanceConfigUrl },
     ],
   },
   {
-    id: 'Shopping',
+    id: t('menu.shopping'),
     icon: <ShoppingBagIcon />,
     children: [
-      { id: 'View', icon: <VisibilityIcon />, href: ShoppingViewUrl },
+      { id: t('menu.view'), icon: <VisibilityIcon />, href: ShoppingViewUrl },
     ],
   },
   {
-    id: 'Other',
+    id: t('menu.other'),
     icon: <CalendarTodayIcon />,
     children: [
-      { id: 'Weekly', icon: <VisibilityIcon />, href: WeeklyViewUrl },
-      { id: 'Daily', icon: <VisibilityIcon />, href: DailyViewUrl },
+      { id: t('menu.weekly'), icon: <VisibilityIcon />, href: WeeklyViewUrl },
+      { id: t('menu.daily'), icon: <VisibilityIcon />, href: DailyViewUrl },
     ],
   },
-
 ];
 
 const category = { 
@@ -114,15 +115,15 @@ const item = {
 
 export default function TrainingNavigation(props) {
   const { ...other } = props;
+  const { t } = useTranslation();
 
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem sx={{ ...item, px: 8, py: 2, fontSize: 22, color: '#fff' }}>
           <Logo />
-
         </ListItem>
-        {categories.map(({ id, children, icon }) => (
+        {categories(t).map(({ id, children, icon }) => (
           <Box key={id} sx={{ bgcolor: '#101F33' }}>
             <ListItem sx={{...category}}>
               <ListItemIcon>{icon}</ListItemIcon>
@@ -136,7 +137,6 @@ export default function TrainingNavigation(props) {
                 </ListItemButton>
               </ListItem>
             ))}
-
             <Divider sx={{ mt: 2 }} />
           </Box>
         ))}
