@@ -66,7 +66,7 @@ export default function AddDietDayView() {
             variant="contained"
             onClick={addDayDietSummary}
           >
-            {t('addDietDay.saveDietDay')}
+            {t('food.saveDietDay')}
           </Button>
         </Grid>
 

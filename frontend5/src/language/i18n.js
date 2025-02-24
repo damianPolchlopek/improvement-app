@@ -176,16 +176,6 @@ i18n.use(initReactI18next).init({
           password: "Hasło",
           submit: "Zatwierdź"
         },
-        mealFilter: {
-          mealPopularity: "Popularność posiłków",
-          all: "WSZYSTKIE",
-          popular: "Popularne",
-          rare: "Rzadkie"
-        },
-        addDietDay: {
-          saveDietDay: "Zapisz dzień diety",
-          addDietDayView: "Widok dodawania dnia diety"
-        },
         food: {
           kcal: "Kcal",
           protein: "Białko",
@@ -215,7 +205,13 @@ i18n.use(initReactI18next).init({
           noRecipes: "Brak dostępnych przepisów",
           product: "Produkt",
           dietStatisticTableRow: "Wiersz statystyki diety",
-          date: "Data"
+          date: "Data",
+          saveDietDay: "Zapisz dzień diety",
+          addDietDayView: "Widok dodawania dnia diety",
+          mealPopularity: "Popularność posiłków",
+          all: "WSZYSTKIE",
+          popular: "Popularne",
+          rare: "Rzadkie"
         }
       }
     }

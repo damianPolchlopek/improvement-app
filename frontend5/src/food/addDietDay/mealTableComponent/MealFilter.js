@@ -9,16 +9,16 @@ export default function MealFilter(props) {
   return (
     <Toolbar>
       <Typography sx={{ marginRight: '20px' }}>
-        {t('mealFilter.mealPopularity')}
+        {t('food.mealPopularity')}
       </Typography>
 
       <Select
         value={props.mealPopularity}
         onChange={(e) => props.setMealPopularity(e.target.value)}
       >
-        <MenuItem value="ALL">{t('mealFilter.all')}</MenuItem>
-        <MenuItem value="HIGH">{t('mealFilter.popular')}</MenuItem>
-        <MenuItem value="LOW">{t('mealFilter.rare')}</MenuItem>
+        <MenuItem value="ALL">{t('food.all')}</MenuItem>
+        <MenuItem value="HIGH">{t('food.popular')}</MenuItem>
+        <MenuItem value="LOW">{t('food.rare')}</MenuItem>
       </Select>
     </Toolbar>
   );
