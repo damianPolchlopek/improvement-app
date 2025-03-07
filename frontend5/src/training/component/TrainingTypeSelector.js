@@ -1,9 +1,9 @@
 import React from "react";
 
 import {
-    MenuItem,
-    Select
-  } from '@mui/material';
+  MenuItem,
+  Select
+} from '@mui/material';
 
 export default function TrainingTypeSelector(props) {
     return <Select

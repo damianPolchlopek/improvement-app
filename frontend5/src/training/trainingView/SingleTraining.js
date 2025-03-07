@@ -16,20 +16,15 @@ import {
 import StyledTableRow from '../../component/table/StyledTableRow';
 import StyledTableCell from '../../component/table/StyledTableCell';
 
-export default function SingleTraining(props) {
+export default function SingleTraining({ trainingName }) {
   const [exercises, setExercises] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [dataFetched, setDataFetched] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
   const handleClick = () => {
-    setOpen(!open);
-    if (!dataFetched) {
-      getExercisesByTrainingName(props.trainingName);
-      setDataFetched(true);
-    }
-  };
-
+    setIsOpen(open => !open);
+    getExercisesByTrainingName(trainingName);
+  }; 
 
   function getExercisesByTrainingName(trainingName) {
     const modifiedTrainingName = trainingName.replace(/ /g, "_");
@@ -58,21 +53,21 @@ export default function SingleTraining(props) {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Box
-        key={props.trainingName}
+        key={trainingName}
         onClick={handleClick}
         sx={{
           cursor: 'pointer',
           padding: '10px',
-          backgroundColor: open ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+          backgroundColor: isOpen ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
           borderBottom: '1px solid rgba(0, 0, 0, 0.1)'
         }}
       >
-        <Typography>{props.trainingName}</Typography>
+        <Typography>{trainingName}</Typography>
       </Box>
 
-      <Collapse in={open} timeout="auto" unmountOnExit>
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -109,6 +104,6 @@ export default function SingleTraining(props) {
           </Table>
         </TableContainer>
       </Collapse>
-    </React.Fragment>
+    </>
   );
 }

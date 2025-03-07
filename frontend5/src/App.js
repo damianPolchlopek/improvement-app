@@ -14,6 +14,16 @@ import './language/i18n.js';
 let theme = createTheme({
   palette: {
     mode: 'dark',
+    primary: {
+      main: '#90caf9',
+    },
+    secondary: {
+      main: '#f48fb1',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1d1d1d',
+    },
   },
   typography: {
     h5: {
@@ -21,6 +31,7 @@ let theme = createTheme({
       fontSize: 26,
       letterSpacing: 0.5,
     },
+    fontFamily: 'Roboto, sans-serif',
   },
   shape: {
     borderRadius: 8,
@@ -45,7 +56,7 @@ theme = {
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#081627',
+          backgroundColor: '#1d1d1d',
         },
       },
     },
@@ -53,6 +64,7 @@ theme = {
       styleOverrides: {
         root: {
           textTransform: 'none',
+          borderRadius: 8,
         },
         contained: {
           boxShadow: 'none',
@@ -71,7 +83,7 @@ theme = {
           height: 3,
           borderTopLeftRadius: 3,
           borderTopRightRadius: 3,
-          backgroundColor: theme.palette.common.white,
+          backgroundColor: theme.palette.primary.main,
         },
       },
     },
@@ -106,7 +118,7 @@ theme = {
     MuiDivider: {
       styleOverrides: {
         root: {
-          backgroundColor: 'rgb(255,255,255,0.15)',
+          backgroundColor: 'rgba(255,255,255,0.15)',
         },
       },
     },
@@ -114,7 +126,7 @@ theme = {
       styleOverrides: {
         root: {
           '&.Mui-selected': {
-            color: '#4fc3f7',
+            color: theme.palette.primary.main,
           },
         },
       },

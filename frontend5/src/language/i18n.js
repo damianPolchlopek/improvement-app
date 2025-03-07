@@ -65,6 +65,20 @@ i18n.use(initReactI18next).init({
           password: "Password",
           submit: "Submit"
         },
+        signup: {
+          title: "Sign Up",
+          alreadyHaveAccount: "Already have an account?",
+          login: "Log in",
+          username: "Username",
+          email: "Email",
+          password: "Password",
+          confirmPassword: "Confirm Password",
+          signUp: "Sign Up",
+          usernameError: "Please enter a valid username!",
+          emailError: "Please enter a valid email!",
+          passwordError: "Password should have minimum 4 characters!",
+          confirmPasswordError: "Passwords must be the same!"
+        },
         mealFilter: {
           mealPopularity: "Meal Popularity",
           all: "ALL",
@@ -175,6 +189,20 @@ i18n.use(initReactI18next).init({
           username: "Nazwa użytkownika",
           password: "Hasło",
           submit: "Zatwierdź"
+        },
+        signup: {
+          title: "Zarejestruj się",
+          alreadyHaveAccount: "Masz już konto?",
+          login: "Zaloguj się",
+          username: "Nazwa użytkownika",
+          email: "Email",
+          password: "Hasło",
+          confirmPassword: "Potwierdź hasło",
+          signUp: "Zarejestruj się",
+          usernameError: "Proszę podać prawidłową nazwę użytkownika!",
+          emailError: "Proszę podać prawidłowy email!",
+          passwordError: "Hasło powinno mieć co najmniej 4 znaki!",
+          confirmPasswordError: "Hasła muszą być takie same!"
         },
         food: {
           kcal: "Kcal",

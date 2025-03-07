@@ -39,22 +39,18 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 
-export default function ExerciseChart(props) {
+export default function ExerciseChart({exercises, beginDate, endDate}) {
   const [dataExercise, setDataExercise] = useState([]);
-  const [beginDate, setBeginDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const { t } = useTranslation();
 
   useEffect(() => {
-    const updatedExercises = props.exercises.map(element => ({
+    const updatedExercises = exercises.map(element => ({
       ...element,
       localDate: convertLocalDateToEpoch(element.localDate),
     }));
 
     setDataExercise(updatedExercises);
-    setBeginDate(props.beginDate);
-    setEndDate(props.endDate);
-  }, [props.exercises, props.beginDate, props.endDate]);
+  }, [exercises, beginDate, endDate]);
 
 
   return (

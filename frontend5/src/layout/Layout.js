@@ -22,6 +22,7 @@ import WeeklyListView from '../other/weekly/WeeklyListView.js';
 import DailyView from '../other/daily/DailyView.js';
 import FinanceView from '../finance/view/FinanceView.js';
 import FinanceConfig from '../finance/FinanceConfig.js';
+import SignUpView from '../login/SignUpView.jsx';
 
 import {
   HomeViewUrl, 
@@ -38,10 +39,9 @@ import {
   WeeklyViewUrl,
   DailyViewUrl,
   FinanceConfigUrl,
-  FinanceViewUrl
+  FinanceViewUrl,
+  SignUpUrl
 } from "../utils/URLHelper";
-
-
 
 const drawerWidth = 200;
 
@@ -98,6 +98,8 @@ export default function Layout(props) {
 
             <Route path={FinanceViewUrl} exact component={FinanceView} />
             <Route path={FinanceConfigUrl} exact component={FinanceConfig} />
+
+            <Route path={SignUpUrl} exact component={SignUpView} />
           </BrowserRouter>
         
         </Box>
