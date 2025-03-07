@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Box } from '@mui/material';
 
 const CenteredContainer = ({ children }) => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <Box style={{ display: 'flex', justifyContent: 'center', alignItems: "center", flexDirection: 'column', height: '100vh' }}>
       {children}
-    </div>
+    </Box>
   );
 };
 

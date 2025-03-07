@@ -17,6 +17,7 @@ export const WeeklyViewUrl = "/weekly-view";
 export const DailyViewUrl = "/daily-view";
 
 export const LoginUrl = "/login-panel"
+export const SignUpUrl = "/sign-up"
 
 export const FinanceViewUrl = "/finance-view";
 export const FinanceConfigUrl = "/finance-config";

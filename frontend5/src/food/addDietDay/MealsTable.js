@@ -23,7 +23,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function Row(props) {
   const { row } = props;
-  const [open, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [mealList, setMealList] = useState([]);
   const { t } = useTranslation();
 
@@ -51,7 +51,7 @@ function Row(props) {
     ['HOT_DISH', 'Ciepły Posiłek'],
     ['SWEETS', 'Słodycze'],
     ['DINNER', 'Kolacja'],
-      ]);
+  ]);
 
   const popularityTranslation = new Map([
     ['ALL', 'All'],
@@ -64,13 +64,13 @@ function Row(props) {
 
   return (
     <React.Fragment>
-      <StyledTableRow onClick={() => {refreshMeals(); setOpen(!open);}}>
+      <StyledTableRow onClick={() => {refreshMeals(); setIsOpen((open) => !open);}}>
         <StyledTableCell sx={{width: '50px'}} >
           <IconButton
             aria-label="expand row"
             size="small"
           >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            {isOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </StyledTableCell >
         <StyledTableCell component="th" scope="row">
@@ -80,7 +80,7 @@ function Row(props) {
       <StyledTableRow>
         <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse
-            in={open}
+            in={isOpen}
             timeout="auto"
             unmountOnExit
           >
