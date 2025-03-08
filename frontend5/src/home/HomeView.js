@@ -26,7 +26,6 @@ function HomeView() {
 
   return (
     <Grid container rowSpacing={1} columnSpacing={1}>
-
       <Grid xs={6}>
         <LoadingButton
           size="large"

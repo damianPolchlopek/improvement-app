@@ -63,7 +63,7 @@ export default function ExerciseView() {
   };
 
   return (
-    <React.Fragment>
+    <>
       <Container>
         <FormControl sx={{ m: 1, minWidth: 120 }}>
           <TrainingTypeSelector 
@@ -128,6 +128,6 @@ export default function ExerciseView() {
           </TableContainer>
         )}
       </Container>
-    </React.Fragment>
+    </>
   );
 }

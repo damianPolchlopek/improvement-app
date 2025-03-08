@@ -8,7 +8,7 @@ import {
 import Grid from '@mui/material/Unstable_Grid2';
 import CenteredContainer from '../component/CenteredContainer';
 import Input from './Input';
-import { useInput } from './useInput';
+import { useInput } from './hooks/useInput';
 import StyledPaper from '../component/StyledPaper';
 
 export default function SignUpView() {

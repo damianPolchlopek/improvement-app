@@ -21,3 +21,5 @@ export const SignUpUrl = "/sign-up"
 
 export const FinanceViewUrl = "/finance-view";
 export const FinanceConfigUrl = "/finance-config";
+
+export const TimerChallengeUrl = "/timer-challenge";

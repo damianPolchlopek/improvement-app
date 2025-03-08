@@ -95,13 +95,13 @@ export default function MealView() {
 
   return (
     <React.Fragment>
-      <CenteredContainer>
+      <Container>
         <TextField
           sx={{width: '25%'}}
           label={t('food.meal')}
           onChange={(event) => handleChange(event, 'mealName')}
         />
-      </CenteredContainer>
+      </Container>
 
       <Container sx={{minHeight: '10vh', display: 'flex', justifyContent: 'center', width: '25%'}}>
         <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
@@ -138,7 +138,6 @@ export default function MealView() {
           {mealList.map((meal, index) =>
             <Grid key={index} xs={6}>
               <SingleMeal meal={meal}/>
-              {console.log(meal)}
             </Grid>
           )}
         </Grid>

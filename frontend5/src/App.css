@@ -1,7 +1,8 @@
 .App {
   /* background-color: #1d2730; */
-  background-color: #202c34;
+  background: radial-gradient( #123146, #202c34);
   /* background-color: #3c198d; */
+  /* background: radial-gradient(#186a5e, #053339); */
   text-align: center;
   display: flex; 
   flex-direction: column;

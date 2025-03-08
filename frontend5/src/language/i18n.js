@@ -32,7 +32,10 @@ i18n.use(initReactI18next).init({
           shopping: "Shopping",
           other: "Other",
           weekly: "Weekly",
-          daily: "Daily"
+          daily: "Daily",
+          ticTacTao: "Tic Tac Toe",
+          timerChallenge: "Timer Challenge",
+          management: "Management"
         },
         chart: {
           date: "Date",
@@ -157,7 +160,10 @@ i18n.use(initReactI18next).init({
           shopping: "Zakupy",
           other: "Inne",
           weekly: "Tygodniowy",
-          daily: "Dzienny"
+          daily: "Dzienny",
+          ticTacTao: "Kółko i Krzyżyk",
+          timerChallenge: "Wyzwanie Czasowe",
+          management: "Zarządzanie"
         },
         chart: {
           date: "Data",
