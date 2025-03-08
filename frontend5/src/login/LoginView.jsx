@@ -10,7 +10,7 @@ import {
 
 import Grid from '@mui/material/Unstable_Grid2';
 
-import { useInput } from './useInput';
+import { useInput } from './hooks/useInput';
 import Input from './Input';
 import CenteredContainer from '../component/CenteredContainer';
 import StyledPaper from '../component/StyledPaper';
@@ -85,6 +85,7 @@ export default function LoginView() {
               label={t('login.password')}
               id="password"
               name="password"
+              type="password"
               onBlur={handlePasswordBlur}
               onChange={handlePasswordChange}
               value={enteredPassword}

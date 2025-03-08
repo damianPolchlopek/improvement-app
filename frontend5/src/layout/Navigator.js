@@ -39,7 +39,8 @@ import {
   WeeklyViewUrl,
   DailyViewUrl,
   FinanceConfigUrl,
-  FinanceViewUrl
+  FinanceViewUrl,
+  TimerChallengeUrl,
 } from "../utils/URLHelper";
 
 import { useTranslation } from 'react-i18next';
@@ -94,6 +95,15 @@ const categories = (t) => [
     children: [
       { id: t('menu.weekly'), icon: <VisibilityIcon />, href: WeeklyViewUrl },
       { id: t('menu.daily'), icon: <VisibilityIcon />, href: DailyViewUrl },
+    ],
+  },
+  {
+    id: t('menu.projects'),
+    icon: <CalendarTodayIcon />,
+    children: [
+      { id: t('menu.ticTacTao'), icon: <VisibilityIcon />, href: WeeklyViewUrl },
+      { id: t('menu.timerChallenge'), icon: <VisibilityIcon />, href: TimerChallengeUrl },
+      { id: t('menu.management'), icon: <VisibilityIcon />, href: DailyViewUrl },
     ],
   },
 ];

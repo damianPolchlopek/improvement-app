@@ -50,40 +50,39 @@ export default function TrainingsView() {
   };
 
   return (
-    <React.Fragment>
-        <Container maxWidth="xl" sx={{ width: '70%' }}>
-          <Typography variant="h4" component="div" style={{ color: 'white' }}>
-            {t('messages.trainingView')}
-          </Typography>
+    <Container maxWidth="xl" sx={{ width: '70%' }}>
+      <Typography variant="h4" component="div" style={{ color: 'white' }}>
+        {t('messages.trainingView')}
+      </Typography>
 
-          {loading ? <CircularProgress /> :
-            <Table sx={{ mt: 2 }}>
-              <TableBody>
-                <StyledTableRow>
-                  {trainingNames.map((training, index) => (
-                    <SingleTraining key={index} trainingName={training} />
-                  ))}
-                </StyledTableRow>
-              </TableBody>
+      {loading ? <CircularProgress /> :
+        <Table sx={{ mt: 2 }}>
+          <TableBody>
+            <StyledTableRow>
+              {trainingNames.map((training, index) => (
+                <SingleTraining key={index} trainingName={training} />
+              ))}
+            </StyledTableRow>
+          </TableBody>
 
-              <TableFooter>
-                <StyledTableRow>
-                  <StyledTableCell colSpan={7}>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25, 50]}
-                      count={listLength}
-                      rowsPerPage={size}
-                      component="div"
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeSize}
-                    />
-                  </StyledTableCell>
-                </StyledTableRow>
-              </TableFooter>
-            </Table>}
+          <TableFooter>
+            <StyledTableRow>
+              <StyledTableCell colSpan={7}>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  count={listLength}
+                  rowsPerPage={size}
+                  component="div"
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeSize}
+                />
+              </StyledTableCell>
+            </StyledTableRow>
+          </TableFooter>
+        </Table>}
 
-        </Container>
-    </React.Fragment>
+    </Container>
+
   );
 }
