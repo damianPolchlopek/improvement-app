@@ -56,7 +56,7 @@ export default function Layout(props) {
   };
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', flex: '100vh' }}>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -75,8 +75,8 @@ export default function Layout(props) {
           sx={{ display: { sm: 'block', xs: 'none' } }}
         />
       </Box>
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column'}}>
-        <Header onDrawerToggle={handleDrawerToggle} />
+      <Box sx={{ flex: 1}}>
+        <Header component="header" onDrawerToggle={handleDrawerToggle} />
         <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
        
           <BrowserRouter>

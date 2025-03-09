@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
 import StyledTableCell from '../../component/table/StyledTableCell';
@@ -64,6 +64,14 @@ export default function ProductView() {
   const [category, setCategory] = useState('ALL');
   const { t } = useTranslation();
 
+  const handleClickOnTab = useCallback((newCategory) => {
+    REST.getProductFiltredByCategoryAndName(newCategory, typedProductName).then(response => {
+      setProductList(response.entity);
+    });
+
+    setCategory(newCategory);
+  }, [typedProductName]);
+
   useEffect(() => {
     REST.getProductCategoryList().then(response => {
       setProductCategoryList(response.entity);
@@ -71,7 +79,7 @@ export default function ProductView() {
         handleClickOnTab(response.entity[0]);
       }
     });
-  }, []);
+  }, [handleClickOnTab]);
 
   useEffect(() => {
     REST.getProductFiltredByCategoryAndName(category, typedProductName).then(response => {
@@ -82,14 +90,6 @@ export default function ProductView() {
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
   };
-
-  const handleClickOnTab = (newCategory) => {
-    REST.getProductFiltredByCategoryAndName(newCategory, typedProductName).then(response => {
-      setProductList(response.entity);
-    });
-
-    setCategory(newCategory);
-  }
 
   const handleProductTyped = (e) => {
     setTypedProductName(e.target.value)

@@ -6,6 +6,7 @@ import { TrendingUp as TrendingUpIcon, TrendingDown as TrendingDownIcon } from '
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
+import { COIN_LIST } from './COIN_LIST.js';
 
 
 function datediff(first, second) {        
@@ -26,10 +27,8 @@ const CryptoPrices = () => {
   const [cryptoDescription, setCryptoDescription] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  var coinList = ["BTC", "ETH", "BNB", "ADA", "SOL", "MATIC", "DOT", "AVAX", "ATOM", "ARB", "SYN"]
-
   useEffect(() => {
-    REST.getFinanceCryptoPrice(coinList.join(","), "USD").then(response => {
+    REST.getFinanceCryptoPrice(COIN_LIST.join(","), "USD").then(response => {
       console.log(response.data)
       setCryptoData(response.data);
       setLoading(false)
@@ -69,7 +68,7 @@ const CryptoPrices = () => {
         </TableHead>
 
       <TableBody>
-        {cryptoData !== null && cryptoDescription !== null && coinList.map((symbol, index) => {
+        {cryptoData !== null && cryptoDescription !== null && COIN_LIST.map((symbol, index) => {
 
         const coinMarketCapIndex = cryptoData[symbol.toString()].cmc_rank;
 
@@ -93,7 +92,7 @@ const CryptoPrices = () => {
         const isPositiveATH = percentATH >= 0;
 
           return (
-            <TableRow>
+            <TableRow key={index}>
               <TableCell>{coinMarketCapIndex}</TableCell>
               <TableCell>{symbol}</TableCell>
               <TableCell>
@@ -156,17 +155,17 @@ const CryptoPrices = () => {
           </Typography>
 
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <Typography>
                 Weeks from ATH: {(calculateDays(cryptoDescription["BTC"].athDate)/7).toFixed(1)}
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <Typography>
                 Weeks from Bottom: {(calculateDays("2022-11-21")/7).toFixed(1)}
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid xs={12}>
               <Typography>
                 Week to halving: {( (calculateDays("2024-04-26")/7) * -1 ).toFixed(1)}
               </Typography>

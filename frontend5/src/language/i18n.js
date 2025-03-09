@@ -243,7 +243,6 @@ i18n.use(initReactI18next).init({
           saveDietDay: "Zapisz dzień diety",
           addDietDayView: "Widok dodawania dnia diety",
           mealPopularity: "Popularność posiłków",
-          all: "WSZYSTKIE",
           popular: "Popularne",
           rare: "Rzadkie"
         }

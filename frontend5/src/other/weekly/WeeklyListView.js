@@ -51,7 +51,7 @@ export default function WeeklyListView() {
 
   return (
     <React.Fragment>
-      {allCategoryTypes.length == 1 ? 
+      {allCategoryTypes.length === 1 ? 
       <Grid container spacing={3}>          
 
           <WeeklyAdd />
