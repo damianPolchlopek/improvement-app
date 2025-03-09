@@ -17,7 +17,7 @@ export default function Header(props) {
   const { t } = useTranslation();
 
   return (
-    <React.Fragment>
+    <>
       <AppBar color="secondary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
@@ -59,7 +59,7 @@ export default function Header(props) {
           </Grid>
         </Toolbar>
       </AppBar>
-    </React.Fragment>
+    </>
   );
 }
 

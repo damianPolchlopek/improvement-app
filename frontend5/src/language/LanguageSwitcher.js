@@ -1,14 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { FormControlLabel, Switch } from '@mui/material';
-import { LanguageContext } from '../language/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
 const LanguageSwitcher = () => {
-  const { language, changeLanguage } = useContext(LanguageContext);
+  const [ language, setLanguage ] = useState(localStorage.getItem('language') || 'en');
+  const { i18n } = useTranslation();
+
   const checked = language === 'en';
 
   const handleChange = (event) => {
     const newLang = event.target.checked ? 'en' : 'pl';
-    changeLanguage(newLang);
+    setLanguage(newLang);
+
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('language', newLang);
   };
 
   return (
