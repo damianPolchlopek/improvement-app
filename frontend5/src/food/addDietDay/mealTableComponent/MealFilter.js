@@ -3,7 +3,7 @@ import * as React from "react";
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-export default function MealFilter(props) {
+export default function MealFilter({mealPopularity, setMealPopularity}) {
   const { t } = useTranslation();
 
   return (
@@ -13,8 +13,8 @@ export default function MealFilter(props) {
       </Typography>
 
       <Select
-        value={props.mealPopularity}
-        onChange={(e) => props.setMealPopularity(e.target.value)}
+        value={mealPopularity}
+        onChange={(e) => setMealPopularity(e.target.value)}
       >
         <MenuItem value="ALL">{t('food.all')}</MenuItem>
         <MenuItem value="HIGH">{t('food.popular')}</MenuItem>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 
-import {AppBar, Avatar, Grid, IconButton, Link, Toolbar,} from '@mui/material';
+import { AppBar, Avatar, Grid, IconButton, Link, Toolbar } from '@mui/material';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import deepOrange from '@mui/material/colors/deepOrange';
@@ -54,7 +54,7 @@ export default function Header(props) {
               </IconButton>
             </Grid>
             <Grid item>
-            <LanguageSwitcher />
+              <LanguageSwitcher />
             </Grid>
           </Grid>
         </Toolbar>
