@@ -13,11 +13,7 @@ export default function FoodStatisticView({ dietSummary }) {
 
   return (
     <CenteredContainer>
-      <Typography
-        sx={{
-          minWidth: { xs: '100%', sm: '400px' },
-        }}
-      >
+      <Typography>
         {t('food.kcal')}: {kcal} {t('food.protein')}: {protein} {t('food.carbs')}: {carbohydrates} {t('food.fat')}: {fat}
       </Typography>
     </CenteredContainer>

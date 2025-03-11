@@ -76,9 +76,7 @@ export default function AddDietDayView() {
             handleClick={handleAddMealToDiet}
           />
         </Grid>
-
       </Grid>
-
     </CenteredContainer>
   );
 }

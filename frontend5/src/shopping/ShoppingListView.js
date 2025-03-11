@@ -24,16 +24,20 @@ export default function ShoppingListView() {
   const [isShoppingListIsVisible, setIsShoppingListIsVisible] = useState(false);
     
   useEffect(() => {
+
+    REST.getAllCategoryProducts().then(response => {
+      setAllCategoryTypes(response.entity);
+      setSelectedCategory(response.entity[0]);
+    });
+
+  }, []);
+
+  useEffect(() => {
     REST.getShoppingListByCategory(selectedCategory).then(response => {
       setShoppingList(response.entity);
     });
 
-    REST.getAllCategoryProducts().then(response => {
-      setAllCategoryTypes(response.entity);
-      setSelectedCategory(response.entity[1])
-    });
-
-  }, []);
+  }, [selectedCategory]);
 
   function loadProductsFromSelectedCategory() {
     REST.getShoppingListByCategory(selectedCategory).then(response => {

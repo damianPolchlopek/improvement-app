@@ -22,9 +22,6 @@ export default function WeeklyListView() {
   const [isWeeklyListIsVisible, setIsWeeklyListIsVisible] = useState(false);
     
   useEffect(() => {
-    REST.getWeeklyListByCategory(selectedCategory).then(response => {
-      setWeeklyList(response.entity);
-    });
 
     REST.getAllCategoryWeeklyRecords().then(response => {
       setAllCategoryTypes(response.entity);
@@ -32,6 +29,14 @@ export default function WeeklyListView() {
     });
 
   }, []);
+
+  useEffect(() => {
+
+    REST.getWeeklyListByCategory(selectedCategory).then(response => {
+      setWeeklyList(response.entity);
+    });
+    
+  }, [selectedCategory]);
 
   function loadProductsFromSelectedCategory() {
     REST.getWeeklyListByCategory(selectedCategory).then(response => {
