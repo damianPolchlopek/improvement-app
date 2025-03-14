@@ -52,6 +52,8 @@ export default function LoginView() {
       cookies.set('role', res.roles);
 
       window.location.reload()
+    }).catch(error => {
+      console.error("Error logging in:", error);
     });
   }
 

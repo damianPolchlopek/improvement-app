@@ -2,6 +2,7 @@ package com.improvement_app.workouts.repository;
 
 import com.improvement_app.workouts.entity.Exercise;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDate;
@@ -20,4 +21,5 @@ public interface ExerciseRepository extends MongoRepository<Exercise, String> {
 
     List<Exercise> findByTrainingNameOrderByIndex(String trainingName);
 
+    Exercise findTopByOrderByDateDesc();
 }

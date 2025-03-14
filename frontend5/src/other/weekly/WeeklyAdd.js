@@ -31,8 +31,8 @@ export default function AddShopping() {
 
   }, []);
 
-  function addProductToShoppingList(){
-    REST.addProductToWeeklyList(item).then(response => {
+  function addRecordToWeeklyList(){
+    REST.addRecordToWeeklyList(item).then(response => {
       console.log(item)
       window.location.reload();
     });
@@ -89,7 +89,7 @@ export default function AddShopping() {
           <Grid xs={12} hidden={isAddProductIsVisible}>
             <Button 
               variant="contained" 
-              onClick={() => addProductToShoppingList()}
+              onClick={() => addRecordToWeeklyList()}
             >
               Add Weekly Record
             </Button>

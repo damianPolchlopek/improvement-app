@@ -15,7 +15,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useTranslation } from 'react-i18next';
 
 
-export default function TrainingForm(props) {
+export default function TrainingForm({exercises, isSimpleForm}) {
   const [exercisesFields, setExercisesFields] = useState([
     {type: '', place: '', name: '', reps: '', weight: '', progress: ''},
   ])
@@ -45,12 +45,11 @@ export default function TrainingForm(props) {
   }, []);
 
   useEffect(() => {
-    setExercisesFields(props.exercises)
-  }, [props.exercises]);
+    setExercisesFields(exercises)
+  }, [exercises]);
 
   function addTraining() {
     REST.addTraining(exercisesFields).then(response => {
-      // props.props.history.push('/add-training')
       window.location.reload(false)
     });
   }
@@ -82,7 +81,7 @@ export default function TrainingForm(props) {
   }
 
   return (
-    <React.Fragment>
+    <>
       <Grid container spacing={2}>
 
         <Grid item xs={12}>
@@ -101,7 +100,7 @@ export default function TrainingForm(props) {
                 <FormControl {...styleFormControl} sx={{width: '50px'}}>
                   <Typography display="inline">{index}</Typography>
                 </FormControl>
-                {!props.isSimpleForm &&
+                {!isSimpleForm &&
                   <FormControl {...styleFormControl}>
                     <InputLabel id="input-label-type">{t('exercise.type')}</InputLabel>
                     <Select
@@ -120,7 +119,7 @@ export default function TrainingForm(props) {
                       }) : null}
                     </Select>
                   </FormControl>}
-                {!props.isSimpleForm &&
+                {!isSimpleForm &&
                   <FormControl {...styleFormControl}>
                     <InputLabel id="input-label-place">{t('exercise.place')}</InputLabel>
                     <Select
@@ -226,6 +225,6 @@ export default function TrainingForm(props) {
         </Grid>
 
       </Grid>
-    </React.Fragment>
+    </>
   )
 }
