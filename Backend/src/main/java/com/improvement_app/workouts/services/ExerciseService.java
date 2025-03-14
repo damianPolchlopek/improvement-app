@@ -56,10 +56,6 @@ public class ExerciseService {
         return exerciseRepository.saveAll(exercises);
     }
 
-    public List<Exercise> findAllOrderByDateDesc() {
-        return exerciseRepository.findAll(Sort.by(Sort.Direction.DESC, "date"));
-    }
-
     public Page<String> getAllTrainingNames(Pageable page) {
         List<String> trainingNames = getAllTrainingNames();
         return PaginationHelper.getPage(trainingNames, page.getPageNumber() + 1, page.getPageSize());
@@ -142,9 +138,9 @@ public class ExerciseService {
     }
 
     public List<Exercise> addTraining(List<Exercise> exercises) {
-        List<Exercise> exercisesFromDb = findAllOrderByDateDesc();
+        Exercise latestExercise = findLatestExercise();
 
-        String trainingName = generateTrainingName(exercises, exercisesFromDb);
+        String trainingName = DriveFilesHelper.generateFileName(exercises, latestExercise);
         String excelFileLocation = createTrainingExcelFile(exercises, trainingName);
         uploadTrainingToGoogleDrive(excelFileLocation, trainingName);
 
@@ -152,8 +148,8 @@ public class ExerciseService {
         return exerciseRepository.saveAll(filledExercises);
     }
 
-    private String generateTrainingName(List<Exercise> exercises, List<Exercise> exercisesFromDb) {
-        return DriveFilesHelper.generateFileName(exercises, exercisesFromDb.get(0));
+    public Exercise findLatestExercise() {
+        return exerciseRepository.findTopByOrderByDateDesc();
     }
 
     private String createTrainingExcelFile(List<Exercise> exercises, String trainingName) {

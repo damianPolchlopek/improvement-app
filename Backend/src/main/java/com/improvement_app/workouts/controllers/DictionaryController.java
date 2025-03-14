@@ -55,9 +55,7 @@ public class DictionaryController {
     @Operation(description = "Get training template")
     @GetMapping(value = "/training/{template}", produces = MediaType.APPLICATION_JSON)
     public TrainingTemplate getTrainingTemplate(@PathVariable String template) {
-        TrainingTemplate addedTraining = trainingTemplateService.getTrainingTemplate(template)
+        return trainingTemplateService.getTrainingTemplate(template)
                 .orElseThrow(() -> new RuntimeException("Training template not found"));
-
-        return addedTraining;
     }
 }

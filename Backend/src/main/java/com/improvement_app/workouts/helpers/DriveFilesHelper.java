@@ -170,19 +170,19 @@ public class DriveFilesHelper {
     public static String generateFileName(List<Exercise> exercisesToAdd, Exercise lastExistedExercise) {
         final String lastExerciseName = lastExistedExercise.getTrainingName();
         final String lastTrainingNumber = parseTrainingName(lastExerciseName, 1);
-        final int lastExercise = Integer.parseInt(lastTrainingNumber);
-        final String incrementedLastExerciseNumber = String.valueOf(lastExercise + 1);
+        final int lastTrainingNumberInt = Integer.parseInt(lastTrainingNumber);
+        final String incrementedLastExerciseNumber = String.valueOf(lastTrainingNumberInt + 1);
 
         final String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
         final String lastTypeExercise = exercisesToAdd.get(0).getTrainingName();
-        final String lastTrainingType = parseTrainingName(lastTypeExercise, 5);
+        final String lastTrainingType = parseTrainingType(lastTypeExercise);
 
         return incrementedLastExerciseNumber + " - " + dateString + "r." + " - " + lastTrainingType;
     }
 
     private static String parseTrainingName(String trainingName, int groupIndex) {
-        final String regex = "([0-9]{3}) - ([0-9]{2}).([0-9]{2}).([0-9]{4})r. - ([A-Z])";
+        final String regex = "([0-9]{3}) - ([0-9]{2}).([0-9]{2}).([0-9]{4})r. - ([A-Z0-9]+)";
 
         final Pattern pattern = Pattern.compile(regex);
         final Matcher matcher = pattern.matcher(trainingName);
@@ -192,6 +192,19 @@ public class DriveFilesHelper {
             throw new TrainingRegexNotFoundException("Incorrect training name: " + trainingName);
 
         return matcher.group(groupIndex);
+    }
+
+    public static String parseTrainingType(String trainingType) {
+        if (trainingType == null || !trainingType.contains("-")) {
+            throw new IllegalArgumentException("Invalid training type format");
+        }
+
+        String[] parts = trainingType.split("-");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid training type format");
+        }
+
+        return parts[1].trim();
     }
 
     public static void createExcelFile(final List<Exercise> exercises,

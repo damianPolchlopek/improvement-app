@@ -27,13 +27,6 @@ public class ExerciseController implements Serializable {
 
     private final ExerciseService exerciseService;
 
-    @Operation(description = "Get all exercises from database")
-    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON)
-    public ListResponse<Exercise> getExercises() {
-        List<Exercise> result = exerciseService.findAllOrderByDateDesc();
-        return ListResponse.of(result);
-    }
-
     @Operation(description = "Get all exercises with provided date")
     @GetMapping(value = "/date/{exerciseDate}", produces = MediaType.APPLICATION_JSON)
     public ListResponse<Exercise> getExercisesByDate(@PathVariable String exerciseDate) {

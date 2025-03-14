@@ -202,8 +202,8 @@ export default class REST {
         return deleteMethod(serverUrl + weekly + productId);
     }
 
-    static addProductToWeeklyList(product) {
-        return post(serverUrl + weekly, product);
+    static addRecordToWeeklyList(product) {
+        return post(serverUrl + 'weekly', product);
     }
 
     static getAllCategoryWeeklyRecords() {

@@ -8,6 +8,7 @@ public class TrainingTypeConverter {
             "B1", "Siłowy#1-B1",
             "C1", "Hipertroficzny#1-C1",
             "D1", "Hipertroficzny#1-D1",
+            "D2", "Hipertroficzny#1-D2",
             "A", "Siłowy#1-A",
             "B", "Siłowy#1-B",
             "C", "Hipertroficzny#1-C",

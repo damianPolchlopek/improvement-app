@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Unstable_Grid2';
-import { ExpandLess, ExpandMore }from '@mui/icons-material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import Typography from '@mui/material/Typography';
 
 import WeeklyAdd from './WeeklyAdd';
@@ -55,7 +55,7 @@ export default function WeeklyListView() {
   };
 
   return (
-    <React.Fragment>
+    <>
       {allCategoryTypes.length === 1 ? 
       <Grid container spacing={3}>          
 
@@ -127,9 +127,8 @@ export default function WeeklyListView() {
           </Grid>
         })}
           
-
       </Grid> : null}
-    </React.Fragment>
+    </>
   );
   
 }
