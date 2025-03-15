@@ -20,7 +20,7 @@ public class CORSConfiguration {
                                 "https://mutarexx.smallhost.pl:3000",
                                 "http://localhost:8080",
                                 "http://localhost:24568")
-                        .allowedMethods("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(false); // Brak poświadczeń
             }

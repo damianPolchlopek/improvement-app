@@ -13,6 +13,7 @@ import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.services.data.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -35,6 +36,8 @@ public class GoogleDriveService {
     private final ExerciseProgressService exerciseProgressService;
     private final ExercisePlaceService exercisePlaceService;
     private final TrainingTemplateService trainingTemplateService;
+    private final SimpMessagingTemplate messagingTemplate;
+
 
     public void initApplicationCategories() {
         final List<DriveFileItemDTO> responseList = googleDriveFileService.listFiles(DRIVE_CATEGORIES_FOLDER_NAME);
@@ -108,8 +111,11 @@ public class GoogleDriveService {
                 googleDriveFileService.downloadFile(driveFileItemDTOLoop);
                 trainingsName.add(trainingName);
 
-                log.info("({}/{}) Dodaje do bazy danych trening o nazwie: {} ",
-                        i+1, responseList.size(), trainingName);
+                String logMessage = String.format("(%d/%d) Dodaje do bazy danych trening o nazwie: %s ",
+                        i + 1, responseList.size(), trainingName);
+                log.info(logMessage);
+                messagingTemplate.convertAndSend("/topic/messages", logMessage);
+
 
                 File file = filePathService.getDownloadedFile(trainingName);
                 List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
