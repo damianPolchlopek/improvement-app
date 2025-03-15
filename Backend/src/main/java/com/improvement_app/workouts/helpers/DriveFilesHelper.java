@@ -175,7 +175,7 @@ public class DriveFilesHelper {
 
         final String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-        final String lastTypeExercise = exercisesToAdd.get(0).getTrainingName();
+        final String lastTypeExercise = exercisesToAdd.get(0).getType();
         final String lastTrainingType = parseTrainingType(lastTypeExercise);
 
         return incrementedLastExerciseNumber + " - " + dateString + "r." + " - " + lastTrainingType;

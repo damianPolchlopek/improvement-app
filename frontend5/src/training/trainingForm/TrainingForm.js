@@ -16,9 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 
 export default function TrainingForm({exercises, isSimpleForm}) {
-  const [exercisesFields, setExercisesFields] = useState([
-    {type: '', place: '', name: '', reps: '', weight: '', progress: ''},
-  ])
+  const [exercisesFields, setExercisesFields] = useState(exercises)
 
   const [exerciseNames, setExerciseNames] = useState([]);
   const [exercisePlaces, setExercisePlaces] = useState([]);
@@ -45,7 +43,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
   }, []);
 
   useEffect(() => {
-    setExercisesFields(exercises)
+    setExercisesFields(exercises);
   }, [exercises]);
 
   function addTraining() {
@@ -54,9 +52,12 @@ export default function TrainingForm({exercises, isSimpleForm}) {
     });
   }
 
-  const handleFormChange = (index, event) => {
+  const handleFormChange = (index, attribut, event) => {
+    console.log(attribut + ' ' + event.target.value)
     let data = [...exercisesFields];
-    data[index][event.target.name] = event.target.value;
+    data[index][attribut] = event.target.value;
+
+    console.log(data)
     setExercisesFields(data);
   }
 
@@ -95,6 +96,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
 
         <Grid item xs={12}>
           {exercisesFields.map((input, index) => {
+            {console.log(input)}
             return (
               <div key={index}>
                 <FormControl {...styleFormControl} sx={{width: '50px'}}>
@@ -107,7 +109,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
                       name={t('exercise.type')}
                       placeholder={t('exercise.type')}
                       value={input.type}
-                      onChange={event => handleFormChange(index, event)}
+                      onChange={event => handleFormChange(index, 'type', event)}
                       size='small'
                     >
                       {exerciseTypes ? exerciseTypes.map((exerciseType, index) => {
@@ -126,7 +128,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
                       name={t('exercise.place')}
                       placeholder={t('exercise.place')}
                       value={input.place}
-                      onChange={event => handleFormChange(index, event)}
+                      onChange={event => handleFormChange(index, 'place', event)}
                       size='small'
                     >
                       {exercisePlaces ? exercisePlaces.map((exercisePlace, index) => {
@@ -144,7 +146,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
                     name={t('exercise.name')}
                     placeholder={t('exercise.name')}
                     value={input.name}
-                    onChange={event => handleFormChange(index, event)}
+                    onChange={event => handleFormChange(index, 'name', event)}
                     size='small'
                   >
                     {exerciseNames ? exerciseNames.map((exerciseName, index) => {
@@ -162,7 +164,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
                     name='reps'
                     placeholder={t('exercise.reps')}
                     value={input.reps}
-                    onChange={event => handleFormChange(index, event)}
+                    onChange={event => handleFormChange(index, 'reps', event)}
                     variant="outlined"
                     size="small"
                   />
@@ -174,7 +176,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
                     name='weight'
                     placeholder={t('exercise.weight')}
                     value={input.weight}
-                    onChange={event => handleFormChange(index, event)}
+                    onChange={event => handleFormChange(index, 'weight', event)}
                     variant="outlined"
                     size="small"
                   />
@@ -185,7 +187,7 @@ export default function TrainingForm({exercises, isSimpleForm}) {
                     name='progress'
                     placeholder='Progress'
                     value={input.progress}
-                    onChange={event => handleFormChange(index, event)}
+                    onChange={event => handleFormChange(index, 'progress', event)}
                     size='small'
                   >
                     {exerciseProgresses ? exerciseProgresses.map((exerciseProgress, index) => {

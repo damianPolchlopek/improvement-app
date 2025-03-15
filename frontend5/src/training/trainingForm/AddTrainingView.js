@@ -23,8 +23,6 @@ export default function AddTrainingView() {
   const { t } = useTranslation();
 
   function loadLastTraining() {
-    setExercises([]);
-
     REST.getTrainingTemplateByType(trainingType)
     .then(response => {
       setExercises(response.content);
