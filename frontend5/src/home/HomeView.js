@@ -5,6 +5,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 
+import LogComponent from './LogComponent';
+
 function HomeView() {
   const [loadingTrainingModule, setLoadingTrainingModule] = React.useState(false);
   const [loadingFoodModule, setLoadingFoodModule] = React.useState(false);
@@ -45,6 +47,10 @@ function HomeView() {
         >
           {t('home.initFoodModule')}
         </LoadingButton>
+      </Grid>
+
+      <Grid xs={12}>
+        <LogComponent />
       </Grid>
     </Grid>
   );
