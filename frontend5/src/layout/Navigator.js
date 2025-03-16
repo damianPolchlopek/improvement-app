@@ -41,6 +41,7 @@ import {
   FinanceConfigUrl,
   FinanceViewUrl,
   TimerChallengeUrl,
+  HolidayPickerUrl
 } from "../utils/URLHelper";
 
 import { useTranslation } from 'react-i18next';
@@ -104,7 +105,7 @@ const categories = (t) => [
       { id: t('menu.ticTacTao'), icon: <VisibilityIcon />, href: WeeklyViewUrl },
       { id: t('menu.timerChallenge'), icon: <VisibilityIcon />, href: TimerChallengeUrl },
       { id: t('menu.management'), icon: <VisibilityIcon />, href: DailyViewUrl },
-      { id: t('menu.vacations (effect)'), icon: <VisibilityIcon />, href: DailyViewUrl },
+      { id: t('menu.vacations (effect)'), icon: <VisibilityIcon />, href: HolidayPickerUrl },
     ],
   },
 ];

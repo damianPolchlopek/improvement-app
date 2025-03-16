@@ -4,7 +4,7 @@ import './TimerChallengeMain.css';
 
 function TimerChallengeMain() {
   return (
-    <>
+    <div id="content">
       <Player />
       <div id="modal" />
       <div id="challenges">
@@ -13,7 +13,7 @@ function TimerChallengeMain() {
         <TimerChallenge title="Getting tough" targetTime={10} />
         <TimerChallenge title="Pros only" targetTime={15} />
       </div>
-    </>
+    </div>
   );
 }
 

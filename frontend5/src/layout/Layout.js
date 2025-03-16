@@ -24,6 +24,7 @@ import FinanceView from '../finance/view/FinanceView.js';
 import FinanceConfig from '../finance/FinanceConfig.js';
 import SignUpView from '../login/SignUpView.jsx';
 import TimerChallengeMain from '../projects/timerChallenge/TimerChallengeMain.jsx';
+import HolidayPickerMain from '../projects/holidayPicker/HolidayPickerMain.jsx';
 
 import {
   HomeViewUrl, 
@@ -42,7 +43,8 @@ import {
   FinanceConfigUrl,
   FinanceViewUrl,
   SignUpUrl,
-  TimerChallengeUrl
+  TimerChallengeUrl,
+  HolidayPickerUrl,
 } from "../utils/URLHelper";
 
 const drawerWidth = 200;
@@ -104,6 +106,7 @@ export default function Layout(props) {
             <Route path={SignUpUrl} exact component={SignUpView} />
 
             <Route path={TimerChallengeUrl} exact component={TimerChallengeMain} />
+            <Route path={HolidayPickerUrl} exact component={HolidayPickerMain} />
           </BrowserRouter>
         
         </Box>
