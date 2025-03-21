@@ -125,12 +125,11 @@ const item = {
   },
 };
 
-export default function TrainingNavigation(props) {
-  const { ...other } = props;
+export default function DrawerComponent(props) {
   const { t } = useTranslation();
 
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer {...props}>
       <List disablePadding>
         <ListItem sx={{ ...item, px: 8, py: 2, fontSize: 22, color: '#fff' }}>
           <Logo />

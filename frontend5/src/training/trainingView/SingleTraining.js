@@ -27,7 +27,7 @@ export default function SingleTraining({ trainingName }) {
   }; 
 
   function getExercisesByTrainingName(trainingName) {
-    const modifiedTrainingName = trainingName.replace(/ /g, "_");
+    const modifiedTrainingName = trainingName?.replace(/ /g, "_");
 
     REST.getExercises(modifiedTrainingName).then(response => {
       setExercises(response.content);
