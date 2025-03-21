@@ -1,6 +1,6 @@
 import './App.css';
 
-import Layout from './layout/Layout.js';
+import Layout from './layout/Layout.jsx';
 import LoginView from './login/LoginView';
 
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -9,6 +9,57 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Cookies from 'universal-cookie';
 import jwt_decode from 'jwt-decode';
 import './language/i18n.js';
+
+
+
+import HomeView from './home/HomeView';
+import AddTrainingView from "./training/trainingForm/AddTrainingView";
+import TrainingsView from "./training/trainingView/TrainingsView";
+import ExerciseView from './training/exerciseView/ExerciseView';
+import MaximumExerciseView from './training/maximumTrainingView/MaximumExerciseView.js';
+import TrainingStatistic from './training/trainingStatistic/TrainingStatistics';
+import ShoppingListView from "./shopping/ShoppingListView";
+import MealView from './food/foodView/MealView.js';
+import AddDietDayView from "./food/addDietDay/AddDietDayView";
+import DietStatisticView from "./food/statistic/DietStatisticView";
+import ProductView from './food/ProductView/ProductView.js';
+import WeeklyListView from './other/weekly/WeeklyListView.js';
+import DailyView from './other/daily/DailyView.js';
+import FinanceView from './finance/view/FinanceView.js';
+import FinanceConfig from './finance/FinanceConfig.js';
+import SignUpView from './login/SignUpView.jsx';
+import TimerChallengeMain from './projects/timerChallenge/TimerChallengeMain.jsx';
+import HolidayPickerMain from './projects/holidayPicker/HolidayPickerMain.jsx';
+
+import ErrorPage from './layout/ErrorPage.jsx';
+
+import {
+  HomeViewUrl, 
+  TrainingViewUrl, 
+  ExerciseViewUrl,
+  MaximumExerciseViewUrl,
+  TrainingAddUrl, 
+  TrainingStatisticUrl,
+  FoodViewUrl,
+  FoodAddUrl,
+  CalculateIngredientsUrl,
+  ShoppingViewUrl,
+  FoodProductUrl,
+  WeeklyViewUrl,
+  DailyViewUrl,
+  FinanceConfigUrl,
+  FinanceViewUrl,
+  SignUpUrl,
+  TimerChallengeUrl,
+  HolidayPickerUrl,
+} from "./utils/URLHelper";
+
+import { 
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+
+import { Box } from '@mui/material';
 
 
 let theme = createTheme({
@@ -162,6 +213,40 @@ theme = {
   },
 };
 
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Layout theme={theme} />,
+    errorElement: <ErrorPage />,
+    children: [
+      { path: HomeViewUrl, element: <HomeView /> },
+      { path: TrainingViewUrl, element: <TrainingsView /> },
+      { path: ExerciseViewUrl, element: <ExerciseView /> },
+      { path: MaximumExerciseViewUrl, element: <MaximumExerciseView /> },
+      { path: TrainingAddUrl, element: <AddTrainingView /> },
+      { path: TrainingStatisticUrl, element: <TrainingStatistic /> },
+      { path: FoodViewUrl, element: <MealView /> },
+      { path: FoodAddUrl, element: <AddDietDayView /> },
+      { path: CalculateIngredientsUrl, element: <DietStatisticView /> },
+      { path: FoodProductUrl, element: <ProductView /> },
+      { path: ShoppingViewUrl, element: <ShoppingListView /> },
+      { path: WeeklyViewUrl, element: <WeeklyListView /> },
+      { path: DailyViewUrl, element: <DailyView /> },
+      { path: FinanceViewUrl, element: <FinanceView /> },
+      { path: FinanceConfigUrl, element: <FinanceConfig /> },
+      { path: SignUpUrl, element: <SignUpView /> },
+      { path: TimerChallengeUrl, element: <TimerChallengeMain /> },
+      { path: HolidayPickerUrl, element: <HolidayPickerMain /> },
+    ]
+  }
+]);
+
+
+
+
+
+
+
 const checkTokenExpirationMiddleware = () => {
   const cookies = new Cookies();
   const token = cookies.get('authorization');
@@ -181,12 +266,14 @@ const checkTokenExpirationMiddleware = () => {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <div className="App">
-        {checkTokenExpirationMiddleware() ? <Layout theme={theme}/> : <LoginView/>}
-      </div>
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <Box className="App">
+          {checkTokenExpirationMiddleware() ? <RouterProvider router={router} /> : <LoginView/>}
+        </Box>
+      </ThemeProvider>
+    </>
   );
 }
 

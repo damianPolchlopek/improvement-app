@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import REST from '../../utils/REST';
 import TrainingForm from "./TrainingForm";
 import { useTranslation } from 'react-i18next';
@@ -30,12 +30,12 @@ export default function AddTrainingView() {
     .catch(error => console.error("Error loading training:", error));
   }
 
-  const history = useHistory();
+  // const history = useHistory();
 
   function addTraining() {
     REST.addTraining(exercises)
     .then(response => {
-      history.push('/trainings')
+      // history.push('/trainings')
     })
     .catch(error => console.error("Error adding training:", error));
   }
