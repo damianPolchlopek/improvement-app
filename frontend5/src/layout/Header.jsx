@@ -15,71 +15,27 @@ import LanguageSwitcher from '../language/LanguageSwitcher';
 import HeaderDesktop from './HeaderDesktop';
 import HeaderMobile from './HeaderMobile';
 
-import {
-  TrainingViewUrl,
-  ExerciseViewUrl,
-  MaximumExerciseViewUrl,
-  TrainingAddUrl,
-  TrainingStatisticUrl,
-  FoodViewUrl,
-  FoodAddUrl,
-  CalculateIngredientsUrl,
-  FoodProductUrl,
-  FinanceViewUrl,
-  FinanceConfigUrl,
-  ShoppingViewUrl,
-  WeeklyViewUrl,
-  DailyViewUrl,
-  TimerChallengeUrl,
-  HolidayPickerUrl,
-} from '../utils/URLHelper';
+import { useTranslation } from 'react-i18next';
 
-const pages = ['Training', 'Food', 'Finance', 'Other', 'Projects'];
-const subPages = {
-  Training: [
-    { name: 'View', path: TrainingViewUrl },
-    { name: 'Exercises', path: ExerciseViewUrl },
-    { name: 'Maximum', path: MaximumExerciseViewUrl },
-    { name: 'Add', path: TrainingAddUrl },
-    { name: 'Statistics', path: TrainingStatisticUrl },
-  ],
-  Food: [
-    { name: 'View', path: FoodViewUrl },
-    { name: 'Add', path: FoodAddUrl },
-    { name: 'Statistics', path: CalculateIngredientsUrl },
-    { name: 'Products', path: FoodProductUrl },
-  ],
-  Finance: [
-    { name: 'View', path: FinanceViewUrl },
-    { name: 'Information', path: FinanceConfigUrl },
-  ],
-  Other: [
-    { name: 'Shopping', path: ShoppingViewUrl },
-    { name: 'Weekly', path: WeeklyViewUrl },
-    { name: 'Daily', path: DailyViewUrl },
-  ],
-  Projects: [
-    { name: 'Timer Challenge', path: TimerChallengeUrl },
-    { name: 'Vacations', path: HolidayPickerUrl },
-  ],
-};
-
-const settings = ['Profile', 'Settings', 'Logout'];
+const settings = ( t ) => ['Profile', 'Settings', 'Logout'];
 
 function ResponsiveAppBar({onDrawerToggle}) {
+  const { t } = useTranslation();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+  
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-
   const handleLogout = () => {
     console.log('User logged out');
-    new Cookies().remove('authorization');
+    const cookies = new Cookies();
+    cookies.remove('authorization', { path: '/' });
+    window.location.reload(); // Reload the page to reflect logout
   };
 
   return (
@@ -90,10 +46,7 @@ function ResponsiveAppBar({onDrawerToggle}) {
           <HeaderMobile
             onDrawerToggle={onDrawerToggle}
           />
-          <HeaderDesktop
-            pages={pages}
-            subPages={subPages}
-          />
+          <HeaderDesktop />
           
           <LanguageSwitcher />
 
@@ -120,7 +73,7 @@ function ResponsiveAppBar({onDrawerToggle}) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {settings(t).map((setting) => (
                 <MenuItem
                   key={setting}
                   onClick={

@@ -35,7 +35,9 @@ i18n.use(initReactI18next).init({
           daily: "Daily",
           ticTacTao: "Tic Tac Toe",
           timerChallenge: "Timer Challenge",
-          management: "Management"
+          management: "Management",
+          projects: "Projects",
+          vacations: "Vacations"
         },
         chart: {
           date: "Date",
@@ -163,7 +165,9 @@ i18n.use(initReactI18next).init({
           daily: "Dzienny",
           ticTacTao: "Kółko i Krzyżyk",
           timerChallenge: "Wyzwanie Czasowe",
-          management: "Zarządzanie"
+          management: "Zarządzanie",
+          projects: "Projekty",
+          vacations: "Urlopy"
         },
         chart: {
           date: "Data",

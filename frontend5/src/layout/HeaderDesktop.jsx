@@ -3,8 +3,12 @@ import { Box, Button, Menu, MenuItem, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
-function HeaderDesktop({ pages, subPages }) {
+import { useTranslation } from 'react-i18next';
+import { MENU_ITEMS as menuItems } from './MenuItems'; 
+
+function HeaderDesktop() {
   const [anchorElDropdown, setAnchorElDropdown] = React.useState({});
+  const { t } = useTranslation();
 
   const handleOpenDropdownMenu = (event, page) => {
     setAnchorElDropdown((prev) => ({ ...prev, [page]: event.currentTarget }));
@@ -20,18 +24,18 @@ function HeaderDesktop({ pages, subPages }) {
         <Logo />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {pages.map((page) => (
-          <Box key={page}>
+        {menuItems(t).map(({ category, subPages }) => (
+          <Box key={category}>
             <Button
-              onClick={(event) => handleOpenDropdownMenu(event, page)}
+              onClick={(event) => handleOpenDropdownMenu(event, category)}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-              {page}
+              {category}
             </Button>
             <Menu
-              anchorEl={anchorElDropdown[page]}
-              open={Boolean(anchorElDropdown[page])}
-              onClose={() => handleCloseDropdownMenu(page)}
+              anchorEl={anchorElDropdown[category]}
+              open={Boolean(anchorElDropdown[category])}
+              onClose={() => handleCloseDropdownMenu(category)}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'left',
@@ -41,10 +45,10 @@ function HeaderDesktop({ pages, subPages }) {
                 horizontal: 'left',
               }}
             >
-              {subPages[page].map((subPage) => (
+              {subPages.map((subPage) => (
                 <MenuItem
                   key={subPage.name}
-                  onClick={() => handleCloseDropdownMenu(page)}
+                  onClick={() => handleCloseDropdownMenu(category)}
                   component={Link}
                   to={subPage.path}
                 >
