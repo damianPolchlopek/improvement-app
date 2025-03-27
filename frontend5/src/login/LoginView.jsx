@@ -15,6 +15,7 @@ import Input from './Input';
 import CenteredContainer from '../component/CenteredContainer';
 import StyledPaper from '../component/StyledPaper';
 
+
 export default function LoginView() {
   const { t } = useTranslation();
 
@@ -51,7 +52,10 @@ export default function LoginView() {
       cookies.set('authorization', authorization);
       cookies.set('role', res.roles);
 
-      window.location.reload()
+      console.log("Logged in successfully!");
+
+      window.location.reload(false);
+      // navigate("/");
     }).catch(error => {
       console.error("Error logging in:", error);
     });

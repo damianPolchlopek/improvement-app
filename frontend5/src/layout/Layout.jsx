@@ -28,6 +28,7 @@ export default function Layout() {
           <Outlet />
         </Box>
       </Box>
+      
     </Box>
   );
 }

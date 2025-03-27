@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import REST from '../../utils/REST';
 import TrainingForm from "./TrainingForm";
 import { useTranslation } from 'react-i18next';
@@ -21,6 +21,7 @@ export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   function loadLastTraining() {
     REST.getTrainingTemplateByType(trainingType)
@@ -30,20 +31,18 @@ export default function AddTrainingView() {
     .catch(error => console.error("Error loading training:", error));
   }
 
-  // const history = useHistory();
-
   function addTraining() {
     REST.addTraining(exercises)
     .then(response => {
-      // history.push('/trainings')
+      navigate('/training/add')
     })
     .catch(error => console.error("Error adding training:", error));
   }
 
   return (
-    <React.Fragment>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+    <>
+      <Grid container spacing={2} sx={{ minWidth: 200 }}>
+        <Grid item xs={12} sx={{ minWidth: 200 }}>
           <Typography
             variant="h5"
             component="div"
@@ -51,7 +50,7 @@ export default function AddTrainingView() {
             {t('messages.loadLastTraining')}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ minWidth: 200 }}>
           <FormControl sx={{m: 1, minWidth: 120}}>
             <TrainingTypeSelector 
               setTrainingType={setTrainingType}
@@ -59,7 +58,7 @@ export default function AddTrainingView() {
           </FormControl>
         </Grid>
         
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ minWidth: 200 }}>
           <Button
             variant="contained"
             onClick={() => loadLastTraining()}
@@ -68,7 +67,7 @@ export default function AddTrainingView() {
           </Button>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ minWidth: 200 }}>
           <FormControlLabel
             control={<Checkbox/>}
             label={t('messages.enableMoreAccurateForm')}
@@ -78,7 +77,11 @@ export default function AddTrainingView() {
           />
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ minWidth: 200 }} />
+        <Grid item xs={12} sx={{ minWidth: 200 }} />
+        <Grid item xs={12} sx={{ minWidth: 200 }} />
+
+        <Grid item xs={12} sx={{ minWidth: 200 }}>
           <TrainingForm
             isSimpleForm={isSimpleForm}
             exercises={exercises}
@@ -86,7 +89,7 @@ export default function AddTrainingView() {
         </Grid>
 
       </Grid>
-    </React.Fragment>
+    </>
 
   );
 }

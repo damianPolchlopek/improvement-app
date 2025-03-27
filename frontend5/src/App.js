@@ -3,14 +3,12 @@ import './App.css';
 import Layout from './layout/Layout.jsx';
 import LoginView from './login/LoginView';
 
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import Cookies from 'universal-cookie';
 import jwt_decode from 'jwt-decode';
 import './language/i18n.js';
-
-
 
 import HomeView from './home/HomeView';
 import AddTrainingView from "./training/trainingForm/AddTrainingView";
@@ -237,14 +235,15 @@ const router = createBrowserRouter([
       { path: SignUpUrl, element: <SignUpView /> },
       { path: TimerChallengeUrl, element: <TimerChallengeMain /> },
       { path: HolidayPickerUrl, element: <HolidayPickerMain /> },
+
+      // {
+      //   path: 'auth',
+      //   element: <AuthenticationPage />,
+      //   action: authAction
+      // },
     ]
   }
 ]);
-
-
-
-
-
 
 
 const checkTokenExpirationMiddleware = () => {
