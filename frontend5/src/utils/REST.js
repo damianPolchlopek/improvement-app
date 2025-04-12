@@ -1,5 +1,4 @@
 import axios from "axios";
-import Cookies from 'universal-cookie';
 
 // const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";
@@ -51,15 +50,15 @@ const deleteMethod = (url) => {
 
 axios.interceptors.request.use(
     (req) => {
-        const cookies = new Cookies();
-        req.headers.Authorization = cookies.get('authorization');
+        req.headers.Authorization = localStorage.getItem('authorization');
         return req;
     },
     (err) => {
-        console.log('Cookies error')
         return Promise.reject(err);
     }
 );
+
+
 
 export default class REST {
     // Training module

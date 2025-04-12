@@ -5,12 +5,12 @@ import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StrengthExercise implements ExerciseStrategy {
+public class KettleExercise implements ExerciseStrategy {
 
     private final String reps;
     private final String weight;
 
-    public StrengthExercise(String reps, String weight) {
+    public KettleExercise(String reps, String weight) {
         this.reps = reps;
         this.weight = weight;
     }

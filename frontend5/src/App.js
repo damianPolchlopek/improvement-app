@@ -6,7 +6,6 @@ import LoginView from './login/LoginView';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import Cookies from 'universal-cookie';
 import jwt_decode from 'jwt-decode';
 import './language/i18n.js';
 
@@ -30,6 +29,8 @@ import TimerChallengeMain from './projects/timerChallenge/TimerChallengeMain.jsx
 import HolidayPickerMain from './projects/holidayPicker/HolidayPickerMain.jsx';
 
 import ErrorPage from './layout/ErrorPage.jsx';
+import {action as logoutAction} from './login/Logout.js';
+import {action as loginAction} from './login/LoginView.jsx';
 
 import {
   HomeViewUrl, 
@@ -50,6 +51,8 @@ import {
   SignUpUrl,
   TimerChallengeUrl,
   HolidayPickerUrl,
+  LoginUrl,
+  LogoutUrl,
 } from "./utils/URLHelper";
 
 import { 
@@ -57,8 +60,9 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 
-import { Box } from '@mui/material';
+import { tokenLoader } from './login/Authentication.js';
 
+import { Box } from '@mui/material';
 
 let theme = createTheme({
   palette: {
@@ -216,46 +220,48 @@ const router = createBrowserRouter([
     path: '/',
     element: <Layout theme={theme} />,
     errorElement: <ErrorPage />,
+    loader: tokenLoader,
     children: [
-      { path: HomeViewUrl, element: <HomeView /> },
+      { index: true, element: <HomeView /> },
+
       { path: TrainingViewUrl, element: <TrainingsView /> },
       { path: ExerciseViewUrl, element: <ExerciseView /> },
       { path: MaximumExerciseViewUrl, element: <MaximumExerciseView /> },
       { path: TrainingAddUrl, element: <AddTrainingView /> },
       { path: TrainingStatisticUrl, element: <TrainingStatistic /> },
+
       { path: FoodViewUrl, element: <MealView /> },
       { path: FoodAddUrl, element: <AddDietDayView /> },
       { path: CalculateIngredientsUrl, element: <DietStatisticView /> },
       { path: FoodProductUrl, element: <ProductView /> },
+
       { path: ShoppingViewUrl, element: <ShoppingListView /> },
       { path: WeeklyViewUrl, element: <WeeklyListView /> },
       { path: DailyViewUrl, element: <DailyView /> },
       { path: FinanceViewUrl, element: <FinanceView /> },
       { path: FinanceConfigUrl, element: <FinanceConfig /> },
+
       { path: SignUpUrl, element: <SignUpView /> },
+      { path: LoginUrl, element: <LoginView />, action: loginAction},
+      { path: LogoutUrl, action: logoutAction},
+
       { path: TimerChallengeUrl, element: <TimerChallengeMain /> },
       { path: HolidayPickerUrl, element: <HolidayPickerMain /> },
-
-      // {
-      //   path: 'auth',
-      //   element: <AuthenticationPage />,
-      //   action: authAction
-      // },
     ]
   }
 ]);
 
 
 const checkTokenExpirationMiddleware = () => {
-  const cookies = new Cookies();
-  const token = cookies.get('authorization');
+  console.log(localStorage.getItem('authorization'));
+  const token = localStorage.getItem('authorization');
 
-  if (token === undefined) {
+  if (token === null) {
     return false;
   }
 
   if (jwt_decode(token).exp < Date.now() / 1000) {
-    cookies.remove('authorization');
+    localStorage.removeItem('authorization');
     return false;
   }
 
@@ -264,12 +270,14 @@ const checkTokenExpirationMiddleware = () => {
 
 
 function App() {
+
   return (
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <Box className="App">
-          {checkTokenExpirationMiddleware() ? <RouterProvider router={router} /> : <LoginView/>}
+          <RouterProvider router={router} />
+          {/* <RouterProvider router={router} /> */}
         </Box>
       </ThemeProvider>
     </>
