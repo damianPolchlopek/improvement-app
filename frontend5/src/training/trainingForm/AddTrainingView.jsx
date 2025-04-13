@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import REST from '../../utils/REST';
 import TrainingForm from "./TrainingForm";
 import { useTranslation } from 'react-i18next';
@@ -21,7 +20,6 @@ export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   function loadLastTraining() {
     REST.getTrainingTemplateByType(trainingType)

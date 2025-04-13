@@ -1,6 +1,6 @@
 import './App.css';
 
-import Layout from './layout/Layout.jsx';
+import Layout from './layout/Layout';
 import LoginView from './login/LoginView';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -12,22 +12,22 @@ import HomeView from './home/HomeView';
 import AddTrainingView from "./training/trainingForm/AddTrainingView";
 import TrainingsView from "./training/trainingView/TrainingsView";
 import ExerciseView from './training/exerciseView/ExerciseView';
-import MaximumExerciseView from './training/maximumTrainingView/MaximumExerciseView.js';
+import MaximumExerciseView from './training/maximumTrainingView/MaximumExerciseView';
 import TrainingStatistic from './training/trainingStatistic/TrainingStatistics';
 import ShoppingListView from "./shopping/ShoppingListView";
-import MealView from './food/foodView/MealView.js';
+import MealView from './food/foodView/MealView';
 import AddDietDayView from "./food/addDietDay/AddDietDayView";
 import DietStatisticView from "./food/statistic/DietStatisticView";
-import ProductView from './food/ProductView/ProductView.js';
-import WeeklyListView from './other/weekly/WeeklyListView.js';
-import DailyView from './other/daily/DailyView.js';
-import FinanceView from './finance/view/FinanceView.js';
-import FinanceInformation from './finance/FinanceInformation.js';
-import SignUpView from './login/SignUpView.jsx';
-import TimerChallengeMain from './projects/timerChallenge/TimerChallengeMain.jsx';
-import HolidayPickerMain from './projects/holidayPicker/HolidayPickerMain.jsx';
+import ProductView from './food/ProductView/ProductView.jsx';
+import WeeklyListView from './other/weekly/WeeklyListView';
+import DailyView from './other/daily/DailyView';
+import FinanceView from './finance/view/FinanceView';
+import FinanceInformation from './finance/FinanceInformation';
+import SignUpView from './login/SignUpView';
+import TimerChallengeMain from './projects/timerChallenge/TimerChallengeMain';
+import HolidayPickerMain from './projects/holidayPicker/HolidayPickerMain';
 
-import ErrorPage from './layout/ErrorPage.jsx';
+import ErrorPage from './layout/ErrorPage';
 import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 
@@ -60,8 +60,9 @@ import {
 } from "react-router-dom";
 
 import { tokenLoader } from './login/Authentication.js';
-import { loader as trainingAddLoader } from './training/trainingForm/TrainingForm.js';
-import { action as addTarainingAction } from './training/trainingForm/TrainingForm.js';
+import { loader as trainingAddLoader } from './training/trainingForm/TrainingForm.jsx';
+import { action as addTarainingAction } from './training/trainingForm/TrainingForm.jsx';
+import { loader as statisticLoader } from './training/trainingStatistic/TrainingStatistics.jsx';
 import { Box } from '@mui/material';
 
 let theme = createTheme({
@@ -231,7 +232,7 @@ const router = createBrowserRouter([
           { path: Exercises, element: <ExerciseView /> },
           { path: Maximum, element: <MaximumExerciseView /> },
           { path: Add, element: <AddTrainingView />, loader: trainingAddLoader, action: addTarainingAction },
-          { path: Statistics, element: <TrainingStatistic /> },    
+          { path: Statistics, element: <TrainingStatistic />, loader: statisticLoader },    
         ]
       },
       { 

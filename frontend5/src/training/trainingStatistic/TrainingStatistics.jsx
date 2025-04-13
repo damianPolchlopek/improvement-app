@@ -18,6 +18,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import moment from 'moment';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useLoaderData } from 'react-router-dom';
 
 function formatXAxis(tickItem) {
   return moment(tickItem).format('DD-MM-YYYY');
@@ -26,23 +27,16 @@ function formatXAxis(tickItem) {
 export default function TrainingStatistic() {
   const [exercises, setExercises] = useState([]);
 
-  const [exerciseNames, setExerciseNames] = useState([]);
+  const exerciseNames = useLoaderData() || [];
   const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
 
   const chartTypes = ['Weight', 'Capacity'];
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
 
-  const [beginDate, setBeginDate] = useState(1633711100000);
+  const [beginDate, setBeginDate] = useState(1653145460000);
   const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
 
   const { t } = useTranslation();
-
-  useEffect(() => {
-    REST.getExerciseNames().then(response => {
-      const exeNames = response.content.map(r => r.name);
-      setExerciseNames(exeNames);
-    });
-  }, []);
 
   useEffect(() => {
     REST.getTrainingStatistic(selectedExerciseName, selectedChartType,
@@ -142,4 +136,10 @@ export default function TrainingStatistic() {
       </Grid>
     </React.Fragment>
   );
+}
+
+export async function loader() {
+  const exerciseNames = await REST.getExerciseNames();
+  
+  return exerciseNames.content
 }

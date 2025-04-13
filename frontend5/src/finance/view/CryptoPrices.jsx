@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import REST from '../../utils/REST';
+import REST from '../../utils/REST.js';
 
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { TrendingUp as TrendingUpIcon, TrendingDown as TrendingDownIcon } from '@mui/icons-material';
