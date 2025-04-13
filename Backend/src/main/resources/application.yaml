@@ -7,7 +7,7 @@ spring:
 bezkoder:
   app:
     jwtSecret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
-    jwtExpirationMs: 86400000
+    jwtExpirationMs: 3600_000
 
 google:
   credentials:

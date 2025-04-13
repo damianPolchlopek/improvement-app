@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import REST from '../../utils/REST';
 import TrainingForm from "./TrainingForm";
 import { useTranslation } from 'react-i18next';
@@ -21,7 +20,6 @@ export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A');
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   function loadLastTraining() {
     REST.getTrainingTemplateByType(trainingType)
@@ -29,14 +27,6 @@ export default function AddTrainingView() {
       setExercises(response.content);
     })
     .catch(error => console.error("Error loading training:", error));
-  }
-
-  function addTraining() {
-    REST.addTraining(exercises)
-    .then(response => {
-      navigate('/training/add')
-    })
-    .catch(error => console.error("Error adding training:", error));
   }
 
   return (
@@ -85,7 +75,7 @@ export default function AddTrainingView() {
           <TrainingForm
             isSimpleForm={isSimpleForm}
             exercises={exercises}
-            submitFunction={addTraining}/>
+          />
         </Grid>
 
       </Grid>

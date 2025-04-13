@@ -1,43 +1,40 @@
-// import { json, redirect } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 
-// import AuthForm from '../components/AuthForm';
+export function getTokenDuration() {
+  const storedExpirationDate = localStorage.getItem('expiration');
+  const expirationDate = new Date(storedExpirationDate * 1000);
+  const now = new Date();
+  const duration = expirationDate.getTime() - now.getTime();
+  return duration;
+}
 
-// function AuthenticationPage() {
-//   return <AuthForm />;
-// }
+export function getAuthToken() {
+  const token = localStorage.getItem('authorization');
 
-// export default AuthenticationPage;
+  if (!token) {
+    return null;
+  }
 
-// export async function action({ request }) {
-//   const searchParams = new URL(request.url).searchParams;
-//   const mode = searchParams.get('mode') || 'login';
+  const tokenDuration = getTokenDuration();
 
-//   if (mode !== 'login' && mode !== 'signup') {
-//     throw json({ message: 'Unsupported mode.' }, { status: 422 });
-//   }
+  if (tokenDuration < 0) {
+    return 'EXPIRED';
+  }
 
-//   const data = await request.formData();
-//   const authData = {
-//     email: data.get('email'),
-//     password: data.get('password'),
-//   };
+  return token;
+}
 
-//   const response = await fetch('http://localhost:8080/' + mode, {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify(authData),
-//   });
+export function tokenLoader() {
+  const token = getAuthToken();
+  return token;
+}
 
-//   if (response.status === 422 || response.status === 401) {
-//     return response;
-//   }
+export function checkAuthLoader() {
+  console.log('checkAuthLoader');
 
-//   if (!response.ok) {
-//     throw json({ message: 'Could not authenticate user.' }, { status: 500 });
-//   }
+  const token = getAuthToken();
 
-//   // soon: manage that token
-//   return redirect('/');
-// }
+  if (!token) {
+    return redirect('/login');
+  }
+}

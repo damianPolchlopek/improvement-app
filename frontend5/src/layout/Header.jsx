@@ -10,16 +10,17 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 
-import Cookies from 'universal-cookie';
 import LanguageSwitcher from '../language/LanguageSwitcher';
 import HeaderDesktop from './HeaderDesktop';
 import HeaderMobile from './HeaderMobile';
 
 import { useTranslation } from 'react-i18next';
+import { useSubmit } from 'react-router-dom';
 
 const settings = ( t ) => ['Profile', 'Settings', 'Logout'];
 
 function ResponsiveAppBar({onDrawerToggle}) {
+  const submit = useSubmit();
   const { t } = useTranslation();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -33,9 +34,7 @@ function ResponsiveAppBar({onDrawerToggle}) {
 
   const handleLogout = () => {
     console.log('User logged out');
-    const cookies = new Cookies();
-    cookies.remove('authorization', { path: '/' });
-    window.location.reload(); // Reload the page to reflect logout
+    submit(null, { method: 'post', action: '/logout' });
   };
 
   return (
@@ -46,6 +45,7 @@ function ResponsiveAppBar({onDrawerToggle}) {
           <HeaderMobile
             onDrawerToggle={onDrawerToggle}
           />
+          
           <HeaderDesktop />
           
           <LanguageSwitcher />

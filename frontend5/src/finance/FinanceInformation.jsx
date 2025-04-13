@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Item from '../component/Item';
 import CenteredContainer from '../component/CenteredContainer';
 
-export default function FinanceConfig() {
+export default function FinanceInformation() {
 
   return (
     <CenteredContainer>

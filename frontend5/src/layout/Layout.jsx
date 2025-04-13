@@ -1,13 +1,35 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
+import { getTokenDuration, getAuthToken } from '../login/Authentication.js';
+import { Outlet, useLoaderData, useSubmit } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Header from './Header.jsx';
-import { Outlet } from "react-router-dom";
 import Drawer from './Drawer.jsx';
 
 export default function Layout() {
-  const [ mobileOpen, setMobileOpen ] = React.useState(false);
+  const [ mobileOpen, setMobileOpen ] = useState(false);
+  const token = useLoaderData();
+  const submit = useSubmit();
   
+  useEffect(() => {
+    if (!token) {
+      return;
+    }
+
+    if (token === 'EXPIRED') {
+      submit(null, { action: '/logout', method: 'post' });
+      return;
+    }
+
+    const tokenDuration = getTokenDuration();
+
+    setTimeout(() => {
+      submit(null, { action: '/logout', method: 'post' });
+    }, tokenDuration);
+
+  }, [token, submit]);
+
   const handleDrawerToggle = () => {
     setMobileOpen((prevValue) => !prevValue);
   };
@@ -23,7 +45,7 @@ export default function Layout() {
       />
 
       <Box sx={{ flex: 1}}>
-        <Header onDrawerToggle={handleDrawerToggle}/>
+        { getAuthToken() !== null ? <Header onDrawerToggle={handleDrawerToggle}/> : null}
         <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
           <Outlet />
         </Box>

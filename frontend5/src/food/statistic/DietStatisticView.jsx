@@ -20,9 +20,9 @@ import DietStatisticTableRow from "./DietStatisticTableRow";
 
 export default function DietStatisticView() {
   const [dietSummaryList, setDietSummaryList] = useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [dietSummaryLength, setDietSummaryLength] = React.useState(0);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [dietSummaryLength, setDietSummaryLength] = useState(0);
   const { t } = useTranslation();
 
   useEffect(() => {
