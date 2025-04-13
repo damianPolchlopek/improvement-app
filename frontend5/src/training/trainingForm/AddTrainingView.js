@@ -31,14 +31,6 @@ export default function AddTrainingView() {
     .catch(error => console.error("Error loading training:", error));
   }
 
-  function addTraining() {
-    REST.addTraining(exercises)
-    .then(response => {
-      navigate('/training/add')
-    })
-    .catch(error => console.error("Error adding training:", error));
-  }
-
   return (
     <>
       <Grid container spacing={2} sx={{ minWidth: 200 }}>
@@ -85,7 +77,7 @@ export default function AddTrainingView() {
           <TrainingForm
             isSimpleForm={isSimpleForm}
             exercises={exercises}
-            submitFunction={addTraining}/>
+          />
         </Grid>
 
       </Grid>

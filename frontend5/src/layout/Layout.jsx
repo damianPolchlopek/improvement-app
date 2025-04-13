@@ -13,9 +13,6 @@ export default function Layout() {
   const submit = useSubmit();
   
   useEffect(() => {
-    console.log('Layout useEffect');
-    console.log(token);
-
     if (!token) {
       return;
     }
@@ -26,7 +23,6 @@ export default function Layout() {
     }
 
     const tokenDuration = getTokenDuration();
-    console.log(tokenDuration);
 
     setTimeout(() => {
       submit(null, { action: '/logout', method: 'post' });

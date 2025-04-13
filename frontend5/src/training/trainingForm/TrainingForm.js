@@ -13,44 +13,24 @@ import {
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { useTranslation } from 'react-i18next';
+import { useLoaderData, Form, redirect } from "react-router-dom";
 
 
-export default function TrainingForm({exercises, isSimpleForm}) {
+export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(exercises)
 
-  const [exerciseNames, setExerciseNames] = useState([]);
-  const [exercisePlaces, setExercisePlaces] = useState([]);
-  const [exerciseProgresses, setExerciseProgresses] = useState([]);
-  const [exerciseTypes, setExerciseTypes] = useState([]);
+  const {
+    exerciseNames = [],
+    exercisePlaces = [],
+    exerciseProgresses = [],
+    exerciseTypes = []
+  } = useLoaderData() || {};
+  
   const { t } = useTranslation();
-
-  useEffect(() => {
-    REST.getExerciseNames().then(response => {
-      setExerciseNames(response.content);
-    });
-
-    REST.getExercisePlaces().then(response => {
-      setExercisePlaces(response.content);
-    });
-
-    REST.getExerciseProgresses().then(response => {
-      setExerciseProgresses(response.content);
-    });
-
-    REST.getExerciseTypes().then(response => {
-      setExerciseTypes(response.content);
-    });
-  }, []);
 
   useEffect(() => {
     setExercisesFields(exercises);
   }, [exercises]);
-
-  function addTraining() {
-    REST.addTraining(exercisesFields).then(response => {
-      window.location.reload(false)
-    });
-  }
 
   const handleFormChange = (index, attribut, event) => {
     console.log(attribut + ' ' + event.target.value)
@@ -82,151 +62,178 @@ export default function TrainingForm({exercises, isSimpleForm}) {
   }
 
   return (
-    <>
+    <Form method="post">
       <Grid container spacing={2}>
-
         <Grid item xs={12}>
-          <Typography
-            variant="h5"
-            component="div"
-          >
-            {t('messages.trainingSchema')}
-          </Typography>
+          <Typography variant="h5">{t('messages.trainingSchema')}</Typography>
         </Grid>
 
         <Grid item xs={12}>
-          {exercisesFields.map((input, index) => {
-            {console.log(input)}
-            return (
-              <div key={index}>
-                <FormControl {...styleFormControl} sx={{width: '50px'}}>
-                  <Typography display="inline">{index}</Typography>
-                </FormControl>
-                {!isSimpleForm &&
-                  <FormControl {...styleFormControl}>
-                    <InputLabel id="input-label-type">{t('exercise.type')}</InputLabel>
-                    <Select
-                      name={t('exercise.type')}
-                      placeholder={t('exercise.type')}
-                      value={input.type}
-                      onChange={event => handleFormChange(index, 'type', event)}
-                      size='small'
-                    >
-                      {exerciseTypes ? exerciseTypes.map((exerciseType, index) => {
-                        return (
-                          <MenuItem key={index} value={exerciseType.type}>
-                            {exerciseType.type}
-                          </MenuItem>
-                        );
-                      }) : null}
-                    </Select>
-                  </FormControl>}
-                {!isSimpleForm &&
-                  <FormControl {...styleFormControl}>
-                    <InputLabel id="input-label-place">{t('exercise.place')}</InputLabel>
-                    <Select
-                      name={t('exercise.place')}
-                      placeholder={t('exercise.place')}
-                      value={input.place}
-                      onChange={event => handleFormChange(index, 'place', event)}
-                      size='small'
-                    >
-                      {exercisePlaces ? exercisePlaces.map((exercisePlace, index) => {
-                        return (
-                          <MenuItem key={index} value={exercisePlace.place}>
-                            {exercisePlace.place}
-                          </MenuItem>
-                        );
-                      }) : null}
-                    </Select>
-                  </FormControl>}
-                <FormControl {...styleFormControl} sx={{width: '500px'}}>
-                  <InputLabel id="input-label-name">{t('exercise.name')}</InputLabel>
+          {exercisesFields.map((input, index) => (
+            <div key={index}>
+              <FormControl {...styleFormControl} sx={{width: '50px'}}>
+                <Typography display="inline">{index}</Typography>
+              </FormControl>
+
+              {!isSimpleForm ? (
+                <FormControl {...styleFormControl} disabled={isSimpleForm}>
+                  <InputLabel>{t('exercise.type')}</InputLabel>
                   <Select
-                    name={t('exercise.name')}
-                    placeholder={t('exercise.name')}
-                    value={input.name}
-                    onChange={event => handleFormChange(index, 'name', event)}
-                    size='small'
+                    name={`type-${index}`}
+                    value={input.type}
+                    onChange={(event) => handleFormChange(index, 'type', event)}
+                    size="small"
                   >
-                    {exerciseNames ? exerciseNames.map((exerciseName, index) => {
-                      return (
-                        <MenuItem key={index} value={exerciseName.name}>
-                          {exerciseName.name}
-                        </MenuItem>
-                      );
-                    }) : null}
+                    {exerciseTypes.map((et, i) => (
+                      <MenuItem key={i} value={et.type}>
+                        {et.type}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
-                <FormControl {...styleFormControl} >
-                  <TextField
-                    label={t('exercise.reps')}
-                    name='reps'
-                    placeholder={t('exercise.reps')}
-                    value={input.reps}
-                    onChange={event => handleFormChange(index, 'reps', event)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </FormControl>
-                <FormControl {...styleFormControl} >
-                  <TextField
-                    sx={{width: '260px'}}
-                    label={t('exercise.weight')}
-                    name='weight'
-                    placeholder={t('exercise.weight')}
-                    value={input.weight}
-                    onChange={event => handleFormChange(index, 'weight', event)}
-                    variant="outlined"
-                    size="small"
-                  />
-                </FormControl>
-                <FormControl {...styleFormControl} sx={{width: '100px'}}>
-                  <InputLabel id="input-label-progress">{t('exercise.progress')}</InputLabel>
+              ) : (
+                <input
+                  type="hidden"
+                  name={`type-${index}`}
+                  value={input.type}
+                />
+              )}
+
+              {!isSimpleForm ? (
+                <FormControl {...styleFormControl}>
+                  <InputLabel>{t('exercise.place')}</InputLabel>
                   <Select
-                    name='progress'
-                    placeholder='Progress'
-                    value={input.progress}
-                    onChange={event => handleFormChange(index, 'progress', event)}
-                    size='small'
+                    name={`place-${index}`}
+                    value={input.place}
+                    onChange={event => handleFormChange(index, 'place', event)}
+                    size="small"
                   >
-                    {exerciseProgresses ? exerciseProgresses.map((exerciseProgress, index) => {
-                      return (
-                        <MenuItem key={index} value={exerciseProgress.progress}>
-                          {exerciseProgress.progress}
-                        </MenuItem>
-                      );
-                    }) : null}
+                    {exercisePlaces.map((ep, i) => (
+                      <MenuItem key={i} value={ep.place}>{ep.place}</MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
-                <FormControl {...styleFormControl}>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => addFields(index)}
-                  >
-                    {t('messages.add')}
-                  </Button>
-                </FormControl>
-                <FormControl {...styleFormControl}>
-                  <Button
-                    variant="contained"
-                    color="error"
-                    onClick={() => removeFields(index)}
-                  >
-                    {t('messages.remove')}
-                  </Button>
-                </FormControl>
-              </div>
-            )
-          })}
+              ) : (
+                <input
+                  type="hidden"
+                  name={`place-${index}`}
+                  value={input.place}
+                />
+              )}
+
+              <FormControl {...styleFormControl} sx={{width: '500px'}}>
+                <InputLabel>{t('exercise.name')}</InputLabel>
+                <Select
+                  name={`name-${index}`}
+                  value={input.name}
+                  onChange={event => handleFormChange(index, 'name', event)}
+                  size="small"
+                >
+                  {exerciseNames.map((en, i) => (
+                    <MenuItem key={i} value={en.name}>{en.name}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl {...styleFormControl}>
+                <TextField
+                  label={t('exercise.reps')}
+                  name={`reps-${index}`}
+                  value={input.reps}
+                  onChange={event => handleFormChange(index, 'reps', event)}
+                  variant="outlined"
+                  size="small"
+                />
+              </FormControl>
+
+              <FormControl {...styleFormControl}>
+                <TextField
+                  label={t('exercise.weight')}
+                  name={`weight-${index}`}
+                  value={input.weight}
+                  onChange={event => handleFormChange(index, 'weight', event)}
+                  variant="outlined"
+                  size="small"
+                  sx={{width: '260px'}}
+                />
+              </FormControl>
+
+              <FormControl {...styleFormControl} sx={{width: '100px'}}>
+                <InputLabel>{t('exercise.progress')}</InputLabel>
+                <Select
+                  name={`progress-${index}`}
+                  value={input.progress}
+                  onChange={event => handleFormChange(index, 'progress', event)}
+                  size="small"
+                >
+                  {exerciseProgresses.map((ep, i) => (
+                    <MenuItem key={i} value={ep.progress}>{ep.progress}</MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl {...styleFormControl}>
+                <Button variant="contained" color="success" onClick={() => addFields(index)}>
+                  {t('messages.add')}
+                </Button>
+              </FormControl>
+              <FormControl {...styleFormControl}>
+                <Button variant="contained" color="error" onClick={() => removeFields(index)}>
+                  {t('messages.remove')}
+                </Button>
+              </FormControl>
+            </div>
+          ))}
         </Grid>
 
         <Grid xs={12}>
-          <Button variant="contained" onClick={addTraining}>{t('messages.submit')}</Button>
+          <Button variant="contained" type="submit">{t('messages.submit')}</Button>
         </Grid>
-
       </Grid>
-    </>
-  )
+    </Form>
+  );
+}
+
+export async function loader() {
+  const exercisesNames = await REST.getExerciseNames();
+  const exercisesPlaces = await REST.getExercisePlaces();
+  const exercisesProgresses = await REST.getExerciseProgresses();
+  const exercisesTypes = await REST.getExerciseTypes();
+
+  return {
+    exerciseNames: exercisesNames.content,
+    exercisePlaces: exercisesPlaces.content,
+    exerciseProgresses: exercisesProgresses.content,
+    exerciseTypes: exercisesTypes.content
+  };
+}
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const exercises = [];
+
+  const indexes = [...new Set(
+    Array.from(formData.keys())
+      .map(key => key.match(/-(\d+)$/)?.[1])
+      .filter(Boolean)
+  )];
+
+  for (const index of indexes) {
+    exercises.push({
+      type: formData.get(`type-${index}`),
+      place: formData.get(`place-${index}`),
+      name: formData.get(`name-${index}`),
+      reps: formData.get(`reps-${index}`),
+      weight: formData.get(`weight-${index}`),
+      progress: formData.get(`progress-${index}`)
+    });
+  }
+
+  try {
+    await REST.addTraining(exercises);
+    return redirect('/training/view');
+  } catch (error) {
+    console.error("Failed to submit training:", error);
+    throw error;
+  }
 }

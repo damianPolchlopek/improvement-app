@@ -6,7 +6,6 @@ import LoginView from './login/LoginView';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import jwt_decode from 'jwt-decode';
 import './language/i18n.js';
 
 import HomeView from './home/HomeView';
@@ -23,7 +22,7 @@ import ProductView from './food/ProductView/ProductView.js';
 import WeeklyListView from './other/weekly/WeeklyListView.js';
 import DailyView from './other/daily/DailyView.js';
 import FinanceView from './finance/view/FinanceView.js';
-import FinanceConfig from './finance/FinanceConfig.js';
+import FinanceInformation from './finance/FinanceInformation.js';
 import SignUpView from './login/SignUpView.jsx';
 import TimerChallengeMain from './projects/timerChallenge/TimerChallengeMain.jsx';
 import HolidayPickerMain from './projects/holidayPicker/HolidayPickerMain.jsx';
@@ -33,26 +32,26 @@ import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 
 import {
-  HomeViewUrl, 
-  TrainingViewUrl, 
-  ExerciseViewUrl,
-  MaximumExerciseViewUrl,
-  TrainingAddUrl, 
-  TrainingStatisticUrl,
-  FoodViewUrl,
-  FoodAddUrl,
-  CalculateIngredientsUrl,
-  ShoppingViewUrl,
-  FoodProductUrl,
-  WeeklyViewUrl,
-  DailyViewUrl,
-  FinanceConfigUrl,
-  FinanceViewUrl,
+  Training, 
+  Exercises,
+  Maximum, 
+  Food,
+  Add,
+  Statistics,
+  Shopping,
+  Products,
+  Weekly,
+  Daily,
+  Other,
   SignUpUrl,
-  TimerChallengeUrl,
-  HolidayPickerUrl,
+  TimerChallenge,
+  HolidayPicker,
   LoginUrl,
   LogoutUrl,
+  Finance,
+  View,
+  Information,
+  Projects,
 } from "./utils/URLHelper";
 
 import { 
@@ -61,7 +60,8 @@ import {
 } from "react-router-dom";
 
 import { tokenLoader } from './login/Authentication.js';
-
+import { loader as trainingAddLoader } from './training/trainingForm/TrainingForm.js';
+import { action as addTarainingAction } from './training/trainingForm/TrainingForm.js';
 import { Box } from '@mui/material';
 
 let theme = createTheme({
@@ -223,51 +223,54 @@ const router = createBrowserRouter([
     loader: tokenLoader,
     children: [
       { index: true, element: <HomeView /> },
-
-      { path: TrainingViewUrl, element: <TrainingsView /> },
-      { path: ExerciseViewUrl, element: <ExerciseView /> },
-      { path: MaximumExerciseViewUrl, element: <MaximumExerciseView /> },
-      { path: TrainingAddUrl, element: <AddTrainingView /> },
-      { path: TrainingStatisticUrl, element: <TrainingStatistic /> },
-
-      { path: FoodViewUrl, element: <MealView /> },
-      { path: FoodAddUrl, element: <AddDietDayView /> },
-      { path: CalculateIngredientsUrl, element: <DietStatisticView /> },
-      { path: FoodProductUrl, element: <ProductView /> },
-
-      { path: ShoppingViewUrl, element: <ShoppingListView /> },
-      { path: WeeklyViewUrl, element: <WeeklyListView /> },
-      { path: DailyViewUrl, element: <DailyView /> },
-      { path: FinanceViewUrl, element: <FinanceView /> },
-      { path: FinanceConfigUrl, element: <FinanceConfig /> },
-
+      { 
+        path: Training, 
+        children: 
+        [
+          { path: View, element: <TrainingsView /> },
+          { path: Exercises, element: <ExerciseView /> },
+          { path: Maximum, element: <MaximumExerciseView /> },
+          { path: Add, element: <AddTrainingView />, loader: trainingAddLoader, action: addTarainingAction },
+          { path: Statistics, element: <TrainingStatistic /> },    
+        ]
+      },
+      { 
+        path: Food, children: 
+        [
+          { path: View, element: <MealView /> },
+          { path: Add, element: <AddDietDayView /> },
+          { path: Statistics, element: <DietStatisticView /> },
+          { path: Products, element: <ProductView /> },
+        ]
+      },
+      { 
+        path: Other, 
+        children: [
+          { path: Shopping, element: <ShoppingListView /> },
+          { path: Weekly, element: <WeeklyListView /> },
+          { path: Daily, element: <DailyView /> },
+        ]
+      },
+      {
+        path: Finance, 
+        children: [
+          { path: View, element: <FinanceView /> },
+          { path: Information, element: <FinanceInformation /> }
+        ]
+      },
+      {
+        path: Projects,
+        children: [
+          { path: TimerChallenge, element: <TimerChallengeMain /> },
+          { path: HolidayPicker, element: <HolidayPickerMain /> },
+        ]
+      },
       { path: SignUpUrl, element: <SignUpView /> },
       { path: LoginUrl, element: <LoginView />, action: loginAction},
       { path: LogoutUrl, action: logoutAction},
-
-      { path: TimerChallengeUrl, element: <TimerChallengeMain /> },
-      { path: HolidayPickerUrl, element: <HolidayPickerMain /> },
     ]
   }
 ]);
-
-
-const checkTokenExpirationMiddleware = () => {
-  console.log(localStorage.getItem('authorization'));
-  const token = localStorage.getItem('authorization');
-
-  if (token === null) {
-    return false;
-  }
-
-  if (jwt_decode(token).exp < Date.now() / 1000) {
-    localStorage.removeItem('authorization');
-    return false;
-  }
-
-  return true;
-};
-
 
 function App() {
 
