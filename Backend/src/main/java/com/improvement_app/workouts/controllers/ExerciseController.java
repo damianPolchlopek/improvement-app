@@ -70,7 +70,6 @@ public class ExerciseController implements Serializable {
                                          @RequestParam(defaultValue = "10") int size,
                                          @RequestParam(defaultValue = "date") String sortField,
                                          @RequestParam(defaultValue = "DESC") String direction) {
-
         Pageable pageable = PageRequest.of(page, size,
                 Sort.by(Sort.Direction.valueOf(direction), sortField));
 
