@@ -1,33 +1,14 @@
+import React, { Suspense, lazy } from 'react';
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 
-import Layout from './layout/Layout';
-import LoginView from './login/LoginView';
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import './language/i18n.js';
-
-import HomeView from './home/HomeView';
-import AddTrainingView from "./training/trainingForm/AddTrainingView";
-import TrainingsView from "./training/trainingView/TrainingsView";
-import ExerciseView from './training/exerciseView/ExerciseView';
-import MaximumExerciseView from './training/maximumTrainingView/MaximumExerciseView';
-import TrainingStatistic from './training/trainingStatistic/TrainingStatistics';
-import ShoppingListView from "./shopping/ShoppingListView";
-import MealView from './food/foodView/MealView';
-import AddDietDayView from "./food/addDietDay/AddDietDayView";
-import DietStatisticView from "./food/statistic/DietStatisticView";
-import ProductView from './food/ProductView/ProductView.jsx';
-import WeeklyListView from './other/weekly/WeeklyListView';
-import DailyView from './other/daily/DailyView';
-import FinanceView from './finance/view/FinanceView';
-import FinanceInformation from './finance/FinanceInformation';
-import SignUpView from './login/SignUpView';
-import TimerChallengeMain from './projects/timerChallenge/TimerChallengeMain';
-import HolidayPickerMain from './projects/holidayPicker/HolidayPickerMain';
-
-import ErrorPage from './layout/ErrorPage';
+import { tokenLoader } from './login/Authentication.js';
 import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 
@@ -54,16 +35,28 @@ import {
   Projects,
 } from "./utils/URLHelper";
 
-import { 
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
-
-import { tokenLoader } from './login/Authentication.js';
-import { loader as trainingAddLoader } from './training/trainingForm/TrainingForm.jsx';
-import { action as addTarainingAction } from './training/trainingForm/TrainingForm.jsx';
-import { loader as statisticLoader } from './training/trainingStatistic/TrainingStatistics.jsx';
-import { Box } from '@mui/material';
+// Lazy-loaded components
+const Layout = lazy(() => import('./layout/Layout'));
+const LoginView = lazy(() => import('./login/LoginView'));
+const HomeView = lazy(() => import('./home/HomeView.jsx'));
+const AddTrainingView = lazy(() => import("./training/trainingForm/AddTrainingView.jsx"));
+const TrainingsView = lazy(() => import("./training/trainingView/TrainingsView.jsx"));
+const ExerciseView = lazy(() => import('./training/exerciseView/ExerciseView.jsx'));
+const MaximumExerciseView = lazy(() => import('./training/maximumTrainingView/MaximumExerciseView.jsx'));
+const TrainingStatistic = lazy(() => import('./training/trainingStatistic/TrainingStatistics.jsx'));
+const ShoppingListView = lazy(() => import("./shopping/ShoppingListView.jsx"));
+const MealView = lazy(() => import('./food/foodView/MealView.jsx'));
+const AddDietDayView = lazy(() => import("./food/addDietDay/AddDietDayView.jsx"));
+const DietStatisticView = lazy(() => import("./food/statistic/DietStatisticView.jsx"));
+const ProductView = lazy(() => import('./food/ProductView/ProductView.jsx'));
+const WeeklyListView = lazy(() => import('./other/weekly/WeeklyListView'));
+const DailyView = lazy(() => import('./other/daily/DailyView'));
+const FinanceView = lazy(() => import('./finance/view/FinanceView.jsx'));
+const FinanceInformation = lazy(() => import('./finance/FinanceInformation.jsx'));
+const SignUpView = lazy(() => import('./login/SignUpView'));
+const TimerChallengeMain = lazy(() => import('./projects/timerChallenge/TimerChallengeMain'));
+const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPickerMain'));
+const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 
 let theme = createTheme({
   palette: {
@@ -216,10 +209,12 @@ theme = {
   },
 };
 
+const suspenseFallback = <p></p>;
+
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout theme={theme} />,
+    element: <Suspense fallback={suspenseFallback}><Layout theme={theme} /></Suspense>,
     errorElement: <ErrorPage />,
     loader: tokenLoader,
     children: [
@@ -228,64 +223,84 @@ const router = createBrowserRouter([
         path: Training, 
         children: 
         [
-          { path: View, element: <TrainingsView /> },
-          { path: Exercises, element: <ExerciseView /> },
-          { path: Maximum, element: <MaximumExerciseView /> },
-          { path: Add, element: <AddTrainingView />, loader: trainingAddLoader, action: addTarainingAction },
-          { path: Statistics, element: <TrainingStatistic />, loader: statisticLoader },    
+          { 
+            path: View, 
+            element: <Suspense fallback={suspenseFallback}><TrainingsView /></Suspense> 
+          },
+          { path: Exercises, element: <Suspense fallback={suspenseFallback}><ExerciseView /></Suspense> },
+          { path: Maximum, element: <Suspense fallback={suspenseFallback}><MaximumExerciseView /></Suspense> },
+          { 
+            path: Add, 
+            element: <Suspense fallback={suspenseFallback}><AddTrainingView /></Suspense>, 
+            loader: () => import('./training/trainingForm/TrainingForm.jsx').then((module) => module.loader()), 
+            action: () => import('./training/trainingForm/TrainingForm.jsx').then((module) => module.action()), 
+          },
+          { 
+            path: Statistics, 
+            element: <Suspense fallback={suspenseFallback}><TrainingStatistic /></Suspense>, 
+            loader: () => import('./training/trainingStatistic/TrainingStatistics.jsx').then((module) => module.loader()), 
+          },    
         ]
       },
       { 
-        path: Food, children: 
-        [
-          { path: View, element: <MealView /> },
-          { path: Add, element: <AddDietDayView /> },
-          { path: Statistics, element: <DietStatisticView /> },
-          { path: Products, element: <ProductView /> },
+        path: Food, 
+        children: [
+          { path: View, element: <Suspense fallback={suspenseFallback}><MealView /></Suspense> },
+          { path: Add, element: <Suspense fallback={suspenseFallback}><AddDietDayView /></Suspense> },
+          { path: Statistics, element: <Suspense fallback={suspenseFallback}><DietStatisticView /></Suspense> },
+          { path: Products, element: <Suspense fallback={suspenseFallback}><ProductView /></Suspense> },
         ]
       },
       { 
         path: Other, 
         children: [
-          { path: Shopping, element: <ShoppingListView /> },
-          { path: Weekly, element: <WeeklyListView /> },
-          { path: Daily, element: <DailyView /> },
+          { path: Shopping, element: <Suspense fallback={suspenseFallback}><ShoppingListView /></Suspense> },
+          { path: Weekly, element: <Suspense fallback={suspenseFallback}><WeeklyListView /></Suspense> },
+          { path: Daily, element: <Suspense fallback={suspenseFallback}><DailyView /></Suspense> },
         ]
       },
       {
         path: Finance, 
         children: [
-          { path: View, element: <FinanceView /> },
-          { path: Information, element: <FinanceInformation /> }
+          { path: View, element: <Suspense fallback={suspenseFallback}><FinanceView /></Suspense> },
+          { path: Information, element: <Suspense fallback={suspenseFallback}><FinanceInformation /></Suspense> }
         ]
       },
       {
         path: Projects,
         children: [
-          { path: TimerChallenge, element: <TimerChallengeMain /> },
-          { path: HolidayPicker, element: <HolidayPickerMain /> },
+          { path: TimerChallenge, element: <Suspense fallback={suspenseFallback}><TimerChallengeMain /></Suspense> },
+          { path: HolidayPicker, element: <Suspense fallback={suspenseFallback}><HolidayPickerMain /></Suspense> },
         ]
       },
-      { path: SignUpUrl, element: <SignUpView /> },
-      { path: LoginUrl, element: <LoginView />, action: loginAction},
-      { path: LogoutUrl, action: logoutAction},
+      { path: SignUpUrl, element: <Suspense fallback={suspenseFallback}><SignUpView /></Suspense> },
+      { 
+        path: LoginUrl, 
+        element: <Suspense fallback={suspenseFallback}><LoginView /></Suspense>, 
+        action: loginAction
+      },
+      { 
+        path: LogoutUrl, 
+        action: logoutAction
+      },
     ]
   }
 ]);
 
-function App() {
+const queryClient = new QueryClient();
 
+function App() {
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline/>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <QueryClientProvider client={queryClient}>
         <Box className="App">
           <RouterProvider router={router} />
-          {/* <RouterProvider router={router} /> */}
         </Box>
-      </ThemeProvider>
-    </>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
+
 
 export default App;

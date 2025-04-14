@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import SingleTraining from './SingleTraining';
 import { useTranslation } from 'react-i18next';
@@ -16,29 +17,18 @@ import {
 import StyledTableRow from '../../component/table/StyledTableRow';
 import StyledTableCell from '../../component/table/StyledTableCell';
 
-
 export default function TrainingsView() {
-  const [trainingNames, setTrainingNames] = useState([]);
-  const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
-
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(25);
-  const [listLength, setListLength] = useState(0);
 
-  useEffect(() => {
-    REST.getAllTrainingNames(page, size)
-      .then(response => {
-        setTrainingNames(response.content);
-        setListLength(response.totalElements)
-        console.log(response)
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Failed to fetch training names', error);
-        setLoading(false);
-      });
-  }, [page, size]);
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['training-names', page, size],
+    queryFn: () => REST.getAllTrainingNames(page, size),
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5, // 5 minut - zmień na ile chcesz
+    cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
+  });
 
   const handleChangeSize = (event) => {
     setSize(+event.target.value);
@@ -55,13 +45,19 @@ export default function TrainingsView() {
         {t('messages.trainingView')}
       </Typography>
 
-      {loading ? <CircularProgress /> :
+      {isLoading ? (
+        <CircularProgress />
+      ) : isError ? (
+        <Typography color="error">{error.message}</Typography>
+      ) : (
         <Table sx={{ mt: 2 }}>
           <TableBody>
             <StyledTableRow>
-              {trainingNames.map((training, index) => (
-                <SingleTraining key={index} trainingName={training} />
-              ))}
+              <StyledTableCell colSpan={7} align="center">
+                {data.content.map((training, index) => (
+                  <SingleTraining key={index} trainingName={training} />
+                ))}
+              </StyledTableCell>
             </StyledTableRow>
           </TableBody>
 
@@ -70,7 +66,7 @@ export default function TrainingsView() {
               <StyledTableCell colSpan={7}>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, 50]}
-                  count={listLength}
+                  count={data.totalElements}
                   rowsPerPage={size}
                   component="div"
                   page={page}
@@ -80,9 +76,8 @@ export default function TrainingsView() {
               </StyledTableCell>
             </StyledTableRow>
           </TableFooter>
-        </Table>}
-
+        </Table>
+      )}
     </Container>
-
   );
 }
