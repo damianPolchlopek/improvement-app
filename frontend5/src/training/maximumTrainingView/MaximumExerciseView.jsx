@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
@@ -11,7 +12,8 @@ import {
   Box,
   CircularProgress,
   FormControl,
-  Container
+  Container,
+  Typography,
 } from '@mui/material';
 
 import StyledTableRow from '../../component/table/StyledTableRow'
@@ -19,38 +21,35 @@ import StyledTableCell from '../../component/table/StyledTableCell'
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
 
 export default function MaximumExerciseView() {
-  const [exercises, setExercises] = useState(() => []);
-  const [loading, setLoading] = useState(() => true);
-  const [trainingType, setTrainingType] = useState(() => 'A');
+  const [trainingType, setTrainingType] = useState('A');
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await REST.getATHTraining(trainingType);
-        setExercises(response.content);
-      } catch (error) {
-        console.error('Failed to fetch training template', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [trainingType]);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['ath-training', trainingType],
+    queryFn: () => REST.getATHTraining(trainingType),
+    staleTime: 1000 * 60 * 5, // 5 min
+    cacheTime: 1000 * 60 * 10, // 10 min
+  });
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <FormControl sx={{ m: 1, minWidth: 200 }}>
-        <TrainingTypeSelector 
-          setTrainingType={setTrainingType}
-        />
+        <TrainingTypeSelector setTrainingType={setTrainingType} />
       </FormControl>
 
-      {loading ? (
+      {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
+      ) : isError ? (
+        <Typography color="error" sx={{ mt: 2 }}>
+          {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania danych'}: {error.message}
+        </Typography>
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table aria-label="simple table">
@@ -63,7 +62,7 @@ export default function MaximumExerciseView() {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {exercises.map((exercise) => (
+              {data.content.map((exercise) => (
                 <StyledTableRow
                   key={exercise.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

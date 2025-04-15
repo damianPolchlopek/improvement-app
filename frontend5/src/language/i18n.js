@@ -55,7 +55,8 @@ i18n.use(initReactI18next).init({
           loadLastTraining: "Load Last Training",
           enableMoreAccurateForm: "Enable a more accurate form",
           trainingSchema: "Training Schema",
-          trainingView: "Training View"
+          trainingView: "Training View",
+          submitting: "Submitting..."
         },
         header: {
           logout: "Logout"
@@ -185,7 +186,8 @@ i18n.use(initReactI18next).init({
           loadLastTraining: "Wczytaj ostatni trening",
           enableMoreAccurateForm: "Włącz dokładnieszy formularz",
           trainingSchema: "Schemat Treningu",
-          trainingView: "Widok treningów"
+          trainingView: "Widok treningów",
+          submitting: "Wysyłanie..."
         },
         header: {
           logout: "Wyloguj się"

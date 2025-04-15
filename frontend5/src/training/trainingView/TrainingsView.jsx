@@ -30,6 +30,7 @@ export default function TrainingsView() {
     cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
   });
 
+  
   const handleChangeSize = (event) => {
     setSize(+event.target.value);
     setPage(0);

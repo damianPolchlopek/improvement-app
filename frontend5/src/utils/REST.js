@@ -1,4 +1,7 @@
 import axios from "axios";
+import { QueryClient } from '@tanstack/react-query';
+
+export const queryClient = new QueryClient();
 
 // const serverUrl = "https://improvement-app-backend.herokuapp.com/";
 // static BASE_URL = "http://localhost:8080/";

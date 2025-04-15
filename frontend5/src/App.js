@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -11,6 +11,7 @@ import './language/i18n.js';
 import { tokenLoader } from './login/Authentication.js';
 import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
+import { queryClient } from './utils/REST.js';
 
 import {
   Training, 
@@ -232,8 +233,7 @@ const router = createBrowserRouter([
           { 
             path: Add, 
             element: <Suspense fallback={suspenseFallback}><AddTrainingView /></Suspense>, 
-            loader: () => import('./training/trainingForm/TrainingForm.jsx').then((module) => module.loader()), 
-            action: () => import('./training/trainingForm/TrainingForm.jsx').then((module) => module.action()), 
+            loader: () => import('./training/trainingForm/TrainingForm.jsx').then((module) => module.loader()),
           },
           { 
             path: Statistics, 
@@ -286,8 +286,6 @@ const router = createBrowserRouter([
     ]
   }
 ]);
-
-const queryClient = new QueryClient();
 
 function App() {
   return (

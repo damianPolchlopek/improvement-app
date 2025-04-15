@@ -14,7 +14,7 @@ export default function Layout() {
   
   useEffect(() => {
     if (!token) {
-      return;
+      submit(null, { action: '/login', method: 'post' });
     }
 
     if (token === 'EXPIRED') {
@@ -45,7 +45,7 @@ export default function Layout() {
       />
 
       <Box sx={{ flex: 1}}>
-        { getAuthToken() !== null ? <Header onDrawerToggle={handleDrawerToggle}/> : null}
+        { token !== null ? <Header onDrawerToggle={handleDrawerToggle}/> : null}
         <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
           <Outlet />
         </Box>

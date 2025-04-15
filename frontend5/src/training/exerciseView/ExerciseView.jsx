@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
+import { useTranslation } from 'react-i18next';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -19,39 +21,34 @@ import {
   TableFooter
 } from '@mui/material';
 
-import { useTranslation } from 'react-i18next';
-
 export default function ExerciseView() {
-  const [exerciseList, setExerciseList] = useState([]);
-  const [exerciseTemplate, setExerciseTemplate] = useState([]);
   const [selectedTrainingType, setSelectedTrainingType] = useState('A');
-  const [loading, setLoading] = useState(true);
-  const { t } = useTranslation();
-
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
-  const [listLength, setListLength] = useState(0);
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [trainingResponse, templateResponse] = await Promise.all([
-          REST.getTrainingByType(selectedTrainingType, page, size),
-          REST.getTrainingTemplate(selectedTrainingType)
-        ]);
+  const {
+    data: trainingData,
+    isLoading: isTrainingLoading,
+    isError: isTrainingError,
+    error: trainingError
+  } = useQuery({
+    queryKey: ['training-by-type', selectedTrainingType, page, size],
+    queryFn: () => REST.getTrainingByType(selectedTrainingType, page, size),
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5
+  });
 
-        setListLength(trainingResponse.totalElements)
-        setExerciseList(trainingResponse.content);
-        setExerciseTemplate(templateResponse.exercises);
-      } catch (error) {
-        console.error('Failed to fetch data', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [selectedTrainingType, page, size]);
+  const {
+    data: templateData,
+    isLoading: isTemplateLoading,
+    isError: isTemplateError,
+    error: templateError
+  } = useQuery({
+    queryKey: ['training-template', selectedTrainingType],
+    queryFn: () => REST.getTrainingTemplate(selectedTrainingType),
+    staleTime: 1000 * 60 * 10
+  });
 
   const handleChangeSize = (event) => {
     setSize(+event.target.value);
@@ -62,72 +59,75 @@ export default function ExerciseView() {
     setPage(newPage);
   };
 
+  const isLoading = isTrainingLoading || isTemplateLoading;
+  const isError = isTrainingError || isTemplateError;
+
   return (
-    <>
-      <Container>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <TrainingTypeSelector 
-            setTrainingType={setSelectedTrainingType}
-          />
-        </FormControl>
+    <Container>
+      <FormControl sx={{ m: 1, minWidth: 120 }}>
+        <TrainingTypeSelector setTrainingType={setSelectedTrainingType} />
+      </FormControl>
 
-        {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <CircularProgress />
-          </Box>
-        ) : (
-          <TableContainer component={Paper} sx={{ mt: 2 }}>
-            <Table>
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>Data</StyledTableCell>
-                  {exerciseTemplate.map((value, index) => (
-                    <StyledTableCell key={index}>{value}</StyledTableCell>
-                  ))}
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {exerciseList.map((exerciseMap, index) => {
-                  const firstAvailableExercise = Object.entries(exerciseMap).find(
-                    ([, value]) => value?.date
-                  );
-                  const date = firstAvailableExercise ? firstAvailableExercise[1].date : 'Brak danych';
+      {isLoading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <CircularProgress />
+        </Box>
+      ) : isError ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+          <p>Error: {(trainingError || templateError)?.message || 'Unknown error'}</p>
+        </Box>
+      ) : (
+        <TableContainer component={Paper} sx={{ mt: 2 }}>
+          <Table>
+            <TableHead>
+              <StyledTableRow>
+                <StyledTableCell>Data</StyledTableCell>
+                {templateData.exercises.map((value, index) => (
+                  <StyledTableCell key={index}>{value}</StyledTableCell>
+                ))}
+              </StyledTableRow>
+            </TableHead>
+            <TableBody>
+              {trainingData.content.map((exerciseMap, index) => {
+                const firstAvailableExercise = Object.entries(exerciseMap).find(
+                  ([, value]) => value?.date
+                );
+                const date = firstAvailableExercise ? firstAvailableExercise[1].date : 'Brak danych';
 
-                  return (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>{date}</StyledTableCell>
-                      {exerciseTemplate.map((exercise, index) => {
-                        const exerciseData = exerciseMap?.[exercise] || {};
-                        return (
-                          <StyledTableCell key={index}>
-                            <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
-                            <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
-                          </StyledTableCell>
-                        );
+                return (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell>{date}</StyledTableCell>
+                    {templateData.exercises.map((exercise, index) => {
+                      const exerciseData = exerciseMap?.[exercise] || {};
+                      return (
+                        <StyledTableCell key={index}>
+                          <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
+                          <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
+                        </StyledTableCell>
+                      );
                     })}
-                    </StyledTableRow>
-                  );
-                })}
-              </TableBody>
-              <TableFooter>
-                <StyledTableRow>
-                  <StyledTableCell colSpan={7}>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25, 50]}
-                      count={listLength}
-                      rowsPerPage={size}
-                      component="div"
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeSize}
-                    />
-                  </StyledTableCell>
-                </StyledTableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        )}
-      </Container>
-    </>
+                  </StyledTableRow>
+                );
+              })}
+            </TableBody>
+            <TableFooter>
+              <StyledTableRow>
+                <StyledTableCell colSpan={templateData.exercises.length + 1}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 50]}
+                    count={trainingData.totalElements}
+                    rowsPerPage={size}
+                    component="div"
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeSize}
+                  />
+                </StyledTableCell>
+              </StyledTableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
+      )}
+    </Container>
   );
 }
