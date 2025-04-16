@@ -1,5 +1,6 @@
-import * as React from "react"
-import {Collapse, IconButton, Table, TableBody, TableCell, TableHead} from "@mui/material";
+import React from "react"
+import { useState } from "react";
+import { Collapse, IconButton, Table, TableBody, TableCell, TableHead } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useTranslation } from 'react-i18next';
@@ -7,12 +8,12 @@ import { useTranslation } from 'react-i18next';
 import StyledTableCell  from '../../component/table/StyledTableCell'
 import StyledTableRow  from '../../component/table/StyledTableRow'
 
-export default function DietStatisticTableRow(props) {
-  const [open, setOpen] = React.useState(false);
+export default function DietStatisticTableRow({ dietSummary }) {
+  const [open, setOpen] = useState(false);
   const { t } = useTranslation();
 
   return (
-    <React.Fragment>
+    <>
       <StyledTableRow onClick={() => setOpen(prev => !prev)}>
         <StyledTableCell sx={{width: '50px'}} >
           <IconButton aria-label="expand row" size="small">
@@ -20,11 +21,11 @@ export default function DietStatisticTableRow(props) {
           </IconButton>
         </StyledTableCell>
 
-        <StyledTableCell>{props.dietSummary.date}</StyledTableCell>
-        <StyledTableCell>{props.dietSummary.kcal}</StyledTableCell>
-        <StyledTableCell>{props.dietSummary.protein}</StyledTableCell>
-        <StyledTableCell>{props.dietSummary.carbohydrates}</StyledTableCell>
-        <StyledTableCell>{props.dietSummary.fat}</StyledTableCell>
+        <StyledTableCell>{dietSummary.date}</StyledTableCell>
+        <StyledTableCell>{dietSummary.kcal}</StyledTableCell>
+        <StyledTableCell>{dietSummary.protein}</StyledTableCell>
+        <StyledTableCell>{dietSummary.carbohydrates}</StyledTableCell>
+        <StyledTableCell>{dietSummary.fat}</StyledTableCell>
       </StyledTableRow>
 
       <StyledTableRow>
@@ -45,7 +46,7 @@ export default function DietStatisticTableRow(props) {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {props.mealsFromDay.map((meal) => {
+                {dietSummary.meals.map((meal) => {
                   return (
                     <StyledTableRow
                       key={meal.id}
@@ -62,6 +63,6 @@ export default function DietStatisticTableRow(props) {
           </Collapse>
         </TableCell>
       </StyledTableRow>
-    </React.Fragment>
+    </>
   );
 }

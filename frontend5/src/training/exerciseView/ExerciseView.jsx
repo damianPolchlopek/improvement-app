@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
+import ErrorBlock from '../../component/ErrorBlock';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -67,15 +68,16 @@ export default function ExerciseView() {
       <FormControl sx={{ m: 1, minWidth: 120 }}>
         <TrainingTypeSelector setTrainingType={setSelectedTrainingType} />
       </FormControl>
-
+      
       {isLoading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-          <p>Error: {(trainingError || templateError)?.message || 'Unknown error'}</p>
-        </Box>
+        <ErrorBlock
+          title="Failed to load training data"
+          message={`Error: ${(trainingError || templateError)?.message || 'Unknown error'}`}
+        />
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table>

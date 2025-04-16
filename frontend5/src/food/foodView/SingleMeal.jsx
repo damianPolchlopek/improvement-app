@@ -3,7 +3,6 @@ import Item from '../../component/Item';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Box,
   Tab,
   Table,
   TableBody,
@@ -11,35 +10,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tabs, Typography,
+  Tabs, 
+  Typography,
 } from '@mui/material';
 
-function TabPanel(props) {
-  const {children, value, index, ...other} = props;
+import TabPanel from '../component/TabPanel';
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
-}
 
-const a11yProps = (index) => ({
-  id: `full-width-tab-${index}`,
-  'aria-controls': `full-width-tabpanel-${index}`,
-});
-
-export default function SingleMeal(props) {
+export default function SingleMeal({ meal }) {
   const [tabIndex, setTabIndex] = React.useState(0);
   const { t } = useTranslation();
 
@@ -60,7 +38,7 @@ export default function SingleMeal(props) {
           aria-label="full width tabs example"
         >
           {tabs.map((label, index) => (
-            <Tab key={index} label={label} {...a11yProps(index)} />
+            <Tab key={index} label={label} />
           ))}
         </Tabs>
 
@@ -69,31 +47,31 @@ export default function SingleMeal(props) {
             <TableBody>
               <TableRow>
                 <TableCell variant="head">{t('food.name')}</TableCell>
-                <TableCell>{props.meal.name}</TableCell>
+                <TableCell>{meal.name}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell variant="head">{t('food.kcal')}</TableCell>
-                <TableCell>{props.meal.kcal}</TableCell>
+                <TableCell>{meal.kcal}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell variant="head">{t('food.protein')}</TableCell>
-                <TableCell>{props.meal.protein}</TableCell>
+                <TableCell>{meal.protein}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell variant="head">{t('food.carbs')}</TableCell>
-                <TableCell>{props.meal.carbohydrates}</TableCell>
+                <TableCell>{meal.carbohydrates}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell variant="head">{t('food.fat')}</TableCell>
-                <TableCell>{props.meal.fat}</TableCell>
+                <TableCell>{meal.fat}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell variant="head">{t('food.portionAmount')}</TableCell>
-                <TableCell>{props.meal.portionAmount}</TableCell>
+                <TableCell>{meal.portionAmount}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell variant="head">{t('food.url')}</TableCell>
-                <TableCell>{props.meal.url}</TableCell>
+                <TableCell>{meal.url}</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -101,7 +79,7 @@ export default function SingleMeal(props) {
         </TabPanel>
 
         <TabPanel value={tabIndex} index={1}>
-          {props.meal.mealIngredients?.length > 0 ? (
+          {meal.mealIngredients?.length > 0 ? (
             <TableContainer>
               <Table>
                 <TableHead>
@@ -113,7 +91,7 @@ export default function SingleMeal(props) {
                 </TableHead>
 
                 <TableBody>
-                  {props.meal.mealIngredients?.map((ingredient, index) =>
+                  {meal.mealIngredients?.map((ingredient, index) =>
                     <TableRow
                       key={index}
                       sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -131,8 +109,8 @@ export default function SingleMeal(props) {
         </TabPanel>
 
         <TabPanel value={tabIndex} index={2}>
-          {props.meal.recipe?.length > 0 ? (
-            props.meal.recipe.map((recipeRow, index) => <div key={index}>{recipeRow}</div>)
+          {meal.recipe?.length > 0 ? (
+            meal.recipe.map((recipeRow, index) => <div key={index}>{recipeRow}</div>)
           ) : (
             <Typography>{t('food.noRecipes')}</Typography>
           )}

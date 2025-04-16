@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
 import { useTranslation } from 'react-i18next';
 
-import StyledTableCell  from '../../component/table/StyledTableCell';
-import StyledTableRow  from '../../component/table/StyledTableRow';
+import StyledTableCell from '../../component/table/StyledTableCell';
+import StyledTableRow from '../../component/table/StyledTableRow';
 
 import {
   Table,
@@ -14,78 +15,89 @@ import {
   TableContainer,
   TableHead,
   Paper,
+  CircularProgress,
+  Box,
+  Typography
 } from '@mui/material';
 
 import DietStatisticTableRow from "./DietStatisticTableRow";
 
 export default function DietStatisticView() {
-  const [dietSummaryList, setDietSummaryList] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [dietSummaryLength, setDietSummaryLength] = useState(0);
+  const [size, setSize] = useState(10);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    REST.getDietSummaries(page, rowsPerPage).then(response => {
-      setDietSummaryList(response.content);
-      setDietSummaryLength(response.totalElements)
-    });
-  }, [page, rowsPerPage]);
+  const {data, isLoading, isError, error
+  } = useQuery({
+    queryKey: ['diet-summaries', page, size],
+    queryFn: () => REST.getDietSummaries(page, size),
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5, // opcjonalnie
+  });
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+    setSize(+event.target.value);
     setPage(0);
   };
 
   return (
     <CenteredContainer>
-      <Paper sx={{width: '65%'}}>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell>{t('food.date')}</StyledTableCell>
-                <StyledTableCell>{t('food.kcal')}</StyledTableCell>
-                <StyledTableCell>{t('food.protein')}</StyledTableCell>
-                <StyledTableCell>{t('food.carbs')}</StyledTableCell>
-                <StyledTableCell>{t('food.fat')}</StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
+      <Paper sx={{ width: '65%' }}>
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, p: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : isError ? (
+          <Box sx={{ p: 4 }}>
+            <Typography color="error">
+              Error: {error?.message || 'Unknown error'}
+            </Typography>
+          </Box>
+        ) : (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <StyledTableRow>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell>{t('food.date')}</StyledTableCell>
+                  <StyledTableCell>{t('food.kcal')}</StyledTableCell>
+                  <StyledTableCell>{t('food.protein')}</StyledTableCell>
+                  <StyledTableCell>{t('food.carbs')}</StyledTableCell>
+                  <StyledTableCell>{t('food.fat')}</StyledTableCell>
+                </StyledTableRow>
+              </TableHead>
 
-            <TableBody>
-              {dietSummaryList
-                .map((dietSummary, index) => {
-                  return <DietStatisticTableRow
+              <TableBody>
+                {data.content.map((dietSummary, index) => (
+                  <DietStatisticTableRow
                     key={index}
-                    mealsFromDay={dietSummary.meals}
                     dietSummary={dietSummary}
                   />
-              })}
-            </TableBody>
+                ))}
+              </TableBody>
 
-            <TableFooter>
-              <StyledTableRow>
-                <StyledTableCell colSpan={7}>
-                  <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    count={dietSummaryLength}
-                    rowsPerPage={rowsPerPage}
-                    component="div"
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </StyledTableCell>
-              </StyledTableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
-
+              <TableFooter>
+                <StyledTableRow>
+                  <StyledTableCell colSpan={7}>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25]}
+                      count={data.totalElements}
+                      rowsPerPage={size}
+                      component="div"
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </StyledTableCell>
+                </StyledTableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        )}
       </Paper>
     </CenteredContainer>
   );
