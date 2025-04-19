@@ -16,18 +16,17 @@ import {
   TableHead,
   Paper,
   CircularProgress,
-  Box,
   Typography
 } from '@mui/material';
 
 import DietStatisticTableRow from "./DietStatisticTableRow";
 
 export default function DietStatisticView() {
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [ page, setPage ] = useState(0);
+  const [ size, setSize ] = useState(10);
   const { t } = useTranslation();
 
-  const {data, isLoading, isError, error
+  const { data, isLoading, isError, error
   } = useQuery({
     queryKey: ['diet-summaries', page, size],
     queryFn: () => REST.getDietSummaries(page, size),
@@ -44,60 +43,69 @@ export default function DietStatisticView() {
     setPage(0);
   };
 
+  if (isLoading) {
+    return (
+      <CenteredContainer>
+        <CircularProgress />
+      </CenteredContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <CenteredContainer>
+        <Typography color="error">
+          Error: {error?.message || 'Unknown error'}
+        </Typography>
+      </CenteredContainer>
+    );
+  }
+
   return (
     <CenteredContainer>
       <Paper sx={{ width: '65%' }}>
-        {isLoading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, p: 4 }}>
-            <CircularProgress />
-          </Box>
-        ) : isError ? (
-          <Box sx={{ p: 4 }}>
-            <Typography color="error">
-              Error: {error?.message || 'Unknown error'}
-            </Typography>
-          </Box>
-        ) : (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell></StyledTableCell>
-                  <StyledTableCell>{t('food.date')}</StyledTableCell>
-                  <StyledTableCell>{t('food.kcal')}</StyledTableCell>
-                  <StyledTableCell>{t('food.protein')}</StyledTableCell>
-                  <StyledTableCell>{t('food.carbs')}</StyledTableCell>
-                  <StyledTableCell>{t('food.fat')}</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
+      
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <StyledTableRow>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell>{t('food.date')}</StyledTableCell>
+                <StyledTableCell>{t('food.kcal')}</StyledTableCell>
+                <StyledTableCell>{t('food.protein')}</StyledTableCell>
+                <StyledTableCell>{t('food.carbs')}</StyledTableCell>
+                <StyledTableCell>{t('food.fat')}</StyledTableCell>
+                <StyledTableCell>{t('food.actions')}</StyledTableCell>
+              </StyledTableRow>
+            </TableHead>
 
-              <TableBody>
-                {data.content.map((dietSummary, index) => (
-                  <DietStatisticTableRow
-                    key={index}
-                    dietSummary={dietSummary}
+            <TableBody>
+              {data.content.map((dietSummary, index) => (
+                <DietStatisticTableRow
+                  key={index}
+                  dietSummary={dietSummary}
+                />
+              ))}
+            </TableBody>
+
+            <TableFooter>
+              <StyledTableRow>
+                <StyledTableCell colSpan={7}>
+                  <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    count={data.totalElements}
+                    rowsPerPage={size}
+                    component="div"
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
                   />
-                ))}
-              </TableBody>
+                </StyledTableCell>
+              </StyledTableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
 
-              <TableFooter>
-                <StyledTableRow>
-                  <StyledTableCell colSpan={7}>
-                    <TablePagination
-                      rowsPerPageOptions={[5, 10, 25]}
-                      count={data.totalElements}
-                      rowsPerPage={size}
-                      component="div"
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </StyledTableCell>
-                </StyledTableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        )}
       </Paper>
     </CenteredContainer>
   );

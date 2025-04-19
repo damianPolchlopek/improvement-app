@@ -13,4 +13,6 @@ public interface DietSummaryHandler {
     DietSummary save(DietSummary dietSummary);
 
     Page<DietSummary> findAll(Pageable pageable);
+
+    void deleteById(Long id);
 }
