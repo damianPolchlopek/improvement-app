@@ -6,8 +6,6 @@ import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import { useTranslation } from 'react-i18next';
 
-import PropTypes from 'prop-types';
-
 import {
   Box,
   Paper,

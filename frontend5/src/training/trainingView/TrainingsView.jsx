@@ -29,7 +29,6 @@ export default function TrainingsView() {
     staleTime: 1000 * 60 * 5, // 5 minut - zmień na ile chcesz
     cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
   });
-
   
   const handleChangeSize = (event) => {
     setSize(+event.target.value);
@@ -40,45 +39,48 @@ export default function TrainingsView() {
     setPage(newPage);
   };
 
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+  
+  if (isError) {
+    return <Typography color="error">{error.message}</Typography>;
+  }
+
   return (
     <Container maxWidth="xl" sx={{ width: '70%' }}>
       <Typography variant="h4" component="div" style={{ color: 'white' }}>
         {t('messages.trainingView')}
       </Typography>
 
-      {isLoading ? (
-        <CircularProgress />
-      ) : isError ? (
-        <Typography color="error">{error.message}</Typography>
-      ) : (
-        <Table sx={{ mt: 2 }}>
-          <TableBody>
-            <StyledTableRow>
-              <StyledTableCell colSpan={7} align="center">
-                {data.content.map((training, index) => (
-                  <SingleTraining key={index} trainingName={training} />
-                ))}
-              </StyledTableCell>
-            </StyledTableRow>
-          </TableBody>
+      <Table sx={{ mt: 2 }}>
+        <TableBody>
+          <StyledTableRow>
+            <StyledTableCell colSpan={7} align="center">
+              {data.content.map((training, index) => (
+                <SingleTraining key={index} trainingName={training} />
+              ))}
+            </StyledTableCell>
+          </StyledTableRow>
+        </TableBody>
 
-          <TableFooter>
-            <StyledTableRow>
-              <StyledTableCell colSpan={7}>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50]}
-                  count={data.totalElements}
-                  rowsPerPage={size}
-                  component="div"
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeSize}
-                />
-              </StyledTableCell>
-            </StyledTableRow>
-          </TableFooter>
-        </Table>
-      )}
+        <TableFooter>
+          <StyledTableRow>
+            <StyledTableCell colSpan={7}>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                count={data.totalElements}
+                rowsPerPage={size}
+                component="div"
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeSize}
+              />
+            </StyledTableCell>
+          </StyledTableRow>
+        </TableFooter>
+      </Table>
+    
     </Container>
   );
 }

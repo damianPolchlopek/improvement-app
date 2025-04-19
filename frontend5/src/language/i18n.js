@@ -91,10 +91,6 @@ i18n.use(initReactI18next).init({
           popular: "Popular",
           rare: "Rare"
         },
-        addDietDay: {
-          saveDietDay: "Save Diet Day",
-          addDietDayView: "Add Diet Day View"
-        },
         food: {
           kcal: "Kcal",
           protein: "Protein",
@@ -130,7 +126,11 @@ i18n.use(initReactI18next).init({
           noRecipes: "No recipes available",
           product: "Product",
           dietStatisticTableRow: "Diet Statistic Table Row",
-          date: "Date"
+          date: "Date",
+          saveDietDay: "Save Diet Day",
+          addDietDayView: "Add Diet Day View",
+          dietSavedSuccessfully: "Diet summary saved successfully!",
+          failedAddDietSummary: "Failed to save the diet summary!" // Moved to food for English
         }
       }
     },
@@ -250,7 +250,9 @@ i18n.use(initReactI18next).init({
           addDietDayView: "Widok dodawania dnia diety",
           mealPopularity: "Popularność posiłków",
           popular: "Popularne",
-          rare: "Rzadkie"
+          rare: "Rzadkie",
+          dietSavedSuccessfully: "Dieta zapisana pomyślnie!",
+          failedAddDietSummary: "Nie udało się zapisać podsumowania diety!" // Moved to food for Polish
         }
       }
     }

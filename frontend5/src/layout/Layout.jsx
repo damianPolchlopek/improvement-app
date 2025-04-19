@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { getTokenDuration, getAuthToken } from '../login/Authentication.js';
+import { getTokenDuration } from '../login/Authentication.js';
 import { Outlet, useLoaderData, useSubmit } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
