@@ -51,4 +51,10 @@ public class DietController {
         List<MealIngredient> products = dietSummaryService.getProducts(mealDTOs);
         return Response.ok(products).build();
     }
+
+    @DeleteMapping("/day-summary/{id}")
+    public Response deleteDietDay(@PathVariable Long id) {
+        dietSummaryService.deleteDietSummary(id);
+        return Response.ok().build();
+    }
 }

@@ -98,4 +98,7 @@ public class DietSummaryService {
         return dietSummaryHandler.findAll(pageable);
     }
 
+    public void deleteDietSummary(Long id) {
+        dietSummaryHandler.deleteById(id);
+    }
 }

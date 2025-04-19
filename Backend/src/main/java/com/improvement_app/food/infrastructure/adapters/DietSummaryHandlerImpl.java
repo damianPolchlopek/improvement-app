@@ -28,4 +28,9 @@ public class DietSummaryHandlerImpl implements DietSummaryHandler {
         return dietSummaryRepository.findAll(pageable);
     }
 
+    @Override
+    public void deleteById(Long id) {
+        dietSummaryRepository.deleteById(id);
+    }
+
 }

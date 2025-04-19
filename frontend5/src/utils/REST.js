@@ -175,6 +175,10 @@ export default class REST {
         return get(serverUrl + food + 'diet/day-summary?page=' + page + '&size=' + size);
     }
 
+    static deleteDietSummaries(id) {
+        return deleteMethod(serverUrl + food + 'diet/day-summary/' + id);
+    }
+
 
 
     // Shopping module

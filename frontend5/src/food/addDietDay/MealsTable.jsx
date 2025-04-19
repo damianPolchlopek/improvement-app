@@ -9,7 +9,7 @@ import {
   Table,
   TableBody,
   TableContainer,
-  Paper,
+  Paper
 } from '@mui/material';
 
 export default function MealsTable({ isSelected, handleClick }) {

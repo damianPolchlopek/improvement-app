@@ -58,6 +58,11 @@ i18n.use(initReactI18next).init({
           trainingView: "Training View",
           submitting: "Submitting..."
         },
+        common: {
+          cancel: "Cancel",
+          delete: "Delete",
+          areYouSure: "Are you sure?",
+        },
         header: {
           logout: "Logout"
         },
@@ -130,7 +135,9 @@ i18n.use(initReactI18next).init({
           saveDietDay: "Save Diet Day",
           addDietDayView: "Add Diet Day View",
           dietSavedSuccessfully: "Diet summary saved successfully!",
-          failedAddDietSummary: "Failed to save the diet summary!" // Moved to food for English
+          failedAddDietSummary: "Failed to save the diet summary!",
+          deleteConfirmation: "Do you really want to delete this item? This action cannot be undone.",
+          actions: "Actions"
         }
       }
     },
@@ -188,6 +195,11 @@ i18n.use(initReactI18next).init({
           trainingSchema: "Schemat Treningu",
           trainingView: "Widok treningów",
           submitting: "Wysyłanie..."
+        },
+        common: {
+          cancel: "Anuluj",
+          delete: "Usuń",
+          areYouSure: "Czy jesteś pewien?",
         },
         header: {
           logout: "Wyloguj się"
@@ -252,7 +264,9 @@ i18n.use(initReactI18next).init({
           popular: "Popularne",
           rare: "Rzadkie",
           dietSavedSuccessfully: "Dieta zapisana pomyślnie!",
-          failedAddDietSummary: "Nie udało się zapisać podsumowania diety!" // Moved to food for Polish
+          failedAddDietSummary: "Nie udało się zapisać podsumowania diety!",
+          deleteConfirmation: "Czy na pewno chcesz usunąć ten element? Tej operacji nie można cofnąć.",
+          actions: "Akcje"
         }
       }
     }
