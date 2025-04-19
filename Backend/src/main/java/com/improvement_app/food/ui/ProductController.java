@@ -27,9 +27,10 @@ public class ProductController {
 
     @GetMapping("/product/categories")
     public Response getProductsCategories() {
-        return Response.ok(Arrays.stream(ProductCategory.values())
+        Object[] entity = Arrays.stream(ProductCategory.values())
                 .map(ProductCategory::getName)
-                .toArray()).build();
+                .toArray();
+        return Response.ok(entity).build();
     }
 
 }

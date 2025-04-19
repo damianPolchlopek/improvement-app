@@ -12,8 +12,8 @@ import {
   Paper,
 } from '@mui/material';
 
-export default function MealsTable(props) {
-  const [mealPopularity, setMealPopularity] = useState('HIGH');
+export default function MealsTable({ isSelected, handleClick }) {
+  const [ mealPopularity, setMealPopularity ] = useState('HIGH');
   const { t } = useTranslation();
 
   const MEALS_CATEGORY = [
@@ -39,8 +39,8 @@ export default function MealsTable(props) {
                 key={index}
                 mealCategory={mealCategory}
                 sx={{textAlign: 'left'}}
-                isSelected={props.isSelected}
-                handleClick={props.handleClick}
+                isSelected={isSelected}
+                handleClick={handleClick}
                 mealPopularity={mealPopularity}
               />
             ))}

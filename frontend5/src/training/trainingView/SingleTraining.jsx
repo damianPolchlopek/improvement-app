@@ -44,6 +44,7 @@ export default function SingleTraining({ trainingName }) {
     staleTime: 1000 * 60 * 5, // 5 minut - zmień na ile chcesz
     cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
   });
+  
 
   const handleClick = () => {
     setIsOpen(open => !open);

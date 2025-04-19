@@ -3,7 +3,7 @@ import * as React from "react";
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-export default function MealFilter({mealPopularity, setMealPopularity}) {
+export default function MealFilter({ mealPopularity, setMealPopularity }) {
   const { t } = useTranslation();
 
   return (

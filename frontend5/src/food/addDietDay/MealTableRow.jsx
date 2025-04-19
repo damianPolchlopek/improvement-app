@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {useEffect, useState} from "react";
+import { useState } from "react";
+import { useQuery } from '@tanstack/react-query';
 import REST from "../../utils/REST";
 import { useTranslation } from 'react-i18next';
 
@@ -12,20 +13,20 @@ import {
   Table,
   TableBody,
   TableHead,
-  Checkbox
+  Checkbox,
+  CircularProgress
 } from '@mui/material';
-
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const categoryTranslation = new Map([
-  ['ALL', 'All'],
-  ['LUNCH', 'Obiad'],
-  ['BREAKFAST', 'Śniadanie'],
-  ['HOT_DISH', 'Ciepły Posiłek'],
-  ['SWEETS', 'Słodycze'],
-  ['DINNER', 'Kolacja'],
+  ['Other', 'All'],
+  ['Lunch', 'Obiad'],
+  ['Breakfast', 'Śniadanie'],
+  ['Hot Dish', 'Ciepły Posiłek'],
+  ['Sweets', 'Słodycze'],
+  ['Dinner', 'Kolacja'],
 ]);
 
 const popularityTranslation = new Map([
@@ -34,33 +35,40 @@ const popularityTranslation = new Map([
   ['LOW', 'Niska'],
 ]);
 
-function translateMealCategory(arg){
+function translateMealCategory(arg) {
   return categoryTranslation.get(arg);
-} 
+}
 
 function translateMealPopularity(arg) {
   return popularityTranslation.get(arg);
 }
 
-export default function MealTableRow({mealPopularity, mealCategory, ...props}) {
+export default function MealTableRow({ mealPopularity, mealCategory, ...props }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [mealList, setMealList] = useState([]);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    REST.getMealList(translateMealCategory(mealCategory), 'ALL', '',
-      translateMealPopularity(mealPopularity), 'category')
-      .then(response => {
-        setMealList(response.entity);
-      })
-      .catch(error => {
-        console.error("Error fetching meals:", error);
-      });
-  }, [mealPopularity, mealCategory]);
+  // ⚡ React Query - Pobieranie posiłków na podstawie kategorii i popularności
+  const { data: mealList = [], isLoading, isError } = useQuery({
+    queryKey: ['mealList', mealCategory, mealPopularity],
+    queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', translateMealPopularity(mealPopularity), 'category'),
+    enabled: !!mealCategory && !!mealPopularity && isOpen,
+    select: (res) => res.entity,
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5, // 5 minut - zmień na ile chcesz
+    cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
+  });
+  
+  if (isLoading) {
+    return <CircularProgress />;
+  }
+
+  if (isError) {
+    return <div>{t('food.errorLoadingMeals')}</div>;
+  }
 
   return (
     <>
-      <StyledTableRow onClick={() => {setIsOpen((open) => !open);}}>
+      <StyledTableRow onClick={() => { setIsOpen((open) => !open); }}>
         <StyledTableCell sx={{width: '50px'}} >
           <IconButton
             aria-label="expand row"
@@ -68,12 +76,11 @@ export default function MealTableRow({mealPopularity, mealCategory, ...props}) {
           >
             {isOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </StyledTableCell >
+        </StyledTableCell>
         <StyledTableCell component="th" scope="row">
           {mealCategory}
         </StyledTableCell>
       </StyledTableRow>
-
 
       <StyledTableRow>
         <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -115,7 +122,8 @@ export default function MealTableRow({mealPopularity, mealCategory, ...props}) {
                       <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
                       <StyledTableCell>{meal.fat}</StyledTableCell>
                     </StyledTableRow>
-                )})}
+                  );
+                })}
               </TableBody>
             </Table>
           </Collapse>

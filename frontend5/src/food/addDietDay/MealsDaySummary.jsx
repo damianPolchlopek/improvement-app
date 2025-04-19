@@ -4,7 +4,7 @@ import CenteredContainer from "../../component/CenteredContainer";
 import PropTypes from "prop-types";
 import { useTranslation } from 'react-i18next';
 
-export default function FoodStatisticView({ dietSummary }) {
+export default function MealsDaySummary({ dietSummary }) {
   const { t } = useTranslation();
 
   if (!dietSummary) return null;
@@ -20,7 +20,7 @@ export default function FoodStatisticView({ dietSummary }) {
   );
 }
 
-FoodStatisticView.propTypes = {
+MealsDaySummary.propTypes = {
   dietSummary: PropTypes.shape({
     kcal: PropTypes.number.isRequired,
     protein: PropTypes.number.isRequired,

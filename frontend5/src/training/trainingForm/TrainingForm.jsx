@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import REST from "../../utils/REST";
+import ErrorBlock from "../../component/ErrorBlock";
 
 import {
   Button,
@@ -13,38 +14,49 @@ import {
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { useTranslation } from 'react-i18next';
-import { useLoaderData, Form, redirect } from "react-router-dom";
-
+import { useLoaderData, Form, useNavigate } from "react-router-dom";
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../utils/REST.js';
 
 export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(exercises)
-
   const {
     exerciseNames = [],
     exercisePlaces = [],
     exerciseProgresses = [],
     exerciseTypes = []
   } = useLoaderData() || {};
-  
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: (exercises) => REST.addTraining(exercises),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['training-names', 0, 25]);
+      navigate('/training/view');
+    },
+    onError: (error) => {
+      console.error('Failed to submit training:', error);
+    },
+  });
 
   useEffect(() => {
     setExercisesFields(exercises);
   }, [exercises]);
 
+  function handleSubmit() {
+    mutate(exercisesFields);
+  }
+
   const handleFormChange = (index, attribut, event) => {
-    console.log(attribut + ' ' + event.target.value)
     let data = [...exercisesFields];
     data[index][attribut] = event.target.value;
-
-    console.log(data)
     setExercisesFields(data);
   }
 
   const addFields = (index) => {
     let data = [...exercisesFields];
     data.splice(index + 1, 0, {type: '', place: '', name: '', reps: '', weight: '', progress: ''})
-    console.log(data)
     setExercisesFields(data)
   }
 
@@ -62,7 +74,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   }
 
   return (
-    <Form method="post">
+    <Form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="h5">{t('messages.trainingSchema')}</Typography>
@@ -187,10 +199,27 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
         </Grid>
 
         <Grid xs={12}>
-          <Button variant="contained" type="submit">{t('messages.submit')}</Button>
+          <Button 
+          variant="contained" 
+          disabled={isPending}
+          type="submit">
+            {isPending ? t('messages.submitting') : t('messages.submit')}
+          </Button>
         </Grid>
       </Grid>
+
+      {isError && (
+        <ErrorBlock
+          title="Failed to add training"
+          message={
+            error.info?.message ||
+            'Failed to add training. Please check your inputs and try again later.'
+          }
+        />
+      )}
+
     </Form>
+    
   );
 }
 
@@ -206,34 +235,4 @@ export async function loader() {
     exerciseProgresses: exercisesProgresses.content,
     exerciseTypes: exercisesTypes.content
   };
-}
-
-export async function action({ request }) {
-  const formData = await request.formData();
-  const exercises = [];
-
-  const indexes = [...new Set(
-    Array.from(formData.keys())
-      .map(key => key.match(/-(\d+)$/)?.[1])
-      .filter(Boolean)
-  )];
-
-  for (const index of indexes) {
-    exercises.push({
-      type: formData.get(`type-${index}`),
-      place: formData.get(`place-${index}`),
-      name: formData.get(`name-${index}`),
-      reps: formData.get(`reps-${index}`),
-      weight: formData.get(`weight-${index}`),
-      progress: formData.get(`progress-${index}`)
-    });
-  }
-
-  try {
-    await REST.addTraining(exercises);
-    return redirect('/training/view');
-  } catch (error) {
-    console.error("Failed to submit training:", error);
-    throw error;
-  }
 }

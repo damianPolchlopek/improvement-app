@@ -1,76 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import SingleMeal from './SingleMeal';
 import CenteredContainer from '../../component/CenteredContainer';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Box,
   Container,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
-import PropTypes from 'prop-types';
-
-
-function TabPanel(props) {
-  const {children, value, index, ...other} = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{p: 3}}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
 
 export default function MealView() {
-  const [mealList, setMealList] = useState([]);
-  const [mealName, setMealName] = useState('');
   const { t } = useTranslation();
 
-  const [mealCategoryList, setMealCategoryList] = React.useState([]);
-  const [mealTypeList, setMealTypeList] = React.useState([]);
+  const [mealName, setMealName] = useState('');
+  const [mealCategory, setMealCategory] = useState('All');
+  const [mealType, setMealType] = useState('All');
 
-  const [mealCategory, setMealCategory] = React.useState('All');
-  const [mealType, setMealType] = React.useState('All');
+  const labelIdCategory = "meal-category-select";
+  const labelIdType = "meal-type-select";
 
-  useEffect(() => {
-    Promise.all([
-      REST.getMealCategoryList(),
-      REST.getMealTypeList()
-    ]).then(([categoryResponse, typeResponse]) => {
-      setMealCategoryList(categoryResponse.entity);
-      setMealTypeList(typeResponse.entity);
-    });
-  }, []);
+  // 🍽️ Pobierz listę kategorii i typów posiłków
+  const { data: mealCategoryList = [] } = useQuery({
+    queryKey: ['mealCategories'],
+    queryFn: REST.getMealCategoryList,
+    select: (res) => res.entity
+  });
 
-  useEffect(() => {
-    REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name').then(response => {
-      setMealList(response.entity);
-    });
-  }, [mealCategory, mealType, mealName]);
+  const { data: mealTypeList = [] } = useQuery({
+    queryKey: ['mealTypes'],
+    queryFn: REST.getMealTypeList,
+    select: (res) => res.entity
+  });
+
+  // 🥗 Pobierz posiłki na podstawie filtrów
+  const { data: mealList = [] } = useQuery({
+    queryKey: ['meals', mealCategory, mealType, mealName],
+    queryFn: () => REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name'),
+    select: (res) => res.entity,
+    enabled: !!mealCategory && !!mealType // upewnij się że są dostępne
+  });
 
   const handleChange = (event, field) => {
     const value = event.target.value;
@@ -90,48 +65,64 @@ export default function MealView() {
     }
   };
 
-  const labelIdCategory = "meal-category-select";
-  const labelIdType = "meal-type-select";
-
   return (
-    <React.Fragment>
-      <Container>
-        <TextField
-          sx={{width: '25%'}}
-          label={t('food.meal')}
-          onChange={(event) => handleChange(event, 'mealName')}
-        />
+    <>
+      <Container
+        sx={{
+          mb: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center', // wyśrodkowanie poziome
+          width: '100%',
+        }}
+      >
+        {/* Rząd 1 – wyszukiwarka */}
+        <Grid container spacing={2} sx={{ maxWidth: 800, width: '100%' }}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label={t('food.meal')}
+              value={mealName}
+              onChange={(event) => handleChange(event, 'mealName')}
+            />
+          </Grid>
+        </Grid>
+
+        {/* Rząd 2 – kategoria i typ */}
+        <Grid container spacing={2} sx={{ mt: 1, maxWidth: 800, width: '100%' }}>
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth variant="standard">
+              <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
+              <Select
+                labelId={labelIdCategory}
+                value={mealCategory}
+                onChange={(event) => handleChange(event, 'mealCategory')}
+              >
+                {mealCategoryList.map((cat, index) => (
+                  <MenuItem key={index} value={cat}>{cat}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth variant="standard">
+              <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
+              <Select
+                labelId={labelIdType}
+                value={mealType}
+                onChange={(event) => handleChange(event, 'mealType')}
+              >
+                {mealTypeList.map((type, index) => (
+                  <MenuItem key={index} value={type}>{type}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
       </Container>
 
-      <Container sx={{minHeight: '10vh', display: 'flex', justifyContent: 'center', width: '25%'}}>
-        <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-          <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
-            <Select
-              labelId={labelIdCategory}
-              value={mealCategory}
-              onChange={(event) => handleChange(event, 'mealCategory')}
-              label={t('food.mealCategory')}
-            >
-              {mealCategoryList.map((mealCategory, index) =>
-                <MenuItem key={index} value={mealCategory}>{mealCategory}</MenuItem>
-              )}
-            </Select>
-        </FormControl>
 
-        <FormControl variant="standard" sx={{m: 1, minWidth: 150}}>
-          <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
-            <Select
-              labelId={labelIdType}
-              value={mealType}
-              onChange={(event) => handleChange(event, 'mealType')}
-              label={t('food.mealType')}
-            >
-              {mealTypeList.map((mealType, index) =>
-                <MenuItem key={index} value={mealType}>{mealType}</MenuItem>
-              )}
-            </Select>
-        </FormControl>
-      </Container>
 
       <CenteredContainer>
         <Grid container rowSpacing={1} columnSpacing={1} sx={{width: '80%'}}>
@@ -142,6 +133,6 @@ export default function MealView() {
           )}
         </Grid>
       </CenteredContainer>
-    </React.Fragment>
+    </>
   );
 }

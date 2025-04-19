@@ -55,7 +55,8 @@ i18n.use(initReactI18next).init({
           loadLastTraining: "Load Last Training",
           enableMoreAccurateForm: "Enable a more accurate form",
           trainingSchema: "Training Schema",
-          trainingView: "Training View"
+          trainingView: "Training View",
+          submitting: "Submitting..."
         },
         header: {
           logout: "Logout"
@@ -89,10 +90,6 @@ i18n.use(initReactI18next).init({
           all: "ALL",
           popular: "Popular",
           rare: "Rare"
-        },
-        addDietDay: {
-          saveDietDay: "Save Diet Day",
-          addDietDayView: "Add Diet Day View"
         },
         food: {
           kcal: "Kcal",
@@ -129,7 +126,11 @@ i18n.use(initReactI18next).init({
           noRecipes: "No recipes available",
           product: "Product",
           dietStatisticTableRow: "Diet Statistic Table Row",
-          date: "Date"
+          date: "Date",
+          saveDietDay: "Save Diet Day",
+          addDietDayView: "Add Diet Day View",
+          dietSavedSuccessfully: "Diet summary saved successfully!",
+          failedAddDietSummary: "Failed to save the diet summary!" // Moved to food for English
         }
       }
     },
@@ -185,7 +186,8 @@ i18n.use(initReactI18next).init({
           loadLastTraining: "Wczytaj ostatni trening",
           enableMoreAccurateForm: "Włącz dokładnieszy formularz",
           trainingSchema: "Schemat Treningu",
-          trainingView: "Widok treningów"
+          trainingView: "Widok treningów",
+          submitting: "Wysyłanie..."
         },
         header: {
           logout: "Wyloguj się"
@@ -248,7 +250,9 @@ i18n.use(initReactI18next).init({
           addDietDayView: "Widok dodawania dnia diety",
           mealPopularity: "Popularność posiłków",
           popular: "Popularne",
-          rare: "Rzadkie"
+          rare: "Rzadkie",
+          dietSavedSuccessfully: "Dieta zapisana pomyślnie!",
+          failedAddDietSummary: "Nie udało się zapisać podsumowania diety!" // Moved to food for Polish
         }
       }
     }
