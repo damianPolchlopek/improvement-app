@@ -18,6 +18,7 @@ export const FoodProductUrl = "/food/products";
 
 export const Food = "food";
 export const Add = "add";
+export const Edit = "edit";
 export const Products = "products";
 export const Statistics = "statistics";
 

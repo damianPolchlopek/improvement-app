@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @RequiredArgsConstructor
@@ -31,6 +32,11 @@ public class DietSummaryHandlerImpl implements DietSummaryHandler {
     @Override
     public void deleteById(Long id) {
         dietSummaryRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<DietSummary> findById(Long id) {
+        return dietSummaryRepository.findById(id);
     }
 
 }

@@ -12,7 +12,7 @@ import {
   Paper
 } from '@mui/material';
 
-export default function MealsTable({ isSelected, handleClick }) {
+export default function MealsTableForm({ isSelected, handleClick }) {
   const [ mealPopularity, setMealPopularity ] = useState('HIGH');
   const { t } = useTranslation();
 

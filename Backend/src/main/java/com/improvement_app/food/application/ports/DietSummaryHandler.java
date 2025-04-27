@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface DietSummaryHandler {
 
@@ -15,4 +16,6 @@ public interface DietSummaryHandler {
     Page<DietSummary> findAll(Pageable pageable);
 
     void deleteById(Long id);
+
+    Optional<DietSummary> findById(Long id);
 }

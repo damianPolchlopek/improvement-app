@@ -164,7 +164,7 @@ export default class REST {
     }
 
     static addDietSummary(selectedMealsId) {
-        return post(serverUrl + food + 'diet/save-diet-day', selectedMealsId);
+        return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
     }
 
     static checkProduct(selectedMeals) {
@@ -177,6 +177,10 @@ export default class REST {
 
     static deleteDietSummaries(id) {
         return deleteMethod(serverUrl + food + 'diet/day-summary/' + id);
+    }
+
+    static getDietSummariesById(id) {
+        return get(serverUrl + food + 'diet/day-summary/' + id);
     }
 
 
