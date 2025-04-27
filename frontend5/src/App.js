@@ -48,7 +48,7 @@ const TrainingStatistic = lazy(() => import('./training/trainingStatistic/Traini
 const ShoppingListView = lazy(() => import("./shopping/ShoppingListView.jsx"));
 const MealView = lazy(() => import('./food/foodView/MealView.jsx'));
 const AddDietDayView = lazy(() => import("./food/addDietDay/AddDietDayView.jsx"));
-const EditDietDayView = lazy(() => import("./food/editView/EditDietDayView.jsx"));
+const EditDietDayView = lazy(() => import("./food/editDietSummaryView/EditDietDayView.jsx"));
 const DietStatisticView = lazy(() => import("./food/statistic/DietStatisticView.jsx"));
 const ProductView = lazy(() => import('./food/ProductView/ProductView.jsx'));
 const WeeklyListView = lazy(() => import('./other/weekly/WeeklyListView'));
@@ -257,7 +257,7 @@ const router = createBrowserRouter([
           { 
             path: ':id/edit', 
             element: <Suspense fallback={suspenseFallback}><EditDietDayView /></Suspense>,
-            loader: ({ params }) => import('./food/editView/EditDietDayView.jsx').then((module) => module.loader({ params })),
+            loader: ({ params }) => import('./food/editDietSummaryView/EditDietDayView.jsx').then((module) => module.loader({ params })),
           },
           { 
             path: Statistics, 

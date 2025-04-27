@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import CenteredContainer from "../../component/CenteredContainer";
+import CenteredContainer from "../../../component/CenteredContainer";
 import PropTypes from "prop-types";
 import { useTranslation } from 'react-i18next';
 

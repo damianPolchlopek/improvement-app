@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
-import REST from "../../utils/REST";
+import REST from "../../../utils/REST";
 import { useTranslation } from 'react-i18next';
 
-import StyledTableCell from '../../component/table/StyledTableCell';
-import StyledTableRow from '../../component/table/StyledTableRow';
+import StyledTableCell from '../../../component/table/StyledTableCell';
+import StyledTableRow from '../../../component/table/StyledTableRow';
 
 import {
   Collapse,

@@ -1,18 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import REST from '../../utils/REST';
-import CenteredContainer from '../../component/CenteredContainer';
 import { useTranslation } from 'react-i18next';
 
 import {
   Button,
-  Snackbar,
-  Alert,
   CircularProgress
 } from '@mui/material';
 
-import DaySummary from './MealsDaySummary';
-import MealsTable from './MealsTableForm';
-import Grid from '@mui/material/Unstable_Grid2';
+import Snackbar from '../../component/Snackbar';
+import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -20,36 +16,15 @@ import { queryClient } from '../../utils/REST';
 
 export default function AddDietDayView() {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
-  const [dietSummary, setDietSummary] = useState({
-    kcal: 0,
-    protein: 0,
-    carbohydrates: 0,
-    fat: 0,
-  });
-  const [selected, setSelected] = useState([]);
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const isSelected = (id) => selected.includes(id);
+  // setSelect obecnie jest w Komponencie glownym i podrzednym - niezbyt dobra implementacja
+  // do pomyslenia jak to bedzie mozna zrobic lepiej
+  const [selected, setSelected] = useState([]);
 
-  // Mutation: calculate diet
-  const calculateDietMutation = useMutation({
-    mutationFn: (selectedIds) => REST.calculateDiet(selectedIds),
-    onSuccess: (response) => {
-      setDietSummary(response.entity);
-    },
-    onError: () => {
-      setSnackbar({
-        open: true,
-        message: t('errors.calculateDiet'),
-        severity: 'error',
-      });
-    }
-  });
-
-  // Mutation: add diet summary
-  const addDietSummaryMutation = useMutation({
-    mutationFn: (selectedIds) => REST.addDietSummary(selectedIds),
+  const createDietSummaryMutation = useMutation({
+    mutationFn: (selectedIds) => REST.createDietSummary(selectedIds),
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
       navigate('/food/statistics');
@@ -63,18 +38,9 @@ export default function AddDietDayView() {
     }
   });
 
-  const handleAddMealToDiet = useCallback((event, id) => {
-    const newSelected = new Set(selected);
-    newSelected.has(id) ? newSelected.delete(id) : newSelected.add(id);
-    const newSelectedArray = Array.from(newSelected);
-    setSelected(newSelectedArray);
-
-    calculateDietMutation.mutate(newSelectedArray);
-  }, [selected]);
-
   const handleSave = () => {
     const dietDayToSave = { meals: selected };
-    addDietSummaryMutation.mutate(dietDayToSave);
+    createDietSummaryMutation.mutate(dietDayToSave);
   };
 
   const handleCloseSnackbar = () => {
@@ -82,49 +48,31 @@ export default function AddDietDayView() {
   }
 
   return (
-    <CenteredContainer>
-      <Grid container spacing={2}>
-        <Grid xs={12}>
-          <DaySummary dietSummary={dietSummary} />
-        </Grid>
-
-        <Grid xs={12}>
-          <Button
-            variant="contained"
-            onClick={handleSave}
-            disabled={addDietSummaryMutation.isLoading}
-            startIcon={
-              addDietSummaryMutation.isLoading ? (
-                <CircularProgress color="inherit" size={20} />
-              ) : null
-            }
-          >
-            {t('food.saveDietDay')}
-          </Button>
-        </Grid>
-
-        <Grid xs={12}>
-          <MealsTable
-            isSelected={isSelected}
-            handleClick={handleAddMealToDiet}
-          />
-        </Grid>
-      </Grid>
+    selected && <>
+      <DietDaySummaryForm 
+        initialSelected={selected}
+        onSelectionChange={setSelected}
+      >
+        <Button
+          variant="contained"
+          onClick={handleSave}
+          disabled={createDietSummaryMutation.isLoading}
+          startIcon={
+            createDietSummaryMutation.isLoading ? (
+              <CircularProgress color="inherit" size={20} />
+            ) : null
+          }
+        >
+          {t('food.saveDietDay')}
+        </Button>
+      </DietDaySummaryForm>
 
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={4000}
+        severity={snackbar.severity} 
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        <Alert 
-          onClose={handleCloseSnackbar} 
-          severity={snackbar.severity} 
-          variant="filled"
-        >
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </CenteredContainer>
+        message={snackbar.message}
+      />
+    </>
   );
 }

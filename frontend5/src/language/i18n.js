@@ -136,8 +136,10 @@ i18n.use(initReactI18next).init({
           addDietDayView: "Add Diet Day View",
           dietSavedSuccessfully: "Diet summary saved successfully!",
           failedAddDietSummary: "Failed to save the diet summary!",
+          failedUpdateDietSummary: "Failed to update the diet summary!",
           deleteConfirmation: "Do you really want to delete this item? This action cannot be undone.",
-          actions: "Actions"
+          actions: "Actions",
+          updateDietDay: "Update Diet Day"
         }
       }
     },
@@ -266,7 +268,9 @@ i18n.use(initReactI18next).init({
           dietSavedSuccessfully: "Dieta zapisana pomyślnie!",
           failedAddDietSummary: "Nie udało się zapisać podsumowania diety!",
           deleteConfirmation: "Czy na pewno chcesz usunąć ten element? Tej operacji nie można cofnąć.",
-          actions: "Akcje"
+          failedUpdateDietSummary: "Nie udało się zaktualizować podsumowania diety!",
+          actions: "Akcje",
+          updateDietDay: "Aktualizuj dzień diety"          
         }
       }
     }

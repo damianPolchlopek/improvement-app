@@ -5,6 +5,7 @@ import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.Meal;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -107,5 +108,16 @@ public class DietSummaryService {
     public DietSummary getDayDietSummary(Long id) {
         return dietSummaryHandler.findById(id)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + id));
+    }
+
+    public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
+        DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
+
+        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
+
+        oldDietSummary.update(recalculatedDietSummary);
+
+        return dietSummaryHandler.save(oldDietSummary);
     }
 }

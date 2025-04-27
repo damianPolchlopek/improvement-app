@@ -39,4 +39,14 @@ public class DietSummary {
         this.date = LocalDate.now();
         this.meals = meals;
     }
+
+    public DietSummary update(DietSummary newDietSummary) {
+        this.kcal = newDietSummary.kcal;
+        this.protein = newDietSummary.protein;
+        this.carbohydrates = newDietSummary.carbohydrates;
+        this.fat = newDietSummary.fat;
+        this.date = LocalDate.now();
+        this.meals = newDietSummary.meals;
+        return this;
+    }
 }

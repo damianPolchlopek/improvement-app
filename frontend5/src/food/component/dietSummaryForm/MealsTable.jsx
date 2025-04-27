@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 
-import MealFilter from "./mealTableComponent/MealFilter";
+import MealFilter from "./MealFilter";
 import MealTableRow from './MealTableRow';
 
 import {

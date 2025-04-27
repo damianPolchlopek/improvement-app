@@ -4,6 +4,7 @@ import com.improvement_app.food.application.DietSummaryService;
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -54,7 +55,6 @@ public class DietController {
 
     @GetMapping("/day-summary/{id}")
     public Response getDietDaySummary(@PathVariable Long id) {
-        System.out.println("id = " + id);
         DietSummary dayDietSummary = dietSummaryService.getDayDietSummary(id);
         return Response.ok(dayDietSummary).build();
     }
@@ -65,11 +65,10 @@ public class DietController {
         return Response.ok(diet).build();
     }
 
-    @PutMapping("/day-summary/{id}")
-    public Response editDietDaySummary(@RequestBody List<Long> ids) {
-        System.out.println("ids = " + ids);
-//        dietSummaryService.getDayDietSummary(id);
-        return Response.ok().build();
+    @PutMapping("/day-summary")
+    public Response editDietDaySummary(@RequestBody UpdateDietSummaryRequest updateDietSummaryRequest) {
+        DietSummary updatedDietSummary = dietSummaryService.updateDietSummary(updateDietSummaryRequest);
+        return Response.ok(updatedDietSummary).build();
     }
 
     @DeleteMapping("/day-summary/{id}")
