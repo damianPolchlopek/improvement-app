@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import REST from '../../../utils/REST';
 import CenteredContainer from '../../../component/CenteredContainer';
 import DaySummary from './MealsDaySummary';
@@ -6,8 +7,9 @@ import MealsTable from './MealsTable';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useMutation } from '@tanstack/react-query';
+import { useSnackbar } from '../../../component/SnackbarProvider';
 
-export default function EditDietDayView({children, initialSelected, onSelectionChange}) {
+export default function EditDietDayView({ children, initialSelected, onSelectionChange }) {
   const [dietSummary, setDietSummary] = useState({
     kcal: 0,
     protein: 0,
@@ -15,6 +17,8 @@ export default function EditDietDayView({children, initialSelected, onSelectionC
     fat: 0,
   });
   const [selected, setSelected] = useState(initialSelected || []);
+  const { showSnackbar } = useSnackbar();
+  const { t } = useTranslation();
 
   const isSelected = (id) => selected.includes(id);
 
@@ -28,11 +32,7 @@ export default function EditDietDayView({children, initialSelected, onSelectionC
       setDietSummary(response.entity);
     },
     onError: () => {
-    //   setSnackbar({
-    //     open: true,
-    //     message: t('errors.calculateDiet'),
-    //     severity: 'error',
-    //   });
+      showSnackbar( t('food.failedCalculateDiet'), 'error' );
     }
   });
 
@@ -74,7 +74,6 @@ export default function EditDietDayView({children, initialSelected, onSelectionC
           />
         </Grid>
       </Grid>
-      
     </CenteredContainer>
   );
 }

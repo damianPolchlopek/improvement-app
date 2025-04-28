@@ -12,6 +12,7 @@ import { tokenLoader } from './login/Authentication.js';
 import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 import { queryClient } from './utils/REST.js';
+import SnackbarProvider from './component/SnackbarProvider.jsx';
 
 import {
   Training, 
@@ -309,11 +310,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <SnackbarProvider>
       <QueryClientProvider client={queryClient}>
         <Box className="App">
           <RouterProvider router={router} />
         </Box>
       </QueryClientProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

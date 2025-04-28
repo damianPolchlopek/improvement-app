@@ -10,10 +10,9 @@ import {
   DialogTitle,
   DialogActions,
   Button,
-  Snackbar,
-  Alert,
   Box
 } from "@mui/material";
+
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -27,10 +26,10 @@ import { queryClient } from '../../utils/REST';
 import REST from '../../utils/REST';
 import ErrorBlock from "../../component/ErrorBlock";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from '../../component/SnackbarProvider';
 
 export default function DietStatisticTableRow({ dietSummary }) {
-  const [snackbar, setSnackbar] = useState(
-      { open: false, message: '', severity: 'success' });
+  const { showSnackbar } = useSnackbar();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
@@ -45,18 +44,10 @@ export default function DietStatisticTableRow({ dietSummary }) {
     mutationFn: (id) => REST.deleteDietSummaries(id),
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
-      setSnackbar({
-        open: true,
-        message: `Success removed diet summary from ${dietSummary.date}`,
-        severity: 'success',
-      });
+      showSnackbar( `Success removed diet summary from ${dietSummary.date}`, 'success' );
     },
     onError: () => {
-      setSnackbar({
-        open: true,
-        message: `Failed removed diet summary from ${dietSummary.date}`,
-        severity: 'error',
-      });
+      showSnackbar( `Failed removed diet summary from ${dietSummary.date}`, 'error' );
     }
   });
 
@@ -73,14 +64,8 @@ export default function DietStatisticTableRow({ dietSummary }) {
     mutate(id);
   }
 
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
-
   const handleEditClick = () => {
     navigate(`/food/${dietSummary.id}/edit`);
-    // setConfirmOpen(true);
-    console.log("Edit clicked", dietSummary.id);
   };
 
   return (
@@ -161,21 +146,6 @@ export default function DietStatisticTableRow({ dietSummary }) {
             />
           )}
         </Dialog>
-
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={4000}
-          onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        >
-          <Alert 
-            onClose={handleCloseSnackbar} 
-            severity={snackbar.severity} 
-            variant="filled"
-          >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
       </StyledTableRow>
     </>
   );

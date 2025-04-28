@@ -117,10 +117,10 @@ export default function MealTableRow({ mealPopularity, mealCategory, ...props })
                         />
                       </StyledTableCell>
                       <StyledTableCell>{meal.name}</StyledTableCell>
-                      <StyledTableCell>{meal.kcal}</StyledTableCell>
+                      <StyledTableCell>{new Number(meal.kcal).toFixed(2)}</StyledTableCell>
                       <StyledTableCell>{meal.protein}</StyledTableCell>
                       <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
-                      <StyledTableCell>{meal.fat}</StyledTableCell>
+                      <StyledTableCell>{new Number(meal.fat).toFixed(2)}</StyledTableCell>
                     </StyledTableRow>
                   );
                 })}

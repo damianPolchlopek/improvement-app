@@ -7,16 +7,16 @@ import {
   CircularProgress
 } from '@mui/material';
 
-import Snackbar from '../../component/Snackbar';
 import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
+import { useSnackbar } from '../../component/SnackbarProvider';
 
 export default function AddDietDayView() {
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const { t } = useTranslation();
+  const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
 
   // setSelect obecnie jest w Komponencie glownym i podrzednym - niezbyt dobra implementacja
@@ -30,11 +30,7 @@ export default function AddDietDayView() {
       navigate('/food/statistics');
     },
     onError: () => {
-      setSnackbar({
-        open: true,
-        message: t('food.failedAddDietSummary'),
-        severity: 'error',
-      });
+      showSnackbar( t('food.failedAddDietSummary'), 'error' );
     }
   });
 
@@ -42,10 +38,6 @@ export default function AddDietDayView() {
     const dietDayToSave = { meals: selected };
     createDietSummaryMutation.mutate(dietDayToSave);
   };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  }
 
   return (
     selected && <>
@@ -66,13 +58,6 @@ export default function AddDietDayView() {
           {t('food.saveDietDay')}
         </Button>
       </DietDaySummaryForm>
-
-      <Snackbar
-        open={snackbar.open}
-        severity={snackbar.severity} 
-        onClose={handleCloseSnackbar}
-        message={snackbar.message}
-      />
     </>
   );
 }

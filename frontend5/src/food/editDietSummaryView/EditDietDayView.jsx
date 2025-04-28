@@ -7,18 +7,18 @@ import {
   CircularProgress
 } from '@mui/material';
 
+import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
+
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLoaderData } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
-
-import Snackbar from '../../component/Snackbar';
-import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
+import { useSnackbar } from '../../component/SnackbarProvider';
 
 export default function EditDietDayView() {
   const mealsDietDay = useLoaderData();
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
 
   // setSelect obecnie jest w Komponencie glownym i podrzednym - niezbyt dobra implementacja
   // do pomyslenia jak to bedzie mozna zrobic lepiej
@@ -34,18 +34,10 @@ export default function EditDietDayView() {
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
       navigate('/food/statistics');
-      setSnackbar({
-        open: true,
-        message: t('food.faileUpdateDietSummary'),
-        severity: 'success',
-      });
+      showSnackbar( t('food.updatedDietSummary'), 'success' );
     },
     onError: () => {
-      setSnackbar({
-        open: true,
-        message: t('food.failedUpdateDietSummary'),
-        severity: 'error',
-      });
+      showSnackbar( t('food.failedUpdateDietSummary'), 'error' );
     }
   });
 
@@ -56,10 +48,6 @@ export default function EditDietDayView() {
     };
 
     updateDietSummaryMutation.mutate(objectToUpdate);
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
   };
 
   return (
@@ -81,13 +69,6 @@ export default function EditDietDayView() {
           {t('food.updateDietDay')}
         </Button>
       </DietDaySummaryForm>
-
-      <Snackbar
-        open={snackbar.open}
-        severity={snackbar.severity} 
-        onClose={handleCloseSnackbar}
-        message={snackbar.message}
-      />
     </>
   );
 }

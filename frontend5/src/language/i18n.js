@@ -139,7 +139,9 @@ i18n.use(initReactI18next).init({
           failedUpdateDietSummary: "Failed to update the diet summary!",
           deleteConfirmation: "Do you really want to delete this item? This action cannot be undone.",
           actions: "Actions",
-          updateDietDay: "Update Diet Day"
+          updateDietDay: "Update Diet Day",
+          updatedDietSummary: "Updated Diet Day Summary",  
+          failedCalculateDiet: "Failed to calculate the diet!",
         }
       }
     },
@@ -270,7 +272,9 @@ i18n.use(initReactI18next).init({
           deleteConfirmation: "Czy na pewno chcesz usunąć ten element? Tej operacji nie można cofnąć.",
           failedUpdateDietSummary: "Nie udało się zaktualizować podsumowania diety!",
           actions: "Akcje",
-          updateDietDay: "Aktualizuj dzień diety"          
+          updateDietDay: "Aktualizuj dzień diety",
+          updatedDietSummary: "Zaktualizowano podsumowanie dnia diety",
+          failedCalculateDiet: "Nie udało się obliczyć diety!",          
         }
       }
     }
