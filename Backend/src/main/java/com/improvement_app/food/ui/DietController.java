@@ -3,6 +3,8 @@ package com.improvement_app.food.ui;
 import com.improvement_app.food.application.DietSummaryService;
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,17 +41,34 @@ public class DietController {
         return Response.ok(dietSummary).build();
     }
 
-    @PostMapping("/save-diet-day")
-    public Response addDietDay(@RequestBody List<Long> ids) {
-        DietSummary dietSummary = dietSummaryService.calculateDietSummary(ids);
-        DietSummary diet = dietSummaryService.addDietSummary(dietSummary);
-        return Response.ok(diet).build();
-    }
-
     @PostMapping("/sum-product")
     public Response sumProduct(@RequestBody List<MealDto> mealDTOs) {
         List<MealIngredient> products = dietSummaryService.getProducts(mealDTOs);
         return Response.ok(products).build();
+    }
+
+
+
+
+
+
+
+    @GetMapping("/day-summary/{id}")
+    public Response getDietDaySummary(@PathVariable Long id) {
+        DietSummary dayDietSummary = dietSummaryService.getDayDietSummary(id);
+        return Response.ok(dayDietSummary).build();
+    }
+
+    @PostMapping("/day-summary")
+    public Response addDietDay(@RequestBody CreateDietSummaryRequest createDietSummaryRequest) {
+        DietSummary diet = dietSummaryService.saveDietDaySummary(createDietSummaryRequest);
+        return Response.ok(diet).build();
+    }
+
+    @PutMapping("/day-summary")
+    public Response editDietDaySummary(@RequestBody UpdateDietSummaryRequest updateDietSummaryRequest) {
+        DietSummary updatedDietSummary = dietSummaryService.updateDietSummary(updateDietSummaryRequest);
+        return Response.ok(updatedDietSummary).build();
     }
 
     @DeleteMapping("/day-summary/{id}")

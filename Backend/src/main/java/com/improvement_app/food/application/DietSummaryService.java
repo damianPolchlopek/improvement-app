@@ -4,6 +4,8 @@ import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.Meal;
 import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
 import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,26 +27,27 @@ public class DietSummaryService {
     private final MealService mealService;
 
     @Transactional
-    public DietSummary addDietSummary(DietSummary dietSummary) {
+    public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
+        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
         return dietSummaryHandler.save(dietSummary);
     }
 
     public DietSummary calculateDietSummary(List<Long> mealsId) {
-        List<Meal> allById = mealService.findAllById(mealsId);
+        List<Meal> meals = mealService.findAllById(mealsId);
 
         double kcal = 0;
         double protein = 0;
         double carbs = 0;
         double fat = 0;
 
-        for (Meal meal : allById) {
+        for (Meal meal : meals) {
             kcal += meal.getKcal();
             protein += meal.getProtein();
             carbs += meal.getCarbohydrates();
             fat += meal.getFat();
         }
 
-        return new DietSummary(kcal, protein, carbs, fat, allById);
+        return new DietSummary(kcal, protein, carbs, fat, meals);
     }
 
     @Transactional
@@ -100,5 +103,21 @@ public class DietSummaryService {
 
     public void deleteDietSummary(Long id) {
         dietSummaryHandler.deleteById(id);
+    }
+
+    public DietSummary getDayDietSummary(Long id) {
+        return dietSummaryHandler.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + id));
+    }
+
+    public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
+        DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
+
+        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
+
+        oldDietSummary.update(recalculatedDietSummary);
+
+        return dietSummaryHandler.save(oldDietSummary);
     }
 }

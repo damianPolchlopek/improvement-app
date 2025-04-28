@@ -11,4 +11,6 @@ public interface DietSummaryRepository extends JpaRepository<DietSummary, Long> 
 
     Page<DietSummary> findAll(Pageable pageable);
 
+
+
 }

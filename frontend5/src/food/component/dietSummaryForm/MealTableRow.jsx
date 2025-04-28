@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
-import REST from "../../utils/REST";
+import REST from "../../../utils/REST";
 import { useTranslation } from 'react-i18next';
 
-import StyledTableCell from '../../component/table/StyledTableCell';
-import StyledTableRow from '../../component/table/StyledTableRow';
+import StyledTableCell from '../../../component/table/StyledTableCell';
+import StyledTableRow from '../../../component/table/StyledTableRow';
 
 import {
   Collapse,
@@ -117,10 +117,10 @@ export default function MealTableRow({ mealPopularity, mealCategory, ...props })
                         />
                       </StyledTableCell>
                       <StyledTableCell>{meal.name}</StyledTableCell>
-                      <StyledTableCell>{meal.kcal}</StyledTableCell>
+                      <StyledTableCell>{new Number(meal.kcal).toFixed(2)}</StyledTableCell>
                       <StyledTableCell>{meal.protein}</StyledTableCell>
                       <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
-                      <StyledTableCell>{meal.fat}</StyledTableCell>
+                      <StyledTableCell>{new Number(meal.fat).toFixed(2)}</StyledTableCell>
                     </StyledTableRow>
                   );
                 })}

@@ -44,6 +44,12 @@ const post = (url, data) => {
     })
 }
 
+const put = (url, data) => {
+    return axios.put(url, data).then((response) => {
+        return response.data;
+    })
+}
+
 const deleteMethod = (url) => {
     return axios.delete(url).then((response) => {
         console.log(response)
@@ -163,8 +169,8 @@ export default class REST {
         return post(serverUrl + food + 'diet/calculate', selectedMealsId);
     }
 
-    static addDietSummary(selectedMealsId) {
-        return post(serverUrl + food + 'diet/save-diet-day', selectedMealsId);
+    static createDietSummary(selectedMealsId) {
+        return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
     }
 
     static checkProduct(selectedMeals) {
@@ -177,6 +183,14 @@ export default class REST {
 
     static deleteDietSummaries(id) {
         return deleteMethod(serverUrl + food + 'diet/day-summary/' + id);
+    }
+
+    static getDietSummariesById(id) {
+        return get(serverUrl + food + 'diet/day-summary/' + id);
+    }
+    
+    static updateDietSummary(updatedDietSummary) {
+        return put(serverUrl + food + 'diet/day-summary', updatedDietSummary);
     }
 
 

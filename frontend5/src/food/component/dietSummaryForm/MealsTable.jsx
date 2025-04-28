@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 
-import MealFilter from "./mealTableComponent/MealFilter";
+import MealFilter from "./MealFilter";
 import MealTableRow from './MealTableRow';
 
 import {
@@ -12,7 +12,7 @@ import {
   Paper
 } from '@mui/material';
 
-export default function MealsTable({ isSelected, handleClick }) {
+export default function MealsTableForm({ isSelected, handleClick }) {
   const [ mealPopularity, setMealPopularity ] = useState('HIGH');
   const { t } = useTranslation();
 

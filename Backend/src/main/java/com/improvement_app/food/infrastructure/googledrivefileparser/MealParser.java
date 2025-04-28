@@ -32,6 +32,7 @@ public class MealParser extends GoogleDriveFilesHandler {
             Meal meal = parseMacroSheet(macroSheet);
 
             XSSFSheet ingredientSheet = wb.getSheetAt(INGREDIENT_SHEET_INDEX);
+            System.out.println("File name: " + file.getName());
             List<MealIngredient> mealIngredients = parseIngredientSheet(ingredientSheet);
             meal.setMealIngredients(mealIngredients);
 
@@ -86,6 +87,7 @@ public class MealParser extends GoogleDriveFilesHandler {
                 continue;
 
             Cell cell = row.getCell(ID_INDEX);
+            System.out.println("Row: " + row.getRowNum() + ", Cell: " + cell.getColumnIndex() + ", Value: " + cell.getNumericCellValue());
             final int productId = (int) cell.getNumericCellValue();
             cell = row.getCell(NAME_INDEX);
             final String name = cell.getStringCellValue();

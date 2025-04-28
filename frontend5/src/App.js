@@ -12,6 +12,7 @@ import { tokenLoader } from './login/Authentication.js';
 import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 import { queryClient } from './utils/REST.js';
+import SnackbarProvider from './component/SnackbarProvider.jsx';
 
 import {
   Training, 
@@ -48,6 +49,7 @@ const TrainingStatistic = lazy(() => import('./training/trainingStatistic/Traini
 const ShoppingListView = lazy(() => import("./shopping/ShoppingListView.jsx"));
 const MealView = lazy(() => import('./food/foodView/MealView.jsx'));
 const AddDietDayView = lazy(() => import("./food/addDietDay/AddDietDayView.jsx"));
+const EditDietDayView = lazy(() => import("./food/editDietSummaryView/EditDietDayView.jsx"));
 const DietStatisticView = lazy(() => import("./food/statistic/DietStatisticView.jsx"));
 const ProductView = lazy(() => import('./food/ProductView/ProductView.jsx'));
 const WeeklyListView = lazy(() => import('./other/weekly/WeeklyListView'));
@@ -245,10 +247,27 @@ const router = createBrowserRouter([
       { 
         path: Food, 
         children: [
-          { path: View, element: <Suspense fallback={suspenseFallback}><MealView /></Suspense> },
-          { path: Add, element: <Suspense fallback={suspenseFallback}><AddDietDayView /></Suspense> },
-          { path: Statistics, element: <Suspense fallback={suspenseFallback}><DietStatisticView /></Suspense> },
-          { path: Products, element: <Suspense fallback={suspenseFallback}><ProductView /></Suspense> },
+          { 
+            path: View, 
+            element: <Suspense fallback={suspenseFallback}><MealView /></Suspense> 
+          },
+          { 
+            path: Add, 
+            element: <Suspense fallback={suspenseFallback}><AddDietDayView /></Suspense> 
+          },
+          { 
+            path: ':id/edit', 
+            element: <Suspense fallback={suspenseFallback}><EditDietDayView /></Suspense>,
+            loader: ({ params }) => import('./food/editDietSummaryView/EditDietDayView.jsx').then((module) => module.loader({ params })),
+          },
+          { 
+            path: Statistics, 
+            element: <Suspense fallback={suspenseFallback}><DietStatisticView /></Suspense> 
+          },
+          { 
+            path: Products, 
+            element: <Suspense fallback={suspenseFallback}><ProductView /></Suspense> 
+          },
         ]
       },
       { 
@@ -291,11 +310,13 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <SnackbarProvider>
       <QueryClientProvider client={queryClient}>
         <Box className="App">
           <RouterProvider router={router} />
         </Box>
       </QueryClientProvider>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }
