@@ -1,0 +1,20 @@
+name: Test SSH Connection
+
+on:
+  workflow_dispatch:  # uruchamiasz ręcznie z GitHub UI
+
+jobs:
+  ssh-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H s2.smallhost.pl >> ~/.ssh/known_hosts
+
+      - name: Connect to server and run `hostname`
+        run: |
+          ssh mutarexx@s2.smallhost.pl "hostname && echo 'Połączenie udane!'"
