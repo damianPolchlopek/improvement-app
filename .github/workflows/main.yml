@@ -1,0 +1,48 @@
+name: Fullstack Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H s2.small.pl >> ~/.ssh/known_hosts
+
+      # === BACKEND ===
+      - name: Build Spring Boot backend
+        run: |
+          cd Backend
+          ./mvnw clean package -DskipTests
+
+      - name: Upload backend jar to server
+        run: |
+          scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/improvement-app-backend-0.0.1-SNAPSHOT.jar
+
+      - name: Restart backend on server
+        run: |
+          ssh mutarexx@s2.small.pl << 'EOF'
+            pkill -f 'improvement-app-backend-0.0.1-SNAPSHOT.jar' || true
+            nohup java -jar /home/mutarexx/improvement-app-backend-0.0.1-SNAPSHOT.jar > backend.log 2>&1 &
+          EOF
+
+      # === FRONTEND ===
+      - name: Build React frontend
+        run: |
+          cd frontend5
+          npm ci
+          npm run build
+
+      - name: Upload frontend files to server
+        run: |
+          scp -r frontend5/build/* mutarexx@s2.small.pl:/home/mutarexx/domains/mutarexx.smallhost.pl/public_html/
