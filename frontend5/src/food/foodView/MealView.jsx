@@ -12,6 +12,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  CircularProgress
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
@@ -20,7 +21,7 @@ export default function MealView() {
   const { t } = useTranslation();
 
   const [mealName, setMealName] = useState('');
-  const [mealCategory, setMealCategory] = useState('All');
+  const [mealCategory, setMealCategory] = useState('Obiad');
   const [mealType, setMealType] = useState('All');
 
   const labelIdCategory = "meal-category-select";
@@ -40,7 +41,7 @@ export default function MealView() {
   });
 
   // 🥗 Pobierz posiłki na podstawie filtrów
-  const { data: mealList = [] } = useQuery({
+  const { data: mealList = [], isLoading } = useQuery({
     queryKey: ['meals', mealCategory, mealType, mealName],
     queryFn: () => REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name'),
     select: (res) => res.entity,
@@ -122,17 +123,19 @@ export default function MealView() {
         </Grid>
       </Container>
 
-
-
-      <CenteredContainer>
-        <Grid container rowSpacing={1} columnSpacing={1} sx={{width: '80%'}}>
-          {mealList.map((meal, index) =>
-            <Grid key={index} xs={6}>
-              <SingleMeal meal={meal}/>
+      {
+        isLoading ? 
+          <CircularProgress sx={{ mt: 2 }} /> : 
+          <CenteredContainer>
+            <Grid container rowSpacing={1} columnSpacing={1} sx={{width: '80%'}}>
+              {mealList.map((meal, index) =>
+                <Grid key={index} xs={6}>
+                  <SingleMeal meal={meal}/>
+                </Grid>
+              )}
             </Grid>
-          )}
-        </Grid>
-      </CenteredContainer>
+          </CenteredContainer>
+        }
     </>
   );
 }
