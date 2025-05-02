@@ -42,6 +42,8 @@ public class MealController {
                 .map(MealDto::from)
                 .collect(Collectors.toList());
 
+        System.out.println(mealDTOs);
+
         return Response.ok(mealDTOs).build();
     }
 

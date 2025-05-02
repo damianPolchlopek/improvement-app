@@ -68,6 +68,10 @@ export default function DietStatisticTableRow({ dietSummary }) {
     navigate(`/food/${dietSummary.id}/edit`);
   };
 
+  const formatInput = (value) => {
+    return Number(value).toFixed(2);
+  }
+
   return (
     <>
       <StyledTableRow>
@@ -78,10 +82,10 @@ export default function DietStatisticTableRow({ dietSummary }) {
         </StyledTableCell>
 
         <StyledTableCell>{dietSummary.date}</StyledTableCell>
-        <StyledTableCell>{dietSummary.kcal}</StyledTableCell>
-        <StyledTableCell>{dietSummary.protein}</StyledTableCell>
-        <StyledTableCell>{dietSummary.carbohydrates}</StyledTableCell>
-        <StyledTableCell>{dietSummary.fat}</StyledTableCell>
+        <StyledTableCell>{formatInput(dietSummary.kcal)}</StyledTableCell>
+        <StyledTableCell>{formatInput(dietSummary.protein)}</StyledTableCell>
+        <StyledTableCell>{formatInput(dietSummary.carbohydrates)}</StyledTableCell>
+        <StyledTableCell>{formatInput(dietSummary.fat)}</StyledTableCell>
 
         {/* Ikona usuwania */}
         <StyledTableCell sx={{ width: "100px" }}>

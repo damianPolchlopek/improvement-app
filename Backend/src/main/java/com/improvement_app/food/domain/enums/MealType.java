@@ -13,6 +13,7 @@ public enum MealType {
     EGGS("Jajka"),
     FISH("Ryba"),
     VEGETARIAN("Wege"),
+    SNACKS("Przekąski"),
     COTTAGE_CHEESE("Twaróg");
 
     final String name;
