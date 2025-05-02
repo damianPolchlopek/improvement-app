@@ -8,12 +8,7 @@ jobs:
   ssh-test:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Debug SSH Key and Known Hosts
-        run: |
-          ls -la ~/.ssh
-          cat ~/.ssh/known_hosts
-          
+    steps:          
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
