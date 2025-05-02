@@ -19,8 +19,8 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H s2.smallhost.pl >> ~/.ssh/known_hosts
+          ssh-keyscan -H s2.small.pl >> ~/.ssh/known_hosts
 
       - name: Connect to server and run `hostname`
         run: |
-          ssh mutarexx@s2.smallhost.pl "hostname && echo 'Połączenie udane!'"
+          ssh mutarexx@s2.small.pl "hostname && echo 'Połączenie udane!'"
