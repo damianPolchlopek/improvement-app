@@ -33,6 +33,7 @@ jobs:
       - name: Restart backend on server
         run: |
           ssh mutarexx@s2.small.pl << 'EOF'
+            export JAVA_VERSION="17"
             pkill -f 'improvement-app-backend-0.0.1-SNAPSHOT.jar' || true
             nohup java -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=smallhost > backend.log 2>&1 &
           EOF
