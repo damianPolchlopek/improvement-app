@@ -24,3 +24,8 @@ server:
 path:
   file:
     excel: /home/mutarexx/tmp/
+
+google:
+  credentials:
+    folder:
+      path: /home/mutarexx/domains/mutarexx.smallhost.pl/google_token/serviceAccount.json
