@@ -14,7 +14,7 @@ spring:
     change-log: classpath:db/changelog/changelog.yaml
 
 server:
-  port: 24568
+  port: 24569
   ssl:
     key-store: /home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12
     key-store-password: password
