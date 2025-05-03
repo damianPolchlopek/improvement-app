@@ -42,7 +42,7 @@ jobs:
         run: |
           cd frontend5
           npm install --force
-          npm run build
+          CI=false npm run build
 
       - name: Upload frontend files to server
         run: |

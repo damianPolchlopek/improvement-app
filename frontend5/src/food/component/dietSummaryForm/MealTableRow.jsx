@@ -66,6 +66,10 @@ export default function MealTableRow({ mealPopularity, mealCategory, ...props })
     return <div>{t('food.errorLoadingMeals')}</div>;
   }
 
+  const formatInput = (value) => {
+    return Number(value).toFixed(2);
+  }
+
   return (
     <>
       <StyledTableRow onClick={() => { setIsOpen((open) => !open); }}>
@@ -117,10 +121,10 @@ export default function MealTableRow({ mealPopularity, mealCategory, ...props })
                         />
                       </StyledTableCell>
                       <StyledTableCell>{meal.name}</StyledTableCell>
-                      <StyledTableCell>{new Number(meal.kcal).toFixed(2)}</StyledTableCell>
-                      <StyledTableCell>{meal.protein}</StyledTableCell>
-                      <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
-                      <StyledTableCell>{new Number(meal.fat).toFixed(2)}</StyledTableCell>
+                      <StyledTableCell>{formatInput(meal.kcal)}</StyledTableCell>
+                      <StyledTableCell>{formatInput(meal.protein)}</StyledTableCell>
+                      <StyledTableCell>{formatInput(meal.carbohydrates)}</StyledTableCell>
+                      <StyledTableCell>{formatInput(meal.fat)}</StyledTableCell>
                     </StyledTableRow>
                   );
                 })}
