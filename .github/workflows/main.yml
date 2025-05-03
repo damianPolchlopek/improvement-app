@@ -28,7 +28,7 @@ jobs:
 
       - name: Upload backend jar to server
         run: |
-          scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/improvement-app-backend-0.0.1-SNAPSHOT.jar
+          scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar
 
       - name: Restart backend on server
         run: |
@@ -41,7 +41,7 @@ jobs:
       - name: Build React frontend
         run: |
           cd frontend5
-          npm ci
+          npm install --force
           npm run build
 
       - name: Upload frontend files to server
