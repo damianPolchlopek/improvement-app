@@ -28,4 +28,4 @@ path:
 google:
   credentials:
     folder:
-      path: /home/mutarexx/domains/mutarexx.smallhost.pl/google_token/serviceAccount.json
+      path: file:/home/mutarexx/domains/mutarexx.smallhost.pl/google_token/serviceAccount.json
