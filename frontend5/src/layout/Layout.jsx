@@ -15,6 +15,7 @@ export default function Layout() {
   useEffect(() => {
     if (!token) {
       submit(null, { action: '/login', method: 'post' });
+      return;
     }
 
     if (token === 'EXPIRED') {
@@ -33,6 +34,10 @@ export default function Layout() {
   const handleDrawerToggle = () => {
     setMobileOpen((prevValue) => !prevValue);
   };
+
+  // if (!token) {
+  //   return null; // lub spinner, jeśli chcesz
+  // }
 
   return (
     <Box sx={{ display: 'flex', flex: '100vh' }}>
