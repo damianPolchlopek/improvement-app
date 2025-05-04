@@ -38,7 +38,7 @@ jobs:
             sleep 2
 
             nohup java -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar \
-            --spring.profiles.active=smallhost --server.port=37886
+            --spring.profiles.active=smallhost --server.port=37886  > backend.log 2>&1 &
           EOF
 
 
