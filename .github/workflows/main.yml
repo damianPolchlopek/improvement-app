@@ -30,13 +30,27 @@ jobs:
         run: |
           scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar
 
-      - name: Restart backend on server
+      - name: Restart backend on server and wait for start
         run: |
           ssh mutarexx@s2.small.pl << 'EOF'
             export JAVA_VERSION="17"
             pkill -f 'improvement-app-backend-0.0.1-SNAPSHOT.jar' || true
-            nohup java -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=smallhost > backend.log 2>&1 &
+            sleep 2
+
+            # Uruchamiamy backend i czekamy aż się załaduje
+            java -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar \
+              --spring.profiles.active=smallhost --server.port=37886 \
+              2>&1 | tee /home/mutarexx/domains/mutarexx.smallhost.pl/backend.log | awk '
+                /Started .* in .* seconds/ { started=1 }
+                { print }
+                END {
+                  if (!started) {
+                    print "ERROR: Application failed to start." > "/dev/stderr"
+                    exit 1
+                  }
+                }'
           EOF
+
 
       # === FRONTEND ===
       - name: Build React frontend
