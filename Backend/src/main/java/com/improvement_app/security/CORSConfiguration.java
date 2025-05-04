@@ -17,9 +17,10 @@ public class CORSConfiguration {
                         .allowedOriginPatterns(
                                 "http://localhost:3000",
                                 "https://mutarexx.smallhost.pl",
+                                "https://mutarexx.smallhost.pl:37786",
                                 "https://mutarexx.smallhost.pl:3000",
                                 "http://localhost:8080",
-                                "http://localhost:37786")
+                                "http://localhost:24568")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(false); // Brak poświadczeń
