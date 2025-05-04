@@ -5,9 +5,11 @@ import SockJS from "sockjs-client";
 const LogComponent = () => {
     const [messages, setMessages] = useState([]); // Stan przechowujący wiadomości
 
+    const host_url = process.env.REACT_APP_API_URL;
+
     useEffect(() => {
         const client = new Client({
-            webSocketFactory: () => new SockJS("http://localhost:8080/ws"),
+            webSocketFactory: () => new SockJS(`${host_url}ws`),
             reconnectDelay: 5000,
             // debug: (str) => console.log("STOMP Debug:", str),
             onConnect: () => {

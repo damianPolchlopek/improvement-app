@@ -35,10 +35,6 @@ export default function Layout() {
     setMobileOpen((prevValue) => !prevValue);
   };
 
-  // if (!token) {
-  //   return null; // lub spinner, jeśli chcesz
-  // }
-
   return (
     <Box sx={{ display: 'flex', flex: '100vh' }}>
        
