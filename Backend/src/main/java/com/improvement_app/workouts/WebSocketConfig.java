@@ -19,7 +19,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("http://localhost:3000") // ✅ Zezwalamy na frontend
+                .setAllowedOrigins(
+                        "http://localhost:3000",
+                        "https://mutarexx.smallhost.pl:37786",
+                        "https://mutarexx.smallhost.pl"
+                ) // ✅ Zezwalamy na frontend
                 .withSockJS(); // ✅ Obsługa SockJS dla przeglądarek bez WebSocket
     }
 }
