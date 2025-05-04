@@ -1,0 +1,2 @@
+# Szukanie uruchomionego procesu po porcie, jesli ps nie pokazuje
+sockstat -4 | grep 24568

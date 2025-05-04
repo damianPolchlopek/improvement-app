@@ -37,18 +37,10 @@ jobs:
             pkill -f 'improvement-app-backend-0.0.1-SNAPSHOT.jar' || true
             sleep 2
 
-            # Uruchamiamy backend i czekamy aż się załaduje
-            java -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar \
-              --spring.profiles.active=smallhost --server.port=37886 \
-              2>&1 | tee /home/mutarexx/domains/mutarexx.smallhost.pl/backend.log | awk '
-                /Started .* in .* seconds/ { started=1 }
-                { print }
-                END {
-                  if (!started) {
-                    print "ERROR: Application failed to start." > "/dev/stderr"
-                    exit 1
-                  }
-                }'
+            nohup java -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar \
+            --spring.profiles.active=smallhost --server.port=37886 \
+            > >(tee -a /home/mutarexx/domains/mutarexx.smallhost.pl/backend.log) \
+            2> >(tee -a /home/mutarexx/domains/mutarexx.smallhost.pl/backend.err.log >&2) &
           EOF
 
 
