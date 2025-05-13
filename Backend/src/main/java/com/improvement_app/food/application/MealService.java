@@ -9,6 +9,7 @@ import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,12 +27,21 @@ public class MealService {
 
     private final MealGoogleDriveHandler mealGoogleDriveHandler;
     private final MealHandler mealHandler;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public List<Meal> initMeals() throws IOException {
         final List<Meal> meals = new ArrayList<>();
-        for (DriveFileItemDTO mealName : mealGoogleDriveHandler.findAll(RECIPES_SHEET_NAME)) {
-            Meal byName = mealGoogleDriveHandler.findByName(mealName);
-            meals.add(byName);
+        List<DriveFileItemDTO> mealsToParse = mealGoogleDriveHandler.findAll(RECIPES_SHEET_NAME);
+        int i = 0;
+        for (DriveFileItemDTO mealName : mealsToParse) {
+            Meal parsedMeal = mealGoogleDriveHandler.findByName(mealName);
+
+            String logMessage = String.format("(%d/%d) Dodaje do bazy danych posiłek o nazwie: %s ",
+                    i++, mealsToParse.size(), parsedMeal.getName());
+            log.info(logMessage);
+            messagingTemplate.convertAndSend("/topic/messages", logMessage);
+
+            meals.add(parsedMeal);
         }
 
         log.info("Dodaje do bazy danych posiłki: " + meals);
