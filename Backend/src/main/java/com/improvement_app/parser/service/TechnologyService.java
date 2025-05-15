@@ -66,7 +66,7 @@ public class TechnologyService {
         while (matcher.find()) {
             String jobOfferList = matcher.group();
 
-            final String jobOfferRegex = "<a(.*)href=\"(/pl/.*)\">";
+            final String jobOfferRegex = "<a(.*)href=\"(/pl/.*)\" target=\"_self\" ngh=\"38";
             Pattern jobOfferPattern = Pattern.compile(jobOfferRegex);
             Matcher jobOfferMatcher = jobOfferPattern.matcher(jobOfferList);
 

@@ -2,14 +2,13 @@ spring:
   data:
     mongodb:
       uri: mongodb+srv://newUser:damian@cluster0.glh4o.mongodb.net/WorkoutApp?retryWrites=true&w=majority
-      socket-timeout: 3000 # w milisekundach
-      connect-timeout: 3000 # w milisekundach
+      socket-timeout: 10000 # w milisekundach
+      connect-timeout: 10000 # w milisekundach
   datasource:
     username: improvement-app-backend_postgres
     password: postgres
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://postgresql-improvement-app-backend.alwaysdata.net:5432/improvement-app-backend_postgresfood
-
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog.yaml
