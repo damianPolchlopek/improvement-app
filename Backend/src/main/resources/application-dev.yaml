@@ -4,8 +4,6 @@ spring:
       uri: mongodb+srv://newUser:damian@cluster0.glh4o.mongodb.net/WorkoutApp?retryWrites=true&w=majority
       socket-timeout: 3000 # w milisekundach
       connect-timeout: 3000 # w milisekundach
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     username: improvement-app-backend_postgres
     password: postgres

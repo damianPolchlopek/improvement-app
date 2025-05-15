@@ -27,6 +27,8 @@ public class GoogleDriveConfig {
 
     @Bean
     public Drive googleDrive() {
-        return new Drive(netHttpTransport, jacksonFactory, googleCredential);
+        return new Drive.Builder(netHttpTransport, jacksonFactory, googleCredential)
+                .setApplicationName("ImprovementAppBackend")
+                .build();
     }
 }

@@ -53,6 +53,7 @@ public class WebSecurityConfig {
 //        return http.build();
 //    }
 
+    //TODO: wystawienie wszystkich endpointow
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorize -> authorize
@@ -63,16 +64,34 @@ public class WebSecurityConfig {
     }
 
     // Optional WebSecurity for ignoring swagger and other static files
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(
-                "/swagger-ui/**", // Swagger UI
-                "/v3/api-docs/**", // OpenAPI dokumentacja
-                "/swagger-resources/**", // Zasoby Swaggera
-                "/webjars/**", // Webjary dla Swagger UI
-                "/v2/api-docs/**" // Starsze API Swaggera (jeśli używasz)
-        );
-    }
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web) -> web.ignoring().requestMatchers(
+//                "/swagger-ui/**", // Swagger UI
+//                "/v3/api-docs/**", // OpenAPI dokumentacja
+//                "/swagger-resources/**", // Zasoby Swaggera
+//                "/webjars/**", // Webjary dla Swagger UI
+//                "/v2/api-docs/**" // Starsze API Swaggera (jeśli używasz)
+//        );
+//    }
 
+
+
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers(
+//                                "/swagger-ui/**", // Swagger UI
+//                                "/v3/api-docs/**", // OpenAPI dokumentacja
+//                                "/swagger-resources/**", // Zasoby Swaggera
+//                                "/webjars/**", // Webjary dla Swagger UI
+//                                "/v2/api-docs/**" // Starsze API Swaggera (jeśli używasz)
+//                        ).permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .csrf().disable(); // Wyłączenie ochrony CSRF (opcjonalne)
+//        return http.build();
+//    }
 
 }
+
