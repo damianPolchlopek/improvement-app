@@ -34,11 +34,11 @@ public class MealService {
         List<DriveFileItemDTO> mealsToParse = mealGoogleDriveHandler.findAll(RECIPES_SHEET_NAME);
         int i = 0;
         for (DriveFileItemDTO mealName : mealsToParse) {
-            Meal parsedMeal = mealGoogleDriveHandler.findByName(mealName);
-
-            String logMessage = String.format("(%d/%d) Dodaje do bazy danych posiłek o nazwie: %s ",
-                    i++, mealsToParse.size(), parsedMeal.getName());
+            final String logMessage = String.format("(%d/%d) Dodaje do bazy danych posiłek o nazwie: %s ",
+                    i++, mealsToParse.size(), mealName.getName());
             log.info(logMessage);
+
+            Meal parsedMeal = mealGoogleDriveHandler.findByName(mealName);
             messagingTemplate.convertAndSend("/topic/messages", logMessage);
 
             meals.add(parsedMeal);
