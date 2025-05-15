@@ -3,6 +3,8 @@ spring:
     active: dev
   security:
     enabled: false
+  jpa:
+    open-in-view: false
 
 bezkoder:
   app:
