@@ -1,28 +1,20 @@
-#FROM eclipse-temurin:17-jdk-alpine as builder
-#WORKDIR /opt/app
-#COPY .mvn/ .mvn
-#COPY mvnw pom.xml ./
-#RUN chmod +x mvnw
-#RUN ./mvnw dependency:go-offline
-#COPY ./src /.src
-#RUN ./mvnw clean package
-#
-#FROM eclipse-temurin:17-jre-alpine
-#WORKDIR /opt/app
-#COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
-#EXPOSE 8080
-#ENTRYPOINT ["java", "-jar", "/opt/app/*.jar"]
+FROM maven:3.8-openjdk-17 AS builder
+WORKDIR /build
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn package -DskipTests
 
-#FROM openjdk:18-ea-11-jdk-alpine3.15
-#ADD target/workouts_app-0.0.1-SNAPSHOT.jar .
-#EXPOSE 8080
-#CMD java -Dserver.port=$PORT $JAVA_OPTS -jar workouts_app-0.0.1-SNAPSHOT.jar
 
-#FROM eclipse-temurin:17-jdk-alpine
-#ADD /target/improvement-app-backend-0.0.1-SNAPSHOT.jar app.jar
-#ENTRYPOINT ["java","-jar","/app.jar"]
 
-FROM openjdk:18-ea-11-jdk-alpine3.15
-ADD target/improvement-app-backend-0.0.1-SNAPSHOT.jar .
-#EXPOSE 8080
-CMD java -jar improvement-app-backend-0.0.1-SNAPSHOT.jar
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=builder /build/target/improvement-app-backend-0.0.1-SNAPSHOT.jar /app/improvement-app-backend-0.0.1-SNAPSHOT.jar
+
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -q --spider http://localhost:8080/actuator/health || exit 1
+
+RUN addgroup --system appgroup && adduser --system appuser --ingroup appgroup
+USER appuser
+
+ENV JAVA_OPTS="-Xms256m -Xmx512m -XX:+UseG1GC"
+ENTRYPOINT exec java $JAVA_OPTS -jar improvement-app-backend-0.0.1-SNAPSHOT.jar
