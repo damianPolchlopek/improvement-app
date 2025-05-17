@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.MealGoogleDriveHandler;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.infrastructure.googledrivefileparser.MealParser;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.service.FilePathService;
@@ -29,7 +29,7 @@ public class MealGoogleDriveHandlerImpl implements MealGoogleDriveHandler {
     }
 
     @Override
-    public Meal findByName(DriveFileItemDTO mealFileName) throws IOException {
+    public MealRecipe findByName(DriveFileItemDTO mealFileName) throws IOException {
         googleDriveFileService.downloadFile(mealFileName);
 
         File file = filePathService.getDownloadedFile(mealFileName.getName());

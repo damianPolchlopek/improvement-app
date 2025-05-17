@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Configuration
 public class MealParser extends GoogleDriveFilesHandler {
-    public Meal parseMealFile(final File file) throws IOException {
+    public MealRecipe parseMealFile(final File file) throws IOException {
         final int MACRO_SHEET_INDEX = 0;
         final int INGREDIENT_SHEET_INDEX = 1;
         final int RECIPE_SHEET_INDEX = 2;
@@ -29,21 +29,21 @@ public class MealParser extends GoogleDriveFilesHandler {
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
 
             XSSFSheet macroSheet = wb.getSheetAt(MACRO_SHEET_INDEX);
-            Meal meal = parseMacroSheet(macroSheet);
+            MealRecipe mealRecipe = parseMacroSheet(macroSheet);
 
             XSSFSheet ingredientSheet = wb.getSheetAt(INGREDIENT_SHEET_INDEX);
             List<MealIngredient> mealIngredients = parseIngredientSheet(ingredientSheet);
-            meal.setMealIngredients(mealIngredients);
+            mealRecipe.setMealIngredients(mealIngredients);
 
             XSSFSheet recipeSheet = wb.getSheetAt(RECIPE_SHEET_INDEX);
             List<String> recipe = parseRecipeSheet(recipeSheet);
-            meal.setRecipe(recipe);
+            mealRecipe.setRecipe(recipe);
 
-            return meal;
+            return mealRecipe;
         }
     }
 
-    private Meal parseMacroSheet(XSSFSheet sheet) {
+    private MealRecipe parseMacroSheet(XSSFSheet sheet) {
         final int DATA_ROW_INDEX = 1;
 
         final int NAME_INDEX = 0;
@@ -70,7 +70,7 @@ public class MealParser extends GoogleDriveFilesHandler {
         final Long id = (long) sheet.getRow(ID_INDEX).getCell(DATA_ROW_INDEX).getNumericCellValue();
         final String popularity = sheet.getRow(POPULARITY_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
 
-        return new Meal(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
+        return new MealRecipe(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
                 MealType.fromValue(type), MealCategory.fromValue(category), MealPopularity.fromValue(popularity));
     }
 

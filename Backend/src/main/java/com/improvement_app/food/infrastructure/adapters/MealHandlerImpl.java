@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.MealHandler;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.infrastructure.MealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -17,7 +17,7 @@ public class MealHandlerImpl implements MealHandler {
     private final MealRepository mealRepository;
 
     @Override
-    public List<Meal> findAll() {
+    public List<MealRecipe> findAll() {
         return mealRepository.findAll();
     }
 
@@ -27,17 +27,17 @@ public class MealHandlerImpl implements MealHandler {
     }
 
     @Override
-    public List<Meal> saveAll(List<Meal> meals) {
-        return mealRepository.saveAll(meals);
+    public List<MealRecipe> saveAll(List<MealRecipe> mealRecipes) {
+        return mealRepository.saveAll(mealRecipes);
     }
 
     @Override
-    public List<Meal> findAllByName(String name, String sortBy) {
+    public List<MealRecipe> findAllByName(String name, String sortBy) {
         return mealRepository.findAllByName(name, sortBy);
     }
 
     @Override
-    public List<Meal> findAllById(List<Long> ids) {
+    public List<MealRecipe> findAllById(List<Long> ids) {
         return mealRepository.findAllById(ids);
     }
 }

@@ -14,7 +14,8 @@ import {
   TableBody,
   TableHead,
   Checkbox,
-  CircularProgress
+  CircularProgress,
+  TextField
 } from '@mui/material';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -43,7 +44,7 @@ function translateMealPopularity(arg) {
   return popularityTranslation.get(arg);
 }
 
-export default function MealTableRow({ mealPopularity, mealCategory, ...props }) {
+export default function MealTableRow({ mealPopularity, mealCategory, isSelected, handleClick}) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
@@ -102,29 +103,59 @@ export default function MealTableRow({ mealPopularity, mealCategory, ...props })
                   <StyledTableCell>{t('food.protein')}</StyledTableCell>
                   <StyledTableCell>{t('food.carbs')}</StyledTableCell>
                   <StyledTableCell>{t('food.fat')}</StyledTableCell>
+                  <StyledTableCell>{t('food.amount')}</StyledTableCell> {/* Dodana kolumna */}
                 </StyledTableRow>
               </TableHead>
               <TableBody>
                 {mealList.map((meal) => {
-                  const isItemSelected = props.isSelected(meal.id);
+                  const isItemSelected = isSelected(meal.id);
 
                   return (
                     <StyledTableRow
-                      onClick={(event) => props.handleClick(event, meal.id)}
                       key={meal.name}
                       selected={isItemSelected}
                     >
-                      <StyledTableCell>
+                      <StyledTableCell
+                        onClick={(event) => handleClick(event, meal.id)}
+                      >
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
                         />
                       </StyledTableCell>
-                      <StyledTableCell>{meal.name}</StyledTableCell>
-                      <StyledTableCell>{formatInput(meal.kcal)}</StyledTableCell>
-                      <StyledTableCell>{formatInput(meal.protein)}</StyledTableCell>
-                      <StyledTableCell>{formatInput(meal.carbohydrates)}</StyledTableCell>
-                      <StyledTableCell>{formatInput(meal.fat)}</StyledTableCell>
+                      <StyledTableCell
+                        onClick={(event) => handleClick(event, meal.id)}
+                      >
+                        {meal.name}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        onClick={(event) => handleClick(event, meal.id)}
+                      >
+                        {formatInput(meal.kcal)}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        onClick={(event) => handleClick(event, meal.id)}
+                      >
+                        {formatInput(meal.protein)}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        onClick={(event) => handleClick(event, meal.id)}
+                      >
+                        {formatInput(meal.carbohydrates)}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        onClick={(event) => handleClick(event, meal.id)}
+                      >
+                        {formatInput(meal.fat)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {/* Pole amount - nie wywołuje handleClick */}
+                        <TextField
+                          size="small"
+                          inputProps={{ style: { width: 60 } }}
+                          variant="outlined"
+                        />
+                      </StyledTableCell>
                     </StyledTableRow>
                   );
                 })}

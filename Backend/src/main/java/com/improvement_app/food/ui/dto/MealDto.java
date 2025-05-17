@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.dto;
 
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealType;
@@ -29,20 +29,20 @@ public class MealDto {
 
     private int amount;
 
-    public static MealDto from(Meal meal) {
+    public static MealDto from(MealRecipe mealRecipe) {
         return new MealDto(
-                meal.getId(),
-                meal.getName(),
-                meal.getKcal(),
-                meal.getProtein(),
-                meal.getCarbohydrates(),
-                meal.getFat(),
-                meal.getPortionAmount(),
-                meal.getUrl(),
-                meal.getCategory(),
-                meal.getType(),
-                meal.getMealIngredients(),
-                meal.getRecipe(),
+                mealRecipe.getId(),
+                mealRecipe.getName(),
+                mealRecipe.getKcal(),
+                mealRecipe.getProtein(),
+                mealRecipe.getCarbohydrates(),
+                mealRecipe.getFat(),
+                mealRecipe.getPortionAmount(),
+                mealRecipe.getUrl(),
+                mealRecipe.getCategory(),
+                mealRecipe.getType(),
+                mealRecipe.getMealIngredients(),
+                mealRecipe.getRecipe(),
                 0
             );
     }

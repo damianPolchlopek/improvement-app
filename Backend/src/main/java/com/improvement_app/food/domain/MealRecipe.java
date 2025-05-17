@@ -4,7 +4,6 @@ package com.improvement_app.food.domain;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +17,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Meal {
+public class MealRecipe {
 
     @Id
     private Long id;
@@ -49,9 +48,9 @@ public class Meal {
     @Enumerated(EnumType.STRING)
     private MealPopularity popularity;
 
-    public Meal(Long id, String name, double kcal, double protein, double carbohydrates,
-                double fat, double portionAmount, String url, MealType type,
-                MealCategory category, MealPopularity popularity) {
+    public MealRecipe(Long id, String name, double kcal, double protein, double carbohydrates,
+                      double fat, double portionAmount, String url, MealType type,
+                      MealCategory category, MealPopularity popularity) {
         this.id = id;
         this.name = name;
         this.kcal = kcal;

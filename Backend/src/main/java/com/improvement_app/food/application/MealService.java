@@ -2,7 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.MealGoogleDriveHandler;
 import com.improvement_app.food.application.ports.MealHandler;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.improvement_app.food.FoodModuleVariables.RECIPES_SHEET_NAME;
-import static com.improvement_app.food.FoodModuleVariables.SWEETS_SHEET_NAME;
 
 @Slf4j
 @Service
@@ -29,66 +28,66 @@ public class MealService {
     private final MealHandler mealHandler;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public List<Meal> initMeals() throws IOException {
-        final List<Meal> meals = new ArrayList<>();
+    public List<MealRecipe> initMeals() throws IOException {
+        final List<MealRecipe> mealRecipes = new ArrayList<>();
         List<DriveFileItemDTO> mealsToParse = mealGoogleDriveHandler.findAll(RECIPES_SHEET_NAME);
         int i = 0;
         for (DriveFileItemDTO mealName : mealsToParse) {
             final String logMessage = String.format("(%d/%d) Dodaje do bazy danych posiłek o nazwie: %s ",
-                    i++, mealsToParse.size(), mealName.getName());
+                    ++i, mealsToParse.size(), mealName.getName());
             log.info(logMessage);
 
-            Meal parsedMeal = mealGoogleDriveHandler.findByName(mealName);
+            MealRecipe parsedMealRecipe = mealGoogleDriveHandler.findByName(mealName);
             messagingTemplate.convertAndSend("/topic/messages", logMessage);
 
-            meals.add(parsedMeal);
+            mealRecipes.add(parsedMealRecipe);
         }
 
-        log.info("Dodaje do bazy danych posiłki: " + meals);
-        mealHandler.saveAll(meals);
+        log.info("Dodaje do bazy danych posiłki: " + mealRecipes);
+        mealHandler.saveAll(mealRecipes);
 
-        return meals;
+        return mealRecipes;
     }
 
 
 
-    public List<Meal> getMeals(MealCategory mealCategory,
-                               MealType mealType,
-                               MealPopularity mealPopularity,
-                               String mealName,
-                               String sortBy) {
+    public List<MealRecipe> getMeals(MealCategory mealCategory,
+                                     MealType mealType,
+                                     MealPopularity mealPopularity,
+                                     String mealName,
+                                     String sortBy) {
 
-        List<Meal> meals = mealHandler.findAllByName(mealName, sortBy);
+        List<MealRecipe> mealRecipes = mealHandler.findAllByName(mealName, sortBy);
 
         if (mealCategory != MealCategory.ALL) {
-            meals = meals
+            mealRecipes = mealRecipes
                     .stream()
                     .filter(meal -> meal.getCategory() == mealCategory)
                     .collect(Collectors.toList());
         }
 
         if (mealType != MealType.ALL) {
-            meals = meals
+            mealRecipes = mealRecipes
                     .stream()
                     .filter(meal -> meal.getType() == mealType)
                     .collect(Collectors.toList());
         }
 
         if (mealPopularity != MealPopularity.ALL) {
-            meals = meals
+            mealRecipes = mealRecipes
                     .stream()
                     .filter(meal -> meal.getPopularity() == mealPopularity)
                     .collect(Collectors.toList());
         }
 
-        return meals;
+        return mealRecipes;
     }
 
     public void deleteAll() {
         mealHandler.deleteAll();
     }
 
-    public List<Meal> findAllById(List<Long> ids) {
+    public List<MealRecipe> findAllById(List<Long> ids) {
         return mealHandler.findAllById(ids);
     }
 

@@ -2,9 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.MealHandler;
 import com.improvement_app.food.application.ports.SweetsGoogleDriveHandler;
-import com.improvement_app.food.domain.Meal;
-import com.improvement_app.food.domain.Product;
-import com.improvement_app.food.domain.enums.ProductCategory;
+import com.improvement_app.food.domain.MealRecipe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +17,7 @@ public class SweetsService {
     private final SweetsGoogleDriveHandler sweetsGoogleDriveHandler;
 
     public void initSweets() throws IOException {
-        List<Meal> sweets = sweetsGoogleDriveHandler.findAll();
+        List<MealRecipe> sweets = sweetsGoogleDriveHandler.findAll();
         mealHandler.saveAll(sweets);
     }
 

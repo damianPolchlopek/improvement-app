@@ -274,7 +274,7 @@ i18n.use(initReactI18next).init({
           actions: "Akcje",
           updateDietDay: "Aktualizuj dzień diety",
           updatedDietSummary: "Zaktualizowano podsumowanie dnia diety",
-          failedCalculateDiet: "Nie udało się obliczyć diety!",          
+          failedCalculateDiet: "Nie udało się obliczyć diety!",      
         }
       }
     }

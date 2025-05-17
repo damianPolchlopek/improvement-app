@@ -2,7 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
@@ -33,21 +33,21 @@ public class DietSummaryService {
     }
 
     public DietSummary calculateDietSummary(List<Long> mealsId) {
-        List<Meal> meals = mealService.findAllById(mealsId);
+        List<MealRecipe> mealRecipes = mealService.findAllById(mealsId);
 
         double kcal = 0;
         double protein = 0;
         double carbs = 0;
         double fat = 0;
 
-        for (Meal meal : meals) {
-            kcal += meal.getKcal();
-            protein += meal.getProtein();
-            carbs += meal.getCarbohydrates();
-            fat += meal.getFat();
+        for (MealRecipe mealRecipe : mealRecipes) {
+            kcal += mealRecipe.getKcal();
+            protein += mealRecipe.getProtein();
+            carbs += mealRecipe.getCarbohydrates();
+            fat += mealRecipe.getFat();
         }
 
-        return new DietSummary(kcal, protein, carbs, fat, meals);
+        return new DietSummary(kcal, protein, carbs, fat, mealRecipes);
     }
 
     @Transactional

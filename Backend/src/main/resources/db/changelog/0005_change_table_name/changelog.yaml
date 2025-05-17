@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0005_change_table_name/001.change-table-meal-name.sql
+      sqlFile:
+        path: 001.change-table-meal-name.sql
+        relativeToChangelogFile: true
