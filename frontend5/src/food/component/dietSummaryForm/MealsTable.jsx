@@ -40,7 +40,7 @@ export default function MealsTableForm({ isSelected, handleClick }) {
                 mealCategory={mealCategory}
                 sx={{textAlign: 'left'}}
                 isSelected={isSelected}
-                handleClick={handleClick}
+                handleSelect={handleClick}
                 mealPopularity={mealPopularity}
               />
             ))}

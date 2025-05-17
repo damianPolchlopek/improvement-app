@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import REST from "../../../utils/REST";
 import { useTranslation } from 'react-i18next';
+import { formatInput } from '../../../utils/common';
 
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
@@ -44,7 +45,7 @@ function translateMealPopularity(arg) {
   return popularityTranslation.get(arg);
 }
 
-export default function MealTableRow({ mealPopularity, mealCategory, isSelected, handleClick}) {
+export default function MealTableRow({ mealPopularity, mealCategory, isSelected, handleSelect}) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
 
@@ -65,10 +66,6 @@ export default function MealTableRow({ mealPopularity, mealCategory, isSelected,
 
   if (isError) {
     return <div>{t('food.errorLoadingMeals')}</div>;
-  }
-
-  const formatInput = (value) => {
-    return Number(value).toFixed(2);
   }
 
   return (
@@ -116,7 +113,7 @@ export default function MealTableRow({ mealPopularity, mealCategory, isSelected,
                       selected={isItemSelected}
                     >
                       <StyledTableCell
-                        onClick={(event) => handleClick(event, meal.id)}
+                        onClick={(event) => handleSelect(event, meal)}
                       >
                         <Checkbox
                           color="primary"
@@ -124,33 +121,35 @@ export default function MealTableRow({ mealPopularity, mealCategory, isSelected,
                         />
                       </StyledTableCell>
                       <StyledTableCell
-                        onClick={(event) => handleClick(event, meal.id)}
+                        onClick={(event) => handleSelect(event, meal)}
                       >
                         {meal.name}
                       </StyledTableCell>
                       <StyledTableCell
-                        onClick={(event) => handleClick(event, meal.id)}
+                        onClick={(event) => handleSelect(event, meal)}
                       >
                         {formatInput(meal.kcal)}
                       </StyledTableCell>
                       <StyledTableCell
-                        onClick={(event) => handleClick(event, meal.id)}
+                        onClick={(event) => handleSelect(event, meal)}
                       >
                         {formatInput(meal.protein)}
                       </StyledTableCell>
                       <StyledTableCell
-                        onClick={(event) => handleClick(event, meal.id)}
+                        onClick={(event) => handleSelect(event, meal)}
                       >
                         {formatInput(meal.carbohydrates)}
                       </StyledTableCell>
                       <StyledTableCell
-                        onClick={(event) => handleClick(event, meal.id)}
+                        onClick={(event) => handleSelect(event, meal)}
                       >
                         {formatInput(meal.fat)}
                       </StyledTableCell>
+
+                      { /* TODO: dopisać aby przy kazdej zmianie inputu byla aktualizacja listy */ }
                       <StyledTableCell>
-                        {/* Pole amount - nie wywołuje handleClick */}
                         <TextField
+                          defaultValue={meal.amount || 1}
                           size="small"
                           inputProps={{ style: { width: 60 } }}
                           variant="outlined"

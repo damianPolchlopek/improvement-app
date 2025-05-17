@@ -2,6 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.EatenMeals;
 import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
@@ -28,26 +29,27 @@ public class DietSummaryService {
 
     @Transactional
     public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
-        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
-        return dietSummaryHandler.save(dietSummary);
+//        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
+        return null;
     }
 
-    public DietSummary calculateDietSummary(List<Long> mealsId) {
-        List<MealRecipe> mealRecipes = mealService.findAllById(mealsId);
+    public DietSummary calculateDietSummary(List<EatenMeals> mealsId) {
 
         double kcal = 0;
         double protein = 0;
         double carbs = 0;
         double fat = 0;
 
-        for (MealRecipe mealRecipe : mealRecipes) {
-            kcal += mealRecipe.getKcal();
-            protein += mealRecipe.getProtein();
-            carbs += mealRecipe.getCarbohydrates();
-            fat += mealRecipe.getFat();
+        for (EatenMeals eatenMeal : mealsId) {
+            final double amount = eatenMeal.getAmount();
+
+            kcal += amount * eatenMeal.getKcal();
+            protein += amount * eatenMeal.getProtein();
+            carbs += amount * eatenMeal.getCarbohydrates();
+            fat += amount * eatenMeal.getFat();
         }
 
-        return new DietSummary(kcal, protein, carbs, fat, mealRecipes);
+        return new DietSummary(kcal, protein, carbs, fat, List.of());
     }
 
     @Transactional
@@ -111,13 +113,15 @@ public class DietSummaryService {
     }
 
     public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
-        DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
+//        DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
+//
+//        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
+//                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
+//
+//        oldDietSummary.update(recalculatedDietSummary);
+//
+//        return dietSummaryHandler.save(oldDietSummary);
 
-        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
-
-        oldDietSummary.update(recalculatedDietSummary);
-
-        return dietSummaryHandler.save(oldDietSummary);
+        return null;
     }
 }

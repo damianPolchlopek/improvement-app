@@ -3,6 +3,7 @@ package com.improvement_app.food.ui;
 import com.improvement_app.food.application.DietSummaryService;
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.ui.commands.CalculateDietRequest;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
 import com.improvement_app.food.ui.dto.MealDto;
@@ -36,8 +37,8 @@ public class DietController {
     }
 
     @PostMapping("/calculate")
-    public Response getMealCategories(@RequestBody List<Long> ids) {
-        DietSummary dietSummary = dietSummaryService.calculateDietSummary(ids);
+    public Response getMealCategories(@RequestBody CalculateDietRequest calculateDietRequest) {
+        DietSummary dietSummary = dietSummaryService.calculateDietSummary(calculateDietRequest.eatenMeals());
         return Response.ok(dietSummary).build();
     }
 

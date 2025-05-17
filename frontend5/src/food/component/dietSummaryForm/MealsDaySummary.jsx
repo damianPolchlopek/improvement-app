@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
-import React from "react";
 import CenteredContainer from "../../../component/CenteredContainer";
 import PropTypes from "prop-types";
 import { useTranslation } from 'react-i18next';
+import { formatInput } from '../../../utils/common';
 
 export default function MealsDaySummary({ dietSummary }) {
   const { t } = useTranslation();
@@ -13,8 +13,11 @@ export default function MealsDaySummary({ dietSummary }) {
 
   return (
     <CenteredContainer>
-      <Typography>
-        {t('food.kcal')}: {kcal} {t('food.protein')}: {protein} {t('food.carbs')}: {carbohydrates} {t('food.fat')}: {fat}
+      <Typography sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+        <span>{t('food.kcal')}: {formatInput(kcal)}</span>
+        <span>{t('food.protein')}: {formatInput(protein)}</span>
+        <span>{t('food.carbs')}: {formatInput(carbohydrates)}</span>
+        <span>{t('food.fat')}: {formatInput(fat)}</span>
       </Typography>
     </CenteredContainer>
   );
