@@ -122,7 +122,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                     <StyledTableCell>{meal.protein}</StyledTableCell>
                     <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
                     <StyledTableCell>{meal.fat}</StyledTableCell>
-                    <StyledTableCell>{meal.portionAmount}</StyledTableCell>
+                    <StyledTableCell>{meal.amount}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

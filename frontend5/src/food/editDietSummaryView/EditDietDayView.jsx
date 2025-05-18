@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
@@ -13,19 +13,18 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLoaderData } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
 import { useSnackbar } from '../../component/SnackbarProvider';
+import { useMealSelection } from '../../context/MealSelectionContext';
 
 export default function EditDietDayView() {
   const mealsDietDay = useLoaderData();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showSnackbar } = useSnackbar();
+  const { selectedMeals, setSelectedMeals } = useMealSelection();
 
-  // setSelect obecnie jest w Komponencie glownym i podrzednym - niezbyt dobra implementacja
-  // do pomyslenia jak to bedzie mozna zrobic lepiej
-  const [selected, setSelected] = useState();
  
   useEffect(() => {
-    setSelected(mealsDietDay.entity.meals.map((meal) => meal.id));
+    setSelectedMeals(mealsDietDay.entity.meals);
   }, [mealsDietDay]);
 
   // Mutation: edit diet summary
@@ -44,18 +43,15 @@ export default function EditDietDayView() {
   const handleUpdate = () => {
     const objectToUpdate = {
       dietSummaryId: mealsDietDay.entity.id,
-      meals: selected
+      meals: selectedMeals
     };
 
     updateDietSummaryMutation.mutate(objectToUpdate);
   };
 
   return (
-    selected && <>
-      <DietDaySummaryForm 
-        initialSelected={selected}
-        onSelectionChange={setSelected}
-      >
+    selectedMeals && <>
+      <DietDaySummaryForm>
         <Button
           variant="contained"
           onClick={handleUpdate}

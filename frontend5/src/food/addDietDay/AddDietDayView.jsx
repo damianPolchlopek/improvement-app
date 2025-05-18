@@ -16,11 +16,10 @@ export default function AddDietDayView() {
 
   const createDietSummaryMutation = useMutation({
     mutationFn: () => {
-      // Format the data to match what the API expects
       console.log('Selected meals:', selectedMeals);
       const dietDayToSave = { 
         meals: selectedMeals.map(meal => ({
-          id: meal.id,
+          ...meal,
           amount: meal.amount || 1
         }))
       };

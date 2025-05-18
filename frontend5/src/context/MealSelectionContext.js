@@ -99,19 +99,6 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     setSelectedMeals([]);
   }, []);
 
-  // // Calculate total nutritional values with amounts
-  // const calculateTotalNutrition = useCallback((meals) => {
-  //   return meals.reduce((totals, meal) => {
-  //     const amount = meal.amount || 1;
-  //     return {
-  //       kcal: totals.kcal + (meal.kcal * amount),
-  //       protein: totals.protein + (meal.protein * amount),
-  //       carbohydrates: totals.carbohydrates + (meal.carbohydrates * amount),
-  //       fat: totals.fat + (meal.fat * amount),
-  //     };
-  //   }, { kcal: 0, protein: 0, carbohydrates: 0, fat: 0 });
-  // }, []);
-
   // Context value
   const value = {
     selectedMeals,
@@ -120,9 +107,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     isMealSelected,
     toggleMealSelection,
     updateMealAmount,
-    clearSelections,
-    // calculateTotalNutrition,
-    isCalculating: calculateDietMutation.isLoading
+    clearSelections
   };
 
   return (

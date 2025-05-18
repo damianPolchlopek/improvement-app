@@ -25,16 +25,14 @@ import java.util.stream.Collectors;
 public class DietSummaryService {
 
     private final DietSummaryHandler dietSummaryHandler;
-    private final MealService mealService;
 
     @Transactional
     public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
-//        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
-        return null;
+        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
+        return dietSummaryHandler.save(dietSummary);
     }
 
     public DietSummary calculateDietSummary(List<EatenMeals> mealsId) {
-
         double kcal = 0;
         double protein = 0;
         double carbs = 0;
@@ -49,7 +47,7 @@ public class DietSummaryService {
             fat += amount * eatenMeal.getFat();
         }
 
-        return new DietSummary(kcal, protein, carbs, fat, List.of());
+        return new DietSummary(kcal, protein, carbs, fat, mealsId);
     }
 
     @Transactional
@@ -113,15 +111,13 @@ public class DietSummaryService {
     }
 
     public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
-//        DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
-//
-//        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
-//                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
-//
-//        oldDietSummary.update(recalculatedDietSummary);
-//
-//        return dietSummaryHandler.save(oldDietSummary);
+        DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
 
-        return null;
+        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
+                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
+
+        oldDietSummary.update(recalculatedDietSummary);
+
+        return dietSummaryHandler.save(oldDietSummary);
     }
 }

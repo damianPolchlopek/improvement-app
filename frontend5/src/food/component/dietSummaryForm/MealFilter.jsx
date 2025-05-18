@@ -17,6 +17,7 @@ export default function MealFilter({ mealPopularity, setMealPopularity }) {
       <Select
         value={mealPopularity}
         onChange={(e) => setMealPopularity(e.target.value)}
+        sx={{ my: 1 }}
       >
         <MenuItem value="ALL">{t('food.all')}</MenuItem>
         <MenuItem value="HIGH">{t('food.popular')}</MenuItem>

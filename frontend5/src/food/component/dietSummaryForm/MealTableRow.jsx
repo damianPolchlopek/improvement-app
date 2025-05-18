@@ -82,7 +82,7 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
     else if (newAmount > 1) {
       toggleMealSelection(meal, newAmount);
     }
-    
+
   };
 
   if (isLoading) {
@@ -180,15 +180,16 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
                         <TextField
                           value={currentAmount}
                           size="small"
-                          type="number"
                           inputProps={{ 
                             style: { width: 60 },
-                            min: 1,
-                            step: 1
+                            // min: 1,
+                            // step: 1
                           }}
                           variant="outlined"
                           onChange={(e) => {
-                            const newAmount = parseInt(e.target.value, 10) || 1;
+                            const newAmount = parseFloat(e.target.value) || 1;
+                            console.log('New amount:', newAmount);
+                            console.log(e.target.value)
                             handleAmountChange(meal, newAmount);
                           }}
                           onClick={(e) => e.stopPropagation()} // Prevent bubbling

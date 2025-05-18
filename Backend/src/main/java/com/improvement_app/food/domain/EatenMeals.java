@@ -19,13 +19,17 @@ public class EatenMeals {
     private double protein;
     private double carbohydrates;
     private double fat;
-    private double amount;
+    private double portionAmount;
+    private String url;
 
     private MealCategory category;
     private MealType type;
     private MealPopularity popularity;
 
     private List<MealIngredient> mealIngredients;
+    private List<String> recipe;
+
+    private double amount;
 
     @Override
     public String toString() {
