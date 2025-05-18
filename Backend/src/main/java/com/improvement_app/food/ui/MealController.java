@@ -2,7 +2,7 @@ package com.improvement_app.food.ui;
 
 
 import com.improvement_app.food.application.MealService;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -42,8 +42,6 @@ public class MealController {
                 .map(MealDto::from)
                 .collect(Collectors.toList());
 
-        System.out.println(mealDTOs);
-
         return Response.ok(mealDTOs).build();
     }
 
@@ -61,7 +59,7 @@ public class MealController {
 
 
     @GetMapping("/initMeals")
-    public List<Meal> initMeals() throws IOException {
+    public List<MealRecipe> initMeals() throws IOException {
         return mealService.initMeals();
     }
 }

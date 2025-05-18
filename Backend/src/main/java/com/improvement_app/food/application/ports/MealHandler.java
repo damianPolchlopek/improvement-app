@@ -1,17 +1,17 @@
 package com.improvement_app.food.application.ports;
 
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 
 import java.util.List;
 
 public interface MealHandler {
-    List<Meal> findAll();
+    List<MealRecipe> findAll();
 
     void deleteAll();
 
-    List<Meal> saveAll(List<Meal> meals);
+    List<MealRecipe> saveAll(List<MealRecipe> mealRecipes);
 
-    List<Meal> findAllByName(String name, String sortBy);
+    List<MealRecipe> findAllByName(String name, String sortBy);
 
-    List<Meal> findAllById(List<Long> ids);
+    List<MealRecipe> findAllById(List<Long> ids);
 }

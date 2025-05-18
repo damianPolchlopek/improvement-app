@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Collapse,
   IconButton,
@@ -111,6 +111,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                   <StyledTableCell>{t("food.protein")}</StyledTableCell>
                   <StyledTableCell>{t("food.carbs")}</StyledTableCell>
                   <StyledTableCell>{t("food.fat")}</StyledTableCell>
+                  <StyledTableCell>{t("food.amount")}</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
@@ -121,6 +122,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                     <StyledTableCell>{meal.protein}</StyledTableCell>
                     <StyledTableCell>{meal.carbohydrates}</StyledTableCell>
                     <StyledTableCell>{meal.fat}</StyledTableCell>
+                    <StyledTableCell>{meal.amount}</StyledTableCell>
                   </StyledTableRow>
                 ))}
               </TableBody>

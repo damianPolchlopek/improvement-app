@@ -1,5 +1,5 @@
 // SnackbarContext.jsx
-import React, { createContext, useReducer, useContext } from 'react';
+import { createContext, useReducer, useContext } from 'react';
 import Snackbar from './Snackbar';
 
 const SnackbarContext = createContext();

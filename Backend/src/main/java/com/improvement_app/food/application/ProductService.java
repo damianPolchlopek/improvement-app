@@ -20,6 +20,7 @@ public class ProductService {
     public void initProducts() throws IOException {
         List<Product> products = productGoogleDriveHandler.findAll();
         productHandler.saveAll(products);
+        System.out.println("Dodaje do bazy danych produkty: " + products);
     }
 
     public List<Product> getProducts(ProductCategory productCategory, String productName) {

@@ -2,7 +2,8 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.EatenMeals;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 public class DietSummaryService {
 
     private final DietSummaryHandler dietSummaryHandler;
-    private final MealService mealService;
 
     @Transactional
     public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
@@ -32,22 +32,22 @@ public class DietSummaryService {
         return dietSummaryHandler.save(dietSummary);
     }
 
-    public DietSummary calculateDietSummary(List<Long> mealsId) {
-        List<Meal> meals = mealService.findAllById(mealsId);
-
+    public DietSummary calculateDietSummary(List<EatenMeals> mealsId) {
         double kcal = 0;
         double protein = 0;
         double carbs = 0;
         double fat = 0;
 
-        for (Meal meal : meals) {
-            kcal += meal.getKcal();
-            protein += meal.getProtein();
-            carbs += meal.getCarbohydrates();
-            fat += meal.getFat();
+        for (EatenMeals eatenMeal : mealsId) {
+            final double amount = eatenMeal.getAmount();
+
+            kcal += amount * eatenMeal.getKcal();
+            protein += amount * eatenMeal.getProtein();
+            carbs += amount * eatenMeal.getCarbohydrates();
+            fat += amount * eatenMeal.getFat();
         }
 
-        return new DietSummary(kcal, protein, carbs, fat, meals);
+        return new DietSummary(kcal, protein, carbs, fat, mealsId);
     }
 
     @Transactional

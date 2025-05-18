@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.SweetsGoogleDriveHandler;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.infrastructure.googledrivefileparser.SweetsParser;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.service.FilePathService;
@@ -27,10 +27,10 @@ public class SweetsGoogleDriveHandlerImpl implements SweetsGoogleDriveHandler {
     private final SweetsParser sweetsParser;
 
     @Override
-    public List<Meal> findAll() throws IOException {
+    public List<MealRecipe> findAll() throws IOException {
         downloadNewProductsFile();
         final File file = filePathService.getDownloadedFile(SWEETS_SHEET_NAME);
-        final List<Meal> sweets = sweetsParser.parseExcelProductsFile(file);
+        final List<MealRecipe> sweets = sweetsParser.parseExcelProductsFile(file);
 
         log.info("Dodaje do bazy danych slodycze: {}", sweets);
         return sweets;

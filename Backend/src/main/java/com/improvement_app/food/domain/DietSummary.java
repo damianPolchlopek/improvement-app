@@ -29,15 +29,17 @@ public class DietSummary {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private List<Meal> meals;
+    private List<EatenMeals> meals;
 
-    public DietSummary(double kcal, double protein, double carbohydrates, double fat, List<Meal> meals) {
+    public DietSummary(double kcal, double protein,
+                       double carbohydrates, double fat,
+                       List<EatenMeals> mealRecipes) {
         this.kcal = kcal;
         this.protein = protein;
         this.carbohydrates = carbohydrates;
         this.fat = fat;
         this.date = LocalDate.now();
-        this.meals = meals;
+        this.meals = mealRecipes;
     }
 
     public DietSummary update(DietSummary newDietSummary) {
