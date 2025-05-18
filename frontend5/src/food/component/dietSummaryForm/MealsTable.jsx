@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 
@@ -12,8 +11,8 @@ import {
   Paper
 } from '@mui/material';
 
-export default function MealsTableForm({ isSelected, handleClick }) {
-  const [ mealPopularity, setMealPopularity ] = useState('HIGH');
+export default function MealsTable() {
+  const [mealPopularity, setMealPopularity] = useState('HIGH');
   const { t } = useTranslation();
 
   const MEALS_CATEGORY = [
@@ -38,10 +37,8 @@ export default function MealsTableForm({ isSelected, handleClick }) {
               <MealTableRow
                 key={index}
                 mealCategory={mealCategory}
-                sx={{textAlign: 'left'}}
-                isSelected={isSelected}
-                handleSelect={handleClick}
                 mealPopularity={mealPopularity}
+                sx={{textAlign: 'left'}}
               />
             ))}
           </TableBody>

@@ -1,11 +1,12 @@
 import { Typography } from "@mui/material";
 import CenteredContainer from "../../../component/CenteredContainer";
-import PropTypes from "prop-types";
 import { useTranslation } from 'react-i18next';
 import { formatInput } from '../../../utils/common';
+import { useMealSelection } from '../../../context/MealSelectionContext';
 
-export default function MealsDaySummary({ dietSummary }) {
+export default function MealsDaySummary() {
   const { t } = useTranslation();
+  const { dietSummary } = useMealSelection();
 
   if (!dietSummary) return null;
 
@@ -22,12 +23,3 @@ export default function MealsDaySummary({ dietSummary }) {
     </CenteredContainer>
   );
 }
-
-MealsDaySummary.propTypes = {
-  dietSummary: PropTypes.shape({
-    kcal: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-    carbohydrates: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-  }).isRequired,
-};

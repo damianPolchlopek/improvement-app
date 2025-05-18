@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import REST from "../../../utils/REST";
 import { useTranslation } from 'react-i18next';
 import { formatInput } from '../../../utils/common';
+import { useMealSelection } from '../../../context/MealSelectionContext';
 
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
@@ -45,21 +45,46 @@ function translateMealPopularity(arg) {
   return popularityTranslation.get(arg);
 }
 
-export default function MealTableRow({ mealPopularity, mealCategory, isSelected, handleSelect}) {
+export default function MealTableRow({ mealPopularity, mealCategory }) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const { 
+    selectedMeals,
+    toggleMealSelection, 
+    updateMealAmount, 
+    isMealSelected 
+  } = useMealSelection();
 
-  // ⚡ React Query - Pobieranie posiłków na podstawie kategorii i popularności
+  // React Query - Fetch meals based on category and popularity
   const { data: mealList = [], isLoading, isError } = useQuery({
     queryKey: ['mealList', mealCategory, mealPopularity],
     queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', translateMealPopularity(mealPopularity), 'category'),
     enabled: !!mealCategory && !!mealPopularity && isOpen,
     select: (res) => res.entity,
     keepPreviousData: true,
-    staleTime: 1000 * 60 * 5, // 5 minut - zmień na ile chcesz
-    cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 10 // cache data for 10 minutes
   });
   
+  const handleMealToggle = (meal) => {
+    const existingMeal = selectedMeals.find(m => m.id === meal.id);
+    const currentAmount = existingMeal?.amount || 1;
+    toggleMealSelection(meal, currentAmount);
+  };
+
+  // Handle amount change for a meal
+  const handleAmountChange = (meal, newAmount) => {
+    const isSelected = isMealSelected(meal.id);
+    
+    if (isSelected) {
+      updateMealAmount(meal.id, newAmount);
+    } 
+    else if (newAmount > 1) {
+      toggleMealSelection(meal, newAmount);
+    }
+    
+  };
+
   if (isLoading) {
     return <CircularProgress />;
   }
@@ -100,59 +125,73 @@ export default function MealTableRow({ mealPopularity, mealCategory, isSelected,
                   <StyledTableCell>{t('food.protein')}</StyledTableCell>
                   <StyledTableCell>{t('food.carbs')}</StyledTableCell>
                   <StyledTableCell>{t('food.fat')}</StyledTableCell>
-                  <StyledTableCell>{t('food.amount')}</StyledTableCell> {/* Dodana kolumna */}
+                  <StyledTableCell>{t('food.amount')}</StyledTableCell>
                 </StyledTableRow>
               </TableHead>
               <TableBody>
                 {mealList.map((meal) => {
-                  const isItemSelected = isSelected(meal.id);
+                  const isItemSelected = isMealSelected(meal.id);
+                  const selectedMeal = selectedMeals.find(m => m.id === meal.id);
+                  const currentAmount = selectedMeal?.amount || 1;
 
                   return (
                     <StyledTableRow
-                      key={meal.name}
+                      key={meal.id}
                       selected={isItemSelected}
                     >
-                      <StyledTableCell
-                        onClick={(event) => handleSelect(event, meal)}
-                      >
+                      <StyledTableCell>
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
+                          onClick={(e) => {
+                            e.stopPropagation(); // Prevent row click event
+                            handleMealToggle(meal);
+                          }}
                         />
                       </StyledTableCell>
-                      <StyledTableCell
-                        onClick={(event) => handleSelect(event, meal)}
+                      <StyledTableCell 
+                        onClick={() => handleMealToggle(meal)}
                       >
                         {meal.name}
                       </StyledTableCell>
-                      <StyledTableCell
-                        onClick={(event) => handleSelect(event, meal)}
+                      <StyledTableCell 
+                        onClick={() => handleMealToggle(meal)}
                       >
                         {formatInput(meal.kcal)}
                       </StyledTableCell>
-                      <StyledTableCell
-                        onClick={(event) => handleSelect(event, meal)}
+                      <StyledTableCell 
+                        onClick={() => handleMealToggle(meal)}
                       >
                         {formatInput(meal.protein)}
                       </StyledTableCell>
-                      <StyledTableCell
-                        onClick={(event) => handleSelect(event, meal)}
+                      <StyledTableCell 
+                        onClick={() => handleMealToggle(meal)}
                       >
                         {formatInput(meal.carbohydrates)}
                       </StyledTableCell>
-                      <StyledTableCell
-                        onClick={(event) => handleSelect(event, meal)}
+                      <StyledTableCell 
+                        onClick={() => handleMealToggle(meal)}
                       >
                         {formatInput(meal.fat)}
                       </StyledTableCell>
-
-                      { /* TODO: dopisać aby przy kazdej zmianie inputu byla aktualizacja listy */ }
-                      <StyledTableCell>
+                      <StyledTableCell
+                        onClick={(e) => e.stopPropagation()} // Prevent triggering row click
+                      >
                         <TextField
-                          defaultValue={meal.amount || 1}
+                          value={currentAmount}
                           size="small"
-                          inputProps={{ style: { width: 60 } }}
+                          type="number"
+                          inputProps={{ 
+                            style: { width: 60 },
+                            min: 1,
+                            step: 1
+                          }}
                           variant="outlined"
+                          onChange={(e) => {
+                            const newAmount = parseInt(e.target.value, 10) || 1;
+                            handleAmountChange(meal, newAmount);
+                          }}
+                          onClick={(e) => e.stopPropagation()} // Prevent bubbling
                         />
                       </StyledTableCell>
                     </StyledTableRow>

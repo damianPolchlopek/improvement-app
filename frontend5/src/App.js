@@ -12,7 +12,9 @@ import { tokenLoader } from './login/Authentication.js';
 import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 import { queryClient } from './utils/REST.js';
+
 import SnackbarProvider from './component/SnackbarProvider.jsx';
+import { MealSelectionProvider } from './context/MealSelectionContext.js';
 
 import {
   Training, 
@@ -310,13 +312,19 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <SnackbarProvider>
+      
       <QueryClientProvider client={queryClient}>
+      <SnackbarProvider>
+      <MealSelectionProvider>
+      
         <Box className="App">
           <RouterProvider router={router} />
         </Box>
-      </QueryClientProvider>
+
+      </MealSelectionProvider>
       </SnackbarProvider>
+      </QueryClientProvider>
+
     </ThemeProvider>
   );
 }

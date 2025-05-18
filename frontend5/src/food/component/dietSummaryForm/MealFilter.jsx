@@ -1,10 +1,12 @@
 import { MenuItem, Select, Toolbar, Typography } from "@mui/material";
-import * as React from "react";
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
+import Button from '@mui/material/Button';
+import { useMealSelection } from '../../../context/MealSelectionContext';
 
 export default function MealFilter({ mealPopularity, setMealPopularity }) {
   const { t } = useTranslation();
+  const { clearSelections } = useMealSelection();
 
   return (
     <Toolbar>
@@ -20,6 +22,13 @@ export default function MealFilter({ mealPopularity, setMealPopularity }) {
         <MenuItem value="HIGH">{t('food.popular')}</MenuItem>
         <MenuItem value="LOW">{t('food.rare')}</MenuItem>
       </Select>
+      <Button
+        variant="contained"
+        sx={{ marginLeft: 'auto' }}
+        onClick={clearSelections}
+      >
+        Clear Selections
+      </Button>
     </Toolbar>
   );
 }
