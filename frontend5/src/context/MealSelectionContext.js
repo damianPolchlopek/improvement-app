@@ -85,7 +85,9 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
 
   // Update meal amount for already selected meal
   const updateMealAmount = useCallback((mealId, newAmount) => {
-    const parsedAmount = parseInt(newAmount, 10) || 1;
+    console.log('Updating meal amount:', mealId, newAmount);
+    const parsedAmount = parseFloat(newAmount) || 1;
+    console.log('Parsed amount:', parsedAmount);
     
     setSelectedMeals(prev => 
       prev.map(meal => 
@@ -93,6 +95,22 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
       )
     );
   }, []);
+
+  const updateMealIngredient = useCallback((mealId, productId, newMealIngredient) => {
+    console.log('Updating meal ingredient:', mealId, productId, newMealIngredient);
+
+    setSelectedMeals(prev => 
+      prev.map(meal => 
+        meal.id === mealId ? { 
+          ...meal, 
+          ingredients: meal.ingredients.map(ingredient => 
+            ingredient.productId === productId ? { ...ingredient, ...newMealIngredient } : ingredient
+          ) 
+        } : meal
+      )
+    );
+  }, []);
+
 
   // Reset all selections
   const clearSelections = useCallback(() => {
@@ -107,6 +125,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     isMealSelected,
     toggleMealSelection,
     updateMealAmount,
+    updateMealIngredient,
     clearSelections
   };
 

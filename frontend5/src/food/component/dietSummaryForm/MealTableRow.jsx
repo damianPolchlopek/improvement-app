@@ -47,11 +47,13 @@ function translateMealPopularity(arg) {
 
 export default function MealTableRow({ mealPopularity, mealCategory }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [openIngredientRow, setOpenIngredientRow] = useState(null); // NEW
   const { t } = useTranslation();
   const { 
     selectedMeals,
     toggleMealSelection, 
     updateMealAmount, 
+    updateMealIngredient,
     isMealSelected 
   } = useMealSelection();
 
@@ -75,6 +77,7 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
   // Handle amount change for a meal
   const handleAmountChange = (meal, newAmount) => {
     const isSelected = isMealSelected(meal.id);
+    console.log('meal -> ', meal);
     
     if (isSelected) {
       updateMealAmount(meal.id, newAmount);
@@ -120,6 +123,7 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
               <TableHead>
                 <StyledTableRow>
                   <StyledTableCell padding="checkbox"></StyledTableCell>
+                  <StyledTableCell padding="checkbox"></StyledTableCell>
                   <StyledTableCell>{t('food.name')}</StyledTableCell>
                   <StyledTableCell>{t('food.kcal')}</StyledTableCell>
                   <StyledTableCell>{t('food.protein')}</StyledTableCell>
@@ -133,69 +137,123 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
                   const isItemSelected = isMealSelected(meal.id);
                   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
                   const currentAmount = selectedMeal?.amount || 1;
+                  const isIngredientsOpen = openIngredientRow === meal.id;
 
                   return (
-                    <StyledTableRow
-                      key={meal.id}
-                      selected={isItemSelected}
-                    >
-                      <StyledTableCell>
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          onClick={(e) => {
-                            e.stopPropagation(); // Prevent row click event
-                            handleMealToggle(meal);
-                          }}
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell 
-                        onClick={() => handleMealToggle(meal)}
+                    <>
+                      <StyledTableRow
+                        key={meal.id}
+                        selected={isItemSelected}
                       >
-                        {meal.name}
-                      </StyledTableCell>
-                      <StyledTableCell 
-                        onClick={() => handleMealToggle(meal)}
-                      >
-                        {formatInput(meal.kcal)}
-                      </StyledTableCell>
-                      <StyledTableCell 
-                        onClick={() => handleMealToggle(meal)}
-                      >
-                        {formatInput(meal.protein)}
-                      </StyledTableCell>
-                      <StyledTableCell 
-                        onClick={() => handleMealToggle(meal)}
-                      >
-                        {formatInput(meal.carbohydrates)}
-                      </StyledTableCell>
-                      <StyledTableCell 
-                        onClick={() => handleMealToggle(meal)}
-                      >
-                        {formatInput(meal.fat)}
-                      </StyledTableCell>
-                      <StyledTableCell
-                        onClick={(e) => e.stopPropagation()} // Prevent triggering row click
-                      >
-                        <TextField
-                          value={currentAmount}
-                          size="small"
-                          inputProps={{ 
-                            style: { width: 60 },
-                            // min: 1,
-                            // step: 1
-                          }}
-                          variant="outlined"
-                          onChange={(e) => {
-                            const newAmount = parseFloat(e.target.value) || 1;
-                            console.log('New amount:', newAmount);
-                            console.log(e.target.value)
-                            handleAmountChange(meal, newAmount);
-                          }}
-                          onClick={(e) => e.stopPropagation()} // Prevent bubbling
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
+                        <StyledTableCell sx={{width: '50px'}} >
+                          <IconButton
+                            aria-label="expand row"
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenIngredientRow(isIngredientsOpen ? null : meal.id);
+                            }}
+                          >
+                            {isIngredientsOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                          </IconButton>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent row click event
+                              handleMealToggle(meal);
+                            }}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell 
+                          onClick={() => handleMealToggle(meal)}
+                        >
+                          {meal.name}
+                        </StyledTableCell>
+                        <StyledTableCell 
+                          onClick={() => handleMealToggle(meal)}
+                        >
+                          {formatInput(meal.kcal)}
+                        </StyledTableCell>
+                        <StyledTableCell 
+                          onClick={() => handleMealToggle(meal)}
+                        >
+                          {formatInput(meal.protein)}
+                        </StyledTableCell>
+                        <StyledTableCell 
+                          onClick={() => handleMealToggle(meal)}
+                        >
+                          {formatInput(meal.carbohydrates)}
+                        </StyledTableCell>
+                        <StyledTableCell 
+                          onClick={() => handleMealToggle(meal)}
+                        >
+                          {formatInput(meal.fat)}
+                        </StyledTableCell>
+                        <StyledTableCell
+                          onClick={(e) => e.stopPropagation()} // Prevent triggering row click
+                        >
+                          <TextField
+                            value={currentAmount}
+                            size="small"
+                            inputProps={{ 
+                              style: { width: 60 },
+                              // min: 1,
+                              // step: 1
+                            }}
+                            variant="outlined"
+                            onChange={(e) => {
+                              const newAmount = parseFloat(e.target.value) || 1;
+                              console.log(newAmount)
+                              handleAmountChange(meal, newAmount);
+                            }}
+                            onClick={(e) => e.stopPropagation()} // Prevent bubbling
+                          />
+                        </StyledTableCell>
+                      </StyledTableRow>
+
+                      {/* Meal Ingredients */}
+                      <StyledTableRow>
+                        <StyledTableCell colSpan={8} sx={{ paddingBottom: 0, paddingTop: 0 }}>
+                          <Collapse
+                            in={isIngredientsOpen}
+                            timeout="auto"
+                            unmountOnExit
+                          >
+                            <Table size="small">
+                              <TableHead>
+                                <StyledTableRow>
+                                  <StyledTableCell>{t('food.name')}</StyledTableCell>
+                                  <StyledTableCell>{t('food.amount')}</StyledTableCell>
+                                  <StyledTableCell>{t('food.unit')}</StyledTableCell>
+                                </StyledTableRow>
+                              </TableHead>
+                              <TableBody>
+                                {meal.mealIngredients.map((ingredient, idx) => (
+                                  <StyledTableRow key={idx}>
+                                  <StyledTableCell>{ingredient.name}</StyledTableCell>
+                                  <StyledTableCell>
+                                    <TextField
+                                      value={ingredient.amount}
+                                      size="small"
+                                      variant="outlined"
+                                      onChange={e => {
+                                        const newValue = parseFloat(e.target.value) || 1;
+                                        updateMealIngredient(meal.id, ingredient.productId, newValue);
+                                      }}
+                                    />
+                                  </StyledTableCell>
+                                  <StyledTableCell>{ingredient.unit}</StyledTableCell>
+                                  </StyledTableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </Collapse>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </>
                   );
                 })}
               </TableBody>
