@@ -96,15 +96,16 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     );
   }, []);
 
-  const updateMealIngredient = useCallback((mealId, productId, newMealIngredient) => {
-    console.log('Updating meal ingredient:', mealId, productId, newMealIngredient);
+  const updateMealIngredient = useCallback((mealId, productId, newMealIngredientAmount) => {
 
     setSelectedMeals(prev => 
       prev.map(meal => 
         meal.id === mealId ? { 
           ...meal, 
-          ingredients: meal.ingredients.map(ingredient => 
-            ingredient.productId === productId ? { ...ingredient, ...newMealIngredient } : ingredient
+          mealIngredients: meal.mealIngredients.map(ingredient => 
+            ingredient.productId === productId ? 
+              {...ingredient, amount: newMealIngredientAmount } : 
+              ingredient
           ) 
         } : meal
       )

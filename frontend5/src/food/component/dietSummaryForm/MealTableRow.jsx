@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import REST from "../../../utils/REST";
 import { useTranslation } from 'react-i18next';
@@ -89,11 +89,23 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
   };
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <StyledTableRow>
+        <StyledTableCell colSpan={8} align="center">
+          <CircularProgress />
+        </StyledTableCell>
+      </StyledTableRow>
+    );
   }
 
   if (isError) {
-    return <div>{t('food.errorLoadingMeals')}</div>;
+    return (
+      <StyledTableRow>
+        <StyledTableCell colSpan={8} align="center">
+          {t('food.errorLoadingMeals')}
+        </StyledTableCell>
+      </StyledTableRow>
+    );
   }
 
   return (
@@ -133,16 +145,16 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
                 </StyledTableRow>
               </TableHead>
               <TableBody>
-                {mealList.map((meal) => {
+                {mealList.map((meal, index) => {
                   const isItemSelected = isMealSelected(meal.id);
                   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
                   const currentAmount = selectedMeal?.amount || 1;
                   const isIngredientsOpen = openIngredientRow === meal.id;
 
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       <StyledTableRow
-                        key={meal.id}
+                        key={index}
                         selected={isItemSelected}
                       >
                         <StyledTableCell sx={{width: '50px'}} >
@@ -231,29 +243,36 @@ export default function MealTableRow({ mealPopularity, mealCategory }) {
                                 </StyledTableRow>
                               </TableHead>
                               <TableBody>
-                                {meal.mealIngredients.map((ingredient, idx) => (
-                                  <StyledTableRow key={idx}>
-                                  <StyledTableCell>{ingredient.name}</StyledTableCell>
-                                  <StyledTableCell>
-                                    <TextField
-                                      value={ingredient.amount}
-                                      size="small"
-                                      variant="outlined"
-                                      onChange={e => {
-                                        const newValue = parseFloat(e.target.value) || 1;
-                                        updateMealIngredient(meal.id, ingredient.productId, newValue);
-                                      }}
-                                    />
-                                  </StyledTableCell>
-                                  <StyledTableCell>{ingredient.unit}</StyledTableCell>
-                                  </StyledTableRow>
-                                ))}
+                                {meal.mealIngredients.map((ingredient, idx) => {
+                                  // Pobierz ilość składnika z wybranego posiłku, jeśli istnieje
+                                  const selectedIngredient = selectedMeal?.mealIngredients?.find(i => i.productId === ingredient.productId);
+                                  const ingredientAmount = selectedIngredient?.amount ?? ingredient.amount;
+
+                                  // console.log('ingredientAmount -> ', meal);
+                                  return (
+                                    <StyledTableRow key={idx}>
+                                      <StyledTableCell>{ingredient.name}</StyledTableCell>
+                                      <StyledTableCell>
+                                        <TextField
+                                          value={ingredientAmount}
+                                          size="small"
+                                          variant="outlined"
+                                          onChange={e => {
+                                            const newValue = parseFloat(e.target.value) || 1;
+                                            updateMealIngredient(meal.id, ingredient.productId, newValue);
+                                          }}
+                                        />
+                                      </StyledTableCell>
+                                      <StyledTableCell>{ingredient.unit}</StyledTableCell>
+                                    </StyledTableRow>
+                                  );
+                                })}
                               </TableBody>
                             </Table>
                           </Collapse>
                         </StyledTableCell>
                       </StyledTableRow>
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </TableBody>
