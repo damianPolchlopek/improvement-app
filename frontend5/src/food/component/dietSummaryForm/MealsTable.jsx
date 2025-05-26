@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 
 import MealFilter from "./MealFilter";
-import MealTableRow from './MealTableRow';
+import MealCategoryRow from './MealCategoryRow';
 
 import {
   Table,
@@ -34,7 +34,7 @@ export default function MealsTable() {
         <Table aria-label="collapsible table" sx={{ minWidth: 700 }}>
           <TableBody>
             {MEALS_CATEGORY.map((mealCategory, index) => (
-              <MealTableRow
+              <MealCategoryRow
                 key={index}
                 mealCategory={mealCategory}
                 mealPopularity={mealPopularity}
