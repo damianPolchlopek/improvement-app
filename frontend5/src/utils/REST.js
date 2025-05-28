@@ -173,8 +173,8 @@ export default class REST {
         return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
     }
 
-    static checkProduct(selectedMeals) {
-        return post(serverUrl + food + 'diet/sum-product', selectedMeals);
+    static recalculateMealMacro(selectedMeal) {
+        return post(serverUrl + food + 'diet/meal/recalculate', selectedMeal);
     }
 
     static getDietSummaries(page, size) {

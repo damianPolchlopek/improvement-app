@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import REST from "../../../utils/REST";
-import { useTranslation } from 'react-i18next';
-import { useMealSelection } from '../../../context/MealSelectionContext';
 
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
@@ -41,7 +39,7 @@ function translateMealPopularity(arg) {
 
 export default function MealCategoryRow({ mealPopularity, mealCategory }) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const { data: mealList = [], isLoading, isError } = useQuery({
     queryKey: ['mealList', mealCategory, mealPopularity],
     queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', translateMealPopularity(mealPopularity), 'category'),

@@ -41,7 +41,7 @@ public class MealDto {
                 mealRecipe.getUrl(),
                 mealRecipe.getCategory(),
                 mealRecipe.getType(),
-                mealRecipe.getMealIngredients(),
+                mealRecipe.getIngredients(),
                 mealRecipe.getRecipe(),
                 0
             );

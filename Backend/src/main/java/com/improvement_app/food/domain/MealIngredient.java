@@ -1,27 +1,50 @@
 package com.improvement_app.food.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.improvement_app.food.domain.enums.Unit;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class MealIngredient {
 
-    private int productId;
+    @Id
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "meal_id", nullable = false)
+    @JsonBackReference
+    private MealRecipe mealRecipe;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference
+    private Product product;
     private String name;
     private double amount;
+
+    @Enumerated(EnumType.STRING)
     private Unit unit;
 
-    public MealIngredient(int productId, String name, double amount, Unit unit) {
-        this.productId = productId;
+    public MealIngredient(Product product, String name, double amount, Unit unit) {
+        this.product = product;
         this.name = name;
         this.amount = amount;
         this.unit = unit;
     }
 
-    public MealIngredient(MealIngredient mealIngredient) {
-        this.productId = mealIngredient.getProductId();
-        this.name = mealIngredient.getName();
-        this.amount = mealIngredient.getAmount();
-        this.unit = mealIngredient.getUnit();
+    @Override
+    public String toString() {
+        return "MealIngredient{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", amount=" + amount +
+                ", unit=" + unit +
+                '}';
     }
 }

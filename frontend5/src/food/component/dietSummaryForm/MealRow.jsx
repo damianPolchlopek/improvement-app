@@ -11,8 +11,10 @@ import StyledTableRow from '../../../component/table/StyledTableRow';
 import { formatInput } from '../../../utils/common';
 import { useMealSelection } from '../../../context/MealSelectionContext';
 import MealIngredientsTable from './MealIngredientsTable';
+import { useMealRecalculation } from '../../../context/useMealRecalculation';
 
-export default function MealRow({ meal, index }) {
+export default function MealRow({ meal: single, index }) {
+  const [meal, setMeal] = useState(single);
   const [isIngredientsOpen, setIsIngredientsOpen] = useState(false);
   const { 
     selectedMeals,
@@ -21,6 +23,7 @@ export default function MealRow({ meal, index }) {
     updateMealIngredient,
     isMealSelected 
   } = useMealSelection();
+  const { recalculateMeal } = useMealRecalculation();
 
   const isItemSelected = isMealSelected(meal.id);
   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
@@ -44,6 +47,10 @@ export default function MealRow({ meal, index }) {
   };
 
   const handleMealIngredientChange = (meal, ingredientId, newAmount) => {
+    recalculateMeal.mutate(meal, {
+      onSuccess: (response) => setMeal(response.entity)
+    });
+
     const isSelected = isMealSelected(meal.id);
     if (isSelected) {
       updateMealIngredient(meal.id, ingredientId, newAmount);

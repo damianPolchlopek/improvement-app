@@ -1,8 +1,5 @@
 import { createContext, useState, useContext, useCallback, useEffect } from 'react';
-import REST from '../utils/REST';
-import { useMutation } from '@tanstack/react-query';
-import { useSnackbar } from '../component/SnackbarProvider';
-import { useTranslation } from 'react-i18next';
+import { useDietCalculation } from './useDietCalculation';
 
 // Create the context
 const MealSelectionContext = createContext();
@@ -22,32 +19,19 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     fat: 0,
   });
   
-  const { showSnackbar } = useSnackbar();
-  const { t } = useTranslation();
 
-  // Calculate diet mutation
-  const calculateDietMutation = useMutation({
-    mutationFn: (meals) => {
-      // Format meals with amounts for API
-      const mealsWithAmounts = meals.map(meal => ({
-        ...meal,
-        amount: meal.amount || 1
-      }));
-      
-      return REST.calculateDiet({ eatenMeals: mealsWithAmounts });
-    },
-    onSuccess: (response) => {
-      setDietSummary(response.entity);
-    },
-    onError: () => {
-      showSnackbar( t('food.failedCalculateDiet'), 'error' );
-    }
-  });
+  const { calculateDiet } = useDietCalculation();
 
   // Recalculate diet when selected meals change
   useEffect(() => {
     if (selectedMeals.length > 0) {
-      calculateDietMutation.mutate(selectedMeals);
+
+      calculateDiet.mutate(selectedMeals, {
+        onSuccess: (response) => setDietSummary(response.entity)
+      });
+
+      // calculateMacro.mutate(selectedMeals);
+
     } else {
       // Reset summary if no meals selected
       setDietSummary({
@@ -85,9 +69,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
 
   // Update meal amount for already selected meal
   const updateMealAmount = useCallback((mealId, newAmount) => {
-    console.log('Updating meal amount:', mealId, newAmount);
     const parsedAmount = parseFloat(newAmount) || 1;
-    console.log('Parsed amount:', parsedAmount);
     
     setSelectedMeals(prev => 
       prev.map(meal => 
@@ -97,6 +79,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   }, []);
 
   const updateMealIngredient = useCallback((mealId, productId, newMealIngredientAmount) => {
+    console.log('updateMealIngredient', mealId, productId, newMealIngredientAmount);
 
     setSelectedMeals(prev => 
       prev.map(meal => 
@@ -110,6 +93,8 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
         } : meal
       )
     );
+
+    // call do backendu o rekalkulacje posilku
   }, []);
 
 

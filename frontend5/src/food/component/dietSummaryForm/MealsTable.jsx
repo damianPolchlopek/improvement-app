@@ -11,6 +11,13 @@ import {
   Paper
 } from '@mui/material';
 
+// components/MealTable/
+// ├── MealCategoryRow.jsx     (pojedyncza kategoria posiłków)
+// ├── MealsList.jsx           (lista posiłków)
+// ├── MealRow.jsx             (pojedynczy posiłek)
+// ├── MealIngredientsTable.jsx (tabela składników)
+// ├── IngredientRow.jsx       (pojedynczy składnik)
+
 export default function MealsTable() {
   const [mealPopularity, setMealPopularity] = useState('HIGH');
   const { t } = useTranslation();
