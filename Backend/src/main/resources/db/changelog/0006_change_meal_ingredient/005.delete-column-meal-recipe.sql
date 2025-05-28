@@ -1,0 +1,1 @@
+ALTER TABLE meal_recipe DROP COLUMN meal_ingredients;

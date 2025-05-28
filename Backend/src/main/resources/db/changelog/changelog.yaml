@@ -22,3 +22,7 @@ databaseChangeLog:
   - include:
       file: 0005_change_table_name/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0006_change_meal_ingredient/changelog.yaml
+      relativeToChangelogFile: true
