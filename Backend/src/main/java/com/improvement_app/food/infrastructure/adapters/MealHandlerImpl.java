@@ -28,7 +28,12 @@ public class MealHandlerImpl implements MealHandler {
 
     @Override
     public List<MealRecipe> saveAll(List<MealRecipe> mealRecipes) {
-        return mealRepository.saveAll(mealRecipes);
+        for (MealRecipe mealRecipe : mealRecipes) {
+            System.out.println("Saving meal recipe: " + mealRecipe.getName() + " with ID: " + mealRecipe.getId());
+            mealRepository.save(mealRecipe);
+        }
+
+        return null;
     }
 
     @Override

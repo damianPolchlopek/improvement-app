@@ -1,7 +1,9 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ProductService;
+import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
+import com.improvement_app.food.ui.response.GetProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.ws.rs.core.Response;
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,7 +25,11 @@ public class ProductController {
     public Response getProductsRequest(@RequestParam String productCategory,
                                        @RequestParam String productName) {
         ProductCategory productCategoryEnum = ProductCategory.fromValue(productCategory);
-        return Response.ok(productService.getProducts(productCategoryEnum, productName)).build();
+        List<GetProductResponse> products = productService.getProducts(productCategoryEnum, productName)
+                .stream()
+                .map(GetProductResponse::from)
+                .toList();
+        return Response.ok(products).build();
     }
 
     @GetMapping("/product/categories")

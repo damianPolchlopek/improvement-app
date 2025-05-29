@@ -13,6 +13,8 @@ export function useDietCalculation() {
         ...meal,
         amount: meal.amount || 1
       }));
+      
+      console.log('Calculating diet with meals:', mealsWithAmounts);
       return REST.calculateDiet({ eatenMeals: mealsWithAmounts });
     },
     onError: () => {

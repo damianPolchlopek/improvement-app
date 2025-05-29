@@ -21,14 +21,4 @@ public class SweetsService {
         mealHandler.saveAll(sweets);
     }
 
-//    public List<Product> getProducts(ProductCategory productCategory, String productName) {
-//        final String productNameLower = productName.toLowerCase();
-//        if (productCategory == ProductCategory.ALL) {
-//            return sweetsHandler.findByName(productNameLower);
-//        }
-//
-//        return sweetsHandler.findProduct(productCategory, productNameLower);
-//    }
-
-
 }

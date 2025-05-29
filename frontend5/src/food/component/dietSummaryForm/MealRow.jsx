@@ -48,6 +48,7 @@ export default function MealRow({ meal: single, index }) {
 
   const handleMealIngredientChange = (meal, ingredientId, newAmount) => {
     recalculateMeal.mutate(meal, {
+      
       onSuccess: (response) => setMeal(response.entity)
     });
 

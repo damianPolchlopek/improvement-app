@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class MealIngredient {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,11 +32,12 @@ public class MealIngredient {
     @Enumerated(EnumType.STRING)
     private Unit unit;
 
-    public MealIngredient(Product product, String name, double amount, Unit unit) {
+    public MealIngredient(Product product, String name, double amount, Unit unit, MealRecipe mealRecipe) {
         this.product = product;
         this.name = name;
         this.amount = amount;
         this.unit = unit;
+        this.mealRecipe = mealRecipe;
     }
 
     @Override

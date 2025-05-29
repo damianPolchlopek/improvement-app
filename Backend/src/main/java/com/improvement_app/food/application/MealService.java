@@ -55,7 +55,8 @@ public class MealService {
                                      MealType mealType,
                                      MealPopularity mealPopularity,
                                      String mealName,
-                                     String sortBy) {
+                                     String sortBy,
+                                     boolean onOnePortion) {
 
         List<MealRecipe> mealRecipes = mealHandler.findAllByName(mealName, sortBy);
 
@@ -80,15 +81,23 @@ public class MealService {
                     .collect(Collectors.toList());
         }
 
+        if (onOnePortion) {
+            mealRecipes = mealRecipes.stream()
+                .map(meal -> {
+                        meal.getIngredients()
+                                .forEach(mealIngredient ->
+                                        mealIngredient.setAmount(mealIngredient.getAmount() / meal.getPortionAmount()));
+
+                        return meal;
+                    })
+                .collect(Collectors.toList());
+        }
+
         return mealRecipes;
     }
 
     public void deleteAll() {
         mealHandler.deleteAll();
-    }
-
-    public List<MealRecipe> findAllById(List<Long> ids) {
-        return mealHandler.findAllById(ids);
     }
 
 }

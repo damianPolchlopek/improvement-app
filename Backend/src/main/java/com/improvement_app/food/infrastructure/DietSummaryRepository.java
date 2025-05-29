@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure;
 
-import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.dietsummary.DietSummary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

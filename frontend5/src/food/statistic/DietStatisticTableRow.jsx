@@ -27,6 +27,7 @@ import REST from '../../utils/REST';
 import ErrorBlock from "../../component/ErrorBlock";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from '../../component/SnackbarProvider';
+import { formatInput } from '../../utils/common';
 
 export default function DietStatisticTableRow({ dietSummary }) {
   const { showSnackbar } = useSnackbar();
@@ -67,10 +68,6 @@ export default function DietStatisticTableRow({ dietSummary }) {
   const handleEditClick = () => {
     navigate(`/food/${dietSummary.id}/edit`);
   };
-
-  const formatInput = (value) => {
-    return Number(value).toFixed(2);
-  }
 
   return (
     <>

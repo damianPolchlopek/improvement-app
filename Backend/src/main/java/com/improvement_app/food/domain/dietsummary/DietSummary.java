@@ -1,4 +1,4 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.domain.dietsummary;
 
 import com.vladmihalcea.hibernate.type.json.JsonType;
 import jakarta.persistence.*;

@@ -1,14 +1,12 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.DietSummaryService;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.domain.dietsummary.DietSummary;
+import com.improvement_app.food.domain.dietsummary.EatenMeal;
 import com.improvement_app.food.ui.commands.CalculateDietRequest;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.commands.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
-import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.ws.rs.core.Response;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,8 +43,8 @@ public class DietController {
 
     @PostMapping("/meal/recalculate")
     public Response sumProduct(@RequestBody RecalculateMealMacroRequest calculateDietRequest) {
-        EatenMeal products = dietSummaryService.calculateMacro(calculateDietRequest);
-        return Response.ok(products).build();
+        EatenMeal eatenMeal = dietSummaryService.calculateMacro(calculateDietRequest);
+        return Response.ok(eatenMeal).build();
     }
 
 
