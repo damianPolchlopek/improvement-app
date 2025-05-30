@@ -42,7 +42,9 @@ export default function MealCategoryRow({ mealPopularity, mealCategory }) {
 
   const { data: mealList = [], isLoading, isError } = useQuery({
     queryKey: ['mealList', mealCategory, mealPopularity],
-    queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', translateMealPopularity(mealPopularity), 'category', true),
+    queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', 
+                                    translateMealPopularity(mealPopularity), 'category', true),
+                                    
     enabled: !!mealCategory && !!mealPopularity && isOpen,
     select: (res) => res.entity,
     keepPreviousData: true,

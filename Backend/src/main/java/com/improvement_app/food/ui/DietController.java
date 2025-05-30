@@ -43,7 +43,7 @@ public class DietController {
 
     @PostMapping("/meal/recalculate")
     public Response sumProduct(@RequestBody RecalculateMealMacroRequest calculateDietRequest) {
-        EatenMeal eatenMeal = dietSummaryService.calculateMacro(calculateDietRequest);
+        EatenMeal eatenMeal = dietSummaryService.recalculateMacro(calculateDietRequest);
         return Response.ok(eatenMeal).build();
     }
 

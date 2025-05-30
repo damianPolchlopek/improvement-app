@@ -47,6 +47,7 @@ public class MealIngredient {
                 ", name='" + name + '\'' +
                 ", amount=" + amount +
                 ", unit=" + unit +
+                ", productId=" + product.getId() +
                 '}';
     }
 }

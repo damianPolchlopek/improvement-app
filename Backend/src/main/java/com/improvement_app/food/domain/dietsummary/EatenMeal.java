@@ -20,7 +20,7 @@ public record EatenMeal(
         MealPopularity popularity,
         List<MealIngredientDTO> mealIngredients,
         List<String> recipe,
-        double amount
+        int amount
 ) {
     @Override
     public String toString() {

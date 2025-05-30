@@ -5,7 +5,6 @@ spring:
     enabled: false
   jpa:
     open-in-view: false
-    show-sql: true
 
 bezkoder:
   app:
