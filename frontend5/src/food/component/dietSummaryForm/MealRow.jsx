@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { 
   IconButton, 
   Checkbox, 
   TextField 
 } from '@mui/material';
+
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import StyledTableCell from '../../../component/table/StyledTableCell';
@@ -88,7 +89,7 @@ export default function MealRow({ meal: single, index }) {
   };
 
   return (
-    <React.Fragment>
+    <>
       <StyledTableRow
         key={index}
         selected={isItemSelected}
@@ -154,6 +155,6 @@ export default function MealRow({ meal: single, index }) {
         selectedMeal={selectedMeal}
         onIngredientAmountChange={handleMealIngredientChange}
       />
-    </React.Fragment>
+    </>
   );
 }

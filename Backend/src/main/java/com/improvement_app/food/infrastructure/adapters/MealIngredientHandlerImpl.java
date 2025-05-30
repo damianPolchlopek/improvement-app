@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
 import java.util.Optional;
 
 @Configuration
@@ -19,5 +20,10 @@ public class MealIngredientHandlerImpl implements MealIngredientHandler {
     @Override
     public Optional<MealIngredient> getMealIngredient(int id) {
         return mealIngredientRepository.findById((long) id);
+    }
+
+    @Override
+    public List<MealIngredient> getMealIngredients(List<Long> ingredients) {
+        return mealIngredientRepository.findAllById(ingredients);
     }
 }

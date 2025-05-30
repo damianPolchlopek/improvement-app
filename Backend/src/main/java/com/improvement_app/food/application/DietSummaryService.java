@@ -28,30 +28,15 @@ public class DietSummaryService {
         return dietSummaryHandler.save(dietSummary);
     }
 
-    public DietSummary calculateDietSummary(List<EatenMeal> mealsId) {
-        double kcal = 0;
-        double protein = 0;
-        double carbs = 0;
-        double fat = 0;
-
-        for (EatenMeal eatenMeal : mealsId) {
-            final double amount = eatenMeal.amount();
-
-            kcal += amount * eatenMeal.kcal();
-            protein += amount * eatenMeal.protein();
-            carbs += amount * eatenMeal.carbohydrates();
-            fat += amount * eatenMeal.fat();
-        }
-
-        return new DietSummary(kcal, protein, carbs, fat, mealsId);
+    @Transactional
+    public DietSummary calculateDietSummary(List<EatenMeal> eatenMeals) {
+        return calculationMacroelementsService.recalculateDayMacro(eatenMeals);
     }
 
     @Transactional
     public EatenMeal recalculateMacro(RecalculateMealMacroRequest calculateDietRequest) {
         EatenMeal eatenMeal = calculateDietRequest.eatenMeal();
-        EatenMeal eatenMeal1 = calculationMacroelementsService.recalculateMealMacro(eatenMeal);
-        System.out.println(eatenMeal1);
-        return eatenMeal1;
+        return calculationMacroelementsService.recalculateMealMacro(eatenMeal);
     }
 
     @Transactional
