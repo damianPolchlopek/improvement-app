@@ -6,7 +6,7 @@ import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
-import com.improvement_app.food.ui.dto.MealDto;
+import com.improvement_app.food.ui.response.GetMealResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,15 +31,17 @@ public class MealController {
                              @RequestParam String mealType,
                              @RequestParam String mealName,
                              @RequestParam String mealPopularity,
-                             @RequestParam String sortBy) {
+                             @RequestParam String sortBy,
+                             @RequestParam(defaultValue = "false") Boolean onOnePortion) {
 
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
         MealPopularity mealPopularityEnum = MealPopularity.fromValue(mealPopularity);
 
-        List<MealDto> mealDTOs = mealService.getMeals(mealCategoryEnum, mealTypeEnum, mealPopularityEnum, mealName, sortBy)
+        List<GetMealResponse> mealDTOs = mealService.getMeals(mealCategoryEnum, mealTypeEnum,
+                        mealPopularityEnum, mealName, sortBy, onOnePortion)
                 .stream()
-                .map(MealDto::from)
+                .map(GetMealResponse::from)
                 .collect(Collectors.toList());
 
         return Response.ok(mealDTOs).build();

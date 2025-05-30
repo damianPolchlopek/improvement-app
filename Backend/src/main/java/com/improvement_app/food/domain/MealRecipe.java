@@ -1,6 +1,7 @@
 package com.improvement_app.food.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -39,14 +40,14 @@ public class MealRecipe {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private List<MealIngredient> mealIngredients;
-
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
     private List<String> recipe;
 
     @Enumerated(EnumType.STRING)
     private MealPopularity popularity;
+
+    @OneToMany(mappedBy = "mealRecipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<MealIngredient> ingredients;
 
     public MealRecipe(Long id, String name, double kcal, double protein, double carbohydrates,
                       double fat, double portionAmount, String url, MealType type,

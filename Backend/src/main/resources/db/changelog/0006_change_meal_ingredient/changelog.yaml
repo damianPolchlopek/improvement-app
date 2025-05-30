@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0006_change_meal_ingredient/001.create-meal-ingredient-table.sql
+      sqlFile:
+        path: 001.create-meal-ingredient-table.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0006_change_meal_ingredient/002.add-primary-key-product.sql
+      sqlFile:
+        path: 002.add-primary-key-product.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 3
+      author: Damian Polchlopek
+      logicalFilePath: 0006_change_meal_ingredient/003.add-foreign-keys.sql
+      sqlFile:
+        path: 003.add-foreign-keys.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 4
+      author: Damian Polchlopek
+      logicalFilePath: 0006_change_meal_ingredient/004.migrate-data-from-meal-recipe-to-new-table.sql
+      sqlFile:
+        path: 004.migrate-data-from-meal-recipe-to-new-table.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 5
+      author: Damian Polchlopek
+      logicalFilePath: 0006_change_meal_ingredient/005.delete-column-meal-recipe.sql
+      sqlFile:
+        path: 005.delete-column-meal-recipe.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 6
+      author: Damian Polchlopek
+      logicalFilePath: 0006_change_meal_ingredient/006.add-index-to-tables.sql
+      sqlFile:
+        path: 006.add-index-to-tables.sql
+        relativeToChangelogFile: true

@@ -1,12 +1,12 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.DietSummaryService;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.domain.dietsummary.DietSummary;
+import com.improvement_app.food.domain.dietsummary.EatenMeal;
 import com.improvement_app.food.ui.commands.CalculateDietRequest;
 import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.commands.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
-import com.improvement_app.food.ui.dto.MealDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.ws.rs.core.Response;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,15 +36,15 @@ public class DietController {
     }
 
     @PostMapping("/calculate")
-    public Response getMealCategories(@RequestBody CalculateDietRequest calculateDietRequest) {
+    public Response getDietSummary(@RequestBody CalculateDietRequest calculateDietRequest) {
         DietSummary dietSummary = dietSummaryService.calculateDietSummary(calculateDietRequest.eatenMeals());
         return Response.ok(dietSummary).build();
     }
 
-    @PostMapping("/sum-product")
-    public Response sumProduct(@RequestBody List<MealDto> mealDTOs) {
-        List<MealIngredient> products = dietSummaryService.getProducts(mealDTOs);
-        return Response.ok(products).build();
+    @PostMapping("/meal/recalculate")
+    public Response sumProduct(@RequestBody RecalculateMealMacroRequest calculateDietRequest) {
+        EatenMeal eatenMeal = dietSummaryService.recalculateMacro(calculateDietRequest);
+        return Response.ok(eatenMeal).build();
     }
 
 

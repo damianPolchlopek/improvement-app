@@ -152,9 +152,9 @@ export default class REST {
     }
 
     //mealCategory=All&mealType=All&mealName=&mealPopularity=&sortBy=
-    static getMealList(mealCategory, mealType, mealName, mealPopularity, sortBy) {
+    static getMealList(mealCategory, mealType, mealName, mealPopularity, sortBy, onOnePortion) {
         return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName
-                                            + "&mealPopularity=" + mealPopularity + "&sortBy=" + sortBy);
+                                    + "&mealPopularity=" + mealPopularity + "&sortBy=" + sortBy + "&onOnePortion=" + onOnePortion);
     }
 
     static getMealCategoryList() {
@@ -165,16 +165,16 @@ export default class REST {
         return get(serverUrl + food + 'meal/types');
     }
 
-    static calculateDiet(selectedMealsId) {
-        return post(serverUrl + food + 'diet/calculate', selectedMealsId);
+    static calculateDiet(selectedMeals) {
+        return post(serverUrl + food + 'diet/calculate', selectedMeals);
     }
 
     static createDietSummary(selectedMealsId) {
         return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
     }
 
-    static checkProduct(selectedMeals) {
-        return post(serverUrl + food + 'diet/sum-product', selectedMeals);
+    static recalculateMealMacro(selectedMeal) {
+        return post(serverUrl + food + 'diet/meal/recalculate', selectedMeal);
     }
 
     static getDietSummaries(page, size) {
