@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,10 +27,17 @@ public class CalculationMacroelementsService {
         double totalCarbohydrates = 0;
         double totalFat = 0;
 
+        List<Long> ingredients = mealIngredients.stream()
+                .map(MealIngredientDTO::id)
+                .collect(Collectors.toList());
+
+        Map<Long, MealIngredient> recipeMealIngredients = mealIngredientHandler.getMealIngredients(ingredients)
+                .stream()
+                .collect(Collectors.toMap(MealIngredient::getId, mealIngredient -> mealIngredient));
+
         for (MealIngredientDTO eatenMealIngredient : mealIngredients) {
-            final MealIngredient recipeMealIngredient = mealIngredientHandler.getMealIngredient(eatenMealIngredient.id())
-                    .orElseThrow(() -> new RuntimeException("Nie znaleziono składnika o id: " + eatenMealIngredient.id()));
-            final Product recipeProduct = recipeMealIngredient.getProduct();
+            final Product recipeProduct = recipeMealIngredients.get(eatenMealIngredient.id())
+                    .getProduct();
 
             totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getKcal();
             totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getProtein();
@@ -37,21 +45,11 @@ public class CalculationMacroelementsService {
             totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getFat();
         }
 
-        return new EatenMeal(
-                eatenMeal.id(),
-                eatenMeal.name(),
+        return eatenMeal.updateMacro(
                 totalKcal,
                 totalProtein,
                 totalCarbohydrates,
-                totalFat,
-                eatenMeal.amount(),
-                eatenMeal.url(),
-                eatenMeal.category(),
-                eatenMeal.type(),
-                eatenMeal.popularity(),
-                eatenMeal.mealIngredients(),
-                eatenMeal.recipe(),
-                eatenMeal.amount()
+                totalFat
         );
     }
 

@@ -3,7 +3,7 @@ package com.improvement_app.food.infrastructure.adapters;
 import com.improvement_app.food.application.ports.ProductHandler;
 import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
-import com.improvement_app.food.infrastructure.ProductRepository;
+import com.improvement_app.food.infrastructure.database.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -32,8 +32,8 @@ public class ProductHandlerImpl implements ProductHandler {
     }
 
     @Override
-    public void saveAll(List<Product> products) {
-        productRepository.saveAll(products);
+    public List<Product> saveAll(List<Product> products) {
+        return productRepository.saveAll(products);
     }
 
     @Override

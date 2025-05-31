@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.MealHandler;
 import com.improvement_app.food.domain.MealRecipe;
-import com.improvement_app.food.infrastructure.MealRepository;
+import com.improvement_app.food.infrastructure.database.MealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +36,4 @@ public class MealHandlerImpl implements MealHandler {
         return mealRepository.findAllByName(name, sortBy);
     }
 
-    @Override
-    public List<MealRecipe> findAllById(List<Long> ids) {
-        return mealRepository.findAllById(ids);
-    }
 }

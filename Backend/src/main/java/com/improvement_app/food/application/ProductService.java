@@ -1,13 +1,11 @@
 package com.improvement_app.food.application;
 
-import com.improvement_app.food.application.ports.ProductGoogleDriveHandler;
 import com.improvement_app.food.application.ports.ProductHandler;
 import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -15,13 +13,6 @@ import java.util.List;
 public class ProductService {
 
     private final ProductHandler productHandler;
-    private final ProductGoogleDriveHandler productGoogleDriveHandler;
-
-    public void initProducts() throws IOException {
-        List<Product> products = productGoogleDriveHandler.findAll();
-        productHandler.saveAll(products);
-        System.out.println("Dodaje do bazy danych produkty: " + products);
-    }
 
     public List<Product> getProducts(ProductCategory productCategory, String productName) {
         final String productNameLower = productName.toLowerCase();

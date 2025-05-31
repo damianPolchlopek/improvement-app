@@ -22,6 +22,31 @@ public record EatenMeal(
         List<String> recipe,
         int amount
 ) {
+
+    public EatenMeal updateMacro(
+            double kcal,
+            double protein,
+            double carbohydrates,
+            double fat
+    ) {
+        return new EatenMeal(
+                this.id,
+                this.name,
+                kcal,
+                protein,
+                carbohydrates,
+                fat,
+                this.portionAmount,
+                this.url,
+                this.category,
+                this.type,
+                this.popularity,
+                this.mealIngredients,
+                this.recipe,
+                this.amount
+        );
+    }
+
     @Override
     public String toString() {
         return "EatenMeals{" +

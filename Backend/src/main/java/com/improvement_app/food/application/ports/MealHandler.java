@@ -13,5 +13,4 @@ public interface MealHandler {
 
     List<MealRecipe> findAllByName(String name, String sortBy);
 
-    List<MealRecipe> findAllById(List<Long> ids);
 }
