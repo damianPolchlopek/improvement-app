@@ -1,18 +1,16 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
-import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.food.domain.enums.Unit;
-import com.improvement_app.food.infrastructure.ProductRepository;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
@@ -20,11 +18,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Configuration
-public class MealParser extends GoogleDriveFilesHandler {
-    public MealRecipe parseMealFile(final File file) throws IOException {
+public class MealParser extends GoogleDriveFilesHelper {
+    public MealRecipe parseMealFile(final File file, Map<Long, Product> products) throws IOException {
         final int MACRO_SHEET_INDEX = 0;
         final int INGREDIENT_SHEET_INDEX = 1;
         final int RECIPE_SHEET_INDEX = 2;
@@ -36,7 +34,7 @@ public class MealParser extends GoogleDriveFilesHandler {
             MealRecipe mealRecipe = parseMacroSheet(macroSheet);
 
             XSSFSheet ingredientSheet = wb.getSheetAt(INGREDIENT_SHEET_INDEX);
-            List<MealIngredient> mealIngredients = parseIngredientSheet(ingredientSheet, mealRecipe);
+            List<MealIngredient> mealIngredients = parseIngredientSheet(ingredientSheet, mealRecipe, products);
             mealRecipe.setIngredients(mealIngredients);
 
             XSSFSheet recipeSheet = wb.getSheetAt(RECIPE_SHEET_INDEX);
@@ -77,11 +75,8 @@ public class MealParser extends GoogleDriveFilesHandler {
         return new MealRecipe(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
                 MealType.fromValue(type), MealCategory.fromValue(category), MealPopularity.fromValue(popularity));
     }
-//TODO: fix parsing data
-    @Autowired
-    ProductRepository productRepository;
 
-    private List<MealIngredient> parseIngredientSheet(XSSFSheet sheet, MealRecipe mealRecipe) {
+    private List<MealIngredient> parseIngredientSheet(XSSFSheet sheet, MealRecipe mealRecipe, Map<Long, Product> products) {
         final int ID_INDEX = 0;
         final int NAME_INDEX = 1;
         final int AMOUNT_INDEX = 2;
@@ -94,7 +89,6 @@ public class MealParser extends GoogleDriveFilesHandler {
 
             Cell cell = row.getCell(ID_INDEX);
             final int productId = (int) cell.getNumericCellValue();
-            Optional<Product> byId = productRepository.findById((long) productId);
             cell = row.getCell(NAME_INDEX);
             final String name = cell.getStringCellValue();
             cell = row.getCell(AMOUNT_INDEX);
@@ -102,7 +96,8 @@ public class MealParser extends GoogleDriveFilesHandler {
             cell = row.getCell(UNIT_INDEX);
             final Unit unit = parseUnit(cell.getStringCellValue());
 
-            MealIngredient mealIngredient = new MealIngredient(byId.get(), name, amount, unit, mealRecipe);
+            final Product product = products.get((long) productId);
+            MealIngredient mealIngredient = new MealIngredient(product, name, amount, unit, mealRecipe);
             mealIngredients.add(mealIngredient);
         }
 

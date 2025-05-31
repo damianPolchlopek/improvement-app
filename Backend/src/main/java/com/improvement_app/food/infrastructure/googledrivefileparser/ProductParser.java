@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class ProductParser extends GoogleDriveFilesHandler {
+public class ProductParser extends GoogleDriveFilesHelper {
     public List<Product> parseExcelProductsFile(final File file) throws IOException {
         List<Product> productList = new ArrayList<>();
 

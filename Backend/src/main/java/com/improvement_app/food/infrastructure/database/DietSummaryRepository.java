@@ -1,4 +1,4 @@
-package com.improvement_app.food.infrastructure;
+package com.improvement_app.food.infrastructure.database;
 
 import com.improvement_app.food.domain.dietsummary.DietSummary;
 import org.springframework.data.domain.Page;

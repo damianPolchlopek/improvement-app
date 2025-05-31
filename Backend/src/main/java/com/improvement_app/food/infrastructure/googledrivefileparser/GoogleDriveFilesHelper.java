@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 
-public class GoogleDriveFilesHandler {
+public class GoogleDriveFilesHelper {
 
     protected boolean checkIfNextRowExists(Row row) {
         final int FIRST_CELL_INDEX = 0;

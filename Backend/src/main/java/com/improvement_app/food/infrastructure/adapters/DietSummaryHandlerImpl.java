@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.infrastructure.DietSummaryRepository;
+import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

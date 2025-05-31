@@ -22,24 +22,20 @@ public class DietSummaryService {
     private final CalculationMacroelementsService calculationMacroelementsService;
 
 
-    @Transactional
     public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
         DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
         return dietSummaryHandler.save(dietSummary);
     }
 
-    @Transactional
     public DietSummary calculateDietSummary(List<EatenMeal> eatenMeals) {
         return calculationMacroelementsService.recalculateDayMacro(eatenMeals);
     }
 
-    @Transactional
     public EatenMeal recalculateMacro(RecalculateMealMacroRequest calculateDietRequest) {
         EatenMeal eatenMeal = calculateDietRequest.eatenMeal();
         return calculationMacroelementsService.recalculateMealMacro(eatenMeal);
     }
 
-    @Transactional
     public Page<DietSummary> getDietSummaries(Pageable pageable) {
         return dietSummaryHandler.findAll(pageable);
     }

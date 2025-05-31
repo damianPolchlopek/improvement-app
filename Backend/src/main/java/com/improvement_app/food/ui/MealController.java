@@ -59,9 +59,4 @@ public class MealController {
         return Response.ok(Arrays.stream(MealType.values()).map(MealType::getName).toArray()).build();
     }
 
-
-    @GetMapping("/initMeals")
-    public List<MealRecipe> initMeals() throws IOException {
-        return mealService.initMeals();
-    }
 }

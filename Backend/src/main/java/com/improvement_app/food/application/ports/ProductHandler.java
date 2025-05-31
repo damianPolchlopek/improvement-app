@@ -10,7 +10,7 @@ public interface ProductHandler {
 
     void deleteAll();
 
-    void saveAll(List<Product> products);
+    List<Product> saveAll(List<Product> products);
 
     List<Product> findByName(String name);
 
