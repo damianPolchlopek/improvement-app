@@ -31,20 +31,17 @@ export default function MealView() {
   const { data: mealCategoryList = [] } = useQuery({
     queryKey: ['mealCategories'],
     queryFn: REST.getMealCategoryList,
-    select: (res) => res.entity
   });
 
   const { data: mealTypeList = [] } = useQuery({
     queryKey: ['mealTypes'],
     queryFn: REST.getMealTypeList,
-    select: (res) => res.entity
   });
 
   // 🥗 Pobierz posiłki na podstawie filtrów
-  const { data: mealList = [], isLoading } = useQuery({
+  const { data: mealList = [], isLoading, isError, error } = useQuery({
     queryKey: ['meals', mealCategory, mealType, mealName],
     queryFn: () => REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name', false),
-    select: (res) => res.entity,
     enabled: !!mealCategory && !!mealType // upewnij się że są dostępne
   });
 
@@ -65,6 +62,14 @@ export default function MealView() {
         break;
     }
   };
+
+  if (isError) {
+    return (
+      <CenteredContainer>
+        <p>Error: {error?.message || 'Unknown error'}</p>
+      </CenteredContainer>
+    );
+  }
 
   return (
     <>

@@ -36,8 +36,7 @@ export default function ProductView() {
     error: categoryError,
   } = useQuery({
     queryKey: ['product-categories'],
-    queryFn: REST.getProductCategoryList,
-    select: (res) => res.entity,
+    queryFn: REST.getProductCategoryList
   });
 
   const selectedCategory = productCategoryList[tabIndex] || 'ALL';

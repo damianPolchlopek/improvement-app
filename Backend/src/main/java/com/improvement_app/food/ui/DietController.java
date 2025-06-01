@@ -220,4 +220,5 @@ public class DietController {
 
         return ResponseEntity.noContent().build();
     }
+
 }

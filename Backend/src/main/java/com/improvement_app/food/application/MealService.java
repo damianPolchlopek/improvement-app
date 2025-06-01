@@ -23,7 +23,8 @@ public class MealService {
                                      MealPopularity mealPopularity,
                                      String mealName,
                                      String sortBy,
-                                     boolean onOnePortion) {
+                                     boolean onOnePortion)
+    {
 
         List<MealRecipe> mealRecipes = mealHandler.findAllByName(mealName, sortBy);
 
