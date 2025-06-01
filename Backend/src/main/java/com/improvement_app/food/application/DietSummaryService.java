@@ -1,5 +1,6 @@
 package com.improvement_app.food.application;
 
+import com.improvement_app.food.application.exceptions.DietSummaryNotFoundException;
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.dietsummary.DietSummary;
 import com.improvement_app.food.domain.dietsummary.EatenMeal;
@@ -10,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,14 +46,15 @@ public class DietSummaryService {
 
     public DietSummary getDayDietSummary(Long id) {
         return dietSummaryHandler.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + id));
+                .orElseThrow(() -> new DietSummaryNotFoundException(id));
     }
 
     public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
         DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
 
-        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
+        long dietSummaryId = updateDietSummaryRequest.dietSummaryId();
+        DietSummary oldDietSummary = dietSummaryHandler.findById(dietSummaryId)
+                .orElseThrow(() -> new DietSummaryNotFoundException(dietSummaryId));
 
         oldDietSummary.update(recalculatedDietSummary);
 

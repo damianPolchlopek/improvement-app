@@ -26,8 +26,7 @@ export default function DietStatisticView() {
   const [ size, setSize ] = useState(10);
   const { t } = useTranslation();
 
-  const { data, isLoading, isError, error
-  } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['diet-summaries', page, size],
     queryFn: () => REST.getDietSummaries(page, size),
     keepPreviousData: true,

@@ -36,6 +36,7 @@ public class CalculationMacroelementsService {
                 .collect(Collectors.toMap(MealIngredient::getId, mealIngredient -> mealIngredient));
 
         for (MealIngredientDTO eatenMealIngredient : mealIngredients) {
+            //TODO: zabezpieczyc przed nullem w mapie
             final Product recipeProduct = recipeMealIngredients.get(eatenMealIngredient.id())
                     .getProduct();
 

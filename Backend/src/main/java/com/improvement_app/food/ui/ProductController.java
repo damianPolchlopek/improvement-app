@@ -1,16 +1,15 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ProductService;
-import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.ui.response.GetProductResponse;
+import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 

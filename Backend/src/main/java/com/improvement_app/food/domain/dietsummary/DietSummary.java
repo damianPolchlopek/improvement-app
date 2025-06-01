@@ -47,7 +47,6 @@ public class DietSummary {
         this.protein = newDietSummary.protein;
         this.carbohydrates = newDietSummary.carbohydrates;
         this.fat = newDietSummary.fat;
-        this.date = LocalDate.now();
         this.meals = newDietSummary.meals;
         return this;
     }

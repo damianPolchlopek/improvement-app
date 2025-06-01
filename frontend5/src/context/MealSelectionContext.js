@@ -27,7 +27,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     if (selectedMeals.length > 0) {
 
       calculateDiet.mutate(selectedMeals, {
-        onSuccess: (response) => setDietSummary(response.entity)
+        onSuccess: (response) => setDietSummary(response)
       });
 
       // calculateMacro.mutate(selectedMeals);
