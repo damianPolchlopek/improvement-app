@@ -1,12 +1,15 @@
 package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.MealHandler;
+import com.improvement_app.food.application.spec.MealRecipeSpecifications;
 import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,44 +21,38 @@ import java.util.stream.Collectors;
 public class MealService {
     private final MealHandler mealHandler;
 
-    public List<MealRecipe> getMeals(MealCategory mealCategory,
-                                     MealType mealType,
-                                     MealPopularity mealPopularity,
-                                     String mealName,
+    public List<MealRecipe> getMeals(MealCategory category,
+                                     MealType type,
+                                     MealPopularity popularity,
+                                     String name,
                                      String sortBy,
-                                     boolean onOnePortion)
-    {
+                                     boolean onOnePortion) {
 
-        List<MealRecipe> mealRecipes = mealHandler.findAllByName(mealName, sortBy);
+        Specification<MealRecipe> spec = Specification
+                .where(category != MealCategory.ALL ? MealRecipeSpecifications.hasCategory(category) : null)
+                .and(type != MealType.ALL ? MealRecipeSpecifications.hasType(type) : null)
+                .and(popularity != MealPopularity.ALL ? MealRecipeSpecifications.hasPopularity(popularity) : null)
+                .and(MealRecipeSpecifications.hasNameContaining(name));
 
-        if (mealCategory != MealCategory.ALL) {
-            mealRecipes = mealRecipes
-                    .stream()
-                    .filter(meal -> meal.getCategory() == mealCategory)
-                    .collect(Collectors.toList());
-        }
+        Sort sort = switch (sortBy) {
+            case "name" -> Sort.by("name").ascending();
+            case "popularity" -> Sort.by("popularity").ascending();
+            case "category" -> Sort.by("category").ascending();
+            case "type" -> Sort.by("type").ascending();
+            default -> Sort.by("name").ascending(); // fallback
+        };
 
-        if (mealType != MealType.ALL) {
-            mealRecipes = mealRecipes
-                    .stream()
-                    .filter(meal -> meal.getType() == mealType)
-                    .collect(Collectors.toList());
-        }
+        List<MealRecipe> mealRecipes = mealHandler.findAll(spec, sort);
 
-        if (mealPopularity != MealPopularity.ALL) {
-            mealRecipes = mealRecipes
-                    .stream()
-                    .filter(meal -> meal.getPopularity() == mealPopularity)
-                    .collect(Collectors.toList());
-        }
-
+        // Obsługa onOnePortion
         if (onOnePortion) {
             mealRecipes = mealRecipes.stream()
                     .map(meal -> {
-                        meal.getIngredients()
-                                .forEach(mealIngredient ->
-                                        mealIngredient.setAmount(mealIngredient.getAmount() / meal.getPortionAmount()));
-
+                        double portions = meal.getPortionAmount();
+                        if (portions > 0) {
+                            meal.getIngredients().forEach(ingredient ->
+                                    ingredient.setAmount(ingredient.getAmount() / portions));
+                        }
                         return meal;
                     })
                     .collect(Collectors.toList());

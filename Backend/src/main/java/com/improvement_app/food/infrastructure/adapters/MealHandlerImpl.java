@@ -4,6 +4,8 @@ import com.improvement_app.food.application.ports.MealHandler;
 import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.infrastructure.database.MealRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +34,8 @@ public class MealHandlerImpl implements MealHandler {
     }
 
     @Override
-    public List<MealRecipe> findAllByName(String name, String sortBy) {
-        return mealRepository.findAllByName(name, sortBy);
+    public List<MealRecipe> findAll(Specification<MealRecipe> spec, Sort sort) {
+        return mealRepository.findAll(spec, sort);
     }
 
 }
