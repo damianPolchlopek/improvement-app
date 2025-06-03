@@ -1,4 +1,4 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.infrastructure.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.improvement_app.food.domain.enums.Unit;
@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class MealIngredient {
+@Table(name = "meal_ingredient")
+public class MealIngredientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,24 +21,24 @@ public class MealIngredient {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_id", nullable = false)
     @JsonBackReference
-    private MealRecipe mealRecipe;
+    private MealRecipeEntity mealRecipeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     @JsonBackReference
-    private Product product;
+    private ProductEntity productEntity;
     private String name;
     private double amount;
 
     @Enumerated(EnumType.STRING)
     private Unit unit;
 
-    public MealIngredient(Product product, String name, double amount, Unit unit, MealRecipe mealRecipe) {
-        this.product = product;
+    public MealIngredientEntity(ProductEntity productEntity, String name, double amount, Unit unit, MealRecipeEntity mealRecipeEntity) {
+        this.productEntity = productEntity;
         this.name = name;
         this.amount = amount;
         this.unit = unit;
-        this.mealRecipe = mealRecipe;
+        this.mealRecipeEntity = mealRecipeEntity;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class MealIngredient {
                 ", name='" + name + '\'' +
                 ", amount=" + amount +
                 ", unit=" + unit +
-                ", productId=" + product.getId() +
+                ", productId=" + productEntity.getId() +
                 '}';
     }
 }

@@ -4,9 +4,9 @@ import com.improvement_app.food.application.exceptions.DietSummaryNotFoundExcept
 import com.improvement_app.food.application.ports.DietSummaryHandler;
 import com.improvement_app.food.domain.dietsummary.DietSummary;
 import com.improvement_app.food.domain.dietsummary.EatenMeal;
-import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
-import com.improvement_app.food.ui.commands.RecalculateMealMacroRequest;
-import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
+import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

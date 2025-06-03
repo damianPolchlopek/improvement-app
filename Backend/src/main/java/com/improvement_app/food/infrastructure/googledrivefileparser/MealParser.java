@@ -1,8 +1,8 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
-import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.domain.MealRecipe;
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Configuration
 public class MealParser extends GoogleDriveFilesHelper {
-    public MealRecipe parseMealFile(final File file, Map<Long, Product> products) throws IOException {
+    public MealRecipeEntity parseMealFile(final File file, Map<Long, ProductEntity> products) throws IOException {
         final int MACRO_SHEET_INDEX = 0;
         final int INGREDIENT_SHEET_INDEX = 1;
         final int RECIPE_SHEET_INDEX = 2;
@@ -31,21 +31,21 @@ public class MealParser extends GoogleDriveFilesHelper {
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
 
             XSSFSheet macroSheet = wb.getSheetAt(MACRO_SHEET_INDEX);
-            MealRecipe mealRecipe = parseMacroSheet(macroSheet);
+            MealRecipeEntity mealRecipeEntity = parseMacroSheet(macroSheet);
 
             XSSFSheet ingredientSheet = wb.getSheetAt(INGREDIENT_SHEET_INDEX);
-            List<MealIngredient> mealIngredients = parseIngredientSheet(ingredientSheet, mealRecipe, products);
-            mealRecipe.setIngredients(mealIngredients);
+            List<MealIngredientEntity> mealIngredientEntities = parseIngredientSheet(ingredientSheet, mealRecipeEntity, products);
+            mealRecipeEntity.setIngredients(mealIngredientEntities);
 
             XSSFSheet recipeSheet = wb.getSheetAt(RECIPE_SHEET_INDEX);
             List<String> recipe = parseRecipeSheet(recipeSheet);
-            mealRecipe.setRecipe(recipe);
+            mealRecipeEntity.setRecipe(recipe);
 
-            return mealRecipe;
+            return mealRecipeEntity;
         }
     }
 
-    private MealRecipe parseMacroSheet(XSSFSheet sheet) {
+    private MealRecipeEntity parseMacroSheet(XSSFSheet sheet) {
         final int DATA_ROW_INDEX = 1;
 
         final int NAME_INDEX = 0;
@@ -72,17 +72,17 @@ public class MealParser extends GoogleDriveFilesHelper {
         final Long id = (long) sheet.getRow(ID_INDEX).getCell(DATA_ROW_INDEX).getNumericCellValue();
         final String popularity = sheet.getRow(POPULARITY_INDEX).getCell(DATA_ROW_INDEX).getStringCellValue();
 
-        return new MealRecipe(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
+        return new MealRecipeEntity(id, name, kcal, protein, carbohydrates, fat, portionAmount, url,
                 MealType.fromValue(type), MealCategory.fromValue(category), MealPopularity.fromValue(popularity));
     }
 
-    private List<MealIngredient> parseIngredientSheet(XSSFSheet sheet, MealRecipe mealRecipe, Map<Long, Product> products) {
+    private List<MealIngredientEntity> parseIngredientSheet(XSSFSheet sheet, MealRecipeEntity mealRecipeEntity, Map<Long, ProductEntity> products) {
         final int ID_INDEX = 0;
         final int NAME_INDEX = 1;
         final int AMOUNT_INDEX = 2;
         final int UNIT_INDEX = 3;
 
-        List<MealIngredient> mealIngredients = new ArrayList<>();
+        List<MealIngredientEntity> mealIngredientEntities = new ArrayList<>();
         for (final Row row : sheet) {
             if (!checkIfNextRowExists(row))
                 continue;
@@ -96,12 +96,12 @@ public class MealParser extends GoogleDriveFilesHelper {
             cell = row.getCell(UNIT_INDEX);
             final Unit unit = parseUnit(cell.getStringCellValue());
 
-            final Product product = products.get((long) productId);
-            MealIngredient mealIngredient = new MealIngredient(product, name, amount, unit, mealRecipe);
-            mealIngredients.add(mealIngredient);
+            final ProductEntity productEntity = products.get((long) productId);
+            MealIngredientEntity mealIngredientEntity = new MealIngredientEntity(productEntity, name, amount, unit, mealRecipeEntity);
+            mealIngredientEntities.add(mealIngredientEntity);
         }
 
-        return mealIngredients;
+        return mealIngredientEntities;
     }
 
     private List<String> parseRecipeSheet(XSSFSheet sheet) {

@@ -2,7 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.MealHandler;
 import com.improvement_app.food.application.spec.MealRecipeSpecifications;
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 public class MealService {
     private final MealHandler mealHandler;
 
-    public List<MealRecipe> getMeals(MealCategory category,
-                                     MealType type,
-                                     MealPopularity popularity,
-                                     String name,
-                                     String sortBy,
-                                     boolean onOnePortion) {
+    public List<MealRecipeEntity> getMeals(MealCategory category,
+                                           MealType type,
+                                           MealPopularity popularity,
+                                           String name,
+                                           String sortBy,
+                                           boolean onOnePortion) {
 
-        Specification<MealRecipe> spec = Specification
+        Specification<MealRecipeEntity> spec = Specification
                 .where(category != MealCategory.ALL ? MealRecipeSpecifications.hasCategory(category) : null)
                 .and(type != MealType.ALL ? MealRecipeSpecifications.hasType(type) : null)
                 .and(popularity != MealPopularity.ALL ? MealRecipeSpecifications.hasPopularity(popularity) : null)
@@ -42,11 +42,11 @@ public class MealService {
             default -> Sort.by("name").ascending(); // fallback
         };
 
-        List<MealRecipe> mealRecipes = mealHandler.findAll(spec, sort);
+        List<MealRecipeEntity> mealRecipeEntities = mealHandler.findAll(spec, sort);
 
         // Obsługa onOnePortion
         if (onOnePortion) {
-            mealRecipes = mealRecipes.stream()
+            mealRecipeEntities = mealRecipeEntities.stream()
                     .map(meal -> {
                         double portions = meal.getPortionAmount();
                         if (portions > 0) {
@@ -58,7 +58,7 @@ public class MealService {
                     .collect(Collectors.toList());
         }
 
-        return mealRecipes;
+        return mealRecipeEntities;
     }
 
     public void deleteAll() {

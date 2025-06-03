@@ -1,4 +1,4 @@
-package com.improvement_app.food.ui.commands;
+package com.improvement_app.food.ui.requests;
 
 import com.improvement_app.food.domain.dietsummary.EatenMeal;
 import jakarta.validation.constraints.NotNull;

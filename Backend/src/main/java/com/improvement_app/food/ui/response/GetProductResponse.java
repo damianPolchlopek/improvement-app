@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.response;
 
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.domain.enums.Unit;
 
@@ -15,17 +15,17 @@ public record GetProductResponse(
         Unit unit,
         ProductCategory productCategory
 ) {
-    public static GetProductResponse from(Product product) {
+    public static GetProductResponse from(ProductEntity productEntity) {
         return new GetProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getKcal(),
-                product.getProtein(),
-                product.getCarbohydrates(),
-                product.getFat(),
-                product.getAmount(),
-                product.getUnit(),
-                product.getProductCategory()
+                productEntity.getId(),
+                productEntity.getName(),
+                productEntity.getKcal(),
+                productEntity.getProtein(),
+                productEntity.getCarbohydrates(),
+                productEntity.getFat(),
+                productEntity.getAmount(),
+                productEntity.getUnit(),
+                productEntity.getProductCategory()
         );
     }
 }

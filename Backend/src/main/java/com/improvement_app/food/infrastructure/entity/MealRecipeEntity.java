@@ -1,4 +1,4 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.infrastructure.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -18,7 +18,8 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class MealRecipe {
+@Table(name = "meal_recipe")
+public class MealRecipeEntity {
 
     @Id
     private Long id;
@@ -45,13 +46,13 @@ public class MealRecipe {
     @Enumerated(EnumType.STRING)
     private MealPopularity popularity;
 
-    @OneToMany(mappedBy = "mealRecipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mealRecipeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<MealIngredient> ingredients;
+    private List<MealIngredientEntity> ingredients;
 
-    public MealRecipe(Long id, String name, double kcal, double protein, double carbohydrates,
-                      double fat, double portionAmount, String url, MealType type,
-                      MealCategory category, MealPopularity popularity) {
+    public MealRecipeEntity(Long id, String name, double kcal, double protein, double carbohydrates,
+                            double fat, double portionAmount, String url, MealType type,
+                            MealCategory category, MealPopularity popularity) {
         this.id = id;
         this.name = name;
         this.kcal = kcal;

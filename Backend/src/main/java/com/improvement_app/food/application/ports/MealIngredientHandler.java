@@ -1,10 +1,10 @@
 package com.improvement_app.food.application.ports;
 
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
 
 import java.util.List;
 
 public interface MealIngredientHandler {
 
-    List<MealIngredient> getMealIngredients(List<Long> ingredients);
+    List<MealIngredientEntity> getMealIngredients(List<Long> ingredients);
 }

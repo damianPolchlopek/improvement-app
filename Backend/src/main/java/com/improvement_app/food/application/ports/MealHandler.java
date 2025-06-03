@@ -1,17 +1,17 @@
 package com.improvement_app.food.application.ports;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
 public interface MealHandler {
-    List<MealRecipe> findAll();
+    List<MealRecipeEntity> findAll();
 
     void deleteAll();
 
-    List<MealRecipe> saveAll(List<MealRecipe> mealRecipes);
+    List<MealRecipeEntity> saveAll(List<MealRecipeEntity> mealRecipeEntities);
 
-    List<MealRecipe> findAll(Specification<MealRecipe> spec, Sort sort);
+    List<MealRecipeEntity> findAll(Specification<MealRecipeEntity> spec, Sort sort);
 }

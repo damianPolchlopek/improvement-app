@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.MealHandler;
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.database.MealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -19,7 +19,7 @@ public class MealHandlerImpl implements MealHandler {
     private final MealRepository mealRepository;
 
     @Override
-    public List<MealRecipe> findAll() {
+    public List<MealRecipeEntity> findAll() {
         return mealRepository.findAll();
     }
 
@@ -29,12 +29,12 @@ public class MealHandlerImpl implements MealHandler {
     }
 
     @Override
-    public List<MealRecipe> saveAll(List<MealRecipe> mealRecipes) {
-        return mealRepository.saveAll(mealRecipes);
+    public List<MealRecipeEntity> saveAll(List<MealRecipeEntity> mealRecipeEntities) {
+        return mealRepository.saveAll(mealRecipeEntities);
     }
 
     @Override
-    public List<MealRecipe> findAll(Specification<MealRecipe> spec, Sort sort) {
+    public List<MealRecipeEntity> findAll(Specification<MealRecipeEntity> spec, Sort sort) {
         return mealRepository.findAll(spec, sort);
     }
 

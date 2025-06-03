@@ -1,18 +1,18 @@
 package com.improvement_app.food.application.ports;
 
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 
 import java.util.List;
 
 public interface ProductHandler {
-    List<Product> findAll();
+    List<ProductEntity> findAll();
 
     void deleteAll();
 
-    List<Product> saveAll(List<Product> products);
+    List<ProductEntity> saveAll(List<ProductEntity> productEntities);
 
-    List<Product> findByName(String name);
+    List<ProductEntity> findByName(String name);
 
-    List<Product> findProduct(ProductCategory productCategory, String productName);
+    List<ProductEntity> findProduct(ProductCategory productCategory, String productName);
 }

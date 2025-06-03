@@ -1,8 +1,8 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
 import com.improvement_app.food.application.ports.InitializerHandler;
-import com.improvement_app.food.domain.MealRecipe;
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.infrastructure.database.MealRepository;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
@@ -44,10 +44,10 @@ public class GoogleDriveRepository implements InitializerHandler {
     public void initializeData() throws IOException {
 
         productRepository.deleteAll();
-        List<Product> savedProducts = productRepository.saveAll(initProducts());
-        Map<Long, Product> products = savedProducts
+        List<ProductEntity> savedProductEntities = productRepository.saveAll(initProducts());
+        Map<Long, ProductEntity> products = savedProductEntities
                 .stream()
-                .collect(Collectors.toMap(Product::getId, product -> product));
+                .collect(Collectors.toMap(ProductEntity::getId, product -> product));
 
 
         // Initialize meals
@@ -59,25 +59,25 @@ public class GoogleDriveRepository implements InitializerHandler {
         initSweets();
     }
 
-    private List<Product> initProducts() throws IOException {
-        List<Product> products = findAllProducts();
-        System.out.println("Dodaje do bazy danych produkty: " + products);
+    private List<ProductEntity> initProducts() throws IOException {
+        List<ProductEntity> productEntities = findAllProducts();
+        System.out.println("Dodaje do bazy danych produkty: " + productEntities);
 
-        return productRepository.saveAll(products);
+        return productRepository.saveAll(productEntities);
     }
 
-    private List<Product> findAllProducts() throws IOException {
+    private List<ProductEntity> findAllProducts() throws IOException {
         downloadNewProductsFile(PRODUCTS_SHEET_NAME);
         final File file = filePathService.getDownloadedFile(PRODUCTS_SHEET_NAME);
-        final List<Product> products = productParser.parseExcelProductsFile(file);
+        final List<ProductEntity> productEntities = productParser.parseExcelProductsFile(file);
 
-        log.info("Dodaje do bazy danych produkty: {}", products);
-        return products;
+        log.info("Dodaje do bazy danych produkty: {}", productEntities);
+        return productEntities;
     }
 
 
-    private List<MealRecipe> initMeals(Map<Long, Product> products) throws IOException {
-        final List<MealRecipe> mealRecipes = new ArrayList<>();
+    private List<MealRecipeEntity> initMeals(Map<Long, ProductEntity> products) throws IOException {
+        final List<MealRecipeEntity> mealRecipeEntities = new ArrayList<>();
         List<DriveFileItemDTO> mealsToParse = findAllMeals(RECIPES_SHEET_NAME);
 
         int i = 0;
@@ -86,23 +86,23 @@ public class GoogleDriveRepository implements InitializerHandler {
                     ++i, mealsToParse.size(), mealName.getName());
             log.info(logMessage);
 
-            MealRecipe parsedMealRecipe = findMealByName(mealName, products);
+            MealRecipeEntity parsedMealRecipeEntity = findMealByName(mealName, products);
             messagingTemplate.convertAndSend("/topic/messages", logMessage);
 
-            mealRecipes.add(parsedMealRecipe);
+            mealRecipeEntities.add(parsedMealRecipeEntity);
         }
 
-        log.info("Dodaje do bazy danych posiłki: " + mealRecipes);
-        mealRepository.saveAll(mealRecipes);
+        log.info("Dodaje do bazy danych posiłki: " + mealRecipeEntities);
+        mealRepository.saveAll(mealRecipeEntities);
 
-        return mealRecipes;
+        return mealRecipeEntities;
     }
 
     public List<DriveFileItemDTO> findAllMeals(String mealFolder) {
         return googleDriveFileService.listFiles(mealFolder);
     }
 
-    public MealRecipe findMealByName(DriveFileItemDTO mealFileName, Map<Long, Product> products) throws IOException {
+    public MealRecipeEntity findMealByName(DriveFileItemDTO mealFileName, Map<Long, ProductEntity> products) throws IOException {
         googleDriveFileService.downloadFile(mealFileName);
 
         File file = filePathService.getDownloadedFile(mealFileName.getName());
@@ -112,14 +112,14 @@ public class GoogleDriveRepository implements InitializerHandler {
 
 
     public void initSweets() throws IOException {
-        List<MealRecipe> sweets = findAllSweets();
+        List<MealRecipeEntity> sweets = findAllSweets();
         mealRepository.saveAll(sweets);
     }
 
-    public List<MealRecipe> findAllSweets() throws IOException {
+    public List<MealRecipeEntity> findAllSweets() throws IOException {
         downloadNewProductsFile(SWEETS_SHEET_NAME);
         final File file = filePathService.getDownloadedFile(SWEETS_SHEET_NAME);
-        final List<MealRecipe> sweets = sweetsParser.parseExcelProductsFile(file);
+        final List<MealRecipeEntity> sweets = sweetsParser.parseExcelProductsFile(file);
 
         log.info("Dodaje do bazy danych slodycze: {}", sweets);
         return sweets;

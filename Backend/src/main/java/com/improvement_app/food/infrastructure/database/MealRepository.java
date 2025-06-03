@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.database;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -12,13 +12,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MealRepository extends JpaRepository<MealRecipe, Long>, JpaSpecificationExecutor<MealRecipe> {
+public interface MealRepository extends JpaRepository<MealRecipeEntity, Long>, JpaSpecificationExecutor<MealRecipeEntity> {
 
 //    @Query("SELECT m FROM MealRecipe m JOIN FETCH m.ingredients WHERE LOWER(m.name) LIKE %:mealName% ORDER BY "
 //            + "CASE WHEN :order = 'category' THEN m.category ELSE m.name END")
 //    List<MealRecipe> findAllByName(String mealName, String order);
 
     @EntityGraph(attributePaths = "ingredients")
-    List<MealRecipe> findAll(@Nullable Specification<MealRecipe> spec, Sort sort);
+    List<MealRecipeEntity> findAll(@Nullable Specification<MealRecipeEntity> spec, Sort sort);
 
 }

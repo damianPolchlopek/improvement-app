@@ -1,8 +1,8 @@
 package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.MealIngredientHandler;
-import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.domain.dietsummary.DietSummary;
 import com.improvement_app.food.domain.dietsummary.EatenMeal;
 import com.improvement_app.food.domain.dietsummary.MealIngredientDTO;
@@ -31,19 +31,19 @@ public class CalculationMacroelementsService {
                 .map(MealIngredientDTO::id)
                 .collect(Collectors.toList());
 
-        Map<Long, MealIngredient> recipeMealIngredients = mealIngredientHandler.getMealIngredients(ingredients)
+        Map<Long, MealIngredientEntity> recipeMealIngredients = mealIngredientHandler.getMealIngredients(ingredients)
                 .stream()
-                .collect(Collectors.toMap(MealIngredient::getId, mealIngredient -> mealIngredient));
+                .collect(Collectors.toMap(MealIngredientEntity::getId, mealIngredient -> mealIngredient));
 
         for (MealIngredientDTO eatenMealIngredient : mealIngredients) {
             //TODO: zabezpieczyc przed nullem w mapie
-            final Product recipeProduct = recipeMealIngredients.get(eatenMealIngredient.id())
-                    .getProduct();
+            final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.id())
+                    .getProductEntity();
 
-            totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getKcal();
-            totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getProtein();
-            totalCarbohydrates += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getCarbohydrates();
-            totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getFat();
+            totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();
+            totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getProtein();
+            totalCarbohydrates += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getCarbohydrates();
+            totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getFat();
         }
 
         return eatenMeal.updateMacro(

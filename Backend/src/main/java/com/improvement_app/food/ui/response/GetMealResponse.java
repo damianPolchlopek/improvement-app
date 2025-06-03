@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.response;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -23,28 +23,28 @@ public record GetMealResponse(Long id,
                               double amount
 ) {
 
-    public static GetMealResponse from(MealRecipe mealRecipe) {
+    public static GetMealResponse from(MealRecipeEntity mealRecipeEntity) {
         return new GetMealResponse(
-                mealRecipe.getId(),
-                mealRecipe.getName(),
-                mealRecipe.getKcal(),
-                mealRecipe.getProtein(),
-                mealRecipe.getCarbohydrates(),
-                mealRecipe.getFat(),
-                mealRecipe.getPortionAmount(),
-                mealRecipe.getUrl(),
-                mealRecipe.getCategory(),
-                mealRecipe.getType(),
-                mealRecipe.getPopularity(),
-                mealRecipe.getIngredients().stream()
+                mealRecipeEntity.getId(),
+                mealRecipeEntity.getName(),
+                mealRecipeEntity.getKcal(),
+                mealRecipeEntity.getProtein(),
+                mealRecipeEntity.getCarbohydrates(),
+                mealRecipeEntity.getFat(),
+                mealRecipeEntity.getPortionAmount(),
+                mealRecipeEntity.getUrl(),
+                mealRecipeEntity.getCategory(),
+                mealRecipeEntity.getType(),
+                mealRecipeEntity.getPopularity(),
+                mealRecipeEntity.getIngredients().stream()
                         .map(ingredient -> new MealIngredientResponse(
                                 ingredient.getName(),
                                 ingredient.getUnit(),
                                 ingredient.getAmount(),
                                 ingredient.getId(),
-                                ingredient.getProduct().getId()))
+                                ingredient.getProductEntity().getId()))
                         .toList(),
-                mealRecipe.getRecipe(),
+                mealRecipeEntity.getRecipe(),
                 0
         );
     }

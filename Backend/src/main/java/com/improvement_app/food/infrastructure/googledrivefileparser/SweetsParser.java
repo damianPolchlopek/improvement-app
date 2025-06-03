@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.domain.enums.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -16,8 +16,8 @@ import java.util.List;
 
 @Configuration
 public class SweetsParser extends GoogleDriveFilesHelper {
-    public List<MealRecipe> parseExcelProductsFile(final File file) throws IOException {
-        List<MealRecipe> sweetsList = new ArrayList<>();
+    public List<MealRecipeEntity> parseExcelProductsFile(final File file) throws IOException {
+        List<MealRecipeEntity> sweetsList = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(file);
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
@@ -25,7 +25,7 @@ public class SweetsParser extends GoogleDriveFilesHelper {
             final int sheetNumber = wb.getNumberOfSheets();
             for (int i = 0; i < sheetNumber; i++) {
                 XSSFSheet sheet = wb.getSheetAt(i);
-                List<MealRecipe> products = parseProductSheet(sheet);
+                List<MealRecipeEntity> products = parseProductSheet(sheet);
                 sweetsList.addAll(products);
             }
         }
@@ -33,7 +33,7 @@ public class SweetsParser extends GoogleDriveFilesHelper {
         return sweetsList;
     }
 
-    private List<MealRecipe> parseProductSheet(XSSFSheet sheet) {
+    private List<MealRecipeEntity> parseProductSheet(XSSFSheet sheet) {
         final int ID_INDEX = 0;
         final int NAME_INDEX = 1;
         final int KCAL_INDEX = 2;
@@ -44,7 +44,7 @@ public class SweetsParser extends GoogleDriveFilesHelper {
         final int TYPE_INDEX = 7;
         final int POPULARITY_INDEX = 8;
 
-        List<MealRecipe> productList = new ArrayList<>();
+        List<MealRecipeEntity> productList = new ArrayList<>();
         for (final Row row : sheet) {
             if (!checkIfNextRowExists(row))
                 continue;
@@ -68,7 +68,7 @@ public class SweetsParser extends GoogleDriveFilesHelper {
             cell = row.getCell(POPULARITY_INDEX);
             final MealPopularity mealPopularity = MealPopularity.fromValue(cell.getStringCellValue());
 
-            MealRecipe sweets = new MealRecipe(id, name, kcal, protein, carbohydrates, fat, 1, "-",
+            MealRecipeEntity sweets = new MealRecipeEntity(id, name, kcal, protein, carbohydrates, fat, 1, "-",
                     mealType, mealCategory, mealPopularity);
             productList.add(sweets);
         }

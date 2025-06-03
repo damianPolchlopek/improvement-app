@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.domain.enums.Unit;
 import org.apache.poi.ss.usermodel.Cell;
@@ -17,8 +17,8 @@ import java.util.List;
 
 @Configuration
 public class ProductParser extends GoogleDriveFilesHelper {
-    public List<Product> parseExcelProductsFile(final File file) throws IOException {
-        List<Product> productList = new ArrayList<>();
+    public List<ProductEntity> parseExcelProductsFile(final File file) throws IOException {
+        List<ProductEntity> productEntityList = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(file);
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
@@ -26,15 +26,15 @@ public class ProductParser extends GoogleDriveFilesHelper {
             final int sheetNumber = wb.getNumberOfSheets();
             for (int i = 0; i < sheetNumber; i++) {
                 XSSFSheet sheet = wb.getSheetAt(i);
-                List<Product> products = parseProductSheet(sheet);
-                productList.addAll(products);
+                List<ProductEntity> productEntities = parseProductSheet(sheet);
+                productEntityList.addAll(productEntities);
             }
         }
 
-        return productList;
+        return productEntityList;
     }
 
-    private List<Product> parseProductSheet(XSSFSheet sheet) {
+    private List<ProductEntity> parseProductSheet(XSSFSheet sheet) {
         final int ID_INDEX = 0;
         final int NAME_INDEX = 1;
         final int KCAL_INDEX = 2;
@@ -44,7 +44,7 @@ public class ProductParser extends GoogleDriveFilesHelper {
         final int AMOUNT_INDEX = 6;
         final int UNIT_INDEX = 7;
 
-        List<Product> productList = new ArrayList<>();
+        List<ProductEntity> productEntityList = new ArrayList<>();
         for (final Row row : sheet) {
             if (!checkIfNextRowExists(row))
                 continue;
@@ -67,10 +67,10 @@ public class ProductParser extends GoogleDriveFilesHelper {
             final Unit unit = parseUnit(cell.getStringCellValue());
             final ProductCategory productCategory = ProductCategory.fromValue(sheet.getSheetName());
 
-            Product product = new Product(id, name, kcal, protein, carbohydrates, fat, amount, unit, productCategory);
-            productList.add(product);
+            ProductEntity productEntity = new ProductEntity(id, name, kcal, protein, carbohydrates, fat, amount, unit, productCategory);
+            productEntityList.add(productEntity);
         }
 
-        return productList;
+        return productEntityList;
     }
 }

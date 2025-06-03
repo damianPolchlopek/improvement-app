@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.ProductHandler;
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class ProductHandlerImpl implements ProductHandler {
     private final ProductRepository productRepository;
 
     @Override
-    public List<Product> findAll() {
+    public List<ProductEntity> findAll() {
         return productRepository.findAll();
     }
 
@@ -32,17 +32,17 @@ public class ProductHandlerImpl implements ProductHandler {
     }
 
     @Override
-    public List<Product> saveAll(List<Product> products) {
-        return productRepository.saveAll(products);
+    public List<ProductEntity> saveAll(List<ProductEntity> productEntities) {
+        return productRepository.saveAll(productEntities);
     }
 
     @Override
-    public List<Product> findByName(String name) {
+    public List<ProductEntity> findByName(String name) {
         return productRepository.findByName(name);
     }
 
     @Override
-    public List<Product> findProduct(ProductCategory productCategory, String productName) {
+    public List<ProductEntity> findProduct(ProductCategory productCategory, String productName) {
         return productRepository.findProduct(productCategory, productName);
     }
 
