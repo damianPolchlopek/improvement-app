@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.requests;
 
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
+import com.improvement_app.food.infrastructure.entity.EatenMeal;
 import jakarta.validation.constraints.NotNull;
 
 public record RecalculateMealMacroRequest(

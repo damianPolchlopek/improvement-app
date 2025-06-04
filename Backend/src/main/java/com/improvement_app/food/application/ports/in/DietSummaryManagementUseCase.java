@@ -1,7 +1,7 @@
 package com.improvement_app.food.application.ports.in;
 
-import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.infrastructure.entity.EatenMeal;
 import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;

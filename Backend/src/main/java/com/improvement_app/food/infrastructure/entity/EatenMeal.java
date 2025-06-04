@@ -1,5 +1,6 @@
-package com.improvement_app.food.domain.dietsummary;
+package com.improvement_app.food.infrastructure.entity;
 
+import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -18,10 +19,15 @@ public record EatenMeal(
         MealCategory category,
         MealType type,
         MealPopularity popularity,
-        List<MealIngredientDTO> mealIngredients,
+        List<MealIngredient> mealIngredients,
         List<String> recipe,
         int amount
 ) {
+
+    public EatenMeal(long id, String test_meal, double kcal, double protein, double carbohydrates, double fat) {
+        this(id, test_meal, kcal, protein, carbohydrates, fat, 1.0, null,
+                MealCategory.DINNER, MealType.ALL, MealPopularity.HIGH, List.of(), List.of(), 1);
+    }
 
     public EatenMeal updateMacro(
             double kcal,

@@ -3,8 +3,8 @@ package com.improvement_app.food.application;
 import com.improvement_app.food.application.exceptions.DietSummaryNotFoundException;
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
-import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.infrastructure.entity.EatenMeal;
 import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
@@ -24,8 +24,8 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
 
 
     public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
-        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
-        return dietSummaryPersistencePort.save(dietSummary);
+        DietSummary dietSummaryEntity = calculateDietSummary(createDietSummaryRequest.meals());
+        return dietSummaryPersistencePort.save(dietSummaryEntity);
     }
 
     public DietSummary calculateDietSummary(List<EatenMeal> eatenMeals) {

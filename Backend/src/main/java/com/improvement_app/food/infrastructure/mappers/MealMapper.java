@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.mappers;
 
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,12 +13,12 @@ public class MealMapper {
 
     private final MealIngredientMapper mealIngredientMapper;
 
-    public Meal toDomain(MealRecipeEntity entity) {
+    public MealRecipe toDomain(MealRecipeEntity entity) {
         if (entity == null) {
             return null;
         }
 
-        return new Meal(
+        return new MealRecipe(
                 entity.getId(),
                 entity.getName(),
                 entity.getKcal(),
@@ -35,13 +35,13 @@ public class MealMapper {
         );
     }
 
-    public List<Meal> toDomain(List<MealRecipeEntity> entities) {
+    public List<MealRecipe> toDomain(List<MealRecipeEntity> entities) {
         return entities.stream()
                 .map(this::toDomain)
                 .toList();
     }
 
-    public MealRecipeEntity toEntity(Meal meal) {
+    public MealRecipeEntity toEntity(MealRecipe meal) {
         if (meal == null) {
             return null;
         }
@@ -64,7 +64,7 @@ public class MealMapper {
         return entity;
     }
 
-    public List<MealRecipeEntity> toEntity(List<Meal> meals) {
+    public List<MealRecipeEntity> toEntity(List<MealRecipe> meals) {
         return meals.stream()
                 .map(this::toEntity)
                 .toList();

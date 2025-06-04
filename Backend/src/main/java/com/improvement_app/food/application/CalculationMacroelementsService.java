@@ -1,11 +1,11 @@
 package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.ProductEntity;
-import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
-import com.improvement_app.food.domain.dietsummary.MealIngredientDTO;
+import com.improvement_app.food.infrastructure.entity.EatenMeal;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class CalculationMacroelementsService {
     private final MealIngredientPersistencePort mealIngredientPersistencePort;
 
     public EatenMeal recalculateMealMacro(EatenMeal eatenMeal) {
-        List<MealIngredientDTO> mealIngredients = eatenMeal.mealIngredients();
+        List<MealIngredient> mealIngredients = eatenMeal.mealIngredients();
 
         double totalKcal = 0;
         double totalProtein = 0;
@@ -28,14 +28,14 @@ public class CalculationMacroelementsService {
         double totalFat = 0;
 
         List<Long> ingredients = mealIngredients.stream()
-                .map(MealIngredientDTO::id)
+                .map(MealIngredient::id)
                 .collect(Collectors.toList());
 
         Map<Long, MealIngredientEntity> recipeMealIngredients = mealIngredientPersistencePort.getMealIngredients(ingredients)
                 .stream()
                 .collect(Collectors.toMap(MealIngredientEntity::getId, mealIngredient -> mealIngredient));
 
-        for (MealIngredientDTO eatenMealIngredient : mealIngredients) {
+        for (MealIngredient eatenMealIngredient : mealIngredients) {
             //TODO: zabezpieczyc przed nullem w mapie
             final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.id())
                     .getProductEntity();

@@ -1,8 +1,10 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
-import com.improvement_app.food.domain.dietsummary.DietSummary;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.infrastructure.entity.DietSummaryEntity;
 import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
+import com.improvement_app.food.infrastructure.mappers.DietSummaryMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -17,15 +19,19 @@ import java.util.Optional;
 public class DietSummaryPersistencePortImpl implements DietSummaryPersistencePort {
 
     private final DietSummaryRepository dietSummaryRepository;
+    private final DietSummaryMapper dietSummaryMapper;
 
     @Override
     public DietSummary save(DietSummary dietSummary) {
-        return dietSummaryRepository.save(dietSummary);
+        DietSummaryEntity dietSummaryEntity = dietSummaryMapper.toEntity(dietSummary);
+        DietSummaryEntity savedDietSummary = dietSummaryRepository.save(dietSummaryEntity);
+        return dietSummaryMapper.toDomain(savedDietSummary);
     }
 
     @Override
     public Page<DietSummary> findAll(Pageable pageable) {
-        return dietSummaryRepository.findAll(pageable);
+        return dietSummaryRepository.findAll(pageable)
+                .map(dietSummaryMapper::toDomain);
     }
 
     @Override
@@ -35,7 +41,8 @@ public class DietSummaryPersistencePortImpl implements DietSummaryPersistencePor
 
     @Override
     public Optional<DietSummary> findById(Long id) {
-        return dietSummaryRepository.findById(id);
+        Optional<DietSummaryEntity> byId = dietSummaryRepository.findById(id);
+        return byId.map(dietSummaryMapper::toDomain);
     }
 
 }

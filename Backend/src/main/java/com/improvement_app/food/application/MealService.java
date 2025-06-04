@@ -2,7 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.in.MealManagementUseCase;
 import com.improvement_app.food.application.ports.out.MealPersistencePort;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealSearchCriteria;
 import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;
@@ -23,12 +23,12 @@ public class MealService implements MealManagementUseCase {
     private final MealPersistencePort mealPersistencePort;
 
     @Override
-    public List<Meal> searchMeals(MealCategory category,
-                                  MealType type,
-                                  MealPopularity popularity,
-                                  String name,
-                                  String sortBy,
-                                  boolean adjustToSinglePortion) {
+    public List<MealRecipe> searchMeals(MealCategory category,
+                                        MealType type,
+                                        MealPopularity popularity,
+                                        String name,
+                                        String sortBy,
+                                        boolean adjustToSinglePortion) {
 
         log.info("Searching meals with criteria: category={}, type={}, popularity={}, name={}",
                 category, type, popularity, name);
@@ -36,11 +36,11 @@ public class MealService implements MealManagementUseCase {
         MealSearchCriteria searchCriteria = MealSearchCriteria.of(category, type, popularity, name);
         MealSortCriteria sortCriteria = MealSortCriteria.of(sortBy);
 
-        List<Meal> meals = mealPersistencePort.findMeals(searchCriteria, sortCriteria);
+        List<MealRecipe> meals = mealPersistencePort.findMeals(searchCriteria, sortCriteria);
 
         if (adjustToSinglePortion) {
             meals = meals.stream()
-                    .map(Meal::adjustToSinglePortion)
+                    .map(MealRecipe::adjustToSinglePortion)
                     .toList();
         }
 

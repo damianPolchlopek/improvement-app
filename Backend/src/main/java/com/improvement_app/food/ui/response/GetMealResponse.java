@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.response;
 
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -23,7 +23,7 @@ public record GetMealResponse(Long id,
                               double amount
 ) {
 
-    public static GetMealResponse from(Meal meal) {
+    public static GetMealResponse from(MealRecipe meal) {
         return new GetMealResponse(
                 meal.id(),
                 meal.name(),

@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.MealPersistencePort;
 import com.improvement_app.food.application.spec.MealRecipeSpecifications;
-import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealRecipe;
 import com.improvement_app.food.domain.MealSearchCriteria;
 import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;
@@ -28,7 +28,7 @@ public class MealPersistenceAdapter implements MealPersistencePort {
     private final MealMapper mealMapper;
 
     @Override
-    public List<Meal> findMeals(MealSearchCriteria searchCriteria, MealSortCriteria sortCriteria) {
+    public List<MealRecipe> findMeals(MealSearchCriteria searchCriteria, MealSortCriteria sortCriteria) {
         Specification<MealRecipeEntity> spec = buildSpecification(searchCriteria);
         Sort sort = buildSort(sortCriteria);
 
@@ -42,7 +42,7 @@ public class MealPersistenceAdapter implements MealPersistencePort {
     }
 
     @Override
-    public List<Meal> saveAll(List<Meal> meals) {
+    public List<MealRecipe> saveAll(List<MealRecipe> meals) {
         List<MealRecipeEntity> entities = mealMapper.toEntity(meals);
 
         List<MealRecipeEntity> saved = jpaRepository.saveAll(entities);
@@ -50,7 +50,7 @@ public class MealPersistenceAdapter implements MealPersistencePort {
     }
 
     @Override
-    public List<Meal> findAll() {
+    public List<MealRecipe> findAll() {
         List<MealRecipeEntity> entities = jpaRepository.findAll();
         return mealMapper.toDomain(entities);
     }

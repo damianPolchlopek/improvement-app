@@ -1,8 +1,8 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
-import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.infrastructure.entity.EatenMeal;
 import com.improvement_app.food.ui.requests.CalculateDietRequest;
 import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
@@ -89,11 +89,11 @@ public class DietController {
 
         log.debug("Calculating diet summary for {} meals", calculateDietRequest.eatenMeals().size());
 
-        DietSummary dietSummary = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.eatenMeals());
+        DietSummary dietSummaryEntity = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.eatenMeals());
 
-        log.debug("Diet summary calculated - total calories: {}", dietSummary.getKcal());
+        log.debug("Diet summary calculated - total calories: {}", dietSummaryEntity.kcal());
 
-        return ResponseEntity.ok(dietSummary);
+        return ResponseEntity.ok(dietSummaryEntity);
     }
 
     @Operation(
@@ -139,7 +139,7 @@ public class DietController {
 
         DietSummary dayDietSummary = dietSummaryManagementUseCase.getDayDietSummary(id);
 
-        log.debug("Diet summary found for id: {} with {} meals", id, dayDietSummary.getMeals().size());
+        log.debug("Diet summary found for id: {} with {} meals", id, dayDietSummary.meals().size());
 
         return ResponseEntity.ok(dayDietSummary);
     }
@@ -166,7 +166,7 @@ public class DietController {
         DietSummary createdDiet = dietSummaryManagementUseCase.saveDietDaySummary(createRequest);
 
         log.info("Diet summary created with id: {} for date: {}",
-                createdDiet.getId(), createdDiet.getDate());
+                createdDiet.id(), createdDiet.date());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDiet);
     }
@@ -190,12 +190,12 @@ public class DietController {
 
         log.debug("Updating diet summary with id: {}", updateRequest.dietSummaryId());
 
-        DietSummary updatedDietSummary = dietSummaryManagementUseCase.updateDietSummary(updateRequest);
+        DietSummary updatedDietSummaryEntity = dietSummaryManagementUseCase.updateDietSummary(updateRequest);
 
         log.info("Diet summary updated with id: {}, new total calories: {}",
-                updatedDietSummary.getId(), updatedDietSummary.getKcal());
+                updatedDietSummaryEntity.id(), updatedDietSummaryEntity.kcal());
 
-        return ResponseEntity.ok(updatedDietSummary);
+        return ResponseEntity.ok(updatedDietSummaryEntity);
     }
 
     @Operation(

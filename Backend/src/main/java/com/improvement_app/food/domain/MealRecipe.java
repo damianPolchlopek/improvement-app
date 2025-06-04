@@ -6,7 +6,7 @@ import com.improvement_app.food.domain.enums.MealType;
 
 import java.util.List;
 
-public record Meal(
+public record MealRecipe(
         Long id,
         String name,
         double kcal,
@@ -22,7 +22,7 @@ public record Meal(
         List<MealIngredient> ingredients
 ) {
 
-    public Meal adjustToSinglePortion() {
+    public MealRecipe adjustToSinglePortion() {
         if (portionAmount <= 1.0) {
             return this;
         }
@@ -31,7 +31,7 @@ public record Meal(
                 .map(ingredient -> ingredient.adjustAmount(portionAmount))
                 .toList();
 
-        return new Meal(
+        return new MealRecipe(
                 id,
                 name,
                 kcal,
