@@ -1,68 +1,64 @@
 package com.improvement_app.food.application;
 
-import com.improvement_app.food.application.ports.MealHandler;
-import com.improvement_app.food.application.spec.MealRecipeSpecifications;
-import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
+import com.improvement_app.food.application.ports.in.MealManagementUseCase;
+import com.improvement_app.food.application.ports.out.MealPersistencePort;
+import com.improvement_app.food.domain.Meal;
+import com.improvement_app.food.domain.MealSearchCriteria;
+import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MealService {
-    private final MealHandler mealHandler;
+public class MealService implements MealManagementUseCase {
 
-    public List<MealRecipeEntity> getMeals(MealCategory category,
-                                           MealType type,
-                                           MealPopularity popularity,
-                                           String name,
-                                           String sortBy,
-                                           boolean onOnePortion) {
+    private final MealPersistencePort mealPersistencePort;
 
-        Specification<MealRecipeEntity> spec = Specification
-                .where(category != MealCategory.ALL ? MealRecipeSpecifications.hasCategory(category) : null)
-                .and(type != MealType.ALL ? MealRecipeSpecifications.hasType(type) : null)
-                .and(popularity != MealPopularity.ALL ? MealRecipeSpecifications.hasPopularity(popularity) : null)
-                .and(MealRecipeSpecifications.hasNameContaining(name));
+    @Override
+    public List<Meal> searchMeals(MealCategory category,
+                                  MealType type,
+                                  MealPopularity popularity,
+                                  String name,
+                                  String sortBy,
+                                  boolean adjustToSinglePortion) {
 
-        Sort sort = switch (sortBy) {
-            case "name" -> Sort.by("name").ascending();
-            case "popularity" -> Sort.by("popularity").ascending();
-            case "category" -> Sort.by("category").ascending();
-            case "type" -> Sort.by("type").ascending();
-            default -> Sort.by("name").ascending(); // fallback
-        };
+        log.info("Searching meals with criteria: category={}, type={}, popularity={}, name={}",
+                category, type, popularity, name);
 
-        List<MealRecipeEntity> mealRecipeEntities = mealHandler.findAll(spec, sort);
+        MealSearchCriteria searchCriteria = MealSearchCriteria.of(category, type, popularity, name);
+        MealSortCriteria sortCriteria = MealSortCriteria.of(sortBy);
 
-        // Obsługa onOnePortion
-        if (onOnePortion) {
-            mealRecipeEntities = mealRecipeEntities.stream()
-                    .map(meal -> {
-                        double portions = meal.getPortionAmount();
-                        if (portions > 0) {
-                            meal.getIngredients().forEach(ingredient ->
-                                    ingredient.setAmount(ingredient.getAmount() / portions));
-                        }
-                        return meal;
-                    })
-                    .collect(Collectors.toList());
+        List<Meal> meals = mealPersistencePort.findMeals(searchCriteria, sortCriteria);
+
+        if (adjustToSinglePortion) {
+            meals = meals.stream()
+                    .map(Meal::adjustToSinglePortion)
+                    .toList();
         }
 
-        return mealRecipeEntities;
+        log.info("Found {} meals matching criteria", meals.size());
+        return meals;
     }
 
-    public void deleteAll() {
-        mealHandler.deleteAll();
+    @Override
+    public List<String> getAvailableCategories() {
+        return Arrays.stream(MealCategory.values())
+                .map(MealCategory::getName)
+                .toList();
     }
 
+    @Override
+    public List<String> getAvailableTypes() {
+        return Arrays.stream(MealType.values())
+                .map(MealType::getName)
+                .toList();
+    }
 }

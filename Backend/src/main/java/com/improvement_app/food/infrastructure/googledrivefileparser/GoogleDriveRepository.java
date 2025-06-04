@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser;
 
-import com.improvement_app.food.application.ports.InitializerHandler;
+import com.improvement_app.food.application.ports.out.InitializerPort;
 import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.infrastructure.database.MealRepository;
@@ -26,7 +26,7 @@ import static com.improvement_app.food.FoodModuleVariables.*;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class GoogleDriveRepository implements InitializerHandler {
+public class GoogleDriveRepository implements InitializerPort {
 
     private final FilePathService filePathService;
     private final GoogleDriveFileService googleDriveFileService;

@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.adapters;
 
-import com.improvement_app.food.application.ports.DietSummaryHandler;
+import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
 import com.improvement_app.food.domain.dietsummary.DietSummary;
 import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
 import jakarta.transaction.Transactional;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Configuration
 @Transactional
 @RequiredArgsConstructor
-public class DietSummaryHandlerImpl implements DietSummaryHandler {
+public class DietSummaryPersistencePortImpl implements DietSummaryPersistencePort {
 
     private final DietSummaryRepository dietSummaryRepository;
 

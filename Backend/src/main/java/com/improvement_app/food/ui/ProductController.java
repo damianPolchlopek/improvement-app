@@ -2,6 +2,7 @@ package com.improvement_app.food.ui;
 
 import com.improvement_app.exceptions.ErrorResponse;
 import com.improvement_app.food.application.ProductService;
+import com.improvement_app.food.application.ports.in.ProductManagementUseCase;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.ui.response.GetProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +33,7 @@ import java.util.List;
 @Validated
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductManagementUseCase productManagementUseCase;
 
     @GetMapping("/product")
     @Operation(
@@ -83,7 +84,7 @@ public class ProductController {
             @RequestParam
             String productName) {
         ProductCategory productCategoryEnum = ProductCategory.fromValue(productCategory);
-        List<GetProductResponse> products = productService.getProducts(productCategoryEnum, productName)
+        List<GetProductResponse> products = productManagementUseCase.getProducts(productCategoryEnum, productName)
                 .stream()
                 .map(GetProductResponse::from)
                 .toList();
@@ -106,11 +107,7 @@ public class ProductController {
             )
     })
     public ResponseEntity<List<String>> getProductCategories() {
-        List<String> categories = Arrays.stream(ProductCategory.values())
-                .map(ProductCategory::getName)
-                .sorted()
-                .toList();
-
+        List<String> categories = productManagementUseCase.getAvailableCategories();
         return ResponseEntity.ok(categories);
     }
 

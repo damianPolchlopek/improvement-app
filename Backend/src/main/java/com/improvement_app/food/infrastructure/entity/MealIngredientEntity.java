@@ -30,6 +30,13 @@ public class MealIngredientEntity {
     private String name;
     private double amount;
 
+    public MealIngredientEntity(Long id, String name, double amount, Unit unit) {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.unit = unit;
+    }
+
     @Enumerated(EnumType.STRING)
     private Unit unit;
 

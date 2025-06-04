@@ -1,20 +1,23 @@
 package com.improvement_app.food.application;
 
-import com.improvement_app.food.application.ports.ProductHandler;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
+import com.improvement_app.food.application.ports.in.ProductManagementUseCase;
+import com.improvement_app.food.application.ports.out.ProductPersistencePort;
+import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class ProductService implements ProductManagementUseCase {
 
-    private final ProductHandler productHandler;
+    private final ProductPersistencePort productHandler;
 
-    public List<ProductEntity> getProducts(ProductCategory productCategory, String productName) {
+    @Override
+    public List<Product> getProducts(ProductCategory productCategory, String productName) {
         final String productNameLower = productName.toLowerCase();
         if (productCategory == ProductCategory.ALL) {
             return productHandler.findByName(productNameLower);
@@ -23,8 +26,11 @@ public class ProductService {
         return productHandler.findProduct(productCategory, productNameLower);
     }
 
-    public void deleteAll() {
-        productHandler.deleteAll();
+    @Override
+    public List<String> getAvailableCategories() {
+        return Arrays.stream(ProductCategory.values())
+                .map(ProductCategory::getName)
+                .sorted()
+                .toList();
     }
-
 }

@@ -1,7 +1,7 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.exceptions.ErrorResponse;
-import com.improvement_app.food.application.MealService;
+import com.improvement_app.food.application.ports.in.MealManagementUseCase;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Tag(name = "Meals", description = "API do zarządzania posiłkami")
@@ -35,7 +34,7 @@ import java.util.List;
 @RequestMapping("/food")
 public class MealController {
 
-    private final MealService mealService;
+    private final MealManagementUseCase mealManagementUseCase;
 
     @GetMapping("/meal")
     @Operation(
@@ -89,13 +88,12 @@ public class MealController {
             @Parameter(description = "Czy pokazać tylko posiłki na jedną porcję", example = "false")
             @RequestParam(defaultValue = "false")
             @NotNull(message = "Parametr onOnePortion nie może być null")
-            Boolean onOnePortion)
-    {
+            Boolean onOnePortion) {
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
         MealPopularity mealPopularityEnum = MealPopularity.fromValue(mealPopularity);
 
-        List<GetMealResponse> mealDTOs = mealService.getMeals(mealCategoryEnum, mealTypeEnum,
+        List<GetMealResponse> mealDTOs = mealManagementUseCase.searchMeals(mealCategoryEnum, mealTypeEnum,
                         mealPopularityEnum, mealName, sortBy, onOnePortion)
                 .stream()
                 .map(GetMealResponse::from)
@@ -119,11 +117,8 @@ public class MealController {
                     )
             )
     })
-    public ResponseEntity<String[]> getMealCategories() {
-        String[] categories = Arrays.stream(MealCategory.values())
-                .map(MealCategory::getName)
-                .toArray(String[]::new);
-
+    public ResponseEntity<List<String>> getMealCategories() {
+        List<String> categories = mealManagementUseCase.getAvailableCategories();
         return ResponseEntity.ok(categories);
     }
 
@@ -142,11 +137,8 @@ public class MealController {
                     )
             )
     })
-    public ResponseEntity<String[]> getMealTypes() {
-        String[] types = Arrays.stream(MealType.values())
-                .map(MealType::getName)
-                .toArray(String[]::new);
-
+    public ResponseEntity<List<String>> getMealTypes() {
+        List<String> types = mealManagementUseCase.getAvailableTypes();
         return ResponseEntity.ok(types);
     }
 

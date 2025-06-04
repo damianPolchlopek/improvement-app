@@ -1,6 +1,7 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.InitializationDataService;
+import com.improvement_app.food.application.ports.in.InitializationUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +16,12 @@ import java.io.IOException;
 @RequestMapping("/drive")
 public class GoogleDriveFoodController {
 
-    private final InitializationDataService initializationDataService;
+    private final InitializationUseCase initializationUseCase;
 
     @GetMapping("/initFoodModule")
     public void initProducts() throws IOException {
         log.info("Usuwam i dodaje nowe produkty i posiłki");
-        initializationDataService.initializeData();
+        initializationUseCase.initializeData();
     }
 
 }

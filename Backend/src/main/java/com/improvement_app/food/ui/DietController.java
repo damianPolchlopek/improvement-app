@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui;
 
-import com.improvement_app.food.application.DietSummaryService;
+import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.domain.dietsummary.DietSummary;
 import com.improvement_app.food.domain.dietsummary.EatenMeal;
 import com.improvement_app.food.ui.requests.CalculateDietRequest;
@@ -34,7 +34,7 @@ import java.time.LocalDate;
 @RequestMapping("/food/diet")
 public class DietController {
 
-    private final DietSummaryService dietSummaryService;
+    private final DietSummaryManagementUseCase dietSummaryManagementUseCase;
 
     @Operation(
             summary = "Pobieranie stronicowanej listy podsumowań diet",
@@ -63,7 +63,7 @@ public class DietController {
 
         Sort.Direction sortDirection = Sort.Direction.valueOf(direction.toUpperCase());
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
-        Page<DietSummary> dietSummaries = dietSummaryService.getDietSummaries(pageable);
+        Page<DietSummary> dietSummaries = dietSummaryManagementUseCase.getDietSummaries(pageable);
 
         log.debug("Found {} diet summaries on page {} of {}",
                 dietSummaries.getNumberOfElements(), page, dietSummaries.getTotalPages());
@@ -89,7 +89,7 @@ public class DietController {
 
         log.debug("Calculating diet summary for {} meals", calculateDietRequest.eatenMeals().size());
 
-        DietSummary dietSummary = dietSummaryService.calculateDietSummary(calculateDietRequest.eatenMeals());
+        DietSummary dietSummary = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.eatenMeals());
 
         log.debug("Diet summary calculated - total calories: {}", dietSummary.getKcal());
 
@@ -114,7 +114,7 @@ public class DietController {
 
         log.debug("Recalculating macro for meal with id: {}", recalculateRequest.eatenMeal().id());
 
-        EatenMeal eatenMeal = dietSummaryService.recalculateMacro(recalculateRequest);
+        EatenMeal eatenMeal = dietSummaryManagementUseCase.recalculateMacro(recalculateRequest);
 
         log.debug("Meal macro recalculated - new calories: {}", eatenMeal.kcal());
 
@@ -137,7 +137,7 @@ public class DietController {
 
         log.debug("Fetching diet summary for id: {}", id);
 
-        DietSummary dayDietSummary = dietSummaryService.getDayDietSummary(id);
+        DietSummary dayDietSummary = dietSummaryManagementUseCase.getDayDietSummary(id);
 
         log.debug("Diet summary found for id: {} with {} meals", id, dayDietSummary.getMeals().size());
 
@@ -163,7 +163,7 @@ public class DietController {
 
         log.debug("Creating new diet summary for date: {}", LocalDate.now());
 
-        DietSummary createdDiet = dietSummaryService.saveDietDaySummary(createRequest);
+        DietSummary createdDiet = dietSummaryManagementUseCase.saveDietDaySummary(createRequest);
 
         log.info("Diet summary created with id: {} for date: {}",
                 createdDiet.getId(), createdDiet.getDate());
@@ -190,7 +190,7 @@ public class DietController {
 
         log.debug("Updating diet summary with id: {}", updateRequest.dietSummaryId());
 
-        DietSummary updatedDietSummary = dietSummaryService.updateDietSummary(updateRequest);
+        DietSummary updatedDietSummary = dietSummaryManagementUseCase.updateDietSummary(updateRequest);
 
         log.info("Diet summary updated with id: {}, new total calories: {}",
                 updatedDietSummary.getId(), updatedDietSummary.getKcal());
@@ -214,7 +214,7 @@ public class DietController {
 
         log.debug("Deleting diet summary with id: {}", id);
 
-        dietSummaryService.deleteDietSummary(id);
+        dietSummaryManagementUseCase.deleteDietSummary(id);
 
         log.info("Diet summary deleted with id: {}", id);
 

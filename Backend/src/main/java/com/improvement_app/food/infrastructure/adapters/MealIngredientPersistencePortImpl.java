@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.adapters;
 
-import com.improvement_app.food.application.ports.MealIngredientHandler;
+import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
 import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.database.MealIngredientRepository;
 import jakarta.transaction.Transactional;
@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 @Transactional
 @RequiredArgsConstructor
-public class MealIngredientHandlerImpl implements MealIngredientHandler {
+public class MealIngredientPersistencePortImpl implements MealIngredientPersistencePort {
 
     private final MealIngredientRepository mealIngredientRepository;
 
