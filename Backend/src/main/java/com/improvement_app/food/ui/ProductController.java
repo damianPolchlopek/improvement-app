@@ -82,7 +82,9 @@ public class ProductController {
                     example = "pomidor"
             )
             @RequestParam
-            String productName) {
+            String productName)
+    {
+
         ProductCategory productCategoryEnum = ProductCategory.fromValue(productCategory);
         List<GetProductResponse> products = productManagementUseCase.getProducts(productCategoryEnum, productName)
                 .stream()
