@@ -1,5 +1,5 @@
 import React from 'react';
-import appLogo from '../assets/app-logo.png';
+import appLogo from '../assets/logo.png';
 
 import { Box } from '@mui/material';
 
