@@ -24,7 +24,7 @@ export default function EditDietDayView() {
 
  
   useEffect(() => {
-    setSelectedMeals(mealsDietDay.entity.meals);
+    setSelectedMeals(mealsDietDay.meals);
   }, [mealsDietDay]);
 
   // Mutation: edit diet summary
@@ -42,7 +42,7 @@ export default function EditDietDayView() {
 
   const handleUpdate = () => {
     const objectToUpdate = {
-      dietSummaryId: mealsDietDay.entity.id,
+      dietSummaryId: mealsDietDay.id,
       meals: selectedMeals
     };
 

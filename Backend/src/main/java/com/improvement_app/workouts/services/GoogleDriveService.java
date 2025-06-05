@@ -17,8 +17,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.improvement_app.workouts.TrainingModuleVariables.*;
 
@@ -38,121 +39,127 @@ public class GoogleDriveService {
     private final TrainingTemplateService trainingTemplateService;
     private final SimpMessagingTemplate messagingTemplate;
 
+    private static final Map<String, Function<List<String>, ?>> DATA_MAPPERS = Map.of(
+        "Names", (List<String> values) -> values.stream().map(Name::new).toList(),
+        "Places", (List<String> values) -> values.stream().map(Place::new).collect(Collectors.toList()),
+        "Progresses", (List<String> values) -> values.stream().map(Progress::new).collect(Collectors.toList()),
+        "Types", (List<String> values) -> values.stream().map(Type::new).collect(Collectors.toList())
+    );
 
     public void initApplicationCategories() {
-        final List<DriveFileItemDTO> responseList = googleDriveFileService.listFiles(DRIVE_CATEGORIES_FOLDER_NAME);
-
-        for (DriveFileItemDTO driveFileItemDTO : responseList) {
-            googleDriveFileService.downloadFile(driveFileItemDTO);
-
-            final File file = filePathService.getDownloadedFile(driveFileItemDTO.getName());
-
-            final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
-            saveDataToDatabase(values, file.getPath());
+        List<DriveFileItemDTO> driveFiles = googleDriveFileService.listFiles(DRIVE_CATEGORIES_FOLDER_NAME);
+        for (DriveFileItemDTO fileItem : driveFiles) {
+            try {
+                googleDriveFileService.downloadFile(fileItem);
+                File file = filePathService.getDownloadedFile(fileItem.getName());
+                if (file.exists()) {
+                    List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
+                    processCategoryData(file.getPath(), values);
+                } else {
+                    log.warn("Pobrany plik nie istnieje: {}", file.getPath());
+                }
+            } catch (Exception e) {
+                log.error("Błąd podczas przetwarzania pliku kategorii: {}", fileItem.getName(), e);
+            }
         }
     }
 
-    private void saveDataToDatabase(List<String> values, String fileName) {
-        final String NAMES = "Names";
-        final String PLACES = "Places";
-        final String PROGRESSES = "Progresses";
-        final String TYPES = "Types";
-
-        if (fileName.contains(NAMES)) {
-            exerciseNameService.deleteAllExerciseNames();
-            List<Name> nameList = values.stream()
-                    .map(Name::new)
-                    .toList();
-
-            exerciseNameService.saveAllExerciseNames(nameList);
-        } else if (fileName.contains(PLACES)) {
-            exercisePlaceService.deleteAllExercisePlaces();
-            List<Place> placeList = values.stream()
-                    .map(Place::new)
-                    .toList();
-
-            exercisePlaceService.saveAllExercisePlaces(placeList);
-        } else if (fileName.contains(PROGRESSES)) {
-            exerciseProgressService.deleteAllExerciseProgresses();
-            List<Progress> progressList = values.stream()
-                    .map(Progress::new)
-                    .toList();
-
-            exerciseProgressService.saveAllExerciseProgresses(progressList);
-        } else if (fileName.contains(TYPES)) {
-            exerciseTypeService.deleteAllExerciseTypes();
-            List<Type> typeList = values.stream()
-                    .map(Type::new)
-                    .toList();
-
-            exerciseTypeService.saveAllExerciseTypes(typeList);
+    private void processCategoryData(String fileName, List<String> values) {
+        for (Map.Entry<String, Function<List<String>, ?>> entry : DATA_MAPPERS.entrySet()) {
+            if (fileName.contains(entry.getKey())) {
+                switch (entry.getKey()) {
+                    case "Names" -> {
+                        exerciseNameService.deleteAllExerciseNames();
+                        exerciseNameService.saveAllExerciseNames((List<Name>) entry.getValue().apply(values));
+                    }
+                    case "Places" -> {
+                        exercisePlaceService.deleteAllExercisePlaces();
+                        exercisePlaceService.saveAllExercisePlaces((List<Place>) entry.getValue().apply(values));
+                    }
+                    case "Progresses" -> {
+                        exerciseProgressService.deleteAllExerciseProgresses();
+                        exerciseProgressService.saveAllExerciseProgresses((List<Progress>) entry.getValue().apply(values));
+                    }
+                    case "Types" -> {
+                        exerciseTypeService.deleteAllExerciseTypes();
+                        exerciseTypeService.saveAllExerciseTypes((List<Type>) entry.getValue().apply(values));
+                    }
+                }
+                return;
+            }
         }
+        log.warn("Nie rozpoznano kategorii dla pliku: {}", fileName);
     }
 
     public void initApplicationExercises() {
         exerciseService.deleteAllExercises();
-        List<Exercise> exercises = saveAllExercisesToDB(DRIVE_TRAININGS_FOLDER_NAME);
-        log.info("Dodane cwiczenia: %s".formatted(exercises));
+        List<Exercise> exercises = importExercisesFromDrive(DRIVE_TRAININGS_FOLDER_NAME);
+        log.info("Dodane ćwiczenia: {}", exercises);
     }
 
-    private List<Exercise> saveAllExercisesToDB(final String folderName) {
-        log.info("Zapisuje cwiczenia do bazy danych z google drive z folderu: {}", folderName);
+    private List<Exercise> importExercisesFromDrive(String folderName) {
+        log.info("Import ćwiczeń z folderu Google Drive: {}", folderName);
 
-        final List<DriveFileItemDTO> responseList = googleDriveFileService.listFiles(folderName);
-        final List<Exercise> exercises = new ArrayList<>();
-        // TODO: sprawdzic czy to mozna usunac (trainingsName)
-        final List<String> trainingsName = exerciseService.getAllTrainingNames();
+        List<DriveFileItemDTO> driveFiles = googleDriveFileService.listFiles(folderName);
+        Set<String> existingTrainingNames = new HashSet<>(exerciseService.getAllTrainingNames());
 
-        for (int i = 0; i < responseList.size(); ++i) {
-            DriveFileItemDTO driveFileItemDTOLoop = responseList.get(i);
-            final String trainingName = driveFileItemDTOLoop.getName();
+        List<Exercise> allParsedExercises = new ArrayList<>();
 
-            if (!trainingsName.contains(trainingName)) {
-                googleDriveFileService.downloadFile(driveFileItemDTOLoop);
-                trainingsName.add(trainingName);
+        for (int i = 0; i < driveFiles.size(); i++) {
+            DriveFileItemDTO fileItem = driveFiles.get(i);
+            String trainingName = fileItem.getName();
 
-                String logMessage = String.format("(%d/%d) Dodaje do bazy danych trening o nazwie: %s ",
-                        i + 1, responseList.size(), trainingName);
-                log.info(logMessage);
-                messagingTemplate.convertAndSend("/topic/messages", logMessage);
+            if (existingTrainingNames.contains(trainingName)) {
+                log.info("Trening '{}' już istnieje w bazie danych", trainingName);
+                continue;
+            }
 
+            try {
+                googleDriveFileService.downloadFile(fileItem);
+                existingTrainingNames.add(trainingName);
+
+                String logMsg = String.format("(%d/%d) Import treningu: %s", i + 1, driveFiles.size(), trainingName);
+                log.info(logMsg);
+                messagingTemplate.convertAndSend("/topic/messages", logMsg);
 
                 File file = filePathService.getDownloadedFile(trainingName);
-                List<Exercise> parsedExercises = DriveFilesHelper.parseExcelTrainingFile(file);
-                exercises.addAll(parsedExercises);
-            } else {
-                log.info("Trening o nazwie: {}, juz istnieje w bazie danych", trainingName);
+                List<Exercise> parsed = DriveFilesHelper.parseExcelTrainingFile(file);
+                allParsedExercises.addAll(parsed);
+
+            } catch (Exception e) {
+                log.error("Błąd przy przetwarzaniu treningu: {}", trainingName, e);
             }
         }
 
-        List<Exercise> filterExercise = exercises
-                .stream()
+        List<Exercise> filteredExercises = allParsedExercises.stream()
                 .filter(e -> !e.getTrainingName().contains("Kopia"))
                 .toList();
 
-        exerciseService.saveAll(filterExercise);
-        log.info("Aktualizacja Treningów zakończona :)");
-
-        return exercises;
+        exerciseService.saveAll(filteredExercises);
+        log.info("Aktualizacja treningów zakończona.");
+        return filteredExercises;
     }
 
     public void initApplicationTrainingTemplates() {
-        final List<DriveFileItemDTO> responseList
-                = googleDriveFileService.listFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
+        List<DriveFileItemDTO> driveFiles = googleDriveFileService.listFiles(DRIVE_TRAINING_TEMPLATES_FOLDER_NAME);
 
-        List<TrainingTemplate> trainingTemplates = new ArrayList<>();
-        for (DriveFileItemDTO driveFileItemDTO : responseList) {
-            googleDriveFileService.downloadFile(driveFileItemDTO);
-
-            final File file = filePathService.getDownloadedFile(driveFileItemDTO.getName());
-            final List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
-
-            trainingTemplates.add(new TrainingTemplate(driveFileItemDTO.getName(), values));
-        }
+        List<TrainingTemplate> templates = driveFiles.stream()
+                .map(fileItem -> {
+                    try {
+                        googleDriveFileService.downloadFile(fileItem);
+                        File file = filePathService.getDownloadedFile(fileItem.getName());
+                        List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
+                        return new TrainingTemplate(fileItem.getName(), values);
+                    } catch (Exception e) {
+                        log.error("Nie udało się sparsować szablonu: {}", fileItem.getName(), e);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .toList();
 
         trainingTemplateService.deleteAllTrainingTemplates();
-        List<TrainingTemplate> savedTrainingTemplates = trainingTemplateService.saveAllTrainingTemplates(trainingTemplates);
-        log.info("Zapisane plany cwiczen: {}", savedTrainingTemplates);
+        List<TrainingTemplate> saved = trainingTemplateService.saveAllTrainingTemplates(templates);
+        log.info("Zapisane plany treningowe: {}", saved);
     }
-
 }

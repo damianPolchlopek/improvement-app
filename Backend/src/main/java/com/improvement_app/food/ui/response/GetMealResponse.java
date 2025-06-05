@@ -18,34 +18,35 @@ public record GetMealResponse(Long id,
                               MealCategory category,
                               MealType type,
                               MealPopularity popularity,
-                              List<MealIngredientResponse> mealIngredients,
+                              List<MealIngredientResponse> ingredients,
                               List<String> recipe,
                               double amount
 ) {
 
-    public static GetMealResponse from(MealRecipe mealRecipe) {
+    public static GetMealResponse from(MealRecipe meal) {
         return new GetMealResponse(
-                mealRecipe.getId(),
-                mealRecipe.getName(),
-                mealRecipe.getKcal(),
-                mealRecipe.getProtein(),
-                mealRecipe.getCarbohydrates(),
-                mealRecipe.getFat(),
-                mealRecipe.getPortionAmount(),
-                mealRecipe.getUrl(),
-                mealRecipe.getCategory(),
-                mealRecipe.getType(),
-                mealRecipe.getPopularity(),
-                mealRecipe.getIngredients().stream()
+                meal.id(),
+                meal.name(),
+                meal.kcal(),
+                meal.protein(),
+                meal.carbohydrates(),
+                meal.fat(),
+                meal.portionAmount(),
+                meal.url(),
+                meal.category(),
+                meal.type(),
+                meal.popularity(),
+                meal.ingredients().stream()
                         .map(ingredient -> new MealIngredientResponse(
-                                ingredient.getName(),
-                                ingredient.getUnit(),
-                                ingredient.getAmount(),
-                                ingredient.getId(),
-                                ingredient.getProduct().getId()))
+                                ingredient.name(),
+                                ingredient.unit(),
+                                ingredient.amount(),
+                                ingredient.id(),
+                                ingredient.productId()))
                         .toList(),
-                mealRecipe.getRecipe(),
-                0
+                meal.recipe(),
+                -1
         );
     }
+
 }

@@ -79,7 +79,7 @@ export default function SingleMeal({ meal }) {
         </TabPanel>
 
         <TabPanel value={tabIndex} index={1}>
-          {meal.mealIngredients?.length > 0 ? (
+          {meal.ingredients?.length > 0 ? (
             <TableContainer>
               <Table>
                 <TableHead>
@@ -91,7 +91,7 @@ export default function SingleMeal({ meal }) {
                 </TableHead>
 
                 <TableBody>
-                  {meal.mealIngredients?.map((ingredient, index) =>
+                  {meal.ingredients?.map((ingredient, index) =>
                     <TableRow
                       key={index}
                       sx={{'&:last-child td, &:last-child th': {border: 0}}}

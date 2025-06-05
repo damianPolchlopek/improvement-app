@@ -1,30 +1,31 @@
 package com.improvement_app.food.application;
 
-import com.improvement_app.food.application.ports.DietSummaryHandler;
-import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
-import com.improvement_app.food.ui.commands.CreateDietSummaryRequest;
-import com.improvement_app.food.ui.commands.RecalculateMealMacroRequest;
-import com.improvement_app.food.ui.commands.UpdateDietSummaryRequest;
+import com.improvement_app.food.application.exceptions.DietSummaryNotFoundException;
+import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
+import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.EatenMeal;
+import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
+import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DietSummaryService {
+public class DietSummaryService implements DietSummaryManagementUseCase {
 
-    private final DietSummaryHandler dietSummaryHandler;
+    private final DietSummaryPersistencePort dietSummaryPersistencePort;
     private final CalculationMacroelementsService calculationMacroelementsService;
 
 
     public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
-        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
-        return dietSummaryHandler.save(dietSummary);
+        DietSummary dietSummaryEntity = calculateDietSummary(createDietSummaryRequest.meals());
+        return dietSummaryPersistencePort.save(dietSummaryEntity);
     }
 
     public DietSummary calculateDietSummary(List<EatenMeal> eatenMeals) {
@@ -37,26 +38,27 @@ public class DietSummaryService {
     }
 
     public Page<DietSummary> getDietSummaries(Pageable pageable) {
-        return dietSummaryHandler.findAll(pageable);
+        return dietSummaryPersistencePort.findAll(pageable);
     }
 
     public void deleteDietSummary(Long id) {
-        dietSummaryHandler.deleteById(id);
+        dietSummaryPersistencePort.deleteById(id);
     }
 
     public DietSummary getDayDietSummary(Long id) {
-        return dietSummaryHandler.findById(id)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + id));
+        return dietSummaryPersistencePort.findById(id)
+                .orElseThrow(() -> new DietSummaryNotFoundException(id));
     }
 
     public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
         DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
 
-        DietSummary oldDietSummary = dietSummaryHandler.findById(updateDietSummaryRequest.dietSummaryId())
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono podsumowania diety o id: " + updateDietSummaryRequest.dietSummaryId()));
+        long dietSummaryId = updateDietSummaryRequest.dietSummaryId();
+        DietSummary oldDietSummary = dietSummaryPersistencePort.findById(dietSummaryId)
+                .orElseThrow(() -> new DietSummaryNotFoundException(dietSummaryId));
 
-        oldDietSummary.update(recalculatedDietSummary);
+        DietSummary updated = oldDietSummary.update(recalculatedDietSummary);
 
-        return dietSummaryHandler.save(oldDietSummary);
+        return dietSummaryPersistencePort.save(updated);
     }
 }

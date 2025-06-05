@@ -46,7 +46,6 @@ export default function MealCategoryRow({ mealPopularity, mealCategory }) {
                                     translateMealPopularity(mealPopularity), 'category', true),
                                     
     enabled: !!mealCategory && !!mealPopularity && isOpen,
-    select: (res) => res.entity,
     keepPreviousData: true,
     staleTime: 1000 * 60 * 5, // 5 minutes
     cacheTime: 1000 * 60 * 10 // cache data for 10 minutes

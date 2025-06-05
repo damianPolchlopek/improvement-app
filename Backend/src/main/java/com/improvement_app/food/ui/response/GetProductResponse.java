@@ -17,15 +17,16 @@ public record GetProductResponse(
 ) {
     public static GetProductResponse from(Product product) {
         return new GetProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getKcal(),
-                product.getProtein(),
-                product.getCarbohydrates(),
-                product.getFat(),
-                product.getAmount(),
-                product.getUnit(),
-                product.getProductCategory()
+                product.id(),
+                product.name(),
+                product.kcal(),
+                product.protein(),
+                product.carbohydrates(),
+                product.fat(),
+                product.amount(),
+                product.unit(),
+                product.productCategory()
         );
     }
+
 }

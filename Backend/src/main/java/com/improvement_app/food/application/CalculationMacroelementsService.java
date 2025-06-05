@@ -1,11 +1,12 @@
 package com.improvement_app.food.application;
 
-import com.improvement_app.food.application.ports.MealIngredientHandler;
+import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
+import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.EatenMeal;
 import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.domain.Product;
-import com.improvement_app.food.domain.dietsummary.DietSummary;
-import com.improvement_app.food.domain.dietsummary.EatenMeal;
-import com.improvement_app.food.domain.dietsummary.MealIngredientDTO;
+import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CalculationMacroelementsService {
 
-    private final MealIngredientHandler mealIngredientHandler;
+    private final MealIngredientPersistencePort mealIngredientPersistencePort;
 
     public EatenMeal recalculateMealMacro(EatenMeal eatenMeal) {
-        List<MealIngredientDTO> mealIngredients = eatenMeal.mealIngredients();
+        List<MealIngredient> mealIngredients = eatenMeal.ingredients();
 
         double totalKcal = 0;
         double totalProtein = 0;
@@ -28,21 +29,22 @@ public class CalculationMacroelementsService {
         double totalFat = 0;
 
         List<Long> ingredients = mealIngredients.stream()
-                .map(MealIngredientDTO::id)
+                .map(MealIngredient::id)
                 .collect(Collectors.toList());
 
-        Map<Long, MealIngredient> recipeMealIngredients = mealIngredientHandler.getMealIngredients(ingredients)
+        Map<Long, MealIngredientEntity> recipeMealIngredients = mealIngredientPersistencePort.getMealIngredients(ingredients)
                 .stream()
-                .collect(Collectors.toMap(MealIngredient::getId, mealIngredient -> mealIngredient));
+                .collect(Collectors.toMap(MealIngredientEntity::getId, mealIngredient -> mealIngredient));
 
-        for (MealIngredientDTO eatenMealIngredient : mealIngredients) {
-            final Product recipeProduct = recipeMealIngredients.get(eatenMealIngredient.id())
-                    .getProduct();
+        for (MealIngredient eatenMealIngredient : mealIngredients) {
+            //TODO: zabezpieczyc przed nullem w mapie
+            final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.id())
+                    .getProductEntity();
 
-            totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getKcal();
-            totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getProtein();
-            totalCarbohydrates += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getCarbohydrates();
-            totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProduct.getAmount() * recipeProduct.getFat();
+            totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();
+            totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getProtein();
+            totalCarbohydrates += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getCarbohydrates();
+            totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getFat();
         }
 
         return eatenMeal.updateMacro(

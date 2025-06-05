@@ -52,17 +52,17 @@ export default function MealRow({ meal: single, index }) {
     const amount = selectedMeal?.amount || 1;
 
     // Zaktualizuj amount tylko dla wybranego składnika
-    const updatedIngredients = meal.mealIngredients.map(ingredient =>
+    const updatedIngredients = meal.ingredients.map(ingredient =>
       ingredient.productId === ingredientId
         ? { ...ingredient, amount: newAmount }
         : ingredient
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
-    const mealWithAmount = { ...meal, amount, mealIngredients: updatedIngredients };
+    const mealWithAmount = { ...meal, amount, ingredients: updatedIngredients };
 
     recalculateMeal.mutate(mealWithAmount, {
-      onSuccess: (response) => setMeal(response.entity)
+      onSuccess: (response) => {setMeal(response)}
     });
 
     const isSelected = isMealSelected(meal.id);
