@@ -18,7 +18,7 @@ public record GetMealResponse(Long id,
                               MealCategory category,
                               MealType type,
                               MealPopularity popularity,
-                              List<MealIngredientResponse> mealIngredients,
+                              List<MealIngredientResponse> ingredients,
                               List<String> recipe,
                               double amount
 ) {

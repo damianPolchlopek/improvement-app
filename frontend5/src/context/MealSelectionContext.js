@@ -83,7 +83,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
       prev.map(meal => 
         meal.id === mealId ? { 
           ...meal, 
-          mealIngredients: meal.mealIngredients.map(ingredient => 
+          ingredients: meal.ingredients.map(ingredient => 
             ingredient.productId === productId ? 
               {...ingredient, amount: newMealIngredientAmount } : 
               ingredient

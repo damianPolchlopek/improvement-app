@@ -2,12 +2,16 @@ package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.infrastructure.entity.DietSummaryEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class DietSummaryMapper {
+
+    private final EatenMealMapper eatenMealMapper;
 
     public DietSummary toDomain(DietSummaryEntity entity) {
         if (entity == null) {
@@ -21,7 +25,7 @@ public class DietSummaryMapper {
                 entity.getCarbohydrates(),
                 entity.getFat(),
                 entity.getDate(),
-                entity.getMeals()
+                eatenMealMapper.toDomain(entity.getMeals())
         );
     }
 
@@ -37,7 +41,7 @@ public class DietSummaryMapper {
                 domain.carbohydrates(),
                 domain.fat(),
                 domain.date(),
-                domain.meals()
+                eatenMealMapper.toEntity(domain.meals())
         );
     }
 
@@ -52,4 +56,6 @@ public class DietSummaryMapper {
                 .map(this::toEntity)
                 .toList();
     }
+
+
 }

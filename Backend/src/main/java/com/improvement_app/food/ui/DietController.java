@@ -2,7 +2,8 @@ package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.infrastructure.entity.EatenMeal;
+import com.improvement_app.food.domain.EatenMeal;
+import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
 import com.improvement_app.food.ui.requests.CalculateDietRequest;
 import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;

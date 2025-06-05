@@ -2,10 +2,11 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
 import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.EatenMeal;
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.ProductEntity;
-import com.improvement_app.food.infrastructure.entity.EatenMeal;
+import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +21,7 @@ public class CalculationMacroelementsService {
     private final MealIngredientPersistencePort mealIngredientPersistencePort;
 
     public EatenMeal recalculateMealMacro(EatenMeal eatenMeal) {
-        List<MealIngredient> mealIngredients = eatenMeal.mealIngredients();
+        List<MealIngredient> mealIngredients = eatenMeal.ingredients();
 
         double totalKcal = 0;
         double totalProtein = 0;

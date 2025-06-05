@@ -1,7 +1,8 @@
 package com.improvement_app.food.application.ports.in;
 
 import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.infrastructure.entity.EatenMeal;
+import com.improvement_app.food.domain.EatenMeal;
+import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
 import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface DietSummaryManagementUseCase {
     Page<DietSummary> getDietSummaries(Pageable pageable);
 
-    DietSummary calculateDietSummary(List<EatenMeal> eatenMeals);
+    DietSummary calculateDietSummary(List<EatenMeal> eatenMealEntities);
 
     EatenMeal recalculateMacro(RecalculateMealMacroRequest recalculateRequest);
 

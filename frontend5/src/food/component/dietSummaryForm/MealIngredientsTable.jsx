@@ -39,8 +39,8 @@ export default function MealIngredientsTable({
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {meal.mealIngredients.map((ingredient, idx) => {
-                const selectedIngredient = selectedMeal?.mealIngredients?.find(
+              {meal.ingredients.map((ingredient, idx) => {
+                const selectedIngredient = selectedMeal?.ingredients?.find(
                   i => i.productId === ingredient.productId
                 );
                 

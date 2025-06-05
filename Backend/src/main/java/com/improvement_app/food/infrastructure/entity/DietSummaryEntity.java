@@ -14,6 +14,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "diet_summary")
 public class DietSummaryEntity {
 
     @Id
@@ -29,5 +30,5 @@ public class DietSummaryEntity {
 
     @Type(JsonType.class)
     @Column(columnDefinition = "jsonb")
-    private List<EatenMeal> meals;
+    private List<EatenMealEntity> meals;
 }
