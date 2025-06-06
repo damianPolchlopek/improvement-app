@@ -7,10 +7,17 @@ spring:
     open-in-view: false
 #    show-sql: true
 
-bezkoder:
-  app:
-    jwtSecret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
-    jwtExpirationMs: 3600_000
+app:
+  security:
+    jwt:
+      secret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
+      expiration-ms: 3600_000
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+      allowed-headers: "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+      allow-credentials: true
+      max-age: 3600
 
 google:
   credentials:
@@ -34,9 +41,11 @@ management:
     prometheus:
       enabled: true
 
-# logging:
-#   level:
-#     root: INFO
+logging:
+   level:
+     root: INFO
 #     com.improvement_app: DEBUG
+     org.springframework.web: DEBUG
+     org.springframework.security: DEBUG
 #   file:
 #     name: logs/application.log

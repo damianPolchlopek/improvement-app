@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0007_add_name_lastname_to_user/001.add-name-surname.sql
+      sqlFile:
+        path: 001.add-name-surname.sql
+        relativeToChangelogFile: true
