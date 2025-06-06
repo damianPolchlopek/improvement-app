@@ -33,7 +33,7 @@ public class FoodDataInitializationService implements InitializerPort {
     private static final String INITIALIZATION_ERROR_MESSAGE = "Food data initialization failed";
 
     @Override
-    @Transactional
+//    @Transactional
     public void initializeData() {
         log.info(INITIALIZATION_START_MESSAGE);
         messagingTemplate.convertAndSend("/topic/messages", INITIALIZATION_START_MESSAGE);
