@@ -1,6 +1,7 @@
 package com.improvement_app.security.controllers;
 
 import com.improvement_app.security.command.request.LoginRequest;
+import com.improvement_app.security.command.request.ResendVerificationEmailRequest;
 import com.improvement_app.security.command.request.SignupRequest;
 import com.improvement_app.security.command.response.JwtResponse;
 import com.improvement_app.security.command.response.MessageResponse;
@@ -31,4 +32,21 @@ public class AuthController {
 		authService.registerUser(signUpRequest);
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
+
+	@GetMapping("/verify-email")
+	public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+		String result = authService.verifyEmail(token);
+		return ResponseEntity.ok(result);
+	}
+
+	@PostMapping("/resend-verification")
+	public ResponseEntity<String> resendVerification(@RequestBody ResendVerificationEmailRequest request) {
+		try {
+			authService.resendVerificationEmail(request.getEmail());
+			return ResponseEntity.ok("Email weryfikacyjny został wysłany ponownie.");
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+
 }

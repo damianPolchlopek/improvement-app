@@ -1,4 +1,4 @@
-package com.improvement_app.security.models;
+package com.improvement_app.security.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.improvement_app.security.repository;
 
 
-import com.improvement_app.security.models.ERole;
-import com.improvement_app.security.models.Role;
+import com.improvement_app.security.entity.ERole;
+import com.improvement_app.security.entity.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

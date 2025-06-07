@@ -6,6 +6,20 @@ spring:
   jpa:
     open-in-view: false
 #    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com
+    password: your-app-password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
 
 app:
   security:
@@ -41,11 +55,12 @@ management:
     prometheus:
       enabled: true
 
-logging:
-   level:
-     root: INFO
+#logging:
+#   level:
+#     root: INFO
 #     com.improvement_app: DEBUG
-     org.springframework.web: DEBUG
-     org.springframework.security: DEBUG
+#     org.springframework.web: DEBUG
+#     org.springframework.security: DEBUG
+#     org.springframework.mail=DEBUG
 #   file:
 #     name: logs/application.log

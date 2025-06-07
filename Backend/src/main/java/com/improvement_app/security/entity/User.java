@@ -1,4 +1,4 @@
-package com.improvement_app.security.models;
+package com.improvement_app.security.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,16 +41,25 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    private String name;
+    private String surname;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", schema = "users",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    private boolean isActive;
+    private boolean isActive = false;
 
-    private String name;
-    private String surname;
+    @Column(name = "email_verified")
+    private boolean emailVerified = false;
+
+    @Column(name = "email_verification_token")
+    private String emailVerificationToken;
+
+    @Column(name = "email_verification_expires")
+    private LocalDateTime emailVerificationExpires;
 
     public User(String username, String email, String password) {
         this.username = username;

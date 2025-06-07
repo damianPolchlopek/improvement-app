@@ -5,10 +5,12 @@ import com.improvement_app.security.command.request.SignupRequest;
 import com.improvement_app.security.command.response.JwtResponse;
 import com.improvement_app.security.exceptions.RoleNotFoundException;
 import com.improvement_app.security.exceptions.UserAlreadyExistsException;
+import com.improvement_app.security.exceptions.EmailNotVerifiedException;
+import com.improvement_app.security.exceptions.InvalidTokenException;
 import com.improvement_app.security.jwt.JwtUtils;
-import com.improvement_app.security.models.ERole;
-import com.improvement_app.security.models.Role;
-import com.improvement_app.security.models.User;
+import com.improvement_app.security.entity.ERole;
+import com.improvement_app.security.entity.Role;
+import com.improvement_app.security.entity.User;
 import com.improvement_app.security.repository.RoleRepository;
 import com.improvement_app.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -36,6 +40,7 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
@@ -45,9 +50,18 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Sprawdź czy email został zweryfikowany
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.isEmailVerified()) {
+            throw new EmailNotVerifiedException("Email must be verified before login");
+        }
+
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
@@ -59,7 +73,7 @@ public class AuthService {
     }
 
     @Transactional
-    public void registerUser(SignupRequest signUpRequest) {
+    public String registerUser(SignupRequest signUpRequest) {
         log.debug("Registering new user: {}", signUpRequest.getUsername());
 
         validateUserRegistration(signUpRequest);
@@ -71,8 +85,65 @@ public class AuthService {
         Set<Role> roles = determineUserRoles(signUpRequest.getRole());
         user.setRoles(roles);
 
+        // Dodaj pola weryfikacji emaila
+        user.setEmailVerified(false);
+        user.setActive(false);
+
+        // Wygeneruj token weryfikacyjny
+        String verificationToken = UUID.randomUUID().toString();
+        user.setEmailVerificationToken(verificationToken);
+        user.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
+
         userRepository.save(user);
-        log.info("User registered successfully: {}", user.getUsername());
+
+        // Wyślij email weryfikacyjny
+        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+
+        log.info("User registered successfully: {}. Verification email sent.", user.getUsername());
+
+        return "User registered successfully. Please check your email to verify your account.";
+    }
+
+    @Transactional
+    public String verifyEmail(String token) {
+        log.debug("Verifying email with token: {}", token);
+
+        User user = userRepository.findByEmailVerificationTokenAndEmailVerificationExpiresAfterAndEmailVerifiedFalse(
+                        token, LocalDateTime.now())
+                .orElseThrow(() -> new InvalidTokenException("Invalid or expired verification token"));
+
+        user.setEmailVerified(true);
+        user.setActive(true);
+        user.setEmailVerificationToken(null);
+        user.setEmailVerificationExpires(null);
+
+        userRepository.save(user);
+
+        log.info("Email verified successfully for user: {}", user.getUsername());
+
+        return "Email verified successfully. You can now log in.";
+    }
+
+    @Transactional
+    public String resendVerificationEmail(String email) {
+        log.debug("Resending verification email to: {}", email);
+
+        User user = userRepository.findByEmailAndEmailVerifiedFalse(email)
+                .orElseThrow(() -> new RuntimeException("No unverified account found with this email"));
+
+        // Wygeneruj nowy token
+        String verificationToken = UUID.randomUUID().toString();
+        user.setEmailVerificationToken(verificationToken);
+        user.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
+
+        userRepository.save(user);
+
+        // Wyślij email
+        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+
+        log.info("Verification email resent to: {}", email);
+
+        return "Verification email sent successfully.";
     }
 
     private void validateUserRegistration(SignupRequest signUpRequest) {

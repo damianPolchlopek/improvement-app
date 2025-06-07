@@ -1,7 +1,7 @@
 package com.improvement_app.security.services;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.improvement_app.security.models.User;
+import com.improvement_app.security.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
+
     @Serial
     private static final long serialVersionUID = 1L;
 

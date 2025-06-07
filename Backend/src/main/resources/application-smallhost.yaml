@@ -27,3 +27,7 @@ google:
   credentials:
     folder:
       path: file:/home/mutarexx/domains/mutarexx.smallhost.pl/google_token/serviceAccount.json
+
+app:
+  frontend:
+    url: https://mutarexx.smallhost.pl

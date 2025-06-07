@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0008_add_user_email_attributes/001.add-email-attributes
+      sqlFile:
+        path: 001.add-email-attributes
+        relativeToChangelogFile: true
