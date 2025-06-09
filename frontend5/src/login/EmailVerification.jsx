@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -20,11 +21,13 @@ import {
 } from '@mui/icons-material';
 
 import REST from '../utils/REST';
+import { LoginUrl, HomeViewUrl } from '../utils/URLHelper';
 
 const EmailVerification = () => {
   const [status, setStatus] = useState('loading'); // loading, success, error
   const [message, setMessage] = useState('');
   const [token, setToken] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Pobierz token z URL-a
@@ -80,11 +83,11 @@ const EmailVerification = () => {
   };
 
   const handleGoToLogin = () => {
-    window.location.href = '/login';
+     navigate(LoginUrl);
   };
 
   const handleGoHome = () => {
-    window.location.href = '/';
+     navigate(HomeViewUrl);
   };
 
   return (

@@ -4,30 +4,47 @@ import {
   Typography
 } from '@mui/material';
 
-export default function Input({ label, id, error, ...props }) {
+export default function Input({ label, id, error, helperText, ...props }) {
     
   return (
-    <FormControl sx={{width: '30vh'}}>
+    <FormControl sx={{ width: '100%' }}>
       <TextField
         {...props}
         label={label}
-        htmlFor={id}
+        id={id}
         name={id}
-        placeholder={id}
+        placeholder={label}
         variant="outlined"
+        fullWidth
+        error={!!error}
+        helperText={helperText}
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: error ? 'error.main' : 'grey.300',
+            },
+          },
+        }}
       />
 
-      <Typography
-        sx={{
-          color: 'red', 
-          margin:0, 
-          fontSize: '0.8rem', 
-          height: '2rem',
-          padding: '0.5rem 0'
-        }}>
-        {error}
-      </Typography>
+      {error && (
+        <Typography
+          sx={{
+            color: 'error.main', 
+            margin: 0, 
+            fontSize: '0.75rem', 
+            lineHeight: 1.66,
+            letterSpacing: '0.03333em',
+            textAlign: 'left',
+            marginTop: '3px',
+            marginLeft: '14px',
+            marginRight: '14px',
+            minHeight: '1.5em'
+          }}
+        >
+          {error}
+        </Typography>
+      )}
     </FormControl>
   );
 }
-  

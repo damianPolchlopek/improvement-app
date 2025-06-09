@@ -7,7 +7,8 @@ import {
   Button,
   Typography,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Box
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
@@ -24,6 +25,21 @@ export default function SignUpView() {
   const [success, setSuccess] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
+
+  // Dodane nowe pola: name i surname
+  const {
+    value: enteredName,
+    handleInputChange: handleNameChange,
+    handleInputBlur: handleNameBlur,
+    hasError: nameIsInvalid,
+  } = useInput('', (value) => value.trim().length >= 2);
+
+  const {
+    value: enteredSurname,
+    handleInputChange: handleSurnameChange,
+    handleInputBlur: handleSurnameBlur,
+    hasError: surnameIsInvalid,
+  } = useInput('', (value) => value.trim().length >= 2);
 
   const {
     value: enteredUsername,
@@ -44,7 +60,7 @@ export default function SignUpView() {
     handleInputChange: handlePasswordChange,
     handleInputBlur: handlePasswordBlur,
     hasError: passwordIsInvalid,
-  } = useInput('', (value) => value.length >= 4); // Zmieniono z 4 na 6 zgodnie z wymaganiami backendu
+  } = useInput('', (value) => value.length >= 6); // Poprawione na 6 znaków zgodnie z helperText
 
   const {
     value: enteredConfirmPassword,
@@ -98,13 +114,13 @@ export default function SignUpView() {
   };
 
   const submitSignUpReq = async () => {
-    // Sprawdź wszystkie pola przed wysłaniem
-    if (usernameIsInvalid || emailIsInvalid || passwordIsInvalid || confirmPasswordIsInvalid) {
+    // Sprawdź wszystkie pola przed wysłaniem (dodane nowe pola)
+    if (nameIsInvalid || surnameIsInvalid || usernameIsInvalid || emailIsInvalid || passwordIsInvalid || confirmPasswordIsInvalid) {
       setError('Proszę poprawić błędy w formularzu.');
       return;
     }
 
-    if (!enteredUsername || !enteredEmail || !enteredPassword || !enteredConfirmPassword) {
+    if (!enteredName || !enteredSurname || !enteredUsername || !enteredEmail || !enteredPassword || !enteredConfirmPassword) {
       setError('Proszę wypełnić wszystkie pola.');
       return;
     }
@@ -114,6 +130,8 @@ export default function SignUpView() {
     setFieldErrors({});
 
     const userDetails = {
+      name: enteredName,
+      surname: enteredSurname,
       username: enteredUsername,
       email: enteredEmail,
       password: enteredPassword
@@ -124,7 +142,7 @@ export default function SignUpView() {
       setSuccess(response.message);
       setShowSuccessMessage(true);
       
-      // Automatyczne przekierowanie po 3 sekundach
+      // Automatyczne przekierowanie po 10 sekundach
       setTimeout(() => {
         navigate('/login');
       }, 10000);
@@ -153,7 +171,7 @@ export default function SignUpView() {
   if (showSuccessMessage) {
     return (
       <CenteredContainer>
-        <StyledPaper>
+        <StyledPaper sx={{ maxWidth: 600, width: '100%' }}>
           <Alert severity="success" sx={{ mb: 3 }}>
             <Typography variant="h6">Rejestracja pomyślna!</Typography>
             <Typography variant="body1" sx={{ mt: 1 }}>
@@ -164,20 +182,23 @@ export default function SignUpView() {
             </Typography>
           </Alert>
           
-          <Button 
-            variant="outlined" 
-            onClick={handleResendVerification}
-            sx={{ mr: 2, mb: 2 }}
-          >
-            Wyślij ponownie email weryfikacyjny
-          </Button>
-          
-          <Button 
-            variant="contained" 
-            onClick={() => navigate('/login')}
-          >
-            Przejdź do logowania
-          </Button>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
+            <Button 
+              variant="outlined" 
+              onClick={handleResendVerification}
+              fullWidth
+            >
+              Wyślij ponownie email weryfikacyjny
+            </Button>
+            
+            <Button 
+              variant="contained" 
+              onClick={() => navigate('/login')}
+              fullWidth
+            >
+              Przejdź do logowania
+            </Button>
+          </Box>
         </StyledPaper>
       </CenteredContainer>
     );
@@ -185,19 +206,46 @@ export default function SignUpView() {
 
   return (
     <CenteredContainer>
-      <StyledPaper>
-        <Typography variant="h5" component="div">{t('signup.title')}</Typography>
-        <Typography variant="body2" sx={{ mb: 2 }}>
+      <StyledPaper sx={{ maxWidth: 600, width: '100%' }}>
+        <Typography variant="h5" component="div" sx={{ mb: 1 }}>
+          {t('signup.title')}
+        </Typography>
+        <Typography variant="body2" sx={{ mb: 3 }}>
           {t('signup.alreadyHaveAccount')} <a href="/login">{t('signup.login')}</a>
         </Typography>
 
         {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
+          <Alert severity="error" sx={{ mb: 3 }}>
             {error}
           </Alert>
         )}
         
         <Grid container spacing={2}>
+          {/* Nowe pola: Imię i Nazwisko obok siebie na większych ekranach */}
+          <Grid xs={12} sm={6}>
+            <Input
+              label="Imię"
+              id="name"
+              name="name"
+              onBlur={handleNameBlur}
+              onChange={handleNameChange}
+              value={enteredName}
+              error={(nameIsInvalid && 'Imię musi mieć co najmniej 2 znaki') || fieldErrors.name}
+            />
+          </Grid>
+
+          <Grid xs={12} sm={6}>
+            <Input
+              label="Nazwisko"
+              id="surname"
+              name="surname"
+              onBlur={handleSurnameBlur}
+              onChange={handleSurnameChange}
+              value={enteredSurname}
+              error={(surnameIsInvalid && 'Nazwisko musi mieć co najmniej 2 znaki') || fieldErrors.surname}
+            />
+          </Grid>
+
           <Grid xs={12}>
             <Input
               label={t('signup.username')}
@@ -215,6 +263,7 @@ export default function SignUpView() {
               label={t('signup.email')}
               id="email"
               name="email"
+              type="email"
               onBlur={handleEmailBlur}
               onChange={handleEmailChange}
               value={enteredEmail}
@@ -232,7 +281,6 @@ export default function SignUpView() {
               onChange={handlePasswordChange}
               value={enteredPassword}
               error={(passwordIsInvalid && 'Hasło musi mieć co najmniej 6 znaków') || fieldErrors.password}
-              helperText="Hasło musi mieć między 6 a 40 znaków"
             />
           </Grid>
 
@@ -252,9 +300,11 @@ export default function SignUpView() {
           <Grid xs={12}>
             <Button 
               variant="contained" 
-              sx={{width: '25vh'}} 
+              fullWidth
+              size="large"
               onClick={submitSignUpReq}
               disabled={isLoading}
+              sx={{ mt: 2, py: 1.5 }}
             >
               {isLoading ? <CircularProgress size={24} /> : t('signup.signUp')}
             </Button>
