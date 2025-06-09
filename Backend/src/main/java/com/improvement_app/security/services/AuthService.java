@@ -125,11 +125,11 @@ public class AuthService {
     }
 
     @Transactional
-    public String resendVerificationEmail(String email) {
-        log.debug("Resending verification email to: {}", email);
+    public String resendVerificationEmail(String username) {
+        log.debug("Resending verification email to: {}", username);
 
-        User user = userRepository.findByEmailAndEmailVerifiedFalse(email)
-                .orElseThrow(() -> new RuntimeException("No unverified account found with this email"));
+        User user = userRepository.findByUsernameAndEmailVerifiedFalse(username)
+                .orElseThrow(() -> new RuntimeException("No unverified account found with this username"));
 
         // Wygeneruj nowy token
         String verificationToken = UUID.randomUUID().toString();
@@ -141,7 +141,7 @@ public class AuthService {
         // Wyślij email
         emailService.sendVerificationEmail(user.getEmail(), verificationToken);
 
-        log.info("Verification email resent to: {}", email);
+        log.info("Verification email resent to: {}", username);
 
         return "Verification email sent successfully.";
     }

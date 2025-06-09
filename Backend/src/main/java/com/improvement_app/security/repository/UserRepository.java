@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Boolean existsByEmail(String email);
 
 	// Nowe metody dla weryfikacji emaila
-	Optional<User> findByEmailAndEmailVerifiedFalse(String email);
+	Optional<User> findByUsernameAndEmailVerifiedFalse(String email);
 
 	Optional<User> findByEmailVerificationTokenAndEmailVerificationExpiresAfterAndEmailVerifiedFalse(
 			String token, LocalDateTime now);

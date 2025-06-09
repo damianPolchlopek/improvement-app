@@ -34,15 +34,15 @@ public class AuthController {
 	}
 
 	@GetMapping("/verify-email")
-	public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+	public ResponseEntity<MessageResponse> verifyEmail(@RequestParam String token) {
 		String result = authService.verifyEmail(token);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(new MessageResponse(result));
 	}
 
 	@PostMapping("/resend-verification")
 	public ResponseEntity<String> resendVerification(@RequestBody ResendVerificationEmailRequest request) {
 		try {
-			authService.resendVerificationEmail(request.getEmail());
+			authService.resendVerificationEmail(request.getUsername());
 			return ResponseEntity.ok("Email weryfikacyjny został wysłany ponownie.");
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
