@@ -18,6 +18,7 @@ import {
   Home,
   Login
 } from '@mui/icons-material';
+
 import REST from '../utils/REST';
 
 const EmailVerification = () => {
@@ -44,22 +45,31 @@ const EmailVerification = () => {
     try {
       setStatus('loading');
       
-      const response = await REST.verifyEmail(token);
-      console.log('Verification response:', response);
+      const responseData = await REST.verifyEmail(token);
       
-      if (response && response.status === 200) {
-        const result = response.data?.message;
+      if (responseData) {
+        const result = responseData.message || 'Email został pomyślnie zweryfikowany!';
         setStatus('success');
-        setMessage(result || 'Email został pomyślnie zweryfikowany!');
+        setMessage(result);
       } else {
-        const errorText = response?.data?.message;
         setStatus('error');
-        setMessage(errorText || 'Wystąpił błąd podczas weryfikacji emaila');
+        setMessage('Nie otrzymano odpowiedzi z serwera');
       }
+      
     } catch (error) {
-      setStatus('error');
-      setMessage('Błąd połączenia z serwerem. Spróbuj ponownie później.');
-      console.error('Verification error:', error);
+      
+      // Sprawdź czy to błąd axios z response
+      if (error.response) {
+        const errorMessage = error.response.data?.message || `Błąd serwera: ${error.response.status}`;
+        setStatus('error');
+        setMessage(errorMessage);
+      } else if (error.request) {
+        setStatus('error');
+        setMessage('Brak odpowiedzi z serwera. Sprawdź połączenie internetowe.');
+      } else {
+        setStatus('error');
+        setMessage(`Błąd: ${error.message || 'Nieznany błąd'}`);
+      }
     }
   };
 
