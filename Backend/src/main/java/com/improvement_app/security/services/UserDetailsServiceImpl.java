@@ -1,6 +1,6 @@
 package com.improvement_app.security.services;
 
-import com.improvement_app.security.entity.User;
+import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,9 +18,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
 
-        return UserDetailsImpl.build(user);
+        return UserDetailsImpl.build(userEntity);
     }
 }

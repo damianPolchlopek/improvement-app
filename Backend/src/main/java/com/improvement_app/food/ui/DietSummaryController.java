@@ -3,7 +3,6 @@ package com.improvement_app.food.ui;
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
 import com.improvement_app.food.ui.requests.CalculateDietRequest;
 import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
@@ -23,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,17 +34,19 @@ import java.time.LocalDate;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/food/diet")
-public class DietController {
+@PreAuthorize("hasRole('USER')") // Globalna ochrona dla całego kontrolera
+public class DietSummaryController {
 
     private final DietSummaryManagementUseCase dietSummaryManagementUseCase;
 
     @Operation(
             summary = "Pobieranie stronicowanej listy podsumowań diet",
-            description = "Zwraca stronicowaną listę wszystkich podsumowań diet z możliwością sortowania"
+            description = "Zwraca stronicowaną listę podsumowań diet aktualnego użytkownika z możliwością sortowania"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista podsumowań diet została pomyślnie pobrana"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowe parametry zapytania")
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowe parametry zapytania"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji")
     })
     @GetMapping("/day-summary")
     public ResponseEntity<Page<DietSummary>> getDayDietSummary(
@@ -57,17 +60,20 @@ public class DietController {
             @RequestParam(defaultValue = "date") String sortField,
 
             @Parameter(description = "Kierunek sortowania", example = "DESC", schema = @Schema(allowableValues = {"ASC", "DESC"}))
-            @RequestParam(defaultValue = "DESC") String direction) {
+            @RequestParam(defaultValue = "DESC") String direction,
 
-        log.debug("Fetching diet summaries - page: {}, size: {}, sortField: {}, direction: {}",
-                page, size, sortField, direction);
+            @AuthenticationPrincipal(expression = "id") Long userId) {
+
+        log.debug("User {} fetching diet summaries - page: {}, size: {}, sortField: {}, direction: {}",
+                userId, page, size, sortField, direction);
 
         Sort.Direction sortDirection = Sort.Direction.valueOf(direction.toUpperCase());
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
-        Page<DietSummary> dietSummaries = dietSummaryManagementUseCase.getDietSummaries(pageable);
 
-        log.debug("Found {} diet summaries on page {} of {}",
-                dietSummaries.getNumberOfElements(), page, dietSummaries.getTotalPages());
+        Page<DietSummary> dietSummaries = dietSummaryManagementUseCase.getDietSummaries(userId, pageable);
+
+        log.debug("User {} found {} diet summaries on page {} of {}",
+                userId, dietSummaries.getNumberOfElements(), page, dietSummaries.getTotalPages());
 
         return ResponseEntity.ok(dietSummaries);
     }
@@ -78,7 +84,8 @@ public class DietController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Podsumowanie diety zostało pomyślnie obliczone"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe")
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji")
     })
     @PostMapping("/calculate")
     public ResponseEntity<DietSummary> calculateDietSummary(
@@ -86,13 +93,16 @@ public class DietController {
                     description = "Lista spożytych posiłków do obliczenia",
                     required = true
             )
-            @Valid @RequestBody CalculateDietRequest calculateDietRequest) {
+            @Valid @RequestBody CalculateDietRequest calculateDietRequest,
+            @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("Calculating diet summary for {} meals", calculateDietRequest.eatenMeals().size());
+        log.debug("User {} calculating diet summary for {} meals",
+                userId, calculateDietRequest.eatenMeals().size());
 
         DietSummary dietSummaryEntity = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.eatenMeals());
 
-        log.debug("Diet summary calculated - total calories: {}", dietSummaryEntity.kcal());
+        log.debug("User {} diet summary calculated - total calories: {}",
+                userId, dietSummaryEntity.kcal());
 
         return ResponseEntity.ok(dietSummaryEntity);
     }
@@ -103,7 +113,9 @@ public class DietController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Makroskładniki zostały pomyślnie przeliczone"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe")
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji"),
+            @ApiResponse(responseCode = "403", description = "Brak dostępu do posiłku innego użytkownika")
     })
     @PostMapping("/meal/recalculate")
     public ResponseEntity<EatenMeal> recalculateMealMacro(
@@ -111,48 +123,56 @@ public class DietController {
                     description = "Dane do przeliczenia makroskładników",
                     required = true
             )
-            @Valid @RequestBody RecalculateMealMacroRequest recalculateRequest) {
+            @Valid @RequestBody RecalculateMealMacroRequest recalculateRequest,
+            @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("Recalculating macro for meal with id: {}", recalculateRequest.eatenMeal().id());
+        log.debug("User {} recalculating macro for meal with id: {}",
+                userId, recalculateRequest.eatenMeal().id());
 
         EatenMeal eatenMeal = dietSummaryManagementUseCase.recalculateMacro(recalculateRequest);
 
-        log.debug("Meal macro recalculated - new calories: {}", eatenMeal.kcal());
+        log.debug("User {} meal macro recalculated - new calories: {}",
+                userId, eatenMeal.kcal());
 
         return ResponseEntity.ok(eatenMeal);
     }
 
     @Operation(
             summary = "Pobieranie szczegółów podsumowania diety",
-            description = "Zwraca szczegóły podsumowania diety dla konkretnego dnia"
+            description = "Zwraca szczegóły podsumowania diety dla konkretnego dnia aktualnego użytkownika"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Szczegóły podsumowania diety zostały pomyślnie pobrane"),
             @ApiResponse(responseCode = "404", description = "Podsumowanie diety nie zostało znalezione"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowy identyfikator")
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowy identyfikator"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji"),
+            @ApiResponse(responseCode = "403", description = "Brak dostępu do danych innego użytkownika")
     })
     @GetMapping("/day-summary/{id}")
     public ResponseEntity<DietSummary> getDietDaySummary(
             @Parameter(description = "Identyfikator podsumowania diety", example = "1")
-            @PathVariable @Min(1) Long id) {
+            @PathVariable @Min(1) Long id,
+            @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("Fetching diet summary for id: {}", id);
+        log.debug("User {} fetching diet summary for id: {}", userId, id);
 
-        DietSummary dayDietSummary = dietSummaryManagementUseCase.getDayDietSummary(id);
+        DietSummary dayDietSummary = dietSummaryManagementUseCase.getDayDietSummary(userId, id);
 
-        log.debug("Diet summary found for id: {} with {} meals", id, dayDietSummary.meals().size());
+        log.debug("User {} diet summary found for id: {} with {} meals",
+                userId, id, dayDietSummary.meals().size());
 
         return ResponseEntity.ok(dayDietSummary);
     }
 
     @Operation(
             summary = "Tworzenie nowego podsumowania diety",
-            description = "Tworzy nowe podsumowanie diety dla konkretnego dnia"
+            description = "Tworzy nowe podsumowanie diety dla konkretnego dnia aktualnego użytkownika"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Podsumowanie diety zostało pomyślnie utworzone"),
             @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe"),
-            @ApiResponse(responseCode = "409", description = "Podsumowanie dla danej daty już istnieje")
+            @ApiResponse(responseCode = "409", description = "Podsumowanie dla danej daty już istnieje"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji")
     })
     @PostMapping("/day-summary")
     public ResponseEntity<DietSummary> createDietDaySummary(
@@ -160,26 +180,29 @@ public class DietController {
                     description = "Dane do utworzenia nowego podsumowania",
                     required = true
             )
-            @Valid @RequestBody CreateDietSummaryRequest createRequest) {
+            @Valid @RequestBody CreateDietSummaryRequest createRequest,
+            @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("Creating new diet summary for date: {}", LocalDate.now());
+        log.debug("User {} creating new diet summary for date: {}", userId, LocalDate.now());
 
-        DietSummary createdDiet = dietSummaryManagementUseCase.saveDietDaySummary(createRequest);
+        DietSummary createdDiet = dietSummaryManagementUseCase.saveDietDaySummary(userId, createRequest);
 
-        log.info("Diet summary created with id: {} for date: {}",
-                createdDiet.id(), createdDiet.date());
+        log.info("User {} diet summary created with id: {} for date: {}",
+                userId, createdDiet.id(), createdDiet.date());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdDiet);
     }
 
     @Operation(
             summary = "Aktualizacja podsumowania diety",
-            description = "Aktualizuje istniejące podsumowanie diety nowymi danymi"
+            description = "Aktualizuje istniejące podsumowanie diety aktualnego użytkownika nowymi danymi"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Podsumowanie diety zostało pomyślnie zaktualizowane"),
             @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe"),
-            @ApiResponse(responseCode = "404", description = "Podsumowanie diety nie zostało znalezione")
+            @ApiResponse(responseCode = "404", description = "Podsumowanie diety nie zostało znalezione"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji"),
+            @ApiResponse(responseCode = "403", description = "Brak dostępu do danych innego użytkownika")
     })
     @PutMapping("/day-summary")
     public ResponseEntity<DietSummary> updateDietDaySummary(
@@ -187,39 +210,43 @@ public class DietController {
                     description = "Dane do aktualizacji podsumowania",
                     required = true
             )
-            @Valid @RequestBody UpdateDietSummaryRequest updateRequest) {
+            @Valid @RequestBody UpdateDietSummaryRequest updateRequest,
+            @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("Updating diet summary with id: {}", updateRequest.dietSummaryId());
+        log.debug("User {} updating diet summary with id: {}", userId, updateRequest.dietSummaryId());
 
-        DietSummary updatedDietSummaryEntity = dietSummaryManagementUseCase.updateDietSummary(updateRequest);
+        DietSummary updatedDietSummaryEntity
+                = dietSummaryManagementUseCase.updateDietSummary(userId, updateRequest);
 
-        log.info("Diet summary updated with id: {}, new total calories: {}",
-                updatedDietSummaryEntity.id(), updatedDietSummaryEntity.kcal());
+        log.info("User {} diet summary updated with id: {}, new total calories: {}",
+                userId, updatedDietSummaryEntity.id(), updatedDietSummaryEntity.kcal());
 
         return ResponseEntity.ok(updatedDietSummaryEntity);
     }
 
     @Operation(
             summary = "Usuwanie podsumowania diety",
-            description = "Usuwa podsumowanie diety o podanym identyfikatorze"
+            description = "Usuwa podsumowanie diety aktualnego użytkownika o podanym identyfikatorze"
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Podsumowanie diety zostało pomyślnie usunięte"),
             @ApiResponse(responseCode = "404", description = "Podsumowanie diety nie zostało znalezione"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowy identyfikator")
+            @ApiResponse(responseCode = "400", description = "Nieprawidłowy identyfikator"),
+            @ApiResponse(responseCode = "401", description = "Brak autoryzacji"),
+            @ApiResponse(responseCode = "403", description = "Brak dostępu do danych innego użytkownika")
     })
     @DeleteMapping("/day-summary/{id}")
     public ResponseEntity<Void> deleteDietDaySummary(
             @Parameter(description = "Identyfikator podsumowania do usunięcia", example = "1")
-            @PathVariable @Min(1) Long id) {
+            @PathVariable @Min(1) Long id,
+            @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("Deleting diet summary with id: {}", id);
+        log.debug("User {} deleting diet summary with id: {}", userId, id);
 
-        dietSummaryManagementUseCase.deleteDietSummary(id);
+        dietSummaryManagementUseCase.deleteDietSummary(userId, id);
 
-        log.info("Diet summary deleted with id: {}", id);
+        log.info("User {} diet summary deleted with id: {}", userId, id);
 
         return ResponseEntity.noContent().build();
     }
-
 }

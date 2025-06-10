@@ -34,3 +34,7 @@ databaseChangeLog:
   - include:
       file: 0008_add_user_email_attributes/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0009_add_multi_user_food/changelog.yaml
+      relativeToChangelogFile: true

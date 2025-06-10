@@ -3,6 +3,7 @@ package com.improvement_app.security.services;
 import com.improvement_app.security.command.request.LoginRequest;
 import com.improvement_app.security.command.request.SignupRequest;
 import com.improvement_app.security.command.response.JwtResponse;
+import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.exceptions.RoleNotFoundException;
 import com.improvement_app.security.exceptions.UserAlreadyExistsException;
 import com.improvement_app.security.exceptions.EmailNotVerifiedException;
@@ -10,7 +11,6 @@ import com.improvement_app.security.exceptions.InvalidTokenException;
 import com.improvement_app.security.jwt.JwtUtils;
 import com.improvement_app.security.entity.ERole;
 import com.improvement_app.security.entity.Role;
-import com.improvement_app.security.entity.User;
 import com.improvement_app.security.repository.RoleRepository;
 import com.improvement_app.security.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,10 +53,10 @@ public class AuthService {
 
         // Sprawdź czy email został zweryfikowany
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        User user = userRepository.findByUsername(userDetails.getUsername())
+        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!user.isEmailVerified()) {
+        if (!userEntity.isEmailVerified()) {
             throw new EmailNotVerifiedException("Email must be verified before login");
         }
 
@@ -78,28 +78,28 @@ public class AuthService {
 
         validateUserRegistration(signUpRequest);
 
-        User user = new User(signUpRequest.getUsername(),
+        UserEntity userEntity = new UserEntity(signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
         Set<Role> roles = determineUserRoles(signUpRequest.getRole());
-        user.setRoles(roles);
+        userEntity.setRoles(roles);
 
         // Dodaj pola weryfikacji emaila
-        user.setEmailVerified(false);
-        user.setActive(false);
+        userEntity.setEmailVerified(false);
+        userEntity.setActive(false);
 
         // Wygeneruj token weryfikacyjny
         String verificationToken = UUID.randomUUID().toString();
-        user.setEmailVerificationToken(verificationToken);
-        user.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
+        userEntity.setEmailVerificationToken(verificationToken);
+        userEntity.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
         // Wyślij email weryfikacyjny
-        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+        emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
 
-        log.info("User registered successfully: {}. Verification email sent.", user.getUsername());
+        log.info("User registered successfully: {}. Verification email sent.", userEntity.getUsername());
 
         return "User registered successfully. Please check your email to verify your account.";
     }
@@ -108,18 +108,18 @@ public class AuthService {
     public String verifyEmail(String token) {
         log.debug("Verifying email with token: {}", token);
 
-        User user = userRepository.findByEmailVerificationTokenAndEmailVerificationExpiresAfterAndEmailVerifiedFalse(
+        UserEntity userEntity = userRepository.findByEmailVerificationTokenAndEmailVerificationExpiresAfterAndEmailVerifiedFalse(
                         token, LocalDateTime.now())
                 .orElseThrow(() -> new InvalidTokenException("Invalid or expired verification token"));
 
-        user.setEmailVerified(true);
-        user.setActive(true);
-        user.setEmailVerificationToken(null);
-        user.setEmailVerificationExpires(null);
+        userEntity.setEmailVerified(true);
+        userEntity.setActive(true);
+        userEntity.setEmailVerificationToken(null);
+        userEntity.setEmailVerificationExpires(null);
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
-        log.info("Email verified successfully for user: {}", user.getUsername());
+        log.info("Email verified successfully for user: {}", userEntity.getUsername());
 
         return "Email verified successfully. You can now log in.";
     }
@@ -128,18 +128,18 @@ public class AuthService {
     public String resendVerificationEmail(String username) {
         log.debug("Resending verification email to: {}", username);
 
-        User user = userRepository.findByUsernameAndEmailVerifiedFalse(username)
+        UserEntity userEntity = userRepository.findByUsernameAndEmailVerifiedFalse(username)
                 .orElseThrow(() -> new RuntimeException("No unverified account found with this username"));
 
         // Wygeneruj nowy token
         String verificationToken = UUID.randomUUID().toString();
-        user.setEmailVerificationToken(verificationToken);
-        user.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
+        userEntity.setEmailVerificationToken(verificationToken);
+        userEntity.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
         // Wyślij email
-        emailService.sendVerificationEmail(user.getEmail(), verificationToken);
+        emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
 
         log.info("Verification email resent to: {}", username);
 

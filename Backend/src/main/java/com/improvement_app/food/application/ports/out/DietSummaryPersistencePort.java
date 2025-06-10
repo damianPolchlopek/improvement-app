@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface DietSummaryPersistencePort {
 
-    DietSummary save(DietSummary dietSummaryEntity);
+    DietSummary save(Long userId, DietSummary dietSummaryEntity);
 
-    Page<DietSummary> findAll(Pageable pageable);
+    Page<DietSummary> findAll(Long userId, Pageable pageable);
 
-    void deleteById(Long id);
+    void deleteById(Long userId, Long id);
 
-    Optional<DietSummary> findById(Long id);
+    Optional<DietSummary> findById(Long userId, Long id);
 }
