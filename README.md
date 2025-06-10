@@ -1,109 +1,92 @@
 # Dokumentacja modułów aplikacji Improvement App
 
+Improvement App to aplikacja webowa do zarządzania dietą, produktami spożywczymi oraz treningami. Składa się z backendu (Spring Boot + Java) oraz frontendu (React + Material UI). 
+
 ## Spis treści
 - [Backend](#backend)
-  - [Technologie](#technologie)
+  - [Opis funkcjonalny](#opis-funkcjonalny)
+  - [Architektura i technologie](#architektura-i-technologie)
   - [Budowanie i uruchamianie](#budowanie-i-uruchamianie)
-  - [Docker](#docker)
-  - [CI/CD](#cicd)
-  - [Konfiguracja](#konfiguracja)
 - [Frontend](#frontend)
-  - [Technologie](#technologie-1)
-  - [Dostępne skrypty](#dostępne-skrypty)
-  - [Konfiguracja środowiska](#konfiguracja-środowiska)
-  - [Budowanie i uruchamianie](#budowanie-i-uruchamianie-1)
+  - [Opis funkcjonalny](#opis-funkcjonalny-1)
+  - [Architektura i technologie](#architektura-i-technologie-1)
+  - [Konfiguracja i uruchomienie](#konfiguracja-i-uruchomienie)
 
 ---
 
 ## Backend
 
-### Technologie
-- Java 17 (OpenJDK)
-- Spring Boot 3.3.4 (Security, Web, Data JPA, Data MongoDB, Jersey, WebSocket)
-- Maven
-- Docker
-- Log4j (logowanie)
-- Prometheus, actuator (monitorowanie)
-- JWT (autoryzacja)
-- MongoDB i/lub relacyjna baza danych (przez JPA)
+### Opis funkcjonalny
+
+Backend obsługuje całą logikę biznesową, autoryzację, połączenia z bazą danych (MongoDB/JPA), zarządza REST API oraz komunikacją WebSocket.  
+Kluczowe funkcjonalności:
+- Zarządzanie produktami spożywczymi (dodawanie, pobieranie, filtrowanie)
+- Zarządzanie posiłkami (generowanie, pobieranie, podsumowania, kategorie, typy)
+- Zarządzanie dietą użytkownika (podsumowania dzienne, wyliczanie makroskładników)
+- Obsługa treningów (dodawanie, pobieranie, szablony treningowe)
+- Bezpieczeństwo: JWT, BCrypt, role użytkowników
+- Monitoring i zdrowie aplikacji: endpoint `/actuator/health`
+- Obsługa WebSocket do komunikacji w czasie rzeczywistym
+
+### Architektura i technologie
+
+- Java 17 + Spring Boot 3.3.4 (Security, Web, Data JPA, Data MongoDB, Jersey, WebSocket)
+- Maven do buildowania i zarządzania zależnościami
+- Log4j, Prometheus (monitoring), actuator
+- JWT do autoryzacji, BCrypt do hashowania haseł
+- Docker (obrazy, docker-compose)
+- CI/CD: pipeline GitLab (budowanie, testy, deploy)
 
 ### Budowanie i uruchamianie
 
-**Lokalnie**  
-W katalogu `Backend/`:
-```bash
-nohup java -jar improvement-app-backend-0.0.1-SNAPSHOT.jar --server.port=24568 -Xmx256m -Xms256m -XX:MaxMetaspaceSize=100m -Xss256k &
-```
-
-**Za pomocą Mavena:**
+**Lokalnie**
 ```bash
 ./mvnw package
+java -jar target/improvement-app-backend-0.0.1-SNAPSHOT.jar --server.port=8080
 ```
-Wygenerowany plik JAR znajdziesz w katalogu `target/`.
 
-### Docker
-
-Budowanie obrazu:
+**Docker**
 ```bash
 docker build -t improvement-app-backend .
-```
-Uruchamianie kontenera:
-```bash
 docker run -p 8080:8080 improvement-app-backend
 ```
-Uruchomienie lokalnie docker copmpose:
-```
-docker-compose up
-docker-compose -f docker-compose.yml build
-```
+Możesz użyć również `docker-compose up` jeśli masz plik compose.
 
+**Healthcheck**:  
+Aplikacja udostępnia endpoint zdrowia pod `/actuator/health`.
 
-Healthcheck: `/actuator/health`
-
-### CI/CD
-
-W repozytorium znajduje się plik `.gitlab-ci.yml` z przykładowym pipeline:
-- Budowanie JAR przez Maven
-- Budowanie i push obrazu Docker do rejestru
-- Deployment na serwis (np. Koyeb)
-
-### Konfiguracja
-
-Plik `pom.xml` zawiera wszystkie zależności. Domyślnie aplikacja korzysta z portu 8080 (można zmienić przez parametr `--server.port`).
-
-Więcej informacji i kod: [Przeglądaj katalog Backend w GitHub](https://github.com/damianPolchlopek/improvement-app/tree/main/Backend)
+**Konfiguracja**:  
+Zależności w `pom.xml`, port domyślny: 8080, konfigurowalny przez parametr startowy.
 
 ---
 
 ## Frontend
 
-### Technologie
+### Opis funkcjonalny
 
-- React 19 (bootstrapped with Create React App)
-- Material UI (MUI, ikony, lab, data-grid, date-pickers)
-- React Query
-- WebSocket (SockJS, STOMP)
-- Axios
-- i18next (wielojęzyczność)
-- Recharts (wykresy)
-- Universal-cookie, jwt-decode, dayjs, moment
+Frontend to nowoczesna aplikacja React. Pozwala użytkownikowi:
+- Przeglądać, dodawać i filtrować produkty spożywcze oraz posiłki
+- Generować i analizować dzienne podsumowania diety
+- Przeglądać i dodawać treningi (w tym korzystać z szablonów treningowych)
+- Otrzymywać powiadomienia w czasie rzeczywistym (WebSocket)
+- Zarządzać własnym profilem (autoryzacja JWT)
+- Sięgać do API backendowego zgodnie z rolą użytkownika
 
-Plik `package.json` zawiera pełną listę zależności.
+### Architektura i technologie
 
-### Dostępne skrypty
+- React 19 + Create React App
+- Material UI (MUI), ikony, data-grid, date-pickers
+- React Query (asynchroniczne pobieranie danych, cache)
+- WebSocket (SockJS, STOMP) do live logów i powiadomień
+- Axios (REST), universal-cookie, i18next (wielojęzyczność)
+- Recharts (wykresy i statystyki)
+- JWT-decode, dayjs, moment (czas, sesje)
 
-W katalogu `frontend5/` możesz uruchomić:
+**Pełna konfiguracja zależności w `frontend5/package.json`.**
 
-- `npm start` — uruchamia aplikację w trybie deweloperskim ([localhost:3000](http://localhost:3000))
-- `npm test` — uruchamia testy
-- `npm run build` — buduje aplikację do katalogu `build/`
-- `npm run eject` — wyodrębnia konfigurację (operacja nieodwracalna)
+### Konfiguracja i uruchomienie
 
-Więcej szczegółów znajdziesz w [dokumentacji Create React App](https://facebook.github.io/create-react-app/docs/getting-started).
-
-### Konfiguracja środowiska
-
-Pliki środowiskowe:
+**Zmienne środowiskowe:**
 - `.env.development`
   ```
   REACT_APP_API_URL=http://localhost:8080/
@@ -113,21 +96,17 @@ Pliki środowiskowe:
   REACT_APP_API_URL=https://mutarexx.smallhost.pl:37786/
   ```
 
-### Budowanie i uruchamianie
-
-**Instalacja zależności:**
+**Instalacja i uruchomienie:**
 ```bash
 npm install
-```
-**Uruchamianie (dev):**
-```bash
-npm start
-```
-**Budowanie (prod):**
-```bash
-npm run build
+npm start     # tryb developerski (localhost:3000)
+npm run build # build produkcyjny (do katalogu build/)
 ```
 
-Kod źródłowy frontendu znajdziesz tutaj: [Przeglądaj katalog frontend5 w GitHub](https://github.com/damianPolchlopek/improvement-app/tree/main/frontend5)
+Aktualne API backendu i frontend są zintegrowane – całość działa zarówno lokalnie, jak i w środowisku produkcyjnym.
 
 ---
+
+**Więcej szczegółów i kod źródłowy:**  
+- [Backend w GitHub](https://github.com/damianPolchlopek/improvement-app/tree/main/Backend)
+- [Frontend w GitHub](https://github.com/damianPolchlopek/improvement-app/tree/main/frontend5)
