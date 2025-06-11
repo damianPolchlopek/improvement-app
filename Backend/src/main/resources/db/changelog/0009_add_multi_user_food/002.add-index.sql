@@ -1,0 +1,1 @@
+CREATE INDEX idx_diet_summaries_user_id ON diet_summary(user_id);

@@ -259,4 +259,16 @@ export default class REST {
     static loginUser(user) {
         return post(serverUrl + 'api/auth/signin', user);
     }
+
+    static registerUser(user) {
+        return post(serverUrl + 'api/auth/signup', user);
+    }
+
+    static verifyEmail(token) {
+        return get(serverUrl + 'api/auth/verify-email?token=' + encodeURIComponent(token));
+    }
+
+    static resendVerificationEmail(username) {
+        return post(serverUrl + 'api/auth/resend-verification', username );
+    }
 }

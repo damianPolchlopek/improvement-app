@@ -1,7 +1,5 @@
 package com.improvement_app.food.domain;
 
-import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
-
 import java.time.LocalDate;
 import java.util.List;
 

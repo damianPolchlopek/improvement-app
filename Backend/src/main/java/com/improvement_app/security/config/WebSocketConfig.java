@@ -1,4 +1,4 @@
-package com.improvement_app.workouts;
+package com.improvement_app.security.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,19 +12,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic"); // ✅ Broker do subskrypcji
-        config.setApplicationDestinationPrefixes("/app"); // ✅ Prefix dla wiadomości wysyłanych do serwera
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins(
-                        "http://localhost:3000",
-                        "https://mutarexx.smallhost.pl:37786",
-                        "https://mutarexx.smallhost.pl"
-                ) // ✅ Zezwalamy na frontend
-                .withSockJS(); // ✅ Obsługa SockJS dla przeglądarek bez WebSocket
+                .setAllowedOriginPatterns("*") // lub konkretne origins
+                .withSockJS();
     }
 }
-

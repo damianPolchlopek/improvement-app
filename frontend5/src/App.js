@@ -17,29 +17,31 @@ import SnackbarProvider from './component/SnackbarProvider.jsx';
 import { MealSelectionProvider } from './context/MealSelectionContext.js';
 
 import {
-  Training, 
-  Exercises,
-  Maximum, 
-  Food,
-  Add,
-  Statistics,
-  Shopping,
-  Products,
-  Weekly,
-  Daily,
-  Other,
+  TRAINING, 
+  EXERCISES,
+  MAXIMUM, 
+  FOOD,
+  ADD,
+  STATISTICS,
+  SHOPPING,
+  PRODUCTS,
+  WEEKLY,
+  DAILY,
+  OTHER,
   SignUpUrl,
   TimerChallenge,
   HolidayPicker,
   LoginUrl,
   LogoutUrl,
-  Finance,
-  View,
-  Information,
-  Projects,
+  FINANCE,
+  VIEW,
+  INFORMATION,
+  PROJECTS,
+  VerifyEmailUrl
 } from "./utils/URLHelper";
 
 // Lazy-loaded components
+const PublicLayout = lazy(() => import('./layout/PublicLayout.jsx'));
 const Layout = lazy(() => import('./layout/Layout'));
 const LoginView = lazy(() => import('./login/LoginView'));
 const HomeView = lazy(() => import('./home/HomeView.jsx'));
@@ -62,6 +64,7 @@ const SignUpView = lazy(() => import('./login/SignUpView'));
 const TimerChallengeMain = lazy(() => import('./projects/timerChallenge/TimerChallengeMain'));
 const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPickerMain'));
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
+const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
 
 let theme = createTheme({
   palette: {
@@ -219,42 +222,65 @@ const suspenseFallback = <p></p>;
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <PublicLayout />,
+    children: [
+      {
+        path: LoginUrl,
+        element: <LoginView />,
+        action: loginAction,
+      },
+      {
+        path: SignUpUrl,
+        element: <Suspense fallback={suspenseFallback}><SignUpView /></Suspense>,
+      },
+      { 
+        path: LogoutUrl, 
+        action: logoutAction
+      },
+      {
+        path: VerifyEmailUrl,
+        element: <Suspense fallback={suspenseFallback}><EmailVerification /></Suspense>,
+      }
+    ]
+  },
+  {
+    path: '/app',
     element: <Suspense fallback={suspenseFallback}><Layout theme={theme} /></Suspense>,
     errorElement: <ErrorPage />,
     loader: tokenLoader,
     children: [
       { index: true, element: <HomeView /> },
       { 
-        path: Training, 
+        path: TRAINING, 
         children: 
         [
           { 
-            path: View, 
+            path: VIEW, 
             element: <Suspense fallback={suspenseFallback}><TrainingsView /></Suspense> 
           },
-          { path: Exercises, element: <Suspense fallback={suspenseFallback}><ExerciseView /></Suspense> },
-          { path: Maximum, element: <Suspense fallback={suspenseFallback}><MaximumExerciseView /></Suspense> },
+          { path: EXERCISES, element: <Suspense fallback={suspenseFallback}><ExerciseView /></Suspense> },
+          { path: MAXIMUM, element: <Suspense fallback={suspenseFallback}><MaximumExerciseView /></Suspense> },
           { 
-            path: Add, 
+            path: ADD, 
             element: <Suspense fallback={suspenseFallback}><AddTrainingView /></Suspense>, 
             loader: () => import('./training/trainingForm/TrainingForm.jsx').then((module) => module.loader()),
           },
           { 
-            path: Statistics, 
+            path: STATISTICS, 
             element: <Suspense fallback={suspenseFallback}><TrainingStatistic /></Suspense>, 
             loader: () => import('./training/trainingStatistic/TrainingStatistics.jsx').then((module) => module.loader()), 
           },    
         ]
       },
       { 
-        path: Food, 
+        path: FOOD, 
         children: [
           { 
-            path: View, 
+            path: VIEW, 
             element: <Suspense fallback={suspenseFallback}><MealView /></Suspense> 
           },
           { 
-            path: Add, 
+            path: ADD, 
             element: <Suspense fallback={suspenseFallback}><AddDietDayView /></Suspense> 
           },
           { 
@@ -263,47 +289,37 @@ const router = createBrowserRouter([
             loader: ({ params }) => import('./food/editDietSummaryView/EditDietDayView.jsx').then((module) => module.loader({ params })),
           },
           { 
-            path: Statistics, 
+            path: STATISTICS, 
             element: <Suspense fallback={suspenseFallback}><DietStatisticView /></Suspense> 
           },
           { 
-            path: Products, 
+            path: PRODUCTS, 
             element: <Suspense fallback={suspenseFallback}><ProductView /></Suspense> 
           },
         ]
       },
       { 
-        path: Other, 
+        path: OTHER, 
         children: [
-          { path: Shopping, element: <Suspense fallback={suspenseFallback}><ShoppingListView /></Suspense> },
-          { path: Weekly, element: <Suspense fallback={suspenseFallback}><WeeklyListView /></Suspense> },
-          { path: Daily, element: <Suspense fallback={suspenseFallback}><DailyView /></Suspense> },
+          { path: SHOPPING, element: <Suspense fallback={suspenseFallback}><ShoppingListView /></Suspense> },
+          { path: WEEKLY, element: <Suspense fallback={suspenseFallback}><WeeklyListView /></Suspense> },
+          { path: DAILY, element: <Suspense fallback={suspenseFallback}><DailyView /></Suspense> },
         ]
       },
       {
-        path: Finance, 
+        path: FINANCE, 
         children: [
-          { path: View, element: <Suspense fallback={suspenseFallback}><FinanceView /></Suspense> },
-          { path: Information, element: <Suspense fallback={suspenseFallback}><FinanceInformation /></Suspense> }
+          { path: VIEW, element: <Suspense fallback={suspenseFallback}><FinanceView /></Suspense> },
+          { path: INFORMATION, element: <Suspense fallback={suspenseFallback}><FinanceInformation /></Suspense> }
         ]
       },
       {
-        path: Projects,
+        path: PROJECTS,
         children: [
           { path: TimerChallenge, element: <Suspense fallback={suspenseFallback}><TimerChallengeMain /></Suspense> },
           { path: HolidayPicker, element: <Suspense fallback={suspenseFallback}><HolidayPickerMain /></Suspense> },
         ]
-      },
-      { path: SignUpUrl, element: <Suspense fallback={suspenseFallback}><SignUpView /></Suspense> },
-      { 
-        path: LoginUrl, 
-        element: <Suspense fallback={suspenseFallback}><LoginView /></Suspense>, 
-        action: loginAction
-      },
-      { 
-        path: LogoutUrl, 
-        action: logoutAction
-      },
+      }
     ]
   }
 ]);

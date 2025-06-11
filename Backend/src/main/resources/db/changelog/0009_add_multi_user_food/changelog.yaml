@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0009_add_multi_user_food/001.add-user-id-to-diet-summary.sql
+      sqlFile:
+        path: 001.add-user-id-to-diet-summary.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0009_add_multi_user_food/002.add-index.sql
+      sqlFile:
+        path: 002.add-index.sql
+        relativeToChangelogFile: true

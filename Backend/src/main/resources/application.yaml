@@ -6,11 +6,32 @@ spring:
   jpa:
     open-in-view: false
 #    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: mutarexx.1@gmail.com
+    password: 'hzlx opsi qnwf betv'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
 
-bezkoder:
-  app:
-    jwtSecret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
-    jwtExpirationMs: 3600_000
+app:
+  security:
+    jwt:
+      secret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
+      expiration-ms: 3600_000
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+      allowed-headers: "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+      allow-credentials: true
+      max-age: 3600
 
 google:
   credentials:
@@ -34,9 +55,12 @@ management:
     prometheus:
       enabled: true
 
-# logging:
+#logging:
 #   level:
 #     root: INFO
 #     com.improvement_app: DEBUG
+#     org.springframework.web: DEBUG
+#     org.springframework.security: DEBUG
+#     org.springframework.mail=DEBUG
 #   file:
 #     name: logs/application.log

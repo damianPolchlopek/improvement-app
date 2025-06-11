@@ -22,10 +22,9 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
     private final DietSummaryPersistencePort dietSummaryPersistencePort;
     private final CalculationMacroelementsService calculationMacroelementsService;
 
-
-    public DietSummary saveDietDaySummary(CreateDietSummaryRequest createDietSummaryRequest) {
-        DietSummary dietSummaryEntity = calculateDietSummary(createDietSummaryRequest.meals());
-        return dietSummaryPersistencePort.save(dietSummaryEntity);
+    public DietSummary saveDietDaySummary(Long userId, CreateDietSummaryRequest createDietSummaryRequest) {
+        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
+        return dietSummaryPersistencePort.save(userId, dietSummary);
     }
 
     public DietSummary calculateDietSummary(List<EatenMeal> eatenMeals) {
@@ -37,28 +36,28 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
         return calculationMacroelementsService.recalculateMealMacro(eatenMeal);
     }
 
-    public Page<DietSummary> getDietSummaries(Pageable pageable) {
-        return dietSummaryPersistencePort.findAll(pageable);
+    public Page<DietSummary> getDietSummaries(Long userId, Pageable pageable) {
+        return dietSummaryPersistencePort.findAll(userId, pageable);
     }
 
-    public void deleteDietSummary(Long id) {
-        dietSummaryPersistencePort.deleteById(id);
+    public void deleteDietSummary(Long userId, Long id) {
+        dietSummaryPersistencePort.deleteById(userId, id);
     }
 
-    public DietSummary getDayDietSummary(Long id) {
-        return dietSummaryPersistencePort.findById(id)
+    public DietSummary getDayDietSummary(Long userId, Long id) {
+        return dietSummaryPersistencePort.findById(userId, id)
                 .orElseThrow(() -> new DietSummaryNotFoundException(id));
     }
 
-    public DietSummary updateDietSummary(UpdateDietSummaryRequest updateDietSummaryRequest) {
+    public DietSummary updateDietSummary(Long userId, UpdateDietSummaryRequest updateDietSummaryRequest) {
         DietSummary recalculatedDietSummary = calculateDietSummary(updateDietSummaryRequest.meals());
 
         long dietSummaryId = updateDietSummaryRequest.dietSummaryId();
-        DietSummary oldDietSummary = dietSummaryPersistencePort.findById(dietSummaryId)
+        DietSummary oldDietSummary = dietSummaryPersistencePort.findById(userId, dietSummaryId)
                 .orElseThrow(() -> new DietSummaryNotFoundException(dietSummaryId));
 
         DietSummary updated = oldDietSummary.update(recalculatedDietSummary);
 
-        return dietSummaryPersistencePort.save(updated);
+        return dietSummaryPersistencePort.save(userId, updated);
     }
 }

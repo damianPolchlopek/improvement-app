@@ -26,3 +26,15 @@ databaseChangeLog:
   - include:
       file: 0006_change_meal_ingredient/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0007_add_name_lastname_to_user/changelog.yaml
+      relativeToChangelogFile: true
+
+  - include:
+      file: 0008_add_user_email_attributes/changelog.yaml
+      relativeToChangelogFile: true
+
+  - include:
+      file: 0009_add_multi_user_food/changelog.yaml
+      relativeToChangelogFile: true
