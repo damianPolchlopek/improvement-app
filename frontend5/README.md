@@ -1,70 +1,144 @@
-# Getting Started with Create React App
+# Frontend5 – Improvement App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany w oparciu o React 19 oraz Material-UI. Projekt został wygenerowany narzędziem [Create React App](https://github.com/facebook/create-react-app), co zapewnia strukturę przyjazną do dalszego rozwoju i prostą konfigurację.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## Spis treści
 
-### `npm start`
+- [Wymagania](#wymagania)
+- [Instalacja](#instalacja)
+- [Dostępne skrypty](#dostępne-skrypty)
+- [Struktura katalogów](#struktura-katalogów)
+- [Najważniejsze biblioteki](#najważniejsze-biblioteki)
+- [Konfiguracja ESLint i przeglądarki](#konfiguracja-eslint-i-przeglądarki)
+- [Testowanie](#testowanie)
+- [Budowanie produkcyjne](#budowanie-produkcyjne)
+- [Międzynarodowość (i18n)](#miedzynarodowosc-i18n)
+- [WebSockety](#websockety)
+- [Przydatne linki](#przydatne-linki)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Wymagania
 
-### `npm test`
+- Node.js (zalecana najnowsza LTS)
+- NPM (w zestawie z Node.js)
+- Przeglądarka wspierająca ES6+
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Instalacja
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Przejdź do katalogu `frontend5`:
+    ```bash
+    cd frontend5
+    ```
+2. Zainstaluj zależności:
+    ```bash
+    npm install
+    ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Dostępne skrypty
 
-### `npm run eject`
+- `npm start` – Uruchamia aplikację w trybie deweloperskim ([http://localhost:3000](http://localhost:3000))
+- `npm test` – Interaktywny tryb testowania z użyciem React Testing Library
+- `npm run build` – Tworzy zoptymalizowaną wersję produkcyjną w katalogu `build`
+- `npm run eject` – Wyodrębnia konfigurację narzędzi do projektu (operacja nieodwracalna)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Struktura katalogów
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `src/` – Główny kod źródłowy aplikacji
+  - `index.js` – Punkt wejścia (renderowanie komponentu `<App />`)
+  - `App.js` – Główny komponent aplikacji
+  - `components/`, `pages/` – Komponenty i widoki
+  - `i18n/` – Konfiguracja tłumaczeń (i18next)
+  - `api/` – Warstwa komunikacji z backendem (np. przez axios)
+- `public/` – Statyczne pliki serwowane przez aplikację
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## Najważniejsze biblioteki
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **React** (v19)
+- **Material UI** (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/x-data-grid`, `@mui/x-date-pickers`)
+- **React Router** (`react-router-dom`) – routing aplikacji
+- **React Query** (`@tanstack/react-query`) – obsługa zapytań i cache
+- **i18next** + **react-i18next** – internacjonalizacja i tłumaczenia
+- **Day.js** i **Moment.js** – operacje na datach
+- **Axios** – komunikacja HTTP z backendem
+- **WebSockety** (`@stomp/stompjs`, `sockjs-client`, `stompjs`) – komunikacja w czasie rzeczywistym
+- **Recharts** – wykresy i wizualizacja danych
+- **Universal-cookie** – obsługa cookies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+## Konfiguracja ESLint i przeglądarki
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- Konfiguracja ESLint oparta na domyślnych ustawieniach Create React App.
+- Obsługiwane przeglądarki:
+  - produkcja: >0.2%, nie martwe, nie Opera Mini
+  - deweloperski: ostatnia wersja Chrome, Firefox, Safari
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Testowanie
 
-### Making a Progressive Web App
+Projekt korzysta z **React Testing Library** oraz **Jest**. Testy znajdują się w plikach z rozszerzeniem `.test.js`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Uruchom testy:
+```bash
+npm test
+```
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Budowanie produkcyjne
 
-### Deployment
+Aby zbudować aplikację do wdrożenia:
+```bash
+npm run build
+```
+Wynik znajdziesz w katalogu `build`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## Międzynarodowość (i18n)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Aplikacja posiada wsparcie dla wielu języków dzięki **i18next**. Pliki tłumaczeń znajdują się w katalogu `src/i18n`.
+
+---
+
+## WebSockety
+
+Do komunikacji w czasie rzeczywistym wykorzystywane są biblioteki:
+- **@stomp/stompjs**
+- **sockjs-client**
+- **stompjs**
+
+---
+
+## Przydatne linki
+
+- [Create React App – dokumentacja](https://facebook.github.io/create-react-app/docs/getting-started)
+- [React – dokumentacja](https://react.dev/)
+- [Material UI – dokumentacja](https://mui.com/)
+- [React Query](https://tanstack.com/query/latest)
+- [i18next](https://www.i18next.com/)
+- [Recharts](https://recharts.org/)
+
+---
+
+## Autorzy
+
+Projekt rozwijany przez zespół Improvement App.
+
+---
+
+## Licencja
+
+Projekt przeznaczony do użytku wewnętrznego.
