@@ -19,16 +19,16 @@ public class StatisticController {
 
     private final StatisticService statisticService;
 
-    @GetMapping(value = "{exerciseName}/{chartType}/{beginDate}/{endDate}", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<DataToFront>> getTrainingStatisticData(@PathVariable String exerciseName,
-                                                                      @PathVariable String chartType,
-                                                                      @PathVariable String beginDate,
-                                                                      @PathVariable String endDate) {
-
-        List<DataToFront> dataToChart
-                = statisticService.generateStatisticChartData(exerciseName, chartType, beginDate, endDate);
-
-        return ResponseEntity.ok(dataToChart);
-    }
+//    @GetMapping(value = "{exerciseName}/{chartType}/{beginDate}/{endDate}", produces = MediaType.APPLICATION_JSON)
+//    public ResponseEntity<List<DataToFront>> getTrainingStatisticData(@PathVariable String exerciseName,
+//                                                                      @PathVariable String chartType,
+//                                                                      @PathVariable String beginDate,
+//                                                                      @PathVariable String endDate) {
+//
+//        List<DataToFront> dataToChart
+//                = statisticService.generateStatisticChartData(exerciseName, chartType, beginDate, endDate);
+//
+//        return ResponseEntity.ok(dataToChart);
+//    }
 
 }

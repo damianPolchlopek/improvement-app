@@ -1,6 +1,7 @@
 package com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy;
 
 import com.improvement_app.workouts.entity.dto.RepAndWeight;
+import com.improvement_app.workouts.entity2.ExerciseSetEntity;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -16,18 +17,18 @@ public class CardioExercise implements ExerciseStrategy {
     final String speed;
 
     @Override
-    public List<RepAndWeight> parseExercise() {
+    public List<ExerciseSetEntity> parseExercise() {
         final String distanceRegex  = "([0-9]+.?[0-9]*) km";
         final String speedRegex     = "([0-9]+.?[0-9]*) km/h";
 
         final String parsedDistance = parseString(distance, distanceRegex);
         final String parsedSpeed    = parseString(speed, speedRegex);
 
-        RepAndWeight firstRep = new RepAndWeight(
+        ExerciseSetEntity firstRep = new ExerciseSetEntity(
                     Double.parseDouble(parsedDistance),
                     Double.parseDouble(parsedSpeed));
 
-        final List<RepAndWeight> result = new ArrayList<>();
+        final List<ExerciseSetEntity> result = new ArrayList<>();
         result.add(firstRep);
         return result;
     }

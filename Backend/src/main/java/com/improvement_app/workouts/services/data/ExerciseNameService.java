@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.services.data;
 
-import com.improvement_app.workouts.entity.exercisesfields.Name;
-import com.improvement_app.workouts.repository.NameRepository;
+import com.improvement_app.workouts.entity2.ExerciseNameEntity;
+import com.improvement_app.workouts.repository2.ExerciseNameEntityRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +11,21 @@ import java.util.List;
 @AllArgsConstructor
 public class ExerciseNameService {
 
-    private final NameRepository nameRepository;
+    private final ExerciseNameEntityRepository nameRepository;
 
-    public List<Name> getExerciseNames() {
+    public List<ExerciseNameEntity> getExerciseNames() {
         return nameRepository.findAll();
     }
 
-    public List<Name> saveAllExerciseNames(List<Name> nameList) {
+    public List<ExerciseNameEntity> saveAllExerciseNames(List<ExerciseNameEntity> nameList) {
         return nameRepository.saveAll(nameList);
     }
 
     public void deleteAllExerciseNames() {
         nameRepository.deleteAll();
+    }
+
+    public void flush() {
+        nameRepository.flush();
     }
 }

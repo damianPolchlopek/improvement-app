@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.googledrivefileparser.initialize
 
 import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
-import com.improvement_app.food.infrastructure.googledrivefileparser.FileDownloadService;
+import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.ProductParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class ProductInitializer {
         messagingTemplate.convertAndSend("/topic/messages", "Loading products...");
 
         try {
-            File productsFile = fileDownloadService.downloadAndGetFile(PRODUCTS_SHEET_NAME);
+            File productsFile = fileDownloadService.downloadFile(PRODUCTS_SHEET_NAME);
             List<ProductEntity> productEntities = productParser.parseExcelProductsFile(productsFile);
 
             validateProducts(productEntities);

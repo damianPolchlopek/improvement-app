@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.googledrivefileparser.initialize
 
 import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.database.MealRepository;
-import com.improvement_app.food.infrastructure.googledrivefileparser.FileDownloadService;
+import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.SweetsParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public class SweetsInitializer {
         messagingTemplate.convertAndSend("/topic/messages", "Loading sweets...");
 
         try {
-            File sweetsFile = fileDownloadService.downloadAndGetFile(SWEETS_SHEET_NAME);
+            File sweetsFile = fileDownloadService.downloadFile(SWEETS_SHEET_NAME);
             List<MealRecipeEntity> sweets = sweetsParser.parseExcelProductsFile(sweetsFile);
 
             validateSweets(sweets);

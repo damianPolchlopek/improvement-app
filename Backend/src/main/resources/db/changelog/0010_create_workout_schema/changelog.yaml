@@ -1,0 +1,64 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0010_create_workout_schema/001.create-training-table.sql
+      sqlFile:
+        path: 001.create-training-table.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0010_create_workout_schema/002.create-exercise-table.sql
+      sqlFile:
+        path: 002.create-exercise-table.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 3
+      author: Damian Polchlopek
+      logicalFilePath: 0010_create_workout_schema/003.create-exercise-set-table.sql
+      sqlFile:
+        path: 003.create-exercise-set-table.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 4
+      author: Damian Polchlopek
+      logicalFilePath: 0010_create_workout_schema/004.create-training-template-table.sql
+      sqlFile:
+        path: 004.create-training-template-table.sql
+        relativeToChangelogFile: true
+
+#  - changeSet:
+#      id: 5
+#      author: Damian Polchlopek
+#      logicalFilePath: 0010_create_workout_schema/005.change-exercise-name-id-to-auto.sql
+#      sqlFile:
+#        path: 005.change-exercise-name-id-to-auto.sql
+#        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 6
+      author: Damian Polchlopek
+      logicalFilePath: 0010_create_workout_schema/006.change-training-id-to-auto.sql
+      sqlFile:
+        path: 006.change-training-id-to-auto.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 7
+      author: Damian Polchlopek
+      logicalFilePath: 0010_create_workout_schema/007.change-exercise-id-to-auto.sql
+      sqlFile:
+        path: 007.change-exercise-id-to-auto.sql
+        relativeToChangelogFile: true
+
+#  - changeSet:
+#      id: 8
+#      author: Damian Polchlopek
+#      logicalFilePath: 0010_create_workout_schema/008.change-exercise-id-to-auto.sql
+#      sqlFile:
+#        path: 008.change-exercise-id-to-auto.sql
+#        relativeToChangelogFile: true

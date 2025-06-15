@@ -1,11 +1,14 @@
 package com.improvement_app.workouts.helpers;
 
 import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
-import com.improvement_app.workouts.exceptions.ExerciseTypeNotFoundException;
-import com.improvement_app.workouts.exceptions.FileNotCreatedException;
-import com.improvement_app.workouts.exceptions.FileNotFoundException;
-import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
+import com.improvement_app.workouts.entity2.ExerciseEntity;
+import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity2.TrainingEntity;
+import com.improvement_app.workouts.entity2.enums.ExerciseName;
+import com.improvement_app.workouts.entity2.enums.ExercisePlace;
+import com.improvement_app.workouts.entity2.enums.ExerciseProgress;
+import com.improvement_app.workouts.entity2.enums.ExerciseType;
+import com.improvement_app.workouts.exceptions.*;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -36,21 +39,19 @@ public class DriveFilesHelper {
     private static final int TRAINING_YEAR_INDEX = 4;
     private static final int TRAINING_TYPE_INDEX = 5;
 
-    public static List<Exercise> parseExcelTrainingFile(final File file) {
-        List<Exercise> exerciseList = new ArrayList<>();
-
+    public static TrainingEntity parseExcelTrainingFile(final File file) {
         try (FileInputStream fis = new FileInputStream(file);
              XSSFWorkbook wb = new XSSFWorkbook(fis)) {
 
             XSSFSheet sheet = wb.getSheetAt(0);
             final int EXERCISE_TYPE_INDEX = 0;
-            final int EXERCISE_AREA_INDEX = 1;
             final int NAME_INDEX = 2;
             final int SERIES_INDEX = 3;
             final int WEIGHT_INDEX = 4;
             final int PROGRESS_INDEX = 5;
 
-            int exerciseIndex = 0;
+            List<ExerciseEntity> exerciseList = new ArrayList<>();
+
             for (final Row row : sheet) {
 
                 if (!checkIfNextRowExists(row))
@@ -58,8 +59,6 @@ public class DriveFilesHelper {
 
                 Cell cell = row.getCell(EXERCISE_TYPE_INDEX);
                 final String exerciseType = cell.getStringCellValue().trim();
-                cell = row.getCell(EXERCISE_AREA_INDEX);
-                final String exerciseArea = cell.getStringCellValue().trim();
                 cell = row.getCell(NAME_INDEX);
                 final String exerciseName = cell.getStringCellValue().trim();
                 cell = row.getCell(SERIES_INDEX);
@@ -68,24 +67,54 @@ public class DriveFilesHelper {
                 final String weight = getCellValue(cell);
                 cell = row.getCell(PROGRESS_INDEX);
                 final String progress = cell.getStringCellValue().trim();
-                final LocalDate localDate = getLocalDate(file.getName());
-                final String trainingName = getTrainingName(file.getName()).trim();
 
                 final ExerciseStrategy exerciseStrategy = getExerciseParseStrategy(exerciseType, reps, weight);
-                final List<RepAndWeight> repAndWeightList = exerciseStrategy.parseExercise();
+                final List<ExerciseSetEntity> exerciseSets = exerciseStrategy.parseExercise();
 
-                final Exercise exercise = new Exercise(exerciseType, exerciseArea, exerciseName, repAndWeightList,
-                        progress, localDate, reps, weight, trainingName, exerciseIndex);
+                ExerciseEntity exerciseEntity = new ExerciseEntity(
+                        ExerciseName.fromValue(exerciseName),
+                        ExerciseType.fromValue(exerciseType),
+                        ExerciseProgress.fromValue(progress),
+                        exerciseSets);
 
-                exerciseList.add(exercise);
-                exerciseIndex++;
+                exerciseList.add(exerciseEntity);
+            }
+
+            final LocalDate localDate = getLocalDate(file.getName());
+            final String trainingName = getTrainingName(file.getName()).trim();
+            final String place = extractPlaceFromExercises(file);
+
+            return new TrainingEntity(localDate, trainingName,
+                    ExercisePlace.fromString(place), exerciseList);
+
+        } catch (IOException e) {
+            throw new FileNotFoundException(e);
+        }
+    }
+
+    private static String extractPlaceFromExercises(File file) {
+        try (FileInputStream fis = new FileInputStream(file);
+             XSSFWorkbook workbook = new XSSFWorkbook(fis)) {
+
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            final int EXERCISE_AREA_INDEX = 1; // Assuming the second column contains the place
+
+            for (Row row : sheet) {
+                Cell cell = row.getCell(EXERCISE_AREA_INDEX);
+                if (cell != null && cell.getCellType() == CellType.STRING) {
+                    String place = cell.getStringCellValue().trim();
+                    if (!place.isEmpty()) {
+                        return place; // Return the first non-empty place found
+                    }
+                }
             }
         } catch (IOException e) {
             throw new FileNotFoundException(e);
         }
 
-        return exerciseList;
+        return null; // Return null if no place is found
     }
+
 
     private static String getCellValue(Cell cell) {
         return cell.getCellType().equals(CellType.STRING) ?
@@ -96,10 +125,19 @@ public class DriveFilesHelper {
     private static boolean checkIfNextRowExists(Row row) {
         final int FIRST_CELL_INDEX = 0;
         Cell cell = row.getCell(FIRST_CELL_INDEX);
-        if (cell == null)
-            return false;
 
-        String exerciseType = cell.getStringCellValue();
+        if (cell == null) {
+            return false;
+        }
+
+        if (cell.getCellType() == CellType.BLANK) {
+            return false;
+        }
+
+        String exerciseType = cell.getCellType() == CellType.STRING ?
+                cell.getStringCellValue() :
+                String.valueOf(cell.getNumericCellValue());
+
         return !exerciseType.isEmpty();
     }
 
@@ -112,16 +150,17 @@ public class DriveFilesHelper {
             XSSFSheet sheet = wb.getSheetAt(0);
 
             for (final Row row : sheet) {
-                if (!checkIfNextRowExists(row))
+                if (!checkIfNextRowExists(row)) {
                     continue;
+                }
 
-                final int DATA_INDEX = 0;
+                final int DATA_INDEX = 1;
                 Cell cell = row.getCell(DATA_INDEX);
                 String data = cell.getStringCellValue();
                 dataList.add(data);
             }
         } catch (Exception e) {
-            throw new FileNotFoundException(e);
+            throw new ExcelFileParseException(e);
         }
 
         return dataList;

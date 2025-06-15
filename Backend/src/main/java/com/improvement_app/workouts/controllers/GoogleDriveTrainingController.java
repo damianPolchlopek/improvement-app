@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.workouts.services.GoogleDriveService;
+import com.improvement_app.workouts.services.InitializationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +16,13 @@ import jakarta.ws.rs.core.MediaType;
 @RequestMapping("/drive")
 public class GoogleDriveTrainingController {
 
-    private final GoogleDriveService googleDriveService;
+    private final InitializationService initializationService;
 
     @Transactional
     @GetMapping(value = "/initApplication", produces = MediaType.APPLICATION_JSON)
     public void initApplication() {
-        log.info("Usuwam i dodaje nowe dane do bazy danych treningowej");
-        googleDriveService.initApplicationCategories();
-        googleDriveService.initApplicationExercises();
-        googleDriveService.initApplicationTrainingTemplates();
+        initializationService.initApplicationTemplates();
+        initializationService.initApplicationTrainings();
     }
 
 }

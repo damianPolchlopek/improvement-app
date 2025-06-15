@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.improvement_app.food.infrastructure",
         "com.improvement_app.security.repository",
         "com.improvement_app.parser.repository",
+        "com.improvement_app.workouts.repository2",
 })
 @EnableMongoRepositories(basePackages = {
         "com.improvement_app.other.weekly.repository",

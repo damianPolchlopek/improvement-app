@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.googledrivefileparser.initialize
 import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.entity.ProductEntity;
 import com.improvement_app.food.infrastructure.database.MealRepository;
-import com.improvement_app.food.infrastructure.googledrivefileparser.FileDownloadService;
+import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.MealParser;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,11 +94,14 @@ public class MealInitializer {
     private MealRecipeEntity parseSingleMeal(DriveFileItemDTO mealFile,
                                              Map<Long, ProductEntity> productMap) throws IOException {
         try {
-            googleDriveFileService.downloadFile(mealFile);
-            return mealParser.parseMealFile(
-                    fileDownloadService.getDownloadedFile(mealFile.getName()),
-                    productMap
-            );
+            File file = fileDownloadService.downloadFile(mealFile.getName());
+
+            if (file == null || !file.exists()) {
+                log.error("File not found after download: {}", mealFile.getName());
+                return null;
+            }
+
+            return mealParser.parseMealFile(file, productMap);
         } catch (IOException e) {
             log.error("Failed to download or parse meal file: {}", mealFile.getName(), e);
             throw e;

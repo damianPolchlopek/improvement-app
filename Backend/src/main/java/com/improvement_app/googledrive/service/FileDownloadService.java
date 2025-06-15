@@ -1,6 +1,7 @@
-package com.improvement_app.food.infrastructure.googledrivefileparser;
+package com.improvement_app.googledrive.service;
 
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
+import com.improvement_app.googledrive.exceptions.GoogleDriveFileNotDownloadedException;
 import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.googledrive.types.MimeType;
@@ -23,7 +24,7 @@ public class FileDownloadService {
     private static final String FILE_ALREADY_EXISTS_MESSAGE = "File already exists, removing old version: {}";
 
 
-    public File downloadAndGetFile(String googleDriveFileName) throws IOException {
+    public File downloadFile(String googleDriveFileName) throws IOException {
         log.info(FILE_DOWNLOAD_MESSAGE, googleDriveFileName);
 
         try {
@@ -45,12 +46,8 @@ public class FileDownloadService {
 
         } catch (Exception e) {
             log.error("Failed to download file: {}", googleDriveFileName, e);
-            throw new IOException("File download failed: " + googleDriveFileName, e);
+            throw new GoogleDriveFileNotDownloadedException("File download failed: " + googleDriveFileName, e);
         }
-    }
-
-    public File getDownloadedFile(String fileName) {
-        return filePathService.getDownloadedFile(fileName);
     }
 
     private void removeExistingFile(String fileName) {

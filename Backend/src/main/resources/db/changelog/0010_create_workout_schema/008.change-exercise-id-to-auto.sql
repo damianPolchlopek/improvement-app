@@ -1,0 +1,5 @@
+ALTER TABLE workout.training_template_exercise
+    ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
+
+ALTER TABLE workout.training_template
+    ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
