@@ -12,7 +12,7 @@ import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm'
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLoaderData } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
-import { useSnackbar } from '../../component/SnackbarProvider';
+import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import { useMealSelection } from '../../context/MealSelectionContext';
 
 export default function EditDietDayView() {

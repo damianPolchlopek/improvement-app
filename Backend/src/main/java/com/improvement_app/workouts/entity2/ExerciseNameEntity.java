@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@ToString(exclude = "trainingTemplates") // Unikaj cyklicznych referencji w toString
+@ToString(exclude = "trainingTemplates")
 public class ExerciseNameEntity {
 
     @Id

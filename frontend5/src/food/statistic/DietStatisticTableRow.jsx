@@ -24,10 +24,10 @@ import StyledTableRow from "../../component/table/StyledTableRow";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from '../../utils/REST';
 import REST from '../../utils/REST';
-import ErrorBlock from "../../component/ErrorBlock";
 import { useNavigate } from "react-router-dom";
-import { useSnackbar } from '../../component/SnackbarProvider';
+import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import { formatInput } from '../../utils/common';
+import ErrorAlert from "../../component/error/ErrorAlert";
 
 export default function DietStatisticTableRow({ dietSummary }) {
   const { showSnackbar } = useSnackbar();
@@ -40,7 +40,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
     mutate,
     isPending: isPendingDeletion,
     isError: isErrorDeleting,
-    error: deleteError,
+    error
   } = useMutation({
     mutationFn: (id) => REST.deleteDietSummaries(id),
     onSuccess: () => {
@@ -140,13 +140,8 @@ export default function DietStatisticTableRow({ dietSummary }) {
             </Button>
           </DialogActions>
           {isErrorDeleting && (
-            <ErrorBlock
-              title={t('food.deleteErrorTitle')}
-              message={
-                deleteError.info?.message ||
-                t('food.deleteErrorMessage')
-              }
-            />
+            <ErrorAlert error={error} />
+            
           )}
         </Dialog>
       </StyledTableRow>

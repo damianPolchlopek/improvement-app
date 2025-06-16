@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import REST from "../../utils/REST";
-import ErrorBlock from "../../component/ErrorBlock";
 
 import {
   Button,
@@ -17,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { useLoaderData, Form, useNavigate } from "react-router-dom";
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../utils/REST.js';
+import ErrorAlert from "../../component/error/ErrorAlert.jsx";
 
 export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(exercises)
@@ -209,13 +209,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       </Grid>
 
       {isError && (
-        <ErrorBlock
-          title="Failed to add training"
-          message={
-            error.info?.message ||
-            'Failed to add training. Please check your inputs and try again later.'
-          }
-        />
+        <ErrorAlert error={error} />
       )}
 
     </Form>

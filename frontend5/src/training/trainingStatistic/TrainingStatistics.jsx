@@ -8,6 +8,7 @@ import {
   Autocomplete,
   FormControl,
   TextField,
+  CircularProgress
 } from '@mui/material';
 
 import {
@@ -20,6 +21,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import moment from 'moment';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useLoaderData } from 'react-router-dom';
+
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 function formatXAxis(tickItem) {
   return moment(tickItem).format('DD-MM-YYYY');
@@ -35,7 +38,7 @@ export default function TrainingStatistic() {
   const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
 
   // useQuery for exercises
-  const { data: exercises, isLoading, isError } = useQuery({
+  const { data: exercises, isLoading, isError, error } = useQuery({
     queryKey: [
       'training-statistic',
       selectedExerciseName,
@@ -140,9 +143,9 @@ export default function TrainingStatistic() {
       {/* Chart */}
       <Grid container item xs={12} justifyContent="center" sx={{ marginTop: 3 }}>
         {isLoading ? (
-          <div>{t('messages.loading')}</div>
+          <CircularProgress />
         ) : isError ? (
-          <div>{t('messages.errorLoading')}</div>
+          <ErrorAlert error={error} />
         ) : (
           <ExerciseChart
             exercises={exercises}

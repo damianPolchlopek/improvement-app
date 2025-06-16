@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
-import ErrorBlock from '../../component/ErrorBlock';
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -74,10 +74,7 @@ export default function ExerciseView() {
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <ErrorBlock
-          title="Failed to load training data"
-          message={`Error: ${(trainingError || templateError)?.message || 'Unknown error'}`}
-        />
+          <ErrorAlert error={(trainingError || templateError)} />
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table>

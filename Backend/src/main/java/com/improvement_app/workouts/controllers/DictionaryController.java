@@ -1,20 +1,21 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
-import com.improvement_app.workouts.entity.TrainingTemplate;
-import com.improvement_app.workouts.entity2.ExerciseNameEntity;
 import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
+import com.improvement_app.workouts.response.ExerciseNameResponse;
 import com.improvement_app.workouts.response.ExercisePlaceResponse;
 import com.improvement_app.workouts.response.ExerciseProgressResponse;
 import com.improvement_app.workouts.response.ExerciseTypeResponse;
 import com.improvement_app.workouts.services.data.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import jakarta.ws.rs.core.MediaType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @Tag(name = "Dictionary API", description = "Example API operations")
@@ -30,8 +31,8 @@ public class DictionaryController {
     private final TrainingTemplateService trainingTemplateService;
 
     @GetMapping("/name")
-    public ListResponse<ExerciseNameEntity> getExerciseNames() {
-        List<ExerciseNameEntity> exerciseNames = exerciseNameService.getExerciseNames();
+    public ListResponse<ExerciseNameResponse> getExerciseNames() {
+        List<ExerciseNameResponse> exerciseNames = exerciseNameService.getExerciseNames();
         return ListResponse.of(exerciseNames);
     }
 

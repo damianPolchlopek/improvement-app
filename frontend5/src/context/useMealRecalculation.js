@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useSnackbar } from '../component/SnackbarProvider';
+import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 import { useTranslation } from 'react-i18next';
 import REST from '../utils/REST';
 

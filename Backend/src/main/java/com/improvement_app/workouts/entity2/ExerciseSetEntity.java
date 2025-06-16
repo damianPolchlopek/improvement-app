@@ -26,4 +26,8 @@ public class ExerciseSetEntity {
         this.rep = rep;
         this.weight = weight;
     }
+
+    public Double getCapacity(){
+        return rep * weight;
+    }
 }

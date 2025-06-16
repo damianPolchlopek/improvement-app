@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
 import REST from '../../utils/REST';
 import { useMealSelection } from '../../context/MealSelectionContext';
-import { useSnackbar } from '../../component/SnackbarProvider';
+import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 import { Button, CircularProgress } from '@mui/material';
 

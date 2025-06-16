@@ -4,16 +4,9 @@ import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.util.Page;
 import com.improvement_app.util.PaginationHelper;
-import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.entity.TrainingTemplate;
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
 import com.improvement_app.workouts.entity2.ExerciseEntity;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
 import com.improvement_app.workouts.entity2.TrainingEntity;
-import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
-import com.improvement_app.workouts.helpers.DriveFilesHelper;
-import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.ExerciseStrategy;
-import com.improvement_app.workouts.repository.ExerciseRepository;
+import com.improvement_app.workouts.entity2.enums.ExerciseName;
 import com.improvement_app.workouts.repository2.ExerciseEntityRepository;
 import com.improvement_app.workouts.repository2.TrainingEntityRepository;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
@@ -23,12 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Slf4j
 @Service
@@ -41,35 +31,42 @@ public class ExerciseService {
     private final TrainingTemplateService trainingTemplateService;
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
-//
-//
-//    public List<ExerciseEntity> findByDateOrderByIndex(LocalDate date) {
-//        return exerciseRepository.findByDateOrderByIndex(date);
-//    }
-//
+
+
+    public List<ExerciseEntity> findByDateOrderByIndex(LocalDate date) {
+        return exerciseRepository.findByTraining_Date(date);
+    }
+
 //    public List<ExerciseEntity> findByNameReverseSorted(String name) {
 //        return exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.DESC, "date"));
 //    }
-//
-//    public List<ExerciseEntity> findByNameOrderByDate(String name) {
-//        return exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.ASC, "date"));
-//    }
-//
+
+    public List<ExerciseEntity> findByNameOrderByDate(String name, LocalDate beginDateLD, LocalDate endDateLD) {
+        ExerciseName exerciseName = ExerciseName.fromValue(name);
+
+        return exerciseRepository.findByNameAndTraining_DateBetweenOrderByTraining_Date(
+                exerciseName,
+                Sort.by(Sort.Direction.ASC, "training.date"),
+                beginDateLD,
+                endDateLD
+        );
+    }
+
 //    public List<ExerciseEntity> findByTrainingNameOrderByIndex(String trainingName) {
 //        return exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
 //    }
-//
-//    @Deprecated
-//    public List<ExerciseEntity> saveAll(List<ExerciseEntity> exercises) {
-//        return exerciseRepository.saveAll(exercises);
-//    }
-//
-//    public Page<String> getAllTrainingNames(Pageable page) {
-//        List<String> trainingNames = getAllTrainingNames();
-//        return PaginationHelper.getPage(trainingNames, page.getPageNumber() + 1, page.getPageSize());
-//    }
 
-    public List<String> getAllTrainingNames() {
+    @Deprecated
+    public List<ExerciseEntity> saveAll(List<ExerciseEntity> exercises) {
+        return exerciseRepository.saveAll(exercises);
+    }
+
+    public Page<String> getAllTrainingNames(Pageable page) {
+        List<String> trainingNames = getAllTrainingNames();
+        return PaginationHelper.getPage(trainingNames, page.getPageNumber() + 1, page.getPageSize());
+    }
+
+    private List<String> getAllTrainingNames() {
         List<TrainingEntity> exercises = trainingRepository.findAll();
 
         return exercises.stream()

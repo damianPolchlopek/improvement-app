@@ -13,6 +13,8 @@ import java.util.List;
 public class ExercisePlaceService {
 
     public List<ExercisePlaceResponse> getExercisePlaces() {
-        return Arrays.stream(ExercisePlace.values()).map(place -> new ExercisePlaceResponse(place.getValue())).toList();
+        return Arrays.stream(ExercisePlace.values())
+                .map(place -> new ExercisePlaceResponse(place.getValue()))
+                .toList();
     }
 }
