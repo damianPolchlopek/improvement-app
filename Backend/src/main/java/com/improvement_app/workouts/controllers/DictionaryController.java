@@ -2,10 +2,7 @@ package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
 import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
-import com.improvement_app.workouts.response.ExerciseNameResponse;
-import com.improvement_app.workouts.response.ExercisePlaceResponse;
-import com.improvement_app.workouts.response.ExerciseProgressResponse;
-import com.improvement_app.workouts.response.ExerciseTypeResponse;
+import com.improvement_app.workouts.response.ExerciseMetadataResponse;
 import com.improvement_app.workouts.services.data.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,26 +28,26 @@ public class DictionaryController {
     private final TrainingTemplateService trainingTemplateService;
 
     @GetMapping("/name")
-    public ListResponse<ExerciseNameResponse> getExerciseNames() {
-        List<ExerciseNameResponse> exerciseNames = exerciseNameService.getExerciseNames();
+    public ListResponse<ExerciseMetadataResponse> getExerciseNames() {
+        List<ExerciseMetadataResponse> exerciseNames = exerciseNameService.getExerciseNames();
         return ListResponse.of(exerciseNames);
     }
 
     @GetMapping("/place")
-    public ListResponse<ExercisePlaceResponse> getExercisePlaces() {
-        List<ExercisePlaceResponse> exercisePlaces = exercisePlaceService.getExercisePlaces();
+    public ListResponse<ExerciseMetadataResponse> getExercisePlaces() {
+        List<ExerciseMetadataResponse> exercisePlaces = exercisePlaceService.getExercisePlaces();
         return ListResponse.of(exercisePlaces);
     }
 
     @GetMapping("/progress")
-    public ListResponse<ExerciseProgressResponse> getExerciseProgresses() {
-        List<ExerciseProgressResponse> exerciseProgresses = exerciseProgressService.getExerciseProgresses();
+    public ListResponse<ExerciseMetadataResponse> getExerciseProgresses() {
+        List<ExerciseMetadataResponse> exerciseProgresses = exerciseProgressService.getExerciseProgresses();
         return ListResponse.of(exerciseProgresses);
     }
 
     @GetMapping("/type")
-    public ListResponse<ExerciseTypeResponse> getExerciseTypes() {
-        List<ExerciseTypeResponse> exerciseTypes = exerciseTypeService.getExerciseTypes();
+    public ListResponse<ExerciseMetadataResponse> getExerciseTypes() {
+        List<ExerciseMetadataResponse> exerciseTypes = exerciseTypeService.getExerciseTypes();
         return ListResponse.of(exerciseTypes);
     }
 

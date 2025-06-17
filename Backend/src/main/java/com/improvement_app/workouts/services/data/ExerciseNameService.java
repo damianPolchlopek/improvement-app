@@ -2,7 +2,7 @@ package com.improvement_app.workouts.services.data;
 
 import com.improvement_app.workouts.entity2.ExerciseNameEntity;
 import com.improvement_app.workouts.repository2.ExerciseNameEntityRepository;
-import com.improvement_app.workouts.response.ExerciseNameResponse;
+import com.improvement_app.workouts.response.ExerciseMetadataResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,11 @@ public class ExerciseNameService {
 
     private final ExerciseNameEntityRepository nameRepository;
 
-    public List<ExerciseNameResponse> getExerciseNames() {
+    public List<ExerciseMetadataResponse> getExerciseNames() {
         return nameRepository.findAll()
                 .stream()
                 .map(ExerciseNameEntity::getName)
-                .map(ExerciseNameResponse::new)
+                .map(ExerciseMetadataResponse::new)
                 .toList();
     }
 

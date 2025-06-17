@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"training", "exerciseSets"})
-@ToString(exclude = {"training"})
+@ToString(exclude = {"training", "exerciseSets"})
 public class ExerciseEntity {
 
     @Id

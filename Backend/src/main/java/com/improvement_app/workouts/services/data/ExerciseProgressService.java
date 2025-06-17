@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.services.data;
 
 import com.improvement_app.workouts.entity2.enums.ExerciseProgress;
-import com.improvement_app.workouts.response.ExerciseProgressResponse;
+import com.improvement_app.workouts.response.ExerciseMetadataResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public class ExerciseProgressService {
 
-    public List<ExerciseProgressResponse> getExerciseProgresses() {
-        return Arrays.stream(ExerciseProgress.values()).map(place -> new ExerciseProgressResponse(place.getValue())).toList();
+    public List<ExerciseMetadataResponse> getExerciseProgresses() {
+        return Arrays.stream(ExerciseProgress.values())
+                .map(place -> new ExerciseMetadataResponse(place.getValue()))
+                .toList();
     }
 
 }

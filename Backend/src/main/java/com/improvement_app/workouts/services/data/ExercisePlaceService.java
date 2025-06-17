@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.services.data;
 
 import com.improvement_app.workouts.entity2.enums.ExercisePlace;
-import com.improvement_app.workouts.response.ExercisePlaceResponse;
+import com.improvement_app.workouts.response.ExerciseMetadataResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 public class ExercisePlaceService {
 
-    public List<ExercisePlaceResponse> getExercisePlaces() {
+    public List<ExerciseMetadataResponse> getExercisePlaces() {
         return Arrays.stream(ExercisePlace.values())
-                .map(place -> new ExercisePlaceResponse(place.getValue()))
+                .map(place -> new ExerciseMetadataResponse(place.getValue()))
                 .toList();
     }
 }

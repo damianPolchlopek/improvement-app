@@ -57,27 +57,28 @@ public enum ExerciseName {
     WYCISKANIE_HANTLI_NA_SKOSIE_30_ST("Wyciskanie hantli na skosie 30 st"),
     PODCIAGANIE_NA_DRAZKU_NADCHWYTEM_SZEROKIM_RAMPA("Podciąganie na drążku nadchwytem szerokim - rampa");
 
-    private final String displayName;
+    private final String name;
 
     ExerciseName(String displayName) {
-        this.displayName = displayName;
+        this.name = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public String getValue() {
+        return name;
     }
 
     public static ExerciseName fromValue(String displayName) {
         for (ExerciseName exercise : ExerciseName.values()) {
-            if (exercise.displayName.equals(displayName)) {
+            if (exercise.name.equals(displayName)) {
                 return exercise;
             }
         }
+
         throw new IllegalArgumentException("No enum constant for display name: " + displayName);
     }
 
     @Override
     public String toString() {
-        return displayName;
+        return name;
     }
 }

@@ -4,17 +4,23 @@ import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.util.Page;
 import com.improvement_app.util.PaginationHelper;
+import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity2.ExerciseEntity;
+import com.improvement_app.workouts.entity2.ExerciseSetEntity;
 import com.improvement_app.workouts.entity2.TrainingEntity;
+import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
 import com.improvement_app.workouts.entity2.enums.ExerciseName;
+import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
 import com.improvement_app.workouts.repository2.ExerciseEntityRepository;
 import com.improvement_app.workouts.repository2.TrainingEntityRepository;
+import com.improvement_app.workouts.response.ExerciseResponse;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -46,7 +52,6 @@ public class ExerciseService {
 
         return exerciseRepository.findByNameAndTraining_DateBetweenOrderByTraining_Date(
                 exerciseName,
-                Sort.by(Sort.Direction.ASC, "training.date"),
                 beginDateLD,
                 endDateLD
         );
@@ -55,11 +60,6 @@ public class ExerciseService {
 //    public List<ExerciseEntity> findByTrainingNameOrderByIndex(String trainingName) {
 //        return exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
 //    }
-
-    @Deprecated
-    public List<ExerciseEntity> saveAll(List<ExerciseEntity> exercises) {
-        return exerciseRepository.saveAll(exercises);
-    }
 
     public Page<String> getAllTrainingNames(Pageable page) {
         List<String> trainingNames = getAllTrainingNames();
@@ -78,28 +78,36 @@ public class ExerciseService {
 //    public void deleteAllExercises() {
 //        exerciseRepository.deleteAll();
 //    }
-//
-//    public List<Exercise> getATHExercise(String trainingTypeShortcut) {
-//        String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
-//
-//        TrainingTemplate trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut)
-//                .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
-//
-//        return trainingTemplate.getExercises().stream()
-//                .map(this::getMaximumCapacityExercise)
-//                .toList();
-//    }
-//
-//    public Exercise getMaximumCapacityExercise(String exerciseName) {
-//        return exerciseRepository.findByNameOrderByDate(exerciseName, Sort.by(Sort.Direction.DESC, "date"))
-//                .stream()
-//                .max(Comparator.comparingDouble(exercise -> exercise.getRepAndWeightList()
-//                        .stream()
-//                        .map(RepAndWeight::getCapacity)
-//                        .reduce((double) 0, Double::sum)))
-//                .stream().findFirst().orElse(null);
-//    }
-//
+
+    public List<ExerciseResponse> getATHExercise(String trainingTypeShortcut) {
+        String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
+
+        TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut)
+                .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
+
+        return trainingTemplate.getExercises().stream()
+                .map(exercise -> getMaximumCapacityExercise(exercise.getName()))
+                .flatMap(Optional::stream)
+                .map(ExerciseResponse::new)
+                .toList();
+    }
+
+    private Optional<ExerciseEntity> getMaximumCapacityExercise(String exerciseName) {
+        final ExerciseName name = ExerciseName.fromValue(exerciseName);
+
+        List<ExerciseEntity> exercises = exerciseRepository.findByNameOrderByTraining_DateDesc(name);
+
+        if (exercises.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return exercises.stream()
+                .max(Comparator.comparingDouble(exercise -> exercise.getExerciseSets()
+                        .stream()
+                        .map(ExerciseSetEntity::getCapacity)
+                        .reduce(0.0, Double::sum)));
+    }
+
 //    public List<Exercise> generateTrainingFromTemplate(String trainingTypeShortcut) {
 //        String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
 //

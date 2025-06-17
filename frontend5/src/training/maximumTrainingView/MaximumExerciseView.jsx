@@ -19,6 +19,7 @@ import {
 import StyledTableRow from '../../component/table/StyledTableRow'
 import StyledTableCell from '../../component/table/StyledTableCell'
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 export default function MaximumExerciseView() {
   const [trainingType, setTrainingType] = useState('A');
@@ -47,9 +48,10 @@ export default function MaximumExerciseView() {
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <Typography color="error" sx={{ mt: 2 }}>
-          {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania danych'}: {error.message}
-        </Typography>
+        <ErrorAlert error={error} />
+        // <Typography color="error" sx={{ mt: 2 }}>
+        //   {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania danych'}: {error.message}
+        // </Typography>
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table aria-label="simple table">

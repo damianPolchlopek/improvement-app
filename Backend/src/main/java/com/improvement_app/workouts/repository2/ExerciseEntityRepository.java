@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, Integer> {
@@ -20,10 +21,12 @@ public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByNameAndTraining_DateBetweenOrderByTraining_Date(
             ExerciseName name,
-            Sort sort,
             LocalDate beginDate,
             LocalDate endDate
     );
+
+    @EntityGraph(attributePaths = {"training", "exerciseSets"})
+    List<ExerciseEntity> findByNameOrderByTraining_DateDesc(ExerciseName exerciseName);
 
 //    Optional<ExerciseEntity> findFirstByNameOrderByDateDesc(String name);
 

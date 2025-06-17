@@ -5,6 +5,7 @@ import com.improvement_app.util.Page;
 import com.improvement_app.workouts.entity.Exercise;
 import com.improvement_app.workouts.entity2.ExerciseEntity;
 import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
+import com.improvement_app.workouts.response.ExerciseResponse;
 import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.ws.rs.core.MediaType;
@@ -26,7 +28,7 @@ import java.util.List;
 @RequestMapping("/exercises")
 public class ExerciseController implements Serializable {
 
-//    private final ExerciseService exerciseService;
+    private final ExerciseService exerciseService;
 
 //    @Operation(description = "Get all exercises with provided date")
 //    @GetMapping(value = "/date/{exerciseDate}", produces = MediaType.APPLICATION_JSON)
@@ -97,12 +99,13 @@ public class ExerciseController implements Serializable {
 //        return exerciseService.getLastTrainings(trainingType, pageable);
 //    }
 //
-//    @Operation(description = "Get maximum exercises from training")
-//    @GetMapping(value = "/training/{trainingType}/maximum", produces = MediaType.APPLICATION_JSON)
-//    public ListResponse<Exercise> getMaxTrainingExercises(@PathVariable String trainingType) {
-//        List<Exercise> exercises = exerciseService.getATHExercise(trainingType);
-//        return ListResponse.of(exercises);
-//    }
+    @Transactional
+    @Operation(description = "Get maximum exercises from training")
+    @GetMapping(value = "/training/{trainingType}/maximum", produces = MediaType.APPLICATION_JSON)
+    public ListResponse<ExerciseResponse> getMaxTrainingExercises(@PathVariable String trainingType) {
+        List<ExerciseResponse> exercises = exerciseService.getATHExercise(trainingType);
+        return ListResponse.of(exercises);
+    }
 //
 //    @Operation(description = "Add new training")
 //    @PostMapping(value = "/addTraining", produces = MediaType.APPLICATION_JSON)
