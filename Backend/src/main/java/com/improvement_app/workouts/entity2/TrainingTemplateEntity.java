@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity2;
 
+import com.improvement_app.workouts.response.TrainingTemplateResponse;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +38,7 @@ public class TrainingTemplateEntity {
                     @Index(name = "idx_training_template_exercise_name", columnList = "exercise_name_id")
             }
     )
-    private Set<ExerciseNameEntity> exercises = new HashSet<>();
+    private List<ExerciseNameEntity> exercises = new ArrayList<>();
 
     public TrainingTemplateEntity(String name) {
         this.name = name;
@@ -47,4 +48,9 @@ public class TrainingTemplateEntity {
         exercises.add(exercise);
         exercise.getTrainingTemplates().add(this);
     }
+
+    public TrainingTemplateResponse toResponse() {
+        return TrainingTemplateResponse.of(this);
+    }
+
 }

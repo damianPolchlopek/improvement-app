@@ -2,23 +2,22 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
-import com.improvement_app.util.Page;
-import com.improvement_app.util.PaginationHelper;
-import com.improvement_app.workouts.entity.TrainingTemplate;
 import com.improvement_app.workouts.entity2.ExerciseEntity;
 import com.improvement_app.workouts.entity2.ExerciseSetEntity;
 import com.improvement_app.workouts.entity2.TrainingEntity;
 import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
 import com.improvement_app.workouts.entity2.enums.ExerciseName;
-import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
+import com.improvement_app.workouts.entity2.enums.ExerciseType;
+import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.repository2.ExerciseEntityRepository;
 import com.improvement_app.workouts.repository2.TrainingEntityRepository;
 import com.improvement_app.workouts.response.ExerciseResponse;
+import com.improvement_app.workouts.response.TrainingDayResponse;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ExerciseService {
 
     private final ExerciseEntityRepository exerciseRepository;
@@ -39,13 +39,29 @@ public class ExerciseService {
     private final FilePathService filePathService;
 
 
-    public List<ExerciseEntity> findByDateOrderByIndex(LocalDate date) {
-        return exerciseRepository.findByTraining_Date(date);
+    public List<ExerciseResponse> findByDateOrderByIndex(LocalDate date) {
+        List<ExerciseEntity> exercises = exerciseRepository.findByTraining_Date(date);
+
+        if (exercises.isEmpty()) {
+            throw new ExercisesNotFoundException("date", date.toString());
+        }
+
+        return exercises.stream()
+                .map(ExerciseResponse::new)
+                .toList();
     }
 
-//    public List<ExerciseEntity> findByNameReverseSorted(String name) {
-//        return exerciseRepository.findByNameOrderByDate(name, Sort.by(Sort.Direction.DESC, "date"));
-//    }
+    public List<ExerciseResponse> findByNameReverseSorted(String name) {
+        List<ExerciseEntity> exercises = exerciseRepository.findByNameOrderByTraining_DateDesc(ExerciseName.fromValue(name));
+
+        if (exercises.isEmpty()) {
+            throw new ExercisesNotFoundException("name", name);
+        }
+
+        return exercises.stream()
+                .map(ExerciseResponse::new)
+                .toList();
+    }
 
     public List<ExerciseEntity> findByNameOrderByDate(String name, LocalDate beginDateLD, LocalDate endDateLD) {
         ExerciseName exerciseName = ExerciseName.fromValue(name);
@@ -57,33 +73,36 @@ public class ExerciseService {
         );
     }
 
-//    public List<ExerciseEntity> findByTrainingNameOrderByIndex(String trainingName) {
-//        return exerciseRepository.findByTrainingNameOrderByIndex(trainingName);
-//    }
+    public List<ExerciseResponse> findByTrainingNameOrderByIndex(String trainingName) {
+        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingName(trainingName);
+
+        if (exercises.isEmpty()) {
+            throw new ExercisesNotFoundException("trainingName", trainingName);
+        }
+
+        return exercises.stream()
+                .map(ExerciseResponse::new)
+                .toList();
+    }
 
     public Page<String> getAllTrainingNames(Pageable page) {
         List<String> trainingNames = getAllTrainingNames();
-        return PaginationHelper.getPage(trainingNames, page.getPageNumber() + 1, page.getPageSize());
+//        return PaginationHelper.getPage(trainingNames, page.getPageNumber() + 1, page.getPageSize());
+        return null;
     }
 
     private List<String> getAllTrainingNames() {
-        List<TrainingEntity> exercises = trainingRepository.findAll();
+        List<TrainingEntity> exercises = trainingRepository.findAllByOrderByDateDesc();
 
         return exercises.stream()
                 .map(TrainingEntity::getName)
-                .sorted(Collections.reverseOrder())
-                .collect(Collectors.toList());
+                .toList();
     }
-//
-//    public void deleteAllExercises() {
-//        exerciseRepository.deleteAll();
-//    }
 
     public List<ExerciseResponse> getATHExercise(String trainingTypeShortcut) {
-        String convertedTrainingType = TrainingTypeConverter.convert(trainingTypeShortcut);
+        String convertedTrainingType = TrainingTypeConverter.toExerciseType(trainingTypeShortcut);
 
-        TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut)
-                .orElseThrow(() -> new TrainingTemplateNotFoundException(convertedTrainingType));
+        TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut);
 
         return trainingTemplate.getExercises().stream()
                 .map(exercise -> getMaximumCapacityExercise(exercise.getName()))
@@ -118,36 +137,71 @@ public class ExerciseService {
 //                .map(this::getLatestExercise)
 //                .toList();
 //    }
-//
-//    public Page<LinkedHashMap<String, Exercise>> getLastTrainings(String type, Pageable page) {
-//        final String longerTrainingType = TrainingTypeConverter.convert(type);
-//        List<Exercise> exercises = exerciseRepository.findAll();
-//
-//        List<String> byName = exercises.stream()
-//                .filter(e -> e.getType().equals(longerTrainingType))
-//                .map(Exercise::getTrainingName)
-//                .distinct()
-//                .toList();
-//
-//        List<Exercise> byDate = exerciseRepository.findByTrainingNameIn(byName);
-//
-//        List<LinkedHashMap<String, Exercise>> collect = byDate.stream()
-//                // Sortowanie ćwiczeń według daty malejąco (LocalDate jest porównywalny)
-//                .sorted(Comparator.comparing(Exercise::getDate).reversed())
-//                // Grupowanie według dnia, następnie grupowanie według nazwy
-//                .collect(Collectors.groupingBy(Exercise::getDate, LinkedHashMap::new,
-//                        Collectors.toMap(Exercise::getName, e -> e, (e1, e2) -> e1, LinkedHashMap::new)))
-//                // Przekształcenie mapy do listy map
-//                .values().stream()
-//                .collect(Collectors.toList());
-//
+
+    public Page<TrainingDayResponse> getLastTrainings2(String type, Pageable page) {
+        final String dbExerciseType = TrainingTypeConverter.toExerciseType(type);
+        final ExerciseType exerciseType = ExerciseType.valueOf(dbExerciseType);
+
+        Page<TrainingEntity> distinctByExercisesType =
+                trainingRepository.findDistinctByExercisesTypeOrderByDateDesc(exerciseType, page);
+
+        return distinctByExercisesType
+                .map(this::mapToTrainingDayResponse);
+    }
+
+    private TrainingDayResponse mapToTrainingDayResponse(TrainingEntity training) {
+
+        Map<String, ExerciseResponse> exerciseMap = training.getExercises().stream()
+                .collect(Collectors.toMap(
+                        e -> e.getName().getValue(),
+                        ExerciseResponse::new,
+                        (existing, duplicate) -> existing,
+                        LinkedHashMap::new
+                ));
+
+        return new TrainingDayResponse(training.getDate(), exerciseMap);
+    }
+
+    public Page<LinkedHashMap<String, ExerciseResponse>> getLastTrainings(String type, Pageable page) {
+        final String dbExerciseType = TrainingTypeConverter.toExerciseType(type);
+        final ExerciseType exerciseType = ExerciseType.valueOf(dbExerciseType);
+
+        List<String> exercises = exerciseRepository.findByType(exerciseType)
+                .stream()
+                .map(e -> e.getTraining().getName())
+                .distinct()
+                .toList();
+
+        List<ExerciseEntity> byDate = exerciseRepository.findByTrainingNameIn(exercises);
+
+        List<LinkedHashMap<String, ExerciseResponse>> collect = byDate.stream()
+                // Sortowanie ćwiczeń według daty treningu malejąco
+                .sorted(Comparator.comparing((ExerciseEntity e) -> e.getTraining().getDate()).reversed())
+                // Grupowanie według dnia treningu, następnie grupowanie według nazwy ćwiczenia
+                .collect(Collectors.groupingBy(
+                        e -> e.getTraining().getDate(),
+                        LinkedHashMap::new,
+                        Collectors.toMap(
+                                e -> e.getName().getValue(),
+                                ExerciseResponse::new,
+                                (e1, e2) -> e1,
+                                LinkedHashMap::new
+                        )
+                ))
+                // Przekształcenie mapy do listy map
+                .values().stream()
+                .collect(Collectors.toList());
+
 //        return PaginationHelper.getPage(collect, page.getPageNumber() + 1, page.getPageSize());
-//    }
-//
-//    private Exercise getLatestExercise(String exerciseName) {
-//        return exerciseRepository.findFirstByNameOrderByDateDesc(exerciseName)
-//                .orElseGet(() -> new Exercise(exerciseName)); // Tworzenie nowego ćwiczenia, jeśli brak w historii
-//    }
+        return null;
+    }
+
+
+    private ExerciseResponse getLatestExercise(String exerciseName) {
+        return exerciseRepository.findFirstByNameOrderByTraining_DateDesc(exerciseName)
+                .map(ExerciseResponse::new)
+                .orElseGet(() -> new ExerciseResponse(exerciseName)); // Tworzenie nowego ćwiczenia, jeśli brak w historii
+    }
 //
 //    public List<Exercise> addTraining(List<Exercise> exercises) {
 //        Exercise latestExercise = findLatestExercise();

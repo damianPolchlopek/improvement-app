@@ -17,6 +17,7 @@ import {
 import StyledTableRow from '../../component/table/StyledTableRow';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import REST from '../../utils/REST';
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 export default function SingleTraining({ trainingName }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function SingleTraining({ trainingName }) {
 
   const modifiedTrainingName = trainingName?.replace(/ /g, '_');
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['exercises', modifiedTrainingName, filter],
     queryFn: async () => {
       if (filter?.type === 'date') {
@@ -78,8 +79,8 @@ export default function SingleTraining({ trainingName }) {
           <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
             <CircularProgress />
           </Box>
-        ) : error ? (
-          <Typography color="error">{t('messages.errorLoading')}</Typography>
+        ) : isError ? (
+          <ErrorAlert error={error} />
         ) : (
           <TableContainer component={Paper}>
             <Table aria-label="exercise table">

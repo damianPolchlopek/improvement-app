@@ -2,6 +2,8 @@ package com.improvement_app.workouts.repository2;
 
 import com.improvement_app.workouts.entity2.ExerciseEntity;
 import com.improvement_app.workouts.entity2.enums.ExerciseName;
+import com.improvement_app.workouts.entity2.enums.ExerciseType;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,9 +30,12 @@ public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByNameOrderByTraining_DateDesc(ExerciseName exerciseName);
 
-//    Optional<ExerciseEntity> findFirstByNameOrderByDateDesc(String name);
+    Optional<ExerciseEntity> findFirstByNameOrderByTraining_DateDesc(String name);
 
-//    List<ExerciseEntity> findByTrainingNameOrderByIndex(String trainingName);
+    List<ExerciseEntity> findByTrainingName(String trainingName);
 
 //    ExerciseEntity findTopByOrderByDateDesc();
+
+    List<ExerciseEntity> findByType(ExerciseType type);
+
 }

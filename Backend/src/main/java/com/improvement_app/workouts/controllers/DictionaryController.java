@@ -1,8 +1,8 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
-import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
 import com.improvement_app.workouts.response.ExerciseMetadataResponse;
+import com.improvement_app.workouts.response.TrainingTemplateResponse;
 import com.improvement_app.workouts.services.data.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,8 +53,8 @@ public class DictionaryController {
 
     @Operation(description = "Get training template")
     @GetMapping(value = "/training/{template}", produces = MediaType.APPLICATION_JSON)
-    public TrainingTemplateEntity getTrainingTemplate(@PathVariable String template) {
+    public TrainingTemplateResponse getTrainingTemplate(@PathVariable String template) {
         return trainingTemplateService.getTrainingTemplate(template)
-                .orElseThrow(() -> new RuntimeException("Training template not found"));
+                .toResponse();
     }
 }

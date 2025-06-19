@@ -87,19 +87,18 @@ export default function ExerciseView() {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {trainingData.content.map((exerciseMap, index) => {
-                const firstAvailableExercise = Object.entries(exerciseMap).find(
-                  ([, value]) => value?.date
-                );
-                const date = firstAvailableExercise ? firstAvailableExercise[1].date : 'Brak danych';
+              {trainingData.content.map((trainingDay, index) => {
+                // trainingDay ma teraz strukturę: { date: "2024-06-19", exercises: { "Bench Press": {...}, "Squats": {...} } }
+                const trainingDate = trainingDay.date || 'Brak danych';
+                const exercisesMap = trainingDay.exercises || {};
 
                 return (
                   <StyledTableRow key={index}>
-                    <StyledTableCell>{date}</StyledTableCell>
-                    {templateData.exercises.map((exercise, index) => {
-                      const exerciseData = exerciseMap?.[exercise] || {};
+                    <StyledTableCell>{trainingDate}</StyledTableCell>
+                    {templateData.exercises.map((exerciseName, exerciseIndex) => {
+                      const exerciseData = exercisesMap[exerciseName] || {};
                       return (
-                        <StyledTableCell key={index}>
+                        <StyledTableCell key={exerciseIndex}>
                           <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
                           <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
                         </StyledTableCell>

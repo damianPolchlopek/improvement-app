@@ -30,6 +30,19 @@ public record ExerciseResponse(
         );
     }
 
+    public ExerciseResponse(String exerciseName) {
+        this(
+                null,
+                exerciseName,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+    }
+
     private static String generateReps(List<ExerciseSetEntity> sets) {
         return sets.stream()
                 .map(set -> formatDouble(set.getRep()))
