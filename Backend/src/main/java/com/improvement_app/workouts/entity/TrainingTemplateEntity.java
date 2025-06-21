@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity2;
+package com.improvement_app.workouts.entity;
 
 import com.improvement_app.workouts.response.TrainingTemplateResponse;
 import jakarta.persistence.*;
@@ -38,6 +38,7 @@ public class TrainingTemplateEntity {
                     @Index(name = "idx_training_template_exercise_name", columnList = "exercise_name_id")
             }
     )
+    @OrderBy("id")
     private List<ExerciseNameEntity> exercises = new ArrayList<>();
 
     public TrainingTemplateEntity(String name) {

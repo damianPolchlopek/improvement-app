@@ -1,7 +1,13 @@
-package com.improvement_app.workouts.entity2;
+package com.improvement_app.workouts.entity;
 
+import com.improvement_app.workouts.controllers.request.ExerciseRequest;
+import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "exercise_set", schema = "workout")
@@ -27,7 +33,15 @@ public class ExerciseSetEntity {
         this.weight = weight;
     }
 
-    public Double getCapacity(){
+    public Double getCapacity() {
         return rep * weight;
+    }
+
+    public static Set<ExerciseSetEntity> fromString(ExerciseRequest request) {
+        return DriveFilesHelper.parseExerciseSets(
+                request.getType(),
+                request.getReps(),
+                request.getWeight()
+        );
     }
 }

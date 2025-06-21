@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
-import com.improvement_app.workouts.entity.dto.DataToFront;
+import com.improvement_app.workouts.response.ChartPoint;
 import com.improvement_app.workouts.services.StatisticService;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -25,7 +25,7 @@ public class StatisticController {
     private final StatisticService statisticService;
 
     @GetMapping(value = "{exerciseName}/{chartType}/{beginDate}/{endDate}", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<List<DataToFront>> getTrainingStatisticData(
+    public ResponseEntity<List<ChartPoint>> getTrainingStatisticData(
                                             @PathVariable
                                             @NotBlank(message = "Exercise name is required")
                                             String exerciseName,
@@ -43,7 +43,7 @@ public class StatisticController {
                                             String endDate)
     {
 
-        List<DataToFront> dataToChart
+        List<ChartPoint> dataToChart
                 = statisticService.generateStatisticChartData(exerciseName, chartType, beginDate, endDate);
 
         return ResponseEntity.ok(dataToChart);

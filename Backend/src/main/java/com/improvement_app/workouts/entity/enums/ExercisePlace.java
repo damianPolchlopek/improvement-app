@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity2.enums;
+package com.improvement_app.workouts.entity.enums;
 
 public enum ExercisePlace {
     GYM("Siłownia"),

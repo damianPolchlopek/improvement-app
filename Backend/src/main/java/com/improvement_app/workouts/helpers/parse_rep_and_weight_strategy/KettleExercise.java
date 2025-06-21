@@ -1,10 +1,9 @@
 package com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy;
 
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class KettleExercise implements ExerciseStrategy {
 
@@ -17,13 +16,13 @@ public class KettleExercise implements ExerciseStrategy {
     }
 
     @Override
-    public List<ExerciseSetEntity> parseExercise() {
+    public Set<ExerciseSetEntity> parseExercise() {
         validateRepsAndWeight(reps, weight);
 
         String[] repsArray = reps.split(String.valueOf(SERIES_DELIMITER));
         String[] weightArray = weight.split(String.valueOf(SERIES_DELIMITER));
 
-        List<ExerciseSetEntity> result = new ArrayList<>();
+        final Set<ExerciseSetEntity> result = new LinkedHashSet<>();
 
         for (int i = 0; i < repsArray.length; i++) {
             final String parsedRep = repsArray[i];

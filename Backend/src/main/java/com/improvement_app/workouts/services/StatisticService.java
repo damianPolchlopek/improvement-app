@@ -1,26 +1,29 @@
 package com.improvement_app.workouts.services;
 
-import com.improvement_app.workouts.entity.chart.ChartType;
-import com.improvement_app.workouts.entity.dto.DataToFront;
-import com.improvement_app.workouts.entity2.ExerciseEntity;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.enums.ChartType;
+import com.improvement_app.workouts.response.ChartPoint;
+import com.improvement_app.workouts.entity.ExerciseEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.exceptions.InvalidDateRangeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StatisticService {
 
     private final ExerciseService exerciseService;
 
-    public List<DataToFront> generateStatisticChartData(String exerciseName, String chartType, String beginDate, String endDate) {
+    public List<ChartPoint> generateStatisticChartData(String exerciseName, String chartType, String beginDate, String endDate) {
         List<ExerciseEntity> filteredExercises = getFilteredExercises(exerciseName, beginDate, endDate);
 
         ChartType type = ChartType.valueOf(chartType);
@@ -28,8 +31,10 @@ public class StatisticService {
         List<Double> values;
         if (type == ChartType.Capacity) {
             values = getCapacity(filteredExercises);
-        } else {
+        } else if (type == ChartType.Weight){
             values = getWeight(filteredExercises);
+        } else {
+            throw new IllegalArgumentException("User selected incorrect chart type: " + type);
         }
 
         List<LocalDate> localDates = getLocalDates(filteredExercises);
@@ -73,26 +78,28 @@ public class StatisticService {
 
     private List<Double> getWeight(List<ExerciseEntity> exercises) {
         if (exercises.isEmpty()) {
+            log.warn("No data to send to chart");
             return List.of();
         }
 
-        int seriesNumber = exercises.get(0).getExerciseSets().size();
+        List<Double> result = new ArrayList<>();
+        for (ExerciseEntity exerciseEntity : exercises) {
+            int seriesNumber = exerciseEntity.getExerciseSets().size();
 
-        return exercises
-                .stream()
-                .map(ExerciseEntity::getExerciseSets)
-                .map(exerciseSet ->
-                        exerciseSet
-                                .stream()
-                                .map(ExerciseSetEntity::getWeight)
-                                .reduce((double) 0, Double::sum))
-                .map(weight -> weight / seriesNumber)
-                .toList();
+            Double reduce = exerciseEntity.getExerciseSets().stream()
+                    .map(ExerciseSetEntity::getWeight)
+                    .reduce((double) 0, Double::sum);
+
+            Double calculationResult = reduce / seriesNumber;
+            result.add(calculationResult);
+        }
+
+        return result;
     }
 
-    private List<DataToFront> scaleLists(List<Double> values, List<LocalDate> dates) {
+    private List<ChartPoint> scaleLists(List<Double> values, List<LocalDate> dates) {
         return IntStream.range(0, dates.size())
-                .mapToObj(i -> new DataToFront(dates.get(i), values.get(i)))
+                .mapToObj(i -> new ChartPoint(dates.get(i), values.get(i)))
                 .collect(Collectors.toList());
     }
 

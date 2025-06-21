@@ -1,9 +1,9 @@
 package com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy;
 
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class SwimmingPoolExercise implements ExerciseStrategy {
@@ -12,8 +12,8 @@ public class SwimmingPoolExercise implements ExerciseStrategy {
     private final String laps;
 
     @Override
-    public List<ExerciseSetEntity> parseExercise() {
-        return List.of(new ExerciseSetEntity(
+    public Set<ExerciseSetEntity> parseExercise() {
+        return Set.of(new ExerciseSetEntity(
                 Double.parseDouble(laps),
                 Double.parseDouble(distance)));
     }

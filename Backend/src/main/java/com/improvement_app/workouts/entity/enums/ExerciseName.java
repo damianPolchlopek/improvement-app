@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity2.enums;
+package com.improvement_app.workouts.entity.enums;
 
 public enum ExerciseName {
     PRZYCIAGANIE_WASKIEGO_UCHWYTU_POZIOMEGO_DO_BRZUCHA("Przyciąganie wąskiego uchwytu wyc poziomego do brzucha"),

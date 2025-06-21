@@ -1,15 +1,15 @@
 package com.improvement_app.workouts.helpers;
 
-import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.entity2.ExerciseEntity;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
-import com.improvement_app.workouts.entity2.TrainingEntity;
-import com.improvement_app.workouts.entity2.enums.ExerciseName;
-import com.improvement_app.workouts.entity2.enums.ExercisePlace;
-import com.improvement_app.workouts.entity2.enums.ExerciseProgress;
-import com.improvement_app.workouts.entity2.enums.ExerciseType;
+import com.improvement_app.workouts.entity.ExerciseEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.TrainingEntity;
+import com.improvement_app.workouts.entity.enums.ExerciseName;
+import com.improvement_app.workouts.entity.enums.ExercisePlace;
+import com.improvement_app.workouts.entity.enums.ExerciseProgress;
+import com.improvement_app.workouts.entity.enums.ExerciseType;
 import com.improvement_app.workouts.exceptions.*;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
+import com.improvement_app.workouts.controllers.request.ExerciseRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,8 +69,7 @@ public class DriveFilesHelper {
                 cell = row.getCell(PROGRESS_INDEX);
                 final String progress = cell.getStringCellValue().trim();
 
-                final ExerciseStrategy exerciseStrategy = getExerciseParseStrategy(exerciseType, reps, weight);
-                final List<ExerciseSetEntity> exerciseSets = exerciseStrategy.parseExercise();
+                final Set<ExerciseSetEntity> exerciseSets = parseExerciseSets(exerciseType, reps, weight);
 
                 ExerciseEntity exerciseEntity = new ExerciseEntity(
                         ExerciseName.fromValue(exerciseName),
@@ -114,7 +114,6 @@ public class DriveFilesHelper {
 
         return null; // Return null if no place is found
     }
-
 
     private static String getCellValue(Cell cell) {
         return cell.getCellType().equals(CellType.STRING) ?
@@ -166,7 +165,15 @@ public class DriveFilesHelper {
         return dataList;
     }
 
-    public static ExerciseStrategy getExerciseParseStrategy(final String exerciseType,
+    public static Set<ExerciseSetEntity> parseExerciseSets(final String exerciseType,
+                                                final String reps,
+                                                final String weight) {
+
+        final ExerciseStrategy exerciseStrategy = getExerciseParseStrategy(exerciseType, reps, weight);
+        return exerciseStrategy.parseExercise();
+    }
+
+    private static ExerciseStrategy getExerciseParseStrategy(final String exerciseType,
                                                             final String reps,
                                                             final String weight) {
         final String STRENGTH_TRAINING_NAME = "Siłowy";
@@ -209,16 +216,15 @@ public class DriveFilesHelper {
         return number + " - " + day + "." + month + "." + year + "r. - " + type;
     }
 
-    public static String generateFileName(List<Exercise> exercisesToAdd, Exercise lastExistedExercise) {
-        final String lastExerciseName = lastExistedExercise.getTrainingName();
+    public static String generateFileName(ExerciseType exerciseType, ExerciseEntity lastExistedExercise) {
+        final String lastExerciseName = lastExistedExercise.getTraining().getName();
         final String lastTrainingNumber = parseTrainingName(lastExerciseName, 1);
         final int lastTrainingNumberInt = Integer.parseInt(lastTrainingNumber);
         final String incrementedLastExerciseNumber = String.valueOf(lastTrainingNumberInt + 1);
 
         final String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-        final String lastTypeExercise = exercisesToAdd.get(0).getType();
-        final String lastTrainingType = parseTrainingType(lastTypeExercise);
+        final String lastTrainingType = parseTrainingType(exerciseType.getValue());
 
         return incrementedLastExerciseNumber + " - " + dateString + "r." + " - " + lastTrainingType;
     }
@@ -249,7 +255,7 @@ public class DriveFilesHelper {
         return parts[1].trim();
     }
 
-    public static void createExcelFile(final List<Exercise> exercises,
+    public static void createExcelFile(final List<ExerciseRequest> exercises,
                                        final String fileLocation) {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
@@ -272,7 +278,7 @@ public class DriveFilesHelper {
             style.setVerticalAlignment(VerticalAlignment.CENTER);
 
             for (int i = 0; i < exercises.size(); ++i) {
-                final Exercise exercise = exercises.get(i);
+                final ExerciseRequest exercise = exercises.get(i);
                 final String exerciseType = exercise.getType();
                 final String exercisePlace = exercise.getPlace();
                 final String exerciseName = exercise.getName();

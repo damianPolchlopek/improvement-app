@@ -1,12 +1,11 @@
 package com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy;
 
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,28 +16,28 @@ public class CardioExercise implements ExerciseStrategy {
     final String speed;
 
     @Override
-    public List<ExerciseSetEntity> parseExercise() {
-        final String distanceRegex  = "([0-9]+.?[0-9]*) km";
-        final String speedRegex     = "([0-9]+.?[0-9]*) km/h";
+    public Set<ExerciseSetEntity> parseExercise() {
+        final String distanceRegex = "([0-9]+.?[0-9]*) km";
+        final String speedRegex = "([0-9]+.?[0-9]*) km/h";
 
         final String parsedDistance = parseString(distance, distanceRegex);
-        final String parsedSpeed    = parseString(speed, speedRegex);
+        final String parsedSpeed = parseString(speed, speedRegex);
 
         ExerciseSetEntity firstRep = new ExerciseSetEntity(
-                    Double.parseDouble(parsedDistance),
-                    Double.parseDouble(parsedSpeed));
+                Double.parseDouble(parsedDistance),
+                Double.parseDouble(parsedSpeed));
 
-        final List<ExerciseSetEntity> result = new ArrayList<>();
+        final Set<ExerciseSetEntity> result = new LinkedHashSet<>();
         result.add(firstRep);
         return result;
     }
 
-    private String parseString(final String stringToParse, final String regex){
-        Pattern pattern     = Pattern.compile(regex);
-        Matcher matcher     = pattern.matcher(stringToParse);
-        boolean matchFound  = matcher.find();
+    private String parseString(final String stringToParse, final String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(stringToParse);
+        boolean matchFound = matcher.find();
 
-        if (!matchFound){
+        if (!matchFound) {
             throw new TrainingRegexNotFoundException("Incorrect string: " + stringToParse
                     + ", for following regex: " + regex);
         }

@@ -121,4 +121,18 @@ public class TrainingExceptionsHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+
+    @ExceptionHandler(TrainingRegexNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleParseException(TrainingRegexNotFoundException ex) {
+        log.warn("Parse exception: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code("INVALID_INPUT_DATA")
+                .message(ex.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.entity2;
+package com.improvement_app.workouts.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

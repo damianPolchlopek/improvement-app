@@ -1,10 +1,7 @@
-package com.improvement_app.workouts.repository2;
+package com.improvement_app.workouts.repository;
 
-import com.improvement_app.workouts.entity2.ExerciseEntity;
-import com.improvement_app.workouts.entity2.enums.ExerciseName;
-import com.improvement_app.workouts.entity2.enums.ExerciseType;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.improvement_app.workouts.entity.ExerciseEntity;
+import com.improvement_app.workouts.entity.enums.ExerciseName;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,9 +13,8 @@ import java.util.Optional;
 @Repository
 public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, Integer> {
 
+    @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByTraining_Date(LocalDate date);
-
-    List<ExerciseEntity> findByTrainingNameIn(List<String> trainingNames);
 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByNameAndTraining_DateBetweenOrderByTraining_Date(
@@ -30,12 +26,13 @@ public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByNameOrderByTraining_DateDesc(ExerciseName exerciseName);
 
-    Optional<ExerciseEntity> findFirstByNameOrderByTraining_DateDesc(String name);
+    @EntityGraph(attributePaths = {"training", "exerciseSets"})
+    Optional<ExerciseEntity> findFirstByNameOrderByTraining_DateDesc(ExerciseName name);
 
+    @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByTrainingName(String trainingName);
 
-//    ExerciseEntity findTopByOrderByDateDesc();
-
-    List<ExerciseEntity> findByType(ExerciseType type);
+    @EntityGraph(attributePaths = {"training"})
+    ExerciseEntity findTopByOrderByTrainingDateDesc();
 
 }

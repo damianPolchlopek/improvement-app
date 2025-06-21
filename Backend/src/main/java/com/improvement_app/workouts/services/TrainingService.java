@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.services;
 
-import com.improvement_app.workouts.entity2.TrainingEntity;
-import com.improvement_app.workouts.repository2.TrainingEntityRepository;
+import com.improvement_app.workouts.entity.TrainingEntity;
+import com.improvement_app.workouts.repository.TrainingEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

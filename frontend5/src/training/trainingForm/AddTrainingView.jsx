@@ -29,7 +29,7 @@ export default function AddTrainingView() {
   } = useQuery({
     queryKey: ['training-template', trainingType],
     queryFn: () => REST.getTrainingTemplateByType(trainingType),
-    enabled: shouldFetch, // tylko jeśli kliknięto
+    // enabled: shouldFetch, // tylko jeśli kliknięto
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
     onSuccess: () => {
@@ -38,7 +38,7 @@ export default function AddTrainingView() {
   });
 
   const handleLoadTraining = () => {
-    setShouldFetch(true);
+    setShouldFetch(true)
   };
 
   return (

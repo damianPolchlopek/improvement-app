@@ -1,6 +1,7 @@
-package com.improvement_app.workouts.entity2;
+package com.improvement_app.workouts.entity;
 
-import com.improvement_app.workouts.entity2.enums.ExercisePlace;
+import com.improvement_app.workouts.entity.enums.ExercisePlace;
+import com.improvement_app.workouts.controllers.request.ExerciseRequest;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,19 @@ public class TrainingEntity {
         for (ExerciseEntity exercise : exercises) {
             exercise.setTraining(this);
         }
+    }
+
+    public static TrainingEntity from(List<ExerciseRequest> trainingRequest) {
+
+        List<ExerciseEntity> exercises = ExerciseEntity.create(trainingRequest);
+        ExerciseRequest exerciseRequest = trainingRequest.get(0);
+
+        return new TrainingEntity(
+                LocalDate.now(),
+                exerciseRequest.getTrainingName(),
+                ExercisePlace.fromString(exerciseRequest.getPlace()),
+                exercises
+        );
     }
 
     @PrePersist

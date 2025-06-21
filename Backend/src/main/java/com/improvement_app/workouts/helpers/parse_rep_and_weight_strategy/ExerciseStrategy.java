@@ -1,14 +1,14 @@
 package com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy;
 
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 
-import java.util.List;
+import java.util.Set;
 
 public interface ExerciseStrategy {
     char SERIES_DELIMITER = '/';
-    List<ExerciseSetEntity> parseExercise();
+
+    Set<ExerciseSetEntity> parseExercise();
 
     default void validateRepsAndWeight(String weight, String reps) {
         long weightSeries = weight.chars()

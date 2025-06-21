@@ -1,10 +1,10 @@
 package com.improvement_app.workouts.response;
 
-import com.improvement_app.workouts.entity2.ExerciseEntity;
-import com.improvement_app.workouts.entity2.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.ExerciseEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public record ExerciseResponse(
@@ -25,8 +25,8 @@ public record ExerciseResponse(
                 entity.getProgress().getValue(),
                 entity.getTraining().getName(),
                 entity.getTraining().getDate(),
-                generateReps(entity.getExerciseSets()),
-                generateWeights(entity.getExerciseSets())
+                formatWeightsToString(entity.getExerciseSets()),
+                formatRepsToString(entity.getExerciseSets())
         );
     }
 
@@ -43,7 +43,7 @@ public record ExerciseResponse(
         );
     }
 
-    private static String generateReps(List<ExerciseSetEntity> sets) {
+    private static String formatRepsToString(Set<ExerciseSetEntity> sets) {
         return sets.stream()
                 .map(set -> formatDouble(set.getRep()))
                 .collect(Collectors.joining("/"));
@@ -53,7 +53,7 @@ public record ExerciseResponse(
         return value % 1 == 0 ? String.valueOf(value.intValue()) : String.valueOf(value);
     }
 
-    private static String generateWeights(List<ExerciseSetEntity> sets) {
+    private static String formatWeightsToString(Set<ExerciseSetEntity> sets) {
         return sets.stream()
                 .map(set -> formatDouble(set.getWeight()))
                 .collect(Collectors.joining("/"));

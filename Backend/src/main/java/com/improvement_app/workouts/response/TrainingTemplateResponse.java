@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.response;
 
-import com.improvement_app.workouts.entity2.ExerciseNameEntity;
-import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
+import com.improvement_app.workouts.entity.ExerciseNameEntity;
+import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 
 import java.util.List;
 

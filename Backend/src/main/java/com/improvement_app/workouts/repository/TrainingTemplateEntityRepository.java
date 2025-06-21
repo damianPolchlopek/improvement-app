@@ -1,6 +1,6 @@
-package com.improvement_app.workouts.repository2;
+package com.improvement_app.workouts.repository;
 
-import com.improvement_app.workouts.entity2.TrainingTemplateEntity;
+import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
