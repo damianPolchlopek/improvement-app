@@ -13,7 +13,9 @@ public interface TrainingEntityRepository extends JpaRepository<TrainingEntity, 
 
     Page<TrainingEntity> findAllByOrderByDateDesc(Pageable page);
 
-    @EntityGraph(attributePaths = {"exercises", "exercises.exerciseSets"})
+    // TODO pomyslec o eager pobieranie ExerciseSets, Jak dodaje to w entity do jest exception,
+    // zwiazany z kartezjanskim iloczynem
+    @EntityGraph(attributePaths = {"exercises"})
     Page<TrainingEntity> findDistinctByExercisesTypeOrderByDateDesc(ExerciseType exerciseType, Pageable page);
 
 

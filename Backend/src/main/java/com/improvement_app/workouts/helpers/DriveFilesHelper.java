@@ -26,7 +26,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,7 +68,7 @@ public class DriveFilesHelper {
                 cell = row.getCell(PROGRESS_INDEX);
                 final String progress = cell.getStringCellValue().trim();
 
-                final Set<ExerciseSetEntity> exerciseSets = parseExerciseSets(exerciseType, reps, weight);
+                final List<ExerciseSetEntity> exerciseSets = parseExerciseSets(exerciseType, reps, weight);
 
                 ExerciseEntity exerciseEntity = new ExerciseEntity(
                         ExerciseName.fromValue(exerciseName),
@@ -165,7 +164,7 @@ public class DriveFilesHelper {
         return dataList;
     }
 
-    public static Set<ExerciseSetEntity> parseExerciseSets(final String exerciseType,
+    public static List<ExerciseSetEntity> parseExerciseSets(final String exerciseType,
                                                 final String reps,
                                                 final String weight) {
 

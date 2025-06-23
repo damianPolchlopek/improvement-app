@@ -38,7 +38,6 @@ public class TrainingTemplateEntity {
                     @Index(name = "idx_training_template_exercise_name", columnList = "exercise_name_id")
             }
     )
-    @OrderBy("id")
     private List<ExerciseNameEntity> exercises = new ArrayList<>();
 
     public TrainingTemplateEntity(String name) {

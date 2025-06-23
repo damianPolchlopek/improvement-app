@@ -16,6 +16,7 @@ import com.improvement_app.workouts.controllers.request.ExerciseRequest;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -128,8 +129,16 @@ public class ExerciseService {
         final String dbExerciseType = TrainingTypeConverter.toExerciseType(type);
         final ExerciseType exerciseType = ExerciseType.valueOf(dbExerciseType);
 
-        return trainingRepository.findDistinctByExercisesTypeOrderByDateDesc(exerciseType, page);
+        Page<TrainingEntity> trainings = trainingRepository.findDistinctByExercisesTypeOrderByDateDesc(exerciseType, page);
 
+        trainings.getContent().forEach(training -> {
+            Hibernate.initialize(training.getExercises());
+            training.getExercises().forEach(exercise ->
+                    Hibernate.initialize(exercise.getExerciseSets())
+            );
+        });
+
+        return trainings;
     }
 
     public TrainingEntity addTraining(List<ExerciseRequest> exerciseRequest) {

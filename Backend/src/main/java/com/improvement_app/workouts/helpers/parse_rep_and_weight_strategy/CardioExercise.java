@@ -4,8 +4,9 @@ import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +17,7 @@ public class CardioExercise implements ExerciseStrategy {
     final String speed;
 
     @Override
-    public Set<ExerciseSetEntity> parseExercise() {
+    public List<ExerciseSetEntity> parseExercise() {
         final String distanceRegex = "([0-9]+.?[0-9]*) km";
         final String speedRegex = "([0-9]+.?[0-9]*) km/h";
 
@@ -27,7 +28,7 @@ public class CardioExercise implements ExerciseStrategy {
                 Double.parseDouble(parsedDistance),
                 Double.parseDouble(parsedSpeed));
 
-        final Set<ExerciseSetEntity> result = new LinkedHashSet<>();
+        final List<ExerciseSetEntity> result = new ArrayList<>();
         result.add(firstRep);
         return result;
     }

@@ -3,12 +3,12 @@ package com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.exceptions.TrainingRegexNotFoundException;
 
-import java.util.Set;
+import java.util.List;
 
 public interface ExerciseStrategy {
     char SERIES_DELIMITER = '/';
 
-    Set<ExerciseSetEntity> parseExercise();
+    List<ExerciseSetEntity> parseExercise();
 
     default void validateRepsAndWeight(String weight, String reps) {
         long weightSeries = weight.chars()

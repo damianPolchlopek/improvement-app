@@ -7,10 +7,7 @@ import com.improvement_app.workouts.entity.enums.ExerciseType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "exercise", schema = "workout")
@@ -40,10 +37,10 @@ public class ExerciseEntity {
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id")
-    private Set<ExerciseSetEntity> exerciseSets = new LinkedHashSet<>();
+    private List<ExerciseSetEntity> exerciseSets = new ArrayList<>();
 
     public ExerciseEntity(ExerciseName name, ExerciseType type, ExerciseProgress progress,
-                          Set<ExerciseSetEntity> exerciseSets) {
+                          List<ExerciseSetEntity> exerciseSets) {
         this.name = name;
         this.type = type;
         this.progress = progress;
@@ -61,7 +58,7 @@ public class ExerciseEntity {
         List<ExerciseEntity> result = new ArrayList<>();
 
         for (ExerciseRequest request : exerciseRequests) {
-            Set<ExerciseSetEntity> sets = ExerciseSetEntity.fromString(request);
+            List<ExerciseSetEntity> sets = ExerciseSetEntity.fromString(request);
             ExerciseEntity exerciseEntity = new ExerciseEntity(
                     ExerciseName.fromValue(request.getName()),
                     ExerciseType.fromValue(request.getType()),
@@ -73,5 +70,18 @@ public class ExerciseEntity {
         }
 
         return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExerciseEntity that = (ExerciseEntity) o;
+        return name == that.name && type == that.type && progress == that.progress;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, type, progress);
     }
 }

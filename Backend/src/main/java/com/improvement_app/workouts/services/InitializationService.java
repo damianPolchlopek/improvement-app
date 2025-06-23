@@ -56,7 +56,8 @@ public class InitializationService {
         List<DriveFileItemDTO> driveFiles = googleDriveFileService.listFiles(folderName);
         List<TrainingEntity> parsedTrainings = new ArrayList<>();
 
-        for (int i = 0; i < driveFiles.size(); i++) {
+//        driveFiles.size()
+        for (int i = 0; i < driveFiles.size() ; i++) {
             DriveFileItemDTO fileItem = driveFiles.get(i);
             String trainingName = fileItem.getName();
 
