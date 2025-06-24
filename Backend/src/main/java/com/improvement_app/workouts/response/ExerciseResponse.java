@@ -2,6 +2,7 @@ package com.improvement_app.workouts.response;
 
 import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
+import com.improvement_app.workouts.entity.enums.ExerciseType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -27,22 +28,10 @@ public record ExerciseResponse(
                 entity.getTraining().getPlace().getValue(),
                 entity.getTraining().getName(),
                 entity.getTraining().getDate(),
-                formatWeightsToString(entity.getExerciseSets()),
-                formatRepsToString(entity.getExerciseSets())
-        );
-    }
-
-    public ExerciseResponse(String exerciseName) {
-        this(
-                null,
-                exerciseName,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null
+                entity.getType() == ExerciseType.KARDIO ? formatWeightsToString(entity.getExerciseSets()) + " km/h"
+                        : formatWeightsToString(entity.getExerciseSets()),
+                entity.getType() == ExerciseType.KARDIO ? formatRepsToString(entity.getExerciseSets()) + " km" :
+                        formatRepsToString(entity.getExerciseSets())
         );
     }
 
