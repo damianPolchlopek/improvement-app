@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.entity;
 
-import com.improvement_app.workouts.controllers.request.ExerciseRequest;
+import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

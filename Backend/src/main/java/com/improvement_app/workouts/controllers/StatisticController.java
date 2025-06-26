@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,11 +41,13 @@ public class StatisticController {
 
                                             @PathVariable
                                             @Pattern(regexp = "^\\d{2}-\\d{2}-\\d{4}$", message = "End date must be in format dd-MM-yyyy")
-                                            String endDate)
+                                            String endDate,
+
+                                            @AuthenticationPrincipal(expression = "id") Long userId)
     {
 
         List<ChartPoint> dataToChart
-                = statisticService.generateStatisticChartData(exerciseName, chartType, beginDate, endDate);
+                = statisticService.generateStatisticChartData(userId, exerciseName, chartType, beginDate, endDate);
 
         return ResponseEntity.ok(dataToChart);
     }

@@ -23,8 +23,8 @@ public class StatisticService {
 
     private final ExerciseService exerciseService;
 
-    public List<ChartPoint> generateStatisticChartData(String exerciseName, String chartType, String beginDate, String endDate) {
-        List<ExerciseEntity> filteredExercises = getFilteredExercises(exerciseName, beginDate, endDate);
+    public List<ChartPoint> generateStatisticChartData(Long userId, String exerciseName, String chartType, String beginDate, String endDate) {
+        List<ExerciseEntity> filteredExercises = getFilteredExercises(userId, exerciseName, beginDate, endDate);
 
         ChartType type = ChartType.valueOf(chartType);
 
@@ -41,7 +41,7 @@ public class StatisticService {
         return scaleLists(values, localDates);
     }
 
-    private List<ExerciseEntity> getFilteredExercises(String exerciseName, String beginDate, String endDate) {
+    private List<ExerciseEntity> getFilteredExercises(Long userId, String exerciseName, String beginDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate beginDateLD = LocalDate.parse(beginDate, formatter);
         LocalDate endDateLD = LocalDate.parse(endDate, formatter);
@@ -54,7 +54,7 @@ public class StatisticService {
             throw new InvalidDateRangeException("End date cannot be in the future");
         }
 
-        return exerciseService.findByNameOrderByDate(exerciseName, beginDateLD, endDateLD);
+        return exerciseService.findByNameOrderByDate(userId, exerciseName, beginDateLD, endDateLD);
     }
 
     private List<LocalDate> getLocalDates(List<ExerciseEntity> exercises) {

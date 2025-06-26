@@ -14,25 +14,25 @@ import java.util.Optional;
 public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, Integer> {
 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
-    List<ExerciseEntity> findByTraining_Date(LocalDate date);
+    List<ExerciseEntity> findByTrainingUserIdAndTrainingDate(Long userId, LocalDate date);
 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
-    List<ExerciseEntity> findByNameAndTraining_DateBetweenOrderByTraining_Date(
-            ExerciseName name,
+    List<ExerciseEntity> findByTrainingUserIdAndNameAndTrainingDateBetweenOrderByTrainingDate(
+            Long userId, ExerciseName name,
             LocalDate beginDate,
             LocalDate endDate
     );
 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
-    List<ExerciseEntity> findByNameOrderByTraining_DateDesc(ExerciseName exerciseName);
+    List<ExerciseEntity> findByTrainingUserIdAndNameOrderByTrainingDateDesc(Long userId, ExerciseName name);
 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
-    Optional<ExerciseEntity> findFirstByNameOrderByTraining_DateDesc(ExerciseName name);
+    Optional<ExerciseEntity> findFirstByTrainingUserIdAndNameOrderByTrainingDateDesc(Long userId, ExerciseName name);
 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
-    List<ExerciseEntity> findByTrainingName(String trainingName);
+    List<ExerciseEntity> findByTrainingUserIdAndTrainingName(Long userId, String trainingName);
 
     @EntityGraph(attributePaths = {"training"})
-    ExerciseEntity findTopByOrderByTrainingDateDesc();
+    ExerciseEntity findTopByTrainingUserIdOrderByTrainingDateDesc(Long userId);
 
 }

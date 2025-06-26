@@ -1,7 +1,8 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.workouts.entity.enums.ExercisePlace;
-import com.improvement_app.workouts.controllers.request.ExerciseRequest;
+import com.improvement_app.workouts.request.ExerciseRequest;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,10 @@ public class TrainingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Column(nullable = false)
     private String name;

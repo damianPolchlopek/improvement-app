@@ -9,7 +9,7 @@ import com.improvement_app.workouts.entity.enums.ExerciseProgress;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import com.improvement_app.workouts.exceptions.*;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
-import com.improvement_app.workouts.controllers.request.ExerciseRequest;
+import com.improvement_app.workouts.request.ExerciseRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

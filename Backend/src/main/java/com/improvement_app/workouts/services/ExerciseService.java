@@ -2,6 +2,8 @@ package com.improvement_app.workouts.services;
 
 import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
+import com.improvement_app.security.entity.UserEntity;
+import com.improvement_app.security.repository.UserRepository;
 import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;
@@ -12,8 +14,9 @@ import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.repository.ExerciseEntityRepository;
 import com.improvement_app.workouts.repository.TrainingEntityRepository;
-import com.improvement_app.workouts.controllers.request.ExerciseRequest;
+import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -36,70 +39,73 @@ public class ExerciseService {
 
     private final ExerciseEntityRepository exerciseRepository;
     private final TrainingEntityRepository trainingRepository;
+    private final UserRepository userRepository;
     private final TrainingTemplateService trainingTemplateService;
 
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
 
 
-    public List<ExerciseEntity> findByDateOrderByIndex(LocalDate date) {
-        List<ExerciseEntity> exercises = exerciseRepository.findByTraining_Date(date);
+    public List<ExerciseEntity> findByDateOrderByIndex(Long userId, LocalDate date) {
+        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndTrainingDate(userId, date);
 
         if (exercises.isEmpty()) {
-            throw new ExercisesNotFoundException("date", date.toString());
+            throw new ExercisesNotFoundException("date", date.toString(), userId);
         }
 
         return exercises;
     }
 
-    public List<ExerciseEntity> findByNameReverseSorted(String name) {
-        List<ExerciseEntity> exercises = exerciseRepository.findByNameOrderByTraining_DateDesc(ExerciseName.fromValue(name));
+    public List<ExerciseEntity> findByNameReverseSorted(Long userId, String name) {
+        ExerciseName exerciseName = ExerciseName.fromValue(name);
+        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndNameOrderByTrainingDateDesc(userId, exerciseName);
 
         if (exercises.isEmpty()) {
-            throw new ExercisesNotFoundException("name", name);
+            throw new ExercisesNotFoundException("name", name, userId);
         }
 
         return exercises;
     }
 
-    public List<ExerciseEntity> findByNameOrderByDate(String name, LocalDate beginDateLD, LocalDate endDateLD) {
+    public List<ExerciseEntity> findByNameOrderByDate(Long userId, String name, LocalDate beginDateLD, LocalDate endDateLD) {
         ExerciseName exerciseName = ExerciseName.fromValue(name);
 
-        return exerciseRepository.findByNameAndTraining_DateBetweenOrderByTraining_Date(
+        return exerciseRepository.findByTrainingUserIdAndNameAndTrainingDateBetweenOrderByTrainingDate(
+                userId,
                 exerciseName,
                 beginDateLD,
                 endDateLD
         );
     }
 
-    public List<ExerciseEntity> findByTrainingNameOrderByIndex(String trainingName) {
-        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingName(trainingName);
+    public List<ExerciseEntity> findByTrainingNameOrderByIndex(Long userId, String trainingName) {
+        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndTrainingName(userId, trainingName);
 
         if (exercises.isEmpty()) {
-            throw new ExercisesNotFoundException("trainingName", trainingName);
+            throw new ExercisesNotFoundException("trainingName", trainingName, userId);
         }
 
         return exercises;
     }
 
-    public Page<String> getAllTrainingNames(Pageable page) {
-        return trainingRepository.findAllByOrderByDateDesc(page)
+    public Page<String> getAllTrainingNames(Long userId, Pageable page) {
+        return trainingRepository.findByUserIdOrderByDateDesc(userId, page)
                 .map(TrainingEntity::getName);
     }
 
-    public List<ExerciseEntity> getATHExercise(String trainingTypeShortcut) {
+    public List<ExerciseEntity> getATHExercise(Long userId, String trainingTypeShortcut) {
         TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut);
 
         return trainingTemplate.getExercises().stream()
-                .map(exercise -> getMaximumCapacityExercise(exercise.getName()))
+                .map(exercise -> getMaximumCapacityExercise(userId, exercise.getName()))
                 .flatMap(Optional::stream)
                 .toList();
     }
 
-    private Optional<ExerciseEntity> getMaximumCapacityExercise(String exerciseName) {
+    private Optional<ExerciseEntity> getMaximumCapacityExercise(Long userId, String exerciseName) {
         final ExerciseName name = ExerciseName.fromValue(exerciseName);
 
-        List<ExerciseEntity> exercises = exerciseRepository.findByNameOrderByTraining_DateDesc(name);
+        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndNameOrderByTrainingDateDesc(userId, name);
 
         if (exercises.isEmpty()) {
             return Optional.empty();
@@ -112,24 +118,24 @@ public class ExerciseService {
                         .reduce(0.0, Double::sum)));
     }
 
-    public List<ExerciseEntity> generateTrainingFromTemplate(String trainingTypeShortcut) {
+    public List<ExerciseEntity> generateTrainingFromTemplate(Long userId, String trainingTypeShortcut) {
         TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut);
 
         return trainingTemplate.getExercises().stream()
-                .map(exerciseNameEntity -> getLatestExercise(ExerciseName.fromValue(exerciseNameEntity.getName())))
+                .map(exerciseNameEntity -> getLatestExercise(userId, ExerciseName.fromValue(exerciseNameEntity.getName())))
                 .toList();
     }
 
-    private ExerciseEntity getLatestExercise(ExerciseName exerciseName) {
-        return exerciseRepository.findFirstByNameOrderByTraining_DateDesc(exerciseName)
+    private ExerciseEntity getLatestExercise(Long userId, ExerciseName exerciseName) {
+        return exerciseRepository.findFirstByTrainingUserIdAndNameOrderByTrainingDateDesc(userId, exerciseName)
                 .orElseGet(() -> new ExerciseEntity(exerciseName));
     }
 
-    public Page<TrainingEntity> getLastTrainings(String type, Pageable page) {
+    public Page<TrainingEntity> getLastTrainings(Long userId, String type, Pageable page) {
         final String dbExerciseType = TrainingTypeConverter.toExerciseType(type);
         final ExerciseType exerciseType = ExerciseType.valueOf(dbExerciseType);
 
-        Page<TrainingEntity> trainings = trainingRepository.findDistinctByExercisesTypeOrderByDateDesc(exerciseType, page);
+        Page<TrainingEntity> trainings = trainingRepository.findDistinctByUserIdAndExercisesTypeOrderByDateDesc(userId, exerciseType, page);
 
         trainings.getContent().forEach(training -> {
             Hibernate.initialize(training.getExercises());
@@ -141,26 +147,30 @@ public class ExerciseService {
         return trainings;
     }
 
-    public TrainingEntity addTraining(List<ExerciseRequest> exerciseRequest) {
+    public TrainingEntity addTraining(Long userId, List<ExerciseRequest> exerciseRequest) {
         if (exerciseRequest == null || exerciseRequest.isEmpty()) {
             log.warn("Lista ExerciseRequest jest pusta lub null");
         }
 
-        ExerciseEntity latestExercise = findLatestExercise();
+        ExerciseEntity latestExercise = findLatestExercise(userId);
 
         ExerciseType type = ExerciseType.fromValue(exerciseRequest.get(0).getType());
         String trainingName = DriveFilesHelper.generateFileName(type, latestExercise);
         String excelFileLocation = createTrainingExcelFile(exerciseRequest, trainingName);
         uploadTrainingToGoogleDrive(excelFileLocation, trainingName);
 
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
         TrainingEntity training = TrainingEntity.from(exerciseRequest);
         training.setName(trainingName);
+        training.setUser(userEntity);
 
         return trainingRepository.save(training);
     }
 
-    private ExerciseEntity findLatestExercise() {
-        return exerciseRepository.findTopByOrderByTrainingDateDesc();
+    private ExerciseEntity findLatestExercise(Long userId) {
+        return exerciseRepository.findTopByTrainingUserIdOrderByTrainingDateDesc(userId);
     }
 
     private String createTrainingExcelFile(List<ExerciseRequest> exercises, String trainingName) {

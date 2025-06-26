@@ -11,12 +11,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TrainingEntityRepository extends JpaRepository<TrainingEntity, Integer> {
 
-    Page<TrainingEntity> findAllByOrderByDateDesc(Pageable page);
+    Page<TrainingEntity> findByUserIdOrderByDateDesc(Long userId, Pageable page);
 
     // TODO pomyslec o eager pobieranie ExerciseSets, Jak dodaje to w entity do jest exception,
     // zwiazany z kartezjanskim iloczynem
     @EntityGraph(attributePaths = {"exercises"})
-    Page<TrainingEntity> findDistinctByExercisesTypeOrderByDateDesc(ExerciseType exerciseType, Pageable page);
-
+    Page<TrainingEntity> findDistinctByUserIdAndExercisesTypeOrderByDateDesc(Long userId, ExerciseType exerciseType, Pageable page);
 
 }

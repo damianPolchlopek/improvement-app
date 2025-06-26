@@ -42,3 +42,7 @@ databaseChangeLog:
   - include:
       file: 0010_create_workout_schema/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0011_add_multi_user_workout/changelog.yaml
+      relativeToChangelogFile: true

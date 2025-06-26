@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.controllers.request;
+package com.improvement_app.workouts.request;
 
 import lombok.Data;
 

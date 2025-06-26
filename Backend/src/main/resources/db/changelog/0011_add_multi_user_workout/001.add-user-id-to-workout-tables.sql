@@ -1,0 +1,1 @@
+ALTER TABLE workout.training ADD COLUMN user_id BIGINT NOT NULL DEFAULT 1;
