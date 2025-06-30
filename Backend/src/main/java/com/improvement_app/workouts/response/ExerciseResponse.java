@@ -23,11 +23,11 @@ public record ExerciseResponse(
         this(
                 entity.getId(),
                 entity.getName().getValue(),
-                entity.getType().getValue(),
-                entity.getProgress().getValue(),
-                entity.getTraining().getPlace().getValue(),
-                entity.getTraining().getName(),
-                entity.getTraining().getDate(),
+                entity.getType() != null ? entity.getType().getValue() : null,
+                entity.getProgress() != null ? entity.getProgress().getValue() : null,
+                entity.getTraining() != null ? entity.getTraining().getPlace().getValue() : null,
+                entity.getTraining() != null ? entity.getTraining().getName() : null,
+                entity.getTraining() != null ? entity.getTraining().getDate() : null,
                 entity.getType() == ExerciseType.KARDIO ? formatWeightsToString(entity.getExerciseSets()) + " km/h"
                         : formatWeightsToString(entity.getExerciseSets()),
                 entity.getType() == ExerciseType.KARDIO ? formatRepsToString(entity.getExerciseSets()) + " km" :

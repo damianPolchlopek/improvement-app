@@ -23,6 +23,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useLoaderData } from 'react-router-dom';
 
 import ErrorAlert from '../../component/error/ErrorAlert';
+import InformationComponent from '../../component/InformationComponent';
 
 function formatXAxis(tickItem) {
   return moment(tickItem).format('DD-MM-YYYY');
@@ -71,6 +72,10 @@ export default function TrainingStatistic() {
   const handleChangeEndDate = (newValue) => {
     setEndDate(newValue.toDate());
   };
+
+  if (exercises && exercises.length == 0) {
+    return <InformationComponent>Trainings have not been added yet!</InformationComponent>
+  } 
 
   return (
     <>

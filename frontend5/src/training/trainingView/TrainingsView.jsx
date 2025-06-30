@@ -11,11 +11,13 @@ import {
   Typography,
   TableBody,
   TablePagination,
-  TableFooter
+  TableFooter,
+  Box
 } from '@mui/material';
 
 import StyledTableRow from '../../component/table/StyledTableRow';
 import StyledTableCell from '../../component/table/StyledTableCell';
+import InformationComponent from '../../component/InformationComponent';
 
 export default function TrainingsView() {
   const { t } = useTranslation();
@@ -46,6 +48,10 @@ export default function TrainingsView() {
   if (isError) {
     return <Typography color="error">{error.message}</Typography>;
   }
+
+  if (data.content.length === 0) {
+    return <InformationComponent>Training have not been added yet!</InformationComponent>
+  }  
 
   return (
     <Container maxWidth="xl" sx={{ width: '70%' }}>

@@ -7,6 +7,7 @@ import ErrorAlert from '../../component/error/ErrorAlert';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
+import InformationComponent from '../../component/InformationComponent';
 
 import {
   Container,
@@ -62,6 +63,10 @@ export default function ExerciseView() {
 
   const isLoading = isTrainingLoading || isTemplateLoading;
   const isError = isTrainingError || isTemplateError;
+
+  if (trainingData && trainingData.content && trainingData.content.length == 0) {
+    return <InformationComponent>Trainings have not been added yet!</InformationComponent>
+  } 
 
   return (
     <Container>
