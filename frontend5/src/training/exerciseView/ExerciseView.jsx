@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
-import ErrorBlock from '../../component/ErrorBlock';
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
+import InformationComponent from '../../component/InformationComponent';
 
 import {
   Container,
@@ -63,6 +64,10 @@ export default function ExerciseView() {
   const isLoading = isTrainingLoading || isTemplateLoading;
   const isError = isTrainingError || isTemplateError;
 
+  if (trainingData && trainingData.content && trainingData.content.length == 0) {
+    return <InformationComponent>Trainings have not been added yet!</InformationComponent>
+  } 
+
   return (
     <Container>
       <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -74,10 +79,7 @@ export default function ExerciseView() {
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <ErrorBlock
-          title="Failed to load training data"
-          message={`Error: ${(trainingError || templateError)?.message || 'Unknown error'}`}
-        />
+          <ErrorAlert error={(trainingError || templateError)} />
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table>
@@ -90,19 +92,18 @@ export default function ExerciseView() {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {trainingData.content.map((exerciseMap, index) => {
-                const firstAvailableExercise = Object.entries(exerciseMap).find(
-                  ([, value]) => value?.date
-                );
-                const date = firstAvailableExercise ? firstAvailableExercise[1].date : 'Brak danych';
+              {trainingData.content.map((trainingDay, index) => {
+                // trainingDay ma teraz strukturę: { date: "2024-06-19", exercises: { "Bench Press": {...}, "Squats": {...} } }
+                const trainingDate = trainingDay.date || 'Brak danych';
+                const exercisesMap = trainingDay.exercises || {};
 
                 return (
                   <StyledTableRow key={index}>
-                    <StyledTableCell>{date}</StyledTableCell>
-                    {templateData.exercises.map((exercise, index) => {
-                      const exerciseData = exerciseMap?.[exercise] || {};
+                    <StyledTableCell>{trainingDate}</StyledTableCell>
+                    {templateData.exercises.map((exerciseName, exerciseIndex) => {
+                      const exerciseData = exercisesMap[exerciseName] || {};
                       return (
-                        <StyledTableCell key={index}>
+                        <StyledTableCell key={exerciseIndex}>
                           <div>{t('exercise.weight')}: {exerciseData.weight || 'N/A'}</div>
                           <div>{t('exercise.reps')}: {exerciseData.reps || 'N/A'}</div>
                         </StyledTableCell>

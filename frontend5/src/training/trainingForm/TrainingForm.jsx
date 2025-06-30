@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import REST from "../../utils/REST";
-import ErrorBlock from "../../component/ErrorBlock";
 
 import {
   Button,
@@ -17,6 +16,9 @@ import { useTranslation } from 'react-i18next';
 import { useLoaderData, Form, useNavigate } from "react-router-dom";
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../utils/REST.js';
+import ErrorAlert from "../../component/error/ErrorAlert.jsx";
+
+import { TrainingViewUrl } from "../../utils/URLHelper.js";
 
 export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(exercises)
@@ -33,7 +35,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     mutationFn: (exercises) => REST.addTraining(exercises),
     onSuccess: () => {
       queryClient.invalidateQueries(['training-names', 0, 25]);
-      navigate('/training/view');
+      navigate(TrainingViewUrl);
     },
     onError: (error) => {
       console.error('Failed to submit training:', error);
@@ -73,6 +75,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     }
   }
 
+
   return (
     <Form onSubmit={handleSubmit}>
       <Grid container spacing={2}>
@@ -97,9 +100,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     size="small"
                   >
                     {exerciseTypes.map((et, i) => (
-                      <MenuItem key={i} value={et.type}>
-                        {et.type}
-                      </MenuItem>
+                      <MenuItem key={i} value={et.name}>{et.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -121,7 +122,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     size="small"
                   >
                     {exercisePlaces.map((ep, i) => (
-                      <MenuItem key={i} value={ep.place}>{ep.place}</MenuItem>
+                      <MenuItem key={i} value={ep.name}>{ep.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -179,7 +180,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   size="small"
                 >
                   {exerciseProgresses.map((ep, i) => (
-                    <MenuItem key={i} value={ep.progress}>{ep.progress}</MenuItem>
+                    <MenuItem key={i} value={ep.name}>{ep.name}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
@@ -209,13 +210,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       </Grid>
 
       {isError && (
-        <ErrorBlock
-          title="Failed to add training"
-          message={
-            error.info?.message ||
-            'Failed to add training. Please check your inputs and try again later.'
-          }
-        />
+        <ErrorAlert error={error} />
       )}
 
     </Form>
@@ -228,6 +223,8 @@ export async function loader() {
   const exercisesPlaces = await REST.getExercisePlaces();
   const exercisesProgresses = await REST.getExerciseProgresses();
   const exercisesTypes = await REST.getExerciseTypes();
+
+  console.log("Progress: ", exercisesProgresses)
 
   return {
     exerciseNames: exercisesNames.content,

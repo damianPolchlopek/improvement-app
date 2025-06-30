@@ -12,13 +12,14 @@ import {
   Box,
   CircularProgress,
   FormControl,
-  Container,
-  Typography,
+  Container
 } from '@mui/material';
 
 import StyledTableRow from '../../component/table/StyledTableRow'
 import StyledTableCell from '../../component/table/StyledTableCell'
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
+import ErrorAlert from '../../component/error/ErrorAlert';
+import InformationComponent from '../../component/InformationComponent';
 
 export default function MaximumExerciseView() {
   const [trainingType, setTrainingType] = useState('A');
@@ -36,6 +37,10 @@ export default function MaximumExerciseView() {
     cacheTime: 1000 * 60 * 10, // 10 min
   });
 
+  if (data && data.content && data.content.length == 0) {
+    return <InformationComponent>Trainings have not been added yet!</InformationComponent>
+  }  
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <FormControl sx={{ m: 1, minWidth: 200 }}>
@@ -47,9 +52,7 @@ export default function MaximumExerciseView() {
           <CircularProgress />
         </Box>
       ) : isError ? (
-        <Typography color="error" sx={{ mt: 2 }}>
-          {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania danych'}: {error.message}
-        </Typography>
+        <ErrorAlert error={error} />
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2 }}>
           <Table aria-label="simple table">

@@ -1,0 +1,1 @@
+CREATE INDEX idx_training_user_id ON workout.training(user_id);

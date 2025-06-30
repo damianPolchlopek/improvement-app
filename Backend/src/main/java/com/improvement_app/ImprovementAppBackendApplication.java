@@ -11,11 +11,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.improvement_app.food.infrastructure",
         "com.improvement_app.security.repository",
         "com.improvement_app.parser.repository",
+        "com.improvement_app.workouts.repository",
 })
 @EnableMongoRepositories(basePackages = {
         "com.improvement_app.other.weekly.repository",
         "com.improvement_app.other.daily.repository",
-        "com.improvement_app.workouts.repository",
         "com.improvement_app.shopping.repository",
 })
 public class ImprovementAppBackendApplication {

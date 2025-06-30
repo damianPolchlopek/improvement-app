@@ -1,93 +1,106 @@
 package com.improvement_app.workouts.services;
 
-import com.improvement_app.workouts.entity.Exercise;
-import com.improvement_app.workouts.entity.dto.DataToFront;
-import com.improvement_app.workouts.entity.dto.RepAndWeight;
-import com.improvement_app.workouts.entity.chart.ChartType;
-import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
+import com.improvement_app.workouts.entity.enums.ChartType;
+import com.improvement_app.workouts.response.ChartPoint;
+import com.improvement_app.workouts.entity.ExerciseEntity;
+import com.improvement_app.workouts.entity.ExerciseSetEntity;
+import com.improvement_app.workouts.exceptions.InvalidDateRangeException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StatisticService {
 
     private final ExerciseService exerciseService;
 
-    public List<DataToFront> generateStatisticChartData(String exerciseName, String chartType, String beginDate, String endDate) {
-        List<Exercise> filteredExercises = getFilteredExercises(exerciseName, beginDate, endDate);
+    public List<ChartPoint> generateStatisticChartData(Long userId, String exerciseName, String chartType, String beginDate, String endDate) {
+        List<ExerciseEntity> filteredExercises = getFilteredExercises(userId, exerciseName, beginDate, endDate);
 
         ChartType type = ChartType.valueOf(chartType);
 
         List<Double> values;
         if (type == ChartType.Capacity) {
             values = getCapacity(filteredExercises);
-        } else {
+        } else if (type == ChartType.Weight){
             values = getWeight(filteredExercises);
+        } else {
+            throw new IllegalArgumentException("User selected incorrect chart type: " + type);
         }
 
         List<LocalDate> localDates = getLocalDates(filteredExercises);
         return scaleLists(values, localDates);
     }
 
-    private List<Exercise> getFilteredExercises(String exerciseName, String beginDate, String endDate) {
+    private List<ExerciseEntity> getFilteredExercises(Long userId, String exerciseName, String beginDate, String endDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate beginDateLD = LocalDate.parse(beginDate, formatter);
         LocalDate endDateLD = LocalDate.parse(endDate, formatter);
 
-        List<Exercise> exercises = exerciseService.findByNameOrderByDate(exerciseName);
-
-        return exercises.stream()
-                .filter(exercise -> exercise.getDate().isAfter(beginDateLD))
-                .filter(exercise -> exercise.getDate().isBefore(endDateLD))
-                .toList();
-    }
-
-    private List<LocalDate> getLocalDates(List<Exercise> exercises) {
-        return exercises
-                .stream()
-                .map(Exercise::getDate)
-                .toList();
-    }
-
-    private List<Double> getCapacity(List<Exercise> exercises) {
-        return exercises
-                .stream()
-                .map(Exercise::getRepAndWeightList)
-                .map(repAndWeights ->
-                        repAndWeights
-                                .stream()
-                                .map(RepAndWeight::getCapacity)
-                                .reduce((double) 0, Double::sum))
-                .toList();
-    }
-
-    private List<Double> getWeight(List<Exercise> exercises) {
-        int seriesNumber = exercises.get(0).getRepAndWeightList().size();
-        return exercises
-                .stream()
-                .map(Exercise::getRepAndWeightList)
-                .map(repAndWeights ->
-                        repAndWeights
-                                .stream()
-                                .map(RepAndWeight::getWeight)
-                                .reduce((double) 0, Double::sum))
-                .map(weight -> weight / seriesNumber)
-                .toList();
-    }
-
-    private List<DataToFront> scaleLists(List<Double> values, List<LocalDate> dates) {
-        List<DataToFront> dataToChart = new ArrayList<>();
-        for (int i = 0; i < dates.size(); i++) {
-            dataToChart.add(new DataToFront(dates.get(i), values.get(i)));
+        if (beginDateLD.isAfter(endDateLD)) {
+            throw new InvalidDateRangeException("Start date cannot be after end date");
         }
 
-        return dataToChart;
+        if (endDateLD.isAfter(LocalDate.now().plusDays(1))) {
+            throw new InvalidDateRangeException("End date cannot be in the future");
+        }
+
+        return exerciseService.findByNameOrderByDate(userId, exerciseName, beginDateLD, endDateLD);
+    }
+
+    private List<LocalDate> getLocalDates(List<ExerciseEntity> exercises) {
+        return exercises
+                .stream()
+                .map(exercise -> exercise.getTraining().getDate())
+                .toList();
+    }
+
+    private List<Double> getCapacity(List<ExerciseEntity> exercises) {
+        return exercises
+                .stream()
+                .map(ExerciseEntity::getExerciseSets)
+                .map(repAndWeights ->
+                        repAndWeights
+                                .stream()
+                                .map(ExerciseSetEntity::getCapacity)
+                                .reduce((double) 0, Double::sum))
+                .toList();
+    }
+
+    private List<Double> getWeight(List<ExerciseEntity> exercises) {
+        if (exercises.isEmpty()) {
+            log.warn("No data to send to chart");
+            return List.of();
+        }
+
+        List<Double> result = new ArrayList<>();
+        for (ExerciseEntity exerciseEntity : exercises) {
+            int seriesNumber = exerciseEntity.getExerciseSets().size();
+
+            Double reduce = exerciseEntity.getExerciseSets().stream()
+                    .map(ExerciseSetEntity::getWeight)
+                    .reduce((double) 0, Double::sum);
+
+            Double calculationResult = reduce / seriesNumber;
+            result.add(calculationResult);
+        }
+
+        return result;
+    }
+
+    private List<ChartPoint> scaleLists(List<Double> values, List<LocalDate> dates) {
+        return IntStream.range(0, dates.size())
+                .mapToObj(i -> new ChartPoint(dates.get(i), values.get(i)))
+                .collect(Collectors.toList());
     }
 
 }

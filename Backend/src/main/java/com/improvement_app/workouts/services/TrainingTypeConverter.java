@@ -9,9 +9,34 @@ public class TrainingTypeConverter {
         // Private constructor to prevent instantiation
     }
 
-    private static final Map<String, String> trainingTypeMap = new HashMap<>();
+    public static String toExerciseType(String type) {
+        Map<String, String> trainingTypeMap = new HashMap<>();
 
-    public static String convert(String type) {
+        // Mapowanie kodów na nazwy enum-ów
+        trainingTypeMap.put("A1", "SILOWY_A1");
+        trainingTypeMap.put("B1", "SILOWY_B1");
+        trainingTypeMap.put("A2", "SILOWY_A2");
+        trainingTypeMap.put("B2", "SILOWY_B2");
+        trainingTypeMap.put("A", "SILOWY_A");
+        trainingTypeMap.put("B", "SILOWY_B");
+        trainingTypeMap.put("C", "HIPERTROFICZNY_C");
+        trainingTypeMap.put("C1", "HIPERTROFICZNY_C1");
+        trainingTypeMap.put("C2", "HIPERTROFICZNY_C2");
+        trainingTypeMap.put("D", "HIPERTROFICZNY_D");
+        trainingTypeMap.put("D1", "HIPERTROFICZNY_D1");
+        trainingTypeMap.put("D2", "HIPERTROFICZNY_D2");
+        trainingTypeMap.put("E", "BASEN_E");
+        trainingTypeMap.put("K1", "KETTLE_K1");
+        trainingTypeMap.put("K2", "KETTLE_K2");
+        trainingTypeMap.put("K3", "KETTLE_K3");
+        trainingTypeMap.put("KARDIO", "KARDIO");
+
+        return trainingTypeMap.getOrDefault(type, "SILOWY_A");
+    }
+
+    public static String toTrainingTemplate(String type) {
+        final Map<String, String> trainingTypeMap = new HashMap<>();
+
         trainingTypeMap.put("A1", "Siłowy#1-A1");
         trainingTypeMap.put("B1", "Siłowy#1-B1");
         trainingTypeMap.put("C1", "Hipertroficzny#1-C1");
@@ -28,4 +53,6 @@ public class TrainingTypeConverter {
 
         return trainingTypeMap.getOrDefault(type, "Siłowy#1-A");
     }
+
+
 }

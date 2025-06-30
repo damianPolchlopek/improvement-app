@@ -18,7 +18,6 @@ import TrainingTypeSelector from "../component/TrainingTypeSelector";
 export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('A'); // na starcie brak
-  const [shouldFetch, setShouldFetch] = useState(false); // trigger zapytania
   const { t } = useTranslation();
 
   const {
@@ -26,19 +25,19 @@ export default function AddTrainingView() {
     isFetching,
     isError,
     error,
+    refetch
   } = useQuery({
     queryKey: ['training-template', trainingType],
     queryFn: () => REST.getTrainingTemplateByType(trainingType),
-    enabled: shouldFetch, // tylko jeśli kliknięto
+    enabled: false, // Wyłącz automatyczne ładowanie
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
-    onSuccess: () => {
-      setShouldFetch(false); // wyłącz trigger po pobraniu
-    },
   });
 
   const handleLoadTraining = () => {
-    setShouldFetch(true);
+    if (trainingType) {
+      refetch(); // Ręcznie wywołaj zapytanie
+    }
   };
 
   return (

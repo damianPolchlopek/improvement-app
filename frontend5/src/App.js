@@ -13,7 +13,7 @@ import {action as logoutAction} from './login/Logout.js';
 import {action as loginAction} from './login/LoginView.jsx';
 import { queryClient } from './utils/REST.js';
 
-import SnackbarProvider from './component/SnackbarProvider.jsx';
+import SnackbarProvider from './component/snackbar/SnackbarProvider.jsx';
 import { MealSelectionProvider } from './context/MealSelectionContext.js';
 
 import {

@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0011_add_multi_user_workout/001.add-user-id-to-workout-tables.sql
+      sqlFile:
+        path: 001.add-user-id-to-workout-tables.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0011_add_multi_user_workout/002.add-index-training-table.sql
+      sqlFile:
+        path: 002.add-index-training-table.sql
+        relativeToChangelogFile: true

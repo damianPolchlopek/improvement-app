@@ -1,0 +1,9 @@
+CREATE SCHEMA IF NOT EXISTS workout;
+
+CREATE TABLE workout.training (
+    id INT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    place VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

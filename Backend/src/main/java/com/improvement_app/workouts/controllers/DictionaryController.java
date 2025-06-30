@@ -1,19 +1,18 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
-import com.improvement_app.workouts.entity.TrainingTemplate;
-import com.improvement_app.workouts.entity.exercisesfields.Name;
-import com.improvement_app.workouts.entity.exercisesfields.Place;
-import com.improvement_app.workouts.entity.exercisesfields.Progress;
-import com.improvement_app.workouts.entity.exercisesfields.Type;
+import com.improvement_app.workouts.response.ExerciseMetadataResponse;
+import com.improvement_app.workouts.response.TrainingTemplateResponse;
 import com.improvement_app.workouts.services.data.*;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import jakarta.ws.rs.core.MediaType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
 
 @Tag(name = "Dictionary API", description = "Example API operations")
@@ -29,33 +28,33 @@ public class DictionaryController {
     private final TrainingTemplateService trainingTemplateService;
 
     @GetMapping("/name")
-    public ListResponse<Name> getExerciseNames() {
-        List<Name> exerciseNames = exerciseNameService.getExerciseNames();
+    public ListResponse<ExerciseMetadataResponse> getExerciseNames() {
+        List<ExerciseMetadataResponse> exerciseNames = exerciseNameService.getExerciseNames();
         return ListResponse.of(exerciseNames);
     }
 
     @GetMapping("/place")
-    public ListResponse<Place> getExercisePlaces() {
-        List<Place> exercisePlaces = exercisePlaceService.getExercisePlaces();
+    public ListResponse<ExerciseMetadataResponse> getExercisePlaces() {
+        List<ExerciseMetadataResponse> exercisePlaces = exercisePlaceService.getExercisePlaces();
         return ListResponse.of(exercisePlaces);
     }
 
     @GetMapping("/progress")
-    public ListResponse<Progress> getExerciseProgresses() {
-        List<Progress> exerciseProgresses = exerciseProgressService.getExerciseProgress();
+    public ListResponse<ExerciseMetadataResponse> getExerciseProgresses() {
+        List<ExerciseMetadataResponse> exerciseProgresses = exerciseProgressService.getExerciseProgresses();
         return ListResponse.of(exerciseProgresses);
     }
 
     @GetMapping("/type")
-    public ListResponse<Type> getExerciseTypes() {
-        List<Type> exerciseTypes = exerciseTypeService.getExerciseTypes();
+    public ListResponse<ExerciseMetadataResponse> getExerciseTypes() {
+        List<ExerciseMetadataResponse> exerciseTypes = exerciseTypeService.getExerciseTypes();
         return ListResponse.of(exerciseTypes);
     }
 
     @Operation(description = "Get training template")
     @GetMapping(value = "/training/{template}", produces = MediaType.APPLICATION_JSON)
-    public TrainingTemplate getTrainingTemplate(@PathVariable String template) {
+    public TrainingTemplateResponse getTrainingTemplate(@PathVariable String template) {
         return trainingTemplateService.getTrainingTemplate(template)
-                .orElseThrow(() -> new RuntimeException("Training template not found"));
+                .toResponse();
     }
 }
