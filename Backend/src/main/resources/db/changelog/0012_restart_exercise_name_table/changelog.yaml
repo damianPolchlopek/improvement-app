@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0012_restart_exercise_name_table/001.restart_exercise_name.sql
+      sqlFile:
+        path: 001.restart_exercise_name.sql
+        relativeToChangelogFile: true

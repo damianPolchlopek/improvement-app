@@ -46,3 +46,7 @@ databaseChangeLog:
   - include:
       file: 0011_add_multi_user_workout/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0012_restart_exercise_name_table/changelog.yaml
+      relativeToChangelogFile: true
