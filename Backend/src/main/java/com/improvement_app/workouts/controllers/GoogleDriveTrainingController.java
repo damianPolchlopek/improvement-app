@@ -3,6 +3,7 @@ package com.improvement_app.workouts.controllers;
 import com.improvement_app.workouts.services.InitializationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +21,9 @@ public class GoogleDriveTrainingController {
 
     @Transactional
     @GetMapping(value = "/initApplication", produces = MediaType.APPLICATION_JSON)
-    public void initApplication() {
+    public void initApplication(@AuthenticationPrincipal(expression = "id") Long userId) {
         initializationService.initApplicationTemplates();
-        initializationService.initApplicationTrainings();
+        initializationService.initApplicationTrainings(userId);
     }
 
 }

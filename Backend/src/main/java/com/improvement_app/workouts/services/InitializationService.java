@@ -5,11 +5,15 @@ import com.improvement_app.googledrive.entity.DriveFileItemDTO;
 import com.improvement_app.googledrive.exceptions.GoogleDriveFileNotDownloadedException;
 import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
+import com.improvement_app.security.entity.UserEntity;
+import com.improvement_app.security.repository.UserRepository;
+import com.improvement_app.security.services.UserDetailsServiceImpl;
 import com.improvement_app.workouts.entity.ExerciseNameEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.services.data.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -36,14 +40,22 @@ public class InitializationService {
     private final SimpMessagingTemplate messagingTemplate;
     private final FileDownloadService fileDownloadService;
 
+    private final UserRepository userRepository;
 
 
-    public void initApplicationTrainings() {
+
+    public void initApplicationTrainings(Long userId) {
         log.info("Usuwam wszystkie zapisane treningi");
         trainingService.deleteAllTrainings();
 
         log.info("Dodaje nowe treningi do bazy danych treningowej");
         List<TrainingEntity> trainings = importTrainingsFromDrive(DRIVE_TRAININGS_FOLDER_NAME);
+
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        for (TrainingEntity training : trainings) {
+            training.setUser(userEntity);
+        }
 
         trainingService.saveAll(trainings);
         log.info("Dodane treningi: {}", trainings);
