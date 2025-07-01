@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0013_reinit_workout_tables/001.remove_tables.sql
+      sqlFile:
+        path: 001.remove_tables.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0013_reinit_workout_tables/002.restart_exercise_name.sql
+      sqlFile:
+        path: 002.restart_exercise_name.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 3
+      author: Damian Polchlopek
+      logicalFilePath: 0013_reinit_workout_tables/003.restart_training_template.sql
+      sqlFile:
+        path: 003.restart_training_template.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 4
+      author: Damian Polchlopek
+      logicalFilePath: 0013_reinit_workout_tables/004.restart_training_template_exercises.sql
+      sqlFile:
+        path: 004.restart_training_template_exercises.sql
+        relativeToChangelogFile: true
