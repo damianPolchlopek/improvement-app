@@ -54,3 +54,7 @@ databaseChangeLog:
   - include:
       file: 0013_reinitialization_workout_tables/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0014_add_last_login_column/changelog.yaml
+      relativeToChangelogFile: true

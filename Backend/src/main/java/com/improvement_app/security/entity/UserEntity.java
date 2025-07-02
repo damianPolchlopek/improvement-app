@@ -61,6 +61,9 @@ public class UserEntity {
     @Column(name = "email_verification_expires")
     private LocalDateTime emailVerificationExpires;
 
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
+
     public UserEntity(String username, String email, String password) {
         this.username = username;
         this.email = email;

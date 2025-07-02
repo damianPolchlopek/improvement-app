@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0014_add_last_login_column/001.add-last-login-column.sql
+      sqlFile:
+        path: 001.add-last-login-column.sql
+        relativeToChangelogFile: true
