@@ -43,39 +43,40 @@ export default function SingleMeal({ meal }) {
         </Tabs>
 
         <TabPanel value={tabIndex} index={0}>
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell variant="head">{t('food.name')}</TableCell>
-                <TableCell>{meal.name}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">{t('food.kcal')}</TableCell>
-                <TableCell>{meal.kcal}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">{t('food.protein')}</TableCell>
-                <TableCell>{meal.protein}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">{t('food.carbs')}</TableCell>
-                <TableCell>{meal.carbohydrates}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">{t('food.fat')}</TableCell>
-                <TableCell>{meal.fat}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">{t('food.portionAmount')}</TableCell>
-                <TableCell>{meal.portionAmount}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell variant="head">{t('food.url')}</TableCell>
-                <TableCell>{meal.url}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-
+          <TableContainer>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell variant="head">{t('food.name')}</TableCell>
+                  <TableCell>{meal.name}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">{t('food.kcal')}</TableCell>
+                  <TableCell>{meal.kcal}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">{t('food.protein')}</TableCell>
+                  <TableCell>{meal.protein}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">{t('food.carbs')}</TableCell>
+                  <TableCell>{meal.carbohydrates}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">{t('food.fat')}</TableCell>
+                  <TableCell>{meal.fat}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">{t('food.portionAmount')}</TableCell>
+                  <TableCell>{meal.portionAmount}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell variant="head">{t('food.url')}</TableCell>
+                  <TableCell>{meal.url}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </TabPanel>
 
         <TabPanel value={tabIndex} index={1}>
