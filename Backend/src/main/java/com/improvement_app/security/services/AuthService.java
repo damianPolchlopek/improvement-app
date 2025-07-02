@@ -42,7 +42,7 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
 
-    @Transactional(readOnly = true)
+    @Transactional
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
         log.debug("Authenticating user: {}", loginRequest.getUsername());
 
@@ -59,6 +59,9 @@ public class AuthService {
         if (!userEntity.isEmailVerified()) {
             throw new EmailNotVerifiedException("Email must be verified before login");
         }
+
+        userEntity.setLastLogin(LocalDateTime.now());
+        userRepository.save(userEntity);
 
         String jwt = jwtUtils.generateJwtToken(authentication);
 
