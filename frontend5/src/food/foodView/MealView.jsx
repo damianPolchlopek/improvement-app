@@ -97,6 +97,7 @@ export default function MealView() {
         {/* Rząd 2 – kategoria i typ */}
         <Grid container spacing={2} sx={{ mt: 1, maxWidth: 800, width: '100%' }}>
           <Grid item xs={12} sm={6}>
+            {mealCategoryList.length > 0 && 
             <FormControl fullWidth variant="standard">
               <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
               <Select
@@ -108,10 +109,11 @@ export default function MealView() {
                   <MenuItem key={index} value={cat}>{cat}</MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl>}
           </Grid>
 
           <Grid item xs={12} sm={6}>
+            {mealTypeList.length > 0 && 
             <FormControl fullWidth variant="standard">
               <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
               <Select
@@ -123,7 +125,7 @@ export default function MealView() {
                   <MenuItem key={index} value={type}>{type}</MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl>}
           </Grid>
         </Grid>
       </Container>
