@@ -10,14 +10,27 @@ import {
   FormControl,
   FormControlLabel,
   Typography,
+  Paper,
+  Box,
+  Card,
+  CardContent,
+  Alert,
+  CircularProgress,
+  Fade,
+  Chip
 } from "@mui/material";
 
 import Grid from '@mui/material/Unstable_Grid2';
 import TrainingTypeSelector from "../component/TrainingTypeSelector";
+import { 
+  Settings, 
+  PlayArrow, 
+  CheckCircle 
+} from '@mui/icons-material';
 
 export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
-  const [trainingType, setTrainingType] = useState('A'); // na starcie brak
+  const [trainingType, setTrainingType] = useState('A');
   const { t } = useTranslation();
 
   const {
@@ -29,59 +42,200 @@ export default function AddTrainingView() {
   } = useQuery({
     queryKey: ['training-template', trainingType],
     queryFn: () => REST.getTrainingTemplateByType(trainingType),
-    enabled: false, // Wyłącz automatyczne ładowanie
+    enabled: false,
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
   });
 
   const handleLoadTraining = () => {
     if (trainingType) {
-      refetch(); // Ręcznie wywołaj zapytanie
+      refetch();
     }
   };
 
   return (
-    <Grid container spacing={2} sx={{ minWidth: 200 }}>
-      <Grid item xs={12}>
-        <Typography variant="h5">{t('messages.loadLastTraining')}</Typography>
-      </Grid>
+    <Box sx={{ 
+      minHeight: '100vh',
+      py: 4
+    }}>
+      <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
 
-      <Grid item xs={12}>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <TrainingTypeSelector setTrainingType={setTrainingType} />
-        </FormControl>
-      </Grid>
+        {/* Training Template Loader */}
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{ 
+            height: '100%',
+            borderRadius: 3,
+            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            '&:hover': {
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={3}>
+                <PlayArrow sx={{ color: '#4caf50', fontSize: 28 }} />
+                <Typography variant="h5" fontWeight="600">
+                  {t('messages.loadLastTraining') || 'Załaduj Szablon'}
+                </Typography>
+              </Box>
+              
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="body2" color="text.secondary" mb={2}>
+                  Wybierz typ treningu:
+                </Typography>
+                <FormControl fullWidth>
+                  <TrainingTypeSelector setTrainingType={setTrainingType} />
+                </FormControl>
+              </Box>
 
-      <Grid item xs={12}>
-        <Button
-          variant="contained"
-          onClick={handleLoadTraining}
-          disabled={!trainingType || isFetching}
-        >
-          {isFetching ? t('messages.loading') || 'Ładowanie...' : t('messages.loadLastTraining')}
-        </Button>
-      </Grid>
+              <Button
+                variant="contained"
+                fullWidth
+                size="large"
+                onClick={handleLoadTraining}
+                disabled={!trainingType || isFetching}
+                startIcon={isFetching ? <CircularProgress size={20} color="inherit" /> : <PlayArrow />}
+                sx={{
+                  py: 1.5,
+                  borderRadius: 2,
+                  background: 'linear-gradient(45deg, #4caf50, #45a049)',
+                  '&:hover': {
+                    background: 'linear-gradient(45deg, #45a049, #3e8e41)',
+                  },
+                  '&:disabled': {
+                    background: 'rgba(0,0,0,0.12)'
+                  }
+                }}
+              >
+                {isFetching ? 
+                  (t('messages.loading') || 'Ładowanie...') : 
+                  (t('messages.loadLastTraining') || 'Załaduj Szablon')
+                }
+              </Button>
 
-      <Grid item xs={12}>
-        <FormControlLabel
-          control={<Checkbox />}
-          label={t('messages.enableMoreAccurateForm')}
-          onClick={() => setIsSimpleForm(!isSimpleForm)}
-        />
-      </Grid>
+              {exercises?.content && exercises.content.length > 0 && (
+                <Fade in={true}>
+                  <Alert 
+                    severity="success" 
+                    sx={{ mt: 2, borderRadius: 2 }}
+                    icon={<CheckCircle />}
+                  >
+                    Szablon załadowany! Znaleziono {exercises.content.length} ćwiczeń.
+                  </Alert>
+                </Fade>
+              )}
+            </CardContent>
+          </Card>
+        </Grid>
 
-      <Grid item xs={12}>
+        {/* Settings Panel */}
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{ 
+            height: '100%',
+            borderRadius: 3,
+            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            '&:hover': {
+              // transform: 'translateY(-4px)',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={3}>
+                <Settings sx={{ color: '#ff9800', fontSize: 28 }} />
+                <Typography variant="h5" fontWeight="600">
+                  Ustawienia Formularza
+                </Typography>
+              </Box>
+              
+              <Box sx={{ 
+                p: 3, 
+                bgcolor: 'rgba(255, 152, 0, 0.05)', 
+                borderRadius: 2,
+                border: '1px solid rgba(255, 152, 0, 0.2)'
+              }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox 
+                      checked={!isSimpleForm}
+                      onChange={() => setIsSimpleForm(!isSimpleForm)}
+                      sx={{
+                        '&.Mui-checked': {
+                          color: '#ff9800',
+                        },
+                      }}
+                    />
+                  }
+                  label={
+                    <Box>
+                      <Typography variant="body1" fontWeight="500">
+                        {t('messages.enableMoreAccurateForm') || 'Formularz Zaawansowany'}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Więcej opcji i szczegółowych ustawień
+                      </Typography>
+                    </Box>
+                  }
+                />
+              </Box>
+
+              <Box sx={{ mt: 3, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                <Chip 
+                  label={isSimpleForm ? "Tryb Prosty" : "Tryb Zaawansowany"} 
+                  color={isSimpleForm ? "default" : "warning"}
+                  variant={isSimpleForm ? "outlined" : "filled"}
+                />
+                <Chip 
+                  label={`Typ: ${trainingType}`} 
+                  color="primary"
+                  variant="outlined"
+                />
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Error Display */}
         {isError && (
-          <Typography color="error">
-            {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania'}: {error.message}
-          </Typography>
+          <Grid xs={12}>
+            <Fade in={true}>
+              <Alert 
+                severity="error" 
+                sx={{ borderRadius: 2 }}
+                onClose={() => {}}
+              >
+                <Typography fontWeight="500">
+                  {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania'}: {error.message}
+                </Typography>
+              </Alert>
+            </Fade>
+          </Grid>
         )}
 
-        <TrainingForm
-          isSimpleForm={isSimpleForm}
-          exercises={exercises?.content || []}
-        />
+        {/* Training Form */}
+        <Grid xs={12}>
+          <Paper elevation={8} sx={{ 
+            borderRadius: 4,
+            overflow: 'hidden',
+            background: 'color.secondary',
+            backdropFilter: 'blur(40px)'
+          }}>
+            <Box sx={{ 
+              p: 2, 
+              background: 'linear-gradient(90deg, #667eea, #764ba2)',
+              color: 'white'
+            }}>
+              <Typography variant="h5" fontWeight="600">
+                Formularz Treningu
+              </Typography>
+            </Box>
+            <Box sx={{ p: 4 }}>
+              <TrainingForm
+                isSimpleForm={isSimpleForm}
+                exercises={exercises?.content || []}
+              />
+            </Box>
+          </Paper>
+        </Grid>
       </Grid>
-    </Grid>
+    </Box>
   );
 }
