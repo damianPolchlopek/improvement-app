@@ -64,13 +64,21 @@ export default function AddTrainingView() {
         <Grid xs={12} md={6}>
           <Card elevation={6} sx={{ 
             height: '100%',
+            minHeight: 400, // Dodana minimalna wysokość
             borderRadius: 3,
             transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
             '&:hover': {
               boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
+            },
+            display: 'flex',
+            flexDirection: 'column'
           }}>
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ 
+              p: 3,
+              display: 'flex',
+              flexDirection: 'column',
+//               height: '100%'
+            }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <PlayArrow sx={{ color: '#4caf50', fontSize: 28 }} />
                 <Typography variant="h5" fontWeight="600">
@@ -78,7 +86,7 @@ export default function AddTrainingView() {
                 </Typography>
               </Box>
               
-              <Box sx={{ mb: 3 }}>
+              <Box sx={{ mb: 3, flex: 1 }}>
                 <Typography variant="body2" color="text.secondary" mb={2}>
                   Wybierz typ treningu:
                 </Typography>
@@ -87,42 +95,44 @@ export default function AddTrainingView() {
                 </FormControl>
               </Box>
 
-              <Button
-                variant="contained"
-                fullWidth
-                size="large"
-                onClick={handleLoadTraining}
-                disabled={!trainingType || isFetching}
-                startIcon={isFetching ? <CircularProgress size={20} color="inherit" /> : <PlayArrow />}
-                sx={{
-                  py: 1.5,
-                  borderRadius: 2,
-                  background: 'linear-gradient(45deg, #4caf50, #45a049)',
-                  '&:hover': {
-                    background: 'linear-gradient(45deg, #45a049, #3e8e41)',
-                  },
-                  '&:disabled': {
-                    background: 'rgba(0,0,0,0.12)'
+              <Box sx={{ mt: 'auto' }}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  onClick={handleLoadTraining}
+                  disabled={!trainingType || isFetching}
+                  startIcon={isFetching ? <CircularProgress size={20} color="inherit" /> : <PlayArrow />}
+                  sx={{
+                    py: 1.5,
+                    borderRadius: 2,
+                    background: 'linear-gradient(45deg, #4caf50, #45a049)',
+                    '&:hover': {
+                      background: 'linear-gradient(45deg, #45a049, #3e8e41)',
+                    },
+                    '&:disabled': {
+                      background: 'rgba(0,0,0,0.12)'
+                    }
+                  }}
+                >
+                  {isFetching ? 
+                    (t('messages.loading') || 'Ładowanie...') : 
+                    (t('messages.loadLastTraining') || 'Załaduj Szablon')
                   }
-                }}
-              >
-                {isFetching ? 
-                  (t('messages.loading') || 'Ładowanie...') : 
-                  (t('messages.loadLastTraining') || 'Załaduj Szablon')
-                }
-              </Button>
+                </Button>
 
-              {exercises?.content && exercises.content.length > 0 && (
-                <Fade in={true}>
-                  <Alert 
-                    severity="success" 
-                    sx={{ mt: 2, borderRadius: 2 }}
-                    icon={<CheckCircle />}
-                  >
-                    Szablon załadowany! Znaleziono {exercises.content.length} ćwiczeń.
-                  </Alert>
-                </Fade>
-              )}
+                {exercises?.content && exercises.content.length > 0 && (
+                  <Fade in={true}>
+                    <Alert 
+                      severity="success" 
+                      sx={{ mt: 2, borderRadius: 2 }}
+                      icon={<CheckCircle />}
+                    >
+                      Szablon załadowany! Znaleziono {exercises.content.length} ćwiczeń.
+                    </Alert>
+                  </Fade>
+                )}
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -131,14 +141,21 @@ export default function AddTrainingView() {
         <Grid xs={12} md={6}>
           <Card elevation={6} sx={{ 
             height: '100%',
+            minHeight: 400, // Dodana minimalna wysokość
             borderRadius: 3,
             transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
             '&:hover': {
-              // transform: 'translateY(-4px)',
               boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
+            },
+            display: 'flex',
+            flexDirection: 'column'
           }}>
-            <CardContent sx={{ p: 3 }}>
+            <CardContent sx={{ 
+              p: 3,
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%'
+            }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Settings sx={{ color: '#ff9800', fontSize: 28 }} />
                 <Typography variant="h5" fontWeight="600">
@@ -150,7 +167,11 @@ export default function AddTrainingView() {
                 p: 3, 
                 bgcolor: 'rgba(255, 152, 0, 0.05)', 
                 borderRadius: 2,
-                border: '1px solid rgba(255, 152, 0, 0.2)'
+                border: '1px solid rgba(255, 152, 0, 0.2)',
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center'
               }}>
                 <FormControlLabel
                   control={

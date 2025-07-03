@@ -11,8 +11,7 @@ import {
   Typography,
   TableBody,
   TablePagination,
-  TableFooter,
-  Box
+  TableFooter
 } from '@mui/material';
 
 import StyledTableRow from '../../component/table/StyledTableRow';

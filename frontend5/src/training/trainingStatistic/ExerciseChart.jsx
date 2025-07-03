@@ -14,6 +14,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { Typography } from '@mui/material';
+
 
 function formatXAxis(tickItem) {
   return moment(tickItem).format('DD/MM/YYYY')
@@ -78,7 +80,7 @@ export default function ExerciseChart({exercises, beginDate, endDate}) {
           </LineChart>
         </ResponsiveContainer>
       ) : (
-        <p>{t('messages.loading')}</p>
+        <Typography variant="body2">{t('messages.loading')}</Typography>
       )}
     </React.Fragment>
   );

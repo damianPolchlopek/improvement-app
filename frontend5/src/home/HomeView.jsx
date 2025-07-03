@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import REST from '../utils/REST';
 
 import Grid from '@mui/material/Unstable_Grid2';
@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 import LogComponent from './LogComponent';
 
 function HomeView() {
-  const [loadingTrainingModule, setLoadingTrainingModule] = React.useState(false);
-  const [loadingFoodModule, setLoadingFoodModule] = React.useState(false);
+  const [loadingTrainingModule, setLoadingTrainingModule] = useState(false);
+  const [loadingFoodModule, setLoadingFoodModule] = useState(false);
   const { t } = useTranslation();
 
   function handleClickTrainingModule() {
@@ -27,7 +27,7 @@ function HomeView() {
   }
 
   return (
-    <Grid container rowSpacing={1} columnSpacing={1}>
+    <Grid container>
       <Grid xs={6}>
         <LoadingButton
           size="large"

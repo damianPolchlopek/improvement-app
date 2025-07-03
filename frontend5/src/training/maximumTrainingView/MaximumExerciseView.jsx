@@ -37,7 +37,7 @@ export default function MaximumExerciseView() {
     cacheTime: 1000 * 60 * 10, // 10 min
   });
 
-  if (data && data.content && data.content.length == 0) {
+  if (data && data.content && data.content.length === 0) {
     return <InformationComponent>Trainings have not been added yet!</InformationComponent>
   }  
 

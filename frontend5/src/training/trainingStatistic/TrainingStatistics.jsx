@@ -73,13 +73,13 @@ export default function TrainingStatistic() {
     setEndDate(newValue.toDate());
   };
 
-  if (exercises && exercises.length == 0) {
+  if (exercises && exercises.length === 0) {
     return <InformationComponent>Trainings have not been added yet!</InformationComponent>
   } 
 
   return (
     <>
-      <Grid container spacing={3} alignItems="center" justifyContent="center">
+      <Grid container>
         {/* Row 1 */}
         <Grid container item xs={12} spacing={3} justifyContent="center">
           <Grid item xs={12} sm={6} md={4}>
@@ -120,11 +120,10 @@ export default function TrainingStatistic() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
                 label={t('chart.beginDate')}
-                inputFormat="DD/MM/YYYY"
                 value={beginDate}
                 onChange={handleChangeBeginDate}
                 renderInput={(params) => (
-                  <TextField {...params} sx={{ width: '100%' }} />
+                  <TextField {...params} />
                 )}
               />
             </LocalizationProvider>
@@ -133,11 +132,10 @@ export default function TrainingStatistic() {
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DesktopDatePicker
                 label={t('chart.endDate')}
-                inputFormat="DD/MM/YYYY"
                 value={endDate}
                 onChange={handleChangeEndDate}
                 renderInput={(params) => (
-                  <TextField {...params} sx={{ width: '100%' }} />
+                  <TextField {...params} />
                 )}
               />
             </LocalizationProvider>
@@ -146,7 +144,11 @@ export default function TrainingStatistic() {
       </Grid>
 
       {/* Chart */}
-      <Grid container item xs={12} justifyContent="center" sx={{ marginTop: 3 }}>
+      <Grid container item 
+        xs={12} 
+        justifyContent="center" 
+        sx={{ marginTop: 3 }}
+      >
         {isLoading ? (
           <CircularProgress />
         ) : isError ? (
