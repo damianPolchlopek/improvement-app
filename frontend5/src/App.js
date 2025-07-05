@@ -1,4 +1,5 @@
 import React, { Suspense, lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
@@ -74,6 +75,10 @@ const router = createBrowserRouter([
     path: '/',
     element: <PublicLayout />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="/app/" replace />,
+      },
       {
         path: LoginUrl,
         element: <LoginView />,

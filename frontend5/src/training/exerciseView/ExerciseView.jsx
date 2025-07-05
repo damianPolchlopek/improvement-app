@@ -24,7 +24,7 @@ import {
   Typography,
   Alert,
   Fade,
-  Chip
+  useTheme
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
@@ -39,6 +39,7 @@ export default function ExerciseView() {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const {
     data: trainingData,
@@ -97,7 +98,7 @@ export default function ExerciseView() {
         <Grid xs={12}>
           <Card elevation={6} sx={{ 
             borderRadius: 3,
-            background: 'linear-gradient(45deg, #667eea, #764ba2)',
+            background: theme.palette.card.header,
             color: 'white',
             mb: 2
           }}>
@@ -217,7 +218,7 @@ export default function ExerciseView() {
             }}>
               <Box sx={{ 
                 p: 3, 
-                background: 'linear-gradient(90deg, #667eea, #764ba2)',
+                background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
                 alignItems: 'center',

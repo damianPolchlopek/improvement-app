@@ -12,9 +12,12 @@ let theme = createTheme({
     background: {
       default: 'radial-gradient( #123146, #202c34)',
       second: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-      gradientMain: '',
       paper: '#1d1d1d',
     },
+    card: {
+      header: 'linear-gradient(90deg, #1e3a52 0%, #2d5374 100%)',
+      border: '1px solid rgba(255, 255, 255, 0.1)'
+    }
   },
   typography: {
     h6: {
