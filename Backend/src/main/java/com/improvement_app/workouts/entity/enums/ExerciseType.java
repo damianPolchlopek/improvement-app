@@ -16,6 +16,7 @@ public enum ExerciseType {
     SILOWY_B1("Siłowy#1-B1"),
     HIPERTROFICZNY_D1("Hipertroficzny#1-D1"),
     KARDIO("Kardio"),
+    ROWER("Rower#1-R"),
     HIPERTROFICZNY_D2("Hipertroficzny#1-D2"),
     KETTLE_K1("Kettle#1-K1");
 
