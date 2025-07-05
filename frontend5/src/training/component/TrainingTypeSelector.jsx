@@ -11,6 +11,10 @@ export default function TrainingTypeSelector({setTrainingType}) {
       defaultValue="A"
       displayEmpty
     >
+      <MenuItem value="K1">Kettle K1</MenuItem>
+      <MenuItem value="K2">Kettle K2</MenuItem>
+      <MenuItem value="K3">Kettle K3</MenuItem>
+      <MenuItem value="R">Rower</MenuItem>
       <MenuItem value="A">Siłowy A</MenuItem>
       <MenuItem value="B">Siłowy B</MenuItem>
       <MenuItem value="C">Hipertroficzny C</MenuItem>
@@ -24,8 +28,5 @@ export default function TrainingTypeSelector({setTrainingType}) {
       <MenuItem value="A2">Siłowy A2</MenuItem>
       <MenuItem value="C2">Hipertroficzny C2</MenuItem>
       <MenuItem value="D2">Hipertroficzny D2</MenuItem>
-      <MenuItem value="K1">Kettle K1</MenuItem>
-      <MenuItem value="K2">Kettle K2</MenuItem>
-      <MenuItem value="K3">Kettle K3</MenuItem>
     </Select>;
   }
