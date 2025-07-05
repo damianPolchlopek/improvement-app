@@ -86,7 +86,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
 
         {/* Ikona usuwania */}
         <StyledTableCell sx={{ width: "100px" }}>
-          <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton aria-label="edit day" size="small" onClick={handleEditClick}>
               <EditIcon color="primary" fontSize="small" />
             </IconButton>

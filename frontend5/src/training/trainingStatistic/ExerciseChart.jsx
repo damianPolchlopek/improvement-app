@@ -14,6 +14,8 @@ import {
   YAxis,
 } from "recharts";
 
+import { Typography } from '@mui/material';
+
 
 function formatXAxis(tickItem) {
   return moment(tickItem).format('DD/MM/YYYY')
@@ -52,35 +54,39 @@ export default function ExerciseChart({exercises, beginDate, endDate}) {
     setDataExercise(updatedExercises);
   }, [exercises, beginDate, endDate]);
 
+  if(dataExercise.length === 0) {
+    return <Typography 
+          variant="body2" 
+          style={{ color: '#a0aec0' }}
+        >
+          {t('messages.loading')}
+        </Typography>
+  }
 
   return (
-    <React.Fragment>
-      {dataExercise.length > 0 ? (
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart
-            width={730}
-            height={250}
-            data={dataExercise}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3"/>
-            <XAxis
-              dataKey="localDate"
-              domain={[convertLocalDateToEpoch(beginDate), convertLocalDateToEpoch(endDate)]}
-              scale="time"
-              type="number"
-              tickFormatter={formatXAxis}
-            />
-            <YAxis />
-            <Tooltip content={<CustomTooltip/>}/>
-            <Legend/>
-            <Line type="monotone" dataKey="value" stroke="#8884d8"/>
-          </LineChart>
-        </ResponsiveContainer>
-      ) : (
-        <p>{t('messages.loading')}</p>
-      )}
-    </React.Fragment>
+    <>
+      <ResponsiveContainer width="100%" height={400}>
+        <LineChart
+          width={730}
+          height={250}
+          data={dataExercise}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis
+            dataKey="localDate"
+            domain={[convertLocalDateToEpoch(beginDate), convertLocalDateToEpoch(endDate)]}
+            scale="time"
+            type="number"
+            tickFormatter={formatXAxis}
+          />
+          <YAxis />
+          <Tooltip content={<CustomTooltip/>}/>
+          <Legend/>
+          <Line type="monotone" dataKey="value" stroke="#8884d8"/>
+        </LineChart>
+      </ResponsiveContainer>
+    </>
   );
 
 }

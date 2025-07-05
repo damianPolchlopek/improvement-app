@@ -29,8 +29,8 @@ export default function DailyForm(props) {
   }
 
   return(
-    <React.Fragment>
-      <Grid container spacing={2}>
+    <>
+      <Grid container>
 
         <Grid xs={12}>
           <Typography 
@@ -82,6 +82,6 @@ export default function DailyForm(props) {
         </Grid>
         
       </Grid>
-    </React.Fragment>
+    </>
   )
 }

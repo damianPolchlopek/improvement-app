@@ -1,9 +1,11 @@
 import React, { Suspense, lazy } from 'react';
+import { Navigate } from 'react-router-dom';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import  theme from './theme.js';
 import { Box } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -66,157 +68,6 @@ const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPic
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
 
-let theme = createTheme({
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#90caf9',
-    },
-    secondary: {
-      main: '#f48fb1',
-    },
-    background: {
-      default: '#121212',
-      paper: '#1d1d1d',
-    },
-  },
-  typography: {
-    h5: {
-      fontWeight: 500,
-      fontSize: 26,
-      letterSpacing: 0.5,
-    },
-    fontFamily: 'Roboto, sans-serif',
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiTab: {
-      defaultProps: {
-        disableRipple: true,
-      },
-    },
-  },
-  mixins: {
-    toolbar: {
-      minHeight: 48,
-    },
-  },
-});
-
-theme = {
-  ...theme,
-  components: {
-    MuiDrawer: {
-      styleOverrides: {
-        paper: {
-          backgroundColor: '#1d1d1d',
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          borderRadius: 8,
-        },
-        contained: {
-          boxShadow: 'none',
-          '&:active': {
-            boxShadow: 'none',
-          },
-        },
-      },
-    },
-    MuiTabs: {
-      styleOverrides: {
-        root: {
-          marginLeft: theme.spacing(1),
-        },
-        indicator: {
-          height: 3,
-          borderTopLeftRadius: 3,
-          borderTopRightRadius: 3,
-          backgroundColor: theme.palette.primary.main,
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          margin: '0 16px',
-          minWidth: 0,
-          padding: 0,
-          [theme.breakpoints.up('md')]: {
-            padding: 0,
-            minWidth: 0,
-          },
-        },
-      },
-    },
-    MuiIconButton: {
-      styleOverrides: {
-        root: {
-          padding: theme.spacing(1),
-        },
-      },
-    },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          borderRadius: 4,
-        },
-      },
-    },
-    MuiDivider: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'rgba(255,255,255,0.15)',
-        },
-      },
-    },
-    MuiListItemButton: {
-      styleOverrides: {
-        root: {
-          '&.Mui-selected': {
-            color: theme.palette.primary.main,
-          },
-        },
-      },
-    },
-    MuiListItemText: {
-      styleOverrides: {
-        primary: {
-          fontSize: 14,
-          fontWeight: theme.typography.fontWeightMedium,
-        },
-      },
-    },
-    MuiListItemIcon: {
-      styleOverrides: {
-        root: {
-          color: 'inherit',
-          minWidth: 'auto',
-          marginRight: theme.spacing(2),
-          '& svg': {
-            fontSize: 20,
-          },
-        },
-      },
-    },
-    MuiAvatar: {
-      styleOverrides: {
-        root: {
-          width: 32,
-          height: 32,
-        },
-      },
-    },
-  },
-};
-
 const suspenseFallback = <p></p>;
 
 const router = createBrowserRouter([
@@ -224,6 +75,10 @@ const router = createBrowserRouter([
     path: '/',
     element: <PublicLayout />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="/app/" replace />,
+      },
       {
         path: LoginUrl,
         element: <LoginView />,

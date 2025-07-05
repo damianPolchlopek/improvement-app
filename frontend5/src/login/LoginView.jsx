@@ -201,7 +201,7 @@ export default function LoginView() {
     <CenteredContainer>
       <StyledPaper>
         <Form method="post">
-          <Grid container spacing={4}>
+          <Grid container>
             <Grid xs={12}>
               <Typography variant="h5" component="div">
                 {t('login.loginPanel')}
