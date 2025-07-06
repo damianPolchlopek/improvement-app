@@ -118,7 +118,7 @@ const LogComponent = () => {
         <Box sx={{ 
           overflow: 'auto',
           '&::-webkit-scrollbar': {
-            // width: '8px',
+            width: '8px',
           },
           '&::-webkit-scrollbar-track': {
             background: 'rgba(255, 255, 255, 0.1)',
