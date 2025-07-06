@@ -179,6 +179,7 @@ public class DriveFilesHelper {
         final String HYPERTROPHIED_TRAINING_NAME = "Hipertroficzny";
         final String CARDIO_TRAINING_NAME = "Kardio";
         final String SWIMMING_POOL_TRAINING_NAME = "Basen";
+        final String BIKE_TRAINING_NAME = "Rower";
         final String KETTLE_POOL_TRAINING_NAME = "Kettle";
 
         if (exerciseType.contains(STRENGTH_TRAINING_NAME)) {
@@ -189,6 +190,8 @@ public class DriveFilesHelper {
             return new CardioExercise(reps, weight);
         } else if (exerciseType.contains(SWIMMING_POOL_TRAINING_NAME)) {
             return new SwimmingPoolExercise(reps, weight);
+        } else if (exerciseType.contains(BIKE_TRAINING_NAME)) {
+            return new CardioExercise(reps, weight);
         } else if (exerciseType.contains(KETTLE_POOL_TRAINING_NAME)) {
             return new KettleExercise(reps, weight);
         } else {

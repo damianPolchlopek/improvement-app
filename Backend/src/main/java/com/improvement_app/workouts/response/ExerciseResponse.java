@@ -1,11 +1,9 @@
 package com.improvement_app.workouts.response;
 
 import com.improvement_app.workouts.entity.ExerciseEntity;
-import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public record ExerciseResponse(
@@ -28,26 +26,38 @@ public record ExerciseResponse(
                 entity.getTraining() != null ? entity.getTraining().getPlace().getValue() : null,
                 entity.getTraining() != null ? entity.getTraining().getName() : null,
                 entity.getTraining() != null ? entity.getTraining().getDate() : null,
-                entity.getType() == ExerciseType.KARDIO ? formatWeightsToString(entity.getExerciseSets()) + " km/h"
-                        : formatWeightsToString(entity.getExerciseSets()),
-                entity.getType() == ExerciseType.KARDIO ? formatRepsToString(entity.getExerciseSets()) + " km" :
-                        formatRepsToString(entity.getExerciseSets())
+                formatWeightsToString(entity),
+                formatRepsToString(entity)
         );
     }
 
-    private static String formatRepsToString(List<ExerciseSetEntity> sets) {
-        return sets.stream()
+    private static String formatRepsToString(ExerciseEntity exerciseEntity) {
+        String result = exerciseEntity.getExerciseSets().stream()
                 .map(set -> formatDouble(set.getRep()))
                 .collect(Collectors.joining("/"));
+
+        if (exerciseEntity.getType() == ExerciseType.KARDIO ||
+                exerciseEntity.getType() == ExerciseType.ROWER) {
+            result += " km";
+        }
+
+        return result;
     }
 
     private static String formatDouble(Double value) {
         return value % 1 == 0 ? String.valueOf(value.intValue()) : String.valueOf(value);
     }
 
-    private static String formatWeightsToString(List<ExerciseSetEntity> sets) {
-        return sets.stream()
+    private static String formatWeightsToString(ExerciseEntity exerciseEntity) {
+        String result = exerciseEntity.getExerciseSets().stream()
                 .map(set -> formatDouble(set.getWeight()))
                 .collect(Collectors.joining("/"));
+
+        if (exerciseEntity.getType() == ExerciseType.KARDIO ||
+                exerciseEntity.getType() == ExerciseType.ROWER) {
+            result += " km/h";
+        }
+
+        return result;
     }
 }

@@ -9,6 +9,7 @@ public enum ExerciseName {
     JUMPING_LUNGES("Jumping lunges"),
     WYCISKANIE_SZTANGI_NA_LAWCE_POZIOMEJ_RAMPA("Wyciskanie sztangi na ławce poziomej - rampa"),
     KRAUL("Kraul"),
+    ROWER("Rower"),
     PODCIAGANIE_SZTANGI_WZDLUZ_TULOWIA("Podciąganie sztangi wzdłuż tułowia"),
     MILITARY_PRESS("Military press"),
     PROSTOWANIE_RAMION_Z_DRAZKIEM_Z_WYC_GORNEGO("Prostowanie ramion z drążkiem z użyciem wyc górnego"),

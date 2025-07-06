@@ -30,4 +30,8 @@ public class TrainingTemplateService {
     public void deleteAllTrainingTemplates() {
         trainingTemplateRepository.deleteAll();
     }
+
+    public void flush() {
+        trainingTemplateRepository.flush();
+    }
 }
