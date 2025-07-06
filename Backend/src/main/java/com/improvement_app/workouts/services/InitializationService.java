@@ -39,7 +39,6 @@ public class InitializationService {
     private final TrainingTemplateService trainingTemplateService;
     private final SimpMessagingTemplate messagingTemplate;
     private final FileDownloadService fileDownloadService;
-
     private final UserRepository userRepository;
 
 
@@ -53,6 +52,7 @@ public class InitializationService {
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+
         for (TrainingEntity training : trainings) {
             training.setUser(userEntity);
         }
@@ -159,6 +159,7 @@ public class InitializationService {
                 .toList();
 
         trainingTemplateService.deleteAllTrainingTemplates();
+        trainingTemplateService.flush();
         List<TrainingTemplateEntity> saved = trainingTemplateService.saveAllTrainingTemplates(templates);
         log.info("Zapisane plany treningowe: {}", saved);
 

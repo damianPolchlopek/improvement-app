@@ -3,7 +3,7 @@ package com.improvement_app.workouts.entity.enums;
 public enum ExercisePlace {
     GYM("Siłownia"),
     HOME("Dom"),
-    OUTDOORS("Plener"),
+    OUTDOORS("Pole"),
     OTHER("Inne");
 
     private final String value;
