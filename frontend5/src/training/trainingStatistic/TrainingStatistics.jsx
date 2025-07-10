@@ -446,9 +446,6 @@ export default function TrainingStatistic() {
                       border: '1px solid rgba(211, 47, 47, 0.3)',
                       '& .MuiAlert-icon': {
                         color: '#f44336',
-                      },
-                      '& .MuiAlert-message': {
-                        width: '100%'
                       }
                     }}
                   >

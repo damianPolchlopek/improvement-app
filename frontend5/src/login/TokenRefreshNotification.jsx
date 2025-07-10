@@ -10,13 +10,12 @@ export default function TokenRefreshNotification() {
     const checkTokenExpiration = () => {
       const tokenDuration = getTokenDuration();
       const minutesLeft = Math.ceil(tokenDuration / (1000 * 60));
-      console.log('Minutes left: ', minutesLeft)
 
       if (minutesLeft <= 2 && minutesLeft > 0) {
         setShowWarning(true);
         setTimeLeft(minutesLeft);
       } else {
-        setShowWarning(true);
+        setShowWarning(false);
       }
     };
     
