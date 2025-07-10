@@ -187,6 +187,18 @@ theme = {
         inputFormat: 'DD/MM/YYYY',
       },
     },
+   MuiAlert: {
+      styleOverrides: {
+        root: {
+          marginBottom: '16px',
+          textAlign: 'center'
+        },
+        message: {
+          width: '100%',
+          textAlign: 'center'
+        }
+      }
+    },
     MuiGrid2: {
       defaultProps: {
         spacing: 3,

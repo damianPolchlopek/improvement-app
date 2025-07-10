@@ -16,7 +16,7 @@ export default function TokenRefreshNotification() {
         setShowWarning(true);
         setTimeLeft(minutesLeft);
       } else {
-        setShowWarning(false);
+        setShowWarning(true);
       }
     };
     
