@@ -1,8 +1,9 @@
 package com.improvement_app.security.services;
 
-import com.improvement_app.security.command.request.LoginRequest;
-import com.improvement_app.security.command.request.SignupRequest;
-import com.improvement_app.security.command.response.JwtResponse;
+import com.improvement_app.security.request.LoginRequest;
+import com.improvement_app.security.request.RefreshTokenRequest;
+import com.improvement_app.security.request.SignupRequest;
+import com.improvement_app.security.response.JwtResponse;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.exceptions.RoleNotFoundException;
 import com.improvement_app.security.exceptions.UserAlreadyExistsException;
@@ -13,8 +14,12 @@ import com.improvement_app.security.entity.ERole;
 import com.improvement_app.security.entity.Role;
 import com.improvement_app.security.repository.RoleRepository;
 import com.improvement_app.security.repository.UserRepository;
+import com.improvement_app.security.response.RefreshTokenResponse;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,12 +28,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -63,7 +66,8 @@ public class AuthService {
         userEntity.setLastLogin(LocalDateTime.now());
         userRepository.save(userEntity);
 
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String accessToken = jwtUtils.generateJwtToken(userDetails.getUsername(), userEntity.getRolesString());
+        String refreshToken = jwtUtils.generateRefreshToken(authentication);
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -71,12 +75,27 @@ public class AuthService {
 
         log.debug("User authenticated successfully: {}", userDetails.getUsername());
 
-        return new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(),
+        return new JwtResponse(accessToken, refreshToken, userDetails.getId(), userDetails.getUsername(),
                 userDetails.getEmail(), roles);
     }
 
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        String refreshToken = refreshTokenRequest.refreshToken();
+
+        try {
+            Claims claims = jwtUtils.validateToken(refreshToken);
+            String username = claims.getSubject();
+
+            String accessToken = jwtUtils.generateJwtToken(username, List.of("ROLE_USER"));
+            return RefreshTokenResponse.of(accessToken);
+
+        } catch (JwtException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token niepoprawny");
+        }
+    }
+
     @Transactional
-    public String registerUser(SignupRequest signUpRequest) {
+    public void registerUser(SignupRequest signUpRequest) {
         log.debug("Registering new user: {}", signUpRequest.getUsername());
 
         validateUserRegistration(signUpRequest);
@@ -103,8 +122,6 @@ public class AuthService {
         emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
 
         log.info("User registered successfully: {}. Verification email sent.", userEntity.getUsername());
-
-        return "User registered successfully. Please check your email to verify your account.";
     }
 
     @Transactional

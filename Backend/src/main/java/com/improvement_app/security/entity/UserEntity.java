@@ -12,6 +12,8 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -68,5 +70,11 @@ public class UserEntity {
         this.username = username;
         this.email = email;
         this.password = password;
+    }
+
+    public List<String> getRolesString(){
+        return roles.stream()
+                .map(r -> r.getName().toString())
+                .collect(Collectors.toList());
     }
 }

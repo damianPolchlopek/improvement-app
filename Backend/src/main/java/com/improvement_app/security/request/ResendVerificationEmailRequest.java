@@ -1,4 +1,4 @@
-package com.improvement_app.security.command.request;
+package com.improvement_app.security.request;
 
 import lombok.Data;
 
