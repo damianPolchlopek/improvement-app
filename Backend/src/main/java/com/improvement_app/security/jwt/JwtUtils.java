@@ -42,7 +42,7 @@ public class JwtUtils {
     public String generateRefreshToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + securityProperties.getJwt().getAccessTokenExpirationMs());
+        Date expiryDate = new Date(now.getTime() + securityProperties.getJwt().getRefreshTokenExpirationMs());
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())

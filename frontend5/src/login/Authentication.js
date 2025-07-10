@@ -10,6 +10,7 @@ export function getTokenDuration() {
   const expirationDate = new Date(storedExpirationDate * 1000);
   const now = new Date();
   const duration = expirationDate.getTime() - now.getTime();
+
   return duration;
 }
 
@@ -21,6 +22,7 @@ export function getRefreshTokenDuration() {
   const expirationDate = new Date(storedRefreshExpiration * 1000);
   const now = new Date();
   const duration = expirationDate.getTime() - now.getTime();
+
   return duration;
 }
 
@@ -56,25 +58,31 @@ export function getRefreshToken() {
   return refreshToken;
 }
 
-export function setTokens(accessToken, refreshToken, expiresIn, refreshExpiresIn) {
-  
-  
-  
-  
-  
-  const expirationDate = new Date().getTime() / 1000 + expiresIn;
-  const refreshExpirationDate = new Date().getTime() / 1000 + refreshExpiresIn;
-  
-  localStorage.setItem('authorization', accessToken);
+export function setTokens(accessToken, refreshToken, type, roles) {
+  const decodedToken = jwt_decode(accessToken);
+  if (decodedToken.exp * 1000 < Date.now()) {
+    throw new Error('Access Token already expired');
+  }
+
+  const decodedRefreshToken = jwt_decode(refreshToken);
+  if (decodedRefreshToken.exp * 1000 < Date.now()) {
+    throw new Error('Refresh Token already expired');
+  }
+
+  const authorization = `${type} ${accessToken}`;
+
+  localStorage.setItem('authorization', authorization);
+  localStorage.setItem('role', JSON.stringify(roles)); // Bezpieczniejsze przechowywanie
+  localStorage.setItem('expiration', decodedToken.exp.toString());
   localStorage.setItem('refreshToken', refreshToken);
-  localStorage.setItem('expiration', expirationDate.toString());
-  localStorage.setItem('refreshExpiration', refreshExpirationDate.toString());
+  localStorage.setItem('refreshExpiration', decodedRefreshToken.exp.toString())
 }
 
 export function clearTokens() {
   localStorage.removeItem('authorization');
-  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('role');
   localStorage.removeItem('expiration');
+  localStorage.removeItem('refreshToken');
   localStorage.removeItem('refreshExpiration');
 }
 
@@ -84,11 +92,9 @@ export async function refreshAccessToken() {
   if (!refreshToken || refreshToken === 'EXPIRED') {
     throw new Error('Refresh token is invalid or expired');
   }
-  
+
   try {
-    
-    const data = await REST.refreshTokenRequest(refreshToken)
-    console.log('Response after refresh token: ', data)
+    const data = await REST.refreshTokenRequest(refreshToken);
 
     const authorization = `Bearer ${data.accessToken}`;
     localStorage.setItem('authorization', authorization);
@@ -97,16 +103,9 @@ export async function refreshAccessToken() {
     localStorage.setItem('expiration', decodedToken.exp.toString());
 
 
-    // // Zapisz nowe tokeny
-    // setTokens(
-    //   data.accessToken,
-    //   data.refreshToken || refreshToken, // Niektóre API zwracają nowy refresh token
-    //   data.expiresIn,
-    //   data.refreshExpiresIn || getRefreshTokenDuration() / 1000
-    // );
-    
-    return data.accessToken;
+    return authorization; // Zwróć pełny token z Bearer
   } catch (error) {
+    console.error('Refresh token failed:', error);
     clearTokens();
     throw error;
   }
@@ -115,14 +114,4 @@ export async function refreshAccessToken() {
 export function tokenLoader() {
   const token = getAuthToken();
   return token;
-}
-
-export function checkAuthLoader() {
-  console.log('checkAuthLoader');
-  
-  const token = getAuthToken();
-  
-  if (!token) {
-    return redirect('/login');
-  }
 }

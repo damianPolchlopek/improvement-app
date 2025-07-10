@@ -9,13 +9,78 @@ import Drawer from './Drawer.jsx';
 import TokenRefreshNotification from '../login/TokenRefreshNotification.jsx';
 
 export default function Layout() {
-  const [ mobileOpen, setMobileOpen ] = useState(false);
-  const token = useLoaderData();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [token, setToken] = useState(useLoaderData());
   const submit = useSubmit();
   
   const logoutTimeoutRef = useRef(null);
   const refreshTimeoutRef = useRef(null);
+  const isRefreshingRef = useRef(false); // Zapobiega wielokrotnym odświeżeniom
 
+  const clearAllTimeouts = () => {
+    if (logoutTimeoutRef.current) {
+      clearTimeout(logoutTimeoutRef.current);
+      logoutTimeoutRef.current = null;
+    }
+    if (refreshTimeoutRef.current) {
+      clearTimeout(refreshTimeoutRef.current);
+      refreshTimeoutRef.current = null;
+    }
+  };
+
+  const scheduleTokenRefresh = (currentToken) => {
+    if (!currentToken || currentToken === 'EXPIRED') return;
+    
+    clearAllTimeouts();
+    
+    const tokenDuration = getTokenDuration();
+    const refreshToken = getRefreshToken();
+        
+    if (tokenDuration <= 0 || !refreshToken || refreshToken === 'EXPIRED') {
+      submit(null, { action: '/logout', method: 'post' });
+      return;
+    }
+
+    // Odśwież token 5 minut przed wygaśnięciem
+    const refreshTime = Math.max(tokenDuration - 300000, 60000); // Minimum 1 minuta
+    
+    console.log('Scheduling refresh in:', refreshTime, 'ms');
+    
+    refreshTimeoutRef.current = setTimeout(async () => {
+      if (isRefreshingRef.current) {
+        console.log('Already refreshing, skipping...');
+        return;
+      }
+      
+      try {
+        isRefreshingRef.current = true;
+        console.log('Attempting to refresh token...');
+        
+        const newToken = await refreshAccessToken();
+        console.log('Token refreshed successfully');
+        
+        // Aktualizuj lokalny stan zamiast przeładowywać stronę
+        setToken(newToken);
+        
+        // Zaplanuj następne odświeżenie
+        scheduleTokenRefresh(newToken);
+        
+      } catch (error) {
+        console.error('Failed to refresh token:', error);
+        submit(null, { action: '/logout', method: 'post' });
+      } finally {
+        isRefreshingRef.current = false;
+      }
+    }, refreshTime);
+
+    // Ustaw timeout na wylogowanie jako backup
+    logoutTimeoutRef.current = setTimeout(() => {
+      console.log('Token expired, logging out');
+      submit(null, { action: '/logout', method: 'post' });
+    }, tokenDuration);
+  };
+
+  // Główny useEffect do zarządzania tokenami
   useEffect(() => {
     if (!token) {
       submit(null, { action: '/login', method: 'post' });
@@ -27,71 +92,12 @@ export default function Layout() {
       return;
     }
 
-    const tokenDuration = getTokenDuration();
-    console.log('Token duration: ', tokenDuration)
+    scheduleTokenRefresh(token);
 
-    // Ustaw timeout na wylogowanie
-    logoutTimeoutRef.current = setTimeout(() => {
-      submit(null, { action: '/logout', method: 'post' });
-    }, tokenDuration);
-
-    // Cleanup function
+    // Cleanup
     return () => {
-      if (logoutTimeoutRef.current) {
-        clearTimeout(logoutTimeoutRef.current);
-      }
-    };
-  }, [token, submit]);
-
-  useEffect(() => {
-    if (!token || token === 'EXPIRED') {
-      return;
-    }
-
-    const scheduleTokenRefresh = () => {
-      // Wyczyść poprzedni timeout jeśli istnieje
-      if (refreshTimeoutRef.current) {
-        clearTimeout(refreshTimeoutRef.current);
-      }
-
-      const tokenDuration = getTokenDuration();
-      const refreshToken = getRefreshToken();
-
-      if (tokenDuration <= 0 || !refreshToken || refreshToken === 'EXPIRED') {
-        return;
-      }
-
-      // Odśwież token 5 minut przed wygaśnięciem (300000ms = 5 minut)
-      const refreshTime = Math.max(tokenDuration - 300000, 0);
-
-      if (refreshTime > 0) {
-        refreshTimeoutRef.current = setTimeout(async () => {
-          try {
-            console.log('Attempting to refresh token...');
-            const newToken = await refreshAccessToken();
-            console.log('Token refreshed successfully');
-            
-            // Opcja 1: Przeładuj stronę (prostsze)
-            // window.location.reload();
-            
-            // Opcja 2: Możesz też spróbować zaktualizować stan bez przeładowania
-            // submit(null, { action: '/refresh-token', method: 'post' });
-            
-          } catch (error) {
-            console.error('Failed to refresh token:', error);
-            submit(null, { action: '/logout', method: 'post' });
-          }
-        }, refreshTime);
-      }
-    };
-
-    scheduleTokenRefresh();
-
-    // Cleanup function
-    return () => {
-      if (refreshTimeoutRef.current) {
-        clearTimeout(refreshTimeoutRef.current);
-      }
+      clearAllTimeouts();
+      isRefreshingRef.current = false;
     };
   }, [token, submit]);
 
@@ -102,7 +108,7 @@ export default function Layout() {
   return (
     <Box sx={{ display: 'flex', flex: '100vh' }}>
       <TokenRefreshNotification />
-       
+      
       <Drawer
         PaperProps={{ style: { width: 200 } }}
         variant="temporary"
@@ -111,12 +117,11 @@ export default function Layout() {
       />
 
       <Box sx={{ flex: 1}}>
-        { token !== null ? <Header onDrawerToggle={handleDrawerToggle}/> : null}
+        {token !== null ? <Header onDrawerToggle={handleDrawerToggle}/> : null}
         <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
           <Outlet />
         </Box>
       </Box>
-      
     </Box>
   );
 }

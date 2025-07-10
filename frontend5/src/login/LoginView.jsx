@@ -14,8 +14,7 @@ import Input from './Input';
 import CenteredContainer from '../component/CenteredContainer';
 import StyledPaper from '../component/StyledPaper';
 import { redirect, Form, useActionData, useNavigation } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-
+import { setTokens } from './Authentication';
 import { HomeViewUrl } from '../utils/URLHelper';
 
 export default function LoginView() {
@@ -289,30 +288,10 @@ export async function action({ request }) {
     const accessToken = res.token;
     const refreshToken = res.refreshToken;
     const tokenType = res.type;
-    const authorization = `${tokenType} ${accessToken}`;
 
-    // Walidacja JWT przed zapisaniem
     try {
-      
-      const decodedToken = jwt_decode(accessToken);
-      if (decodedToken.exp * 1000 < Date.now()) {
-        throw new Error('Access Token already expired');
-      }
 
-      console.log('Decoded token: ', decodedToken)
-
-      const decodedRefreshToken = jwt_decode(refreshToken);
-      console.log('Decoded refresh token: ', decodedRefreshToken)
-      if (decodedRefreshToken.exp * 1000 < Date.now()) {
-        throw new Error('Refresh Token already expired');
-      }
-
-      // Bezpieczniejsze przechowywanie (rozważ użycie httpOnly cookies)
-      localStorage.setItem('authorization', authorization);
-      localStorage.setItem('role', JSON.stringify(res.roles)); // Bezpieczniejsze przechowywanie
-      localStorage.setItem('expiration', decodedToken.exp.toString());
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('refreshExpiration', decodedRefreshToken.exp.toString())
+      setTokens(accessToken, refreshToken, tokenType, res.roles)
 
     } catch (tokenError) {
       console.error('Token validation failed:', tokenError);
