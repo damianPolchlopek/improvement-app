@@ -15,7 +15,8 @@ public class SecurityProperties {
     @Data
     public static class Jwt {
         private String secret = "defaultSecretKey";
-        private int expirationMs = 86400000; // 24 hours
+        private long accessTokenExpirationMs = 900_000; // 15 minut
+        private long refreshTokenExpirationMs = 259_200_000; // 3 dni
     }
 
     @Data

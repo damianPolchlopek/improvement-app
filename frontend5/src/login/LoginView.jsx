@@ -14,13 +14,19 @@ import Input from './Input';
 import CenteredContainer from '../component/CenteredContainer';
 import StyledPaper from '../component/StyledPaper';
 import { redirect, Form, useActionData, useNavigation } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-
+import { setTokens } from './Authentication';
 import { HomeViewUrl } from '../utils/URLHelper';
+import { 
+  getErrorInfo, 
+  getResendMessages, 
+  handleLoginError, 
+  validateRequiredFields, 
+  handleTokenValidationError 
+} from '../utils/errorSystem';
 
 export default function LoginView() {
   const { t } = useTranslation();
-  const actionData = useActionData(); // Pobieranie danych z action
+  const actionData = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
 
@@ -28,6 +34,9 @@ export default function LoginView() {
   const [resendingEmail, setResendingEmail] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
   const [resendError, setResendError] = useState(null);
+
+  // Pobieranie komunikatów resend
+  const resendMessages = getResendMessages(t);
 
   useEffect(() => {
     if (actionData?.error) {
@@ -40,7 +49,7 @@ export default function LoginView() {
   // Funkcja do ponownego wysłania maila weryfikacyjnego
   const handleResendEmail = async () => {
     if (!enteredUsername.trim()) {
-      setResendError(t('login.errors.resend.noUsername', 'Wprowadź swój login/email'));
+      setResendError(resendMessages.error.noUsername);
       return;
     }
 
@@ -55,8 +64,7 @@ export default function LoginView() {
     } catch (error) {
       console.error('Resend email failed:', error);
       setResendError(
-        error.response?.data?.message || 
-        t('login.errors.resend.failed', 'Nie udało się wysłać emaila weryfikacyjnego')
+        error.response?.data?.message || resendMessages.error.failed
       );
     } finally {
       setResendingEmail(false);
@@ -82,72 +90,45 @@ export default function LoginView() {
     if (!actionData?.error) return null;
 
     const { code, message, details } = actionData.error;
-    
-    // Mapowanie kodów błędów na wiadomości dla użytkownika
-    const errorMessages = {
-      'EMAIL_NOT_VERIFIED': {
-        severity: 'warning',
-        title: t('login.errors.emailNotVerified.title', 'Email nie został zweryfikowany'),
-        message: t('login.errors.emailNotVerified.message', 'Sprawdź swoją skrzynkę e-mail i kliknij link aktywacyjny.')
-      },
-      'INVALID_CREDENTIALS': {
-        severity: 'error',
-        title: t('login.errors.invalidCredentials.title', 'Nieprawidłowe dane'),
-        message: t('login.errors.invalidCredentials.message', 'Sprawdź login i hasło.')
-      },
-      'ACCOUNT_LOCKED': {
-        severity: 'error',
-        title: t('login.errors.accountLocked.title', 'Konto zablokowane'),
-        message: t('login.errors.accountLocked.message', 'Skontaktuj się z administratorem.')
-      }
-    };
-
-    const errorInfo = errorMessages[code] || {
-      severity: 'error',
-      title: t('login.errors.generic.title', 'Błąd logowania'),
-      message: message || t('login.errors.generic.message', 'Wystąpił nieoczekiwany błąd.')
-    };
+    const errorInfo = getErrorInfo(code, t);
 
     return (
-      errorVisible &&
-      <Alert 
-        severity={errorInfo.severity} 
-        sx={{ 
-          mb: 2,
-          textAlign: 'center',
-          '& .MuiAlert-message': {
-            width: '100%',
+      errorVisible && (
+        <Alert
+          severity={errorInfo.severity}
+          sx={{
+            mb: 2,
             textAlign: 'center'
-          }
-        }}
-        onClose={() => setErrorVisible(false)}
-      >
-        <strong>{errorInfo.title}</strong><br />
-        {errorInfo.message}
-        {details && <><br /><small>{details}</small></>}
-        
-        {/* Przycisk resend dla błędu niezweryfikowanego emaila */}
-        {code === 'EMAIL_NOT_VERIFIED' && (
-          <Box sx={{ mt: 2 }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={handleResendEmail}
-              disabled={resendingEmail}
-              sx={{ minWidth: '140px' }}
-            >
-              {resendingEmail ? (
-                <>
-                  <CircularProgress size={16} sx={{ mr: 1 }} />
-                  {t('login.resend.sending', 'Wysyłanie...')}
-                </>
-              ) : (
-                t('login.resend.button', 'Wyślij ponownie')
-              )}
-            </Button>
-          </Box>
-        )}
-      </Alert>
+          }}
+          onClose={() => setErrorVisible(false)}
+        >
+          <strong>{errorInfo.title}</strong><br />
+          {message || errorInfo.message}
+          {details && <><br /><small>{details}</small></>}
+
+          {/* Przycisk resend dla błędu niezweryfikowanego emaila */}
+          {errorInfo.showResendButton && (
+            <Box sx={{ mt: 2 }}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={handleResendEmail}
+                disabled={resendingEmail}
+                sx={{ minWidth: '140px' }}
+              >
+                {resendingEmail ? (
+                  <>
+                    <CircularProgress size={16} sx={{ mr: 1 }} />
+                    {resendMessages.button.sending}
+                  </>
+                ) : (
+                  resendMessages.button.text
+                )}
+              </Button>
+            </Box>
+          )}
+        </Alert>
+      )
     );
   };
 
@@ -156,20 +137,16 @@ export default function LoginView() {
     if (!resendSuccess) return null;
 
     return (
-      <Alert 
-        severity="success" 
-        sx={{ 
+      <Alert
+        severity="success"
+        sx={{
           mb: 2,
-          textAlign: 'center',
-          '& .MuiAlert-message': {
-            width: '100%',
-            textAlign: 'center'
-          }
+          textAlign: 'center'
         }}
         onClose={() => setResendSuccess(false)}
       >
-        <strong>{t('login.resend.success.title', 'Email wysłany!')}</strong><br />
-        {t('login.resend.success.message', 'Sprawdź swoją skrzynkę e-mail.')}
+        <strong>{resendMessages.success.title}</strong><br />
+        {resendMessages.success.message}
       </Alert>
     );
   };
@@ -179,19 +156,15 @@ export default function LoginView() {
     if (!resendError) return null;
 
     return (
-      <Alert 
-        severity="error" 
-        sx={{ 
+      <Alert
+        severity="error"
+        sx={{
           mb: 2,
-          textAlign: 'center',
-          '& .MuiAlert-message': {
-            width: '100%',
-            textAlign: 'center'
-          }
+          textAlign: 'center'
         }}
         onClose={() => setResendError(null)}
       >
-        <strong>{t('login.resend.error.title', 'Błąd wysyłania')}</strong><br />
+        <strong>{resendMessages.error.title}</strong><br />
         {resendError}
       </Alert>
     );
@@ -243,9 +216,9 @@ export default function LoginView() {
             </Grid>
 
             <Grid xs={12}>
-              <Button 
-                variant="contained" 
-                sx={{width: '25vh'}} 
+              <Button
+                variant="contained"
+                sx={{ width: '25vh' }}
                 type='submit'
                 disabled={isSubmitting || usernameIsInvalid || passwordIsInvalid}
               >
@@ -268,14 +241,9 @@ export async function action({ request }) {
   };
 
   // Walidacja po stronie serwera
-  if (!userDetails.username?.trim() || !userDetails.password?.trim()) {
-    return {
-      error: {
-        code: 'INVALID_INPUT',
-        message: 'Username and password are required',
-        details: 'Please fill in all required fields'
-      }
-    };
+  const validationError = validateRequiredFields(userDetails, ['username', 'password']);
+  if (validationError) {
+    return validationError;
   }
 
   try {
@@ -287,90 +255,18 @@ export async function action({ request }) {
     }
 
     const accessToken = res.token;
+    const refreshToken = res.refreshToken;
     const tokenType = res.type;
-    const authorization = `${tokenType} ${accessToken}`;
 
-    // Walidacja JWT przed zapisaniem
     try {
-      const decodedToken = jwt_decode(accessToken);
-      
-      // Sprawdzenie czy token nie wygasł
-      if (decodedToken.exp * 1000 < Date.now()) {
-        throw new Error('Token already expired');
-      }
-
-      // Bezpieczniejsze przechowywanie (rozważ użycie httpOnly cookies)
-      localStorage.setItem('authorization', authorization);
-      localStorage.setItem('role', JSON.stringify(res.roles)); // Bezpieczniejsze przechowywanie
-      localStorage.setItem('expiration', decodedToken.exp.toString());
-
+      setTokens(accessToken, refreshToken, tokenType, res.roles);
     } catch (tokenError) {
-      console.error('Token validation failed:', tokenError);
-      return {
-        error: {
-          code: 'INVALID_TOKEN',
-          message: 'Invalid authentication token received',
-          details: 'Please try logging in again'
-        }
-      };
+      return handleTokenValidationError(tokenError);
     }
 
     return redirect(HomeViewUrl);
 
   } catch (err) {
-    console.error("Login failed:", err);
-
-    // Szczegółowa obsługa różnych typów błędów
-    if (err.response?.status === 403) {
-      const errorData = err.response.data;
-      
-      return {
-        error: {
-          code: errorData.code || 'FORBIDDEN',
-          message: errorData.message || 'Access forbidden',
-          details: errorData.details,
-          timestamp: errorData.timestamp
-        }
-      };
-    }
-
-    if (err.response?.status === 401) {
-      return {
-        error: {
-          code: 'INVALID_CREDENTIALS',
-          message: 'Invalid username or password',
-          details: 'Please check your credentials and try again'
-        }
-      };
-    }
-
-    if (err.response?.status >= 500) {
-      return {
-        error: {
-          code: 'SERVER_ERROR',
-          message: 'Server error occurred',
-          details: 'Please try again later or contact support'
-        }
-      };
-    }
-
-    if (!err.response) {
-      return {
-        error: {
-          code: 'NETWORK_ERROR',
-          message: 'Network connection failed',
-          details: 'Please check your internet connection'
-        }
-      };
-    }
-
-    // Fallback dla nieznanych błędów
-    return {
-      error: {
-        code: 'UNKNOWN_ERROR',
-        message: 'An unexpected error occurred',
-        details: 'Please try again or contact support'
-      }
-    };
+    return handleLoginError(err);
   }
 }

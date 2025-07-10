@@ -1,10 +1,12 @@
 package com.improvement_app.security.controllers;
 
-import com.improvement_app.security.command.request.LoginRequest;
-import com.improvement_app.security.command.request.ResendVerificationEmailRequest;
-import com.improvement_app.security.command.request.SignupRequest;
-import com.improvement_app.security.command.response.JwtResponse;
-import com.improvement_app.security.command.response.MessageResponse;
+import com.improvement_app.security.request.LoginRequest;
+import com.improvement_app.security.request.RefreshTokenRequest;
+import com.improvement_app.security.request.ResendVerificationEmailRequest;
+import com.improvement_app.security.request.SignupRequest;
+import com.improvement_app.security.response.JwtResponse;
+import com.improvement_app.security.response.MessageResponse;
+import com.improvement_app.security.response.RefreshTokenResponse;
 import com.improvement_app.security.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,12 @@ public class AuthController {
 	public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		authService.registerUser(signUpRequest);
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+
+	@PostMapping("/refresh-token")
+	public ResponseEntity<RefreshTokenResponse> refresh(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+		RefreshTokenResponse refreshTokenResponse = authService.refreshToken(refreshTokenRequest);
+		return ResponseEntity.ok(refreshTokenResponse);
 	}
 
 	@GetMapping("/verify-email")

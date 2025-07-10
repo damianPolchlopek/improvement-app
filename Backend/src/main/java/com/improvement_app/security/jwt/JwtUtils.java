@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -21,13 +22,27 @@ public class JwtUtils {
     private final SecurityProperties securityProperties;
 
     private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(securityProperties.getJwt().getSecret().getBytes(StandardCharsets.UTF_8));
+        byte[] bytes = securityProperties.getJwt().getSecret().getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(bytes);
     }
 
-    public String generateJwtToken(Authentication authentication) {
+    public String generateJwtToken(String username, List<String> roles) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + securityProperties.getJwt().getAccessTokenExpirationMs());
+
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("roles", roles)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(getSigningKey())
+                .compact();
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + securityProperties.getJwt().getExpirationMs());
+        Date expiryDate = new Date(now.getTime() + securityProperties.getJwt().getRefreshTokenExpirationMs());
 
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
@@ -65,5 +80,13 @@ public class JwtUtils {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
+    }
+
+    public Claims validateToken(String token) throws JwtException {
+        return Jwts.parserBuilder()
+                .setSigningKey(securityProperties.getJwt().getSecret().getBytes(StandardCharsets.UTF_8))
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

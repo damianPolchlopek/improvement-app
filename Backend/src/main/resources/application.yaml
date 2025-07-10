@@ -25,7 +25,8 @@ app:
   security:
     jwt:
       secret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
-      expiration-ms: 3600_000
+      access-token-expiration-ms: 900_000     # 15 minut
+      refresh-token-expiration-ms: 259_200_000  # 3 dni
     cors:
       allowed-origins: "*"
       allowed-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"

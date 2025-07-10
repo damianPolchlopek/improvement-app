@@ -57,6 +57,7 @@ const deleteMethod = (url) => {
     });
 }
 
+
 axios.interceptors.request.use(
     (req) => {
         req.headers.Authorization = localStorage.getItem('authorization');
@@ -66,8 +67,6 @@ axios.interceptors.request.use(
         return Promise.reject(err);
     }
 );
-
-
 
 export default class REST {
     // Training module
@@ -262,6 +261,10 @@ export default class REST {
 
     static registerUser(user) {
         return post(serverUrl + 'api/auth/signup', user);
+    }
+
+    static refreshTokenRequest(refreshToken) {
+        return post(serverUrl + 'api/auth/refresh-token', { refreshToken });
     }
 
     static verifyEmail(token) {
