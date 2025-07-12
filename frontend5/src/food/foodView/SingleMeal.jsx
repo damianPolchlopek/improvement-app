@@ -138,7 +138,7 @@ export default function SingleMeal({ meal }) {
             <Typography variant="h6" fontWeight="600" gutterBottom>
               Wartości Odżywcze
             </Typography>
-            <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(140px, 1fr))" gap={2} mb={3}>
+            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} mb={3}>
               {nutritionData.map((item, index) => (
                 <Paper key={index} elevation={2} sx={{
                   p: 2,
@@ -279,14 +279,6 @@ export default function SingleMeal({ meal }) {
                   <Box key={index} sx={{ mb: 2 }}>
                     <Typography 
                       variant="body1" 
-                      // sx={{ 
-                      //   lineHeight: 1.6,
-                      //   '&:before': {
-                      //     content: `"${index + 1}. "`,
-                      //     fontWeight: 600,
-                      //     color: 'primary.main'
-                      //   }
-                      // }}
                     >
                       {recipeRow}
                     </Typography>
