@@ -2,18 +2,13 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import CenteredContainer from '../../component/CenteredContainer';
-import StyledTableCell from '../../component/table/StyledTableCell';
-import StyledTableRow from '../../component/table/StyledTableRow';
+import DataTable from '../../component/table/DataTable';
 import { useTranslation } from 'react-i18next';
 
 import {
   Box,
   Paper,
   Tab,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
   Tabs,
   TextField,
   CircularProgress,
@@ -64,6 +59,45 @@ export default function ProductView() {
     setTypedProductName(e.target.value);
   };
 
+  // Definicja kolumn dla DataTable
+  const columns = [
+    {
+      key: 'name',
+      label: t('food.name'),
+      accessor: 'name'
+    },
+    {
+      key: 'kcal',
+      label: t('food.kcal'),
+      accessor: 'kcal'
+    },
+    {
+      key: 'protein',
+      label: t('food.protein'),
+      accessor: 'protein'
+    },
+    {
+      key: 'carbohydrates',
+      label: t('food.carbs'),
+      accessor: 'carbohydrates'
+    },
+    {
+      key: 'fat',
+      label: t('food.fat'),
+      accessor: 'fat'
+    },
+    {
+      key: 'amount',
+      label: t('food.amount'),
+      accessor: 'amount'
+    },
+    {
+      key: 'unit',
+      label: t('food.unit'),
+      accessor: 'unit'
+    }
+  ];
+
   return (
     <CenteredContainer>
       <Grid container sx={{ width: '70%' }} spacing={2}>
@@ -107,44 +141,16 @@ export default function ProductView() {
 
                 {productCategoryList.map((productCategory, index) => (
                   <TabPanel key={index} value={tabIndex} index={index}>
-                    {isLoadingProducts ? (
-                      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-                        <CircularProgress />
-                      </Box>
-                    ) : isProductError ? (
-                      <Typography color="error">
-                        Error: {productError?.message || 'Unknown error'}
-                      </Typography>
-                    ) : (
-                      <TableContainer>
-                        <Table>
-                          <TableHead>
-                            <StyledTableRow>
-                              <StyledTableCell>{t('food.name')}</StyledTableCell>
-                              <StyledTableCell>{t('food.kcal')}</StyledTableCell>
-                              <StyledTableCell>{t('food.protein')}</StyledTableCell>
-                              <StyledTableCell>{t('food.carbs')}</StyledTableCell>
-                              <StyledTableCell>{t('food.fat')}</StyledTableCell>
-                              <StyledTableCell>{t('food.amount')}</StyledTableCell>
-                              <StyledTableCell>{t('food.unit')}</StyledTableCell>
-                            </StyledTableRow>
-                          </TableHead>
-                          <TableBody>
-                            {productList.map((product) => (
-                              <StyledTableRow key={product.id}>
-                                <StyledTableCell>{product.name}</StyledTableCell>
-                                <StyledTableCell>{product.kcal}</StyledTableCell>
-                                <StyledTableCell>{product.protein}</StyledTableCell>
-                                <StyledTableCell>{product.carbohydrates}</StyledTableCell>
-                                <StyledTableCell>{product.fat}</StyledTableCell>
-                                <StyledTableCell>{product.amount}</StyledTableCell>
-                                <StyledTableCell>{product.unit}</StyledTableCell>
-                              </StyledTableRow>
-                            ))}
-                          </TableBody>
-                        </Table>
-                      </TableContainer>
-                    )}
+                    <DataTable
+                      data={productList}
+                      columns={columns}
+                      isLoading={isLoadingProducts}
+                      isError={isProductError}
+                      error={productError}
+                      loadingMessage={t('common.loading')}
+                      emptyMessage={t('food.noProductsFound')}
+                      containerProps={{ component: 'div' }} // Usuń Paper wrapper z DataTable
+                    />
                   </TabPanel>
                 ))}
               </>

@@ -6,19 +6,25 @@ import CenteredContainer from '../../component/CenteredContainer';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Container,
+  Box,
+  Card,
+  CardContent,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  CircularProgress
+  CircularProgress,
+  Typography,
+  useTheme
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
+import { Restaurant, Search, Category, FilterList } from '@mui/icons-material';
 
 export default function MealView() {
   const { t } = useTranslation();
+  const theme = useTheme();
 
   const [mealName, setMealName] = useState('');
   const [mealCategory, setMealCategory] = useState('Obiad');
@@ -66,83 +72,175 @@ export default function MealView() {
   if (isError) {
     return (
       <CenteredContainer>
-        <p>Error: {error?.message || 'Unknown error'}</p>
+        <Card elevation={6} sx={{ borderRadius: 3, p: 3, maxWidth: 600 }}>
+          <CardContent sx={{ textAlign: 'center' }}>
+            <Typography variant="h6" color="error">
+              Error: {error?.message || 'Unknown error'}
+            </Typography>
+          </CardContent>
+        </Card>
       </CenteredContainer>
     );
   }
 
   return (
-    <>
-      <Container
-        sx={{
-          mb: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center', // wyśrodkowanie poziome
-          width: '100%',
-        }}
-      >
-        {/* Rząd 1 – wyszukiwarka */}
-        <Grid container sx={{ maxWidth: 800, width: '100%' }}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label={t('food.meal')}
-              value={mealName}
-              onChange={(event) => handleChange(event, 'mealName')}
-            />
-          </Grid>
+    <Box sx={{ py: 4 }}>
+      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
+
+        {/* Header Section */}
+        <Grid xs={12}>
+          <Card elevation={6} sx={{
+            borderRadius: 3,
+            background: theme.palette.card.header,
+            color: 'white',
+            mb: 2
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <Restaurant sx={{ fontSize: 32 }} />
+                <Typography variant="h4" fontWeight="600">
+                  Przeglądaj Posiłki
+                </Typography>
+              </Box>
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                Znajdź idealne posiłki dopasowane do Twoich potrzeb
+              </Typography>
+            </CardContent>
+          </Card>
         </Grid>
 
-        {/* Rząd 2 – kategoria i typ */}
-        <Grid container sx={{ mt: 1, maxWidth: 800, width: '100%' }}>
-          <Grid item xs={12} sm={6}>
-            {mealCategoryList.length > 0 && 
-            <FormControl fullWidth variant="standard">
-              <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
-              <Select
-                labelId={labelIdCategory}
-                value={mealCategory}
-                onChange={(event) => handleChange(event, 'mealCategory')}
-              >
-                {mealCategoryList.map((cat, index) => (
-                  <MenuItem key={index} value={cat}>{cat}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>}
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            {mealTypeList.length > 0 && 
-            <FormControl fullWidth variant="standard">
-              <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
-              <Select
-                labelId={labelIdType}
-                value={mealType}
-                onChange={(event) => handleChange(event, 'mealType')}
-              >
-                {mealTypeList.map((type, index) => (
-                  <MenuItem key={index} value={type}>{type}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>}
-          </Grid>
+        {/* Search Section */}
+        <Grid xs={12} md={12}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            '&:hover': {
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={3}>
+                <Search sx={{ color: '#2196f3', fontSize: 28 }} />
+                <Typography variant="h6" fontWeight="600">
+                  Wyszukaj Posiłek
+                </Typography>
+              </Box>
+              <TextField
+                fullWidth
+                label={t('food.meal')}
+                value={mealName}
+                onChange={(event) => handleChange(event, 'mealName')}
+                variant="outlined"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                  }
+                }}
+              />
+            </CardContent>
+          </Card>
         </Grid>
-      </Container>
 
-      {
-        isLoading ? 
-          <CircularProgress sx={{ mt: 2 }} /> : 
-          <CenteredContainer>
-            <Grid container rowSpacing={1} columnSpacing={1} sx={{width: '80%'}}>
-              {mealList.map((meal, index) =>
-                <Grid key={index} xs={6}>
-                  <SingleMeal meal={meal}/>
+        {/* Filters Section */}
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            '&:hover': {
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={3}>
+                <Category sx={{ color: '#ff9800', fontSize: 28 }} />
+                <Typography variant="h6" fontWeight="600">
+                  Kategoria Posiłku
+                </Typography>
+              </Box>
+              {mealCategoryList.length > 0 && 
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
+                  <Select
+                    labelId={labelIdCategory}
+                    value={mealCategory}
+                    onChange={(event) => handleChange(event, 'mealCategory')}
+                    label={t('food.mealCategory')}
+                    sx={{
+                      borderRadius: 2,
+                    }}
+                  >
+                    {mealCategoryList.map((cat, index) => (
+                      <MenuItem key={index} value={cat}>{cat}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              }
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+            '&:hover': {
+              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
+            }
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={3}>
+                <FilterList sx={{ color: '#9c27b0', fontSize: 28 }} />
+                <Typography variant="h6" fontWeight="600">
+                  Typ Posiłku
+                </Typography>
+              </Box>
+              {mealTypeList.length > 0 && 
+                <FormControl fullWidth variant="outlined">
+                  <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
+                  <Select
+                    labelId={labelIdType}
+                    value={mealType}
+                    onChange={(event) => handleChange(event, 'mealType')}
+                    label={t('food.mealType')}
+                    sx={{
+                      borderRadius: 2,
+                    }}
+                  >
+                    {mealTypeList.map((type, index) => (
+                      <MenuItem key={index} value={type}>{type}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              }
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Results Section */}
+        <Grid xs={12}>
+          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+            <CardContent sx={{ p: 3 }}>
+              {isLoading ? (
+                <Box display="flex" justifyContent="center" py={4}>
+                  <CircularProgress size={40} />
+                </Box>
+              ) : (
+                <Grid container spacing={3}>
+                  {mealList.map((meal, index) => (
+                    <Grid key={index} xs={12} md={6}>
+                      <SingleMeal meal={meal} />
+                    </Grid>
+                  ))}
                 </Grid>
               )}
-            </Grid>
-          </CenteredContainer>
-        }
-    </>
+            </CardContent>
+          </Card>
+        </Grid>
+
+      </Grid>
+    </Box>
   );
 }
