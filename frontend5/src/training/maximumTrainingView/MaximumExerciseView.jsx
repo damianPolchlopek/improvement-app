@@ -1,32 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
+import DataTable from '../../component/table/DataTable';
+
 import {
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
   FormControl,
-  CircularProgress,
   Box,
   Card,
   CardContent,
   Typography,
-  Alert,
-  Fade,
   useTheme
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { FitnessCenter, TrendingUp, BarChart } from '@mui/icons-material';
 
-import StyledTableRow from '../../component/table/StyledTableRow';
-import StyledTableCell from '../../component/table/StyledTableCell';
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
-import ErrorAlert from '../../component/error/ErrorAlert';
-import InformationComponent from '../../component/InformationComponent';
 
 export default function MaximumExerciseView() {
   const [trainingType, setTrainingType] = useState('A');
@@ -44,18 +35,36 @@ export default function MaximumExerciseView() {
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
   });
-
-  if (data && data.content && data.content.length === 0) {
-    return (
-      <Box sx={{ minHeight: '100vh', py: 4 }}>
-        <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
-          <Grid xs={12}>
-            <InformationComponent>Trainings have not been added yet!</InformationComponent>
-          </Grid>
-        </Grid>
-      </Box>
-    );
-  }
+  
+  const maximumExerciseColumns = [
+    {
+      key: 'date',
+      label: t('exercise.date'),
+      accessor: 'date',
+      render: (value) => (
+        <Typography variant="body1" fontWeight="500">
+          {value}
+        </Typography>
+      )
+    },
+    {
+      key: 'name',
+      label: t('exercise.name'),
+      accessor: 'name'
+    },
+    {
+      key: 'reps',
+      label: t('exercise.reps'),
+      accessor: 'reps',
+      align: 'right'
+    },
+    {
+      key: 'weight',
+      label: t('exercise.weight'),
+      accessor: 'weight',
+      align: 'right'
+    }
+  ];
 
   return (
     <Box sx={{ py: 4 }}>
@@ -131,109 +140,33 @@ export default function MaximumExerciseView() {
           </Card>
         </Grid>
 
-        {/* Loading State */}
-        {isLoading && (
-          <Grid xs={12}>
-            <Card elevation={6}>
-              <CardContent sx={{ p: 6, textAlign: 'center' }}>
-                <CircularProgress size={60} sx={{ mb: 2 }} />
-                <Typography variant="h6" color="text.secondary">
-                  Ładowanie danych...
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-
-        {/* Error State */}
-        {isError && (
-          <Grid xs={12}>
-            <Fade in={true}>
-              <Alert severity="error" sx={{ borderRadius: 2, fontSize: '1.1rem' }}>
-                <ErrorAlert error={error} />
-              </Alert>
-            </Fade>
-          </Grid>
-        )}
-
-        {/* Data Table */}
-        {!isLoading && !isError && data && (
-          <Grid xs={12}>
-            <Card elevation={8} sx={{
-              borderRadius: 4,
-              overflow: 'hidden'
+        <Grid xs={12}>
+          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+            <Box sx={{
+              p: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2
             }}>
-              <Box sx={{
-                p: 3,
-                background: theme.palette.card.header,
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2
-              }}>
-                <TrendingUp sx={{ fontSize: 28 }} />
-                <Typography variant="h5" fontWeight="600">
-                  Najlepsze Wyniki - Typ {trainingType}
-                </Typography>
-              </Box>
+              <TrendingUp sx={{ fontSize: 28 }} />
+              <Typography variant="h5" fontWeight="600">
+                Najlepsze Wyniki - Typ {trainingType}
+              </Typography>
+            </Box>
 
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <Typography variant="subtitle1" fontWeight="600">
-                          {t('exercise.date')}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <Typography variant="subtitle1" fontWeight="600">
-                          {t('exercise.name')}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <Typography variant="subtitle1" fontWeight="600">
-                          {t('exercise.reps')}
-                        </Typography>
-                      </StyledTableCell>
-                      <StyledTableCell align="right">
-                        <Typography variant="subtitle1" fontWeight="600">
-                          {t('exercise.weight')}
-                        </Typography>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.content.map((exercise) => (
-                      <StyledTableRow key={exercise.id}>
-                        <StyledTableCell>
-                          <Typography variant="body1" fontWeight="500">
-                            {exercise.date}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <Typography variant="body1">
-                            {exercise.name}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          <Typography variant="body1">
-                            {exercise.reps}
-                          </Typography>
-                        </StyledTableCell>
-                        <StyledTableCell align="right">
-                          <Typography variant="body1">
-                            {exercise.weight}
-                          </Typography>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Card>
-          </Grid>
-        )}
+            <DataTable
+              data={data?.content}
+              isLoading={isLoading}
+              isError={isError}
+              error={error}
+              columns={maximumExerciseColumns}
+              loadingMessage="Ładowanie maksymalnych wyników..."
+              emptyMessage="Brak rekordów maksymalnych"
+            />
+          </Card>
+        </Grid>
 
       </Grid>
     </Box>

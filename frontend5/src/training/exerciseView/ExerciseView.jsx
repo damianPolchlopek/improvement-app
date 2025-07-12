@@ -2,28 +2,18 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
-import ErrorAlert from '../../component/error/ErrorAlert';
 
-import StyledTableCell from '../../component/table/StyledTableCell';
-import StyledTableRow from '../../component/table/StyledTableRow';
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
 import InformationComponent from '../../component/InformationComponent';
+import DataTable from '../../component/table/DataTable';
 
 import {
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
   FormControl,
-  CircularProgress,
   Box,
   TablePagination,
-  TableFooter,
   Card,
   CardContent,
   Typography,
-  Alert,
-  Fade,
   useTheme
 } from '@mui/material';
 
@@ -87,6 +77,46 @@ export default function ExerciseView() {
       </Box>
     );
   }
+
+  const createTrainingColumns = () => {
+    if (!templateData?.exercises) return [];
+    
+    const columns = [
+      {
+        key: 'date',
+        label: 'Data',
+        accessor: 'date',
+        render: (value) => (
+          <Typography variant="body1" fontWeight="500">
+            {value || 'Brak danych'}
+          </Typography>
+        )
+      }
+    ];
+
+    // Dodaj kolumny dla każdego ćwiczenia
+    templateData.exercises.forEach(exerciseName => {
+      columns.push({
+        key: exerciseName,
+        label: exerciseName,
+        accessor: (row) => row.exercises?.[exerciseName] || {},
+        render: (exerciseData) => (
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography variant="body2" color="text.primary">
+              <strong>{t('exercise.weight')}:</strong> {exerciseData.weight || 'N/A'}
+            </Typography>
+            <Typography variant="body2" color="text.primary">
+              <strong>{t('exercise.reps')}:</strong> {exerciseData.reps || 'N/A'}
+            </Typography>
+          </Box>
+        )
+      });
+    });
+
+    return columns;
+  };
+
+  const trainingColumns = createTrainingColumns();
 
   return (
     <Box sx={{ 
@@ -181,132 +211,48 @@ export default function ExerciseView() {
           </Grid>
         </Grid>
 
-        {/* Loading State */}
-        {isLoading && (
-          <Grid xs={12}>
-            <Card elevation={6}>
-              <CardContent sx={{ p: 6, textAlign: 'center' }}>
-                <CircularProgress size={60} sx={{ mb: 2 }} />
-                <Typography variant="h6" color="text.secondary">
-                  Ładowanie danych...
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        )}
-
-        {/* Error State */}
-        {isError && (
-          <Grid xs={12}>
-            <Fade in={true}>
-              <Alert 
-                severity="error" 
-                sx={{ borderRadius: 2, fontSize: '1.1rem' }}
-              >
-                <ErrorAlert error={(trainingError || templateError)} />
-              </Alert>
-            </Fade>
-          </Grid>
-        )}
-
-        {/* Training Data Table */}
-        {!isLoading && !isError && trainingData && templateData && (
-          <Grid xs={12}>
-            <Card elevation={8} sx={{ 
-              borderRadius: 4,
-              overflow: 'hidden'
+        {/* Main Table */}
+        <Grid xs={12}>
+          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+            <Box sx={{
+              p: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2
             }}>
-              <Box sx={{ 
-                p: 3, 
-                background: theme.palette.card.header,
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2
-              }}>
-                <ViewList sx={{ fontSize: 28 }} />
-                <Typography variant="h5" fontWeight="600">
-                  Historia Treningów - Typ {selectedTrainingType}
-                </Typography>
-              </Box>
-              
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <Typography variant="subtitle1" fontWeight="600">
-                          Data
-                        </Typography>
-                      </StyledTableCell>
-                      {templateData.exercises.map((value, index) => (
-                        <StyledTableCell key={index}>
-                          <Typography variant="subtitle1" fontWeight="600">
-                            {value}
-                          </Typography>
-                        </StyledTableCell>
-                      ))}
-                    </StyledTableRow>
-                  </TableHead>
-                  <TableBody>
-                    {trainingData.content.map((trainingDay, index) => {
-                      const trainingDate = trainingDay.date || 'Brak danych';
-                      const exercisesMap = trainingDay.exercises || {};
+              <ViewList sx={{ fontSize: 28 }} />
+              <Typography variant="h5" fontWeight="600">
+                Historia Treningów - Typ {selectedTrainingType}
+              </Typography>
+            </Box>
 
-                      return (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell>
-                            <Typography variant="body1" fontWeight="500">
-                              {trainingDate}
-                            </Typography>
-                          </StyledTableCell>
-                          {templateData.exercises.map((exerciseName, exerciseIndex) => {
-                            const exerciseData = exercisesMap[exerciseName] || {};
-                            return (
-                              <StyledTableCell key={exerciseIndex}>
-                                <Box sx={{ 
-                                  display: 'flex', 
-                                  flexDirection: 'column', 
-                                }}>
-                                  <Typography variant="body2" color="text.primary">
-                                    <strong>{t('exercise.weight')}:</strong> {exerciseData.weight || 'N/A'}
-                                  </Typography>
-                                  <Typography variant="body2" color="text.primary">
-                                    <strong>{t('exercise.reps')}:</strong> {exerciseData.reps || 'N/A'}
-                                  </Typography>
-                                </Box>
-                              </StyledTableCell>
-                            );
-                          })}
-                        </StyledTableRow>
-                      );
-                    })}
-                  </TableBody>
-                  <TableFooter>
-                    <StyledTableRow>
-                      <StyledTableCell colSpan={templateData.exercises.length + 1}>
-                        <TablePagination
-                          rowsPerPageOptions={[5, 10, 25, 50]}
-                          count={trainingData.totalElements}
-                          rowsPerPage={size}
-                          component="div"
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeSize}
-                          sx={{
-                            '.MuiTablePagination-toolbar': {
-                              fontSize: '1rem'
-                            }
-                          }}
-                        />
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  </TableFooter>
-                </Table>
-              </TableContainer>
-            </Card>
-          </Grid>
-        )}
+            <DataTable
+              data={trainingData?.content}
+              isLoading={isLoading}
+              isError={isError}
+              error={trainingError || templateError}
+              columns={trainingColumns}
+              loadingMessage="Ładowanie historii treningów..."
+              emptyMessage="Brak treningów do wyświetlenia"
+            />
+
+            {/* Paginacja */}
+            {trainingData && (
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                count={trainingData.totalElements}
+                rowsPerPage={size}
+                component="div"
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeSize}
+              />
+            )}
+          </Card>
+        </Grid>
+
       </Grid>
     </Box>
   );

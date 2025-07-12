@@ -1,4 +1,3 @@
-import { redirect } from 'react-router-dom';
 import REST from '../utils/REST';
 import jwt_decode from 'jwt-decode';
 
