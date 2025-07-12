@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 
 import {
   Collapse,
   Typography,
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  CircularProgress,
+  Box
 } from '@mui/material';
 
-import StyledTableRow from '../../component/table/StyledTableRow';
-import StyledTableCell from '../../component/table/StyledTableCell';
 import REST from '../../utils/REST';
-import ErrorAlert from '../../component/error/ErrorAlert';
+import DataTable from '../../component/table/DataTable';
 
 export default function SingleTraining({ trainingName }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [filter, setFilter] = useState(null); // null | { type: 'date' | 'name', value: string }
+  const [filter, setFilter] = useState(null);
   const { t } = useTranslation();
 
   const modifiedTrainingName = trainingName?.replace(/ /g, '_');
@@ -40,24 +32,49 @@ export default function SingleTraining({ trainingName }) {
         return res.content;
       }
     },
-    enabled: isOpen, // tylko gdy komponent się otworzy
+    enabled: isOpen,
     keepPreviousData: true,
-    staleTime: 1000 * 60 * 5, // 5 minut - zmień na ile chcesz
-    cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
+    staleTime: 1000 * 60 * 5,
+    cacheTime: 1000 * 60 * 10
   });
-  
 
   const handleClick = () => {
     setIsOpen(open => !open);
   };
 
-  const handleFilterByDate = (date) => {
-    setFilter({ type: 'date', value: date });
+  const handleCellClick = (row, column, value) => {
+    if (column.key === 'date') {
+      setFilter({ type: 'date', value: row.date });
+    } else if (column.key === 'name') {
+      setFilter({ type: 'name', value: row.name });
+    }
   };
 
-  const handleFilterByName = (name) => {
-    setFilter({ type: 'name', value: name });
-  };
+  const exerciseColumns = [
+    {
+      key: 'date',
+      label: t('exercise.date'),
+      accessor: 'date',
+      align: 'right'
+    },
+    {
+      key: 'name',
+      label: t('exercise.name'),
+      accessor: 'name'
+    },
+    {
+      key: 'reps',
+      label: t('exercise.reps'),
+      accessor: 'reps',
+      align: 'right'
+    },
+    {
+      key: 'weight',
+      label: t('exercise.weight'),
+      accessor: 'weight',
+      align: 'right'
+    }
+  ];
 
   return (
     <>
@@ -75,44 +92,16 @@ export default function SingleTraining({ trainingName }) {
       </Box>
 
       <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        {isLoading ? (
-          <Box sx={{ p: 2, display: 'flex', justifyContent: 'center' }}>
-            <CircularProgress />
-          </Box>
-        ) : isError ? (
-          <ErrorAlert error={error} />
-        ) : (
-          <TableContainer component={Paper}>
-            <Table aria-label="exercise table">
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell align="right">{t('exercise.date')}</StyledTableCell>
-                  <StyledTableCell>{t('exercise.name')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('exercise.reps')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('exercise.weight')}</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-
-              <TableBody>
-                {data?.map((exercise) => (
-                  <StyledTableRow
-                    key={exercise.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <StyledTableCell align="right" onClick={() => handleFilterByDate(exercise.date)}>
-                      {exercise.date}
-                    </StyledTableCell>
-                    <StyledTableCell onClick={() => handleFilterByName(exercise.name)}>
-                      {exercise.name}
-                    </StyledTableCell>
-                    <StyledTableCell align="right">{exercise.reps}</StyledTableCell>
-                    <StyledTableCell align="right">{exercise.weight}</StyledTableCell>
-                  </StyledTableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+        <DataTable
+          data={data}
+          isLoading={isLoading}
+          isError={isError}
+          error={error}
+          columns={exerciseColumns}
+          onCellClick={handleCellClick}
+          loadingMessage="Ładowanie ćwiczeń..."
+          emptyMessage="Brak ćwiczeń do wyświetlenia"
+        />
       </Collapse>
     </>
   );
