@@ -21,5 +21,6 @@ public class TrainingService {
 
     public void deleteAllTrainings() {
         trainingEntityRepository.deleteAll();
+        trainingEntityRepository.flush();
     }
 }

@@ -3,7 +3,7 @@ WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 COPY src ./src
-RUN mvn package -DskipTests
+RUN mvn package
 
 
 
@@ -13,8 +13,6 @@ COPY --from=builder /build/target/improvement-app-backend-0.0.1-SNAPSHOT.jar /ap
 
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -q --spider http://localhost:8080/actuator/health || exit 1
 
-RUN addgroup --system appgroup && adduser --system appuser --ingroup appgroup
-USER appuser
-
 ENV JAVA_OPTS="-Xms256m -Xmx512m -XX:+UseG1GC"
 ENTRYPOINT exec java $JAVA_OPTS -jar improvement-app-backend-0.0.1-SNAPSHOT.jar
+

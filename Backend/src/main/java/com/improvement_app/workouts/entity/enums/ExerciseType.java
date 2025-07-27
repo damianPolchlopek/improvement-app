@@ -18,6 +18,7 @@ public enum ExerciseType {
     KARDIO("Kardio"),
     ROWER("Rower#1-R"),
     HIPERTROFICZNY_D2("Hipertroficzny#1-D2"),
+    FBW_F("FBW#2-F"),
     KETTLE_K1("Kettle#1-K1");
 
     private final String value;

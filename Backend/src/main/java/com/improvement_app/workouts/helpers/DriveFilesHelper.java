@@ -181,6 +181,7 @@ public class DriveFilesHelper {
         final String SWIMMING_POOL_TRAINING_NAME = "Basen";
         final String BIKE_TRAINING_NAME = "Rower";
         final String KETTLE_POOL_TRAINING_NAME = "Kettle";
+        final String FBW_TRAINING_NAME = "FBW";
 
         if (exerciseType.contains(STRENGTH_TRAINING_NAME)) {
             return new StrengthExercise(reps, weight);
@@ -194,6 +195,8 @@ public class DriveFilesHelper {
             return new CardioExercise(reps, weight);
         } else if (exerciseType.contains(KETTLE_POOL_TRAINING_NAME)) {
             return new KettleExercise(reps, weight);
+        } else if (exerciseType.contains(FBW_TRAINING_NAME)) {
+            return new StrengthExercise(reps, weight);
         } else {
             throw new ExerciseTypeNotFoundException(exerciseType);
         }

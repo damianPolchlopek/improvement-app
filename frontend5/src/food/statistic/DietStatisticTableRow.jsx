@@ -61,7 +61,9 @@ export default function DietStatisticTableRow({ dietSummary }) {
     },
     onError: () => {
       showSnackbar(`Failed removed diet summary from ${dietSummary.date}`, 'error');
-    }
+    },
+
+    retry: false,
   });
 
   const handleDeleteClick = () => {

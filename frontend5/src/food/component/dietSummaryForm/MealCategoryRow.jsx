@@ -30,11 +30,11 @@ const popularityTranslation = new Map([
 ]);
 
 function translateMealCategory(arg) {
-  return categoryTranslation.get(arg);
+  return categoryTranslation.get(arg) ?? 'Other';
 }
 
 function translateMealPopularity(arg) {
-  return popularityTranslation.get(arg);
+  return popularityTranslation.get(arg) ?? 'ALL';
 }
 
 export default function MealCategoryRow({ mealPopularity, mealCategory }) {
