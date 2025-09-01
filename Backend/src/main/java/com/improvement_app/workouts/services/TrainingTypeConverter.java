@@ -31,6 +31,8 @@ public class TrainingTypeConverter {
         trainingTypeMap.put("K3", "KETTLE_K3");
         trainingTypeMap.put("KARDIO", "KARDIO");
         trainingTypeMap.put("F", "FBW_F");
+        trainingTypeMap.put("F1", "FBW_F_1");
+        trainingTypeMap.put("F2", "FBW_F_2");
 
         return trainingTypeMap.getOrDefault(type, "SILOWY_A");
     }
