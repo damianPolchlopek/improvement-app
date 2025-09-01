@@ -1,5 +1,6 @@
 package com.improvement_app.security.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,6 +42,7 @@ public class UserEntity {
 
     @NotBlank
     @Size(max = 120)
+    @JsonIgnore
     private String password;
 
     private String name;

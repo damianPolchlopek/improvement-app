@@ -20,7 +20,9 @@ public interface ExerciseStrategy {
                 .count();
 
         if (weightSeries != repsSeries) {
-            throw new TrainingRegexNotFoundException("Incorrect training data");
+            String msg = String.format("Different reps and weight series. Reps: %s,  Weight: %s, " +
+                    "Reps series: %d, Weight series: %d", reps, weight, repsSeries, weightSeries);
+            throw new TrainingRegexNotFoundException(msg);
         }
     }
 }

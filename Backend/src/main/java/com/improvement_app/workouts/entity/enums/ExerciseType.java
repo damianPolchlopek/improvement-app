@@ -19,6 +19,8 @@ public enum ExerciseType {
     ROWER("Rower#1-R"),
     HIPERTROFICZNY_D2("Hipertroficzny#1-D2"),
     FBW_F("FBW#2-F"),
+    FBW_F_1("FBW#1-F1"),
+    FBW_F_2("FBW#1-F2"),
     KETTLE_K1("Kettle#1-K1");
 
     private final String value;

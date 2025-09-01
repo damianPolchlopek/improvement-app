@@ -77,4 +77,6 @@ public class TrainingEntity {
             createdAt = LocalDateTime.now();
         }
     }
+
+
 }

@@ -11,6 +11,8 @@ export default function TrainingTypeSelector({setTrainingType}) {
       defaultValue="A"
       displayEmpty
     >
+      <MenuItem value="F1">F1</MenuItem>
+      <MenuItem value="F2">F2</MenuItem>
       <MenuItem value="F">5x5</MenuItem>
       <MenuItem value="K1">Kettle K1</MenuItem>
       <MenuItem value="K2">Kettle K2</MenuItem>

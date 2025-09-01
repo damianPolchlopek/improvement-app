@@ -52,6 +52,8 @@ public class TrainingTypeConverter {
         trainingTypeMap.put("K2", "Kettle#1-K2");
         trainingTypeMap.put("K3", "Kettle#1-K3");
         trainingTypeMap.put("F", "FBW#2-F");
+        trainingTypeMap.put("F1", "FBW#1-F1");
+        trainingTypeMap.put("F2", "FBW#1-F2");
 
         return trainingTypeMap.getOrDefault(type, "Siłowy#1-A");
     }
