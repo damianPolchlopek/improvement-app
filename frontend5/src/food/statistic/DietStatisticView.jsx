@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 
 import Grid from '@mui/material/Unstable_Grid2';
-import { Restaurant, Analytics, TrendingUp, AssessmentIcon } from '@mui/icons-material';
+import { Restaurant, Analytics, TrendingUp } from '@mui/icons-material';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -56,7 +56,7 @@ export default function DietStatisticView() {
             <Card elevation={6} sx={{ borderRadius: 3, p: 4, textAlign: 'center' }}>
               <CircularProgress size={60} />
               <Typography variant="h6" sx={{ mt: 2 }}>
-                {t('common.loading')}
+                {t('messages.loading')}
               </Typography>
             </Card>
           </Grid>

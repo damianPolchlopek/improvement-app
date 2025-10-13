@@ -156,6 +156,10 @@ export default class REST {
                                     + "&mealPopularity=" + mealPopularity + "&sortBy=" + sortBy + "&onOnePortion=" + onOnePortion);
     }
 
+    static getMealIngredients(mealId) {
+        return get(serverUrl + food + 'meal/' + mealId + '/ingredients');
+    }
+
     static getMealCategoryList() {
         return get(serverUrl + food + 'meal/categories');
     }

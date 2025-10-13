@@ -7,7 +7,7 @@ public record MealIngredient(
         String name,
         double amount,
         Unit unit,
-        Long productId
+        Product product
 ) {
 
     public MealIngredient adjustAmount(double portionDivisor) {
@@ -16,7 +16,7 @@ public record MealIngredient(
                 name,
                 amount / portionDivisor,
                 unit,
-                productId
+                product
         );
     }
 }

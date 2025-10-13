@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealPersistenceAdapter implements MealPersistencePort {
 
-    private final MealRepository jpaRepository;
+    private final MealRepository mealRepository;
     private final MealMapper mealMapper;
 
     @Override
@@ -32,26 +32,26 @@ public class MealPersistenceAdapter implements MealPersistencePort {
         Specification<MealRecipeEntity> spec = buildSpecification(searchCriteria);
         Sort sort = buildSort(sortCriteria);
 
-        List<MealRecipeEntity> entities = jpaRepository.findAll(spec, sort);
+        List<MealRecipeEntity> entities = mealRepository.findAll(spec, sort);
         return mealMapper.toDomain(entities);
     }
 
     @Override
     public void deleteAll() {
-        jpaRepository.deleteAll();
+        mealRepository.deleteAll();
     }
 
     @Override
     public List<MealRecipe> saveAll(List<MealRecipe> meals) {
         List<MealRecipeEntity> entities = mealMapper.toEntity(meals);
 
-        List<MealRecipeEntity> saved = jpaRepository.saveAll(entities);
+        List<MealRecipeEntity> saved = mealRepository.saveAll(entities);
         return mealMapper.toDomain(saved);
     }
 
     @Override
     public List<MealRecipe> findAll() {
-        List<MealRecipeEntity> entities = jpaRepository.findAll();
+        List<MealRecipeEntity> entities = mealRepository.findAll();
         return mealMapper.toDomain(entities);
     }
 
