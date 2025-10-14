@@ -19,17 +19,12 @@ public record EatenMealEntity(
         MealCategory category,
         MealType type,
         MealPopularity popularity,
-        List<MealIngredient> mealIngredients,
+        List<MealIngredientEntity> mealIngredients,
         List<String> recipe,
 
 
         double amount
 ) {
-
-    public EatenMealEntity(long id, String test_meal, double kcal, double protein, double carbohydrates, double fat) {
-        this(id, test_meal, kcal, protein, carbohydrates, fat, 1.0, null,
-                MealCategory.DINNER, MealType.ALL, MealPopularity.HIGH, List.of(), List.of(), 1.0);
-    }
 
     @Override
     public String toString() {

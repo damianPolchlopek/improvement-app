@@ -41,8 +41,7 @@ public record GetMealResponse(Long id,
                                 ingredient.name(),
                                 ingredient.unit(),
                                 ingredient.amount(),
-                                ingredient.id(),
-                                ingredient.productId()))
+                                ingredient.id()))
                         .toList(),
                 meal.recipe(),
                 -1

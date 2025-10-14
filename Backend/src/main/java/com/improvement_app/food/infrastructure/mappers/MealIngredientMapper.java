@@ -2,12 +2,16 @@ package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class MealIngredientMapper {
+
+    private final ProductMapper productMapper;
 
     public MealIngredient toDomain(MealIngredientEntity entity) {
         if (entity == null) {
@@ -19,7 +23,7 @@ public class MealIngredientMapper {
                 entity.getName(),
                 entity.getAmount(),
                 entity.getUnit(),
-                entity.getProductEntity() != null ? entity.getProductEntity().getId() : null
+                entity.getProductEntity() != null ? productMapper.toDomain(entity.getProductEntity()) : null
         );
     }
 

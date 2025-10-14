@@ -5,7 +5,10 @@ import com.improvement_app.food.application.ports.in.MealManagementUseCase;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
+import com.improvement_app.food.domain.enums.ProductCategory;
+import com.improvement_app.food.ui.response.GetMealIngredientWithProductResponse;
 import com.improvement_app.food.ui.response.GetMealResponse;
+import com.improvement_app.food.ui.response.MealIngredientResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -20,12 +23,10 @@ import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Tag(name = "Meals", description = "API do zarządzania posiłkami")
 @Validated
@@ -89,6 +90,7 @@ public class MealController {
             @RequestParam(defaultValue = "false")
             @NotNull(message = "Parametr onOnePortion nie może być null")
             Boolean onOnePortion) {
+
         MealCategory mealCategoryEnum = MealCategory.fromValue(mealCategory);
         MealType mealTypeEnum = MealType.fromValue(mealType);
         MealPopularity mealPopularityEnum = MealPopularity.fromValue(mealPopularity);
@@ -100,6 +102,19 @@ public class MealController {
                 .toList();
 
         return ResponseEntity.ok(mealDTOs);
+    }
+
+    @GetMapping("/meal/{id}/ingredients")
+    @Operation(
+            summary = "Pobierz skladniki posiłku",
+            description = "Zwraca listę wszystkich dostępnych kategorii posiłków"
+    )
+    public ResponseEntity<Map<ProductCategory, List<GetMealIngredientWithProductResponse>>> getMealIngredients(@PathVariable Long id) {
+
+        Map<ProductCategory, List<GetMealIngredientWithProductResponse>> ingredients =
+                mealManagementUseCase.getMealIngredients(id);
+
+        return ResponseEntity.ok(ingredients);
     }
 
     @GetMapping("/meal/categories")

@@ -10,7 +10,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Tabs, 
   Typography,
@@ -31,6 +30,7 @@ import {
 } from '@mui/icons-material';
 
 import TabPanel from '../component/TabPanel';
+import TabPanelMealIngredients from './TabPanelMealIngredients';
 
 export default function SingleMeal({ meal }) {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -212,60 +212,7 @@ export default function SingleMeal({ meal }) {
         </TabPanel>
 
         <TabPanel value={tabIndex} index={1}>
-          {meal.ingredients?.length > 0 ? (
-            <Box>
-              <Typography variant="h6" fontWeight="600" gutterBottom>
-                Składniki ({meal.ingredients.length})
-              </Typography>
-              <TableContainer component={Paper} elevation={1} sx={{ borderRadius: 2 }}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ fontWeight: 600 }}>{t('food.name')}</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>{t('food.amount')}</TableCell>
-                      <TableCell sx={{ fontWeight: 600 }}>{t('food.unit')}</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {meal.ingredients?.map((ingredient, index) => (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          '&:last-child td, &:last-child th': { border: 0 },
-                          '&:hover': { backgroundColor: 'blue' }
-                        }}
-                      >
-                        <TableCell sx={{ fontWeight: 500 }}>{ingredient.name}</TableCell>
-                        <TableCell>
-                          <Chip 
-                            label={ingredient.amount} 
-                            size="small" 
-                            color="primary" 
-                            variant="outlined"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <Chip 
-                            label={ingredient.unit} 
-                            size="small" 
-                            color="secondary" 
-                            variant="outlined"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          ) : (
-            <Box textAlign="center" py={4}>
-              <Kitchen sx={{ fontSize: 48, color: 'grey.400', mb: 2 }} />
-              <Typography variant="h6" color="text.secondary">
-                {t('food.noProducts')}
-              </Typography>
-            </Box>
-          )}
+          <TabPanelMealIngredients meal={meal}/>
         </TabPanel>
 
         <TabPanel value={tabIndex} index={2}>

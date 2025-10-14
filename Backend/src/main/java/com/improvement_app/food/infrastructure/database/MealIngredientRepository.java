@@ -13,4 +13,7 @@ public interface MealIngredientRepository extends JpaRepository<MealIngredientEn
     @EntityGraph(attributePaths = "productEntity")
     List<MealIngredientEntity> findAllById(Iterable<Long> ids);
 
+    @EntityGraph(attributePaths = "productEntity")
+    List<MealIngredientEntity> findByMealRecipeEntityId(Long mealId);
+
 }

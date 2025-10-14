@@ -195,7 +195,7 @@ i18n.use(initReactI18next).init({
           submit: "Wyślij",
           loading: "Ładowanie...",
           loadLastTraining: "Wczytaj ostatni trening",
-          enableMoreAccurateForm: "Włącz dokładnieszy formularz",
+          enableMoreAccurateForm: "Włącz dokładniejszy formularz",
           trainingSchema: "Schemat Treningu",
           trainingView: "Widok treningów",
           submitting: "Wysyłanie..."

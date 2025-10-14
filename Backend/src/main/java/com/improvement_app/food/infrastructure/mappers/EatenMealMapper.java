@@ -2,12 +2,16 @@ package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.EatenMeal;
 import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class EatenMealMapper {
+
+    private final MealIngredientMapper mealIngredientMapper;
 
     public EatenMealEntity toEntity(EatenMeal eatenMeal) {
 
@@ -23,7 +27,7 @@ public class EatenMealMapper {
                 eatenMeal.category(),
                 eatenMeal.type(),
                 eatenMeal.popularity(),
-                eatenMeal.ingredients(),
+                mealIngredientMapper.toEntityList(eatenMeal.ingredients()),
                 eatenMeal.recipe(),
                 eatenMeal.amount()
         );
@@ -43,7 +47,7 @@ public class EatenMealMapper {
                 entity.type(),
                 entity.popularity(),
                 entity.recipe(),
-                entity.mealIngredients(),
+                mealIngredientMapper.toDomainList(entity.mealIngredients()),
                 entity.amount()
         );
     }

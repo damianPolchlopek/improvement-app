@@ -18,7 +18,7 @@ public interface MealRepository extends JpaRepository<MealRecipeEntity, Long>, J
 //            + "CASE WHEN :order = 'category' THEN m.category ELSE m.name END")
 //    List<MealRecipe> findAllByName(String mealName, String order);
 
-    @EntityGraph(attributePaths = "ingredients")
+    @EntityGraph(attributePaths = {"ingredients", "ingredients.productEntity"})
     List<MealRecipeEntity> findAll(@Nullable Specification<MealRecipeEntity> spec, Sort sort);
 
 }
