@@ -5,7 +5,7 @@ spring:
     enabled: false
   jpa:
     open-in-view: false
-    show-sql: true
+#    show-sql: true
   mail:
     host: smtp.gmail.com
     port: 587
