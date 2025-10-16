@@ -26,6 +26,7 @@ public enum MealType {
             "Twaróg", MealType.COTTAGE_CHEESE,
             "Ryba", MealType.FISH,
             "Wege", MealType.VEGETARIAN,
+            "Przekąski", MealType.SNACKS,
             "Owsianka", MealType.OATMEAL
     );
 
