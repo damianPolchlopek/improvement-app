@@ -8,7 +8,7 @@ import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
-import com.improvement_app.food.infrastructure.database.MealRepository;
+import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.mappers.MealMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MealPersistenceAdapter implements MealPersistencePort {
 
-    private final MealRepository mealRepository;
+    private final MealRecipeRepository mealRecipeRepository;
     private final MealMapper mealMapper;
 
     @Override
@@ -32,26 +32,26 @@ public class MealPersistenceAdapter implements MealPersistencePort {
         Specification<MealRecipeEntity> spec = buildSpecification(searchCriteria);
         Sort sort = buildSort(sortCriteria);
 
-        List<MealRecipeEntity> entities = mealRepository.findAll(spec, sort);
+        List<MealRecipeEntity> entities = mealRecipeRepository.findAll(spec, sort);
         return mealMapper.toDomain(entities);
     }
 
     @Override
     public void deleteAll() {
-        mealRepository.deleteAll();
+        mealRecipeRepository.deleteAll();
     }
 
     @Override
     public List<MealRecipe> saveAll(List<MealRecipe> meals) {
         List<MealRecipeEntity> entities = mealMapper.toEntity(meals);
 
-        List<MealRecipeEntity> saved = mealRepository.saveAll(entities);
+        List<MealRecipeEntity> saved = mealRecipeRepository.saveAll(entities);
         return mealMapper.toDomain(saved);
     }
 
     @Override
     public List<MealRecipe> findAll() {
-        List<MealRecipeEntity> entities = mealRepository.findAll();
+        List<MealRecipeEntity> entities = mealRecipeRepository.findAll();
         return mealMapper.toDomain(entities);
     }
 

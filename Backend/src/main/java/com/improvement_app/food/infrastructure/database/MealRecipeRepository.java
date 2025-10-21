@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MealRepository extends JpaRepository<MealRecipeEntity, Long>, JpaSpecificationExecutor<MealRecipeEntity> {
+public interface MealRecipeRepository extends JpaRepository<MealRecipeEntity, Long>, JpaSpecificationExecutor<MealRecipeEntity> {
 
 //    @Query("SELECT m FROM MealRecipe m JOIN FETCH m.ingredients WHERE LOWER(m.name) LIKE %:mealName% ORDER BY "
 //            + "CASE WHEN :order = 'category' THEN m.category ELSE m.name END")

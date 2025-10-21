@@ -1,12 +1,13 @@
 package com.improvement_app.food.infrastructure.entity;
 
-import com.improvement_app.food.domain.MealIngredient;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
+import lombok.Builder;
 
 import java.util.List;
 
+@Builder
 public record EatenMealEntity(
         Long id,
         String name,

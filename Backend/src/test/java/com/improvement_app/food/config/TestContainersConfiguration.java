@@ -16,6 +16,7 @@ public class TestContainersConfiguration {
                 .withDatabaseName("testdb")
                 .withUsername("testuser")
                 .withPassword("testpass")
+                .withInitScript("schema.sql")
                 .withReuse(true); // Reużycie kontenera między testami dla szybszego wykonania
     }
 }
