@@ -23,8 +23,8 @@ path:
 logging:
   level:
     org.springframework.data.mongodb.core.MongoTemplate: DEBUG
-    io.hypersistence.utils: DEBUG
-    org.hibernate.type: TRACE
+#    io.hypersistence.utils: DEBUG
+#    org.hibernate.type: TRACE
 
 # Postgres - lokalnie
 #spring:
