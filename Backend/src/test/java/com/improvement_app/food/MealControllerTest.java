@@ -1,7 +1,6 @@
 package com.improvement_app.food;
 
 import com.improvement_app.food.data.TestDataFactory;
-import com.improvement_app.security.entity.UserEntity;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
@@ -9,8 +8,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.io.IOException;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc(addFilters = false)
@@ -45,12 +42,12 @@ public class MealControllerTest extends AbstractE2ETest {
         // when
         String responseBody = RestAssured
                 .given()
-                    .accept(ContentType.JSON)
+                .accept(ContentType.JSON)
                 .when()
-                    .get("/food/meal/types")
+                .get("/food/meal/types")
                 .then()
-                    .statusCode(HttpStatus.OK.value())
-                    .contentType(ContentType.JSON)
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
                 .extract()
                 .asString();
 
@@ -62,22 +59,20 @@ public class MealControllerTest extends AbstractE2ETest {
         JSONAssert.assertEquals(expectedJson, responseBody, true);
     }
 
-
     @Test
     void shouldReturnSortedMealIngredients() throws Exception {
         // given
         TestDataFactory.TestDataGenerator testData = TestDataFactory.generator(
-            productRepository,
-            mealRecipeRepository,
-            dietSummaryRepository,
-            userRepository
+                productRepository,
+                mealRecipeRepository,
+                dietSummaryRepository,
+                userRepository
         );
 
         testData
-                .withUser()
-                .withProducts(20)              // 1. Najpierw produkty
-                .withMealRecipes(10, 5) // 2. Potem przepisy z produktami
-                .withDietSummaries(7);   // 3. Na końcu historia diety
+            .withUser()
+            .withProducts(20)              // 1. Najpierw produkty
+            .withMealRecipes(10, 5); // 2. Potem przepisy z produktami
 
         // when
         String responseBody = RestAssured
@@ -95,5 +90,38 @@ public class MealControllerTest extends AbstractE2ETest {
         String expectedJson = readResource("expected/food/meal_ingredients.json");
         JSONAssert.assertEquals(expectedJson, responseBody, true);
     }
+
+    @Test
+    void shouldReturnMeals() throws Exception {
+        // given
+        TestDataFactory.TestDataGenerator testData = TestDataFactory.generator(
+                productRepository,
+                mealRecipeRepository,
+                dietSummaryRepository,
+                userRepository
+        );
+
+        testData
+            .withUser()
+            .withProducts(20)
+            .withMealRecipes(10, 5);
+
+
+        // when
+        String responseBody = RestAssured
+                .given()
+                .accept(ContentType.JSON)
+                .when()
+                .get("/food/meal")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .contentType(ContentType.JSON)
+                .extract()
+                .asString();
+
+        System.out.println("hello");
+
+    }
+
 
 }

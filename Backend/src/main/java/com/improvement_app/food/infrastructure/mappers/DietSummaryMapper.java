@@ -1,7 +1,8 @@
 package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.infrastructure.entity.DietSummaryEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
+import com.improvement_app.food.infrastructure.entity.summary.EatenMealEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,8 @@ public class DietSummaryMapper {
             return null;
         }
 
+        List<EatenMealEntity> mealsEntities = eatenMealMapper.toEntity(domain.meals());
+
         return new DietSummaryEntity(
                 domain.id(),
                 domain.kcal(),
@@ -41,7 +44,7 @@ public class DietSummaryMapper {
                 domain.carbohydrates(),
                 domain.fat(),
                 domain.date(),
-                eatenMealMapper.toEntity(domain.meals())
+                mealsEntities
         );
     }
 

@@ -1,6 +1,5 @@
-package com.improvement_app.food.infrastructure.entity;
+package com.improvement_app.food.infrastructure.entity.meals;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.domain.enums.Unit;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,6 @@ public class ProductEntity {
     private ProductCategory productCategory;
 
     @OneToMany(mappedBy = "productEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<MealIngredientEntity> mealIngredientEntities;
 
     public ProductEntity(Long id, String name, double kcal, double protein, double carbohydrates,

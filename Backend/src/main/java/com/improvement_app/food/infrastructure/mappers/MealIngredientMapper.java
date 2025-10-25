@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

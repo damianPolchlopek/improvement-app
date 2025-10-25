@@ -4,7 +4,11 @@ import com.improvement_app.food.domain.enums.*;
 import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
 import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
-import com.improvement_app.food.infrastructure.entity.*;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
+import com.improvement_app.food.infrastructure.entity.summary.EatenMealEntity;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
 import net.datafaker.Faker;
@@ -287,10 +291,10 @@ public class TestDataFactory {
 
                     eatenMeals.add(eatenMeal);
 
-                    totalKcal += eatenMeal.kcal();
-                    totalProtein += eatenMeal.protein();
-                    totalCarbs += eatenMeal.carbohydrates();
-                    totalFat += eatenMeal.fat();
+                    totalKcal += eatenMeal.getKcal();
+                    totalProtein += eatenMeal.getProtein();
+                    totalCarbs += eatenMeal.getCarbohydrates();
+                    totalFat += eatenMeal.getFat();
                 }
 
                 DietSummaryEntity summary = dietSummaryBuilder()

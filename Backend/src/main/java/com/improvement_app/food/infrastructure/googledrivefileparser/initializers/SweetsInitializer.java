@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser.initializers;
 
-import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.SweetsParser;

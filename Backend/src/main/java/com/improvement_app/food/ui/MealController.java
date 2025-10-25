@@ -8,7 +8,6 @@ import com.improvement_app.food.domain.enums.MealType;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.ui.response.GetMealIngredientWithProductResponse;
 import com.improvement_app.food.ui.response.GetMealResponse;
-import com.improvement_app.food.ui.response.MealIngredientResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

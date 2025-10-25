@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.database;
 
-import com.improvement_app.food.infrastructure.entity.DietSummaryEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

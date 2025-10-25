@@ -4,9 +4,8 @@ import com.improvement_app.food.application.ports.out.MealIngredientPersistenceP
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.domain.EatenMeal;
 import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
-import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

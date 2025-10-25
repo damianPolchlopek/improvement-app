@@ -29,7 +29,7 @@ export default function AddDietDayView() {
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
       showSnackbar(t('food.dietDaySaved'), 'success');
-      navigate('/food/statistics');
+      navigate('/app/food/statistics');
     },
     onError: () => {
       showSnackbar(t('food.failedAddDietSummary'), 'error');

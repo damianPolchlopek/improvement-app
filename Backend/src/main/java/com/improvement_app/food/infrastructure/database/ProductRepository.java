@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.database;
 
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

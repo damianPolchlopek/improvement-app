@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.googledrivefileparser;
 
 import com.improvement_app.food.application.ports.out.InitializerPort;
 import com.improvement_app.food.domain.exceptions.DataInitializationException;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
 import com.improvement_app.food.infrastructure.googledrivefileparser.initializers.MealInitializer;

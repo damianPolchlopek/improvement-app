@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.Product;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

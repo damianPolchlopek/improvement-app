@@ -1,8 +1,8 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser.parsers;
 
-import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
-import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
