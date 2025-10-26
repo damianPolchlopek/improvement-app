@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser.initializers;
 
-import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
-import com.improvement_app.food.infrastructure.database.MealRepository;
+import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.SweetsParser;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class SweetsInitializer {
 
     private final FileDownloadService fileDownloadService;
     private final SweetsParser sweetsParser;
-    private final MealRepository mealRepository;
+    private final MealRecipeRepository mealRecipeRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
     private static final String SWEETS_PROCESSING_MESSAGE = "Processing sweets from file: {}";
@@ -37,7 +37,7 @@ public class SweetsInitializer {
             List<MealRecipeEntity> sweets = sweetsParser.parseExcelProductsFile(sweetsFile);
 
             validateSweets(sweets);
-            mealRepository.saveAll(sweets);
+            mealRecipeRepository.saveAll(sweets);
 
             log.info(SWEETS_SAVED_MESSAGE, sweets.size());
             messagingTemplate.convertAndSend("/topic/messages",

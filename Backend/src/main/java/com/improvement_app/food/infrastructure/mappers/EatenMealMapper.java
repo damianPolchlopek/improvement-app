@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.infrastructure.entity.EatenMealEntity;
+import com.improvement_app.food.infrastructure.entity.summary.EatenMealEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -35,20 +35,20 @@ public class EatenMealMapper {
 
     public EatenMeal toDomain(EatenMealEntity entity) {
         return new EatenMeal(
-                entity.id(),
-                entity.name(),
-                entity.kcal(),
-                entity.protein(),
-                entity.carbohydrates(),
-                entity.fat(),
-                entity.portionAmount(),
-                entity.url(),
-                entity.category(),
-                entity.type(),
-                entity.popularity(),
-                entity.recipe(),
-                mealIngredientMapper.toDomainList(entity.mealIngredients()),
-                entity.amount()
+                entity.getId(),
+                entity.getName(),
+                entity.getKcal(),
+                entity.getProtein(),
+                entity.getCarbohydrates(),
+                entity.getFat(),
+                entity.getPortionAmount(),
+                entity.getUrl(),
+                entity.getCategory(),
+                entity.getType(),
+                entity.getPopularity(),
+                entity.getRecipe(),
+                mealIngredientMapper.toDomainList(entity.getMealIngredients()),
+                entity.getAmount()
         );
     }
 

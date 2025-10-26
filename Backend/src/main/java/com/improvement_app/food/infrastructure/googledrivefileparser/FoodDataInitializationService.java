@@ -2,8 +2,8 @@ package com.improvement_app.food.infrastructure.googledrivefileparser;
 
 import com.improvement_app.food.application.ports.out.InitializerPort;
 import com.improvement_app.food.domain.exceptions.DataInitializationException;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
-import com.improvement_app.food.infrastructure.database.MealRepository;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
+import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
 import com.improvement_app.food.infrastructure.googledrivefileparser.initializers.MealInitializer;
 import com.improvement_app.food.infrastructure.googledrivefileparser.initializers.ProductInitializer;
@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class FoodDataInitializationService implements InitializerPort {
     private final MealInitializer mealInitializer;
     private final SweetsInitializer sweetsInitializer;
     private final ProductRepository productRepository;
-    private final MealRepository mealRepository;
+    private final MealRecipeRepository mealRecipeRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
     private static final String INITIALIZATION_START_MESSAGE = "Starting food data initialization";
@@ -57,7 +56,7 @@ public class FoodDataInitializationService implements InitializerPort {
 
     private void clearExistingData() {
         log.info("Clearing existing data from database");
-        mealRepository.deleteAll();
+        mealRecipeRepository.deleteAll();
         productRepository.deleteAll();
     }
 }

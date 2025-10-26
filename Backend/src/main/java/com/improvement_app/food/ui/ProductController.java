@@ -1,7 +1,6 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.exceptions.ErrorResponse;
-import com.improvement_app.food.application.ProductService;
 import com.improvement_app.food.application.ports.in.ProductManagementUseCase;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.ui.response.GetProductResponse;
@@ -14,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -66,7 +63,7 @@ public class ProductController {
                     )
             )
     })
-    public Response getProductsRequest(
+    public ResponseEntity<List<GetProductResponse>> getProductsRequest(
             @Parameter(
                     description = "Kategoria produktu",
                     required = true,
@@ -84,13 +81,12 @@ public class ProductController {
             @RequestParam
             String productName)
     {
-
         ProductCategory productCategoryEnum = ProductCategory.fromValue(productCategory);
         List<GetProductResponse> products = productManagementUseCase.getProducts(productCategoryEnum, productName)
                 .stream()
                 .map(GetProductResponse::from)
                 .toList();
-        return Response.ok(products).build();
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/product/categories")

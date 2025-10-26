@@ -1,12 +1,12 @@
-package com.improvement_app.food.infrastructure.entity;
+package com.improvement_app.food.infrastructure.entity.meals;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
-import com.vladmihalcea.hibernate.type.json.JsonType;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "meal_recipe")
+@Builder
 public class MealRecipeEntity {
 
     @Id
@@ -47,7 +48,6 @@ public class MealRecipeEntity {
     private MealPopularity popularity;
 
     @OneToMany(mappedBy = "mealRecipeEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<MealIngredientEntity> ingredients;
 
     public MealRecipeEntity(Long id, String name, double kcal, double protein, double carbohydrates,

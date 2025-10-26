@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
 import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.infrastructure.entity.DietSummaryEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
 import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
 import com.improvement_app.food.infrastructure.mappers.DietSummaryMapper;
 import com.improvement_app.security.entity.UserEntity;
@@ -38,7 +38,6 @@ public class DietSummaryPersistencePortImpl implements DietSummaryPersistencePor
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
         dietSummaryEntity.setUser(userEntity);
-
         DietSummaryEntity savedDietSummary = dietSummaryRepository.save(dietSummaryEntity);
 
         log.debug("Diet summary saved with id: {} for user: {}", savedDietSummary.getId(), userId);

@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
 import com.improvement_app.food.domain.MealIngredient;
-import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.database.MealIngredientRepository;
 import com.improvement_app.food.infrastructure.mappers.MealIngredientMapper;
 import jakarta.transaction.Transactional;

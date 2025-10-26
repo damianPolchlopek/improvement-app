@@ -1,6 +1,6 @@
 package com.improvement_app.food.application.spec;
 
-import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;

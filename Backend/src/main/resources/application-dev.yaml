@@ -20,9 +20,11 @@ path:
     excel: src/main/resources/tmp_files/
 
 # Logging
-#logging:
-#  level:
-#    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+logging:
+  level:
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+#    io.hypersistence.utils: DEBUG
+#    org.hibernate.type: TRACE
 
 # Postgres - lokalnie
 #spring:

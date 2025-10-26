@@ -1,18 +1,21 @@
-package com.improvement_app.food.infrastructure.entity;
+package com.improvement_app.food.infrastructure.entity.meals;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.improvement_app.food.domain.enums.Unit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "meal_ingredient")
-public class MealIngredientEntity {
+@Builder
+public class MealIngredientEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +23,11 @@ public class MealIngredientEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_id", nullable = false)
-    @JsonBackReference
+//    @JsonBackReference
     private MealRecipeEntity mealRecipeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
-    @JsonBackReference
     private ProductEntity productEntity;
     private String name;
     private double amount;

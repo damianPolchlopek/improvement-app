@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser.initializers;
-import com.improvement_app.food.infrastructure.entity.MealRecipeEntity;
-import com.improvement_app.food.infrastructure.entity.ProductEntity;
-import com.improvement_app.food.infrastructure.database.MealRepository;
+import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
+import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.MealParser;
 import com.improvement_app.googledrive.entity.DriveFileItemDTO;
@@ -29,7 +29,7 @@ public class MealInitializer {
     private final GoogleDriveFileService googleDriveFileService;
     private final FileDownloadService fileDownloadService;
     private final MealParser mealParser;
-    private final MealRepository mealRepository;
+    private final MealRecipeRepository mealRecipeRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
     private static final String MEAL_PROCESSING_MESSAGE = "(%d/%d) Processing meal: %s";
@@ -46,7 +46,7 @@ public class MealInitializer {
         List<MealRecipeEntity> processedMeals = processMealFiles(mealFiles, productMap);
 
         if (!processedMeals.isEmpty()) {
-            mealRepository.saveAll(processedMeals);
+            mealRecipeRepository.saveAll(processedMeals);
             log.info(MEALS_COMPLETED_MESSAGE, processedMeals.size());
         }
     }

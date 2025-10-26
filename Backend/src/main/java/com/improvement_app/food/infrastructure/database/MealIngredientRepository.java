@@ -1,6 +1,6 @@
 package com.improvement_app.food.infrastructure.database;
 
-import com.improvement_app.food.infrastructure.entity.MealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

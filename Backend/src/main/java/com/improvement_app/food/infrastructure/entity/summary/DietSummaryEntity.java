@@ -1,14 +1,16 @@
-package com.improvement_app.food.infrastructure.entity;
+package com.improvement_app.food.infrastructure.entity.summary;
 
 import com.improvement_app.security.entity.UserEntity;
-import com.vladmihalcea.hibernate.type.json.JsonType;
+import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "diet_summary")
+@Builder
 public class DietSummaryEntity {
 
     @Id
@@ -33,9 +36,10 @@ public class DietSummaryEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @Type(JsonType.class)
-    @Column(columnDefinition = "jsonb")
-    private List<EatenMealEntity> meals;
+    @Type(JsonBinaryType.class)
+    @Column(name = "meals", columnDefinition = "jsonb")
+    @Builder.Default
+    private List<EatenMealEntity> meals = new ArrayList<>();
 
     public DietSummaryEntity(Long id, double kcal, double protein, double carbohydrates, double fat,
                              LocalDate date, List<EatenMealEntity> toEntity) {
