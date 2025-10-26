@@ -2,8 +2,8 @@ package com.improvement_app.food;
 
 import com.improvement_app.food.config.PermitAllSecurityConfig;
 import com.improvement_app.food.config.TestContainersConfiguration;
+import com.improvement_app.food.data.TestDataFactory;
 import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
-import com.improvement_app.food.infrastructure.database.MealIngredientRepository;
 import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
 import com.improvement_app.food.infrastructure.database.ProductRepository;
 import com.improvement_app.security.repository.UserRepository;
@@ -31,8 +31,6 @@ public abstract class AbstractE2ETest {
     @Autowired
     protected ProductRepository productRepository;
     @Autowired
-    protected MealIngredientRepository mealIngredientRepository;
-    @Autowired
     protected DietSummaryRepository dietSummaryRepository;
     @Autowired
     protected UserRepository userRepository;
@@ -45,6 +43,8 @@ public abstract class AbstractE2ETest {
         RestAssured.port = port;
 //        RestAssured.basePath = "/api";
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+
+        TestDataFactory.resetFaker();
     }
 
     String readResource(String path) throws IOException {

@@ -42,9 +42,9 @@ public class MealControllerTest extends AbstractE2ETest {
         // when
         String responseBody = RestAssured
                 .given()
-                .accept(ContentType.JSON)
+                    .accept(ContentType.JSON)
                 .when()
-                .get("/food/meal/types")
+                    .get("/food/meal/types")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .contentType(ContentType.JSON)
@@ -70,25 +70,27 @@ public class MealControllerTest extends AbstractE2ETest {
         );
 
         testData
-            .withUser()
-            .withProducts(20)              // 1. Najpierw produkty
-            .withMealRecipes(10, 5); // 2. Potem przepisy z produktami
+                .withUser()
+                .withProducts(20)
+                .withMealRecipes(10, 5);
 
         // when
         String responseBody = RestAssured
                 .given()
-                .accept(ContentType.JSON)
+                    .accept(ContentType.JSON)
                 .when()
-                .get("/food/meal/34/ingredients")
+                    .get("/food/meal/34/ingredients")
                 .then()
-                .statusCode(HttpStatus.OK.value())
-                .contentType(ContentType.JSON)
-                .extract()
+                    .statusCode(HttpStatus.OK.value())
+                    .contentType(ContentType.JSON)
+                    .extract()
                 .asString();
 
         // then
         String expectedJson = readResource("expected/food/meal_ingredients.json");
         JSONAssert.assertEquals(expectedJson, responseBody, true);
+
+        testData.cleanUp();
     }
 
     @Test
@@ -102,9 +104,9 @@ public class MealControllerTest extends AbstractE2ETest {
         );
 
         testData
-            .withUser()
-            .withProducts(20)
-            .withMealRecipes(10, 5);
+                .withUser()
+                .withProducts(20)
+                .withMealRecipes(10, 5);
 
         // when
         String responseBody = RestAssured
@@ -122,11 +124,13 @@ public class MealControllerTest extends AbstractE2ETest {
                     .statusCode(HttpStatus.OK.value())
                     .contentType(ContentType.JSON)
                     .extract()
-                    .asString();
+                .asString();
 
         // then
         String expectedJson = readResource("expected/food/meal_search.json");
         JSONAssert.assertEquals(expectedJson, responseBody, true);
+
+        testData.cleanUp();
     }
 
 }

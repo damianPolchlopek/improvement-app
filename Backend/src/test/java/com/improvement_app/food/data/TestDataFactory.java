@@ -22,7 +22,14 @@ import java.util.*;
  */
 public class TestDataFactory {
 
-    private static final Faker faker = new Faker(new Locale("pl"), new Random(42L));
+    private static Faker faker = new Faker(new Locale("pl"), new Random(42L));
+
+    /**
+     * Resetuje Faker do początkowego stanu z tym samym seedem
+     */
+    public static void resetFaker() {
+        faker = new Faker(new Locale("pl"), new Random(42L));
+    }
 
     // ============================================
     // BUILDERY - zwracają buildera z losowymi wartościami
@@ -330,6 +337,7 @@ public class TestDataFactory {
             dietSummaryRepository.deleteAll(generatedSummaries);
             mealRecipeRepository.deleteAll(generatedMeals);
             productRepository.deleteAll(generatedProducts);
+            userRepository.deleteAll();
 
             generatedSummaries.clear();
             generatedMeals.clear();

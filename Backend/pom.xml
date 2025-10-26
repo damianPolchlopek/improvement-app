@@ -69,13 +69,6 @@
             <artifactId>log4j-slf4j-impl</artifactId>
         </dependency>
 
-<!--        &lt;!&ndash; Validation &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>jakarta.validation</groupId>-->
-<!--            <artifactId>jakarta.validation-api</artifactId>-->
-<!--            <version>3.0.2</version>-->
-<!--        </dependency>-->
-
         <!-- JWT -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
