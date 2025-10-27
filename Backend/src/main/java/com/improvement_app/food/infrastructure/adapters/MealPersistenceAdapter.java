@@ -8,7 +8,7 @@ import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
-import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
+import com.improvement_app.food.infrastructure.repository.MealRecipeRepository;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.mappers.MealMapper;
 import lombok.RequiredArgsConstructor;

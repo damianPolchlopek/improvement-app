@@ -3,7 +3,7 @@ package com.improvement_app.food.infrastructure.adapters;
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
 import com.improvement_app.food.domain.DietSummary;
 import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
-import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
+import com.improvement_app.food.infrastructure.repository.DietSummaryRepository;
 import com.improvement_app.food.infrastructure.mappers.DietSummaryMapper;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;

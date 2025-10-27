@@ -1,9 +1,9 @@
 package com.improvement_app.food.data;
 
 import com.improvement_app.food.domain.enums.*;
-import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
-import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
-import com.improvement_app.food.infrastructure.database.ProductRepository;
+import com.improvement_app.food.infrastructure.repository.DietSummaryRepository;
+import com.improvement_app.food.infrastructure.repository.MealRecipeRepository;
+import com.improvement_app.food.infrastructure.repository.ProductRepository;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;

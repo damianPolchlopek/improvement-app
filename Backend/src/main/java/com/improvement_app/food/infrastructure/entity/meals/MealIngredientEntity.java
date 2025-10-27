@@ -23,7 +23,6 @@ public class MealIngredientEntity implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_id", nullable = false)
-//    @JsonBackReference
     private MealRecipeEntity mealRecipeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -4,7 +4,7 @@ import com.improvement_app.food.application.ports.out.ProductPersistencePort;
 import com.improvement_app.food.domain.Product;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
-import com.improvement_app.food.infrastructure.database.ProductRepository;
+import com.improvement_app.food.infrastructure.repository.ProductRepository;
 import com.improvement_app.food.infrastructure.mappers.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
