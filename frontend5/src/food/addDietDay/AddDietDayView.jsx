@@ -18,12 +18,20 @@ export default function AddDietDayView() {
     mutationFn: () => {
       console.log('Selected meals:', selectedMeals);
       const dietDayToSave = { 
+
         meals: selectedMeals.map(meal => ({
           ...meal,
-          amount: meal.amount || 1
+          mealRecipeId: meal.id,
+          amount: meal.amount || 1,
+
+          ingredients: (meal.ingredients || []).map(mealIngredient => ({
+            ...mealIngredient,
+            mealRecipeIngredientId: mealIngredient.id,
+          }))
         }))
+        
       };
-      
+      console.log('Transferred Selected meals:', dietDayToSave);
       return REST.createDietSummary(dietDayToSave);
     },
     onSuccess: () => {

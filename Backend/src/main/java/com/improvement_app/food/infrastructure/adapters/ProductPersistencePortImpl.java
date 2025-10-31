@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.ProductPersistencePort;
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.domain.recipe.Product;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.infrastructure.repository.ProductRepository;

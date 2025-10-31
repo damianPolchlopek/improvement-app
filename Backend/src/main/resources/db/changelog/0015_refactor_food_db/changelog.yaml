@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/001-create-schema-food.sql
+      sqlFile:
+        path: 001-create-schema-food.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/002-move-selected-tables-to-food.sql
+      sqlFile:
+        path: 002-move-selected-tables-to-food.sql
+        relativeToChangelogFile: true
+
+  - changeSet:
+      id: 3
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/003-move-related-sequences-to-food.sql
+      sqlFile:
+        path: 003-move-related-sequences-to-food.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 4
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/004-create-daily-meal-table.sql
+      sqlFile:
+        path: 004-create-daily-meal-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 5
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/005-create-daily-meal-ingredient-table.sql
+      sqlFile:
+        path: 005-create-daily-meal-ingredient-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 6
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/006-remove-meals-json-column.sql
+      sqlFile:
+        path: 006-remove-meals-json-column.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

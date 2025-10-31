@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.requests;
 
-import com.improvement_app.food.domain.EatenMeal;
+import com.improvement_app.food.domain.summary.DailyMeal;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +13,6 @@ public record UpdateDietSummaryRequest(
 
         @NotNull(message = "Lista posiłków nie może być null")
         @NotEmpty(message = "Lista posiłków nie może być pusta")
-        List<EatenMeal> meals
+        List<DailyMeal> meals
 ) {
 }

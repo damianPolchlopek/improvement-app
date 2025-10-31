@@ -1,0 +1,1 @@
+ALTER TABLE food.diet_summary DROP COLUMN meals;

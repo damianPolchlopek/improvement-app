@@ -1,4 +1,4 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.domain.summary;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,12 +10,12 @@ public record DietSummary(
         double carbohydrates,
         double fat,
         LocalDate date,
-        List<EatenMeal> meals
+        List<DailyMeal> meals
 ) {
 
         public DietSummary(double kcal, double protein,
                         double carbohydrates, double fat,
-                        List<EatenMeal> meals) {
+                        List<DailyMeal> meals) {
             this(null, kcal, protein, carbohydrates, fat, LocalDate.now(), meals);
         }
 

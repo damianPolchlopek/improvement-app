@@ -1,10 +1,10 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
+import com.improvement_app.food.domain.summary.DietSummary;
+import com.improvement_app.food.domain.summary.DailyMeal;
 import com.improvement_app.food.ui.requests.CalculateDietRequest;
-import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,9 +97,9 @@ public class DietSummaryController {
             @AuthenticationPrincipal(expression = "id") Long userId) {
 
         log.debug("User {} calculating diet summary for {} meals",
-                userId, calculateDietRequest.eatenMeals().size());
+                userId, calculateDietRequest.dailyMeals().size());
 
-        DietSummary dietSummaryEntity = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.eatenMeals());
+        DietSummary dietSummaryEntity = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.dailyMeals());
 
         log.debug("User {} diet summary calculated - total calories: {}",
                 userId, dietSummaryEntity.kcal());
@@ -118,7 +118,7 @@ public class DietSummaryController {
             @ApiResponse(responseCode = "403", description = "Brak dostępu do posiłku innego użytkownika")
     })
     @PostMapping("/meal/recalculate")
-    public ResponseEntity<EatenMeal> recalculateMealMacro(
+    public ResponseEntity<DailyMeal> recalculateMealMacro(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dane do przeliczenia makroskładników",
                     required = true
@@ -127,14 +127,14 @@ public class DietSummaryController {
             @AuthenticationPrincipal(expression = "id") Long userId) {
 
         log.debug("User {} recalculating macro for meal with id: {}",
-                userId, recalculateRequest.eatenMeal().id());
+                userId, recalculateRequest.dailyMeal().id());
 
-        EatenMeal eatenMeal = dietSummaryManagementUseCase.recalculateMacro(recalculateRequest);
+        DailyMeal dailyMeal = dietSummaryManagementUseCase.recalculateMacro(recalculateRequest);
 
         log.debug("User {} meal macro recalculated - new calories: {}",
-                userId, eatenMeal.kcal());
+                userId, dailyMeal.kcal());
 
-        return ResponseEntity.ok(eatenMeal);
+        return ResponseEntity.ok(dailyMeal);
     }
 
     @Operation(

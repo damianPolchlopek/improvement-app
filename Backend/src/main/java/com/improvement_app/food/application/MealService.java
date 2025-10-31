@@ -3,7 +3,7 @@ package com.improvement_app.food.application;
 import com.improvement_app.food.application.ports.in.MealManagementUseCase;
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
 import com.improvement_app.food.application.ports.out.MealPersistencePort;
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.domain.recipe.MealRecipe;
 import com.improvement_app.food.domain.MealSearchCriteria;
 import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;

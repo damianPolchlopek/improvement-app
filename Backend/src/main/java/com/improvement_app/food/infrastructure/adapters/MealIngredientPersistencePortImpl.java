@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.domain.recipe.MealIngredient;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.repository.MealIngredientRepository;
 import com.improvement_app.food.infrastructure.mappers.MealIngredientMapper;

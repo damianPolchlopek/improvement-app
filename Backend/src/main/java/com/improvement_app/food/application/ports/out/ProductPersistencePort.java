@@ -1,6 +1,6 @@
 package com.improvement_app.food.application.ports.out;
 
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.domain.recipe.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
 
 import java.util.List;

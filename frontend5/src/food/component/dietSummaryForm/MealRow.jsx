@@ -28,11 +28,11 @@ export default function MealRow({ meal: single, index }) {
 
   const isItemSelected = isMealSelected(meal.id);
   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
-  const currentAmount = selectedMeal?.amount || 1;
+  const currentAmount = selectedMeal?.portionMultiplier || 1;
 
   const handleMealToggle = () => {
     const existingMeal = selectedMeals.find(m => m.id === meal.id);
-    const currentAmount = existingMeal?.amount || 1;
+    const currentAmount = existingMeal?.portionMultiplier || 1;
     toggleMealSelection(meal, currentAmount);
   };
 
@@ -49,17 +49,17 @@ export default function MealRow({ meal: single, index }) {
 
   const handleMealIngredientChange = (meal, ingredientId, newAmount) => {
     // Pobierz aktualny amount dla całego posiłku
-    const amount = selectedMeal?.amount || 1;
+    const portionMultiplier = selectedMeal?.portionMultiplier || 1;
 
     // Zaktualizuj amount tylko dla wybranego składnika
     const updatedIngredients = meal.ingredients.map(ingredient =>
       ingredient.productId === ingredientId
-        ? { ...ingredient, amount: newAmount }
+        ? { ...ingredient, portionMultiplier: newAmount }
         : ingredient
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
-    const mealWithAmount = { ...meal, amount, ingredients: updatedIngredients };
+    const mealWithAmount = { ...meal, portionMultiplier, ingredients: updatedIngredients };
 
     recalculateMeal.mutate(mealWithAmount, {
       onSuccess: (response) => {setMeal(response)}

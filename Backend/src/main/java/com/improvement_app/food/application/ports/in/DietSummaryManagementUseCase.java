@@ -1,8 +1,8 @@
 package com.improvement_app.food.application.ports.in;
 
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
+import com.improvement_app.food.domain.summary.DietSummary;
+import com.improvement_app.food.domain.summary.DailyMeal;
+import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
 import org.springframework.data.domain.Page;
@@ -13,9 +13,9 @@ import java.util.List;
 public interface DietSummaryManagementUseCase {
     Page<DietSummary> getDietSummaries(Long userId, Pageable pageable);
 
-    DietSummary calculateDietSummary(List<EatenMeal> eatenMealEntities);
+    DietSummary calculateDietSummary(List<DailyMeal> dailyMealEntities);
 
-    EatenMeal recalculateMacro(RecalculateMealMacroRequest recalculateRequest);
+    DailyMeal recalculateMacro(RecalculateMealMacroRequest recalculateRequest);
 
     DietSummary getDayDietSummary(Long userId, Long id);
 

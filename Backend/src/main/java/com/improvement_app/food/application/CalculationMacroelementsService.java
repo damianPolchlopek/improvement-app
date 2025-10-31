@@ -1,9 +1,9 @@
 package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.domain.summary.DailyMealIngredient;
+import com.improvement_app.food.domain.summary.DietSummary;
+import com.improvement_app.food.domain.summary.DailyMeal;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import lombok.AllArgsConstructor;
@@ -19,8 +19,8 @@ public class CalculationMacroelementsService {
 
     private final MealIngredientPersistencePort mealIngredientPersistencePort;
 
-    public EatenMeal recalculateMealMacro(EatenMeal eatenMeal) {
-        List<MealIngredient> mealIngredients = eatenMeal.ingredients();
+    public DailyMeal recalculateMealMacro(DailyMeal dailyMeal) {
+        List<DailyMealIngredient> mealIngredients = dailyMeal.ingredients();
 
         double totalKcal = 0;
         double totalProtein = 0;
@@ -28,25 +28,24 @@ public class CalculationMacroelementsService {
         double totalFat = 0;
 
         List<Long> ingredients = mealIngredients.stream()
-                .map(MealIngredient::id)
+                .map(DailyMealIngredient::mealRecipeIngredientId)
                 .collect(Collectors.toList());
 
-        Map<Long, MealIngredientEntity> recipeMealIngredients = mealIngredientPersistencePort.getMealIngredients(ingredients)
+        Map<Long, ProductEntity> recipeMealIngredients = mealIngredientPersistencePort.getMealIngredients(ingredients)
                 .stream()
-                .collect(Collectors.toMap(MealIngredientEntity::getId, mealIngredient -> mealIngredient));
+                .collect(Collectors.toMap(MealIngredientEntity::getId, MealIngredientEntity::getProductEntity));
 
-        for (MealIngredient eatenMealIngredient : mealIngredients) {
+        for (DailyMealIngredient eatenMealIngredient : mealIngredients) {
             //TODO: zabezpieczyc przed nullem w mapie
-            final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.id())
-                    .getProductEntity();
+            final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.mealRecipeIngredientId());
 
-            totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();
-            totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getProtein();
-            totalCarbohydrates += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getCarbohydrates();
-            totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getFat();
+            totalKcal += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();
+            totalProtein += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getProtein();
+            totalCarbohydrates += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getCarbohydrates();
+            totalFat += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getFat();
         }
 
-        return eatenMeal.updateMacro(
+        return dailyMeal.updateMacro(
                 totalKcal,
                 totalProtein,
                 totalCarbohydrates,
@@ -54,14 +53,14 @@ public class CalculationMacroelementsService {
         );
     }
 
-    public DietSummary recalculateDayMacro(List<EatenMeal> eatenMeals) {
+    public DietSummary recalculateDayMacro(List<DailyMeal> dailyMeals) {
         double totalKcal = 0;
         double totalProtein = 0;
         double totalCarbohydrates = 0;
         double totalFat = 0;
 
-        for (EatenMeal eatenMeal : eatenMeals) {
-            final EatenMeal recalculatedMeal = recalculateMealMacro(eatenMeal);
+        for (DailyMeal dailyMeal : dailyMeals) {
+            final DailyMeal recalculatedMeal = recalculateMealMacro(dailyMeal);
             totalKcal += recalculatedMeal.kcal();
             totalProtein += recalculatedMeal.protein();
             totalCarbohydrates += recalculatedMeal.carbohydrates();
@@ -73,7 +72,7 @@ public class CalculationMacroelementsService {
                 totalProtein,
                 totalCarbohydrates,
                 totalFat,
-                eatenMeals);
+                dailyMeals);
     }
 
 }

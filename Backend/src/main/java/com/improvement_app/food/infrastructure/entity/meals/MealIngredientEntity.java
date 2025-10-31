@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "meal_ingredient")
+@Table(name = "meal_ingredient", schema = "food")
 @Builder
 public class MealIngredientEntity implements Serializable {
 
@@ -30,6 +30,9 @@ public class MealIngredientEntity implements Serializable {
     private ProductEntity productEntity;
     private String name;
     private double amount;
+    @Enumerated(EnumType.STRING)
+    private Unit unit;
+
 
     public MealIngredientEntity(Long id, String name, double amount, Unit unit) {
         this.id = id;
@@ -37,9 +40,6 @@ public class MealIngredientEntity implements Serializable {
         this.amount = amount;
         this.unit = unit;
     }
-
-    @Enumerated(EnumType.STRING)
-    private Unit unit;
 
     public MealIngredientEntity(ProductEntity productEntity, String name, double amount, Unit unit, MealRecipeEntity mealRecipeEntity) {
         this.productEntity = productEntity;

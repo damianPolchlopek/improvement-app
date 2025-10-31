@@ -3,9 +3,9 @@ package com.improvement_app.food.application;
 import com.improvement_app.food.application.exceptions.DietSummaryNotFoundException;
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
+import com.improvement_app.food.domain.summary.DietSummary;
+import com.improvement_app.food.domain.summary.DailyMeal;
+import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +23,17 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
     private final CalculationMacroelementsService calculationMacroelementsService;
 
     public DietSummary saveDietDaySummary(Long userId, CreateDietSummaryRequest createDietSummaryRequest) {
-        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.meals());
+        DietSummary dietSummary = calculateDietSummary(createDietSummaryRequest.toDailyMeals());
         return dietSummaryPersistencePort.save(userId, dietSummary);
     }
 
-    public DietSummary calculateDietSummary(List<EatenMeal> eatenMeals) {
-        return calculationMacroelementsService.recalculateDayMacro(eatenMeals);
+    public DietSummary calculateDietSummary(List<DailyMeal> dailyMeals) {
+        return calculationMacroelementsService.recalculateDayMacro(dailyMeals);
     }
 
-    public EatenMeal recalculateMacro(RecalculateMealMacroRequest calculateDietRequest) {
-        EatenMeal eatenMeal = calculateDietRequest.eatenMeal();
-        return calculationMacroelementsService.recalculateMealMacro(eatenMeal);
+    public DailyMeal recalculateMacro(RecalculateMealMacroRequest calculateDietRequest) {
+        DailyMeal dailyMeal = calculateDietRequest.dailyMeal();
+        return calculationMacroelementsService.recalculateMealMacro(dailyMeal);
     }
 
     public Page<DietSummary> getDietSummaries(Long userId, Pageable pageable) {

@@ -2,7 +2,7 @@ package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.MealPersistencePort;
 import com.improvement_app.food.application.spec.MealRecipeSpecifications;
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.domain.recipe.MealRecipe;
 import com.improvement_app.food.domain.MealSearchCriteria;
 import com.improvement_app.food.domain.MealSortCriteria;
 import com.improvement_app.food.domain.enums.MealCategory;

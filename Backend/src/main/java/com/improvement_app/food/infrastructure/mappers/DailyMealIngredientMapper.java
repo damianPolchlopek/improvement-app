@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.mappers;
 
-import com.improvement_app.food.domain.recipe.MealIngredient;
-import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
+import com.improvement_app.food.domain.summary.DailyMealIngredient;
+import com.improvement_app.food.infrastructure.entity.summary.DailyMealIngredientEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -9,30 +9,27 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class MealIngredientMapper {
-
-    private final ProductMapper productMapper;
-
-    public MealIngredient toDomain(MealIngredientEntity entity) {
+public class DailyMealIngredientMapper {
+    public DailyMealIngredient toDomain(DailyMealIngredientEntity entity) {
         if (entity == null) {
             return null;
         }
 
-        return new MealIngredient(
+        return new DailyMealIngredient(
                 entity.getId(),
+                null,
                 entity.getName(),
                 entity.getAmount(),
-                entity.getUnit(),
-                entity.getProductEntity() != null ? productMapper.toDomain(entity.getProductEntity()) : null
+                entity.getUnit()
         );
     }
 
-    public MealIngredientEntity toEntity(MealIngredient domain) {
+    public DailyMealIngredientEntity toEntity(DailyMealIngredient domain) {
         if (domain == null) {
             return null;
         }
 
-        return new MealIngredientEntity(
+        return new DailyMealIngredientEntity(
                 domain.id(),
                 domain.name(),
                 domain.amount(),
@@ -41,7 +38,7 @@ public class MealIngredientMapper {
         );
     }
 
-    public List<MealIngredient> toDomainList(List<MealIngredientEntity> entities) {
+    public List<DailyMealIngredient> toDomainList(List<DailyMealIngredientEntity> entities) {
         if (entities == null) return List.of();
 
         return entities.stream()
@@ -49,7 +46,7 @@ public class MealIngredientMapper {
                 .toList();
     }
 
-    public List<MealIngredientEntity> toEntityList(List<MealIngredient> ingredients) {
+    public List<DailyMealIngredientEntity> toEntityList(List<DailyMealIngredient> ingredients) {
         if (ingredients == null) return List.of();
 
         return ingredients.stream()

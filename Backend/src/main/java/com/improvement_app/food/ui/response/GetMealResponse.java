@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.response;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.domain.recipe.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;

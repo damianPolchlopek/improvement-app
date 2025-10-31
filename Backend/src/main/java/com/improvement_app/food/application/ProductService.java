@@ -2,7 +2,7 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.in.ProductManagementUseCase;
 import com.improvement_app.food.application.ports.out.ProductPersistencePort;
-import com.improvement_app.food.domain.Product;
+import com.improvement_app.food.domain.recipe.Product;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
