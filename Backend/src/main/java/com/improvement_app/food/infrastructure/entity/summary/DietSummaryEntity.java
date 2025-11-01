@@ -34,8 +34,7 @@ public class DietSummaryEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "diet_summary_id")
+    @OneToMany(mappedBy = "dietSummary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyMealEntity> meals = new ArrayList<>();
 
     public DietSummaryEntity(Long id, double kcal, double protein, double carbohydrates, double fat,
@@ -47,5 +46,12 @@ public class DietSummaryEntity {
         this.fat = fat;
         this.date = date;
         this.meals = toEntity;
+
+        // Ustaw relację zwrotną
+        if (toEntity != null) {
+            for (DailyMealEntity meal : toEntity) {
+                meal.setDietSummary(this);
+            }
+        }
     }
 }

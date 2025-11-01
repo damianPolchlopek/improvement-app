@@ -20,10 +20,13 @@ public class DailyMealIngredientEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "daily_meal_id")
+    private DailyMealEntity dailyMeal;
 
     private String name;
     private double amount;

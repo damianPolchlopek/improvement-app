@@ -31,8 +31,11 @@ public class DailyMealEntity {
     @JoinColumn(name = "meal_recipe_id")
     private MealRecipeEntity recipeEntity;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "daily_meal_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diet_summary_id", nullable = false)
+    private DietSummaryEntity dietSummary;
+
+    @OneToMany(mappedBy = "dailyMeal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyMealIngredientEntity> mealIngredients;
 
     public DailyMealEntity(Long id, String name, double cachedKcal, double cachedProtein,
@@ -46,18 +49,12 @@ public class DailyMealEntity {
         this.cachedFat = cachedFat;
         this.portionMultiplier = portionMultiplier;
         this.mealIngredients = mealIngredients;
-    }
 
-    @Override
-    public String toString() {
-        return "EatenMealEntity{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", kcal=" + cachedKcal +
-                ", protein=" + cachedProtein +
-                ", carbohydrates=" + cachedCarbohydrates +
-                ", fat=" + cachedFat +
-                ", portionMultiplier=" + portionMultiplier +
-                '}';
+        // Ustaw relację zwrotną
+        if (mealIngredients != null) {
+            for (DailyMealIngredientEntity ingredient : mealIngredients) {
+                ingredient.setDailyMeal(this);
+            }
+        }
     }
 }
