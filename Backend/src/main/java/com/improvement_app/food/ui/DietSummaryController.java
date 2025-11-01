@@ -2,11 +2,8 @@ package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.domain.summary.DietSummary;
-import com.improvement_app.food.domain.summary.DailyMeal;
-import com.improvement_app.food.ui.requests.CalculateDietRequest;
 import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
-import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
-import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.update.UpdateDietSummaryRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;

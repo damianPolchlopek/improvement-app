@@ -1,10 +1,11 @@
-package com.improvement_app.food.ui.requests.create;
+package com.improvement_app.food.ui.requests.update;
 
-import com.improvement_app.food.domain.summary.DailyMealIngredient;
 import com.improvement_app.food.domain.enums.Unit;
+import com.improvement_app.food.domain.summary.DailyMealIngredient;
 import com.improvement_app.food.ui.requests.calculate.CalculateMealIngredientRequest;
 
-public record CreateDailyMealIngredientRequest(
+public record UpdateDailyMealIngredientRequest(
+        Long id,
         Long mealRecipeIngredientId,
         String name,
         double amount,
@@ -12,7 +13,7 @@ public record CreateDailyMealIngredientRequest(
 ) {
     public DailyMealIngredient toDailyMealIngredient() {
         return new DailyMealIngredient(
-                null,
+                this.id,
                 this.mealRecipeIngredientId,
                 this.name,
                 this.amount,

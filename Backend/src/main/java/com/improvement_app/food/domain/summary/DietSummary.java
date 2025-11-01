@@ -1,5 +1,7 @@
 package com.improvement_app.food.domain.summary;
 
+import com.improvement_app.food.domain.calculate.CalculateResult;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,15 +21,15 @@ public record DietSummary(
             this(null, kcal, protein, carbohydrates, fat, LocalDate.now(), meals);
         }
 
-        public DietSummary update(DietSummary newDietSummary) {
+        public DietSummary update(CalculateResult calculateResult) {
             return new DietSummary(
                     this.id,
-                    newDietSummary.kcal,
-                    newDietSummary.protein,
-                    newDietSummary.carbohydrates,
-                    newDietSummary.fat,
+                    calculateResult.kcal(),
+                    calculateResult.protein(),
+                    calculateResult.carbohydrates(),
+                    calculateResult.fat(),
                     this.date,
-                    newDietSummary.meals
+                    this.meals
             );
         }
 }

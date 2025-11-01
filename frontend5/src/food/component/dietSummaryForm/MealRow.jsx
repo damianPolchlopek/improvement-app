@@ -54,12 +54,14 @@ export default function MealRow({ meal: single, index }) {
     // Zaktualizuj amount tylko dla wybranego składnika
     const updatedIngredients = meal.ingredients.map(ingredient =>
       ingredient.productId === ingredientId
-        ? { ...ingredient, portionMultiplier: newAmount }
+        ? { ...ingredient, portionMultiplier: newAmount, mealRecipeIngredientId: ingredient.id }
         : ingredient
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
     const mealWithAmount = { ...meal, portionMultiplier, ingredients: updatedIngredients };
+
+    console.log('Meal to recalculate: ', mealWithAmount)
 
     recalculateMeal.mutate(mealWithAmount, {
       onSuccess: (response) => {setMeal(response)}

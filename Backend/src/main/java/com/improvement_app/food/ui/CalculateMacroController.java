@@ -1,10 +1,11 @@
 package com.improvement_app.food.ui;
 
-import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
+import com.improvement_app.food.application.ports.in.CalculationManagementUseCase;
+import com.improvement_app.food.domain.calculate.CalculateResult;
 import com.improvement_app.food.domain.summary.DailyMeal;
 import com.improvement_app.food.domain.summary.DietSummary;
-import com.improvement_app.food.ui.requests.CalculateDietRequest;
-import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
+import com.improvement_app.food.ui.requests.calculate.CalculateDietRequest;
+import com.improvement_app.food.ui.requests.calculate.RecalculateMealMacroRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/food/macro")
 public class CalculateMacroController {
 
-    private final DietSummaryManagementUseCase dietSummaryManagementUseCase;
+    private final CalculationManagementUseCase calculationManagementUseCase;
 
 
     @Operation(
@@ -41,7 +42,7 @@ public class CalculateMacroController {
             @ApiResponse(responseCode = "401", description = "Brak autoryzacji")
     })
     @PostMapping("/calculate")
-    public ResponseEntity<DietSummary> calculateDietSummary(
+    public ResponseEntity<CalculateResult> calculateDietSummary(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Lista spożytych posiłków do obliczenia",
                     required = true
@@ -52,7 +53,7 @@ public class CalculateMacroController {
         log.debug("User {} calculating diet summary for {} meals",
                 userId, calculateDietRequest.dailyMeals().size());
 
-        DietSummary dietSummaryEntity = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.dailyMeals());
+        CalculateResult dietSummaryEntity = calculationManagementUseCase.calculateDayMacro(calculateDietRequest);
 
         log.debug("User {} diet summary calculated - total calories: {}",
                 userId, dietSummaryEntity.kcal());
@@ -71,7 +72,7 @@ public class CalculateMacroController {
             @ApiResponse(responseCode = "403", description = "Brak dostępu do posiłku innego użytkownika")
     })
     @PostMapping("/meal/recalculate")
-    public ResponseEntity<DailyMeal> recalculateMealMacro(
+    public ResponseEntity<CalculateResult> recalculateMealMacro(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dane do przeliczenia makroskładników",
                     required = true
@@ -79,14 +80,14 @@ public class CalculateMacroController {
             @Valid @RequestBody RecalculateMealMacroRequest recalculateRequest,
             @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("User {} recalculating macro for meal with id: {}",
-                userId, recalculateRequest.dailyMeal().id());
+        log.debug("User {} recalculating macro for meal {}",
+                userId, recalculateRequest.dailyMeal());
 
-        DailyMeal dailyMeal = dietSummaryManagementUseCase.recalculateMacro(recalculateRequest);
+        CalculateResult result = calculationManagementUseCase.recalculateMealMacro(recalculateRequest);
 
         log.debug("User {} meal macro recalculated - new calories: {}",
-                userId, dailyMeal.kcal());
+                userId, result.kcal());
 
-        return ResponseEntity.ok(dailyMeal);
+        return ResponseEntity.ok(result);
     }
 }
