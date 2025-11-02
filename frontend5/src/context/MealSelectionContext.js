@@ -8,7 +8,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   const [selectedMeals, setSelectedMeals] = useState(
     initialSelected.map(meal => ({
       ...meal,
-      portionMultiplier: meal.portionMultiplier || 1 // Ensure amount is always present
+      amount: meal.amount || 1 // Ensure amount is always present
     }))
   );
   
@@ -49,7 +49,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   }, [selectedMeals]);
 
   // Toggle meal selection with amount
-  const toggleMealSelection = useCallback((meal, portionMultiplier = 1) => {
+  const toggleMealSelection = useCallback((meal, amount = 1) => {
     setSelectedMeals(prev => {
       const existingIndex = prev.findIndex(item => item.id === meal.id);
       
@@ -61,7 +61,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
       else {
         return [...prev, { 
           ...meal, 
-          portionMultiplier: parseInt(portionMultiplier, 10) || 1 
+          amount: parseInt(amount, 10) || 1 
         }];
       }
     });
@@ -73,7 +73,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     
     setSelectedMeals(prev => 
       prev.map(meal => 
-        meal.id === mealId ? { ...meal, portionMultiplier: parsedAmount } : meal
+        meal.id === mealId ? { ...meal, amount: parsedAmount } : meal
       )
     );
   }, []);
@@ -85,7 +85,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
           ...meal, 
           ingredients: meal.ingredients.map(ingredient => 
             ingredient.productId === productId ? 
-              {...ingredient, portionMultiplier: newMealIngredientAmount } : 
+              {...ingredient, amount: newMealIngredientAmount } : 
               ingredient
           ) 
         } : meal

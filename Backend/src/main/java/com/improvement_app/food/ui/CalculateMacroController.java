@@ -2,10 +2,9 @@ package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ports.in.CalculationManagementUseCase;
 import com.improvement_app.food.domain.calculate.CalculateResult;
-import com.improvement_app.food.domain.summary.DailyMeal;
-import com.improvement_app.food.domain.summary.DietSummary;
 import com.improvement_app.food.ui.requests.calculate.CalculateDietRequest;
 import com.improvement_app.food.ui.requests.calculate.RecalculateMealMacroRequest;
+import com.improvement_app.food.ui.response.CalculationResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -72,7 +71,7 @@ public class CalculateMacroController {
             @ApiResponse(responseCode = "403", description = "Brak dostępu do posiłku innego użytkownika")
     })
     @PostMapping("/meal/recalculate")
-    public ResponseEntity<CalculateResult> recalculateMealMacro(
+    public ResponseEntity<CalculationResponse> recalculateMealMacro(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "Dane do przeliczenia makroskładników",
                     required = true
@@ -88,6 +87,6 @@ public class CalculateMacroController {
         log.debug("User {} meal macro recalculated - new calories: {}",
                 userId, result.kcal());
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(CalculationResponse.from(result));
     }
 }

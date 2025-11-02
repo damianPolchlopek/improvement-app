@@ -13,8 +13,9 @@ export function useDietCalculation() {
 
       const mealsWithAmounts = meals.map(meal => ({
         ...meal,
+        amount: meal.amount || 1,
         mealRecipeId: meal.id,
-        portionMultiplier: meal.portionMultiplier || 1,
+        portionMultiplier: meal.amount || 1,
 
         ingredients: (meal.ingredients || []).map(mealIngredient => ({
           ...mealIngredient,

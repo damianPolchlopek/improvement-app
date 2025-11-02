@@ -19,6 +19,7 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
     private final DietSummaryPersistencePort dietSummaryPersistencePort;
     private final CalculationMacroelementsService calculationMacroelementsService;
 
+    @Override
     public DietSummary saveDietDaySummary(Long userId, CreateDietSummaryRequest createDietSummaryRequest) {
         CalculateResult calculateResult = calculationMacroelementsService.calculateDayMacro(
                 createDietSummaryRequest.toCalculateDayRequest());
@@ -28,19 +29,23 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
         return dietSummaryPersistencePort.save(userId, dietSummary);
     }
 
+    @Override
     public Page<DietSummary> getDietSummaries(Long userId, Pageable pageable) {
         return dietSummaryPersistencePort.findAll(userId, pageable);
     }
 
+    @Override
     public void deleteDietSummary(Long userId, Long id) {
         dietSummaryPersistencePort.deleteById(userId, id);
     }
 
+    @Override
     public DietSummary getDayDietSummary(Long userId, Long id) {
         return dietSummaryPersistencePort.findById(userId, id)
                 .orElseThrow(() -> new DietSummaryNotFoundException(id));
     }
 
+    @Override
     public DietSummary updateDietSummary(Long userId, UpdateDietSummaryRequest updateDietSummaryRequest) {
         CalculateResult calculateResult = calculationMacroelementsService.calculateDayMacro(
                 updateDietSummaryRequest.toCalculateDayRequest());

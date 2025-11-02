@@ -40,11 +40,14 @@ export default function MealIngredientsTable({
             </TableHead>
             <TableBody>
               {meal.ingredients.map((ingredient, idx) => {
+                console.log('Selected meal: ', selectedMeal)
                 const selectedIngredient = selectedMeal?.ingredients?.find(
                   i => i.productId === ingredient.productId
                 );
-                
+
+                console.log('Selected ingredient: ', selectedIngredient)
                 const ingredientAmount = selectedIngredient?.amount ?? ingredient.amount;
+                console.log('ingredientAmount: ', ingredientAmount)
 
                 return (
                   <IngredientRow

@@ -28,11 +28,11 @@ export default function MealRow({ meal: single, index }) {
 
   const isItemSelected = isMealSelected(meal.id);
   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
-  const currentAmount = selectedMeal?.portionMultiplier || 1;
+  const currentAmount = selectedMeal?.amount || 1;
 
   const handleMealToggle = () => {
     const existingMeal = selectedMeals.find(m => m.id === meal.id);
-    const currentAmount = existingMeal?.portionMultiplier || 1;
+    const currentAmount = existingMeal?.amount || 1;
     toggleMealSelection(meal, currentAmount);
   };
 
@@ -49,22 +49,30 @@ export default function MealRow({ meal: single, index }) {
 
   const handleMealIngredientChange = (meal, ingredientId, newAmount) => {
     // Pobierz aktualny amount dla całego posiłku
-    const portionMultiplier = selectedMeal?.portionMultiplier || 1;
+    const amount = selectedMeal?.amount || 1;
 
     // Zaktualizuj amount tylko dla wybranego składnika
     const updatedIngredients = meal.ingredients.map(ingredient =>
       ingredient.productId === ingredientId
-        ? { ...ingredient, portionMultiplier: newAmount, mealRecipeIngredientId: ingredient.id }
+        ? { ...ingredient, amount: newAmount, mealRecipeIngredientId: ingredient.id }
         : ingredient
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
-    const mealWithAmount = { ...meal, portionMultiplier, ingredients: updatedIngredients };
+    const mealWithAmount = { ...meal, portionMultiplier: amount, ingredients: updatedIngredients };
 
     console.log('Meal to recalculate: ', mealWithAmount)
 
     recalculateMeal.mutate(mealWithAmount, {
-      onSuccess: (response) => {setMeal(response)}
+      onSuccess: (response) => {
+        setMeal(prev => ({
+          ...prev,
+          kcal: response.kcal,
+          protein: response.protein,
+          carbohydrates: response.carbohydrates,
+          fat: response.fat
+    }));
+      }
     });
 
     const isSelected = isMealSelected(meal.id);
