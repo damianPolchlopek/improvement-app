@@ -33,4 +33,6 @@ public class ProductEntity {
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
 
+
+
 }

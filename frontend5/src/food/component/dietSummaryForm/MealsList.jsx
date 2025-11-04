@@ -19,43 +19,29 @@ export default function MealsList({
 }) {
   const { t } = useTranslation();
 
-  const renderContent = () => {
-    if (isLoading) {
-      return (
-        <TableBody>
-          <StyledTableRow>
-            <StyledTableCell colSpan={8} align="center">
-              <CircularProgress />
-            </StyledTableCell>
-          </StyledTableRow>
-        </TableBody>
-      );
-    }
-
-    if (isError) {
-      return (
-        <TableBody>
-          <StyledTableRow>
-            <StyledTableCell colSpan={8} align="center">
-              {t('food.errorLoadingMeals')}
-            </StyledTableCell>
-          </StyledTableRow>
-        </TableBody>
-      );
-    }
-
+  if (isLoading) {
     return (
       <TableBody>
-        {mealList.map((meal, index) => (
-          <MealRow 
-            key={meal.id || index} 
-            meal={meal} 
-            index={index} 
-          />
-        ))}
+        <StyledTableRow>
+          <StyledTableCell colSpan={8} align="center">
+            <CircularProgress />
+          </StyledTableCell>
+        </StyledTableRow>
       </TableBody>
     );
-  };
+  }
+
+  if (isError) {
+    return (
+      <TableBody>
+        <StyledTableRow>
+          <StyledTableCell colSpan={8} align="center">
+            {t('food.errorLoadingMeals')}
+          </StyledTableCell>
+        </StyledTableRow>
+      </TableBody>
+    );
+  }
 
   return (
     <StyledTableRow>
@@ -78,7 +64,15 @@ export default function MealsList({
                 <StyledTableCell>{t('food.amount')}</StyledTableCell>
               </StyledTableRow>
             </TableHead>
-            {renderContent()}
+            <TableBody>
+              {mealList.map((meal, index) => (
+                <MealRow 
+                  key={meal.id || index} 
+                  meal={meal} 
+                  index={index} 
+                />
+              ))}
+            </TableBody>
           </Table>
         </Collapse>
       </StyledTableCell>

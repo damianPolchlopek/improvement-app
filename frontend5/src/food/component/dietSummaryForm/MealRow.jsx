@@ -55,7 +55,7 @@ export default function MealRow({ meal: single, index }) {
     const updatedIngredients = meal.ingredients.map(ingredient =>
       ingredient.productId === ingredientId
         ? { ...ingredient, amount: newAmount, mealRecipeIngredientId: ingredient.id }
-        : ingredient
+        : { ...ingredient, mealRecipeIngredientId: ingredient.id }
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
@@ -71,7 +71,7 @@ export default function MealRow({ meal: single, index }) {
           protein: response.protein,
           carbohydrates: response.carbohydrates,
           fat: response.fat
-    }));
+        }));
       }
     });
 

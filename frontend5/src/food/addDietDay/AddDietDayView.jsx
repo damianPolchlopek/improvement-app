@@ -22,7 +22,7 @@ export default function AddDietDayView() {
         meals: selectedMeals.map(meal => ({
           ...meal,
           mealRecipeId: meal.id,
-          amount: meal.amount || 1,
+          portionMultiplier: meal.amount || 1,
 
           ingredients: (meal.ingredients || []).map(mealIngredient => ({
             ...mealIngredient,

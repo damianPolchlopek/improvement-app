@@ -3,16 +3,12 @@ package com.improvement_app.food.application;
 import com.improvement_app.food.application.ports.in.CalculationManagementUseCase;
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
 import com.improvement_app.food.domain.calculate.CalculateResult;
-import com.improvement_app.food.domain.summary.DailyMealIngredient;
-import com.improvement_app.food.domain.summary.DietSummary;
-import com.improvement_app.food.domain.summary.DailyMeal;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.ui.requests.calculate.CalculateMealIngredientRequest;
 import com.improvement_app.food.ui.requests.calculate.CalculateMealRequest;
 import com.improvement_app.food.ui.requests.calculate.RecalculateMealMacroRequest;
 import com.improvement_app.food.ui.requests.calculate.CalculateDietRequest;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +57,7 @@ public class CalculationMacroelementsService implements CalculationManagementUse
 
         for (CalculateMealIngredientRequest eatenMealIngredient : mealIngredients) {
             //TODO: zabezpieczyc przed nullem w mapie
+
             final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.mealRecipeIngredientId());
 
             totalKcal += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();

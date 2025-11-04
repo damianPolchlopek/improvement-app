@@ -6,6 +6,7 @@ import com.improvement_app.food.ui.requests.calculate.CalculateMealIngredientReq
 
 public record CreateDailyMealIngredientRequest(
         Long mealRecipeIngredientId,
+        Long productId,
         String name,
         double amount,
         Unit unit
@@ -14,6 +15,7 @@ public record CreateDailyMealIngredientRequest(
         return new DailyMealIngredient(
                 null,
                 this.mealRecipeIngredientId,
+                this.productId,
                 this.name,
                 this.amount,
                 this.unit

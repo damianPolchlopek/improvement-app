@@ -54,4 +54,18 @@ public class DietSummaryEntity {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "DietSummaryEntity{" +
+                "id=" + id +
+                ", kcal=" + kcal +
+                ", protein=" + protein +
+                ", carbohydrates=" + carbohydrates +
+                ", fat=" + fat +
+                ", date=" + date +
+                ", user=" + user +
+                ", meals=" + meals.stream().map(DailyMealEntity::getName).toList() +
+                '}';
+    }
 }

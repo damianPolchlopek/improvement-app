@@ -38,10 +38,12 @@ public record GetMealResponse(Long id,
                 meal.popularity(),
                 meal.ingredients().stream()
                         .map(ingredient -> new MealIngredientResponse(
+                                ingredient.id(),
+                                ingredient.product().id(),
                                 ingredient.name(),
-                                ingredient.unit(),
                                 ingredient.amount(),
-                                ingredient.id()))
+                                ingredient.unit()
+                                ))
                         .toList(),
                 meal.recipe(),
                 -1
