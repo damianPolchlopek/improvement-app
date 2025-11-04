@@ -32,7 +32,7 @@ export default function EditDietDayView() {
     mutationFn: (selectedIds) => REST.updateDietSummary(selectedIds),
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
-      navigate('/food/statistics');
+      navigate('/app/food/statistics');
       showSnackbar( t('food.updatedDietSummary'), 'success' );
     },
     onError: () => {

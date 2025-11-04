@@ -1,8 +1,11 @@
 package com.improvement_app.food.infrastructure.mappers;
 
 import com.improvement_app.food.domain.summary.DailyMealIngredient;
+import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.infrastructure.entity.summary.DailyMealIngredientEntity;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class DailyMealIngredientMapper {
+
+    private final  EntityManager entityManager;
+
     public DailyMealIngredient toDomain(DailyMealIngredientEntity entity) {
         if (entity == null) {
             return null;
@@ -18,7 +24,7 @@ public class DailyMealIngredientMapper {
         return new DailyMealIngredient(
                 entity.getId(),
                 null,
-                null,
+                entity.getProduct().getId(),
                 entity.getName(),
                 entity.getAmount(),
                 entity.getUnit()
@@ -30,13 +36,20 @@ public class DailyMealIngredientMapper {
             return null;
         }
 
-        return new DailyMealIngredientEntity(
+        DailyMealIngredientEntity entity = new DailyMealIngredientEntity(
                 domain.id(),
                 domain.name(),
                 domain.amount(),
                 domain.unit()
-                // Uwaga: powiązanie z productEntity celowo pominięte (brak pełnych danych)
         );
+
+        if (domain.productId() != null) {
+            entity.setProduct(
+                    entityManager.getReference(ProductEntity.class, domain.productId())
+            );
+        }
+
+        return entity;
     }
 
     public List<DailyMealIngredient> toDomainList(List<DailyMealIngredientEntity> entities) {

@@ -80,7 +80,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
   }
 
   const handleEditClick = () => {
-    navigate(`/food/${dietSummary.id}/edit`);
+    navigate(`/app/food/${dietSummary.id}/edit`);
   };
 
   const formatDate = (dateString) => {
