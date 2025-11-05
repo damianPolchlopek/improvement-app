@@ -26,7 +26,7 @@ export default function MealRow({ meal: single, index }) {
   } = useMealSelection();
   const { recalculateMeal } = useMealRecalculation();
 
-  const isItemSelected = isMealSelected(meal.id);
+  const isItemSelected = isMealSelected(meal.mealRecipeId);
   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
   const currentAmount = selectedMeal?.amount || 1;
 
@@ -38,7 +38,7 @@ export default function MealRow({ meal: single, index }) {
 
   const handleMealAmountChange = (e) => {
     const newAmount = parseFloat(e.target.value) || 1;
-    const isSelected = isMealSelected(meal.id);
+    const isSelected = isMealSelected(meal.mealRecipeId);
     
     if (isSelected) {
       updateMealAmount(meal.id, newAmount);
@@ -73,7 +73,7 @@ export default function MealRow({ meal: single, index }) {
       }
     });
 
-    const isSelected = isMealSelected(meal.id);
+    const isSelected = isMealSelected(meal.mealRecipeId);
     if (isSelected) {
       updateMealIngredient(meal.id, ingredientId, newAmount);
     } else {

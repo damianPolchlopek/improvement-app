@@ -8,7 +8,7 @@ import com.improvement_app.food.domain.enums.MealType;
 import java.util.List;
 
 public record GetMealResponse(Long id,
-                              
+
                               // pole dodane pod forontend aby mozna bylo porownywac posilki
                               // podczas create i update
                               long mealRecipeId,

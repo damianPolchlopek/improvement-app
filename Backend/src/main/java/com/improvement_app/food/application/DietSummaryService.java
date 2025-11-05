@@ -4,13 +4,17 @@ import com.improvement_app.food.application.exceptions.DietSummaryNotFoundExcept
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
 import com.improvement_app.food.domain.calculate.CalculateResult;
+import com.improvement_app.food.domain.summary.DailyMeal;
 import com.improvement_app.food.domain.summary.DietSummary;
 import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.update.UpdateDailyMealRequest;
 import com.improvement_app.food.ui.requests.update.UpdateDietSummaryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +58,11 @@ public class DietSummaryService implements DietSummaryManagementUseCase {
         DietSummary oldDietSummary = dietSummaryPersistencePort.findById(userId, dietSummaryId)
                 .orElseThrow(() -> new DietSummaryNotFoundException(dietSummaryId));
 
-        DietSummary updated = oldDietSummary.update(calculateResult);
+        List<DailyMeal> updatedMeals = updateDietSummaryRequest.meals().stream()
+                .map(UpdateDailyMealRequest::toDailyMeal)
+                .toList();
+
+        DietSummary updated = oldDietSummary.update(calculateResult, updatedMeals);
 
         return dietSummaryPersistencePort.save(userId, updated);
     }

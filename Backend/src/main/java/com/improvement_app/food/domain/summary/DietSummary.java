@@ -21,7 +21,7 @@ public record DietSummary(
             this(null, kcal, protein, carbohydrates, fat, LocalDate.now(), meals);
         }
 
-        public DietSummary update(CalculateResult calculateResult) {
+        public DietSummary update(CalculateResult calculateResult, List<DailyMeal> updatedMeals) {
             return new DietSummary(
                     this.id,
                     calculateResult.kcal(),
@@ -29,7 +29,7 @@ public record DietSummary(
                     calculateResult.carbohydrates(),
                     calculateResult.fat(),
                     this.date,
-                    this.meals
+                    updatedMeals
             );
         }
 }
