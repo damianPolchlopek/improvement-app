@@ -61,8 +61,6 @@ export default function MealRow({ meal: single, index }) {
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
     const mealWithAmount = { ...meal, portionMultiplier: amount, ingredients: updatedIngredients };
 
-    console.log('Meal to recalculate: ', mealWithAmount)
-
     recalculateMeal.mutate(mealWithAmount, {
       onSuccess: (response) => {
         setMeal(prev => ({

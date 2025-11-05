@@ -8,6 +8,11 @@ import com.improvement_app.food.domain.enums.MealType;
 import java.util.List;
 
 public record GetMealResponse(Long id,
+                              
+                              // pole dodane pod forontend aby mozna bylo porownywac posilki
+                              // podczas create i update
+                              long mealRecipeId,
+
                               String name,
                               double kcal,
                               double protein,
@@ -19,12 +24,12 @@ public record GetMealResponse(Long id,
                               MealType type,
                               MealPopularity popularity,
                               List<MealIngredientResponse> ingredients,
-                              List<String> recipe,
                               double amount
 ) {
 
     public static GetMealResponse from(MealRecipe meal) {
         return new GetMealResponse(
+                meal.id(),
                 meal.id(),
                 meal.name(),
                 meal.kcal(),
@@ -45,7 +50,6 @@ public record GetMealResponse(Long id,
                                 ingredient.unit()
                                 ))
                         .toList(),
-                meal.recipe(),
                 -1
         );
     }

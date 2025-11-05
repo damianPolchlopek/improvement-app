@@ -1,4 +1,6 @@
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import REST from "../../../utils/REST";
 import { useTranslation } from 'react-i18next';
 import {
   Collapse,
@@ -11,13 +13,49 @@ import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
 import MealRow from './MealRow';
 
+
+const categoryTranslation = new Map([
+  ['Other', 'All'],
+  ['Lunch', 'Obiad'],
+  ['Breakfast', 'Śniadanie'],
+  ['Hot Dish', 'Ciepły Posiłek'],
+  ['Sweets', 'Słodycze'],
+  ['Dinner', 'Kolacja'],
+]);
+
+const popularityTranslation = new Map([
+  ['ALL', 'All'],
+  ['HIGH', 'Wysoka'],
+  ['LOW', 'Niska'],
+]);
+
+function translateMealCategory(arg) {
+  return categoryTranslation.get(arg) ?? 'Other';
+}
+
+function translateMealPopularity(arg) {
+  return popularityTranslation.get(arg) ?? 'ALL';
+}
+
+
 export default function MealsList({ 
   isOpen, 
-  mealList, 
-  isLoading, 
-  isError 
+  mealCategory, 
+  mealPopularity 
 }) {
   const { t } = useTranslation();
+
+  const { data: mealList = [], isLoading, isError } = useQuery({
+    queryKey: ['mealList', mealCategory, mealPopularity],
+    queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', 
+                                    translateMealPopularity(mealPopularity), 'category', true),
+                                    
+    enabled: !!mealCategory && !!mealPopularity && isOpen,
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 10 // cache data for 10 minutes
+  });
+
 
   if (isLoading) {
     return (
