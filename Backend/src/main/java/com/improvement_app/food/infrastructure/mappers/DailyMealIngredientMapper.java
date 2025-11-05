@@ -23,7 +23,6 @@ public class DailyMealIngredientMapper {
 
         return new DailyMealIngredient(
                 entity.getId(),
-                null,
                 entity.getProduct().getId(),
                 entity.getName(),
                 entity.getAmount(),

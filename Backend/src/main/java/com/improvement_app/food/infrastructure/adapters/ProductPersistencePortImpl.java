@@ -54,4 +54,10 @@ public class ProductPersistencePortImpl implements ProductPersistencePort {
         return productMapper.toDomain(entities);
     }
 
+    @Override
+    public List<Product> getProducts(List<Long> productIds) {
+        List<ProductEntity> entities = productRepository.findAllById(productIds);
+        return productMapper.toDomain(entities);
+    }
+
 }

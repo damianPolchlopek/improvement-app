@@ -54,8 +54,8 @@ export default function MealRow({ meal: single, index }) {
     // Zaktualizuj amount tylko dla wybranego składnika
     const updatedIngredients = meal.ingredients.map(ingredient =>
       ingredient.productId === ingredientId
-        ? { ...ingredient, amount: newAmount, mealRecipeIngredientId: ingredient.id }
-        : { ...ingredient, mealRecipeIngredientId: ingredient.id }
+        ? { ...ingredient, amount: newAmount }
+        : ingredient
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami

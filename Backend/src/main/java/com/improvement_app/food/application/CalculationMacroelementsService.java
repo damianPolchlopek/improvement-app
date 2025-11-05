@@ -2,7 +2,9 @@ package com.improvement_app.food.application;
 
 import com.improvement_app.food.application.ports.in.CalculationManagementUseCase;
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
+import com.improvement_app.food.application.ports.out.ProductPersistencePort;
 import com.improvement_app.food.domain.calculate.CalculateResult;
+import com.improvement_app.food.domain.recipe.Product;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.ui.requests.calculate.CalculateMealIngredientRequest;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +25,7 @@ public class CalculationMacroelementsService implements CalculationManagementUse
 
 
     private final MealIngredientPersistencePort mealIngredientPersistencePort;
+    private final ProductPersistencePort productPersistencePort;
 
 
     public CalculateResult calculateDayMacro(CalculateDietRequest calculateDayRequest) {
@@ -47,23 +51,23 @@ public class CalculationMacroelementsService implements CalculationManagementUse
         double totalCarbohydrates = 0;
         double totalFat = 0;
 
-        List<Long> ingredients = mealIngredients.stream()
-                .map(CalculateMealIngredientRequest::mealRecipeIngredientId)
-                .collect(Collectors.toList());
+        List<Long> productIds = mealIngredients.stream()
+                .map(CalculateMealIngredientRequest::productId)
+                .toList();
 
-        Map<Long, ProductEntity> recipeMealIngredients = mealIngredientPersistencePort.getMealIngredients(ingredients)
+        Map<Long, Product> products = productPersistencePort.getProducts(productIds)
                 .stream()
-                .collect(Collectors.toMap(MealIngredientEntity::getId, MealIngredientEntity::getProductEntity));
+                .collect(Collectors.toMap(Product::id, Function.identity()));
 
         for (CalculateMealIngredientRequest eatenMealIngredient : mealIngredients) {
             //TODO: zabezpieczyc przed nullem w mapie
 
-            final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.mealRecipeIngredientId());
+            final Product recipeProductEntity = products.get(eatenMealIngredient.productId());
 
-            totalKcal += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();
-            totalProtein += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getProtein();
-            totalCarbohydrates += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getCarbohydrates();
-            totalFat += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getFat();
+            totalKcal += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.kcal();
+            totalProtein += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.protein();
+            totalCarbohydrates += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.carbohydrates();
+            totalFat += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.fat();
         }
 
         return new CalculateResult(

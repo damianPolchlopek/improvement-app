@@ -51,6 +51,7 @@ export default function EditDietDayView() {
 
   return (
     selectedMeals && <>
+    {console.log('Update component view')}
       <DietDaySummaryForm>
         <Button
           variant="contained"

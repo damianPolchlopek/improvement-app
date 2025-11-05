@@ -19,10 +19,6 @@ public class MealIngredientPersistencePortImpl implements MealIngredientPersiste
     private final MealIngredientRepository mealIngredientRepository;
     private final MealIngredientMapper mealIngredientMapper;
 
-    @Override
-    public List<MealIngredientEntity> getMealIngredients(List<Long> ingredients) {
-        return mealIngredientRepository.findAllById(ingredients);
-    }
 
     @Override
     public List<MealIngredient> getMealIngredients(Long mealId) {

@@ -4,7 +4,6 @@ import com.improvement_app.food.domain.enums.Unit;
 
 public record DailyMealIngredient(
         Long id,
-        Long mealRecipeIngredientId,
         Long productId,
         String name,
         double amount,

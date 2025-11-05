@@ -5,7 +5,6 @@ import com.improvement_app.food.domain.enums.Unit;
 import com.improvement_app.food.ui.requests.calculate.CalculateMealIngredientRequest;
 
 public record CreateDailyMealIngredientRequest(
-        Long mealRecipeIngredientId,
         Long productId,
         String name,
         double amount,
@@ -14,7 +13,6 @@ public record CreateDailyMealIngredientRequest(
     public DailyMealIngredient toDailyMealIngredient() {
         return new DailyMealIngredient(
                 null,
-                this.mealRecipeIngredientId,
                 this.productId,
                 this.name,
                 this.amount,
@@ -24,7 +22,7 @@ public record CreateDailyMealIngredientRequest(
 
     public CalculateMealIngredientRequest toCalculateMealIngredientRequest() {
         return new CalculateMealIngredientRequest(
-                mealRecipeIngredientId,
+                productId,
                 name,
                 amount,
                 unit

@@ -76,7 +76,7 @@ public class DietSummaryPersistencePortImpl implements DietSummaryPersistencePor
     public Optional<DietSummary> findById(Long userId, Long id) {
         log.debug("Fetching diet summary with id: {}", id);
 
-        Optional<DietSummaryEntity> dietSummary = dietSummaryRepository.findByIdAndUserId(userId, id);
+        Optional<DietSummaryEntity> dietSummary = dietSummaryRepository.findByIdAndUserId(id, userId);
 
         return dietSummary.map(dietSummaryMapper::toDomain);
     }

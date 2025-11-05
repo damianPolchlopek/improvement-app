@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface MealIngredientPersistencePort {
 
-    List<MealIngredientEntity> getMealIngredients(List<Long> ingredients);
-
     List<MealIngredient> getMealIngredients(Long mealId);
 }
