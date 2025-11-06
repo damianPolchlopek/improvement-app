@@ -1,9 +1,9 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.domain.recipe.MealIngredient;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
-import com.improvement_app.food.infrastructure.database.MealIngredientRepository;
+import com.improvement_app.food.infrastructure.repository.MealIngredientRepository;
 import com.improvement_app.food.infrastructure.mappers.MealIngredientMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,6 @@ public class MealIngredientPersistencePortImpl implements MealIngredientPersiste
     private final MealIngredientRepository mealIngredientRepository;
     private final MealIngredientMapper mealIngredientMapper;
 
-    @Override
-    public List<MealIngredientEntity> getMealIngredients(List<Long> ingredients) {
-        return mealIngredientRepository.findAllById(ingredients);
-    }
 
     @Override
     public List<MealIngredient> getMealIngredients(Long mealId) {

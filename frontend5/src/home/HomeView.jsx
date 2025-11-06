@@ -10,7 +10,6 @@ import {
   CardContent,
   Typography,
   Container,
-  Fade,
   useTheme
 } from '@mui/material';
 import {

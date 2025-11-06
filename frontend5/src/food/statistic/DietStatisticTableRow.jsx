@@ -80,7 +80,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
   }
 
   const handleEditClick = () => {
-    navigate(`/food/${dietSummary.id}/edit`);
+    navigate(`/app/food/${dietSummary.id}/edit`);
   };
 
   const formatDate = (dateString) => {
@@ -232,7 +232,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                           {t("food.fat")}
                         </StyledTableCell>
                         <StyledTableCell sx={{ fontWeight: 'bold' }}>
-                          {t("food.amount")}
+                          {t("food.portionMultiplier")}
                         </StyledTableCell>
                       </StyledTableRow>
                     </TableHead>
@@ -273,7 +273,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                           </StyledTableCell>
                           <StyledTableCell>
                             <Typography variant="body2">
-                              {meal.amount}
+                              {meal.portionMultiplier}
                             </Typography>
                           </StyledTableCell>
                         </StyledTableRow>

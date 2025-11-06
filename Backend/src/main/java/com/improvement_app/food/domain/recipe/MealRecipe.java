@@ -1,4 +1,4 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.domain.recipe;
 
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
@@ -6,7 +6,7 @@ import com.improvement_app.food.domain.enums.MealType;
 
 import java.util.List;
 
-public record EatenMeal(
+public record MealRecipe(
         Long id,
         String name,
         double kcal,
@@ -19,30 +19,32 @@ public record EatenMeal(
         MealType type,
         MealPopularity popularity,
         List<String> recipe,
-        List<MealIngredient> ingredients,
-        double amount
+        List<MealIngredient> ingredients
 ) {
-    public EatenMeal updateMacro(
-            double kcal,
-            double protein,
-            double carbohydrates,
-            double fat
-    ) {
-        return new EatenMeal(
+
+    public MealRecipe adjustToSinglePortion() {
+        if (portionAmount <= 1.0) {
+            return this;
+        }
+
+        List<MealIngredient> adjustedIngredients = ingredients.stream()
+                .map(ingredient -> ingredient.adjustAmount(portionAmount))
+                .toList();
+
+        return new MealRecipe(
                 id,
                 name,
                 kcal,
                 protein,
                 carbohydrates,
                 fat,
-                portionAmount,
+                1.0, // adjusted portion
                 url,
                 category,
                 type,
                 popularity,
                 recipe,
-                ingredients,
-                amount
+                adjustedIngredients
         );
     }
 }

@@ -1,4 +1,4 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.domain.recipe;
 
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.domain.enums.Unit;

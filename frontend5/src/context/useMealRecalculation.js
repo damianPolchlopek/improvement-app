@@ -8,7 +8,7 @@ export function useMealRecalculation() {
   const { t } = useTranslation();
 
   const recalculateMeal = useMutation({
-    mutationFn: (eatenMeal) => REST.recalculateMealMacro({ eatenMeal }),
+    mutationFn: (dailyMeal) => REST.recalculateMealMacro({ dailyMeal }),
     onError: () => {
       showSnackbar(t('food.failedCalculateDiet'), 'error');
     }

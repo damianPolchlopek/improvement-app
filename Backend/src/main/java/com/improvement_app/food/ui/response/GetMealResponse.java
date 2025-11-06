@@ -1,6 +1,6 @@
 package com.improvement_app.food.ui.response;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.domain.recipe.MealRecipe;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -8,6 +8,11 @@ import com.improvement_app.food.domain.enums.MealType;
 import java.util.List;
 
 public record GetMealResponse(Long id,
+
+                              // pole dodane pod forontend aby mozna bylo porownywac posilki
+                              // podczas create i update
+                              long mealRecipeId,
+
                               String name,
                               double kcal,
                               double protein,
@@ -19,12 +24,12 @@ public record GetMealResponse(Long id,
                               MealType type,
                               MealPopularity popularity,
                               List<MealIngredientResponse> ingredients,
-                              List<String> recipe,
                               double amount
 ) {
 
     public static GetMealResponse from(MealRecipe meal) {
         return new GetMealResponse(
+                meal.id(),
                 meal.id(),
                 meal.name(),
                 meal.kcal(),
@@ -38,12 +43,13 @@ public record GetMealResponse(Long id,
                 meal.popularity(),
                 meal.ingredients().stream()
                         .map(ingredient -> new MealIngredientResponse(
+                                ingredient.id(),
+                                ingredient.product().id(),
                                 ingredient.name(),
-                                ingredient.unit(),
                                 ingredient.amount(),
-                                ingredient.id()))
+                                ingredient.unit()
+                                ))
                         .toList(),
-                meal.recipe(),
                 -1
         );
     }

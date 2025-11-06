@@ -1,14 +1,14 @@
 package com.improvement_app.food.data;
 
 import com.improvement_app.food.domain.enums.*;
-import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
-import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
-import com.improvement_app.food.infrastructure.database.ProductRepository;
+import com.improvement_app.food.infrastructure.repository.DietSummaryRepository;
+import com.improvement_app.food.infrastructure.repository.MealRecipeRepository;
+import com.improvement_app.food.infrastructure.repository.ProductRepository;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
-import com.improvement_app.food.infrastructure.entity.summary.EatenMealEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DailyMealEntity;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
 import net.datafaker.Faker;
@@ -45,8 +45,7 @@ public class TestDataFactory {
                 .fat(faker.number().randomDouble(2, 0, 25))
                 .amount(100.0)
                 .unit(faker.options().option(Unit.class))
-                .productCategory(faker.options().option(ProductCategory.class))
-                .mealIngredientEntities(new ArrayList<>());
+                .productCategory(faker.options().option(ProductCategory.class));
     }
 
     public static MealRecipeEntity.MealRecipeEntityBuilder mealRecipeBuilder() {
@@ -265,7 +264,7 @@ public class TestDataFactory {
 
                 // Losowa liczba zjedzonych posiłków (2-5 dziennie)
                 int mealsPerDay = faker.number().numberBetween(2, 6);
-                List<EatenMealEntity> eatenMeals = new ArrayList<>();
+                List<DailyMealEntity> eatenMeals = new ArrayList<>();
 
                 double totalKcal = 0;
                 double totalProtein = 0;
@@ -279,29 +278,24 @@ public class TestDataFactory {
 
                     double portionMultiplier = faker.number().randomDouble(2, 1, 2);
 
-                    EatenMealEntity eatenMeal = new EatenMealEntity(
+                    DailyMealEntity eatenMeal = new DailyMealEntity(
                             randomMeal.getId(),
                             randomMeal.getName(),
                             randomMeal.getKcal() * portionMultiplier,
                             randomMeal.getProtein() * portionMultiplier,
                             randomMeal.getCarbohydrates() * portionMultiplier,
                             randomMeal.getFat() * portionMultiplier,
-                            randomMeal.getPortionAmount(),
-                            randomMeal.getUrl(),
-                            randomMeal.getCategory(),
-                            randomMeal.getType(),
-                            randomMeal.getPopularity(),
-                            randomMeal.getIngredients(),
-                            randomMeal.getRecipe(),
-                            portionMultiplier
+                            portionMultiplier,
+                            List.of()
+//                            randomMeal.getIngredients()
                     );
 
                     eatenMeals.add(eatenMeal);
 
-                    totalKcal += eatenMeal.getKcal();
-                    totalProtein += eatenMeal.getProtein();
-                    totalCarbs += eatenMeal.getCarbohydrates();
-                    totalFat += eatenMeal.getFat();
+                    totalKcal += eatenMeal.getCachedKcal();
+                    totalProtein += eatenMeal.getCachedProtein();
+                    totalCarbs += eatenMeal.getCachedCarbohydrates();
+                    totalFat += eatenMeal.getCachedFat();
                 }
 
                 DietSummaryEntity summary = dietSummaryBuilder()

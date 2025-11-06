@@ -1,4 +1,6 @@
-package com.improvement_app.food.domain;
+package com.improvement_app.food.domain.summary;
+
+import com.improvement_app.food.domain.calculate.CalculateResult;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -10,24 +12,24 @@ public record DietSummary(
         double carbohydrates,
         double fat,
         LocalDate date,
-        List<EatenMeal> meals
+        List<DailyMeal> meals
 ) {
 
         public DietSummary(double kcal, double protein,
                         double carbohydrates, double fat,
-                        List<EatenMeal> meals) {
+                        List<DailyMeal> meals) {
             this(null, kcal, protein, carbohydrates, fat, LocalDate.now(), meals);
         }
 
-        public DietSummary update(DietSummary newDietSummary) {
+        public DietSummary update(CalculateResult calculateResult, List<DailyMeal> updatedMeals) {
             return new DietSummary(
                     this.id,
-                    newDietSummary.kcal,
-                    newDietSummary.protein,
-                    newDietSummary.carbohydrates,
-                    newDietSummary.fat,
+                    calculateResult.kcal(),
+                    calculateResult.protein(),
+                    calculateResult.carbohydrates(),
+                    calculateResult.fat(),
                     this.date,
-                    newDietSummary.meals
+                    updatedMeals
             );
         }
 }

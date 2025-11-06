@@ -1,0 +1,266 @@
+// Food & Workout Management System - Database Schema
+// PostgreSQL 16.3
+// Wklej ten kod na: https://dbdiagram.io/d
+
+Project food_workout_app {
+  database_type: 'PostgreSQL'
+  Note: 'Schemat bazy danych dla aplikacji Food & Workout Management'
+}
+
+// ============================================
+// SCHEMA: users
+// ============================================
+
+Table users.users {
+  id integer [pk, increment]
+  username varchar(20) [unique, not null, note: 'BRAK CONSTRAINT w bazie - dodać!']
+  email varchar(50) [unique, not null, note: 'BRAK CONSTRAINT w bazie - dodać!']
+  password varchar(120) [not null, note: 'BCrypt hash']
+  name varchar(50)
+  surname varchar(50)
+  is_active boolean [not null, default: false]
+  email_verified boolean [not null, default: false]
+  email_verification_token varchar(255)
+  email_verification_expires timestamp
+  last_login timestamp [default: `CURRENT_TIMESTAMP`]
+
+  Note: 'Tabela użytkowników systemu'
+  indexes {
+    (email)
+    (username)
+  }
+}
+
+Table users.roles {
+  id integer [pk, increment, note: 'PROBLEM: powinno być bigint!']
+  name varchar(20) [not null]
+
+  Note: 'Role użytkowników (ADMIN, USER, etc.)'
+}
+
+Table users.user_roles {
+  user_id bigint [pk, note: 'FK do users.users.id']
+  role_id bigint [pk, note: 'FK do roles.id - typ niezgodny!']
+
+  Note: 'Tabela Many-to-Many: użytkownicy <-> role'
+}
+
+// ============================================
+// SCHEMA: public (Diet Management)
+// ============================================
+
+Table public.diet_summary {
+  id integer [pk, increment]
+  user_id bigint [not null, default: 1, note: '⚠️ BRAK FK do users.users!']
+  date date
+  kcal double
+  protein double
+  carbohydrates double
+  fat double
+  meals jsonb [note: 'JSON z listą posiłków w danym dniu']
+
+  Note: 'Podsumowanie diety użytkownika na dany dzień'
+  indexes {
+    user_id [name: 'idx_diet_summaries_user_id']
+  }
+}
+
+Table public.meal_recipe {
+  id integer [pk, increment]
+  name text [not null]
+  kcal double [not null]
+  protein double [not null]
+  carbohydrates double [not null]
+  fat double [not null]
+  portion_amount double [not null]
+  url text
+  category text
+  type text
+  recipe jsonb [note: 'JSON z przepisem']
+  popularity text
+
+  Note: 'Przepisy na posiłki'
+}
+
+Table public.meal_ingredient {
+  id integer [pk, increment]
+  meal_id integer [not null, note: 'FK do meal_recipe']
+  product_id integer [not null, note: 'FK do product']
+  name text [not null]
+  amount double [not null]
+  unit text
+
+  Note: 'Składniki w przepisach'
+  indexes {
+    meal_id [name: 'idx_meal_ingredients_meal_id']
+    product_id [name: 'idx_meal_ingredients_product_id']
+  }
+}
+
+Table public.product {
+  id integer [pk]
+  name text [not null]
+  kcal double [not null]
+  protein double [not null]
+  carbohydrates double [not null]
+  fat double [not null]
+  amount double [not null]
+  unit text
+  product_category text
+
+  Note: 'Produkty spożywcze (baza danych składników)'
+}
+
+// ============================================
+// SCHEMA: workout
+// ============================================
+
+Table workout.training {
+  id integer [pk, increment, note: 'GENERATED ALWAYS AS IDENTITY']
+  user_id bigint [not null, default: 1, note: '⚠️ BRAK FK do users.users!']
+  name varchar(255) [not null]
+  date date [not null]
+  place varchar(255)
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+
+  Note: 'Sesje treningowe użytkownika'
+  indexes {
+    user_id [name: 'idx_training_user_id']
+  }
+}
+
+Table workout.exercise {
+  id integer [pk, increment, note: 'GENERATED ALWAYS AS IDENTITY']
+  training_id bigint [not null, note: 'FK do training']
+  name varchar(255) [not null]
+  type varchar(255)
+  progress varchar(255)
+
+  Note: 'Ćwiczenia wykonane w ramach treningu'
+  indexes {
+    training_id [name: 'idx_exercise_training']
+  }
+}
+
+Table workout.exercise_set {
+  id integer [pk, increment, note: 'GENERATED ALWAYS AS IDENTITY']
+  exercise_id bigint [not null, note: 'FK do exercise']
+  rep double [not null, note: 'Liczba powtórzeń']
+  weight double [not null, note: 'Ciężar w kg']
+
+  Note: 'Serie w ramach ćwiczenia'
+  indexes {
+    exercise_id [name: 'idx_set_exercise']
+  }
+}
+
+Table workout.training_template {
+  id integer [pk, increment]
+  name varchar(255) [unique, not null]
+
+  Note: 'Szablony planów treningowych'
+}
+
+Table workout.exercise_name {
+  id integer [pk, increment]
+  name varchar(255) [unique, not null]
+
+  Note: 'Słownik nazw ćwiczeń'
+}
+
+Table workout.training_template_exercise {
+  id integer [pk, increment]
+  training_template_id bigint [not null, note: 'FK do training_template']
+  exercise_name_id bigint [not null, note: 'FK do exercise_name']
+
+  Note: 'Ćwiczenia przypisane do szablonów treningowych'
+  indexes {
+    training_template_id [name: 'idx_training_template_exercise_template']
+    exercise_name_id [name: 'idx_training_template_exercise_name']
+  }
+}
+
+// ============================================
+// BRAKUJĄCE RELACJE (dodać w bazie!)
+// ============================================
+
+// Ref: public.diet_summary.user_id > users.users.id [note: '⚠️ DODAĆ TEN FK!']
+// Ref: workout.training.user_id > users.users.id [note: '⚠️ DODAĆ TEN FK!']
+
+// ============================================
+// LIQUIBASE TABLES
+// ============================================
+
+Table public.databasechangelog {
+  id varchar(255) [not null]
+  author varchar(255) [not null]
+  filename varchar(255) [not null]
+  dateexecuted timestamp [not null]
+  orderexecuted integer [not null]
+  exectype varchar(10) [not null]
+  md5sum varchar(35)
+  description varchar(255)
+  comments varchar(255)
+  tag varchar(255)
+  liquibase varchar(20)
+  contexts varchar(255)
+  labels varchar(255)
+  deployment_id varchar(10)
+
+  Note: 'Liquibase changelog - historia migracji'
+}
+
+Table public.databasechangeloglock {
+  id integer [pk]
+  locked boolean [not null]
+  lockgranted timestamp
+  lockedby varchar(255)
+
+  Note: 'Liquibase lock - blokada podczas migracji'
+}
+
+// ============================================
+// FOREIGN KEY RELATIONSHIPS
+// ============================================
+
+// Users schema
+Ref: users.user_roles.user_id > users.users.id [delete: cascade]
+Ref: users.user_roles.role_id > users.roles.id [delete: cascade]
+
+// Diet schema
+Ref: public.meal_ingredient.meal_id > public.meal_recipe.id [delete: cascade]
+Ref: public.meal_ingredient.product_id > public.product.id [delete: restrict]
+
+// Workout schema
+Ref: workout.exercise.training_id > workout.training.id [delete: cascade]
+Ref: workout.exercise_set.exercise_id > workout.exercise.id [delete: cascade]
+Ref: workout.training_template_exercise.training_template_id > workout.training_template.id [delete: cascade]
+Ref: workout.training_template_exercise.exercise_name_id > workout.exercise_name.id [delete: cascade]
+
+// ============================================
+// NOTATKI I ZALECENIA
+// ============================================
+
+Note critical_issues {
+  '''
+  ⚠️ KRYTYCZNE PROBLEMY DO NAPRAWIENIA:
+
+  1. BRAKUJĄCE FOREIGN KEYS:
+     - public.diet_summary.user_id -> users.users.id
+     - workout.training.user_id -> users.users.id
+
+  2. NIESPÓJNOŚĆ TYPÓW:
+     - users.roles.id jest integer, a user_roles.role_id jest bigint
+     - Zmienić roles.id na bigint
+
+  3. BRAKUJĄCE CONSTRAINTS:
+     - users.email powinno mieć UNIQUE
+     - users.username powinno mieć UNIQUE
+
+  4. ZALECENIA:
+     - Dodać created_at, updated_at do wszystkich tabel
+     - Rozważyć soft delete (deleted_at) zamiast CASCADE dla users
+     - Dodać walidację email (CHECK constraint)
+     - Zwiększyć password do varchar(255) dla bezpieczeństwa
+  '''
+}

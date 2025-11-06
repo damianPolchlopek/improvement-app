@@ -26,7 +26,7 @@ export default function MealRow({ meal: single, index }) {
   } = useMealSelection();
   const { recalculateMeal } = useMealRecalculation();
 
-  const isItemSelected = isMealSelected(meal.id);
+  const isItemSelected = isMealSelected(meal.mealRecipeId);
   const selectedMeal = selectedMeals.find(m => m.id === meal.id);
   const currentAmount = selectedMeal?.amount || 1;
 
@@ -38,7 +38,7 @@ export default function MealRow({ meal: single, index }) {
 
   const handleMealAmountChange = (e) => {
     const newAmount = parseFloat(e.target.value) || 1;
-    const isSelected = isMealSelected(meal.id);
+    const isSelected = isMealSelected(meal.mealRecipeId);
     
     if (isSelected) {
       updateMealAmount(meal.id, newAmount);
@@ -47,30 +47,38 @@ export default function MealRow({ meal: single, index }) {
     }
   };
 
-  const handleMealIngredientChange = (meal, ingredientId, newAmount) => {
+  const handleMealIngredientChange = (meal, ingredientProductId, newAmount) => {
     // Pobierz aktualny amount dla całego posiłku
     const amount = selectedMeal?.amount || 1;
 
     // Zaktualizuj amount tylko dla wybranego składnika
     const updatedIngredients = meal.ingredients.map(ingredient =>
-      ingredient.productId === ingredientId
+      ingredient.productId === ingredientProductId
         ? { ...ingredient, amount: newAmount }
         : ingredient
     );
 
     // Stwórz nowy obiekt meal z poprawionym amount i zaktualizowanymi składnikami
-    const mealWithAmount = { ...meal, amount, ingredients: updatedIngredients };
+    const mealWithAmount = { ...meal, portionMultiplier: amount, ingredients: updatedIngredients };
 
     recalculateMeal.mutate(mealWithAmount, {
-      onSuccess: (response) => {setMeal(response)}
+      onSuccess: (response) => {
+        setMeal(prev => ({
+          ...prev,
+          kcal: response.kcal,
+          protein: response.protein,
+          carbohydrates: response.carbohydrates,
+          fat: response.fat
+        }));
+      }
     });
 
-    const isSelected = isMealSelected(meal.id);
+    const isSelected = isMealSelected(meal.mealRecipeId);
     if (isSelected) {
-      updateMealIngredient(meal.id, ingredientId, newAmount);
+      updateMealIngredient(meal.mealRecipeId, ingredientProductId, newAmount);
     } else {
       toggleMealSelection(mealWithAmount, 1);
-      updateMealIngredient(meal.id, ingredientId, newAmount);
+      updateMealIngredient(meal.mealRecipeId, ingredientProductId, newAmount);
     }
   };
 

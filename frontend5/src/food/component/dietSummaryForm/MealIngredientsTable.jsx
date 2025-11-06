@@ -18,8 +18,8 @@ export default function MealIngredientsTable({
 }) {
   const { t } = useTranslation();
 
-  const handleIngredientAmountChange = (ingredientId, newAmount) => {
-    onIngredientAmountChange(meal, ingredientId, newAmount);
+  const handleIngredientAmountChange = (ingredientProductId, newAmount) => {
+    onIngredientAmountChange(meal, ingredientProductId, newAmount);
   };
 
   return (
@@ -40,10 +40,11 @@ export default function MealIngredientsTable({
             </TableHead>
             <TableBody>
               {meal.ingredients.map((ingredient, idx) => {
+
                 const selectedIngredient = selectedMeal?.ingredients?.find(
                   i => i.productId === ingredient.productId
                 );
-                
+
                 const ingredientAmount = selectedIngredient?.amount ?? ingredient.amount;
 
                 return (

@@ -1,7 +1,7 @@
 package com.improvement_app.food.infrastructure.googledrivefileparser.initializers;
 
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
-import com.improvement_app.food.infrastructure.database.ProductRepository;
+import com.improvement_app.food.infrastructure.repository.ProductRepository;
 import com.improvement_app.googledrive.service.FileDownloadService;
 import com.improvement_app.food.infrastructure.googledrivefileparser.parsers.ProductParser;
 import lombok.RequiredArgsConstructor;

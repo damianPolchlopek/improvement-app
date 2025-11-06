@@ -1,52 +1,76 @@
 package com.improvement_app.food.application;
 
+import com.improvement_app.food.application.ports.in.CalculationManagementUseCase;
 import com.improvement_app.food.application.ports.out.MealIngredientPersistencePort;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.domain.MealIngredient;
+import com.improvement_app.food.application.ports.out.ProductPersistencePort;
+import com.improvement_app.food.domain.calculate.CalculateResult;
+import com.improvement_app.food.domain.recipe.Product;
 import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
-import lombok.AllArgsConstructor;
+import com.improvement_app.food.ui.requests.calculate.CalculateMealIngredientRequest;
+import com.improvement_app.food.ui.requests.calculate.CalculateMealRequest;
+import com.improvement_app.food.ui.requests.calculate.RecalculateMealMacroRequest;
+import com.improvement_app.food.ui.requests.calculate.CalculateDietRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
-public class CalculationMacroelementsService {
+@RequiredArgsConstructor
+public class CalculationMacroelementsService implements CalculationManagementUseCase {
+
 
     private final MealIngredientPersistencePort mealIngredientPersistencePort;
+    private final ProductPersistencePort productPersistencePort;
 
-    public EatenMeal recalculateMealMacro(EatenMeal eatenMeal) {
-        List<MealIngredient> mealIngredients = eatenMeal.ingredients();
+
+    public CalculateResult calculateDayMacro(CalculateDietRequest calculateDayRequest) {
+        return recalculateDayMacro(calculateDayRequest.dailyMeals());
+    }
+
+    public CalculateResult recalculateMealMacro(RecalculateMealMacroRequest calculateDietRequest) {
+        CalculateMealRequest dailyMeal = calculateDietRequest.dailyMeal();
+        return recalculateMealMacro(dailyMeal);
+    }
+
+
+
+
+
+
+
+    public CalculateResult recalculateMealMacro(CalculateMealRequest dailyMeal) {
+        List<CalculateMealIngredientRequest> mealIngredients = dailyMeal.ingredients();
 
         double totalKcal = 0;
         double totalProtein = 0;
         double totalCarbohydrates = 0;
         double totalFat = 0;
 
-        List<Long> ingredients = mealIngredients.stream()
-                .map(MealIngredient::id)
-                .collect(Collectors.toList());
+        List<Long> productIds = mealIngredients.stream()
+                .map(CalculateMealIngredientRequest::productId)
+                .toList();
 
-        Map<Long, MealIngredientEntity> recipeMealIngredients = mealIngredientPersistencePort.getMealIngredients(ingredients)
+        Map<Long, Product> products = productPersistencePort.getProducts(productIds)
                 .stream()
-                .collect(Collectors.toMap(MealIngredientEntity::getId, mealIngredient -> mealIngredient));
+                .collect(Collectors.toMap(Product::id, Function.identity()));
 
-        for (MealIngredient eatenMealIngredient : mealIngredients) {
+        for (CalculateMealIngredientRequest eatenMealIngredient : mealIngredients) {
             //TODO: zabezpieczyc przed nullem w mapie
-            final ProductEntity recipeProductEntity = recipeMealIngredients.get(eatenMealIngredient.id())
-                    .getProductEntity();
 
-            totalKcal += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getKcal();
-            totalProtein += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getProtein();
-            totalCarbohydrates += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getCarbohydrates();
-            totalFat += eatenMeal.amount() * eatenMealIngredient.amount() / recipeProductEntity.getAmount() * recipeProductEntity.getFat();
+            final Product recipeProductEntity = products.get(eatenMealIngredient.productId());
+
+            totalKcal += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.kcal();
+            totalProtein += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.protein();
+            totalCarbohydrates += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.carbohydrates();
+            totalFat += dailyMeal.portionMultiplier() * eatenMealIngredient.amount() / recipeProductEntity.amount() * recipeProductEntity.fat();
         }
 
-        return eatenMeal.updateMacro(
+        return new CalculateResult(
                 totalKcal,
                 totalProtein,
                 totalCarbohydrates,
@@ -54,26 +78,25 @@ public class CalculationMacroelementsService {
         );
     }
 
-    public DietSummary recalculateDayMacro(List<EatenMeal> eatenMeals) {
+    public CalculateResult recalculateDayMacro(List<CalculateMealRequest> dailyMeals) {
         double totalKcal = 0;
         double totalProtein = 0;
         double totalCarbohydrates = 0;
         double totalFat = 0;
 
-        for (EatenMeal eatenMeal : eatenMeals) {
-            final EatenMeal recalculatedMeal = recalculateMealMacro(eatenMeal);
+        for (CalculateMealRequest dailyMeal : dailyMeals) {
+            final CalculateResult recalculatedMeal = recalculateMealMacro(dailyMeal);
             totalKcal += recalculatedMeal.kcal();
             totalProtein += recalculatedMeal.protein();
             totalCarbohydrates += recalculatedMeal.carbohydrates();
             totalFat += recalculatedMeal.fat();
         }
 
-        return new DietSummary(
+        return new CalculateResult(
                 totalKcal,
                 totalProtein,
                 totalCarbohydrates,
-                totalFat,
-                eatenMeals);
+                totalFat);
     }
 
 }

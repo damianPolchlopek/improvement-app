@@ -18,7 +18,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "meal_recipe")
+@Table(name = "meal_recipe", schema = "food")
 @Builder
 public class MealRecipeEntity {
 

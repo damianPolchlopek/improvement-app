@@ -42,25 +42,25 @@ public class GlobalExceptionHandler {
     /**
      * Obsługa błędów walidacji request body (@Valid)
      */
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ValidationErrorResponse> handleValidationErrors(MethodArgumentNotValidException e) {
-        log.warn("Validation failed for request: {}", e.getBindingResult().getObjectName());
-
-        List<FieldValidationError> fieldErrors = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .map(this::mapToFieldValidationError)
-                .collect(Collectors.toList());
-
-        ValidationErrorResponse errorResponse = ValidationErrorResponse.builder()
-                .code("VALIDATION_FAILED")
-                .message("Request validation failed")
-                .timestamp(LocalDateTime.now())
-                .fieldErrors(fieldErrors)
-                .build();
-
-        return ResponseEntity.badRequest().body(errorResponse);
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException.class)
+//    public ResponseEntity<ValidationErrorResponse> handleValidationErrors(MethodArgumentNotValidException e) {
+//        log.warn("Validation failed for request: {}", e.getBindingResult().getObjectName());
+//
+//        List<FieldValidationError> fieldErrors = e.getBindingResult()
+//                .getFieldErrors()
+//                .stream()
+//                .map(this::mapToFieldValidationError)
+//                .collect(Collectors.toList());
+//
+//        ValidationErrorResponse errorResponse = ValidationErrorResponse.builder()
+//                .code("VALIDATION_FAILED")
+//                .message("Request validation failed")
+//                .timestamp(LocalDateTime.now())
+//                .fieldErrors(fieldErrors)
+//                .build();
+//
+//        return ResponseEntity.badRequest().body(errorResponse);
+//    }
 
     /**
      * Obsługa błędów walidacji parametrów metod (@Min, @Max, etc.)

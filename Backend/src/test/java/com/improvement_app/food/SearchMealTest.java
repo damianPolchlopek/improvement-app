@@ -1,6 +1,6 @@
 package com.improvement_app.food;
 
-import com.improvement_app.food.infrastructure.database.MealRecipeRepository;
+import com.improvement_app.food.infrastructure.repository.MealRecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class SearchMealTest extends AbstractE2ETest {

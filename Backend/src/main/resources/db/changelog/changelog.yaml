@@ -58,3 +58,7 @@ databaseChangeLog:
   - include:
       file: 0014_add_last_login_column/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0015_refactor_food_db/changelog.yaml
+      relativeToChangelogFile: true

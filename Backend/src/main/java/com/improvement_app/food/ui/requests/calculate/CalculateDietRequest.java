@@ -1,6 +1,5 @@
-package com.improvement_app.food.ui.requests;
+package com.improvement_app.food.ui.requests.calculate;
 
-import com.improvement_app.food.domain.EatenMeal;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,6 +8,6 @@ import java.util.List;
 public record CalculateDietRequest(
         @NotNull(message = "Lista posiłków nie może być null")
         @NotEmpty(message = "Lista posiłków nie może być pusta")
-        List<EatenMeal> eatenMeals
+        List<CalculateMealRequest> dailyMeals
 ) {
 }

@@ -1,12 +1,9 @@
 package com.improvement_app.food.ui;
 
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
-import com.improvement_app.food.domain.DietSummary;
-import com.improvement_app.food.domain.EatenMeal;
-import com.improvement_app.food.ui.requests.CalculateDietRequest;
-import com.improvement_app.food.ui.requests.CreateDietSummaryRequest;
-import com.improvement_app.food.ui.requests.RecalculateMealMacroRequest;
-import com.improvement_app.food.ui.requests.UpdateDietSummaryRequest;
+import com.improvement_app.food.domain.summary.DietSummary;
+import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
+import com.improvement_app.food.ui.requests.update.UpdateDietSummaryRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -76,65 +73,6 @@ public class DietSummaryController {
                 userId, dietSummaries.getNumberOfElements(), page, dietSummaries.getTotalPages());
 
         return ResponseEntity.ok(dietSummaries);
-    }
-
-    @Operation(
-            summary = "Obliczanie podsumowania diety",
-            description = "Oblicza podsumowanie diety na podstawie spożytych posiłków bez zapisywania wyniku"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Podsumowanie diety zostało pomyślnie obliczone"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe"),
-            @ApiResponse(responseCode = "401", description = "Brak autoryzacji")
-    })
-    @PostMapping("/calculate")
-    public ResponseEntity<DietSummary> calculateDietSummary(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Lista spożytych posiłków do obliczenia",
-                    required = true
-            )
-            @Valid @RequestBody CalculateDietRequest calculateDietRequest,
-            @AuthenticationPrincipal(expression = "id") Long userId) {
-
-        log.debug("User {} calculating diet summary for {} meals",
-                userId, calculateDietRequest.eatenMeals().size());
-
-        DietSummary dietSummaryEntity = dietSummaryManagementUseCase.calculateDietSummary(calculateDietRequest.eatenMeals());
-
-        log.debug("User {} diet summary calculated - total calories: {}",
-                userId, dietSummaryEntity.kcal());
-
-        return ResponseEntity.ok(dietSummaryEntity);
-    }
-
-    @Operation(
-            summary = "Przeliczanie makroskładników posiłku",
-            description = "Przelicza makroskładniki dla pojedynczego posiłku na podstawie nowych wartości"
-    )
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Makroskładniki zostały pomyślnie przeliczone"),
-            @ApiResponse(responseCode = "400", description = "Nieprawidłowe dane wejściowe"),
-            @ApiResponse(responseCode = "401", description = "Brak autoryzacji"),
-            @ApiResponse(responseCode = "403", description = "Brak dostępu do posiłku innego użytkownika")
-    })
-    @PostMapping("/meal/recalculate")
-    public ResponseEntity<EatenMeal> recalculateMealMacro(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "Dane do przeliczenia makroskładników",
-                    required = true
-            )
-            @Valid @RequestBody RecalculateMealMacroRequest recalculateRequest,
-            @AuthenticationPrincipal(expression = "id") Long userId) {
-
-        log.debug("User {} recalculating macro for meal with id: {}",
-                userId, recalculateRequest.eatenMeal().id());
-
-        EatenMeal eatenMeal = dietSummaryManagementUseCase.recalculateMacro(recalculateRequest);
-
-        log.debug("User {} meal macro recalculated - new calories: {}",
-                userId, eatenMeal.kcal());
-
-        return ResponseEntity.ok(eatenMeal);
     }
 
     @Operation(

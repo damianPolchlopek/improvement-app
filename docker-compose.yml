@@ -16,7 +16,7 @@ services:
       - webnet
 
   frontend:
-    build: ./Frontend2
+    build: ./frontend5
     ports:
       - "3000:3000"
     depends_on:

@@ -1,9 +1,10 @@
 package com.improvement_app.food.infrastructure.adapters;
 
 import com.improvement_app.food.application.ports.out.DietSummaryPersistencePort;
-import com.improvement_app.food.domain.DietSummary;
+import com.improvement_app.food.domain.summary.DietSummary;
+import com.improvement_app.food.infrastructure.entity.summary.DailyMealEntity;
 import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
-import com.improvement_app.food.infrastructure.database.DietSummaryRepository;
+import com.improvement_app.food.infrastructure.repository.DietSummaryRepository;
 import com.improvement_app.food.infrastructure.mappers.DietSummaryMapper;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -74,7 +76,7 @@ public class DietSummaryPersistencePortImpl implements DietSummaryPersistencePor
     public Optional<DietSummary> findById(Long userId, Long id) {
         log.debug("Fetching diet summary with id: {}", id);
 
-        Optional<DietSummaryEntity> dietSummary = dietSummaryRepository.findByIdAndUserId(userId, id);
+        Optional<DietSummaryEntity> dietSummary = dietSummaryRepository.findByIdAndUserId(id, userId);
 
         return dietSummary.map(dietSummaryMapper::toDomain);
     }

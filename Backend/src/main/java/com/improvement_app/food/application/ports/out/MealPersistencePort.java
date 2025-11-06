@@ -1,6 +1,6 @@
 package com.improvement_app.food.application.ports.out;
 
-import com.improvement_app.food.domain.MealRecipe;
+import com.improvement_app.food.domain.recipe.MealRecipe;
 import com.improvement_app.food.domain.MealSearchCriteria;
 import com.improvement_app.food.domain.MealSortCriteria;
 

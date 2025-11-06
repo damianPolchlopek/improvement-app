@@ -45,13 +45,13 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
 
   // Check if a meal is selected by ID
   const isMealSelected = useCallback((mealId) => {
-    return selectedMeals.some(meal => meal.id === mealId);
+    return selectedMeals.some(meal => meal.mealRecipeId === mealId);
   }, [selectedMeals]);
 
   // Toggle meal selection with amount
   const toggleMealSelection = useCallback((meal, amount = 1) => {
     setSelectedMeals(prev => {
-      const existingIndex = prev.findIndex(item => item.id === meal.id);
+      const existingIndex = prev.findIndex(item => item.mealRecipeId === meal.mealRecipeId);
       
       // If meal exists, remove it
       if (existingIndex >= 0) {
@@ -73,7 +73,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     
     setSelectedMeals(prev => 
       prev.map(meal => 
-        meal.id === mealId ? { ...meal, amount: parsedAmount } : meal
+        meal.mealRecipeId === mealId ? { ...meal, amount: parsedAmount } : meal
       )
     );
   }, []);
@@ -81,7 +81,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   const updateMealIngredient = useCallback((mealId, productId, newMealIngredientAmount) => {
     setSelectedMeals(prev => 
       prev.map(meal => 
-        meal.id === mealId ? { 
+        meal.mealRecipeId === mealId ? { 
           ...meal, 
           ingredients: meal.ingredients.map(ingredient => 
             ingredient.productId === productId ? 
