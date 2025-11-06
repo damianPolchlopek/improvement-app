@@ -8,6 +8,7 @@ export default function IngredientRow({
   ingredientAmount, 
   onAmountChange 
 }) {
+  
   const handleAmountChange = (e) => {
     const newValue = parseFloat(e.target.value) || 1;
     onAmountChange(ingredient.productId, newValue);

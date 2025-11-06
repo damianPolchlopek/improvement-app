@@ -47,13 +47,13 @@ export default function MealRow({ meal: single, index }) {
     }
   };
 
-  const handleMealIngredientChange = (meal, ingredientId, newAmount) => {
+  const handleMealIngredientChange = (meal, ingredientProductId, newAmount) => {
     // Pobierz aktualny amount dla całego posiłku
     const amount = selectedMeal?.amount || 1;
 
     // Zaktualizuj amount tylko dla wybranego składnika
     const updatedIngredients = meal.ingredients.map(ingredient =>
-      ingredient.productId === ingredientId
+      ingredient.productId === ingredientProductId
         ? { ...ingredient, amount: newAmount }
         : ingredient
     );
@@ -75,10 +75,10 @@ export default function MealRow({ meal: single, index }) {
 
     const isSelected = isMealSelected(meal.mealRecipeId);
     if (isSelected) {
-      updateMealIngredient(meal.id, ingredientId, newAmount);
+      updateMealIngredient(meal.mealRecipeId, ingredientProductId, newAmount);
     } else {
       toggleMealSelection(mealWithAmount, 1);
-      updateMealIngredient(meal.id, ingredientId, newAmount);
+      updateMealIngredient(meal.mealRecipeId, ingredientProductId, newAmount);
     }
   };
 

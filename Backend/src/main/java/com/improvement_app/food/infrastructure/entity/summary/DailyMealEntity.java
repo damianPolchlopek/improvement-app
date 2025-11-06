@@ -1,5 +1,9 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
+import com.improvement_app.food.domain.enums.MealCategory;
+import com.improvement_app.food.domain.enums.MealPopularity;
+import com.improvement_app.food.domain.enums.MealType;
+import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
