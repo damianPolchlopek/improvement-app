@@ -1,0 +1,6 @@
+ALTER TABLE food.meal_recipe ALTER COLUMN id TYPE BIGINT;
+ALTER TABLE food.meal_ingredient ALTER COLUMN id TYPE BIGINT;
+ALTER TABLE food.meal_ingredient ALTER COLUMN meal_id TYPE BIGINT;
+ALTER TABLE food.meal_ingredient ALTER COLUMN product_id TYPE BIGINT;
+ALTER TABLE food.product ALTER COLUMN id TYPE BIGINT;
+ALTER TABLE food.diet_summary ALTER COLUMN id TYPE BIGINT;

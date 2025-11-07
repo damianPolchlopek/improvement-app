@@ -54,3 +54,43 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 7
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/007-modify-daily-meal-table.sql
+      sqlFile:
+        path: 007-modify-daily-meal-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 8
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/008-modify-day-summary-table.sql
+      sqlFile:
+        path: 008-modify-day-summary-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 9
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/009-modify-product-table.sql
+      sqlFile:
+        path: 009-modify-product-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 10
+      author: Damian Polchlopek
+      logicalFilePath: 0015_refactor_food_db/010-change-integer-to-bigint-type.sql
+      sqlFile:
+        path: 010-change-integer-to-bigint-type.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
