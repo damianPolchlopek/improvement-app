@@ -1,17 +1,16 @@
 package com.improvement_app.security.services;
 
 import com.improvement_app.security.entity.*;
+import com.improvement_app.security.exceptions.EmailNotVerifiedException;
+import com.improvement_app.security.exceptions.RoleNotFoundException;
+import com.improvement_app.security.exceptions.UserAlreadyExistsException;
+import com.improvement_app.security.jwt.JwtUtils;
+import com.improvement_app.security.repository.RoleRepository;
+import com.improvement_app.security.repository.UserRepository;
 import com.improvement_app.security.request.LoginRequest;
 import com.improvement_app.security.request.RefreshTokenRequest;
 import com.improvement_app.security.request.SignupRequest;
 import com.improvement_app.security.response.JwtResponse;
-import com.improvement_app.security.exceptions.RoleNotFoundException;
-import com.improvement_app.security.exceptions.UserAlreadyExistsException;
-import com.improvement_app.security.exceptions.EmailNotVerifiedException;
-import com.improvement_app.security.exceptions.InvalidTokenException;
-import com.improvement_app.security.jwt.JwtUtils;
-import com.improvement_app.security.repository.RoleRepository;
-import com.improvement_app.security.repository.UserRepository;
 import com.improvement_app.security.response.RefreshTokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -30,8 +29,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -101,9 +101,13 @@ public class AuthService {
 
         validateUserRegistration(signUpRequest);
 
-        UserEntity userEntity = new UserEntity(signUpRequest.getUsername(),
+        UserEntity userEntity = new UserEntity(
+                signUpRequest.getUsername(),
                 signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+                encoder.encode(signUpRequest.getPassword()),
+                signUpRequest.getName(),
+                signUpRequest.getSurname()
+        );
 
         Set<Role> roles = determineUserRoles(signUpRequest.getRole());
         userEntity.setRoles(roles);
@@ -145,11 +149,13 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No account found with this username"));
 
+        //todo: nie pozwol wysylac ponownych emaili po weryfikacji konta
+
         UserTokenEntity verificationToken = userTokenService.createToken(userEntity, TokenTypeEnum.EMAIL_VERIFICATION);
 
         emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
 
-        log.info("Verification email resent to: {}", username);
+        log.info("Verification email resent to: {}", userEntity.getEmail());
 
         return "Verification email sent successfully.";
     }

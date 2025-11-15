@@ -9,6 +9,7 @@ import com.improvement_app.security.exceptions.TokenExpiredException;
 import com.improvement_app.security.repository.UserTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.Duration;
@@ -17,6 +18,7 @@ import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserTokenService {
 
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();

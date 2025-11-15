@@ -1,4 +1,3 @@
-ALTER TABLE users.roles
-    ALTER COLUMN id TYPE BIGINT
+ALTER TABLE users.roles ALTER COLUMN id TYPE BIGINT;
 
 ALTER SEQUENCE users.roles_id_seq AS BIGINT;
