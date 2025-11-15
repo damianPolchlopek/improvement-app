@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 016_refactor_user_db/001-create-user-tokens-table.sql
+      sqlFile:
+        path: 001-create-user-tokens-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 016_refactor_user_db/002-modify-user-table.sql
+      sqlFile:
+        path: 002-modify-user-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 3
+      author: Damian Polchlopek
+      logicalFilePath: 016_refactor_user_db/003-modify-user-role-table.sql
+      sqlFile:
+        path: 003-modify-user-role-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

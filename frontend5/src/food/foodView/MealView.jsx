@@ -44,11 +44,11 @@ export default function MealView() {
     queryFn: REST.getMealTypeList,
   });
 
-  // 🥗 Pobierz posiłki na podstawie filtrów
   const { data: mealList = [], isLoading, isError, error } = useQuery({
     queryKey: ['meals', mealCategory, mealType, mealName],
     queryFn: () => REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name', false),
-    enabled: !!mealCategory && !!mealType // upewnij się że są dostępne
+    enabled: !!mealCategory && !!mealType, // upewnij się że są dostępne
+    staleTime: 1000 * 60 * 5
   });
 
   const handleChange = (event, field) => {

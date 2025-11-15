@@ -33,10 +33,10 @@ export const ShoppingViewUrl = `${APP}/${OTHER}/${SHOPPING}`;
 export const WeeklyViewUrl = `${APP}/${OTHER}/${WEEKLY}`;
 export const DailyViewUrl = `${APP}/${OTHER}/${DAILY}`;
 
-export const LoginUrl = `login`;
-export const SignUpUrl = `sign-up`;
-export const LogoutUrl = `logout`;
-export const VerifyEmailUrl = `verify-email`;
+export const LoginUrl = `/login`;
+export const SignUpUrl = `/sign-up`;
+export const LogoutUrl = `/logout`;
+export const VerifyEmailUrl = `/verify-email`;
 
 export const FINANCE = "finance";
 export const INFORMATION = "information";

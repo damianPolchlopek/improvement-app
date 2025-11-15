@@ -1,5 +1,6 @@
 package com.improvement_app.security.services;
 
+import com.improvement_app.security.entity.UserTokenEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-    public void sendVerificationEmail(String email, String token) {
+    public void sendVerificationEmail(String email, UserTokenEntity token) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -32,7 +33,7 @@ public class EmailService {
             helper.setSubject("Potwierdź swój adres email");
             helper.setFrom(fromEmail);
 
-            String verificationLink = frontendUrl + "/verify-email?token=" + token;
+            String verificationLink = frontendUrl + "/verify-email?token=" + token.getToken();
 
             String htmlContent = """
                 <!DOCTYPE html>
