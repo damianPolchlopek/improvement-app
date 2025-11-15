@@ -1,29 +1,23 @@
 package com.improvement_app.security.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "users", schema = "users",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "username"),
-                @UniqueConstraint(columnNames = "email")
-        })
+@Table(name = "users", schema = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -33,21 +27,29 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(max = 20)
+    @NotBlank(message = "Username is required")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters")
+    @Column(nullable = false, unique = true, length = 20)
     private String username;
 
-    @NotBlank
-    @Size(max = 50)
-    @Email
+    @NotBlank(message = "Email is required")
+    @Size(max = 50, message = "Email must not exceed 50 characters")
+    @Email(message = "Email must be valid")
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
 
-    @NotBlank
-    @Size(max = 120)
+    @NotBlank(message = "Password is required")
+    @Size(max = 255, message = "Password hash too long") // Zwiększone z 120 na 255!
     @JsonIgnore
+    @Column(nullable = false, length = 255)
     private String password;
 
+    @Size(max = 50)
+    @Column(length = 50)
     private String name;
+
+    @Size(max = 50)
+    @Column(length = 50)
     private String surname;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -56,19 +58,13 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    private boolean isActive = false;
+    private Boolean isActive = false;
 
     @Column(name = "email_verified")
-    private boolean emailVerified = false;
-
-    @Column(name = "email_verification_token")
-    private String emailVerificationToken;
-
-    @Column(name = "email_verification_expires")
-    private LocalDateTime emailVerificationExpires;
+    private Boolean emailVerified = false;
 
     @Column(name = "last_login")
-    private LocalDateTime lastLogin;
+    private Instant lastLogin;
 
     public UserEntity(String username, String email, String password) {
         this.username = username;
@@ -76,9 +72,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<String> getRolesString(){
+    public List<String> getRolesString() {
         return roles.stream()
                 .map(r -> r.getName().toString())
-                .collect(Collectors.toList());
+                .toList();
     }
+
+
 }

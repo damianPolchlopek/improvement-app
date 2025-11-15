@@ -1,22 +1,8 @@
 package com.improvement_app.security.request;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.NotBlank;
 
-@Data
-public class LoginRequest {
-	@NotBlank
-	private String username;
-
-	@NotBlank
-	private String password;
-
-	@Override
-	public String toString() {
-		return "LoginRequest{" +
-				"username='" + username + '\'' +
-				", password='" + password + '\'' +
-				'}';
-	}
-}
+public record LoginRequest(
+        @NotBlank String username,
+        @NotBlank String password
+) { }

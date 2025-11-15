@@ -62,3 +62,7 @@ databaseChangeLog:
   - include:
       file: 0015_refactor_food_db/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 016_refactor_user_db/changelog.yaml
+      relativeToChangelogFile: true

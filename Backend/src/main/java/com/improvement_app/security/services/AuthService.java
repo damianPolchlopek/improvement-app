@@ -1,22 +1,21 @@
 package com.improvement_app.security.services;
 
+import com.improvement_app.security.entity.*;
 import com.improvement_app.security.request.LoginRequest;
 import com.improvement_app.security.request.RefreshTokenRequest;
 import com.improvement_app.security.request.SignupRequest;
 import com.improvement_app.security.response.JwtResponse;
-import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.exceptions.RoleNotFoundException;
 import com.improvement_app.security.exceptions.UserAlreadyExistsException;
 import com.improvement_app.security.exceptions.EmailNotVerifiedException;
 import com.improvement_app.security.exceptions.InvalidTokenException;
 import com.improvement_app.security.jwt.JwtUtils;
-import com.improvement_app.security.entity.ERole;
-import com.improvement_app.security.entity.Role;
 import com.improvement_app.security.repository.RoleRepository;
 import com.improvement_app.security.repository.UserRepository;
 import com.improvement_app.security.response.RefreshTokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -30,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -44,13 +44,14 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
+    private final UserTokenService userTokenService;
 
     @Transactional
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
-        log.debug("Authenticating user: {}", loginRequest.getUsername());
+        log.debug("Authenticating user: {}", loginRequest.username());
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -59,11 +60,11 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!userEntity.isEmailVerified()) {
+        if (!userEntity.getEmailVerified()) {
             throw new EmailNotVerifiedException("Email must be verified before login");
         }
 
-        userEntity.setLastLogin(LocalDateTime.now());
+        userEntity.setLastLogin(Instant.now());
         userRepository.save(userEntity);
 
         String accessToken = jwtUtils.generateJwtToken(userDetails.getUsername(), userEntity.getRolesString());
@@ -109,17 +110,14 @@ public class AuthService {
 
         // Dodaj pola weryfikacji emaila
         userEntity.setEmailVerified(false);
-        userEntity.setActive(false);
+        userEntity.setIsActive(false);
+        UserEntity savedUser = userRepository.save(userEntity);
 
         // Wygeneruj token weryfikacyjny
-        String verificationToken = UUID.randomUUID().toString();
-        userEntity.setEmailVerificationToken(verificationToken);
-        userEntity.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
-
-        userRepository.save(userEntity);
+        UserTokenEntity token = userTokenService.createToken(savedUser, TokenTypeEnum.EMAIL_VERIFICATION);
 
         // Wyślij email weryfikacyjny
-        emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
+        emailService.sendVerificationEmail(savedUser.getEmail(), token);
 
         log.info("User registered successfully: {}. Verification email sent.", userEntity.getUsername());
     }
@@ -128,14 +126,10 @@ public class AuthService {
     public String verifyEmail(String token) {
         log.debug("Verifying email with token: {}", token);
 
-        UserEntity userEntity = userRepository.findByEmailVerificationTokenAndEmailVerificationExpiresAfterAndEmailVerifiedFalse(
-                        token, LocalDateTime.now())
-                .orElseThrow(() -> new InvalidTokenException("Invalid or expired verification token"));
+        UserEntity userEntity = userTokenService.validateAndUseToken(token, TokenTypeEnum.EMAIL_VERIFICATION);
 
         userEntity.setEmailVerified(true);
-        userEntity.setActive(true);
-        userEntity.setEmailVerificationToken(null);
-        userEntity.setEmailVerificationExpires(null);
+        userEntity.setIsActive(true);
 
         userRepository.save(userEntity);
 
@@ -148,17 +142,11 @@ public class AuthService {
     public String resendVerificationEmail(String username) {
         log.debug("Resending verification email to: {}", username);
 
-        UserEntity userEntity = userRepository.findByUsernameAndEmailVerifiedFalse(username)
-                .orElseThrow(() -> new RuntimeException("No unverified account found with this username"));
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("No account found with this username"));
 
-        // Wygeneruj nowy token
-        String verificationToken = UUID.randomUUID().toString();
-        userEntity.setEmailVerificationToken(verificationToken);
-        userEntity.setEmailVerificationExpires(LocalDateTime.now().plusHours(24));
+        UserTokenEntity verificationToken = userTokenService.createToken(userEntity, TokenTypeEnum.EMAIL_VERIFICATION);
 
-        userRepository.save(userEntity);
-
-        // Wyślij email
         emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
 
         log.info("Verification email resent to: {}", username);
