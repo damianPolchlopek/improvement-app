@@ -28,3 +28,13 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 4
+      author: Damian Polchlopek
+      logicalFilePath: 016_refactor_user_db/004-refactor-user-schema.sql
+      sqlFile:
+        path: 004-refactor-user-schema.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

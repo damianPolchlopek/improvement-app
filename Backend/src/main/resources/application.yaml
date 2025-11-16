@@ -13,7 +13,7 @@ spring:
       idle-timeout: 30000            # 30 sekund
       max-lifetime: 600000           # 10 minut
       connection-timeout: 5000       # 5 sekund
-      leak-detection-threshold: 5000 # wykryje leaki powyżej 5s
+      leak-detection-threshold: 60000  # 60 sekund
   mail:
     host: smtp.gmail.com
     port: 587
