@@ -1,19 +1,19 @@
 package com.improvement_app.workouts.response;
 
+import com.improvement_app.util.InstantToLocalDateConverter;
 import com.improvement_app.workouts.entity.TrainingEntity;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public record TrainingDayResponse(
-        Instant date,
+        LocalDate date,
         Map<String, ExerciseResponse> exercises
 ) {
 
     public static TrainingDayResponse from(TrainingEntity training) {
-
         Map<String, ExerciseResponse> exerciseMap = training.getExercises().stream()
                 .collect(Collectors.toMap(
                         e -> e.getName().getValue(),
@@ -22,6 +22,7 @@ public record TrainingDayResponse(
                         LinkedHashMap::new
                 ));
 
-        return new TrainingDayResponse(training.getDate(), exerciseMap);
+        LocalDate date = InstantToLocalDateConverter.convert(training.getDate());
+        return new TrainingDayResponse(date, exerciseMap);
     }
 }
