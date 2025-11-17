@@ -66,3 +66,7 @@ databaseChangeLog:
   - include:
       file: 016_refactor_user_db/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 017_refactor_workout_schema/changelog.yaml
+      relativeToChangelogFile: true

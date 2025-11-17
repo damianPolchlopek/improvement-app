@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class DriveFilesHelper {
                 exerciseList.add(exerciseEntity);
             }
 
-            final LocalDate localDate = getLocalDate(file.getName());
+            final Instant localDate = getLocalDate(file.getName());
             final String trainingName = getTrainingName(file.getName()).trim();
             final String place = extractPlaceFromExercises(file);
 
@@ -202,13 +203,13 @@ public class DriveFilesHelper {
         }
     }
 
-    private static LocalDate getLocalDate(final String dateToParse) {
+    private static Instant getLocalDate(final String dateToParse) {
         final String day = parseTrainingName(dateToParse, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(dateToParse, TRAINING_MONTH_INDEX);
         final String year = parseTrainingName(dateToParse, TRAINING_YEAR_INDEX);
         final String dateConcatenation = year + "-" + month + "-" + day;
 
-        return LocalDate.parse(dateConcatenation);
+        return Instant.parse(dateConcatenation);
     }
 
     private static String getTrainingName(final String fileName) {

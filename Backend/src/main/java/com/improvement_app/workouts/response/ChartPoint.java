@@ -2,14 +2,14 @@ package com.improvement_app.workouts.response;
 
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Data
 public class ChartPoint {
-    LocalDate localDate;
+    Instant localDate;
     Double value;
 
-    public ChartPoint(LocalDate localDate, Double value) {
+    public ChartPoint(Instant localDate, Double value) {
         this.localDate = localDate;
         this.value = value;
     }
