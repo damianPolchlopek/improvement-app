@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 017_refactor_workout_schema/001-refactor-training-table.sql
+      sqlFile:
+        path: 001-refactor-training-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

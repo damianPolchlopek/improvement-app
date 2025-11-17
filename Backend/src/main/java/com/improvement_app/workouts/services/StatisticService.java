@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class StatisticService {
             throw new IllegalArgumentException("User selected incorrect chart type: " + type);
         }
 
-        List<LocalDate> localDates = getLocalDates(filteredExercises);
+        List<Instant> localDates = getLocalDates(filteredExercises);
         return scaleLists(values, localDates);
     }
 
@@ -57,7 +58,7 @@ public class StatisticService {
         return exerciseService.findByNameOrderByDate(userId, exerciseName, beginDateLD, endDateLD);
     }
 
-    private List<LocalDate> getLocalDates(List<ExerciseEntity> exercises) {
+    private List<Instant> getLocalDates(List<ExerciseEntity> exercises) {
         return exercises
                 .stream()
                 .map(exercise -> exercise.getTraining().getDate())
@@ -97,7 +98,7 @@ public class StatisticService {
         return result;
     }
 
-    private List<ChartPoint> scaleLists(List<Double> values, List<LocalDate> dates) {
+    private List<ChartPoint> scaleLists(List<Double> values, List<Instant> dates) {
         return IntStream.range(0, dates.size())
                 .mapToObj(i -> new ChartPoint(dates.get(i), values.get(i)))
                 .collect(Collectors.toList());

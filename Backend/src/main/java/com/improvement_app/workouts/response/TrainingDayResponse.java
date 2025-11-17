@@ -2,13 +2,13 @@ package com.improvement_app.workouts.response;
 
 import com.improvement_app.workouts.entity.TrainingEntity;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public record TrainingDayResponse(
-        LocalDate date,
+        Instant date,
         Map<String, ExerciseResponse> exercises
 ) {
 
