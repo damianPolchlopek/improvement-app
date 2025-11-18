@@ -1,4 +1,4 @@
-package com.improvement_app.util;
+package com.improvement_app.workouts.converters;
 
 import java.time.Instant;
 import java.time.LocalDate;

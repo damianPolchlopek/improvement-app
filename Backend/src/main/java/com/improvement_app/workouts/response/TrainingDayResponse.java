@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.response;
 
-import com.improvement_app.util.InstantToLocalDateConverter;
+import com.improvement_app.workouts.converters.InstantToLocalDateConverter;
 import com.improvement_app.workouts.entity.TrainingEntity;
 
 import java.time.LocalDate;

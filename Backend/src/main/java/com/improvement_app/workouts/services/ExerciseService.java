@@ -4,6 +4,7 @@ import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
+import com.improvement_app.workouts.converters.TrainingTypeConverter;
 import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;

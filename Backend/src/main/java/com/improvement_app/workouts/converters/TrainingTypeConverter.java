@@ -1,4 +1,4 @@
-package com.improvement_app.workouts.services;
+package com.improvement_app.workouts.converters;
 
 import java.util.HashMap;
 import java.util.Map;

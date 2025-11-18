@@ -3,7 +3,7 @@ package com.improvement_app.workouts.services.data;
 import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.exceptions.TrainingTemplateNotFoundException;
 import com.improvement_app.workouts.repository.TrainingTemplateEntityRepository;
-import com.improvement_app.workouts.services.TrainingTypeConverter;
+import com.improvement_app.workouts.converters.TrainingTypeConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
