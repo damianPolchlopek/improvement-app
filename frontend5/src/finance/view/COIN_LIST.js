@@ -1,1 +1,1 @@
-export const COIN_LIST = ["BTC", "ETH", "BNB", "ADA", "SOL", "MATIC", "DOT", "AVAX", "ATOM", "ARB", "SYN"]
+export const COIN_LIST = ["BTC", "ETH", "BNB", "ADA", "SOL", "DOT", "AVAX", "ATOM", "ARB", "SYN"]
