@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +17,7 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(exclude = "trainingTemplates")
-public class ExerciseNameEntity {
+public class ExerciseNameEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

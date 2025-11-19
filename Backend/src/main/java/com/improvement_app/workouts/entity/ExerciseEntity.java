@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
 import com.improvement_app.workouts.entity.enums.ExerciseProgress;
@@ -16,7 +17,7 @@ import java.util.*;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"training", "exerciseSets"})
 @ToString(exclude = {"training", "exerciseSets"})
-public class ExerciseEntity {
+public class ExerciseEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package com.improvement_app.mainappcontroller;
+package com.improvement_app.common.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;

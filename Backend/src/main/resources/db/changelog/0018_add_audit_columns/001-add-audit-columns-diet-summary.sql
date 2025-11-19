@@ -1,0 +1,11 @@
+ALTER TABLE food.diet_summary
+ADD COLUMN created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW();
+
+ALTER TABLE food.diet_summary
+ADD COLUMN created_by VARCHAR(255) NOT NULL DEFAULT 'SYSTEM_INIT';
+
+ALTER TABLE food.diet_summary
+ADD COLUMN updated_at TIMESTAMP WITH TIME ZONE;
+
+ALTER TABLE food.diet_summary
+ADD COLUMN updated_by VARCHAR(255);

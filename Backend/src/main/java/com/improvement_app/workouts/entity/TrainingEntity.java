@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.workouts.entity.enums.ExercisePlace;
 import com.improvement_app.workouts.request.ExerciseRequest;
@@ -21,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"exercises"})
 @ToString(exclude = {"exercises"})
-public class TrainingEntity {
+public class TrainingEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,9 +40,6 @@ public class TrainingEntity {
 
     @Enumerated(EnumType.STRING)
     private ExercisePlace place;
-
-    @Column(name = "created_at")
-    private Instant createdAt;
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ExerciseEntity> exercises = new ArrayList<>();
@@ -69,13 +67,5 @@ public class TrainingEntity {
                 exercises
         );
     }
-
-    @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = Instant.now();
-        }
-    }
-
 
 }

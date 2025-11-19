@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import jakarta.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExerciseSetEntity {
+public class ExerciseSetEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

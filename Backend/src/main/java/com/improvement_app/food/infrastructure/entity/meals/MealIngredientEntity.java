@@ -1,5 +1,6 @@
 package com.improvement_app.food.infrastructure.entity.meals;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.Unit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Table(name = "meal_ingredient", schema = "food")
 @Builder
-public class MealIngredientEntity implements Serializable {
+public class MealIngredientEntity extends AuditableEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

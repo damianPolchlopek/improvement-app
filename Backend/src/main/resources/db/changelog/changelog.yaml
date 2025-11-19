@@ -70,3 +70,7 @@ databaseChangeLog:
   - include:
       file: 017_refactor_workout_schema/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0018_add_audit_columns/changelog.yaml
+      relativeToChangelogFile: true
