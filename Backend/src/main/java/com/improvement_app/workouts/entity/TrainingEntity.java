@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.workouts.entity.enums.ExercisePlace;
 import com.improvement_app.workouts.request.ExerciseRequest;
@@ -10,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"exercises"})
 @ToString(exclude = {"exercises"})
-public class TrainingEntity {
+public class TrainingEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,18 +36,15 @@ public class TrainingEntity {
     private String name;
 
     @Column(nullable = false)
-    private Instant date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private ExercisePlace place;
 
-    @Column(name = "created_at")
-    private Instant createdAt;
-
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ExerciseEntity> exercises = new ArrayList<>();
 
-    public TrainingEntity(Instant localDate, String trainingName,
+    public TrainingEntity(LocalDate localDate, String trainingName,
                           ExercisePlace fromString, List<ExerciseEntity> exerciseList) {
         this.date = localDate;
         this.name = trainingName;
@@ -58,24 +56,15 @@ public class TrainingEntity {
     }
 
     public static TrainingEntity from(List<ExerciseRequest> trainingRequest) {
-
         List<ExerciseEntity> exercises = ExerciseEntity.create(trainingRequest);
         ExerciseRequest exerciseRequest = trainingRequest.get(0);
 
         return new TrainingEntity(
-                Instant.now(),
+                LocalDate.now(),
                 exerciseRequest.getTrainingName(),
                 ExercisePlace.fromString(exerciseRequest.getPlace()),
                 exercises
         );
     }
-
-    @PrePersist
-    protected void onCreate() {
-        if (createdAt == null) {
-            createdAt = Instant.now();
-        }
-    }
-
 
 }

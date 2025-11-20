@@ -1,6 +1,7 @@
 package com.improvement_app.food.infrastructure.entity.meals;
 
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
@@ -20,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "meal_recipe", schema = "food")
 @Builder
-public class MealRecipeEntity {
+public class MealRecipeEntity extends AuditableEntity {
 
     @Id
     private Long id;

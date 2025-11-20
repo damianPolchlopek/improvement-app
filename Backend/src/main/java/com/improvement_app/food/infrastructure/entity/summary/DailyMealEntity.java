@@ -1,9 +1,6 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
-import com.improvement_app.food.domain.enums.MealCategory;
-import com.improvement_app.food.domain.enums.MealPopularity;
-import com.improvement_app.food.domain.enums.MealType;
-import com.improvement_app.food.infrastructure.entity.meals.MealIngredientEntity;
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +16,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "daily_meal", schema = "food")
-public class DailyMealEntity {
+public class DailyMealEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

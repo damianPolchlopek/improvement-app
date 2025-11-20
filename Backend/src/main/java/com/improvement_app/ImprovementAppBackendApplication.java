@@ -2,6 +2,7 @@ package com.improvement_app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         "com.improvement_app.other.daily.repository",
         "com.improvement_app.shopping.repository",
 })
+@EnableJpaAuditing
 public class ImprovementAppBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(ImprovementAppBackendApplication.class, args);

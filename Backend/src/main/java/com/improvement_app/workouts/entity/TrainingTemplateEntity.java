@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.entity;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.workouts.response.TrainingTemplateResponse;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -17,7 +18,7 @@ import java.util.*;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(exclude = "exercises") // Unikaj cyklicznych referencji w toString
-public class TrainingTemplateEntity {
+public class TrainingTemplateEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class TrainingTemplateEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "training_template_exercise",
             schema = "workout",

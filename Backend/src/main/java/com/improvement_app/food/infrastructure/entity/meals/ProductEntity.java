@@ -1,5 +1,6 @@
 package com.improvement_app.food.infrastructure.entity.meals;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.domain.enums.Unit;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Table(name = "product", schema = "food")
 @Builder
-public class ProductEntity {
+public class ProductEntity extends AuditableEntity {
 
     @Id
     private Long id;

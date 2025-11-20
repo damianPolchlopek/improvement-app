@@ -1,9 +1,7 @@
 package com.improvement_app.workouts.response;
 
-import com.improvement_app.workouts.converters.InstantToLocalDateConverter;
 import lombok.Data;
 
-import java.time.Instant;
 import java.time.LocalDate;
 
 @Data
@@ -11,8 +9,8 @@ public class ChartPoint {
     LocalDate localDate;
     Double value;
 
-    public ChartPoint(Instant date, Double value) {
-        this.localDate = InstantToLocalDateConverter.convert(date);
+    public ChartPoint(LocalDate date, Double value) {
+        this.localDate = date;
         this.value = value;
     }
 }

@@ -1,6 +1,5 @@
 package com.improvement_app.workouts.response;
 
-import com.improvement_app.workouts.converters.InstantToLocalDateConverter;
 import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 
@@ -26,7 +25,7 @@ public record ExerciseResponse(
                 entity.getProgress() != null ? entity.getProgress().getValue() : null,
                 entity.getTraining() != null ? entity.getTraining().getPlace().getValue() : null,
                 entity.getTraining() != null ? entity.getTraining().getName() : null,
-                entity.getTraining() != null ? InstantToLocalDateConverter.convert(entity.getTraining().getDate()) : null,
+                entity.getTraining() != null ? entity.getTraining().getDate() : null,
                 formatWeightsToString(entity),
                 formatRepsToString(entity)
         );

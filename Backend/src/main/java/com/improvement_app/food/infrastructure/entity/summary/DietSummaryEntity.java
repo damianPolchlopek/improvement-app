@@ -1,5 +1,6 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
+import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.security.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "diet_summary", schema = "food")
 @Builder
-public class DietSummaryEntity {
+public class DietSummaryEntity extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

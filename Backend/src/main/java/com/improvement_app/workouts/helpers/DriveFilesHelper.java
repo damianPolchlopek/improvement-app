@@ -80,7 +80,7 @@ public class DriveFilesHelper {
                 exerciseList.add(exerciseEntity);
             }
 
-            final Instant localDate = getLocalDate(file.getName());
+            final LocalDate localDate = getLocalDate(file.getName());
             final String trainingName = getTrainingName(file.getName()).trim();
             final String place = extractPlaceFromExercises(file);
 
@@ -203,13 +203,13 @@ public class DriveFilesHelper {
         }
     }
 
-    private static Instant getLocalDate(final String dateToParse) {
+    private static LocalDate getLocalDate(final String dateToParse) {
         final String day = parseTrainingName(dateToParse, TRAINING_DAY_INDEX);
         final String month = parseTrainingName(dateToParse, TRAINING_MONTH_INDEX);
         final String year = parseTrainingName(dateToParse, TRAINING_YEAR_INDEX);
         final String dateConcatenation = year + "-" + month + "-" + day;
 
-        return Instant.parse(dateConcatenation);
+        return LocalDate.parse(dateConcatenation);
     }
 
     private static String getTrainingName(final String fileName) {

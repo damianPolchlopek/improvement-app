@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/001-add-audit-columns-diet-summary.sql
+      sqlFile:
+        path: 001-add-audit-columns-diet-summary.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 2
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/002-add-audit-columns-food-schema.sql
+      sqlFile:
+        path: 002-add-audit-columns-food-schema.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 3
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/003-add-audit-columns-workout-schema.sql
+      sqlFile:
+        path: 003-add-audit-columns-workout-schema.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
