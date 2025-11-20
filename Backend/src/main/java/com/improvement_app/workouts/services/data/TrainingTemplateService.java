@@ -6,6 +6,7 @@ import com.improvement_app.workouts.repository.TrainingTemplateEntityRepository;
 import com.improvement_app.workouts.converters.TrainingTypeConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class TrainingTemplateService {
 
     private TrainingTemplateEntityRepository trainingTemplateRepository;
 
-
+    @Transactional
     public TrainingTemplateEntity getTrainingTemplate(String trainingTypeShortcut) {
         String trainingTypeName = TrainingTypeConverter.toTrainingTemplate(trainingTypeShortcut);
 
@@ -23,15 +24,10 @@ public class TrainingTemplateService {
                 .orElseThrow(() -> new TrainingTemplateNotFoundException(trainingTypeName));
     }
 
-    public List<TrainingTemplateEntity> saveAllTrainingTemplates(List<TrainingTemplateEntity> trainingTemplateList) {
-        return trainingTemplateRepository.saveAll(trainingTemplateList);
-    }
-
-    public void deleteAllTrainingTemplates() {
+    @Transactional
+    public List<TrainingTemplateEntity> recreateTemplates(List<TrainingTemplateEntity> templates) {
         trainingTemplateRepository.deleteAll();
+        return trainingTemplateRepository.saveAll(templates);
     }
 
-    public void flush() {
-        trainingTemplateRepository.flush();
-    }
 }

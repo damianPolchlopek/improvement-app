@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class TrainingEntity extends AuditableEntity {
     private String name;
 
     @Column(nullable = false)
-    private Instant date;
+    private LocalDate date;
 
     @Enumerated(EnumType.STRING)
     private ExercisePlace place;
@@ -44,7 +44,7 @@ public class TrainingEntity extends AuditableEntity {
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ExerciseEntity> exercises = new ArrayList<>();
 
-    public TrainingEntity(Instant localDate, String trainingName,
+    public TrainingEntity(LocalDate localDate, String trainingName,
                           ExercisePlace fromString, List<ExerciseEntity> exerciseList) {
         this.date = localDate;
         this.name = trainingName;
@@ -56,12 +56,11 @@ public class TrainingEntity extends AuditableEntity {
     }
 
     public static TrainingEntity from(List<ExerciseRequest> trainingRequest) {
-
         List<ExerciseEntity> exercises = ExerciseEntity.create(trainingRequest);
         ExerciseRequest exerciseRequest = trainingRequest.get(0);
 
         return new TrainingEntity(
-                Instant.now(),
+                LocalDate.now(),
                 exerciseRequest.getTrainingName(),
                 ExercisePlace.fromString(exerciseRequest.getPlace()),
                 exercises

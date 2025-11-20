@@ -28,7 +28,7 @@ public class TrainingTemplateEntity extends AuditableEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "training_template_exercise",
             schema = "workout",

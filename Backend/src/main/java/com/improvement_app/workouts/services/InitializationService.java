@@ -6,14 +6,12 @@ import com.improvement_app.googledrive.exceptions.GoogleDriveFileNotDownloadedEx
 import com.improvement_app.googledrive.service.FilePathService;
 import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.security.entity.UserEntity;
-import com.improvement_app.security.repository.UserRepository;
-import com.improvement_app.security.services.UserDetailsServiceImpl;
+import com.improvement_app.security.services.UserService;
 import com.improvement_app.workouts.entity.ExerciseNameEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.services.data.*;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -39,26 +37,27 @@ public class InitializationService {
     private final TrainingTemplateService trainingTemplateService;
     private final SimpMessagingTemplate messagingTemplate;
     private final FileDownloadService fileDownloadService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
 
 
     public void initApplicationTrainings(Long userId) {
-        log.info("Usuwam wszystkie zapisane treningi");
-        trainingService.deleteAllTrainings();
-
-        log.info("Dodaje nowe treningi do bazy danych treningowej");
         List<TrainingEntity> trainings = importTrainingsFromDrive(DRIVE_TRAININGS_FOLDER_NAME);
 
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
+        UserEntity userEntity = userService.findById(userId);
 
         for (TrainingEntity training : trainings) {
             training.setUser(userEntity);
         }
 
-        trainingService.saveAll(trainings);
-        log.info("Dodane treningi: {}", trainings);
+        log.info("Dodaje nowe treningi do bazy danych treningowej");
+        List<TrainingEntity> trainingEntities = trainingService.recreateTraining(trainings);
+
+        List<String> strings = trainingEntities.stream()
+                .map(TrainingEntity::getName)
+                .toList();
+
+        log.info("Dodane treningi: {}", strings);
     }
 
     //TODO: Sprawdzenie czy trening istnieje jak tak, to usuń stary
@@ -158,9 +157,7 @@ public class InitializationService {
                 .filter(Objects::nonNull)
                 .toList();
 
-        trainingTemplateService.deleteAllTrainingTemplates();
-        trainingTemplateService.flush();
-        List<TrainingTemplateEntity> saved = trainingTemplateService.saveAllTrainingTemplates(templates);
+        List<TrainingTemplateEntity> saved = trainingTemplateService.recreateTemplates(templates);
         log.info("Zapisane plany treningowe: {}", saved);
 
         return saved;

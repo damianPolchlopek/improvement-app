@@ -16,6 +16,7 @@ public class ExerciseNameService {
 
     private final ExerciseNameEntityRepository nameRepository;
 
+    @Transactional
     public List<ExerciseMetadataResponse> getExerciseNames() {
         return nameRepository.findAll()
                 .stream()
@@ -24,10 +25,12 @@ public class ExerciseNameService {
                 .toList();
     }
 
+    @Transactional
     public List<ExerciseNameEntity> saveAllExerciseNames(List<ExerciseNameEntity> nameList) {
         return nameRepository.saveAll(nameList);
     }
 
+    @Transactional
     public void deleteAllExerciseNames() {
         nameRepository.deleteAll();
     }

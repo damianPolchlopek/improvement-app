@@ -46,7 +46,7 @@ public class ExerciseService {
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
 
-
+    @Transactional
     public List<ExerciseEntity> findByDateOrderByIndex(Long userId, LocalDate date) {
         List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndTrainingDate(userId, date);
 
@@ -57,6 +57,7 @@ public class ExerciseService {
         return exercises;
     }
 
+    @Transactional
     public List<ExerciseEntity> findByNameReverseSorted(Long userId, String name) {
         ExerciseName exerciseName = ExerciseName.fromValue(name);
         List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndNameOrderByTrainingDateDesc(userId, exerciseName);
@@ -68,6 +69,7 @@ public class ExerciseService {
         return exercises;
     }
 
+    @Transactional
     public List<ExerciseEntity> findByNameOrderByDate(Long userId, String name, LocalDate beginDateLD, LocalDate endDateLD) {
         ExerciseName exerciseName = ExerciseName.fromValue(name);
 
@@ -79,6 +81,7 @@ public class ExerciseService {
         );
     }
 
+    @Transactional
     public List<ExerciseEntity> findByTrainingNameOrderByIndex(Long userId, String trainingName) {
         List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndTrainingName(userId, trainingName);
 
@@ -89,6 +92,7 @@ public class ExerciseService {
         return exercises;
     }
 
+    @Transactional
     public Page<String> getAllTrainingNames(Long userId, Pageable page) {
         return trainingRepository.findByUserIdOrderByDateDesc(userId, page)
                 .map(TrainingEntity::getName);
