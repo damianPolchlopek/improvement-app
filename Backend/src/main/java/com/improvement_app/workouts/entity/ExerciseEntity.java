@@ -7,6 +7,7 @@ import com.improvement_app.workouts.entity.enums.ExerciseProgress;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.*;
 
@@ -20,7 +21,12 @@ import java.util.*;
 public class ExerciseEntity extends AuditableEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_seq")
+    @SequenceGenerator(
+            name = "exercise_seq",
+            sequenceName = "workout.exercise_id_seq",
+            allocationSize = 50
+    )
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,6 +44,7 @@ public class ExerciseEntity extends AuditableEntity {
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id")
+    @BatchSize(size = 50)
     private List<ExerciseSetEntity> exerciseSets = new ArrayList<>();
 
     public ExerciseEntity(ExerciseName name, ExerciseType type, ExerciseProgress progress,
@@ -73,16 +80,4 @@ public class ExerciseEntity extends AuditableEntity {
         return result;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExerciseEntity that = (ExerciseEntity) o;
-        return name == that.name && type == that.type && progress == that.progress;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, type, progress);
-    }
 }

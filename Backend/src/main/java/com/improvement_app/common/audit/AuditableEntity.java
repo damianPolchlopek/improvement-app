@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.Instant;
 
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class) // Włącza nasłuchiwanie dla JPA Auditing
+@EntityListeners(AuditingEntityListener.class) // Włacza nasłuchiwanie dla JPA Auditing
 public class AuditableEntity {
 
     @CreatedDate

@@ -11,8 +11,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import './language/i18n.js';
 import { tokenLoader } from './login/Authentication.js';
-import {action as logoutAction} from './login/Logout.js';
-import {action as loginAction} from './login/LoginView.jsx';
+import { action as logoutAction } from './login/Logout.js';
+import { action as loginAction } from './login/LoginView.jsx';
 import { queryClient } from './utils/REST.js';
 
 import SnackbarProvider from './component/snackbar/SnackbarProvider.jsx';

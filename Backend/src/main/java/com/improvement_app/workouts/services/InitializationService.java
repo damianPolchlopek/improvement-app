@@ -51,13 +51,7 @@ public class InitializationService {
         }
 
         log.info("Dodaje nowe treningi do bazy danych treningowej");
-        List<TrainingEntity> trainingEntities = trainingService.recreateTraining(trainings);
-
-        List<String> strings = trainingEntities.stream()
-                .map(TrainingEntity::getName)
-                .toList();
-
-        log.info("Dodane treningi: {}", strings);
+        trainingService.recreateTraining(trainings);
     }
 
     //TODO: Sprawdzenie czy trening istnieje jak tak, to usuń stary
@@ -68,7 +62,7 @@ public class InitializationService {
         List<TrainingEntity> parsedTrainings = new ArrayList<>();
 
 //        driveFiles.size()
-        for (int i = 0; i < driveFiles.size() ; i++) {
+        for (int i = 0; i < 5 ; i++) {
             DriveFileItemDTO fileItem = driveFiles.get(i);
             String trainingName = fileItem.getName();
 
@@ -96,7 +90,6 @@ public class InitializationService {
         return parsedTrainings;
     }
 
-
     public void initApplicationTemplates() {
         log.info("Inicjalizacja szablonów treningowych...");
         List<ExerciseNameEntity> exerciseNameEntities = initExerciseNames();
@@ -116,11 +109,8 @@ public class InitializationService {
     }
 
     private List<ExerciseNameEntity> initExerciseNames() {
-        exerciseNameService.deleteAllExerciseNames();
-        exerciseNameService.flush();
-
         List<ExerciseNameEntity> exerciseNameEntities = downloadAndParseExerciseNames();
-        return exerciseNameService.saveAllExerciseNames(exerciseNameEntities);
+        return exerciseNameService.recreateExerciseName(exerciseNameEntities);
     }
 
     private List<ExerciseNameEntity> downloadAndParseExerciseNames() {

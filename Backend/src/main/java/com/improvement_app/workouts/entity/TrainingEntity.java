@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +26,12 @@ import java.util.List;
 public class TrainingEntity extends AuditableEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "training_seq")
+    @SequenceGenerator(
+            name = "training_seq",
+            sequenceName = "workout.training_id_seq",
+            allocationSize = 50
+    )
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +48,7 @@ public class TrainingEntity extends AuditableEntity {
     private ExercisePlace place;
 
     @OneToMany(mappedBy = "training", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @BatchSize(size = 50)
     private List<ExerciseEntity> exercises = new ArrayList<>();
 
     public TrainingEntity(LocalDate localDate, String trainingName,

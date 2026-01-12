@@ -26,16 +26,10 @@ public class ExerciseNameService {
     }
 
     @Transactional
-    public List<ExerciseNameEntity> saveAllExerciseNames(List<ExerciseNameEntity> nameList) {
+    public List<ExerciseNameEntity> recreateExerciseName(List<ExerciseNameEntity> nameList) {
+        nameRepository.deleteAllInBatch();
+        nameRepository.flush();
         return nameRepository.saveAll(nameList);
     }
 
-    @Transactional
-    public void deleteAllExerciseNames() {
-        nameRepository.deleteAll();
-    }
-
-    public void flush() {
-        nameRepository.flush();
-    }
 }

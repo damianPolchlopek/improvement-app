@@ -1,7 +1,7 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
   data:
     mongodb:
       uri: mongodb://mo2222_workout:kO-TBI9_!$yJaVK7uT9zYkXL1r1lwy@mongo2.small.pl/mo2222_workout?retryWrites=true&w=majority&tls=false&tlsAllowInvalidCertificates=true
