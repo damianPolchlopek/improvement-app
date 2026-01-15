@@ -1,7 +1,6 @@
 package com.improvement_app.workouts.services;
 
 import com.improvement_app.workouts.entity.TrainingEntity;
-import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.repository.TrainingEntityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +17,16 @@ public class TrainingService {
     private final TrainingEntityRepository trainingEntityRepository;
 
     @Transactional
-    public List<TrainingEntity> recreateTraining(List<TrainingEntity> trainings) {
-        trainingEntityRepository.deleteAll();
+    public void recreateTraining(List<TrainingEntity> trainings) {
+        log.info("Usuwanie starych treningów...");
+        trainingEntityRepository.deleteAllInBatch();
+        trainingEntityRepository.flush();
+        trainingEntityRepository.saveAll(trainings);
+        log.info("Zapisano wszystkie {} treningi", trainings.size());
+    }
+
+    @Transactional
+    public List<TrainingEntity> save(List<TrainingEntity> trainings) {
         return trainingEntityRepository.saveAll(trainings);
     }
 

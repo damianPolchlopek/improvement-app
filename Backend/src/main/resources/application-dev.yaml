@@ -8,7 +8,7 @@ spring:
     username: improvement-app-backend_postgres
     password: postgres
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://postgresql-improvement-app-backend.alwaysdata.net:5432/improvement-app-backend_postgresfood
+    url: jdbc:postgresql://postgresql-improvement-app-backend.alwaysdata.net:5432/improvement-app-backend_postgresfood?reWriteBatchedInserts=true
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog.yaml

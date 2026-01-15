@@ -28,3 +28,63 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 4
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/004-change-exercise-set-table.sql
+      sqlFile:
+        path: 004-change-exercise-set-table.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 5
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/005-restart-exercise-set-sequence.sql
+      sqlFile:
+        path: 005-restart-exercise-set-sequence.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 6
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/006-add-sequence-to-training-tables.sql
+      sqlFile:
+        path: 006-add-sequence-to-training-tables.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 7
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/007-add-sequence-to-training-tables.sql
+      sqlFile:
+        path: 007-add-sequence-to-training-tables.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 8
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/008-change-sequence-incrementation.sql
+      sqlFile:
+        path: 008-change-sequence-incrementation.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 9
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/009-change-sequence-incrementation.sql
+      sqlFile:
+        path: 009-change-sequence-incrementation.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

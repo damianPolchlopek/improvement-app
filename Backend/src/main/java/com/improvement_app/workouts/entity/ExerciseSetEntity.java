@@ -19,7 +19,11 @@ import java.util.List;
 public class ExerciseSetEntity extends AuditableEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_set_seq")
+    @SequenceGenerator(
+            name = "exercise_set_seq",
+            sequenceName = "workout.exercise_set_id_seq",
+            allocationSize = 50)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -45,18 +49,5 @@ public class ExerciseSetEntity extends AuditableEntity {
                 request.getReps(),
                 request.getWeight()
         );
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ExerciseSetEntity that = (ExerciseSetEntity) o;
-        return rep.equals(that.rep) && weight.equals(that.weight);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, rep, weight);
     }
 }

@@ -26,7 +26,8 @@ public class TrainingTemplateService {
 
     @Transactional
     public List<TrainingTemplateEntity> recreateTemplates(List<TrainingTemplateEntity> templates) {
-        trainingTemplateRepository.deleteAll();
+        trainingTemplateRepository.deleteAllInBatch();
+        trainingTemplateRepository.flush();
         return trainingTemplateRepository.saveAll(templates);
     }
 

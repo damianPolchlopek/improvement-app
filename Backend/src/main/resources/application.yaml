@@ -6,6 +6,15 @@ spring:
   jpa:
     open-in-view: false
 #    show-sql: true
+    properties:
+      hibernate:
+#        format_sql: true
+        generate_statistics: true
+        jdbc:
+          batch_size: 50
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
   datasource:
     hikari:
       maximum-pool-size: 10
@@ -73,3 +82,9 @@ management:
 #     org.springframework.mail=DEBUG
 #   file:
 #     name: logs/application.log
+
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
+#    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG

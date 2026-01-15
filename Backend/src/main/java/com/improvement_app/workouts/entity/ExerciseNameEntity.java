@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +30,7 @@ public class ExerciseNameEntity extends AuditableEntity {
     private String name;
 
     @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
+    @BatchSize(size = 50)
     private Set<TrainingTemplateEntity> trainingTemplates = new HashSet<>();
 
     public ExerciseNameEntity(String name) {
