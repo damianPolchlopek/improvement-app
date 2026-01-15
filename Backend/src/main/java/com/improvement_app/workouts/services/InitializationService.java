@@ -62,7 +62,7 @@ public class InitializationService {
         List<TrainingEntity> parsedTrainings = new ArrayList<>();
 
 //        driveFiles.size()
-        for (int i = 0; i < 5 ; i++) {
+        for (int i = 0; i < driveFiles.size() ; i++) {
             DriveFileItemDTO fileItem = driveFiles.get(i);
             String trainingName = fileItem.getName();
 

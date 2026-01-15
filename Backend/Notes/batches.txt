@@ -1,0 +1,108 @@
+Aby odpalić batchowanie należy:
+1. 
+
+
+Pomiary inicjalizacji (297 treningow):
+ - z batchowaniem: (okolo 25 sec)
+        * pobieranie plikow - 6 min 55 sec
+        * zapisywanie do bazy danych - 7 min 19 sec
+ Logi:
+    2026-01-15T16:48:27.354+01:00  INFO 33756 --- [nio-8080-exec-7] i.StatisticalLoggingSessionEventListener : Session Metrics {
+        522700 nanoseconds spent acquiring 1 JDBC connections;
+        0 nanoseconds spent releasing 0 JDBC connections;
+        17325408 nanoseconds spent preparing 178 JDBC statements;
+        9235898292 nanoseconds spent executing 175 JDBC statements;
+        9246098800 nanoseconds spent executing 174 JDBC batches;
+        0 nanoseconds spent performing 0 L2C puts;
+        0 nanoseconds spent performing 0 L2C hits;
+        0 nanoseconds spent performing 0 L2C misses;
+        10257893000 nanoseconds spent executing 1 flushes (flushing a total of 8647 entities and 1880 collections);
+        0 nanoseconds spent executing 0 pre-partial-flushes;
+        7800 nanoseconds spent executing 1 partial-flushes (flushing a total of 0 entities and 0 collections)
+    }
+
+ - bez batchowania (okolo 7 min 40 sec)
+        * pobieranie plikow - 7 min 19 sec
+        * zapisywanie do bazy danych - 14 min 55 sec
+
+ Logi:
+
+    2026-01-15T16:39:38.064+01:00  INFO 35524 --- [nio-8080-exec-1] i.StatisticalLoggingSessionEventListener : Session Metrics {
+        98099 nanoseconds spent acquiring 1 JDBC connections;
+        0 nanoseconds spent releasing 0 JDBC connections;
+        90642569 nanoseconds spent preparing 8768 JDBC statements;
+        445756855008 nanoseconds spent executing 8768 JDBC statements;
+        0 nanoseconds spent executing 0 JDBC batches;
+        0 nanoseconds spent performing 0 L2C puts;
+        0 nanoseconds spent performing 0 L2C hits;
+        0 nanoseconds spent performing 0 L2C misses;
+        438361165599 nanoseconds spent executing 1 flushes (flushing a total of 8594 entities and 1868 collections);
+        0 nanoseconds spent executing 0 pre-partial-flushes;
+        7400 nanoseconds spent executing 1 partial-flushes (flushing a total of 0 entities and 0 collections)
+    }
+
+
+### Debugowanie
+
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
+#    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG
+
+
+### Przykładowe logi
+
+
+Bez batchowania:
+
+2026-01-13T18:11:29.301+01:00  INFO 30964 --- [nio-8080-exec-9] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    297914400 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    2738100 nanoseconds spent preparing 60 JDBC statements;
+    2084852900 nanoseconds spent executing 60 JDBC statements;
+    0 nanoseconds spent executing 0 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    7677500 nanoseconds spent executing 1 flushes (flushing a total of 60 entities and 60 collections);
+    0 nanoseconds spent executing 0 pre-partial-flushes;
+    0 nanoseconds spent executing 0 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+2026-01-13T18:11:49.497+01:00  INFO 30964 --- [MessageBroker-2]
+
+
+Batchowanie:
+
+2026-01-13T19:28:30.732+01:00  INFO 23796 --- [nio-8080-exec-4] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    84300 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    4291200 nanoseconds spent preparing 10 JDBC statements;
+    312327800 nanoseconds spent executing 7 JDBC statements;
+    413949300 nanoseconds spent executing 6 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    548623800 nanoseconds spent executing 1 flushes (flushing a total of 199 entities and 43 collections);
+    0 nanoseconds spent executing 0 pre-partial-flushes;
+    6700 nanoseconds spent executing 1 partial-flushes (flushing a total of 0 entities and 0 collections)
+}
+
+
+Bez :
+#        order_inserts: true
+#        order_updates: true
+
+
+2026-01-13T19:29:51.136+01:00  INFO 27800 --- [nio-8080-exec-3] i.StatisticalLoggingSessionEventListener : Session Metrics {
+    143900 nanoseconds spent acquiring 1 JDBC connections;
+    0 nanoseconds spent releasing 0 JDBC connections;
+    6149400 nanoseconds spent preparing 88 JDBC statements;
+    292411700 nanoseconds spent executing 7 JDBC statements;
+    3958060200 nanoseconds spent executing 81 JDBC batches;
+    0 nanoseconds spent performing 0 L2C puts;
+    0 nanoseconds spent performing 0 L2C hits;
+    0 nanoseconds spent performing 0 L2C misses;
+    4126863400 nanoseconds spent executing 1 flushes (flushing a total of 199 entities and 43 collections);
+    0 nanoseconds spent executing 0 pre-partial-flushes;
+    10800 nanoseconds spent executing 1 partial-flushes (flushing a total of 0 entities and 0 collections)

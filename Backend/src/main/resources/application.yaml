@@ -5,11 +5,11 @@ spring:
     enabled: false
   jpa:
     open-in-view: false
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate:
 #        format_sql: true
-        generate_statistics: true
+#        generate_statistics: true
         jdbc:
           batch_size: 50
           batch_versioned_data: true
@@ -83,9 +83,8 @@ management:
 #   file:
 #     name: logs/application.log
 
-
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
-    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG
+#logging:
+#  level:
+#    org.hibernate.SQL: DEBUG
+#    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
+#    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG
