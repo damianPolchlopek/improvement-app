@@ -12,7 +12,7 @@ spring:
 #        generate_statistics: true
         jdbc:
           batch_size: 50
-#          batch_versioned_data: true
+          batch_versioned_data: true
         order_inserts: true
         order_updates: true
   datasource:
