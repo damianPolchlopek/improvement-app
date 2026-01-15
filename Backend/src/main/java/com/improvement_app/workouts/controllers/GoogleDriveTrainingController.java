@@ -21,9 +21,8 @@ public class GoogleDriveTrainingController {
 
     @GetMapping(value = "/initApplication", produces = MediaType.APPLICATION_JSON)
     public void initApplication(@AuthenticationPrincipal(expression = "id") Long userId) {
-//        initializationService.initApplicationTemplates();
-        initializationService.
-                initApplicationTrainings(userId);
+        initializationService.initApplicationTemplates();
+        initializationService.initApplicationTrainings(userId);
     }
 
 }

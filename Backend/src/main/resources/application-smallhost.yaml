@@ -9,7 +9,7 @@ spring:
     username: p2222_food
     password: 9bJpou&'X99BGfT?.Z18h6jVSBk8cK
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://pgsql2.small.pl/p2222_food
+    url: jdbc:postgresql://pgsql2.small.pl/p2222_food?reWriteBatchedInserts=true
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog.yaml
