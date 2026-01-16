@@ -88,3 +88,13 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 10
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/010-refactor-table-types.sql
+      sqlFile:
+        path: 010-refactor-table-types.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
