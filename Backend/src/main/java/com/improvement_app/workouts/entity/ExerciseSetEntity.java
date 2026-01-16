@@ -23,6 +23,7 @@ public class ExerciseSetEntity extends AuditableEntity {
     @SequenceGenerator(
             name = "exercise_set_seq",
             sequenceName = "workout.exercise_set_id_seq",
+            schema = "workout",
             allocationSize = 50)
     private Long id;
 
