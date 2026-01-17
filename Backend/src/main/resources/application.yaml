@@ -84,8 +84,9 @@ management:
 #   file:
 #     name: logs/application.log
 
-#logging:
-#  level:
+logging:
+  level:
 #    org.hibernate.SQL: DEBUG
 #    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
 #    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG
+    org.hibernate.tool.schema: DEBUG
