@@ -98,3 +98,13 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 11
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/011-fix-sequence.sql
+      sqlFile:
+        path: 011-fix-sequence.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
