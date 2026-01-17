@@ -108,3 +108,23 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 12
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/012-drop-recipe-fk.sql
+      sqlFile:
+        path: 012-drop-recipe-fk.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 13
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/013-drop-meal-recipe-fk.sql
+      sqlFile:
+        path: 013-drop-meal-recipe-fk.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
