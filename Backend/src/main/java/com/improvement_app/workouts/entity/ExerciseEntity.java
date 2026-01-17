@@ -24,8 +24,8 @@ public class ExerciseEntity extends AuditableEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_seq")
     @SequenceGenerator(
             name = "exercise_seq",
-            sequenceName = "workout.exercise_id_seq",
-//            schema = "workout",
+            sequenceName = "exercise_id_seq",
+            schema = "workout",
             allocationSize = 50
     )
     private Long id;
