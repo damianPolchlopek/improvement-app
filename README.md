@@ -35,7 +35,7 @@ Kluczowe funkcjonalności:
 - Log4j, Prometheus (monitoring), actuator
 - JWT do autoryzacji, BCrypt do hashowania haseł
 - Docker (obrazy, docker-compose)
-- CI/CD: pipeline GitLab (budowanie, testy, deploy)
+- CI/CD: pipeline Github (budowanie, testy, deploy)
 
 ### Budowanie i uruchamianie
 
