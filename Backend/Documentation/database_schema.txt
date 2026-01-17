@@ -1,0 +1,258 @@
+// =======================
+// FOOD
+// =======================
+
+Table food_diet_summary {
+  id bigint [pk]
+  kcal double
+  protein double
+  carbohydrates double
+  fat double
+  date date
+  user_id bigint [not null]
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table food_daily_meal {
+  id bigint [pk]
+  diet_summary_id bigint [not null]
+  meal_recipe_id bigint [not null]
+  name varchar
+  portion_multiplier double
+  cached_kcal double
+  cached_protein double
+  cached_carbohydrates double
+  cached_fat double
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table food_daily_meal_ingredient {
+  id bigint [pk]
+  daily_meal_id bigint [not null]
+  product_id bigint [not null]
+  name varchar
+  amount double
+  unit varchar
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table food_meal_recipe {
+  id bigint [pk]
+  name text
+  kcal double
+  protein double
+  carbohydrates double
+  fat double
+  portion_amount double
+  url text
+  category text
+  type text
+  recipe jsonb
+  popularity text
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table food_meal_ingredient {
+  id bigint [pk]
+  meal_id bigint [not null]
+  product_id bigint [not null]
+  name text
+  amount double
+  unit text
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table food_product {
+  id bigint [pk]
+  name text
+  kcal double
+  protein double
+  carbohydrates double
+  fat double
+  amount double
+  unit text
+  product_category text
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+
+// =======================
+// USERS
+// =======================
+
+Table users_users {
+  id bigint [pk]
+  username varchar [unique]
+  email varchar [unique]
+  password varchar
+  name varchar
+  surname varchar
+  is_active boolean
+  email_verified boolean
+  last_login timestamptz
+}
+
+Table users_roles {
+  id bigint [pk]
+  name varchar [unique]
+}
+
+Table users_user_roles {
+  user_id bigint
+  role_id bigint
+
+  indexes {
+    (user_id, role_id) [pk]
+  }
+}
+
+Table users_user_tokens {
+  id bigint [pk]
+  user_id bigint [not null]
+  token varchar [unique]
+  type varchar
+  expires_at timestamptz
+  used_at timestamptz
+  created_at timestamptz
+}
+
+
+// =======================
+// WORKOUT
+// =======================
+
+Table workout_training {
+  id bigint [pk]
+  name varchar
+  date date
+  place varchar
+  user_id bigint [not null]
+  created_at timestamp
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table workout_exercise {
+  id bigint [pk]
+  training_id bigint [not null]
+  name varchar
+  type varchar
+  progress varchar
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table workout_exercise_set {
+  id bigint [pk]
+  exercise_id bigint [not null]
+  rep double
+  weight double
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table workout_exercise_name {
+  id bigint [pk]
+  name varchar [unique]
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table workout_training_template {
+  id bigint [pk]
+  name varchar [unique]
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+Table workout_training_template_exercise {
+  id bigint [pk]
+  training_template_id bigint [not null]
+  exercise_name_id bigint [not null]
+  created_at timestamptz
+  created_by varchar
+  updated_at timestamptz
+  updated_by varchar
+}
+
+
+// =======================
+// PUBLIC (Liquibase)
+// =======================
+
+Table public_databasechangelog {
+  id varchar
+  author varchar
+  filename varchar
+  dateexecuted timestamp
+  orderexecuted int
+  exectype varchar
+  md5sum varchar
+  description varchar
+  comments varchar
+  tag varchar
+  liquibase varchar
+  contexts varchar
+  labels varchar
+  deployment_id varchar
+}
+
+Table public_databasechangeloglock {
+  id int [pk]
+  locked boolean
+  lockgranted timestamp
+  lockedby varchar
+}
+
+
+// =======================
+// RELATIONS
+// =======================
+
+// FOOD
+Ref: food_daily_meal.diet_summary_id > food_diet_summary.id [delete: cascade]
+Ref: food_daily_meal.meal_recipe_id > food_meal_recipe.id
+Ref: food_daily_meal_ingredient.daily_meal_id > food_daily_meal.id [delete: cascade]
+Ref: food_daily_meal_ingredient.product_id > food_product.id
+Ref: food_meal_ingredient.meal_id > food_meal_recipe.id [delete: cascade]
+Ref: food_meal_ingredient.product_id > food_product.id [delete: restrict]
+Ref: food_diet_summary.user_id > users_users.id [delete: cascade]
+
+// USERS
+Ref: users_user_roles.user_id > users_users.id [delete: cascade]
+Ref: users_user_roles.role_id > users_roles.id [delete: cascade]
+Ref: users_user_tokens.user_id > users_users.id [delete: cascade]
+
+// WORKOUT
+Ref: workout_training.user_id > users_users.id [delete: cascade]
+Ref: workout_exercise.training_id > workout_training.id [delete: cascade]
+Ref: workout_exercise_set.exercise_id > workout_exercise.id [delete: cascade]
+Ref: workout_training_template_exercise.training_template_id > workout_training_template.id [delete: cascade]
+Ref: workout_training_template_exercise.exercise_name_id > workout_exercise_name.id [delete: cascade]
