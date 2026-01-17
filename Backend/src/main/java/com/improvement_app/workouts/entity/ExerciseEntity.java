@@ -21,10 +21,11 @@ import java.util.List;
 public class ExerciseEntity extends AuditableEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "exercise_set_seq")
     @SequenceGenerator(
-            name = "exercise_seq",
-            sequenceName = "workout.exercise_id_seq",
+            name = "exercise_set_seq",
+            sequenceName = "exercise_set_id_seq",  
+            schema = "workout",
             allocationSize = 50
     )
     private Long id;
