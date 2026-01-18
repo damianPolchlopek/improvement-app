@@ -1,4 +1,4 @@
-package com.improvement_app.common.audit;
+package com.improvement_app.common.audit.basic;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

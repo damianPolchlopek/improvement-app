@@ -16,6 +16,15 @@ spring:
           batch_versioned_data: true
         order_inserts: true
         order_updates: true
+
+
+#      Audyt - Envers
+      org.hibernate.envers.audit_table_suffix: _AUD
+      org.hibernate.envers.revision_field_name: REV
+      org.hibernate.envers.revision_type_field_name: REVTYPE
+      org.hibernate.envers.default_schema: audit
+      org.hibernate.envers.store_data_at_delete: true
+
   datasource:
     hikari:
       maximum-pool-size: 10
@@ -24,6 +33,7 @@ spring:
       max-lifetime: 600000           # 10 minut
       connection-timeout: 5000       # 5 sekund
       leak-detection-threshold: 60000  # 60 sekund
+
   mail:
     host: smtp.gmail.com
     port: 587

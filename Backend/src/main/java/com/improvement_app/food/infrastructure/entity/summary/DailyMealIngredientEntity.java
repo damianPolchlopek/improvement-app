@@ -1,6 +1,5 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
-import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.Unit;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import jakarta.persistence.*;
@@ -8,14 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
+@Audited
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "daily_meal_ingredient", schema = "food")
-public class DailyMealIngredientEntity extends AuditableEntity {
+public class DailyMealIngredientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

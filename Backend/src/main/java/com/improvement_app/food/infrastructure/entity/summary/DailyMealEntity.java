@@ -1,22 +1,23 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
-import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import java.util.List;
 
+@Audited
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "daily_meal", schema = "food")
-public class DailyMealEntity extends AuditableEntity {
+public class DailyMealEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

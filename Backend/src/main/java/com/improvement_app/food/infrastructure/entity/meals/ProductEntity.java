@@ -1,22 +1,22 @@
 package com.improvement_app.food.infrastructure.entity.meals;
 
-import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.ProductCategory;
 import com.improvement_app.food.domain.enums.Unit;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
-import jakarta.persistence.*;
-
+@Audited
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "product", schema = "food")
 @Builder
-public class ProductEntity extends AuditableEntity {
+public class ProductEntity {
 
     @Id
     private Long id;
@@ -33,7 +33,6 @@ public class ProductEntity extends AuditableEntity {
 
     @Enumerated(EnumType.STRING)
     private ProductCategory productCategory;
-
 
 
 }

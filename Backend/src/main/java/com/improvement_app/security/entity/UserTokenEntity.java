@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import java.time.Instant;
 
+@Audited
 @Data
 @Entity
 @Table(name = "user_tokens", schema = "users")
