@@ -1,24 +1,25 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
-import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.security.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Audited
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "diet_summary", schema = "food")
 @Builder
-public class DietSummaryEntity extends AuditableEntity {
+public class DietSummaryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

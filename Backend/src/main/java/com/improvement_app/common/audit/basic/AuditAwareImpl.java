@@ -1,4 +1,4 @@
-package com.improvement_app.common.audit;
+package com.improvement_app.common.audit.basic;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;

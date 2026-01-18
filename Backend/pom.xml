@@ -132,6 +132,12 @@
             <artifactId>liquibase-core</artifactId>
         </dependency>
 
+        <!-- Audyt - Hibernate Envers-->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-envers</artifactId>
+        </dependency>
+
         <!-- Springdoc OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>

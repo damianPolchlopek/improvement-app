@@ -1,27 +1,28 @@
 package com.improvement_app.food.infrastructure.entity.meals;
 
 
-import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.MealCategory;
 import com.improvement_app.food.domain.enums.MealPopularity;
 import com.improvement_app.food.domain.enums.MealType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 
-import jakarta.persistence.*;
 import java.util.List;
 
+@Audited
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "meal_recipe", schema = "food")
 @Builder
-public class MealRecipeEntity extends AuditableEntity {
+public class MealRecipeEntity {
 
     @Id
     private Long id;

@@ -138,3 +138,43 @@ databaseChangeLog:
         relativeToChangelogFile: true
         splitStatements: false
         stripComments: false
+
+  - changeSet:
+      id: 15
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/015-remove-basic-audit-from-food.sql
+      sqlFile:
+        path: 015-remove-basic-audit-from-food.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 16
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/016-add-audit-tables.sql
+      sqlFile:
+        path: 016-add-audit-tables.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 17
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/017-add-user-audit-tables.sql
+      sqlFile:
+        path: 017-add-user-audit-tables.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false
+
+  - changeSet:
+      id: 18
+      author: Damian Polchlopek
+      logicalFilePath: 0018_add_audit_columns/018-add-food-audit-tables.sql
+      sqlFile:
+        path: 018-add-food-audit-tables.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

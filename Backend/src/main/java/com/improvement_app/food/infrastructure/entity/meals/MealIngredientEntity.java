@@ -1,22 +1,23 @@
 package com.improvement_app.food.infrastructure.entity.meals;
 
-import com.improvement_app.common.audit.AuditableEntity;
 import com.improvement_app.food.domain.enums.Unit;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import java.io.Serializable;
 
+@Audited
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "meal_ingredient", schema = "food")
 @Builder
-public class MealIngredientEntity extends AuditableEntity implements Serializable {
+public class MealIngredientEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
