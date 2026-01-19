@@ -29,7 +29,24 @@ export default function EditDietDayView() {
 
   // Mutation: edit diet summary
   const updateDietSummaryMutation = useMutation({
-    mutationFn: (selectedIds) => REST.updateDietSummary(selectedIds),
+    mutationFn: () => {
+      
+      const objectToUpdate = {
+      dietSummaryId: mealsDietDay.id,
+      meals: selectedMeals.map(meal => ({
+          ...meal,
+          mealRecipeId: meal.id,
+          portionMultiplier: meal.amount || 1,
+
+          ingredients: (meal.ingredients || []).map(mealIngredient => ({
+            ...mealIngredient,
+            mealRecipeIngredientId: mealIngredient.id,
+          }))
+        }))
+    };
+      
+      return REST.updateDietSummary(objectToUpdate)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
       navigate('/app/food/statistics');
@@ -41,12 +58,7 @@ export default function EditDietDayView() {
   });
 
   const handleUpdate = () => {
-    const objectToUpdate = {
-      dietSummaryId: mealsDietDay.id,
-      meals: selectedMeals
-    };
-
-    updateDietSummaryMutation.mutate(objectToUpdate);
+    updateDietSummaryMutation.mutate();
   };
 
   return (
