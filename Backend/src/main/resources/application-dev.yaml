@@ -17,6 +17,7 @@ spring:
     change-log: classpath:db/changelog/changelog.yaml
 
 
+
 # Aplikacja
 path:
   file:
