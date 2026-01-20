@@ -7,8 +7,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.util.List;
+import java.util.Objects;
 
 @Audited
 @Data
@@ -31,8 +33,10 @@ public class DailyMealEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_recipe_id")
+    @NotAudited
     private MealRecipeEntity recipeEntity;
 
+    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diet_summary_id", nullable = false)
     private DietSummaryEntity dietSummary;
@@ -58,5 +62,22 @@ public class DailyMealEntity {
                 ingredient.setDailyMeal(this);
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DailyMealEntity meal = (DailyMealEntity) o;
+        return Double.compare(meal.cachedKcal, cachedKcal) == 0 && Double.compare(meal.cachedProtein, cachedProtein) == 0 &&
+                Double.compare(meal.cachedCarbohydrates, cachedCarbohydrates) == 0 &&
+                Double.compare(meal.cachedFat, cachedFat) == 0 &&
+                Double.compare(meal.portionMultiplier, portionMultiplier) == 0 &&
+                id.equals(meal.id) && name.equals(meal.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, cachedKcal, cachedProtein, cachedCarbohydrates, cachedFat, portionMultiplier);
     }
 }

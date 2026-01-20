@@ -7,10 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Audited
 @Data
@@ -32,10 +34,12 @@ public class DietSummaryEntity {
 
     private LocalDate date;
 
+    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
+//    @NotAudited
     @OneToMany(mappedBy = "dietSummary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyMealEntity> meals = new ArrayList<>();
 
@@ -69,5 +73,18 @@ public class DietSummaryEntity {
                 ", user=" + user +
                 ", meals=" + meals.stream().map(DailyMealEntity::getName).toList() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DietSummaryEntity that = (DietSummaryEntity) o;
+        return Double.compare(that.kcal, kcal) == 0 && Double.compare(that.protein, protein) == 0 && Double.compare(that.carbohydrates, carbohydrates) == 0 && Double.compare(that.fat, fat) == 0 && id.equals(that.id) && date.equals(that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, kcal, protein, carbohydrates, fat, date);
     }
 }
