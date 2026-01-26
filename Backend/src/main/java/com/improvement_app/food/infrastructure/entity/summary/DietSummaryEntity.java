@@ -1,5 +1,6 @@
 package com.improvement_app.food.infrastructure.entity.summary;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.improvement_app.security.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,12 +36,10 @@ public class DietSummaryEntity {
 
     private LocalDate date;
 
-    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 
-//    @NotAudited
     @OneToMany(mappedBy = "dietSummary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyMealEntity> meals = new ArrayList<>();
 

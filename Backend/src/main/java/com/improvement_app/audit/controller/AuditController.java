@@ -1,44 +1,42 @@
-package com.improvement_app.common.audit;
+package com.improvement_app.audit.controller;
 
-import com.improvement_app.common.audit.dto.AuditChanges;
-import com.improvement_app.common.audit.dto.AuditRevisionInfo;
-import com.improvement_app.common.audit.dto.AuditRevisionMetadata;
-import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
-import com.improvement_app.food.infrastructure.entity.summary.DailyMealEntity;
-import com.improvement_app.food.infrastructure.entity.summary.DailyMealIngredientEntity;
+import com.improvement_app.audit.dto.RevisionInfo;
+import com.improvement_app.audit.service.GenericAuditService;
+import com.improvement_app.audit.dto.AuditChanges;
+import com.improvement_app.audit.dto.AuditRevisionMetadata;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DailyMealEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DailyMealIngredientEntity;
+import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
 import com.improvement_app.security.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
 
 @Tag(name = "Audit", description = "API do przeglądania historii zmian")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/audit")
-@PreAuthorize("hasRole('ADMIN')")
 public class AuditController {
 
     private final GenericAuditService auditService;
 
-    @Operation(summary = "Pobierz pełną historię zmian dla encji")
-    @GetMapping("/{entityType}/{entityId}/history")
-    public ResponseEntity<List<? extends AuditRevisionInfo<?>>> getEntityHistory(
+    @GetMapping("/{entityType}/{id}/revisions")
+    @Operation(summary = "Lista wszystkich rewizji")
+    public ResponseEntity<List<RevisionInfo>> getRevisions(
             @PathVariable String entityType,
-            @PathVariable Long entityId) {
+            @PathVariable @Min(1) Long id) {
 
         Class<?> entityClass = resolveEntityClass(entityType);
-        List<? extends AuditRevisionInfo<?>> history = auditService.getEntityHistory(entityClass, entityId);
+        List<RevisionInfo> revisionHistory = auditService.getRevisionHistory(entityClass, id);
 
-        return ResponseEntity.ok(history);
+        return ResponseEntity.ok(revisionHistory);
     }
 
     @Operation(summary = "Pobierz zmiany w konkretnej rewizji")
@@ -78,20 +76,6 @@ public class AuditController {
         return ResponseEntity.ok(metadata);
     }
 
-    @Operation(summary = "Pobierz zmiany użytkownika w określonym czasie")
-    @GetMapping("/{entityType}/user/{username}")
-    public ResponseEntity<List<? extends AuditRevisionInfo<?>>> getUserChanges(
-            @PathVariable String entityType,
-            @PathVariable String username,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant from,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant to) {
-
-        Class<?> entityClass = resolveEntityClass(entityType);
-        List<? extends AuditRevisionInfo<?>> changes = auditService.getUserChanges(entityClass, username, from, to);
-
-        return ResponseEntity.ok(changes);
-    }
-
     /**
      * Helper method - mapuje String entity type na konkretną klasę
      */
@@ -106,8 +90,6 @@ public class AuditController {
 
             // User module
             case "user" -> UserEntity.class;
-
-            // Można dodać więcej według potrzeb
 
             default -> throw new IllegalArgumentException("Unknown entity type: " + entityType);
         };

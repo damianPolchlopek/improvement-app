@@ -1,6 +1,6 @@
 package com.improvement_app.workouts.entity;
 
-import com.improvement_app.common.audit.basic.AuditableEntity;
+import com.improvement_app.audit.basic.AuditableEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

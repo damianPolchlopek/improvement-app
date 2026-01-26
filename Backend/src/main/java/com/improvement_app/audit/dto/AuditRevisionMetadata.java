@@ -1,6 +1,6 @@
-package com.improvement_app.common.audit.dto;
+package com.improvement_app.audit.dto;
 
-import com.improvement_app.common.audit.envers.CustomRevisionEntity;
+import com.improvement_app.audit.envers.CustomRevisionEntity;
 import lombok.Builder;
 import lombok.Data;
 

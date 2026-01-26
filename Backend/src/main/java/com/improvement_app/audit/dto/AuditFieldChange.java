@@ -1,4 +1,4 @@
-package com.improvement_app.common.audit.dto;
+package com.improvement_app.audit.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

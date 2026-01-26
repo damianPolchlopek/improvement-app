@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 import java.util.List;
 import java.util.Objects;
@@ -33,10 +32,8 @@ public class DailyMealEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meal_recipe_id")
-    @NotAudited
     private MealRecipeEntity recipeEntity;
 
-    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diet_summary_id", nullable = false)
     private DietSummaryEntity dietSummary;

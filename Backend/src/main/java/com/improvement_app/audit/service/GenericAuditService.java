@@ -1,7 +1,12 @@
-package com.improvement_app.common.audit;
+package com.improvement_app.audit.service;
 
-import com.improvement_app.common.audit.dto.*;
-import com.improvement_app.common.audit.envers.CustomRevisionEntity;
+import com.improvement_app.audit.dto.AuditChanges;
+import com.improvement_app.audit.dto.AuditFieldChange;
+import com.improvement_app.audit.dto.AuditRevisionMetadata;
+import com.improvement_app.audit.dto.RevisionInfo;
+import com.improvement_app.audit.envers.CustomRevisionEntity;
+import com.improvement_app.audit.response.AuditRevisionDto;
+import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,22 +32,23 @@ public class GenericAuditService {
 
     private final EntityManager entityManager;
 
-    /**
-     * Pobiera pełną historię zmian dla dowolnej encji
-     */
+
     @Transactional(readOnly = true)
-    public <T> List<AuditRevisionInfo<T>> getEntityHistory(Class<T> entityClass, Object entityId) {
+    public List<RevisionInfo> getRevisionHistory(Class<?> entityClass, Long entityId) {
         AuditReader reader = AuditReaderFactory.get(entityManager);
 
-        List<Object[]> revisions = reader.createQuery()
-                .forRevisionsOfEntity(entityClass, false, true)
-                .add(AuditEntity.id().eq(entityId))
-                .getResultList();
+        List<Number> revisions = reader.getRevisions(entityClass, entityId);
 
         return revisions.stream()
-                .map(this::<T>mapToAuditRevisionInfo)
-                .sorted((a, b) -> b.getRevisionNumber().compareTo(a.getRevisionNumber()))
-                .collect(Collectors.toList());
+                .map(rev -> {
+                    Date revDate = reader.getRevisionDate(rev);
+                    return new RevisionInfo(
+                            rev.longValue(),
+                            LocalDateTime.ofInstant(revDate.toInstant(), ZoneId.systemDefault())
+                    );
+                })
+                .sorted(Comparator.comparing(RevisionInfo::timestamp).reversed())
+                .toList();
     }
 
     /**
@@ -50,7 +59,8 @@ public class GenericAuditService {
             Class<T> entityClass,
             Object entityId,
             Number oldRevision,
-            Number newRevision) {
+            Number newRevision
+    ) {
 
         AuditReader reader = AuditReaderFactory.get(entityManager);
 
@@ -112,69 +122,8 @@ public class GenericAuditService {
         return AuditRevisionMetadata.from(revEntity);
     }
 
-    /**
-     * Pobiera wszystkie encje zmienione w danej rewizji
-     */
-//    @Transactional(readOnly = true)
-//    public Map<String, List<Object>> getAllEntitiesInRevision(Number revision) {
-//        AuditReader reader = AuditReaderFactory.get(entityManager);
-//
-//        Set<String> entityNames = reader.getCrossTypeRevisionChangesInTransaction(revision)
-//                .stream()
-//                .map(Object::getClass)
-//                .map(Class::getSimpleName)
-//                .collect(Collectors.toSet());
-//
-//        Map<String, List<Object>> result = new HashMap<>();
-//        for (String entityName : entityNames) {
-//            result.put(entityName, new ArrayList<>());
-//        }
-//
-//        return result;
-//    }
-
-    /**
-     * Pobiera zmiany użytkownika w określonym czasie
-     */
-    @Transactional(readOnly = true)
-    public <T> List<AuditRevisionInfo<T>> getUserChanges(
-            Class<T> entityClass,
-            String username,
-            Instant from,
-            Instant to) {
-
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-
-        List<Object[]> revisions = reader.createQuery()
-                .forRevisionsOfEntity(entityClass, false, true)
-                .add(AuditEntity.revisionProperty("username").eq(username))
-                .add(AuditEntity.revisionProperty("revtstmp").ge(from.toEpochMilli()))
-                .add(AuditEntity.revisionProperty("revtstmp").le(to.toEpochMilli()))
-                .getResultList();
-
-        return revisions.stream()
-                .map(this::<T>mapToAuditRevisionInfo)
-                .sorted((a, b) -> b.getTimestamp().compareTo(a.getTimestamp()))
-                .collect(Collectors.toList());
-    }
-
     // ========== METODY POMOCNICZE ==========
 
-    private <T> AuditRevisionInfo<T> mapToAuditRevisionInfo(Object[] revisionData) {
-        @SuppressWarnings("unchecked")
-        T entity = (T) revisionData[0];
-        CustomRevisionEntity revEntity = (CustomRevisionEntity) revisionData[1];
-        RevisionType revType = (RevisionType) revisionData[2];
-
-        return AuditRevisionInfo.<T>builder()
-                .entity(entity)
-                .revisionNumber(revEntity.getRev())
-                .timestamp(Instant.ofEpochMilli(revEntity.getRevtstmp()))
-                .username(revEntity.getUsername())
-                .ipAddress(revEntity.getIpAddress())
-                .revisionType(revType)
-                .build();
-    }
 
     private <T> AuditChanges<T> compareEntitiesGeneric(
             T oldVersion,
