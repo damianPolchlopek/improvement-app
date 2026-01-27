@@ -24,6 +24,7 @@ export const FoodAddUrl = `${APP}/${FOOD}/${ADD}`;
 export const CalculateIngredientsUrl = `${APP}/${FOOD}/${STATISTICS}`;
 export const FoodProductUrl = `${APP}/${FOOD}/${PRODUCTS}`;
 
+export const AUDIT = "audit";
 export const OTHER = "other";
 export const SHOPPING = "shopping";
 export const WEEKLY = "weekly";

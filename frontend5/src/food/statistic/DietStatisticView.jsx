@@ -11,7 +11,6 @@ import {
   TableContainer,
   TableHead,
   Paper,
-  CircularProgress,
   Typography,
   Box,
   Card,
@@ -25,6 +24,9 @@ import { Restaurant, Analytics, TrendingUp } from '@mui/icons-material';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import DietStatisticTableRow from "./DietStatisticTableRow";
+
+import PageLoader from '../../component/loader/PageLoader';
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 export default function DietStatisticView() {
   const [page, setPage] = useState(0);
@@ -49,36 +51,11 @@ export default function DietStatisticView() {
   };
 
   if (isLoading) {
-    return (
-      <Box sx={{ py: 4 }}>
-        <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-          <Grid xs={12}>
-            <Card elevation={6} sx={{ borderRadius: 3, p: 4, textAlign: 'center' }}>
-              <CircularProgress size={60} />
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                {t('messages.loading')}
-              </Typography>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>
-    );
+    return <PageLoader text={t('messages.loading')} />;
   }
-
+  
   if (isError) {
-    return (
-      <Box sx={{ py: 4 }}>
-        <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-          <Grid xs={12}>
-            <Card elevation={6} sx={{ borderRadius: 3, p: 4, textAlign: 'center' }}>
-              <Typography variant="h6" color="error">
-                Error: {error?.message || 'Unknown error'}
-              </Typography>
-            </Card>
-          </Grid>
-        </Grid>
-      </Box>
-    );
+    return <ErrorAlert error={error} />;
   }
 
   return (

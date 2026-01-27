@@ -278,4 +278,9 @@ export default class REST {
     static resendVerificationEmail(username) {
         return post(serverUrl + 'api/auth/resend-verification', username );
     }
+
+    // Audit
+    static getRevisions(dietSummaryId) {
+        return get(serverUrl + 'api/audit/diet-summary/' + dietSummaryId + '/revisions');
+    }
 }
