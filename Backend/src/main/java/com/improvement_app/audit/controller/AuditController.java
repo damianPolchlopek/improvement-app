@@ -1,9 +1,10 @@
 package com.improvement_app.audit.controller;
 
-import com.improvement_app.audit.dto.RevisionInfo;
+import com.improvement_app.audit.response.RevisionInfo;
+import com.improvement_app.audit.response.AuditRevisionDto;
+import com.improvement_app.audit.response.DietSummaryAuditDto;
 import com.improvement_app.audit.service.GenericAuditService;
-import com.improvement_app.audit.dto.AuditChanges;
-import com.improvement_app.audit.dto.AuditRevisionMetadata;
+import com.improvement_app.audit.response.AuditRevisionMetadata;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
 import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import com.improvement_app.food.infrastructure.entity.summary.DailyMealEntity;
@@ -37,34 +38,7 @@ public class AuditController {
         List<RevisionInfo> revisionHistory = auditService.getRevisionHistory(entityClass, id);
 
         return ResponseEntity.ok(revisionHistory);
-    }
 
-    @Operation(summary = "Pobierz zmiany w konkretnej rewizji")
-    @GetMapping("/{entityType}/{entityId}/revision/{revisionNumber}")
-    public ResponseEntity<AuditChanges<?>> getRevisionChanges(
-            @PathVariable String entityType,
-            @PathVariable Long entityId,
-            @PathVariable Integer revisionNumber) {
-
-        Class<?> entityClass = resolveEntityClass(entityType);
-        AuditChanges<?> changes = auditService.getRevisionChanges(entityClass, entityId, revisionNumber);
-
-        return ResponseEntity.ok(changes);
-    }
-
-    @Operation(summary = "Porównaj dwie rewizje")
-    @GetMapping("/{entityType}/{entityId}/compare")
-    public ResponseEntity<AuditChanges<?>> compareRevisions(
-            @PathVariable String entityType,
-            @PathVariable Long entityId,
-            @RequestParam Integer oldRevision,
-            @RequestParam Integer newRevision) {
-
-        Class<?> entityClass = resolveEntityClass(entityType);
-        AuditChanges<?> changes = auditService.getChangesBetweenRevisions(
-                entityClass, entityId, oldRevision, newRevision);
-
-        return ResponseEntity.ok(changes);
     }
 
     @Operation(summary = "Pobierz metadane rewizji")
@@ -75,6 +49,26 @@ public class AuditController {
         AuditRevisionMetadata metadata = auditService.getRevisionMetadata(revisionNumber);
         return ResponseEntity.ok(metadata);
     }
+
+    @Operation(summary = "Pobierz historię zmian DietSummary (tylko pola skalarne)")
+    @GetMapping("/diet-summary/{id}/history")
+    public ResponseEntity<List<AuditRevisionDto<DietSummaryAuditDto>>> getDietHistory(
+            @PathVariable Long id) {
+
+        List<AuditRevisionDto<DietSummaryAuditDto>> history =
+                auditService.getEntityHistoryAsDto(
+                        DietSummaryEntity.class,
+                        id,
+                        DietSummaryAuditDto::from
+                );
+
+        return ResponseEntity.ok(history);
+    }
+
+
+
+
+
 
     /**
      * Helper method - mapuje String entity type na konkretną klasę

@@ -283,4 +283,9 @@ export default class REST {
     static getRevisions(dietSummaryId) {
         return get(serverUrl + 'api/audit/diet-summary/' + dietSummaryId + '/revisions');
     }
+
+    static getRevisionDetails(dietSummaryId, revisionNumber) {
+        return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber);
+    }
+
 }

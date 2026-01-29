@@ -1,35 +1,28 @@
 package com.improvement_app.audit.response;
 
 import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class DietSummaryAuditDto {
-    private Long id;
-    private double kcal;
-    private double protein;
-    private double carbohydrates;
-    private double fat;
-    private LocalDate date;
-    private Long userId;
+public record DietSummaryAuditDto(
+        Long id,
+        double kcal,
+        double protein,
+        double carbohydrates,
+        double fat,
+        LocalDate date,
+        Long userId
+) {
 
     public static DietSummaryAuditDto from(DietSummaryEntity entity) {
-        return DietSummaryAuditDto.builder()
-                .id(entity.getId())
-                .kcal(entity.getKcal())
-                .protein(entity.getProtein())
-                .carbohydrates(entity.getCarbohydrates())
-                .fat(entity.getFat())
-                .date(entity.getDate())
-                .userId(entity.getUser() != null ? entity.getUser().getId() : null)
-                .build();
+        return new DietSummaryAuditDto(
+                entity.getId(),
+                entity.getKcal(),
+                entity.getProtein(),
+                entity.getCarbohydrates(),
+                entity.getFat(),
+                entity.getDate(),
+                entity.getUser() != null ? entity.getUser().getId() : null
+        );
     }
 }

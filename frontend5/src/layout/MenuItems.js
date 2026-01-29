@@ -15,7 +15,8 @@ import {
     DailyViewUrl,
     TimerChallengeUrl,
     HolidayPickerUrl,
-    HomeViewUrl
+    HomeViewUrl,
+    AuditFoodUrl
   } from '../utils/URLHelper';
 
   import {
@@ -83,6 +84,13 @@ import {
       subPages: [
         { name: t('menu.timerChallenge'), path: TimerChallengeUrl, icon: <VisibilityIcon /> },
         { name: t('menu.vacations'), path: HolidayPickerUrl, icon: <VisibilityIcon /> },
+      ],
+    },
+    {
+      category: t('menu.audit'),
+      icon: <CalendarTodayIcon />,
+      subPages: [
+        { name: t('menu.food'), path: AuditFoodUrl, icon: <VisibilityIcon /> },
       ],
     },
   ];

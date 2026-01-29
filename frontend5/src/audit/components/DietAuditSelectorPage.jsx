@@ -48,7 +48,7 @@ const DietAuditSelectorPage = () => {
   const { data, isLoading, isError, error } = useDietSummaries(page, size);
 
   const handleViewAudit = (dietSummaryId) => {
-    navigate(`/app/food/diet/audit/${dietSummaryId}`);
+    navigate(`/app/audit/${dietSummaryId}`);
   };
 
   const handleChangePage = (event, newPage) => {

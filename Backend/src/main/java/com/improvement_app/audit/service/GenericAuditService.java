@@ -1,12 +1,9 @@
 package com.improvement_app.audit.service;
 
-import com.improvement_app.audit.dto.AuditChanges;
-import com.improvement_app.audit.dto.AuditFieldChange;
-import com.improvement_app.audit.dto.AuditRevisionMetadata;
-import com.improvement_app.audit.dto.RevisionInfo;
 import com.improvement_app.audit.envers.CustomRevisionEntity;
 import com.improvement_app.audit.response.AuditRevisionDto;
-import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
+import com.improvement_app.audit.response.AuditRevisionMetadata;
+import com.improvement_app.audit.response.RevisionInfo;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +14,11 @@ import org.hibernate.envers.query.AuditEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -32,79 +29,32 @@ public class GenericAuditService {
 
     private final EntityManager entityManager;
 
-
     @Transactional(readOnly = true)
     public List<RevisionInfo> getRevisionHistory(Class<?> entityClass, Long entityId) {
         AuditReader reader = AuditReaderFactory.get(entityManager);
 
-        List<Number> revisions = reader.getRevisions(entityClass, entityId);
+        @SuppressWarnings("unchecked")
+        List<Object[]> results = reader.createQuery()
+                .forRevisionsOfEntity(entityClass, false, true)
+                .add(AuditEntity.id().eq(entityId))
+                .getResultList();
 
-        return revisions.stream()
-                .map(rev -> {
-                    Date revDate = reader.getRevisionDate(rev);
+        return results.stream()
+                .map(row -> {
+                    CustomRevisionEntity revisionEntity = (CustomRevisionEntity) row[1];
+                    RevisionType revisionType = (RevisionType) row[2];
+
                     return new RevisionInfo(
-                            rev.longValue(),
-                            LocalDateTime.ofInstant(revDate.toInstant(), ZoneId.systemDefault())
+                            revisionEntity.getRev(),
+                            LocalDateTime.ofInstant(
+                                    Instant.ofEpochMilli(revisionEntity.getRevtstmp()),
+                                    ZoneId.systemDefault()
+                            ),
+                            revisionType
                     );
                 })
-                .sorted(Comparator.comparing(RevisionInfo::timestamp).reversed())
+                .sorted(Comparator.comparing(RevisionInfo::revisionTimestamp).reversed())
                 .toList();
-    }
-
-    /**
-     * Pobiera różnice między dwiema rewizjami (generic)
-     */
-    @Transactional(readOnly = true)
-    public <T> AuditChanges<T> getChangesBetweenRevisions(
-            Class<T> entityClass,
-            Object entityId,
-            Number oldRevision,
-            Number newRevision
-    ) {
-
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-
-        T oldVersion = reader.find(entityClass, entityId, oldRevision);
-        T newVersion = reader.find(entityClass, entityId, newRevision);
-
-        if (oldVersion == null || newVersion == null) {
-            throw new IllegalArgumentException("One or both revisions not found");
-        }
-
-        return compareEntitiesGeneric(oldVersion, newVersion, oldRevision, newRevision);
-    }
-
-    /**
-     * Pobiera zmiany w konkretnej rewizji (porównuje z poprzednią)
-     */
-    @Transactional(readOnly = true)
-    public <T> AuditChanges<T> getRevisionChanges(Class<T> entityClass, Object entityId, Number revision) {
-        AuditReader reader = AuditReaderFactory.get(entityManager);
-
-        List<Number> allRevisions = reader.getRevisions(entityClass, entityId);
-
-        if (allRevisions.isEmpty()) {
-            throw new IllegalArgumentException("No revisions found for entity");
-        }
-
-        // Znajdź poprzednią rewizję
-        Number previousRevision = null;
-        for (int i = 0; i < allRevisions.size(); i++) {
-            if (allRevisions.get(i).equals(revision)) {
-                if (i > 0) {
-                    previousRevision = allRevisions.get(i - 1);
-                }
-                break;
-            }
-        }
-
-        if (previousRevision == null) {
-            // Pierwsza rewizja - CREATE
-            T entity = reader.find(entityClass, entityId, revision);
-            return AuditChanges.createOperation(entity, revision);
-        }
-
-        return getChangesBetweenRevisions(entityClass, entityId, previousRevision, revision);
     }
 
     /**
@@ -122,65 +72,39 @@ public class GenericAuditService {
         return AuditRevisionMetadata.from(revEntity);
     }
 
-    // ========== METODY POMOCNICZE ==========
+    @Transactional(readOnly = true)
+    public <E, D> List<AuditRevisionDto<D>> getEntityHistoryAsDto(
+            Class<E> entityClass,
+            Object entityId,
+            Function<E, D> mapper) {
 
+        AuditReader reader = AuditReaderFactory.get(entityManager);
 
-    private <T> AuditChanges<T> compareEntitiesGeneric(
-            T oldVersion,
-            T newVersion,
-            Number oldRevision,
-            Number newRevision) {
+        List<Object[]> revisions = reader.createQuery()
+                .forRevisionsOfEntity(entityClass, false, true)
+                .add(AuditEntity.id().eq(entityId))
+                .getResultList();
 
-        Map<String, AuditFieldChange> changes = new HashMap<>();
+        return revisions.stream()
+                .map(revData -> {
+                    @SuppressWarnings("unchecked")
+                    E entity = (E) revData[0];
+                    CustomRevisionEntity rev = (CustomRevisionEntity) revData[1];
+                    RevisionType revType = (RevisionType) revData[2];
 
-        // Użyj refleksji do porównania wszystkich pól
-        Field[] fields = oldVersion.getClass().getDeclaredFields();
+                    D dto = mapper.apply(entity);
 
-        for (Field field : fields) {
-            // Pomiń pola Hibernate (proxies, collections itp.)
-            if (shouldSkipField(field)) {
-                continue;
-            }
-
-            try {
-                field.setAccessible(true);
-                Object oldValue = field.get(oldVersion);
-                Object newValue = field.get(newVersion);
-
-                if (!Objects.equals(oldValue, newValue)) {
-                    changes.put(field.getName(), new AuditFieldChange(
-                            field.getName(),
-                            oldValue,
-                            newValue,
-                            field.getType().getSimpleName()
-                    ));
-                }
-            } catch (IllegalAccessException e) {
-                log.warn("Cannot access field: {}", field.getName(), e);
-            }
-        }
-
-        return AuditChanges.<T>builder()
-                .oldVersion(oldVersion)
-                .newVersion(newVersion)
-                .oldRevision(oldRevision.intValue())
-                .newRevision(newRevision.intValue())
-                .changes(changes)
-                .hasChanges(!changes.isEmpty())
-                .build();
+                    return AuditRevisionDto.from(
+                            dto,
+                            rev.getRev(),
+                            Instant.ofEpochMilli(rev.getRevtstmp()),
+                            rev.getUsername(),
+                            rev.getIpAddress(),
+                            revType
+                    );
+                })
+                .sorted((a, b) -> b.revisionNumber().compareTo(a.revisionNumber()))
+                .collect(Collectors.toList());
     }
 
-    private boolean shouldSkipField(Field field) {
-        String fieldName = field.getName();
-        String fieldType = field.getType().getName();
-
-        // Pomiń kolekcje Hibernate, lazy proxies itp.
-        return fieldName.startsWith("$")
-                || fieldName.equals("serialVersionUID")
-                || fieldType.contains("HibernateProxy")
-                || fieldType.contains("PersistentBag")
-                || fieldType.contains("PersistentSet")
-                || fieldType.contains("PersistentList")
-                || java.util.Collection.class.isAssignableFrom(field.getType());
-    }
 }

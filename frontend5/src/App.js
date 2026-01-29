@@ -68,7 +68,8 @@ const TimerChallengeMain = lazy(() => import('./projects/timerChallenge/TimerCha
 const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPickerMain'));
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
-const DietAuditPage = lazy(() => import('./audit/components/DietAuditSelectorPage.jsx'));
+const DietAuditSelectorPage = lazy(() => import('./audit/components/DietAuditSelectorPage.jsx'));
+const DietAuditPage = lazy(() => import('./audit/components/DietAuditPage.jsx'));
 
 const suspenseFallback = <p></p>;
 
@@ -173,7 +174,9 @@ const router = createBrowserRouter([
       { 
         path: AUDIT, 
         children: [
-          { path: '', element: <Suspense fallback={suspenseFallback}><DietAuditPage /></Suspense> },
+          { path: '', element: <Suspense fallback={suspenseFallback}><DietAuditSelectorPage /></Suspense> },
+          { path: ':dietSummaryId', element: <Suspense fallback={suspenseFallback}><DietAuditPage /></Suspense> },
+
         ]
       },
       {
