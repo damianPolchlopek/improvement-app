@@ -2,7 +2,7 @@ package com.improvement_app.audit.controller;
 
 import com.improvement_app.audit.response.RevisionInfo;
 import com.improvement_app.audit.response.AuditRevisionDto;
-import com.improvement_app.audit.response.DietSummaryAuditDto;
+import com.improvement_app.audit.response.DietSummaryDto;
 import com.improvement_app.audit.service.GenericAuditService;
 import com.improvement_app.audit.response.AuditRevisionMetadata;
 import com.improvement_app.food.infrastructure.entity.meals.MealRecipeEntity;
@@ -52,14 +52,14 @@ public class AuditController {
 
     @Operation(summary = "Pobierz historię zmian DietSummary (tylko pola skalarne)")
     @GetMapping("/diet-summary/{id}/history")
-    public ResponseEntity<List<AuditRevisionDto<DietSummaryAuditDto>>> getDietHistory(
+    public ResponseEntity<List<AuditRevisionDto<DietSummaryDto>>> getDietHistory(
             @PathVariable Long id) {
 
-        List<AuditRevisionDto<DietSummaryAuditDto>> history =
+        List<AuditRevisionDto<DietSummaryDto>> history =
                 auditService.getEntityHistoryAsDto(
                         DietSummaryEntity.class,
                         id,
-                        DietSummaryAuditDto::from
+                        DietSummaryDto::from
                 );
 
         return ResponseEntity.ok(history);

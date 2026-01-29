@@ -2,7 +2,7 @@ package com.improvement_app.audit.response;
 
 import com.improvement_app.food.infrastructure.entity.summary.DailyMealEntity;
 
-public record DailyMealAuditDto(
+public record DailyMealDto(
         Long id,
         String name,
         double cachedKcal,
@@ -14,8 +14,8 @@ public record DailyMealAuditDto(
         Long dietSummaryId
 ) {
 
-    public static DailyMealAuditDto from(DailyMealEntity entity) {
-        return new DailyMealAuditDto(
+    public static DailyMealDto from(DailyMealEntity entity) {
+        return new DailyMealDto(
                 entity.getId(),
                 entity.getName(),
                 entity.getCachedKcal(),

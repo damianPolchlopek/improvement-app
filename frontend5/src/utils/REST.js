@@ -288,4 +288,10 @@ export default class REST {
         return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber);
     }
 
+    // compare?olderRevision=23&newerRevision=26
+    static getRevisionComparsion(dietSummaryId, olderRevisionId, newerRevisionId) {
+        return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/revisions/compare?olderRevision=' 
+            + olderRevisionId + '&newerRevision=' + newerRevisionId);
+    }
+
 }

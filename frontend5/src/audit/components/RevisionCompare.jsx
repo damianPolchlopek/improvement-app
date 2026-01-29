@@ -1,9 +1,8 @@
 // features/diet-audit/components/RevisionCompare.jsx
 
 import React from 'react';
-import { useRevisionDetails } from '../hooks/useDietAudit';
+import { useRevisionComparison } from '../hooks/useDietAudit';
 import { useParams } from 'react-router-dom';
-import { detectChanges } from '../utils/changeDetector';
 import { formatMacroChange, getMacroChangeColor } from '../utils/auditFormatters';
 import MealChangesList from './MealChangesList';
 
@@ -44,18 +43,14 @@ const RevisionCompare = ({
 
   const needsSelection = selectedRevisions.length < 2;
 
-  // Pobierz pełne dane dla obu wybranych rewizji
-  const { data: revision1Data, isLoading: isLoading1 } = useRevisionDetails(
-    actualDietSummaryId,
-    selectedRevisions[0]?.revisionNumber
-  );
+  const olderRevisionNumber = selectedRevisions[0]?.revisionNumber;
+  const newerRevisionNumber = selectedRevisions[1]?.revisionNumber;
 
-  const { data: revision2Data, isLoading: isLoading2 } = useRevisionDetails(
+  const { data: comparisonData, isLoading, isError } = useRevisionComparison(
     actualDietSummaryId,
-    selectedRevisions[1]?.revisionNumber
+    olderRevisionNumber,
+    newerRevisionNumber
   );
-
-  const isLoading = isLoading1 || isLoading2;
 
   if (needsSelection) {
     return (
@@ -174,23 +169,16 @@ const RevisionCompare = ({
     );
   }
 
-  // Sprawdź czy mamy dane
-  if (!revision1Data || !revision2Data) {
+  // Error state
+  if (isError || !comparisonData) {
     return (
       <Alert severity="error">
-        Nie udało się załadować danych rewizji
+        Nie udało się załadować porównania rewizji
       </Alert>
     );
   }
 
-  // Sortuj rewizje - starsza jako pierwsza
-  const [olderRevision, newerRevision] = 
-    revision1Data.revisionNumber < revision2Data.revisionNumber
-      ? [revision1Data, revision2Data]
-      : [revision2Data, revision1Data];
-
-  // Wykryj zmiany
-  const changes = detectChanges(olderRevision, newerRevision);
+  const { olderRevision, newerRevision, macroChanges, mealsAdded, mealsRemoved, mealsModified } = comparisonData;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -274,9 +262,7 @@ const RevisionCompare = ({
             <Grid xs={12} sm={6} md={3}>
               <MacroChange 
                 label="Kalorie"
-                oldValue={olderRevision.dietSummary.kcal}
-                newValue={newerRevision.dietSummary.kcal}
-                change={changes.macroChanges.kcal}
+                changeDetail={macroChanges.kcal}
                 unit="kcal"
                 color="#ff9800"
               />
@@ -284,9 +270,7 @@ const RevisionCompare = ({
             <Grid xs={12} sm={6} md={3}>
               <MacroChange 
                 label="Białko"
-                oldValue={olderRevision.dietSummary.protein}
-                newValue={newerRevision.dietSummary.protein}
-                change={changes.macroChanges.protein}
+                changeDetail={macroChanges.protein}
                 unit="g"
                 color="#2196f3"
               />
@@ -294,9 +278,7 @@ const RevisionCompare = ({
             <Grid xs={12} sm={6} md={3}>
               <MacroChange 
                 label="Węglowodany"
-                oldValue={olderRevision.dietSummary.carbohydrates}
-                newValue={newerRevision.dietSummary.carbohydrates}
-                change={changes.macroChanges.carbohydrates}
+                changeDetail={macroChanges.carbohydrates}
                 unit="g"
                 color="#4caf50"
               />
@@ -304,9 +286,7 @@ const RevisionCompare = ({
             <Grid xs={12} sm={6} md={3}>
               <MacroChange 
                 label="Tłuszcze"
-                oldValue={olderRevision.dietSummary.fat}
-                newValue={newerRevision.dietSummary.fat}
-                change={changes.macroChanges.fat}
+                changeDetail={macroChanges.fat}
                 unit="g"
                 color="#fdd835"
               />
@@ -316,13 +296,18 @@ const RevisionCompare = ({
       </Card>
 
       {/* Zmiany w posiłkach */}
-      <MealChangesList changes={changes} />
+        <MealChangesList 
+        changes={{
+            mealsAdded,
+            mealsRemoved,
+            mealsModified
+        }}
+        />
     </Box>
   );
 };
 
 // Helper Components
-
 const VersionInfo = ({ title, revision, color, borderColor }) => (
   <Card 
     elevation={4}
@@ -370,32 +355,25 @@ const VersionInfo = ({ title, revision, color, borderColor }) => (
         
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
-            Posiłków:
+            Kalorie:
           </Typography>
-          <Chip 
-            label={revision.dietSummary.meals.length}
-            size="small"
-            sx={{
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              color: 'white',
-              fontWeight: 700,
-              height: '20px'
-            }}
-          />
+          <Typography variant="body2" fontWeight="600" color="white">
+            {revision.dietSummary.kcal.toFixed(1)} kcal
+          </Typography>
         </Box>
       </Box>
     </CardContent>
   </Card>
 );
 
-const MacroChange = ({ label, oldValue, newValue, change, unit, color }) => {
-  const changeColor = getMacroChangeColor(change);
-  const hasChange = Math.abs(change) > 0.1;
-  const percentChange = oldValue !== 0 ? ((change / oldValue) * 100).toFixed(1) : 0;
+const MacroChange = ({ label, changeDetail, unit, color }) => {
+  const { oldValue, newValue, diff, percentChange } = changeDetail;
+  const changeColor = getMacroChangeColor(diff);
+  const hasChange = Math.abs(diff) > 0.1;
 
   const getChangeIcon = () => {
-    if (change > 0) return <TrendingUpIcon sx={{ fontSize: 16 }} />;
-    if (change < 0) return <TrendingDownIcon sx={{ fontSize: 16 }} />;
+    if (diff > 0) return <TrendingUpIcon sx={{ fontSize: 16 }} />;
+    if (diff < 0) return <TrendingDownIcon sx={{ fontSize: 16 }} />;
     return <RemoveIcon sx={{ fontSize: 16 }} />;
   };
 
@@ -465,7 +443,7 @@ const MacroChange = ({ label, oldValue, newValue, change, unit, color }) => {
           >
             <Chip
               icon={getChangeIcon()}
-              label={formatMacroChange(change)}
+              label={formatMacroChange(diff)}
               size="small"
               sx={{
                 backgroundColor: alpha(changeColor, 0.2),
@@ -482,7 +460,7 @@ const MacroChange = ({ label, oldValue, newValue, change, unit, color }) => {
               fontWeight="600"
               sx={{ color: changeColor }}
             >
-              {percentChange}%
+              {percentChange.toFixed(1)}%
             </Typography>
           </Box>
         )}

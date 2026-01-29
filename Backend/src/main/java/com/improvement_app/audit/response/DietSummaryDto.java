@@ -4,7 +4,7 @@ import com.improvement_app.food.infrastructure.entity.summary.DietSummaryEntity;
 
 import java.time.LocalDate;
 
-public record DietSummaryAuditDto(
+public record DietSummaryDto(
         Long id,
         double kcal,
         double protein,
@@ -14,8 +14,8 @@ public record DietSummaryAuditDto(
         Long userId
 ) {
 
-    public static DietSummaryAuditDto from(DietSummaryEntity entity) {
-        return new DietSummaryAuditDto(
+    public static DietSummaryDto from(DietSummaryEntity entity) {
+        return new DietSummaryDto(
                 entity.getId(),
                 entity.getKcal(),
                 entity.getProtein(),

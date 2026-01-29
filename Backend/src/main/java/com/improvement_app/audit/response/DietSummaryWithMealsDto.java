@@ -13,12 +13,12 @@ public record DietSummaryWithMealsDto(
         double fat,
         LocalDate date,
         Long userId,
-        List<DailyMealAuditDto> meals
+        List<DailyMealDto> meals
 ) {
 
     public static DietSummaryWithMealsDto from(
             DietSummaryEntity diet,
-            List<DailyMealAuditDto> meals
+            List<DailyMealDto> meals
     ) {
         return new DietSummaryWithMealsDto(
                 diet.getId(),
