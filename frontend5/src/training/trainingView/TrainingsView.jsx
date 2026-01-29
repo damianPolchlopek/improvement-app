@@ -5,7 +5,6 @@ import SingleTraining from './SingleTraining';
 import { useTranslation } from 'react-i18next';
 
 import {
-  CircularProgress,
   Container,
   Table,
   Typography,
@@ -16,7 +15,6 @@ import {
   CardContent,
   Box,
   Fade,
-  Alert,
   useTheme
 } from '@mui/material';
 
@@ -30,6 +28,7 @@ import StyledTableRow from '../../component/table/StyledTableRow';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import InformationComponent from '../../component/InformationComponent';
 import ErrorAlert from '../../component/error/ErrorAlert';
+import PageLoader from '../../component/loader/PageLoader';
 
 export default function TrainingsView() {
   const { t } = useTranslation();
@@ -55,54 +54,11 @@ export default function TrainingsView() {
   };
 
   if (isLoading) {
-    return (
-      <Box sx={{ 
-        minHeight: '100vh', 
-        py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <CircularProgress 
-          size={60} 
-          sx={{ 
-            mb: 3,
-            color: '#4caf50'
-          }} 
-        />
-        <Typography variant="h6" color="white" fontWeight="600">
-          Ładowanie treningów...
-        </Typography>
-        <Typography variant="body2" color="rgba(255, 255, 255, 0.7)" sx={{ mt: 1 }}>
-          Pobieranie listy treningów
-        </Typography>
-      </Box>
-    );
+    return <PageLoader text="Ładowanie treningów..." />;
   }
 
   if (isError) {
-    return (
-      <Box sx={{ minHeight: '100vh', py: 4 }}>
-        <Container maxWidth="xl" sx={{ width: '70%' }}>
-          <Alert 
-            severity="error" 
-            sx={{ 
-              borderRadius: 3,
-              fontSize: '1.1rem',
-              backgroundColor: 'rgba(211, 47, 47, 0.1)',
-              color: 'white',
-              border: '1px solid rgba(211, 47, 47, 0.3)',
-              '& .MuiAlert-icon': {
-                color: '#f44336',
-              }
-            }}
-          >
-            <ErrorAlert error={error} />
-          </Alert>
-        </Container>
-      </Box>
-    );
+    return <ErrorAlert error={error} />;
   }
 
   if (data?.content?.length === 0) {

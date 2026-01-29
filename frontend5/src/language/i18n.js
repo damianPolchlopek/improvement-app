@@ -37,7 +37,8 @@ i18n.use(initReactI18next).init({
           timerChallenge: "Timer Challenge",
           management: "Management",
           projects: "Projects",
-          vacations: "Vacations"
+          vacations: "Vacations",
+          audit: "Audit"
         },
         chart: {
           date: "Date",
@@ -179,7 +180,8 @@ i18n.use(initReactI18next).init({
           timerChallenge: "Wyzwanie Czasowe",
           management: "Zarządzanie",
           projects: "Projekty",
-          vacations: "Urlopy"
+          vacations: "Urlopy",
+          audit: "Audyt"
         },
         chart: {
           date: "Data",

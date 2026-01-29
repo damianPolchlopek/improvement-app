@@ -278,4 +278,20 @@ export default class REST {
     static resendVerificationEmail(username) {
         return post(serverUrl + 'api/auth/resend-verification', username );
     }
+
+    // Audit
+    static getRevisions(dietSummaryId) {
+        return get(serverUrl + 'api/audit/diet-summary/' + dietSummaryId + '/revisions');
+    }
+
+    static getRevisionDetails(dietSummaryId, revisionNumber) {
+        return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber);
+    }
+
+    // compare?olderRevision=23&newerRevision=26
+    static getRevisionComparsion(dietSummaryId, olderRevisionId, newerRevisionId) {
+        return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/revisions/compare?olderRevision=' 
+            + olderRevisionId + '&newerRevision=' + newerRevisionId);
+    }
+
 }

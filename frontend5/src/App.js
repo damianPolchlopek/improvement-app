@@ -30,6 +30,7 @@ import {
   WEEKLY,
   DAILY,
   OTHER,
+  AUDIT,
   SignUpUrl,
   TimerChallenge,
   HolidayPicker,
@@ -67,6 +68,8 @@ const TimerChallengeMain = lazy(() => import('./projects/timerChallenge/TimerCha
 const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPickerMain'));
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
+const DietAuditSelectorPage = lazy(() => import('./audit/components/DietAuditSelectorPage.jsx'));
+const DietAuditPage = lazy(() => import('./audit/components/DietAuditPage.jsx'));
 
 const suspenseFallback = <p></p>;
 
@@ -166,6 +169,14 @@ const router = createBrowserRouter([
         children: [
           { path: VIEW, element: <Suspense fallback={suspenseFallback}><FinanceView /></Suspense> },
           { path: INFORMATION, element: <Suspense fallback={suspenseFallback}><FinanceInformation /></Suspense> }
+        ]
+      },
+      { 
+        path: AUDIT, 
+        children: [
+          { path: '', element: <Suspense fallback={suspenseFallback}><DietAuditSelectorPage /></Suspense> },
+          { path: ':dietSummaryId', element: <Suspense fallback={suspenseFallback}><DietAuditPage /></Suspense> },
+
         ]
       },
       {

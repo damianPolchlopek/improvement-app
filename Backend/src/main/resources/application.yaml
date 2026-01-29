@@ -16,6 +16,9 @@ spring:
           batch_versioned_data: true
         order_inserts: true
         order_updates: true
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+          implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
 
 
 #      Audyt - Envers

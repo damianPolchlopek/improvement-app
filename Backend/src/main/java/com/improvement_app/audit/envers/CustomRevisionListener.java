@@ -1,4 +1,4 @@
-package com.improvement_app.common.audit.envers;
+package com.improvement_app.audit.envers;
 
 import org.hibernate.envers.RevisionListener;
 import org.springframework.security.core.Authentication;

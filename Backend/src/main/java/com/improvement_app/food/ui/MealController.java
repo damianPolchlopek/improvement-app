@@ -100,7 +100,7 @@ public class MealController {
                 .map(GetMealResponse::from)
                 .toList();
 
-        return ResponseEntity.ok(mealDTOs);
+         return ResponseEntity.ok(mealDTOs);
     }
 
     @GetMapping("/meal/{id}/ingredients")

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +33,22 @@ public class GlobalExceptionHandler {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code("INVALID_ARGUMENT")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    /**
+     * Obsługa nieprawidłowych Requestow, na nie istniejace endpointy
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgument(NoResourceFoundException e) {
+        log.warn("Invalid path provided: {}", e.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code("INVALID_REQUEST")
                 .message(e.getMessage())
                 .timestamp(LocalDateTime.now())
                 .build();

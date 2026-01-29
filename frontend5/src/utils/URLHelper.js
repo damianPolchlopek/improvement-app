@@ -50,3 +50,6 @@ export const HolidayPicker = "vacations";
 
 export const TimerChallengeUrl = `${APP}/${PROJECTS}/${TimerChallenge}`;
 export const HolidayPickerUrl = `${APP}/${PROJECTS}/${HolidayPicker}`;
+
+export const AUDIT = "audit";
+export const AuditFoodUrl = `${APP}/${AUDIT}`;
