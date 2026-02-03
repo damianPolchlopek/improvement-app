@@ -59,7 +59,7 @@ const AddDietDayView = lazy(() => import("./food/addDietDay/AddDietDayView.jsx")
 const EditDietDayView = lazy(() => import("./food/editDietSummaryView/EditDietDayView.jsx"));
 const DietStatisticView = lazy(() => import("./food/statistic/DietStatisticView.jsx"));
 const ProductView = lazy(() => import('./food/ProductView/ProductView.jsx'));
-const WeeklyListView = lazy(() => import('./other/weekly/WeeklyListView'));
+const WeeklyRecordView = lazy(() => import('./other/weekly/WeeklyRecordsView.jsx'));
 const DailyView = lazy(() => import('./other/daily/DailyView'));
 const FinanceView = lazy(() => import('./finance/view/FinanceView.jsx'));
 const FinanceInformation = lazy(() => import('./finance/FinanceInformation.jsx'));
@@ -160,7 +160,7 @@ const router = createBrowserRouter([
         path: OTHER, 
         children: [
           { path: SHOPPING, element: <Suspense fallback={suspenseFallback}><ShoppingListView /></Suspense> },
-          { path: WEEKLY, element: <Suspense fallback={suspenseFallback}><WeeklyListView /></Suspense> },
+          { path: WEEKLY, element: <Suspense fallback={suspenseFallback}><WeeklyRecordView /></Suspense> },
           { path: DAILY, element: <Suspense fallback={suspenseFallback}><DailyView /></Suspense> },
         ]
       },

@@ -94,7 +94,7 @@ public class ExerciseService {
 
     @Transactional
     public Page<String> getAllTrainingNames(Long userId, Pageable page) {
-        return trainingRepository.findByUserIdOrderByDateDesc(userId, page)
+        return trainingRepository.findByUserId(userId, page)
                 .map(TrainingEntity::getName);
     }
 

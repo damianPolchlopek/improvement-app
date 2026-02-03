@@ -235,8 +235,8 @@ export default class REST {
 
 
     // daily
-    static getDaily() {
-        return get(serverUrl + daily);
+    static getDaily(page, size) {
+        return get(serverUrl + 'daily?page=' + page + '&size=' + size);
     }
 
     static deleteDaily(id) {
