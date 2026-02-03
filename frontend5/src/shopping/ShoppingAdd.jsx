@@ -1,98 +1,121 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import REST from '../utils/REST';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Unstable_Grid2';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  useTheme,
+  Collapse,
+  IconButton,
+  CircularProgress
+} from '@mui/material';
 
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
+import { ShoppingCartIcon, AddIcon } from '@mui/icons-material';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
+export default function ShoppingAdd({ categories = [] }) {
+  const [item, setItem] = useState({ name: '', category: categories[0] || '' });
+  const [open, setOpen] = useState(false);
 
-export default function ShoppingAdd() {
-  const [allCategoryTypes, setAllCategoryTypes] = useState([]);
-  const [item, setItem] = useState({name: '', category: 'SklepSpożywczy'});
-  const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
-    
-  useEffect(() => {
+  const theme = useTheme();
+  const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
-    REST.getAllCategoryProducts().then(response => {
-      setAllCategoryTypes(response.entity);
-    });
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => REST.addProductToShoppingList(item),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shopping-list'] });
+      setItem(prev => ({ ...prev, name: '' }));
+      showSnackbar('Product added', 'success');
+    },
+    onError: () => {
+      showSnackbar('Failed to add product', 'error');
+    },
+    retry: false,
+  });
 
-  }, []);
-
-  function addProductToShoppingList() {
-    REST.addProductToShoppingList(item).then(response => {
-      window.location.reload();
-    });
-  }
+  const handleAdd = () => {
+    if (!item.name.trim()) return;
+    mutate();
+  };
 
   return (
-    <React.Fragment>
-      {allCategoryTypes.length > 3 ? 
-      <React.Fragment>
+    <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+      {/* Header */}
+      <Box
+        onClick={() => setOpen(prev => !prev)}
+        sx={{
+          p: 2,
+          background: theme.palette.card.header,
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          cursor: 'pointer',
+          userSelect: 'none',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <ShoppingCartOutlinedIcon sx={{ fontSize: 24 }} />
+          <Typography variant="h6" fontWeight="600">
+            Add Product
+          </Typography>
+        </Box>
+        <IconButton sx={{ color: 'white' }} size="small">
+          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </Box>
 
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Typography 
-              variant="h5" 
-              component="div" 
-              onClick={() => setIsAddProductIsVisible(!isAddProductIsVisible)}
+      {/* Form */}
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            placeholder="Product name..."
+            label="Name"
+            variant="outlined"
+            size="small"
+            fullWidth
+            value={item.name}
+            onChange={(e) => setItem(prev => ({ ...prev, name: e.target.value }))}
+          />
+
+          <FormControl size="small" fullWidth>
+            <InputLabel>Category</InputLabel>
+            <Select
+              label="Category"
+              value={item.category}
+              onChange={(e) => setItem(prev => ({ ...prev, category: e.target.value }))}
             >
-              Add Products
-              {!isAddProductIsVisible ? <ExpandLess /> : <ExpandMore />}
-            </Typography>
-          </Grid>
+              {categories.map(cat => (
+                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <Grid xs={12} hidden={isAddProductIsVisible}>
-            <TextField
-              placeholder="Product Name ..."
-              label="Name"
-              variant="outlined"
-              size="small"
-              onChange={(e)=> setItem({name: e.target.value, category: item.category})}
-            />
-          </Grid>
-          
-          <Grid xs={12} hidden={isAddProductIsVisible}>
-            <FormControl sx={{ m: 1, minWidth: 150 }}>
-              <InputLabel>Category</InputLabel>
-              <Select
-                label="Category"
-                defaultValue={allCategoryTypes[0]} 
-                onChange={(e)=> setItem({name: item.name, category: e.target.value})}
-                size="small"
-              >
-                {allCategoryTypes ? allCategoryTypes.map(categoryType => {
-                  return(
-                    <MenuItem key={categoryType} value={categoryType}>
-                      {categoryType}
-                    </MenuItem>
-                  );
-                }) : null}
-              </Select>
-            </FormControl>
-          </Grid>
-            
-          <Grid xs={12} hidden={isAddProductIsVisible}>
-            <Button 
-              variant="contained" 
-              onClick={() => addProductToShoppingList()}
-            >
-              Add Product
-            </Button>
-          </Grid>
-
-        </Grid>
-
-      </React.Fragment> : null}
-    </React.Fragment>
+          <Button
+            variant="contained"
+            onClick={handleAdd}
+            disabled={isPending || !item.name.trim()}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            {isPending ? <CircularProgress size={20} /> : 'Add Product'}
+          </Button>
+        </CardContent>
+      </Collapse>
+    </Card>
   );
-  
 }

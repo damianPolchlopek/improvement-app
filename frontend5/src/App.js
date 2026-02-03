@@ -53,7 +53,7 @@ const TrainingsView = lazy(() => import("./training/trainingView/TrainingsView.j
 const ExerciseView = lazy(() => import('./training/exerciseView/ExerciseView.jsx'));
 const MaximumExerciseView = lazy(() => import('./training/maximumTrainingView/MaximumExerciseView.jsx'));
 const TrainingStatistic = lazy(() => import('./training/trainingStatistic/TrainingStatistics.jsx'));
-const ShoppingListView = lazy(() => import("./shopping/ShoppingListView.jsx"));
+const ShoppingListView = lazy(() => import("./shopping/ShoppingListPage.jsx"));
 const MealView = lazy(() => import('./food/foodView/MealView.jsx'));
 const AddDietDayView = lazy(() => import("./food/addDietDay/AddDietDayView.jsx"));
 const EditDietDayView = lazy(() => import("./food/editDietSummaryView/EditDietDayView.jsx"));
