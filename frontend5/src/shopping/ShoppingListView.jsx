@@ -1,196 +1,162 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import REST from '../utils/REST';
+import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  useTheme,
+  Collapse,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  CircularProgress,
+  Divider,
+} from '@mui/material';
 
-import { ExpandLess, ExpandMore }from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+import ErrorAlert from '../component/error/ErrorAlert';
 
 
-export default function ShoppingListView() {
-  const [shoppingList, setShoppingList] = useState([]);
-  const [allCategoryTypes, setAllCategoryTypes] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [item, setItem] = useState({name: '', category: 'All'});
+export default function ShoppingListView({ categories = [] }) {
+  const [selectedCategory, setSelectedCategory] = useState(categories[0] || '');
+  const [open, setOpen] = useState(true);
 
-  const [isAddProductIsVisible, setIsAddProductIsVisible] = useState(false);
-  const [isChooseCategoryIsHidden, setIsChooseCategoryIsHidden] = useState(true);
-  const [isShoppingListIsVisible, setIsShoppingListIsVisible] = useState(false);
-    
-  useEffect(() => {
+  const theme = useTheme();
+  const { showSnackbar } = useSnackbar();
+  const queryClient = useQueryClient();
 
-    REST.getAllCategoryProducts().then(response => {
-      setAllCategoryTypes(response.entity);
-      setSelectedCategory(response.entity[0]);
-    });
+  const { data: shoppingList, isLoading, isError, error } = useQuery({
+    queryKey: ['shopping-list', selectedCategory],
+    queryFn: () => REST.getShoppingListByCategory(selectedCategory).then(res => res.entity),
+    enabled: !!selectedCategory,
+    keepPreviousData: true,
+  });
 
-  }, []);
+  const { mutate: deleteProduct, isPending: isDeleting } = useMutation({
+    mutationFn: (id) => REST.deleteProductFromShoppingList(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['shopping-list', selectedCategory] });
+      showSnackbar('Product removed', 'success');
+    },
+    onError: () => {
+      showSnackbar('Failed to remove product', 'error');
+    },
+    retry: false,
+  });
 
-  useEffect(() => {
-    REST.getShoppingListByCategory(selectedCategory).then(response => {
-      setShoppingList(response.entity);
-    });
-
-  }, [selectedCategory]);
-
-  function loadProductsFromSelectedCategory() {
-    REST.getShoppingListByCategory(selectedCategory).then(response => {
-      setShoppingList(response.entity);
-    });
+  if (isError) {
+    return <ErrorAlert error={error} />;
   }
-
-  function deleteProductFromShoppingList(productId) {
-    REST.deleteProductFromShoppingList(productId).then(response => {
-      window.location.reload();
-    });
-  }
-
-  function addProductToShoppingList() {
-    REST.addProductToShoppingList(item).then(response => {
-      window.location.reload();
-    });
-  }
-
-  const handleChangeSelectedCategory = (event) => {
-    console.log(event.target.value)
-    setSelectedCategory(event.target.value);
-  };
 
   return (
-    <React.Fragment>
-      {allCategoryTypes.length > 3 ? 
-      <React.Fragment>
-       
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Typography 
-              variant="h5" 
-              component="div" 
-              onClick={() => setIsAddProductIsVisible(!isAddProductIsVisible)}
+    <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+      {/* Header */}
+      <Box
+        onClick={() => setOpen(prev => !prev)}
+        sx={{
+          p: 2,
+          background: theme.palette.card.header,
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          cursor: 'pointer',
+          userSelect: 'none',
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          <ShoppingBasketIcon sx={{ fontSize: 24 }} />
+          <Typography variant="h6" fontWeight="600">
+            Shopping List
+          </Typography>
+        </Box>
+        <IconButton sx={{ color: 'white' }} size="small">
+          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </IconButton>
+      </Box>
+
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+          {/* Category selector */}
+          <FormControl size="small" sx={{ maxWidth: 250 }}>
+            <InputLabel>Category</InputLabel>
+            <Select
+              label="Category"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              Add Products
-              {!isAddProductIsVisible ? <ExpandLess /> : <ExpandMore />}
+              {categories.map(cat => (
+                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <Divider />
+
+          {/* Product list */}
+          {isLoading ? (
+            <CircularProgress size={24} sx={{ alignSelf: 'center' }} />
+          ) : shoppingList?.length === 0 ? (
+            <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', py: 2 }}>
+              No products in this category
             </Typography>
-          </Grid>
+          ) : (
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              {shoppingList?.map((product) => (
+                <Box
+                  key={product.id}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    p: 1.5,
+                    borderRadius: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    '&:hover': {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                    transition: 'background-color 0.2s ease-in-out',
+                  }}
+                >
+                  <Typography variant="body2" fontWeight="500">
+                    {product.name}
+                  </Typography>
 
-          <Grid xs={12} hidden={isAddProductIsVisible}>
-            <TextField
-              placeholder="Product Name ..."
-              label="Name"
-              variant="outlined"
-              size="small"
-              onChange={(e)=> setItem({name: e.target.value, category: item.category})}
-              // style={{color: 'white'}}
-            />
-          </Grid>
-          
-
-          <Grid xs={12} hidden={isAddProductIsVisible}>
-            <FormControl sx={{ m: 1, minWidth: 150 }}>
-              <InputLabel>Category</InputLabel>
-              <Select
-                defaultValue={allCategoryTypes[0]} 
-                onChange={(e)=> setItem({name: item.name, category: e.target.value})}
-                label="Category"
-                size="small"
-              >
-                {allCategoryTypes ? allCategoryTypes.map(categoryType => {
-                  return(
-                    <MenuItem key={categoryType} value={categoryType}>
-                      {categoryType}
-                    </MenuItem>
-                  );
-                }) : null}
-              </Select>
-            </FormControl>
-          </Grid>
-            
-          <Grid xs={12} hidden={isAddProductIsVisible}>
-            <Button 
-              variant="contained" 
-              onClick={() => addProductToShoppingList()}
-            >
-              Add Product
-            </Button>
-          </Grid>
-
-        </Grid>
-
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Typography 
-              variant="h5" 
-              component="div" 
-              onClick={() => setIsChooseCategoryIsHidden(!isChooseCategoryIsHidden)}
-            >
-              Choose Category
-              {!isChooseCategoryIsHidden ? <ExpandLess /> : <ExpandMore />}
-            </Typography>
-          </Grid>
-          <Grid xs={12} hidden={isChooseCategoryIsHidden}>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-              <InputLabel>Category</InputLabel>
-              <Select
-                value={selectedCategory}
-                label="Category"
-                onChange={handleChangeSelectedCategory}
-              >
-                {allCategoryTypes ? allCategoryTypes.map(exerciseType => {
-                  return(
-                    <MenuItem key={exerciseType} value={exerciseType}>
-                      {exerciseType}
-                    </MenuItem>
-                  );
-                }) : null}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          {/* style={{textAlign: 'left'}} */}
-          <Grid xs={12} hidden={isChooseCategoryIsHidden}>
-            <Button 
-              variant="contained" 
-              onClick={() => {loadProductsFromSelectedCategory()}}
-            >
-              Load Shopping List
-            </Button>
-          </Grid>
-
-        </Grid>
-        
-        <Grid container spacing={2}>
-          <Grid xs={12}>
-            <Typography 
-              variant="h5" 
-              component="div"
-              onClick={() => setIsShoppingListIsVisible(!isShoppingListIsVisible)}
-            >
-              Shopping List
-              {!isShoppingListIsVisible ? <ExpandLess /> : <ExpandMore />}
-            </Typography>
-          </Grid>
-          
-          {shoppingList.map((product, index) => {
-            return <Grid container xs={12} key={index}>
-              <Grid xs={6} textAlign='right' hidden={isShoppingListIsVisible}>
-                {product.name}
-              </Grid>
-              <Grid xs={6} textAlign='left' hidden={isShoppingListIsVisible}>
-                <Button onClick={() => {deleteProductFromShoppingList(product.id)}}>Delete</Button>
-              </Grid>
-            </Grid>
-          })}
-          
-        </Grid>
-
-      </React.Fragment> : null}
-    </React.Fragment>
+                  <IconButton
+                    size="small"
+                    onClick={() => deleteProduct(product.id)}
+                    disabled={isDeleting}
+                    sx={{
+                      backgroundColor: theme.palette.error.light,
+                      color: theme.palette.error.main,
+                      '&:hover': {
+                        backgroundColor: theme.palette.error.main,
+                        color: 'white',
+                        transform: 'scale(1.1)',
+                      },
+                      transition: 'all 0.2s ease-in-out',
+                    }}
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+          )}
+        </CardContent>
+      </Collapse>
+    </Card>
   );
-  
 }

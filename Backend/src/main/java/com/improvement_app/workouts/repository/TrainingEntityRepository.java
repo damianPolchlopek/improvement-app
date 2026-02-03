@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TrainingEntityRepository extends JpaRepository<TrainingEntity, Integer> {
 
-    Page<TrainingEntity> findByUserIdOrderByDateDesc(Long userId, Pageable page);
+    Page<TrainingEntity> findByUserId(Long userId, Pageable page);
 
     // TODO pomyslec o eager pobieranie ExerciseSets, Jak dodaje to w entity do jest exception,
     // zwiazany z kartezjanskim iloczynem

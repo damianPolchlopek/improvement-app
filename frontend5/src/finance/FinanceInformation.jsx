@@ -1,156 +1,237 @@
 import React from 'react';
 
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  Paper,
+  Typography,
+  Box,
+  Card,
+  CardContent,
+  useTheme,
+  List,
+  ListItem,
+  ListItemText
+} from '@mui/material';
+
 import Grid from '@mui/material/Unstable_Grid2';
+import { Info, TrendingUp, CalendarToday } from '@mui/icons-material';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { List, ListItem } from '@mui/material';
-import Typography from '@mui/material/Typography';
-
-import Item from '../component/Item';
-import CenteredContainer from '../component/CenteredContainer';
+import StyledTableCell from '../component/table/StyledTableCell';
+import StyledTableRow from '../component/table/StyledTableRow';
 
 export default function FinanceInformation() {
+  const theme = useTheme();
 
   return (
-    <CenteredContainer>
-      <All />
-    </CenteredContainer>
-  );
-}
+    <Box sx={{ py: 4 }}>
+      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
 
+        {/* Header Section */}
+        <Grid xs={12}>
+          <Card elevation={6} sx={{
+            borderRadius: 3,
+            background: theme.palette.card.header,
+            color: 'white',
+            mb: 2
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <Info sx={{ fontSize: 32 }} />
+                <Typography variant="h4" fontWeight="600">
+                  Informacje o Rynku Krypto
+                </Typography>
+              </Box>
+              <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                Historyczne dane i kluczowe informacje o cyklach bitcoina
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-const All = () => {
-  return(
-    <Grid container sx={{ width: '70%'}} spacing={2}>
-      <Grid xs={12}>
-        <Item>
-          <TableContainer>
+        {/* Historical Cycles Table */}
+        <Grid xs={12}>
+          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+            <Box sx={{
+              p: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2
+            }}>
+              <TrendingUp sx={{ fontSize: 28 }} />
+              <Typography variant="h5" fontWeight="600">
+                Historyczne Cykle BTC
+              </Typography>
+            </Box>
+
+            <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
               <Table>
                 <TableHead>
-                  <TableRow>
-                      <TableCell>-</TableCell>
-                      <TableCell>2013</TableCell>
-                      <TableCell>2017</TableCell>
-                      <TableCell>2021</TableCell>
-                  </TableRow>
-                  </TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell sx={{ fontWeight: 'bold' }}>-</StyledTableCell>
+                    <StyledTableCell sx={{ fontWeight: 'bold' }}>2013</StyledTableCell>
+                    <StyledTableCell sx={{ fontWeight: 'bold' }}>2017</StyledTableCell>
+                    <StyledTableCell sx={{ fontWeight: 'bold' }}>2021</StyledTableCell>
+                  </StyledTableRow>
+                </TableHead>
+                <TableBody>
+                  <StyledTableRow>
+                    <StyledTableCell sx={{ fontWeight: '600' }}>Spadki % BTC</StyledTableCell>
+                    <StyledTableCell>86%</StyledTableCell>
+                    <StyledTableCell>84%</StyledTableCell>
+                    <StyledTableCell>78%</StyledTableCell>
+                  </StyledTableRow>
 
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>Spadki % BTC</TableCell>
-                      <TableCell>86%</TableCell>
-                      <TableCell>84%</TableCell>
-                      <TableCell>78%</TableCell>
-                    </TableRow>
+                  <StyledTableRow>
+                    <StyledTableCell sx={{ fontWeight: '600' }}>Cykle wzrostowe [tygodnie]</StyledTableCell>
+                    <StyledTableCell>142</StyledTableCell>
+                    <StyledTableCell>152</StyledTableCell>
+                    <StyledTableCell>151</StyledTableCell>
+                  </StyledTableRow>
 
-                    <TableRow>
-                      <TableCell>Cykle wzrostowe [tygodnie]</TableCell>
-                      <TableCell>142</TableCell>
-                      <TableCell>152</TableCell>
-                      <TableCell>151</TableCell>
-                    </TableRow>
+                  <StyledTableRow>
+                    <StyledTableCell sx={{ fontWeight: '600' }}>Cykle spadkowe [tygodnie]</StyledTableCell>
+                    <StyledTableCell>59</StyledTableCell>
+                    <StyledTableCell>50</StyledTableCell>
+                    <StyledTableCell>52</StyledTableCell>
+                  </StyledTableRow>
 
-                    <TableRow>
-                      <TableCell>Cykle spadkowe [tygodnie]</TableCell>
-                      <TableCell>59</TableCell>
-                      <TableCell>50</TableCell>
-                      <TableCell>52</TableCell>
-                    </TableRow>
+                  <StyledTableRow>
+                    <StyledTableCell sx={{ fontWeight: '600' }}>Wzrosty i spadki [tygodnie]</StyledTableCell>
+                    <StyledTableCell>201</StyledTableCell>
+                    <StyledTableCell>202</StyledTableCell>
+                    <StyledTableCell>203</StyledTableCell>
+                  </StyledTableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Card>
+        </Grid>
 
-                    <TableRow>
-                      <TableCell>Wzrosty i spadki [tygodnie]</TableCell>
-                      <TableCell>201</TableCell>
-                      <TableCell>202</TableCell>
-                      <TableCell>203</TableCell>
-                    </TableRow>
+        {/* Info Cards */}
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                Dołek zazwyczaj jest 365 dni po górce
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-                  </TableBody>
-                
-          </Table>
-          </TableContainer>
-        </Item>
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                Wzrosty zaczynają się: - 1 - 1.5 rok przed halvingiem - wzrosty trwają do około roku po halvingu
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                Następny halving około Kwiecień 2024
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                Decyzja o wprowadzeniu ETF na BTC przez BlackRock około luty 2024
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1" sx={{ mb: 2 }}>
+                Istotne katalizatory zmian sentymentu w ciągu kolejnych 12 miesięcy, które zbiegną się w czasie z halvingiem to m.in.:
+              </Typography>
+              <List dense>
+                <ListItem>
+                  <ListItemText primary="rozprawa sądowa między SEC a Grayscale w sierpniu 2023" />
+                </ListItem>
+                <ListItem>
+                  <ListItemText primary="decyzje dotyczące ETF spot ArkInvest we wrześniu 2023" />
+                </ListItem>
+                <ListItem>
+                  <ListItemText primary="rozwiązanie sprawy Ripple również we wrześniu 2023" />
+                </ListItem>
+                <ListItem>
+                  <ListItemText primary="decyzje dotyczące wniosków BlackRock i Fidelity w marcu 2024" />
+                </ListItem>
+              </List>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                Krypto rozważane przez SEC za security: BNB, XRP, ADA, SOL, MATIC, ATOM, NEAR, SAND, ALGO, MANA
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                PlanB: BTC najlepiej kupić 6 miesięcy przed Halvingiem, a najlepiej sprzedać 18 miesięcy po halvingu.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid xs={12} md={6}>
+          <Card elevation={6} sx={{
+            height: '100%',
+            borderRadius: 3,
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Typography variant="body1">
+                Jarzombek: TENET - token z Re-Staking. Pokazuje to jak silna może stać się narracja na projekty oferujące Re-Staking, które z czasem mogą doświadczyć znacznych wzrostów.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+
       </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Dołek zazwyczaj jest 365 dni po górce
-          </Typography>
-        </Item>
-      </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Wzrosty zaczynają się:
-            - 1 - 1.5 rok przed halvingiem
-            - wzrosty trwaja do około roku po halvingu
-          </Typography>
-        </Item>
-      </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Następny halving około Kwiecien 2024
-          </Typography>
-        </Item>
-      </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Decyzja o wprowadzeniu ETF na BTC przez BlackRock około luty 2024
-          </Typography>
-        </Item>
-      </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Istotne katalizatory zmian sentymentu w ciągu kolejnych 12 miesięcy, które zbiegną się w czasie z halvingiem to m.in.: 
-            <List>
-              <ListItem>- rozprawa sądowa między SEC a Grayscale w sierpniu 2023,</ListItem>
-              <ListItem>- decyzje dotyczące ETF spot ArkInvest we wrześniu 2023,</ListItem>
-              <ListItem>- rozwiązanie sprawy Ripple również we wrześniu 2023,</ListItem>
-              <ListItem>- decyzje dotyczące wniosków BlackRock i Fidelity w marcu 2024</ListItem>
-            </List>
-          </Typography>
-        </Item>
-      </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Krypto rozważane przez SEC za security: BNB, XRP, ADA, SOL, MATIC, ATOM, NEAR, SAND, ALGO, MANA
-          </Typography>
-        </Item>
-      </Grid>
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            PlanB: BTC najlepiej kupić 6 miesięcy przed Halvingiem, a najlepiej sprzedać 18 miesięcy po halvingu.
-          </Typography>
-        </Item>
-      </Grid>
-
-
-      <Grid xs={6}>
-        <Item>
-          <Typography variant="body1">
-            Jarzombek: TENET - token z 
-
-            Co więcej, pokazuje to również jak silna może stać się narracja na projekty oferujące Re-Staking, które z czasem mogą doświadczyć znacznych wzrostów - nie tylko zainteresowania. Jednym z projektów wpisujących się w narrację Re-Stakingu jest projekt o nazwie Tenet, który można wrzucić na swój krypto-researchowy tapet i zastanowić się, czy oferuje on coś interesującego.
-          </Typography>
-        </Item>
-      </Grid>
-
-    </Grid>
-  )
+    </Box>
+  );
 }
