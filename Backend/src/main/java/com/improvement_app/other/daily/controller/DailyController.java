@@ -24,7 +24,7 @@ public class DailyController {
         return ResponseEntity.ok(savedDaily);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<Page<Daily>> getDaily(@RequestParam(defaultValue = "0") int page,
                                                 @RequestParam(defaultValue = "10") int size,
                                                 @RequestParam(defaultValue = "date") String sortField,

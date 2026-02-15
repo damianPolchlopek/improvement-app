@@ -87,8 +87,8 @@ management:
     prometheus:
       enabled: true
 
-#logging:
-#   level:
+logging:
+   level:
 #     root: INFO
 #     com.improvement_app: DEBUG
 #     org.springframework.web: DEBUG
@@ -97,9 +97,16 @@ management:
 #   file:
 #     name: logs/application.log
 
-logging:
-  level:
+#logging:
+#  level:
 #    org.hibernate.SQL: DEBUG
 #    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
 #    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG
-    org.hibernate.tool.schema: DEBUG
+#    org.hibernate.tool.schema: DEBUG
+
+springdoc:
+  swagger-ui:
+    path: /
+    enabled: false
+  api-docs:
+    enabled: false

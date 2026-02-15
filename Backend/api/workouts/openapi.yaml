@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Exercise Statistics API
+  version: 1.0.0
+  description: API for retrieving exercise performance statistics
+
+paths:
+  /api/v1/exercises/{exerciseName}/statistics:
+    get:
+      summary: Get exercise statistics
+      description: Returns time-series data for exercise performance analysis
+      operationId: getExerciseStatistics
+      tags:
+        - Exercise Statistics
+      parameters:
+        - name: exerciseName
+          in: path
+          required: true
+          description: Name of the exercise
+          schema:
+            type: string
+            minLength: 2
+            maxLength: 100
+          example: Squat
+
+        - name: beginDate
+          in: query
+          required: true
+          description: Start date in ISO-8601 format
+          schema:
+            type: string
+            format: date
+          example: "2024-01-01"
+
+        - name: endDate
+          in: query
+          required: true
+          description: End date in ISO-8601 format
+          schema:
+            type: string
+            format: date
+          example: "2024-12-31"
+
+        - name: chartType
+          in: query
+          required: false
+          description: Type of chart data to retrieve
+          schema:
+            type: string
+            enum: [CAPACITY, WEIGHT]
+            default: CAPACITY
+          example: CAPACITY
+
+      responses:
+        '200':
+          description: Statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChartPoint'
+              examples:
+                typical:
+                  summary: Typical response
+                  value:
+                    - date: "2024-01-01"
+                      value: 100.5
+                    - date: "2024-01-15"
+                      value: 105.2
+
+        '204':
+          description: No data found for given criteria
+
+        '400':
+          description: Invalid request parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+        '404':
+          description: Exercise not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ChartPoint:
+      type: object
+      required:
+        - date
+        - value
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the measurement
+        value:
+          type: number
+          format: double
+          description: Measured value
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred

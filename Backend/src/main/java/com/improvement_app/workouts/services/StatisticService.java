@@ -24,18 +24,16 @@ public class StatisticService {
 
     private final ExerciseService exerciseService;
 
-    public List<ChartPoint> generateStatisticChartData(Long userId, String exerciseName, String chartType, String beginDate, String endDate) {
+    public List<ChartPoint> generateStatisticChartData(Long userId, String exerciseName, ChartType chartType, String beginDate, String endDate) {
         List<ExerciseEntity> filteredExercises = getFilteredExercises(userId, exerciseName, beginDate, endDate);
 
-        ChartType type = ChartType.valueOf(chartType);
-
         List<Double> values;
-        if (type == ChartType.Capacity) {
+        if (chartType == ChartType.Capacity) {
             values = getCapacity(filteredExercises);
-        } else if (type == ChartType.Weight){
+        } else if (chartType == ChartType.Weight){
             values = getWeight(filteredExercises);
         } else {
-            throw new IllegalArgumentException("User selected incorrect chart type: " + type);
+            throw new IllegalArgumentException("User selected incorrect chart type: " + chartType);
         }
 
         List<LocalDate> localDates = getLocalDates(filteredExercises);

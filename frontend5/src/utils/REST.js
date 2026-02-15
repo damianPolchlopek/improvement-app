@@ -22,7 +22,7 @@ const daily = 'daily/';
 const finance = 'finance/';
 const crypto = 'crypto/';
 
-const statistic = 'statistic/';
+const statistic = '/statistic';
 
 // const axiosInstance = axios.create({
 //     baseURL: 'https://mutarexx.smallhost.pl:24568',
@@ -31,11 +31,12 @@ const statistic = 'statistic/';
 //     }),
 //   });
 
-const get = (url) => {
-    return axios.get(url).then((response) => {
-        console.log(response)
-        return response.data;
-    });
+const get = (url, params = {}) => {
+    return axios.get(url, { params })
+        .then(response => {
+            console.log(response);
+            return response.data;
+        });
 }
 
 const post = (url, data) => {
@@ -111,13 +112,8 @@ export default class REST {
         return get(serverUrl + drive + 'initApplication');
     }
 
-
-    static getTestStatistic(exerciseName) {
-        return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
-    }
-
     static getTrainingStatistic(exerciseName, chartType, beginDate, endDate) {
-        return get(serverUrl + exercise + statistic + exerciseName + '/' + chartType + '/' + beginDate + '/' + endDate);
+        return get(serverUrl + 'v1/' + exercise + exerciseName + statistic, {chartType, beginDate, endDate});
     }
 
     static getATHTraining(type) {
@@ -129,7 +125,7 @@ export default class REST {
     }
 
     static getTrainingByType(type, page, size) {
-        return get(serverUrl + exercise + 'training/' + type + '?page=' + page + '&size=' + size);
+        return get(serverUrl + exercise + 'training/' + type, {page, size});
     }
 
     static addTraining(data) {

@@ -76,17 +76,8 @@ public class WebSecurityConfig {
 
                 // AUTORYZACJA - TO JEST NAJWAŻNIEJSZE!
                 .authorizeHttpRequests(auth -> auth
-                        // ====== WEBSOCKET ENDPOINTS - DODANE! ======
-                        .requestMatchers("/ws/**").permitAll()
-                        .requestMatchers("/ws/info/**").permitAll()
-                        .requestMatchers("/sockjs-node/**").permitAll()
-                        .requestMatchers("/error").permitAll()
-
-                        // Publiczne endpointy
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/test/all").permitAll()
-
-                        // Swagger/OpenAPI - jeśli używasz
+                        // Swagger/OpenAPI
+//                        .requestMatchers("/").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
@@ -94,6 +85,10 @@ public class WebSecurityConfig {
                                 "/webjars/**",
                                 "/v2/api-docs/**"
                         ).permitAll()
+
+                        // Publiczne endpointy
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/test/all").permitAll()
 
                         // Endpointy wymagające autoryzacji
                         .requestMatchers(HttpMethod.GET, "/api/test/user")

@@ -1,0 +1,610 @@
+{
+  "info": {
+    "_postman_id": "52900b94-a45d-4a18-a3bc-bc1888cb8fbd",
+    "name": "Localhost",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6780200"
+  },
+  "item": [
+    {
+      "name": "Food Module",
+      "item": [
+        {
+          "name": "/food/meal/{id}/ingredients",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/food/meal/24/ingredients",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "food",
+                "meal",
+                "24",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/food/meal/types",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/food/meal/24/ingredients",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "food",
+                "meal",
+                "24",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/food/meal",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/food/meal/24/ingredients",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "food",
+                "meal",
+                "24",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/food/diet/day-summary",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/food/meal/24/ingredients",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "food",
+                "meal",
+                "24",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/food/product",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/food/meal/24/ingredients",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "food",
+                "meal",
+                "24",
+                "ingredients"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Finance Module",
+      "item": [
+        {
+          "name": "/finance/crypto/description",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/finance/crypto/description",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "finance",
+                "crypto",
+                "description"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/finance/crypto/price/BTC/USD",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/finance/crypto/description",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "finance",
+                "crypto",
+                "description"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Debug",
+      "item": [
+        {
+          "name": "/exercises/trainingType/[type] Copy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/api/debug/hibernate-config",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "api",
+                "debug",
+                "hibernate-config"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Audit",
+      "item": [
+        {
+          "name": "/audit/revision/food/{dietSummaryId}/{revision}",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "/{entityType}/{entityId}/revision/{revisionNumber}",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/api/audit/diet-summary/103/revision/26",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "api",
+                "audit",
+                "diet-summary",
+                "103",
+                "revision",
+                "26"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/{entityType}/diet-summary/{id}/history",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/api/audit/diet-summary/103/history",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "api",
+                "audit",
+                "diet-summary",
+                "103",
+                "history"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/{entityType}/{entityId}/compare",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/api/audit/food/diet-summary/103/revisions/compare?olderRevision=23&newerRevision=26",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "api",
+                "audit",
+                "food",
+                "diet-summary",
+                "103",
+                "revisions",
+                "compare"
+              ],
+              "query": [
+                {
+                  "key": "olderRevision",
+                  "value": "23"
+                },
+                {
+                  "key": "newerRevision",
+                  "value": "26"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/revision/{revisionNumber}/metadata",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/api/audit/revision/26/metadata",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "api",
+                "audit",
+                "revision",
+                "26",
+                "metadata"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/{entityType}/{id}/revisions",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/api/audit/diet-summary/103/revisions",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "api",
+                "audit",
+                "diet-summary",
+                "103",
+                "revisions"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Exercise",
+      "item": [
+        {
+          "name": "/exercises/name/[name]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "/exercises/statistic",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/v1/exercises/Bieżnia/statistic?beginDate=22-11-2022&endDate=22-11-2025&chartType=Weight",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "v1",
+                "exercises",
+                "Bieżnia",
+                "statistic"
+              ],
+              "query": [
+                {
+                  "key": "beginDate",
+                  "value": "22-11-2022"
+                },
+                {
+                  "key": "endDate",
+                  "value": "22-11-2025"
+                },
+                {
+                  "key": "chartType",
+                  "value": "Weight"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "/exercises/trainingType/[type]",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseURL}}/exercises/trainingType/G",
+              "host": [
+                "{{baseURL}}"
+              ],
+              "path": [
+                "exercises",
+                "trainingType",
+                "G"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "pm.environment.set(\"authToken\", response.token);\r",
+              "\r",
+              "console.log(\"Dziala:\" + response.token)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"test\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/signin",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "auth",
+            "signin"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseURL",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
