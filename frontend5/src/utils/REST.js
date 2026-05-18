@@ -39,7 +39,7 @@ const get = (url) => {
 }
 
 const post = (url, data) => {
-    return axios.post(url, data).then((response) => {
+    return axios.post(url, data, { timeout: 15000 }).then((response) => {
         return response.data;
     })
 }

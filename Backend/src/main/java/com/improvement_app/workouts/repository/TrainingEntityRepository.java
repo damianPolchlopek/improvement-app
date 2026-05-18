@@ -4,7 +4,6 @@ import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,9 +12,8 @@ public interface TrainingEntityRepository extends JpaRepository<TrainingEntity, 
 
     Page<TrainingEntity> findByUserId(Long userId, Pageable page);
 
-    // TODO pomyslec o eager pobieranie ExerciseSets, Jak dodaje to w entity do jest exception,
-    // zwiazany z kartezjanskim iloczynem
-    @EntityGraph(attributePaths = {"exercises"})
+    // @EntityGraph removed: combining collection fetch with Pageable causes in-memory pagination (OOM).
+    // @BatchSize(50) on exercises + Hibernate.initialize in service handles batch loading safely.
     Page<TrainingEntity> findDistinctByUserIdAndExercisesTypeOrderByDateDesc(Long userId, ExerciseType exerciseType, Pageable page);
 
 }
