@@ -194,3 +194,4 @@ Obsługa błędów realizowana jest centralnie w pakiecie `exceptions/`. Dzięki
 Projekt cechuje modularność, czytelny podział na warstwy i domeny oraz centralna obsługa wyjątków i konfiguracji. Pozwala to na łatwą rozbudowę, testy i utrzymanie kodu. Dobrze oddzielone domeny i warstwy gwarantują zgodność z najlepszymi praktykami architektury aplikacji Spring Boot.
 
 ---
+
