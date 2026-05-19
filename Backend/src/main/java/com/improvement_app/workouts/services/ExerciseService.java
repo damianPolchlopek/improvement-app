@@ -140,7 +140,7 @@ public class ExerciseService {
         final String dbExerciseType = TrainingTypeConverter.toExerciseType(type);
         final ExerciseType exerciseType = ExerciseType.valueOf(dbExerciseType);
 
-        Page<TrainingEntity> trainings = trainingRepository.findDistinctByUserIdAndExercisesTypeOrderByDateDesc(userId, exerciseType, page);
+        Page<TrainingEntity> trainings = trainingRepository.findByUserIdAndExercisesType(userId, exerciseType, page);
 
         trainings.getContent().forEach(training -> {
             Hibernate.initialize(training.getExercises());
