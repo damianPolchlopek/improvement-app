@@ -83,7 +83,12 @@ public class WebSecurityConfig {
                         .requestMatchers("/error").permitAll()
 
                         // Publiczne endpointy
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/signin").permitAll()
+                        .requestMatchers("/api/auth/signup").permitAll()
+                        .requestMatchers("/api/auth/refresh-token").permitAll()
+                        .requestMatchers("/api/auth/logout").permitAll()
+                        .requestMatchers("/api/auth/verify-email").permitAll()
+                        .requestMatchers("/api/auth/resend-verification").permitAll()
                         .requestMatchers("/api/test/all").permitAll()
 
                         // Swagger/OpenAPI - jeśli używasz

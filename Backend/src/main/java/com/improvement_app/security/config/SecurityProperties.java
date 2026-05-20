@@ -24,4 +24,11 @@ public class SecurityProperties {
         private String[] allowedOrigins = {"http://localhost:3000"};
         private Long maxAge = 3600L;
     }
+
+    @Data
+    public static class Cookie {
+        private boolean secure = false;
+    }
+
+    private Cookie cookie = new Cookie();
 }

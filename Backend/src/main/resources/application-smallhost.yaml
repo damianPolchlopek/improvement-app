@@ -34,3 +34,6 @@ google:
 app:
   frontend:
     url: https://mutarexx.smallhost.pl
+  security:
+    cookie:
+      secure: true

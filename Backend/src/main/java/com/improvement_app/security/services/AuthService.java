@@ -1,5 +1,6 @@
 package com.improvement_app.security.services;
 
+import com.improvement_app.security.config.SecurityProperties;
 import com.improvement_app.security.entity.*;
 import com.improvement_app.security.exceptions.EmailNotVerifiedException;
 import com.improvement_app.security.exceptions.RoleNotFoundException;
@@ -8,10 +9,8 @@ import com.improvement_app.security.jwt.JwtUtils;
 import com.improvement_app.security.repository.RoleRepository;
 import com.improvement_app.security.repository.UserRepository;
 import com.improvement_app.security.request.LoginRequest;
-import com.improvement_app.security.request.RefreshTokenRequest;
 import com.improvement_app.security.request.SignupRequest;
 import com.improvement_app.security.response.JwtResponse;
-import com.improvement_app.security.response.RefreshTokenResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.ws.rs.NotFoundException;
@@ -45,9 +44,13 @@ public class AuthService {
     private final JwtUtils jwtUtils;
     private final EmailService emailService;
     private final UserTokenService userTokenService;
+    private final SecurityProperties securityProperties;
+
+    public record AuthResult(String accessToken, String refreshToken, JwtResponse userInfo) {}
+    public record RefreshResult(String accessToken, long expiresAt) {}
 
     @Transactional
-    public JwtResponse authenticateUser(LoginRequest loginRequest) {
+    public AuthResult authenticateUser(LoginRequest loginRequest) {
         log.debug("Authenticating user: {}", loginRequest.username());
 
         Authentication authentication = authenticationManager.authenticate(
@@ -55,7 +58,6 @@ public class AuthService {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // Sprawdź czy email został zweryfikowany
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -74,21 +76,30 @@ public class AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
+        long accessTokenExpiresAt = System.currentTimeMillis() + securityProperties.getJwt().getAccessTokenExpirationMs();
+        long refreshTokenExpiresAt = System.currentTimeMillis() + securityProperties.getJwt().getRefreshTokenExpirationMs();
+
         log.debug("User authenticated successfully: {}", userDetails.getUsername());
 
-        return new JwtResponse(accessToken, refreshToken, userDetails.getId(), userDetails.getUsername(),
-                userDetails.getEmail(), roles);
+        JwtResponse userInfo = new JwtResponse(
+                userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(),
+                roles, accessTokenExpiresAt, refreshTokenExpiresAt
+        );
+        return new AuthResult(accessToken, refreshToken, userInfo);
     }
 
-    public RefreshTokenResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
-        String refreshToken = refreshTokenRequest.refreshToken();
-
+    public RefreshResult refreshToken(String rawRefreshToken) {
         try {
-            Claims claims = jwtUtils.validateToken(refreshToken);
+            Claims claims = jwtUtils.validateToken(rawRefreshToken);
             String username = claims.getSubject();
 
-            String accessToken = jwtUtils.generateJwtToken(username, List.of("ROLE_USER"));
-            return RefreshTokenResponse.of(accessToken);
+            UserEntity userEntity = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+
+            String newAccessToken = jwtUtils.generateJwtToken(username, userEntity.getRolesString());
+            long expiresAt = System.currentTimeMillis() + securityProperties.getJwt().getAccessTokenExpirationMs();
+
+            return new RefreshResult(newAccessToken, expiresAt);
 
         } catch (JwtException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token niepoprawny");
@@ -112,15 +123,11 @@ public class AuthService {
         Set<Role> roles = determineUserRoles(signUpRequest.getRole());
         userEntity.setRoles(roles);
 
-        // Dodaj pola weryfikacji emaila
         userEntity.setEmailVerified(false);
         userEntity.setIsActive(false);
         UserEntity savedUser = userRepository.save(userEntity);
 
-        // Wygeneruj token weryfikacyjny
         UserTokenEntity token = userTokenService.createToken(savedUser, TokenTypeEnum.EMAIL_VERIFICATION);
-
-        // Wyślij email weryfikacyjny
         emailService.sendVerificationEmail(savedUser.getEmail(), token);
 
         log.info("User registered successfully: {}. Verification email sent.", userEntity.getUsername());
@@ -149,13 +156,10 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("No account found with this username"));
 
-        //todo: nie pozwol wysylac ponownych emaili po weryfikacji konta
-
         UserTokenEntity verificationToken = userTokenService.createToken(userEntity, TokenTypeEnum.EMAIL_VERIFICATION);
-
         emailService.sendVerificationEmail(userEntity.getEmail(), verificationToken);
 
-        log.info("Verification email resent to: {}", userEntity.getEmail());
+        log.info("Verification email resent to: {}", userEntity.getUsername());
 
         return "Verification email sent successfully.";
     }

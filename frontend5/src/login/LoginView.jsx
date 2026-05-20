@@ -16,12 +16,11 @@ import StyledPaper from '../component/StyledPaper';
 import { redirect, Form, useActionData, useNavigation } from 'react-router-dom';
 import { setTokens } from './Authentication';
 import { HomeViewUrl } from '../utils/URLHelper';
-import { 
-  getErrorInfo, 
-  getResendMessages, 
-  handleLoginError, 
-  validateRequiredFields, 
-  handleTokenValidationError 
+import {
+  getErrorInfo,
+  getResendMessages,
+  handleLoginError,
+  validateRequiredFields
 } from '../utils/errorSystem';
 
 export default function LoginView() {
@@ -249,20 +248,9 @@ export async function action({ request }) {
   try {
     const res = await REST.loginUser(userDetails);
 
-    // Walidacja odpowiedzi z serwera
-    if (!res.token || !res.type) {
-      throw new Error('Invalid server response');
-    }
-
-    const accessToken = res.token;
-    const refreshToken = res.refreshToken;
-    const tokenType = res.type;
-
-    try {
-      setTokens(accessToken, refreshToken, tokenType, res.roles);
-    } catch (tokenError) {
-      return handleTokenValidationError(tokenError);
-    }
+    // Tokeny są ustawiane przez backend jako httpOnly cookies
+    // W body dostajemy tylko dane użytkownika i czasy wygaśnięcia
+    setTokens(res.accessTokenExpiresAt, res.refreshTokenExpiresAt, res.roles);
 
     return redirect(HomeViewUrl);
 

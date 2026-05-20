@@ -31,42 +31,34 @@ const statistic = 'statistic/';
 //     }),
 //   });
 
+const axios_timeout = 15000;
+
 const get = (url) => {
-    return axios.get(url).then((response) => {
-        console.log(response)
+    return axios.get(url, { timeout: axios_timeout }).then((response) => {
         return response.data;
     });
 }
 
 const post = (url, data) => {
-    return axios.post(url, data, { timeout: 15000 }).then((response) => {
+    return axios.post(url, data, { timeout: axios_timeout }).then((response) => {
         return response.data;
     })
 }
 
 const put = (url, data) => {
-    return axios.put(url, data).then((response) => {
+    return axios.put(url, data, { timeout: axios_timeout }).then((response) => {
         return response.data;
     })
 }
 
 const deleteMethod = (url) => {
-    return axios.delete(url).then((response) => {
-        console.log(response)
+    return axios.delete(url, { timeout: axios_timeout }).then((response) => {
         return response.data;
     });
 }
 
-
-axios.interceptors.request.use(
-    (req) => {
-        req.headers.Authorization = localStorage.getItem('authorization');
-        return req;
-    },
-    (err) => {
-        return Promise.reject(err);
-    }
-);
+// Przeglądarka automatycznie wysyła httpOnly cookies przy każdym requeście
+axios.defaults.withCredentials = true;
 
 export default class REST {
     // Training module
@@ -267,8 +259,13 @@ export default class REST {
         return post(serverUrl + 'api/auth/signup', user);
     }
 
-    static refreshTokenRequest(refreshToken) {
-        return post(serverUrl + 'api/auth/refresh-token', { refreshToken });
+    static refreshTokenRequest() {
+        // refresh_token jest wysyłany automatycznie jako httpOnly cookie
+        return post(serverUrl + 'api/auth/refresh-token', {});
+    }
+
+    static logoutUser() {
+        return post(serverUrl + 'api/auth/logout', {});
     }
 
     static verifyEmail(token) {
