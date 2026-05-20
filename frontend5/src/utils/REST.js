@@ -33,7 +33,7 @@ const statistic = 'statistic/';
 
 // Przeglądarka automatycznie wysyła httpOnly cookies przy każdym requeście
 axios.defaults.withCredentials = true;
-axios.defaults.timeout = 15000;
+axios.defaults.timeout = 60000;
 
 const get = (url) => axios.get(url).then(r => r.data);
 const post = (url, data) => axios.post(url, data).then(r => r.data);
