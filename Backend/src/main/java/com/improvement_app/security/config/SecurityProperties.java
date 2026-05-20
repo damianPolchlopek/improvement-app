@@ -24,6 +24,8 @@ public class SecurityProperties {
     @Data
     public static class Cors {
         private String[] allowedOrigins = {"http://localhost:3000"};
+        private String[] allowedMethods = {"GET, POST, PUT, DELETE, OPTIONS, PATCH"};
+        private String[] allowedHeaders = {"*"};
         private Long maxAge = 3600L;
     }
 

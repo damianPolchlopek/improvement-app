@@ -33,6 +33,7 @@ public class WebSecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
+    private final SecurityProperties securityProperties;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -136,20 +137,18 @@ public class WebSecurityConfig {
 
         // Dozwolone źródła - LEPIEJ PRZEZ PROPERTIES!
         configuration.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:8080",
-                "http://localhost:24568",
-                "https://mutarexx.smallhost.pl",
-                "https://mutarexx.smallhost.pl:*" // Wildcard dla portów
+                securityProperties.getCors().getAllowedOrigins()
         ));
 
         // Dozwolone metody HTTP
         configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
+                securityProperties.getCors().getAllowedMethods()
         ));
 
         // Dozwolone nagłówki
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setAllowedHeaders(Arrays.asList(
+                securityProperties.getCors().getAllowedHeaders()
+        ));
 
         // Czy pozwalać na credentials (cookies, authorization headers)
         configuration.setAllowCredentials(true); // ZMIANA: true dla JWT!
