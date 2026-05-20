@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.envers.NotAudited;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 
@@ -68,12 +69,44 @@ public class UserEntity {
     @Column(name = "last_login")
     private Instant lastLogin;
 
+    @NotAudited
+    @Column(name = "failed_login_attempts", nullable = false)
+    private int failedLoginAttempts = 0;
+
+    @NotAudited
+    @Column(name = "locked_until")
+    private Instant lockedUntil;
+
+
+
+    public boolean isAccountLocked() {
+        return lockedUntil != null && Instant.now().isBefore(lockedUntil);
+    }
+
+    public void incrementFailedAttempts(int maxAttempts, int lockDurationMinutes) {
+        this.failedLoginAttempts++;
+        if (this.failedLoginAttempts >= maxAttempts) {
+            this.lockedUntil = Instant.now().plusSeconds(lockDurationMinutes * 60L);
+        }
+    }
+
+    public void resetFailedAttempts() {
+        this.failedLoginAttempts = 0;
+        this.lockedUntil = null;
+    }
+
     public UserEntity(String username, String email, String password, String name, String surname) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.failedLoginAttempts = 0;
+        this.isActive = false;
+        this.lockedUntil = null;
+        this.lastLogin = null;
+        this.roles = new HashSet<>();
+        this.emailVerified = false;
     }
 
     public List<String> getRolesString() {

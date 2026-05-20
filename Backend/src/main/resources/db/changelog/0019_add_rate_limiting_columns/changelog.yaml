@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Damian Polchlopek
+      logicalFilePath: 0019_add_rate_limiting_columns/001-add-rate-limiting-columns.sql
+      sqlFile:
+        path: 001-add-rate-limiting-columns.sql
+        relativeToChangelogFile: true
+        splitStatements: false
+        stripComments: false

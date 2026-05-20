@@ -101,4 +101,32 @@ public class SecurityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(AccountLockedException.class)
+    public ResponseEntity<ErrorResponse> handleAccountLocked(AccountLockedException ex) {
+        log.warn("Blocked login attempt on locked account");
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code("ACCOUNT_LOCKED")
+                .message("Account is temporarily locked due to too many failed login attempts.")
+                .timestamp(LocalDateTime.now())
+                .details("Try again later or contact support")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorResponse);
+    }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleRateLimitExceeded(RateLimitExceededException ex) {
+        log.warn("Rate limit exceeded: {}", ex.getMessage());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code("RATE_LIMIT_EXCEEDED")
+                .message("Too many requests. Please try again later.")
+                .timestamp(LocalDateTime.now())
+                .details(ex.getMessage())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorResponse);
+    }
+
 }

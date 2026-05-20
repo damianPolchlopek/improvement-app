@@ -11,6 +11,8 @@ public class SecurityProperties {
 
     private Jwt jwt = new Jwt();
     private Cors cors = new Cors();
+    private Cookie cookie = new Cookie();
+    private RateLimit rateLimit = new RateLimit();
 
     @Data
     public static class Jwt {
@@ -30,5 +32,12 @@ public class SecurityProperties {
         private boolean secure = false;
     }
 
-    private Cookie cookie = new Cookie();
+    @Data
+    public static class RateLimit {
+        private int maxLoginAttempts = 5;
+        private int lockDurationMinutes = 15;
+        private int maxEmailTokensPerHour = 3;
+    }
+
+
 }

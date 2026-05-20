@@ -74,3 +74,7 @@ databaseChangeLog:
   - include:
       file: 0018_add_audit_columns/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0019_add_rate_limiting_columns/changelog.yaml
+      relativeToChangelogFile: true

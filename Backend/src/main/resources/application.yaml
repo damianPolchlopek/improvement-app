@@ -60,6 +60,10 @@ app:
       refresh-token-expiration-ms: 259_200_000  # 3 dni
     cookie:
       secure: false  # true na produkcji (HTTPS)
+    rate-limit:
+      max-login-attempts: 5
+      lock-duration-minutes: 15
+      max-email-tokens-per-hour: 3
     cors:
       allowed-origins: "*"
       allowed-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"

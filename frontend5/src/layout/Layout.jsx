@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { getTokenDuration, getRefreshToken, refreshAccessToken } from '../login/Authentication.js';
-import { Outlet, useLoaderData, useSubmit } from 'react-router-dom';
+import { Outlet, useLoaderData, useNavigate, useSubmit } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Header from './Header.jsx';
@@ -12,6 +12,7 @@ export default function Layout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [token, setToken] = useState(useLoaderData());
   const submit = useSubmit();
+  const navigate = useNavigate();
   
   const logoutTimeoutRef = useRef(null);
   const refreshTimeoutRef = useRef(null);
@@ -83,7 +84,7 @@ export default function Layout() {
   // Główny useEffect do zarządzania tokenami
   useEffect(() => {
     if (!token) {
-      submit(null, { action: '/login', method: 'post' });
+      navigate('/login');
       return;
     }
 

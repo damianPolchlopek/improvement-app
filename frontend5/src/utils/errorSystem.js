@@ -22,16 +22,25 @@ export const ERROR_DEFINITIONS = {
     titleKey: 'login.errors.invalidCredentials.title',
     messageKey: 'login.errors.invalidCredentials.message',
     defaultTitle: 'Invalid credentials',
-    defaultMessage: 'Please check your username and password.',
+    defaultMessage: 'Please check your username and password. Too many failed attempts will temporarily lock your account.',
     showResendButton: false,
     category: 'auth'
   },
   'ACCOUNT_LOCKED': {
-    severity: 'error',
+    severity: 'warning',
     titleKey: 'login.errors.accountLocked.title',
     messageKey: 'login.errors.accountLocked.message',
-    defaultTitle: 'Account locked',
-    defaultMessage: 'Please contact administrator.',
+    defaultTitle: 'Account temporarily locked',
+    defaultMessage: 'Your account has been locked for 15 minutes due to too many failed login attempts. Please try again later.',
+    showResendButton: false,
+    category: 'auth'
+  },
+  'RATE_LIMIT_EXCEEDED': {
+    severity: 'warning',
+    titleKey: 'login.errors.rateLimitExceeded.title',
+    messageKey: 'login.errors.rateLimitExceeded.message',
+    defaultTitle: 'Too many requests',
+    defaultMessage: 'You have exceeded the allowed number of requests. Please wait and try again later.',
     showResendButton: false,
     category: 'auth'
   },
@@ -158,6 +167,12 @@ export const handleHttpError = (error, context = 'generic') => {
   // Obsługa błędu 403 - używamy danych z serwera jeśli dostępne
   if (status === 403) {
     const errorCode = data?.code || 'FORBIDDEN';
+    return createErrorResponse(errorCode, data, context);
+  }
+
+  // Obsługa błędu 429 - rate limiting i blokada konta
+  if (status === 429) {
+    const errorCode = data?.code || 'RATE_LIMIT_EXCEEDED';
     return createErrorResponse(errorCode, data, context);
   }
 

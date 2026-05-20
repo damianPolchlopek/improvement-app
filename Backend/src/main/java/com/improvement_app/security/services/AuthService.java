@@ -2,6 +2,7 @@ package com.improvement_app.security.services;
 
 import com.improvement_app.security.config.SecurityProperties;
 import com.improvement_app.security.entity.*;
+import com.improvement_app.security.exceptions.AccountLockedException;
 import com.improvement_app.security.exceptions.EmailNotVerifiedException;
 import com.improvement_app.security.exceptions.RoleNotFoundException;
 import com.improvement_app.security.exceptions.UserAlreadyExistsException;
@@ -18,9 +19,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j
@@ -45,6 +45,7 @@ public class AuthService {
     private final EmailService emailService;
     private final UserTokenService userTokenService;
     private final SecurityProperties securityProperties;
+    private final LoginAttemptService loginAttemptService;
 
     public record AuthResult(String accessToken, String refreshToken, JwtResponse userInfo) {}
     public record RefreshResult(String accessToken, long expiresAt) {}
@@ -53,38 +54,46 @@ public class AuthService {
     public AuthResult authenticateUser(LoginRequest loginRequest) {
         log.debug("Authenticating user: {}", loginRequest.username());
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
+        UserEntity userEntity = userRepository.findByUsername(loginRequest.username())
+                .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
+
+        if (userEntity.isAccountLocked()) {
+            log.warn("Blocked login attempt for locked account: {}", loginRequest.username());
+            throw new AccountLockedException("Account is temporarily locked. Try again later.");
+        }
+
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.username(), loginRequest.password()));
+        } catch (BadCredentialsException e) {
+            loginAttemptService.recordFailedAttempt(userEntity.getId());
+            throw new BadCredentialsException("Invalid credentials");
+        }
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        UserEntity userEntity = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!userEntity.getEmailVerified()) {
             throw new EmailNotVerifiedException("Email must be verified before login");
         }
 
+        userEntity.resetFailedAttempts();
         userEntity.setLastLogin(Instant.now());
         userRepository.save(userEntity);
 
-        String accessToken = jwtUtils.generateJwtToken(userDetails.getUsername(), userEntity.getRolesString());
+        String accessToken = jwtUtils.generateJwtToken(userEntity.getUsername(), userEntity.getRolesString());
         String refreshToken = jwtUtils.generateRefreshToken(authentication);
-
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
 
         long accessTokenExpiresAt = System.currentTimeMillis() + securityProperties.getJwt().getAccessTokenExpirationMs();
         long refreshTokenExpiresAt = System.currentTimeMillis() + securityProperties.getJwt().getRefreshTokenExpirationMs();
 
-        log.debug("User authenticated successfully: {}", userDetails.getUsername());
+        log.debug("User authenticated successfully: {}", userEntity.getUsername());
 
         JwtResponse userInfo = new JwtResponse(
-                userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(),
-                roles, accessTokenExpiresAt, refreshTokenExpiresAt
+                userEntity.getId(), userEntity.getUsername(), userEntity.getEmail(),
+                userEntity.getRolesString(), accessTokenExpiresAt, refreshTokenExpiresAt
         );
+
         return new AuthResult(accessToken, refreshToken, userInfo);
     }
 

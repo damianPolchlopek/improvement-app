@@ -29,13 +29,17 @@ public class UserDetailsImpl implements UserDetails {
 
     private final Collection<? extends GrantedAuthority> authorities;
 
+    private final boolean accountNonLocked;
+
     public UserDetailsImpl(Long id, String username, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           Collection<? extends GrantedAuthority> authorities,
+                           boolean accountNonLocked) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.accountNonLocked = accountNonLocked;
     }
 
     public static UserDetailsImpl build(UserEntity userEntity) {
@@ -48,7 +52,8 @@ public class UserDetailsImpl implements UserDetails {
                 userEntity.getUsername(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                authorities);
+                authorities,
+                !userEntity.isAccountLocked());
     }
 
     @Override
@@ -73,7 +78,7 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @Override
