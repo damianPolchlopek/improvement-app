@@ -97,6 +97,7 @@ public class AuthService {
         return new AuthResult(accessToken, refreshToken, userInfo);
     }
 
+    @Transactional(readOnly = true)
     public RefreshResult refreshToken(String rawRefreshToken) {
         try {
             Claims claims = jwtUtils.validateToken(rawRefreshToken);

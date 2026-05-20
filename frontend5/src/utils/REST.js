@@ -31,34 +31,14 @@ const statistic = 'statistic/';
 //     }),
 //   });
 
-const axios_timeout = 15000;
-
-const get = (url) => {
-    return axios.get(url, { timeout: axios_timeout }).then((response) => {
-        return response.data;
-    });
-}
-
-const post = (url, data) => {
-    return axios.post(url, data, { timeout: axios_timeout }).then((response) => {
-        return response.data;
-    })
-}
-
-const put = (url, data) => {
-    return axios.put(url, data, { timeout: axios_timeout }).then((response) => {
-        return response.data;
-    })
-}
-
-const deleteMethod = (url) => {
-    return axios.delete(url, { timeout: axios_timeout }).then((response) => {
-        return response.data;
-    });
-}
-
 // Przeglądarka automatycznie wysyła httpOnly cookies przy każdym requeście
 axios.defaults.withCredentials = true;
+axios.defaults.timeout = 15000;
+
+const get = (url) => axios.get(url).then(r => r.data);
+const post = (url, data) => axios.post(url, data).then(r => r.data);
+const put = (url, data) => axios.put(url, data).then(r => r.data);
+const deleteMethod = (url) => axios.delete(url).then(r => r.data);
 
 export default class REST {
     // Training module
