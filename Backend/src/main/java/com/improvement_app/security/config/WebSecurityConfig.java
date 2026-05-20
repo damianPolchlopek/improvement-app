@@ -108,6 +108,19 @@ public class WebSecurityConfig {
 
                         // WSZYSTKIE INNE REQUESTY WYMAGAJĄ AUTORYZACJI!
                         .anyRequest().authenticated()
+                )
+
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                        .contentSecurityPolicy(csp -> csp.policyDirectives(
+                                "default-src 'self'; " +
+                                "script-src 'self' 'unsafe-inline'; " +
+                                "style-src 'self' 'unsafe-inline'; " +
+                                "img-src 'self' data:; " +
+                                "font-src 'self'; " +
+                                "connect-src 'self' ws: wss:; " +
+                                "frame-ancestors 'self'"
+                        ))
                 );
 
         // Dodanie naszego filtra JWT

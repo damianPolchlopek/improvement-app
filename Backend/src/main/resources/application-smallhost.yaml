@@ -37,3 +37,5 @@ app:
   security:
     cookie:
       secure: true
+    cors:
+      allowed-origins: "https://mutarexx.smallhost.pl"
