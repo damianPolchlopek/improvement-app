@@ -2,6 +2,9 @@ package com.improvement_app.security.config;
 
 import com.improvement_app.security.jwt.AuthEntryPointJwt;
 import com.improvement_app.security.jwt.AuthTokenFilter;
+import com.improvement_app.security.oauth2.CustomOidcUserService;
+import com.improvement_app.security.oauth2.OAuth2FailureHandler;
+import com.improvement_app.security.oauth2.OAuth2SuccessHandler;
 import com.improvement_app.security.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -34,6 +36,10 @@ public class WebSecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
     private final SecurityProperties securityProperties;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomOidcUserService customOidcUserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -44,18 +50,13 @@ public class WebSecurityConfig {
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
+        authProvider.setPasswordEncoder(passwordEncoder);
         return authProvider;
     }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfiguration) throws Exception {
         return authConfiguration.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -77,7 +78,11 @@ public class WebSecurityConfig {
 
                 // AUTORYZACJA - TO JEST NAJWAŻNIEJSZE!
                 .authorizeHttpRequests(auth -> auth
-                        // ====== WEBSOCKET ENDPOINTS - DODANE! ======
+                        // OAuth2
+                        .requestMatchers("/oauth2/**").permitAll()
+                        .requestMatchers("/login/oauth2/**").permitAll()
+
+                        // ====== WEBSOCKET ENDPOINTS ======
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/ws/info/**").permitAll()
                         .requestMatchers("/sockjs-node/**").permitAll()
@@ -122,6 +127,12 @@ public class WebSecurityConfig {
                                 "connect-src 'self' ws: wss:; " +
                                 "frame-ancestors 'self'"
                         ))
+                )
+
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(info -> info.oidcUserService(customOidcUserService))
+                        .successHandler(oAuth2SuccessHandler)
+                        .failureHandler(oAuth2FailureHandler)
                 );
 
         // Dodanie naszego filtra JWT

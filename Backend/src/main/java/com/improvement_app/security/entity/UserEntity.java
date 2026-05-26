@@ -77,6 +77,9 @@ public class UserEntity {
     @Column(name = "locked_until")
     private Instant lockedUntil;
 
+    @NotAudited
+    @Column(name = "google_id", length = 255)
+    private String googleId;
 
 
     public boolean isAccountLocked() {

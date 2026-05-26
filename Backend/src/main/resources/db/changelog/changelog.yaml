@@ -78,3 +78,7 @@ databaseChangeLog:
   - include:
       file: 0019_add_rate_limiting_columns/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0020_add_oauth2_columns/changelog.yaml
+      relativeToChangelogFile: true

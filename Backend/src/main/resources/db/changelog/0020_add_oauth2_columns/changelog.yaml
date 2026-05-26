@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0020-add-oauth2-columns
+      author: Damian Polchlopek
+      changes:
+        - sqlFile:
+            path: 001-add-oauth2-columns.sql
+            relativeToChangelogFile: true

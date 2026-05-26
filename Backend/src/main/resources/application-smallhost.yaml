@@ -6,19 +6,28 @@ spring:
     mongodb:
       uri: mongodb://mo2222_workout:kO-TBI9_!$yJaVK7uT9zYkXL1r1lwy@mongo2.small.pl/mo2222_workout?retryWrites=true&w=majority&tls=false&tlsAllowInvalidCertificates=true
   datasource:
-    username: p2222_food
-    password: 9bJpou&'X99BGfT?.Z18h6jVSBk8cK
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://pgsql2.small.pl/p2222_food?reWriteBatchedInserts=true
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/changelog.yaml
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid, email, profile
+
 
 server:
   port: 37786
   ssl:
     key-store: /home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12
-    key-store-password: password
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
     key-store-type: PKCS12
     key-alias: alias_name
 

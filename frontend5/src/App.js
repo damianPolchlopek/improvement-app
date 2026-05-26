@@ -19,9 +19,9 @@ import SnackbarProvider from './component/snackbar/SnackbarProvider.jsx';
 import { MealSelectionProvider } from './context/MealSelectionContext.js';
 
 import {
-  TRAINING, 
+  TRAINING,
   EXERCISES,
-  MAXIMUM, 
+  MAXIMUM,
   FOOD,
   ADD,
   STATISTICS,
@@ -40,7 +40,8 @@ import {
   VIEW,
   INFORMATION,
   PROJECTS,
-  VerifyEmailUrl
+  VerifyEmailUrl,
+  OAuth2CallbackUrl
 } from "./utils/URLHelper";
 
 // Lazy-loaded components
@@ -68,6 +69,7 @@ const TimerChallengeMain = lazy(() => import('./projects/timerChallenge/TimerCha
 const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPickerMain'));
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
+const OAuth2CallbackPage = lazy(() => import('./login/OAuth2CallbackPage.jsx'));
 const DietAuditSelectorPage = lazy(() => import('./audit/components/DietAuditSelectorPage.jsx'));
 const DietAuditPage = lazy(() => import('./audit/components/DietAuditPage.jsx'));
 
@@ -98,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: VerifyEmailUrl,
         element: <Suspense fallback={suspenseFallback}><EmailVerification /></Suspense>,
+      },
+      {
+        path: OAuth2CallbackUrl,
+        element: <Suspense fallback={suspenseFallback}><OAuth2CallbackPage /></Suspense>,
       }
     ]
   },

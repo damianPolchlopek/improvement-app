@@ -73,7 +73,7 @@ i18n.use(initReactI18next).init({
         },
         login: {
           loginPanel: "Login Panel",
-          username: "Username",
+          username: "Username or Email",
           password: "Password",
           submit: "Submit"
         },
@@ -216,7 +216,7 @@ i18n.use(initReactI18next).init({
         },
         login: {
           loginPanel: "Panel logowania",
-          username: "Nazwa użytkownika",
+          username: "Nazwa użytkownika lub Email",
           password: "Hasło",
           submit: "Zatwierdź"
         },

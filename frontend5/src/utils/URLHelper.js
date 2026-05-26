@@ -37,6 +37,7 @@ export const LoginUrl = `/login`;
 export const SignUpUrl = `/sign-up`;
 export const LogoutUrl = `/logout`;
 export const VerifyEmailUrl = `/verify-email`;
+export const OAuth2CallbackUrl = `/oauth2/callback`;
 
 export const FINANCE = "finance";
 export const INFORMATION = "information";

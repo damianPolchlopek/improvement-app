@@ -3,6 +3,13 @@ spring:
     active: dev
   security:
     enabled: false
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope: openid, email, profile
   jpa:
     open-in-view: false
 #    show-sql: true
@@ -40,8 +47,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: mutarexx.1@gmail.com
-    password: 'hzlx opsi qnwf betv'
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -55,7 +62,7 @@ spring:
 app:
   security:
     jwt:
-      secret: EgqjKQLDwxs96e8/Q6cURnC72rqllIOtR0AUsqCSffk8sq/0wqPAReUH2glVh0hcjNH6H2yWDI1Em+n1D3t5qw==
+      secret: ${JWT_SECRET}
       access-token-expiration-ms: 900_000     # 15 minut
       refresh-token-expiration-ms: 259_200_000  # 3 dni
     cookie:
@@ -78,7 +85,7 @@ google:
 
 coinmarketcap:
   api:
-    key: 90c48b1c-81a5-4e96-801f-493d4a30784b
+    key: ${COINMARKETCAP_API_KEY}
 
 path:
   file:
