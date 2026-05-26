@@ -116,3 +116,4 @@ logging:
 #    org.hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
 #    org.hibernate.engine.jdbc.spi.SqlExceptionHelper: DEBUG
     org.hibernate.tool.schema: DEBUG
+
