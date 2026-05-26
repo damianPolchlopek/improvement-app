@@ -41,6 +41,7 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           SSL_KEYSTORE_PASSWORD: ${{ secrets.SSL_KEYSTORE_PASSWORD }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: |
           {
             printf 'export GOOGLE_CLIENT_ID=%q\n'      "$GOOGLE_CLIENT_ID"
@@ -52,6 +53,7 @@ jobs:
             printf 'export DB_USERNAME=%q\n'           "$DB_USERNAME"
             printf 'export DB_PASSWORD=%q\n'           "$DB_PASSWORD"
             printf 'export SSL_KEYSTORE_PASSWORD=%q\n' "$SSL_KEYSTORE_PASSWORD"
+            printf 'export MONGODB_URI=%q\n'             "$MONGODB_URI"
             echo 'export JAVA_VERSION="17"'
             echo 'pkill -f improvement-app-backend-0.0.1-SNAPSHOT.jar || true'
             echo 'sleep 2'
