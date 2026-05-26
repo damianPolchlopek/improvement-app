@@ -31,33 +31,31 @@ jobs:
           scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar
 
       - name: Restart backend on server and wait for start
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          MAIL_USERNAME: ${{ secrets.MAIL_USERNAME }}
+          MAIL_PASSWORD: ${{ secrets.MAIL_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          COINMARKETCAP_API_KEY: ${{ secrets.COINMARKETCAP_API_KEY }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SSL_KEYSTORE_PASSWORD: ${{ secrets.SSL_KEYSTORE_PASSWORD }}
         run: |
-          ssh mutarexx@s2.small.pl << EOF
+          ssh mutarexx@s2.small.pl "
+            export GOOGLE_CLIENT_ID='${GOOGLE_CLIENT_ID}'
+            export GOOGLE_CLIENT_SECRET='${GOOGLE_CLIENT_SECRET}'
+            export MAIL_USERNAME='${MAIL_USERNAME}'
+            export MAIL_PASSWORD='${MAIL_PASSWORD}'
+            export JWT_SECRET='${JWT_SECRET}'
+            export COINMARKETCAP_API_KEY='${COINMARKETCAP_API_KEY}'
+            export DB_USERNAME='${DB_USERNAME}'
+            export DB_PASSWORD='${DB_PASSWORD}'
+            export SSL_KEYSTORE_PASSWORD='${SSL_KEYSTORE_PASSWORD}'
             pkill -f 'improvement-app-backend-0.0.1-SNAPSHOT.jar' || true
             sleep 2
-
-            export GOOGLE_CLIENT_ID='${{ secrets.GOOGLE_CLIENT_ID }}'
-            export GOOGLE_CLIENT_SECRET='${{ secrets.GOOGLE_CLIENT_SECRET }}'
-            export MAIL_USERNAME='${{ secrets.MAIL_USERNAME }}'
-            export MAIL_PASSWORD='${{ secrets.MAIL_PASSWORD }}'
-            export JWT_SECRET='${{ secrets.JWT_SECRET }}'
-            export COINMARKETCAP_API_KEY='${{ secrets.COINMARKETCAP_API_KEY }}'
-            export DB_USERNAME='${{ secrets.DB_USERNAME }}'
-            export DB_PASSWORD='${{ secrets.DB_PASSWORD }}'
-            export SSL_KEYSTORE_PASSWORD='${{ secrets.SSL_KEYSTORE_PASSWORD }}'
-
-            nohup java \\
-              -Xms32m \\
-              -Xmx192m \\
-              -XX:MaxMetaspaceSize=160m \\
-              -XX:CompressedClassSpaceSize=48m \\
-              -XX:ReservedCodeCacheSize=32m \\
-              -XX:+UseSerialGC \\
-              -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar \\
-              --spring.profiles.active=smallhost \\
-              --server.port=37786 \\
-              > /home/mutarexx/backend.log 2>&1 &
-          EOF
+            nohup java -Xms32m -Xmx192m -XX:MaxMetaspaceSize=160m -XX:CompressedClassSpaceSize=48m -XX:ReservedCodeCacheSize=32m -XX:+UseSerialGC -jar /home/mutarexx/domains/mutarexx.smallhost.pl/improvement-app-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=smallhost --server.port=37786 > /home/mutarexx/backend.log 2>&1 &
+          "
 
 
       # === FRONTEND ===
