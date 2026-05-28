@@ -3,7 +3,9 @@ import REST from "../../utils/REST";
 
 import {
   Button,
+  CircularProgress,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -36,8 +38,15 @@ import {
   TrendingUp
 } from '@mui/icons-material';
 
+function withStableKey(exercise, fallbackIndex) {
+  return { ...exercise, _key: exercise.id ?? `init-${fallbackIndex}-${Date.now()}` };
+}
+
 export default function TrainingForm({ exercises, isSimpleForm }) {
-  const [exercisesFields, setExercisesFields] = useState(exercises)
+  const [exercisesFields, setExercisesFields] = useState(() =>
+    exercises.map(withStableKey)
+  );
+  const [validationError, setValidationError] = useState('');
   const {
     exerciseNames = [],
     exercisePlaces = [],
@@ -59,10 +68,16 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   });
 
   useEffect(() => {
-    setExercisesFields(exercises);
+    setExercisesFields(exercises.map(withStableKey));
   }, [exercises]);
 
   function handleSubmit() {
+    const invalid = exercisesFields.some(f => !f.name || !f.reps || !f.weight);
+    if (invalid) {
+      setValidationError('Uzupełnij nazwę, powtórzenia i ciężar dla każdego ćwiczenia.');
+      return;
+    }
+    setValidationError('');
     mutate(exercisesFields);
   }
 
@@ -74,7 +89,10 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
 
   const addFields = (index) => {
     let data = [...exercisesFields];
-    data.splice(index + 1, 0, {type: '', place: '', name: '', reps: '', weight: '', progress: ''})
+    data.splice(index + 1, 0, {
+      _key: crypto.randomUUID(),
+      type: '', place: '', name: '', reps: '', weight: '', progress: ''
+    });
     setExercisesFields(data)
   }
 
@@ -118,7 +136,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={3}>
           {exercisesFields.map((input, index) => (
-            <Grid xs={12} key={index}>
+            <Grid xs={12} key={input._key}>
               <Fade in={true} timeout={300 + index * 100}>
                 <Card elevation={4}>
                   <CardContent sx={{ p: 3 }}>
@@ -361,7 +379,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
         >
           {isPending ? (
             <Box display="flex" alignItems="center" gap={2}>
-              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              <CircularProgress size={20} color="inherit" />
               {t('messages.submitting')}
             </Box>
           ) : (
@@ -370,7 +388,16 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
         </Button>
       </Box>
 
-      {/* Błędy */}
+      {/* Błąd walidacji */}
+      {validationError && (
+        <Box sx={{ mt: 2 }}>
+          <FormHelperText error sx={{ fontSize: '0.95rem', textAlign: 'center' }}>
+            {validationError}
+          </FormHelperText>
+        </Box>
+      )}
+
+      {/* Błędy serwera */}
       {isError && (
         <Box sx={{ mt: 3 }}>
           <ErrorAlert error={error} />

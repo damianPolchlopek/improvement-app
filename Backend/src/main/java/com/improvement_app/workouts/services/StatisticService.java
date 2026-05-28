@@ -87,12 +87,16 @@ public class StatisticService {
         for (ExerciseEntity exerciseEntity : exercises) {
             int seriesNumber = exerciseEntity.getExerciseSets().size();
 
-            Double reduce = exerciseEntity.getExerciseSets().stream()
+            if (seriesNumber == 0) {
+                log.warn("Ćwiczenie {} nie ma serii — pomijam punkt na wykresie", exerciseEntity.getName());
+                continue;
+            }
+
+            Double sum = exerciseEntity.getExerciseSets().stream()
                     .map(ExerciseSetEntity::getWeight)
                     .reduce((double) 0, Double::sum);
 
-            Double calculationResult = reduce / seriesNumber;
-            result.add(calculationResult);
+            result.add(sum / seriesNumber);
         }
 
         return result;

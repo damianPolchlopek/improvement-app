@@ -8,6 +8,7 @@ import com.improvement_app.workouts.response.TrainingDayResponse;
 import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,12 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+@Validated
 @Tag(name = "Exercise API", description = "Controller to handle all operation on exercise database.")
 @RestController
 @RequiredArgsConstructor
@@ -124,7 +127,7 @@ public class ExerciseController implements Serializable {
 
     @Operation(description = "Add new training")
     @PostMapping(value = "/addTraining", produces = MediaType.APPLICATION_JSON)
-    public ResponseEntity<TrainingDayResponse> addTraining(@RequestBody List<ExerciseRequest> exercises,
+    public ResponseEntity<TrainingDayResponse> addTraining(@Valid @RequestBody List<ExerciseRequest> exercises,
                                                            @AuthenticationPrincipal(expression = "id") Long userId) {
         TrainingEntity training = exerciseService.addTraining(userId, exercises);
         return ResponseEntity.ok(TrainingDayResponse.from(training));
