@@ -1,4 +1,23 @@
+coinmarketcap:
+  api:
+    key: dummy-test-key
+
+app:
+  security:
+    jwt:
+      secret: dGVzdC1zZWNyZXQta2V5LWZvci10ZXN0aW5nLW9ubHktbXVzdC1iZS1sb25nLWVub3VnaA==
+
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: dummy-google-client-id
+            client-secret: dummy-google-client-secret
+  mail:
+    username: test@test.com
+    password: test-password
   liquibase:
     enabled: false
 

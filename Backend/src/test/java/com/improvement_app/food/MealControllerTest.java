@@ -128,7 +128,9 @@ public class MealControllerTest extends AbstractE2ETest {
 
         // then
         String expectedJson = readResource("expected/food/meal_search.json");
-        JSONAssert.assertEquals(expectedJson, responseBody, true);
+        // Lenient mode: extra fields in actual (productId, mealRecipeId added for frontend) are allowed.
+        // All fields that ARE in expectedJson are still validated for presence and value.
+        JSONAssert.assertEquals(expectedJson, responseBody, false);
 
         testData.cleanUp();
     }
