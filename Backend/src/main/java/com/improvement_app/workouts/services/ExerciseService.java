@@ -142,6 +142,8 @@ public class ExerciseService {
 
         Page<TrainingEntity> trainings = trainingRepository.findByUserIdAndExercisesType(userId, exerciseType, page);
 
+        // @BatchSize(size=50) on both exercises and exerciseSets batches these into
+        // 2 SQL queries total instead of N×M individual selects.
         trainings.getContent().forEach(training -> {
             Hibernate.initialize(training.getExercises());
             training.getExercises().forEach(exercise ->
@@ -154,22 +156,25 @@ public class ExerciseService {
 
     public TrainingEntity addTraining(Long userId, List<ExerciseRequest> exerciseRequest) {
         if (exerciseRequest == null || exerciseRequest.isEmpty()) {
-            log.warn("Lista ExerciseRequest jest pusta lub null");
+            throw new IllegalArgumentException("Lista ćwiczeń nie może być pusta");
         }
-
-        ExerciseEntity latestExercise = findLatestExercise(userId);
-
-        ExerciseType type = ExerciseType.fromValue(exerciseRequest.get(0).getType());
-        String trainingName = DriveFilesHelper.generateFileName(type, latestExercise);
-        String excelFileLocation = createTrainingExcelFile(exerciseRequest, trainingName);
-        uploadTrainingToGoogleDrive(excelFileLocation, trainingName);
 
         UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
+        ExerciseEntity latestExercise = findLatestExercise(userId);
+        ExerciseType type = ExerciseType.fromValue(exerciseRequest.get(0).getType());
+        String trainingName = DriveFilesHelper.generateFileName(type, latestExercise);
+
         TrainingEntity training = TrainingEntity.from(exerciseRequest);
         training.setName(trainingName);
         training.setUser(userEntity);
+
+        // Google Drive is the source of truth — upload first.
+        // If Drive fails, we throw and nothing is persisted (consistent state).
+        // If DB fails after a successful Drive upload, initApplicationTrainings()
+        // can restore the DB from Drive at any time.
+        uploadTrainingToDrive(exerciseRequest, trainingName);
 
         return trainingRepository.save(training);
     }
@@ -178,13 +183,9 @@ public class ExerciseService {
         return exerciseRepository.findTopByTrainingUserIdOrderByTrainingDateDesc(userId);
     }
 
-    private String createTrainingExcelFile(List<ExerciseRequest> exercises, String trainingName) {
+    private void uploadTrainingToDrive(List<ExerciseRequest> exercises, String trainingName) {
         String excelFileLocation = filePathService.getExcelPath(trainingName);
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
-        return excelFileLocation;
-    }
-
-    private void uploadTrainingToGoogleDrive(String excelFileLocation, String trainingName) {
         File file = new File(excelFileLocation);
         googleDriveFileService.uploadFile(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
     }

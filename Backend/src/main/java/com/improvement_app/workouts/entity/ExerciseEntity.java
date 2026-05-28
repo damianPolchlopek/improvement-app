@@ -7,6 +7,7 @@ import com.improvement_app.workouts.entity.enums.ExerciseType;
 import com.improvement_app.workouts.request.ExerciseRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,7 @@ public class ExerciseEntity extends AuditableEntity {
 
     @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @OrderBy("id")
+    @BatchSize(size = 50)
     private List<ExerciseSetEntity> exerciseSets = new ArrayList<>();
 
     public ExerciseEntity(ExerciseName name, ExerciseType type, ExerciseProgress progress,

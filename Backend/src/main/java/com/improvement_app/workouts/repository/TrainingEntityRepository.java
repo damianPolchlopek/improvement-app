@@ -1,6 +1,5 @@
 package com.improvement_app.workouts.repository;
 
-import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import org.springframework.data.domain.Page;

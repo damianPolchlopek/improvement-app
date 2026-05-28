@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.request;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -10,12 +11,18 @@ public class ExerciseRequest {
     private String id;
     private String type;
     private String place;
+
+    @NotEmpty
     private String trainingName;
     private LocalDate date;
 
     private String name;
     private String progress;
+
+    @NotEmpty
     private String reps;
+
+    @NotEmpty
     private String weight;
     private int index;
 
