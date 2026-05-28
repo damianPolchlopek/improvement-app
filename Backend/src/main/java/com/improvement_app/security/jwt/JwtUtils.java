@@ -4,6 +4,7 @@ import com.improvement_app.security.config.SecurityProperties;
 import com.improvement_app.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -72,7 +73,7 @@ public class JwtUtils {
                     .build()
                     .parseClaimsJws(authToken);
             return true;
-        } catch (SecurityException e) {
+        } catch (SignatureException e) {
             log.error("Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());

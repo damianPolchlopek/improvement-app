@@ -391,34 +391,29 @@ class AuthControllerIntegrationTest {
     // POST /refresh-token
     // ═════════════════════════════════════════════════════════════════════════
 
-    /**
-     * UWAGA: AuthController rzuca ResponseStatusException(HttpStatus.UNAUTHORIZED), ale
-     * GlobalExceptionHandler#handleRuntimeException łapie RuntimeException → 500 INTERNAL_ERROR
-     * i nadpisuje status. Tu dokumentujemy stan obecny. Bug do osobnego ticketu.
-     */
     @Test
-    @DisplayName("POST /refresh-token bez cookie → 500 INTERNAL_ERROR (BUG: powinno być 401)")
-    void refreshTokenShouldFailWithoutCookie() {
+    @DisplayName("POST /refresh-token bez cookie → 401 UNAUTHORIZED")
+    void refreshTokenShouldReturn401WithoutCookie() {
         RestAssured
                 .given()
                 .when()
                     .post("/refresh-token")
                 .then()
-                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .body("code", equalTo("INTERNAL_ERROR"));
+                    .statusCode(HttpStatus.UNAUTHORIZED.value())
+                    .body("code", equalTo("UNAUTHORIZED"));
     }
 
     @Test
-    @DisplayName("POST /refresh-token z nieprawidłowym refresh tokenem → 500 (BUG: powinno być 401)")
-    void refreshTokenShouldFailForInvalidToken() {
+    @DisplayName("POST /refresh-token z nieprawidłowym refresh tokenem → 401 UNAUTHORIZED")
+    void refreshTokenShouldReturn401ForInvalidToken() {
         RestAssured
                 .given()
                     .cookie("refresh_token", "not-a-valid-jwt")
                 .when()
                     .post("/refresh-token")
                 .then()
-                    .statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .body("code", equalTo("INTERNAL_ERROR"));
+                    .statusCode(HttpStatus.UNAUTHORIZED.value())
+                    .body("code", equalTo("UNAUTHORIZED"));
     }
 
     @Test

@@ -152,8 +152,8 @@ class JwtUtilsTest {
         }
 
         @Test
-        @DisplayName("token podpisany innym sekretem → propaguje JwtException")
-        void shouldRejectTokenSignedWithDifferentKey() {
+        @DisplayName("token podpisany innym sekretem → false")
+        void shouldReturnFalseForTokenSignedWithDifferentKey() {
             SecurityProperties otherProps = new SecurityProperties();
             otherProps.getJwt().setSecret(
                     "aW5uZS10YWplbW5lLWtsdWN6LWtvbmllY3puaWUtZGx1Z2ktbmEtaG1hYy1zaGEyNTY=");
@@ -161,12 +161,7 @@ class JwtUtilsTest {
 
             String foreignToken = other.generateJwtToken("alice", List.of("ROLE_USER"));
 
-            // UWAGA: JwtUtils#validateJwtToken łapie java.lang.SecurityException, a jjwt 0.11
-            // rzuca io.jsonwebtoken.security.SignatureException (NIE dziedziczącej po lang!).
-            // W efekcie zły podpis nie jest "łykany" jako false, tylko propaguje wyżej.
-            // Test dokumentuje ten stan; równolegle malformed/empty/expired token są obsłużone OK.
-            assertThatThrownBy(() -> jwtUtils.validateJwtToken(foreignToken))
-                    .isInstanceOf(JwtException.class);
+            assertThat(jwtUtils.validateJwtToken(foreignToken)).isFalse();
         }
 
         @Test

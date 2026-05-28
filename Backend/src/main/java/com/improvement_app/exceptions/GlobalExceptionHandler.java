@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
@@ -119,6 +120,22 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    /**
+     * Obsługa ResponseStatusException — zachowuje oryginalny status i powód.
+     */
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ErrorResponse> handleResponseStatusException(ResponseStatusException e) {
+        log.warn("ResponseStatusException: {} {}", e.getStatusCode(), e.getReason());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code(HttpStatus.valueOf(e.getStatusCode().value()).name())
+                .message(e.getReason())
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(e.getStatusCode()).body(errorResponse);
     }
 
     /**
