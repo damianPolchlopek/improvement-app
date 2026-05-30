@@ -176,7 +176,14 @@ public class ExerciseService {
         // can restore the DB from Drive at any time.
         uploadTrainingToDrive(exerciseRequest, trainingName);
 
-        return trainingRepository.save(training);
+        TrainingEntity saved = trainingRepository.save(training);
+
+        // open-in-view=false — kontroler buduje TrainingDayResponse po wyjściu z tej transakcji.
+        // Wymuszamy załadowanie kolekcji póki sesja Hibernate jeszcze żyje.
+        Hibernate.initialize(saved.getExercises());
+        saved.getExercises().forEach(e -> Hibernate.initialize(e.getExerciseSets()));
+
+        return saved;
     }
 
     private ExerciseEntity findLatestExercise(Long userId) {
