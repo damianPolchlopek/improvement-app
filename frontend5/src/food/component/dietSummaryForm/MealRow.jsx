@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import { 
-  IconButton, 
-  Checkbox, 
-  TextField 
-} from '@mui/material';
+import { IconButton, Checkbox, TextField } from '@mui/material';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -17,21 +13,21 @@ import { useMealRecalculation } from '../../../context/useMealRecalculation';
 export default function MealRow({ meal: single, index }) {
   const [meal, setMeal] = useState(single);
   const [isIngredientsOpen, setIsIngredientsOpen] = useState(false);
-  const { 
+  const {
     selectedMeals,
-    toggleMealSelection, 
-    updateMealAmount, 
+    toggleMealSelection,
+    updateMealAmount,
     updateMealIngredient,
-    isMealSelected 
+    isMealSelected,
   } = useMealSelection();
   const { recalculateMeal } = useMealRecalculation();
 
   const isItemSelected = isMealSelected(meal.mealRecipeId);
-  const selectedMeal = selectedMeals.find(m => m.id === meal.id);
+  const selectedMeal = selectedMeals.find((m) => m.id === meal.id);
   const currentAmount = selectedMeal?.amount || 1;
 
   const handleMealToggle = () => {
-    const existingMeal = selectedMeals.find(m => m.id === meal.id);
+    const existingMeal = selectedMeals.find((m) => m.id === meal.id);
     const currentAmount = existingMeal?.amount || 1;
     toggleMealSelection(meal, currentAmount);
   };
@@ -39,7 +35,7 @@ export default function MealRow({ meal: single, index }) {
   const handleMealAmountChange = (e) => {
     const newAmount = parseFloat(e.target.value) || 1;
     const isSelected = isMealSelected(meal.mealRecipeId);
-    
+
     if (isSelected) {
       updateMealAmount(meal.id, newAmount);
     } else if (newAmount > 1) {
@@ -52,7 +48,7 @@ export default function MealRow({ meal: single, index }) {
     const amount = selectedMeal?.amount || 1;
 
     // Zaktualizuj amount tylko dla wybranego składnika
-    const updatedIngredients = meal.ingredients.map(ingredient =>
+    const updatedIngredients = meal.ingredients.map((ingredient) =>
       ingredient.productId === ingredientProductId
         ? { ...ingredient, amount: newAmount }
         : ingredient
@@ -63,14 +59,14 @@ export default function MealRow({ meal: single, index }) {
 
     recalculateMeal.mutate(mealWithAmount, {
       onSuccess: (response) => {
-        setMeal(prev => ({
+        setMeal((prev) => ({
           ...prev,
           kcal: response.kcal,
           protein: response.protein,
           carbohydrates: response.carbohydrates,
-          fat: response.fat
+          fat: response.fat,
         }));
-      }
+      },
     });
 
     const isSelected = isMealSelected(meal.mealRecipeId);
@@ -84,7 +80,7 @@ export default function MealRow({ meal: single, index }) {
 
   const toggleIngredientsOpen = (e) => {
     e.stopPropagation();
-    setIsIngredientsOpen(prev => !prev);
+    setIsIngredientsOpen((prev) => !prev);
   };
 
   const handleCheckboxClick = (e) => {
@@ -98,57 +94,38 @@ export default function MealRow({ meal: single, index }) {
 
   return (
     <>
-      <StyledTableRow
-        key={index}
-        selected={isItemSelected}
-      >
-        <StyledTableCell sx={{width: '50px'}}>
-          <IconButton
-            aria-label="expand ingredients"
-            size="small"
-            onClick={toggleIngredientsOpen}
-          >
+      <StyledTableRow key={index} selected={isItemSelected}>
+        <StyledTableCell sx={{ width: '50px' }}>
+          <IconButton aria-label="expand ingredients" size="small" onClick={toggleIngredientsOpen}>
             {isIngredientsOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </StyledTableCell>
-        
+
         <StyledTableCell>
-          <Checkbox
-            color="primary"
-            checked={isItemSelected}
-            onClick={handleCheckboxClick}
-          />
+          <Checkbox color="primary" checked={isItemSelected} onClick={handleCheckboxClick} />
         </StyledTableCell>
-        
-        <StyledTableCell onClick={handleMealToggle}>
-          {meal.name}
-        </StyledTableCell>
-        
-        <StyledTableCell onClick={handleMealToggle}>
-          {formatInput(meal.kcal)}
-        </StyledTableCell>
-        
-        <StyledTableCell onClick={handleMealToggle}>
-          {formatInput(meal.protein)}
-        </StyledTableCell>
-        
+
+        <StyledTableCell onClick={handleMealToggle}>{meal.name}</StyledTableCell>
+
+        <StyledTableCell onClick={handleMealToggle}>{formatInput(meal.kcal)}</StyledTableCell>
+
+        <StyledTableCell onClick={handleMealToggle}>{formatInput(meal.protein)}</StyledTableCell>
+
         <StyledTableCell onClick={handleMealToggle}>
           {formatInput(meal.carbohydrates)}
         </StyledTableCell>
-        
-        <StyledTableCell onClick={handleMealToggle}>
-          {formatInput(meal.fat)}
-        </StyledTableCell>
-        
+
+        <StyledTableCell onClick={handleMealToggle}>{formatInput(meal.fat)}</StyledTableCell>
+
         <StyledTableCell onClick={handleAmountInputClick}>
           <TextField
             value={currentAmount}
             size="small"
-            inputProps={{ 
+            inputProps={{
               style: { width: 60 },
               type: 'number',
               min: 1,
-              step: 1
+              step: 1,
             }}
             variant="outlined"
             onChange={handleMealAmountChange}

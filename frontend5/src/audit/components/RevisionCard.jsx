@@ -14,14 +14,10 @@ import {
   alpha,
   Collapse,
   IconButton,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 
-
-import {
-  ExpandMore as ExpandMoreIcon,
-  LocalDining as LocalDiningIcon,
-} from '@mui/icons-material';
+import { ExpandMore as ExpandMoreIcon, LocalDining as LocalDiningIcon } from '@mui/icons-material';
 
 import Grid from '@mui/material/Grid';
 
@@ -30,10 +26,10 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
   const [expanded, setExpanded] = useState(false);
 
   // Lazy loading - pobierz pełne dane dopiero gdy karta jest wybrana
-  const { 
-    data: fullRevision, 
+  const {
+    data: fullRevision,
     isLoading: isLoadingDetails,
-    error: detailsError 
+    error: detailsError,
   } = useRevisionDetails(
     dietSummaryId,
     isSelected ? revision.revisionNumber : null // Pobieraj tylko gdy wybrana
@@ -60,12 +56,10 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
         borderRadius: 3,
         cursor: 'pointer',
         transition: 'all 0.3s ease',
-        background: isSelected 
+        background: isSelected
           ? 'linear-gradient(145deg, #243441 0%, #2d4a5a 100%)'
           : 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: isSelected 
-          ? `2px solid ${typeInfo.color}`
-          : '1px solid rgba(255, 255, 255, 0.1)',
+        border: isSelected ? `2px solid ${typeInfo.color}` : '1px solid rgba(255, 255, 255, 0.1)',
         position: 'relative',
         overflow: 'visible',
         '&:hover': {
@@ -73,37 +67,41 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
           boxShadow: `0 8px 24px ${alpha(typeInfo.color, 0.3)}`,
           border: `2px solid ${alpha(typeInfo.color, 0.6)}`,
         },
-        '&::before': isSelected ? {
-          content: '""',
-          position: 'absolute',
-          top: -2,
-          left: -2,
-          right: -2,
-          bottom: -2,
-          background: `linear-gradient(45deg, ${alpha(typeInfo.color, 0.3)}, transparent)`,
-          borderRadius: 3,
-          zIndex: -1,
-          filter: 'blur(10px)',
-        } : {}
+        '&::before': isSelected
+          ? {
+              content: '""',
+              position: 'absolute',
+              top: -2,
+              left: -2,
+              right: -2,
+              bottom: -2,
+              background: `linear-gradient(45deg, ${alpha(typeInfo.color, 0.3)}, transparent)`,
+              borderRadius: 3,
+              zIndex: -1,
+              filter: 'blur(10px)',
+            }
+          : {},
       }}
     >
       <CardContent sx={{ p: 3 }}>
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="start" mb={3}>
           <Box display="flex" alignItems="center" gap={2}>
-            <Box sx={{
-              fontSize: '2.5rem',
-              filter: `drop-shadow(0 0 8px ${alpha(typeInfo.color, 0.6)})`,
-              transition: 'all 0.3s ease',
-            }}>
+            <Box
+              sx={{
+                fontSize: '2.5rem',
+                filter: `drop-shadow(0 0 8px ${alpha(typeInfo.color, 0.6)})`,
+                transition: 'all 0.3s ease',
+              }}
+            >
               {typeInfo.icon}
             </Box>
-            
+
             <Box>
               <Typography variant="h6" fontWeight="700" color="white">
                 Rewizja #{revision.revisionNumber}
               </Typography>
-              <Chip 
+              <Chip
                 label={typeInfo.label}
                 size="small"
                 sx={{
@@ -112,29 +110,29 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                   color: typeInfo.color,
                   fontWeight: 600,
                   border: `1px solid ${alpha(typeInfo.color, 0.3)}`,
-                  fontSize: '0.75rem'
+                  fontSize: '0.75rem',
                 }}
               />
             </Box>
           </Box>
 
           <Box textAlign="right">
-            <Typography 
-              variant="body2" 
-              color="rgba(255, 255, 255, 0.9)" 
+            <Typography
+              variant="body2"
+              color="rgba(255, 255, 255, 0.9)"
               fontWeight="600"
               sx={{ mb: 0.5 }}
             >
               {timeInfo.time}
             </Typography>
-            <Chip 
+            <Chip
               label={timeInfo.relative}
               size="small"
               sx={{
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 color: 'rgba(255, 255, 255, 0.7)',
                 fontSize: '0.7rem',
-                height: '20px'
+                height: '20px',
               }}
             />
           </Box>
@@ -142,12 +140,15 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
 
         {/* Loading State lub Macros Summary */}
         {isSelected && isLoadingDetails ? (
-          <Card elevation={0} sx={{
-            background: 'rgba(0, 0, 0, 0.2)',
-            borderRadius: 2,
-            mb: 3,
-            p: 2,
-          }}>
+          <Card
+            elevation={0}
+            sx={{
+              background: 'rgba(0, 0, 0, 0.2)',
+              borderRadius: 2,
+              mb: 3,
+              p: 2,
+            }}
+          >
             <Box display="flex" alignItems="center" justifyContent="center" gap={2} py={3}>
               <CircularProgress size={24} sx={{ color: '#4caf50' }} />
               <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
@@ -158,42 +159,45 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
         ) : isSelected && hasFullData ? (
           <>
             {/* Macros Summary - pokazuj tylko gdy mamy pełne dane */}
-            <Card elevation={0} sx={{
-              background: 'rgba(0, 0, 0, 0.2)',
-              borderRadius: 2,
-              mb: 3,
-              border: '1px solid rgba(255, 255, 255, 0.05)'
-            }}>
+            <Card
+              elevation={0}
+              sx={{
+                background: 'rgba(0, 0, 0, 0.2)',
+                borderRadius: 2,
+                mb: 3,
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+              }}
+            >
               <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
                 <Grid container spacing={2}>
                   <Grid size={3}>
-                    <MacroDisplay 
-                      label="Kalorie" 
-                      value={dietSummary.kcal} 
+                    <MacroDisplay
+                      label="Kalorie"
+                      value={dietSummary.kcal}
                       unit="kcal"
                       color="#ff9800"
                     />
                   </Grid>
                   <Grid size={3}>
-                    <MacroDisplay 
-                      label="Białko" 
-                      value={dietSummary.protein} 
+                    <MacroDisplay
+                      label="Białko"
+                      value={dietSummary.protein}
                       unit="g"
                       color="#2196f3"
                     />
                   </Grid>
                   <Grid size={3}>
-                    <MacroDisplay 
-                      label="Węgle" 
-                      value={dietSummary.carbohydrates} 
+                    <MacroDisplay
+                      label="Węgle"
+                      value={dietSummary.carbohydrates}
                       unit="g"
                       color="#4caf50"
                     />
                   </Grid>
                   <Grid size={3}>
-                    <MacroDisplay 
-                      label="Tłuszcze" 
-                      value={dietSummary.fat} 
+                    <MacroDisplay
+                      label="Tłuszcze"
+                      value={dietSummary.fat}
                       unit="g"
                       color="#fdd835"
                     />
@@ -203,14 +207,14 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             </Card>
 
             {/* Footer Info */}
-            <Box 
-              display="flex" 
-              justifyContent="space-between" 
+            <Box
+              display="flex"
+              justifyContent="space-between"
               alignItems="center"
               sx={{
                 pb: expanded ? 2 : 0,
                 borderBottom: expanded ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
               }}
             >
               <Box display="flex" alignItems="center" gap={1}>
@@ -219,7 +223,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                   Posiłków: <strong style={{ color: 'white' }}>{meals.length}</strong>
                 </Typography>
               </Box>
-              
+
               <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
                 Data diety: <strong style={{ color: 'white' }}>{dietSummary.date}</strong>
               </Typography>
@@ -233,7 +237,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                     transition: 'transform 0.3s ease',
                     '&:hover': {
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    }
+                    },
                   }}
                 >
                   <ExpandMoreIcon />
@@ -245,20 +249,20 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             {meals.length > 0 && (
               <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <Box sx={{ mt: 2, pt: 2 }}>
-                  <Typography 
-                    variant="caption" 
-                    color="rgba(255, 255, 255, 0.6)" 
-                    sx={{ 
-                      mb: 2, 
+                  <Typography
+                    variant="caption"
+                    color="rgba(255, 255, 255, 0.6)"
+                    sx={{
+                      mb: 2,
                       display: 'block',
                       textTransform: 'uppercase',
                       letterSpacing: 1,
-                      fontWeight: 600
+                      fontWeight: 600,
                     }}
                   >
                     Lista posiłków:
                   </Typography>
-                  
+
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                     {meals.map((meal, index) => (
                       <MealCard key={meal.id || index} meal={meal} index={index} />
@@ -269,23 +273,29 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             )}
           </>
         ) : isSelected ? (
-          <Card elevation={0} sx={{
-            background: 'rgba(0, 0, 0, 0.2)',
-            borderRadius: 2,
-            mb: 3,
-            p: 2,
-          }}>
+          <Card
+            elevation={0}
+            sx={{
+              background: 'rgba(0, 0, 0, 0.2)',
+              borderRadius: 2,
+              mb: 3,
+              p: 2,
+            }}
+          >
             <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" align="center">
               Kliknij aby zobaczyć szczegóły
             </Typography>
           </Card>
         ) : (
-          <Card elevation={0} sx={{
-            background: 'rgba(0, 0, 0, 0.2)',
-            borderRadius: 2,
-            mb: 3,
-            p: 2,
-          }}>
+          <Card
+            elevation={0}
+            sx={{
+              background: 'rgba(0, 0, 0, 0.2)',
+              borderRadius: 2,
+              mb: 3,
+              p: 2,
+            }}
+          >
             <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" align="center">
               Kliknij aby zobaczyć szczegóły
             </Typography>
@@ -299,15 +309,15 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
 // Helper Components
 const MacroDisplay = ({ label, value, unit, color }) => (
   <Box textAlign="center">
-    <Typography 
-      variant="caption" 
-      color="rgba(255, 255, 255, 0.6)" 
-      sx={{ 
-        mb: 0.5, 
+    <Typography
+      variant="caption"
+      color="rgba(255, 255, 255, 0.6)"
+      sx={{
+        mb: 0.5,
         display: 'block',
         textTransform: 'uppercase',
         fontSize: '0.65rem',
-        letterSpacing: 0.5
+        letterSpacing: 0.5,
       }}
     >
       {label}
@@ -315,9 +325,9 @@ const MacroDisplay = ({ label, value, unit, color }) => (
     <Typography variant="h6" fontWeight="700" sx={{ color, lineHeight: 1 }}>
       {value.toFixed(1)}
     </Typography>
-    <Typography 
-      component="span" 
-      variant="caption" 
+    <Typography
+      component="span"
+      variant="caption"
       sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.65rem' }}
     >
       {unit}
@@ -326,7 +336,7 @@ const MacroDisplay = ({ label, value, unit, color }) => (
 );
 
 const MealCard = ({ meal, index }) => (
-  <Card 
+  <Card
     elevation={0}
     sx={{
       background: 'rgba(255, 255, 255, 0.05)',
@@ -338,7 +348,7 @@ const MealCard = ({ meal, index }) => (
       <Box display="flex" justifyContent="space-between" alignItems="start">
         <Box flex={1}>
           <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-            <Chip 
+            <Chip
               label={`#${index + 1}`}
               size="small"
               sx={{
@@ -346,14 +356,14 @@ const MealCard = ({ meal, index }) => (
                 fontSize: '0.7rem',
                 backgroundColor: 'rgba(76, 175, 80, 0.2)',
                 color: '#4caf50',
-                fontWeight: 700
+                fontWeight: 700,
               }}
             />
             <Typography variant="body2" color="white" fontWeight="600">
               {meal.name}
             </Typography>
           </Box>
-          
+
           <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
             Porcja: {meal.portionMultiplier}x
           </Typography>

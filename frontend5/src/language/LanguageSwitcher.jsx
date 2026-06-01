@@ -3,7 +3,7 @@ import { FormControlLabel, Switch } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 const LanguageSwitcher = () => {
-  const [ language, setLanguage ] = useState(localStorage.getItem('language') || 'en');
+  const [language, setLanguage] = useState(localStorage.getItem('language') || 'en');
   const { i18n } = useTranslation();
 
   const checked = language === 'en';

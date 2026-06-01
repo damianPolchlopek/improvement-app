@@ -17,13 +17,12 @@ import {
   useTheme,
   Collapse,
   IconButton,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
 
 export default function ShoppingAdd({ categories = [] }) {
   const [item, setItem] = useState({ name: '', category: categories[0] || '' });
@@ -37,7 +36,7 @@ export default function ShoppingAdd({ categories = [] }) {
     mutationFn: () => REST.addProductToShoppingList(item),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['shopping-list'] });
-      setItem(prev => ({ ...prev, name: '' }));
+      setItem((prev) => ({ ...prev, name: '' }));
       showSnackbar('Product added', 'success');
     },
     onError: () => {
@@ -55,7 +54,7 @@ export default function ShoppingAdd({ categories = [] }) {
     <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
       {/* Header */}
       <Box
-        onClick={() => setOpen(prev => !prev)}
+        onClick={() => setOpen((prev) => !prev)}
         sx={{
           p: 2,
           background: theme.palette.card.header,
@@ -88,7 +87,7 @@ export default function ShoppingAdd({ categories = [] }) {
             size="small"
             fullWidth
             value={item.name}
-            onChange={(e) => setItem(prev => ({ ...prev, name: e.target.value }))}
+            onChange={(e) => setItem((prev) => ({ ...prev, name: e.target.value }))}
           />
 
           <FormControl size="small" fullWidth>
@@ -96,10 +95,12 @@ export default function ShoppingAdd({ categories = [] }) {
             <Select
               label="Category"
               value={item.category}
-              onChange={(e) => setItem(prev => ({ ...prev, category: e.target.value }))}
+              onChange={(e) => setItem((prev) => ({ ...prev, category: e.target.value }))}
             >
-              {categories.map(cat => (
-                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+              {categories.map((cat) => (
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

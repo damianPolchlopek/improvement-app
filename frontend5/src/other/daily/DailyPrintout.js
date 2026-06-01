@@ -1,7 +1,7 @@
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import REST from "../../utils/REST";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import REST from '../../utils/REST';
+import { useTranslation } from 'react-i18next';
 
 import {
   Table,
@@ -16,14 +16,14 @@ import {
   Typography,
   Chip,
   useTheme,
-} from "@mui/material";
-import { TrendingUp } from "@mui/icons-material";
-import { useState } from "react";
+} from '@mui/material';
+import { TrendingUp } from '@mui/icons-material';
+import { useState } from 'react';
 
-import StyledTableCell from "../../component/table/StyledTableCell";
-import StyledTableRow from "../../component/table/StyledTableRow";
-import PageLoader from "../../component/loader/PageLoader";
-import ErrorAlert from "../../component/error/ErrorAlert";
+import StyledTableCell from '../../component/table/StyledTableCell';
+import StyledTableRow from '../../component/table/StyledTableRow';
+import PageLoader from '../../component/loader/PageLoader';
+import ErrorAlert from '../../component/error/ErrorAlert';
 
 export default function DailyPrintout() {
   const [page, setPage] = useState(0);
@@ -32,7 +32,7 @@ export default function DailyPrintout() {
   const theme = useTheme();
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["daily-list", page, size],
+    queryKey: ['daily-list', page, size],
     queryFn: () => REST.getDaily(page, size),
     keepPreviousData: true,
     staleTime: 1000 * 60 * 5,
@@ -48,7 +48,7 @@ export default function DailyPrintout() {
   };
 
   if (isLoading) {
-    return <PageLoader text={t("messages.loading")} />;
+    return <PageLoader text={t('messages.loading')} />;
   }
 
   if (isError) {
@@ -57,15 +57,15 @@ export default function DailyPrintout() {
 
   return (
     <Box sx={{ py: 2 }}>
-      <Card elevation={8} sx={{ borderRadius: 4, overflow: "hidden" }}>
+      <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
         {/* Header */}
         <Box
           sx={{
             p: 3,
             background: theme.palette.card.header,
-            color: "white",
-            display: "flex",
-            alignItems: "center",
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
             gap: 2,
           }}
         >
@@ -93,7 +93,7 @@ export default function DailyPrintout() {
                 <StyledTableRow
                   key={daily.id || index}
                   sx={{
-                    "&:hover": {
+                    '&:hover': {
                       backgroundColor: theme.palette.action.hover,
                     },
                   }}
@@ -105,32 +105,32 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.smoking ? "Yes" : "No"}
-                      color={daily.smoking ? "success" : "error"}
+                      label={daily.smoking ? 'Yes' : 'No'}
+                      color={daily.smoking ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
                     />
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.exercise ? "Yes" : "No"}
-                      color={daily.exercise ? "success" : "error"}
+                      label={daily.exercise ? 'Yes' : 'No'}
+                      color={daily.exercise ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
                     />
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.book ? "Yes" : "No"}
-                      color={daily.book ? "success" : "error"}
+                      label={daily.book ? 'Yes' : 'No'}
+                      color={daily.book ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
                     />
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.work ? "Yes" : "No"}
-                      color={daily.work ? "success" : "error"}
+                      label={daily.work ? 'Yes' : 'No'}
+                      color={daily.work ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
                     />
@@ -148,7 +148,7 @@ export default function DailyPrintout() {
                   rowsPerPage={size}
                   page={page}
                   SelectProps={{
-                    inputProps: { "aria-label": "rows per page" },
+                    inputProps: { 'aria-label': 'rows per page' },
                     native: true,
                   }}
                   onPageChange={handleChangePage}

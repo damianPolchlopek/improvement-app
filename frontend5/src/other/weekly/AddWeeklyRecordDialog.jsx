@@ -12,7 +12,7 @@ import {
   MenuItem,
   Box,
   CircularProgress,
-  Typography
+  Typography,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
@@ -33,15 +33,10 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
   const [formData, setFormData] = useState({
     name: '',
     category: categories[0] || 'Waga',
-    date: formatDate(moment().valueOf())
+    date: formatDate(moment().valueOf()),
   });
 
-  const {
-    mutate,
-    isPending,
-    isError,
-    error
-  } = useMutation({
+  const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (data) => REST.addRecordToWeeklyList(data),
     onSuccess: () => {
       queryClient.invalidateQueries(['weekly-records']);
@@ -58,7 +53,7 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
     setFormData({
       name: '',
       category: categories[0] || 'Waga',
-      date: formatDate(moment().valueOf())
+      date: formatDate(moment().valueOf()),
     });
     onClose();
   };
@@ -73,9 +68,9 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
   };
 
   const handleChange = (field, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -88,17 +83,19 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
       PaperProps={{
         sx: {
           borderRadius: 3,
-          boxShadow: '0 12px 40px rgba(0,0,0,0.2)'
-        }
+          boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+        },
       }}
     >
-      <DialogTitle sx={{
-        background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 1
-      }}>
+      <DialogTitle
+        sx={{
+          background: 'linear-gradient(45deg, #2196f3, #1976d2)',
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
         <AddIcon />
         Dodaj Rekord Tygodniowy
       </DialogTitle>
@@ -106,7 +103,6 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            
             <TextField
               label="Nazwa rekordu"
               placeholder="Wpisz nazwę..."
@@ -143,35 +139,27 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
             />
 
             {isPending && (
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                p: 2,
-                backgroundColor: 'info.light',
-                borderRadius: 2
-              }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  p: 2,
+                  backgroundColor: 'info.light',
+                  borderRadius: 2,
+                }}
+              >
                 <CircularProgress size={20} />
-                <Typography variant="body2">
-                  Dodawanie rekordu...
-                </Typography>
+                <Typography variant="body2">Dodawanie rekordu...</Typography>
               </Box>
             )}
 
-            {isError && (
-              <ErrorAlert error={error} />
-            )}
-
+            {isError && <ErrorAlert error={error} />}
           </Box>
         </DialogContent>
 
         <DialogActions sx={{ p: 3, gap: 1 }}>
-          <Button
-            onClick={handleClose}
-            variant="outlined"
-            size="large"
-            disabled={isPending}
-          >
+          <Button onClick={handleClose} variant="outlined" size="large" disabled={isPending}>
             Anuluj
           </Button>
           <Button

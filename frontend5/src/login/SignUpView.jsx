@@ -3,13 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import REST from '../utils/REST';
 
-import {
-  Button,
-  Typography,
-  Alert,
-  CircularProgress,
-  Box
-} from '@mui/material';
+import { Button, Typography, Alert, CircularProgress, Box } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
 import CenteredContainer from '../component/CenteredContainer';
@@ -71,24 +65,24 @@ export default function SignUpView() {
 
   // Funkcja do przetwarzania błędów z backendu
   const processBackendError = (error) => {
-    console.error("Registration failed:", error);
-    
+    console.error('Registration failed:', error);
+
     // Wyczyść poprzednie błędy pól
     setFieldErrors({});
-    
+
     if (error.response && error.response.data) {
       const errorData = error.response.data;
-      
+
       // Jeśli mamy błędy walidacji pól
       if (errorData.fieldErrors && Array.isArray(errorData.fieldErrors)) {
         const newFieldErrors = {};
         let errorMessages = [];
-        
-        errorData.fieldErrors.forEach(fieldError => {
+
+        errorData.fieldErrors.forEach((fieldError) => {
           newFieldErrors[fieldError.field] = fieldError.message;
           errorMessages.push(`${fieldError.field}: ${fieldError.message}`);
         });
-        
+
         setFieldErrors(newFieldErrors);
         setError(`Błędy walidacji: ${errorMessages.join(', ')}`);
       }
@@ -99,28 +93,40 @@ export default function SignUpView() {
       // Fallback na kod błędu
       else if (errorData.code) {
         setError(`Błąd: ${errorData.code}`);
-      }
-      else {
+      } else {
         setError('Wystąpił nieznany błąd serwera.');
       }
     }
     // Jeśli nie ma szczegółów odpowiedzi
     else if (error.message) {
       setError(error.message);
-    }
-    else {
+    } else {
       setError('Rejestracja nie powiodła się.');
     }
   };
 
   const submitSignUpReq = async () => {
     // Sprawdź wszystkie pola przed wysłaniem (dodane nowe pola)
-    if (nameIsInvalid || surnameIsInvalid || usernameIsInvalid || emailIsInvalid || passwordIsInvalid || confirmPasswordIsInvalid) {
+    if (
+      nameIsInvalid ||
+      surnameIsInvalid ||
+      usernameIsInvalid ||
+      emailIsInvalid ||
+      passwordIsInvalid ||
+      confirmPasswordIsInvalid
+    ) {
       setError('Proszę poprawić błędy w formularzu.');
       return;
     }
 
-    if (!enteredName || !enteredSurname || !enteredUsername || !enteredEmail || !enteredPassword || !enteredConfirmPassword) {
+    if (
+      !enteredName ||
+      !enteredSurname ||
+      !enteredUsername ||
+      !enteredEmail ||
+      !enteredPassword ||
+      !enteredConfirmPassword
+    ) {
       setError('Proszę wypełnić wszystkie pola.');
       return;
     }
@@ -134,19 +140,18 @@ export default function SignUpView() {
       surname: enteredSurname,
       username: enteredUsername,
       email: enteredEmail,
-      password: enteredPassword
+      password: enteredPassword,
     };
 
     try {
       const response = await REST.registerUser(userDetails);
       setSuccess(response.message);
       setShowSuccessMessage(true);
-      
+
       // Automatyczne przekierowanie po 10 sekundach
       setTimeout(() => {
         navigate('/login');
       }, 10000);
-      
     } catch (err) {
       processBackendError(err);
     } finally {
@@ -181,21 +186,13 @@ export default function SignUpView() {
               Zostaniesz przekierowany do strony logowania za chwilę...
             </Typography>
           </Alert>
-          
+
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
-            <Button 
-              variant="outlined" 
-              onClick={handleResendVerification}
-              fullWidth
-            >
+            <Button variant="outlined" onClick={handleResendVerification} fullWidth>
               Wyślij ponownie email weryfikacyjny
             </Button>
-            
-            <Button 
-              variant="contained" 
-              onClick={() => navigate('/login')}
-              fullWidth
-            >
+
+            <Button variant="contained" onClick={() => navigate('/login')} fullWidth>
               Przejdź do logowania
             </Button>
           </Box>
@@ -219,7 +216,7 @@ export default function SignUpView() {
             {error}
           </Alert>
         )}
-        
+
         <Grid container spacing={2}>
           {/* Nowe pola: Imię i Nazwisko obok siebie na większych ekranach */}
           <Grid size={{ xs: 12, sm: 6 }}>
@@ -242,7 +239,10 @@ export default function SignUpView() {
               onBlur={handleSurnameBlur}
               onChange={handleSurnameChange}
               value={enteredSurname}
-              error={(surnameIsInvalid && 'Nazwisko musi mieć co najmniej 2 znaki') || fieldErrors.surname}
+              error={
+                (surnameIsInvalid && 'Nazwisko musi mieć co najmniej 2 znaki') ||
+                fieldErrors.surname
+              }
             />
           </Grid>
 
@@ -280,7 +280,10 @@ export default function SignUpView() {
               onBlur={handlePasswordBlur}
               onChange={handlePasswordChange}
               value={enteredPassword}
-              error={(passwordIsInvalid && 'Hasło musi mieć co najmniej 6 znaków') || fieldErrors.password}
+              error={
+                (passwordIsInvalid && 'Hasło musi mieć co najmniej 6 znaków') ||
+                fieldErrors.password
+              }
             />
           </Grid>
 
@@ -293,13 +296,16 @@ export default function SignUpView() {
               onBlur={handleConfirmPasswordBlur}
               onChange={handleConfirmPasswordChange}
               value={enteredConfirmPassword}
-              error={(confirmPasswordIsInvalid && t('signup.confirmPasswordError')) || fieldErrors.confirmPassword}
+              error={
+                (confirmPasswordIsInvalid && t('signup.confirmPasswordError')) ||
+                fieldErrors.confirmPassword
+              }
             />
           </Grid>
 
           <Grid size={12}>
-            <Button 
-              variant="contained" 
+            <Button
+              variant="contained"
               fullWidth
               size="large"
               onClick={submitSignUpReq}

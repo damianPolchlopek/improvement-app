@@ -12,27 +12,30 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
+} from 'recharts';
 
 import { Typography } from '@mui/material';
 
-
 function formatXAxis(tickItem) {
-  return moment(tickItem).format('DD/MM/YYYY')
+  return moment(tickItem).format('DD/MM/YYYY');
 }
 
 function convertLocalDateToEpoch(date) {
-  return moment(date).valueOf()
+  return moment(date).valueOf();
 }
 
 const CustomTooltip = ({ active, payload, label }) => {
   const { t } = useTranslation();
-  
+
   if (active && payload && payload.length) {
     return (
       <div style={{ backgroundColor: 'black', padding: '5px', color: 'white' }}>
-        <p>{t('chart.date')}: {formatXAxis(label)}</p>
-        <p>{t('chart.value')}: {payload[0]?.value || 'No data'}</p>
+        <p>
+          {t('chart.date')}: {formatXAxis(label)}
+        </p>
+        <p>
+          {t('chart.value')}: {payload[0]?.value || 'No data'}
+        </p>
       </div>
     );
   }
@@ -40,13 +43,12 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-
-export default function ExerciseChart({exercises, beginDate, endDate}) {
+export default function ExerciseChart({ exercises, beginDate, endDate }) {
   const [dataExercise, setDataExercise] = useState([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const updatedExercises = exercises.map(element => ({
+    const updatedExercises = exercises.map((element) => ({
       ...element,
       localDate: convertLocalDateToEpoch(element.localDate),
     }));
@@ -54,13 +56,12 @@ export default function ExerciseChart({exercises, beginDate, endDate}) {
     setDataExercise(updatedExercises);
   }, [exercises, beginDate, endDate]);
 
-  if(dataExercise.length === 0) {
-    return <Typography 
-          variant="body2" 
-          style={{ color: '#a0aec0' }}
-        >
-          {t('messages.loading')}
-        </Typography>
+  if (dataExercise.length === 0) {
+    return (
+      <Typography variant="body2" style={{ color: '#a0aec0' }}>
+        {t('messages.loading')}
+      </Typography>
+    );
   }
 
   return (
@@ -72,7 +73,7 @@ export default function ExerciseChart({exercises, beginDate, endDate}) {
           data={dataExercise}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-          <CartesianGrid strokeDasharray="3 3"/>
+          <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="localDate"
             domain={[convertLocalDateToEpoch(beginDate), convertLocalDateToEpoch(endDate)]}
@@ -81,12 +82,11 @@ export default function ExerciseChart({exercises, beginDate, endDate}) {
             tickFormatter={formatXAxis}
           />
           <YAxis />
-          <Tooltip content={<CustomTooltip/>}/>
-          <Legend/>
-          <Line type="monotone" dataKey="value" stroke="#8884d8"/>
+          <Tooltip content={<CustomTooltip />} />
+          <Legend />
+          <Line type="monotone" dataKey="value" stroke="#8884d8" />
         </LineChart>
       </ResponsiveContainer>
     </>
   );
-
 }

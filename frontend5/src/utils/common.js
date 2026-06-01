@@ -1,3 +1,3 @@
 export const formatInput = (value) => {
-    return Number(value).toFixed(2);
-}
+  return Number(value).toFixed(2);
+};

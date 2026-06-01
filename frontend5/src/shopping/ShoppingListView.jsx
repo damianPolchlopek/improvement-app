@@ -26,7 +26,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import ErrorAlert from '../component/error/ErrorAlert';
 
-
 export default function ShoppingListView({ categories = [] }) {
   const [selectedCategory, setSelectedCategory] = useState(categories[0] || '');
   const [open, setOpen] = useState(true);
@@ -35,9 +34,14 @@ export default function ShoppingListView({ categories = [] }) {
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
 
-  const { data: shoppingList, isLoading, isError, error } = useQuery({
+  const {
+    data: shoppingList,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['shopping-list', selectedCategory],
-    queryFn: () => REST.getShoppingListByCategory(selectedCategory).then(res => res.entity),
+    queryFn: () => REST.getShoppingListByCategory(selectedCategory).then((res) => res.entity),
     enabled: !!selectedCategory,
     keepPreviousData: true,
   });
@@ -62,7 +66,7 @@ export default function ShoppingListView({ categories = [] }) {
     <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
       {/* Header */}
       <Box
-        onClick={() => setOpen(prev => !prev)}
+        onClick={() => setOpen((prev) => !prev)}
         sx={{
           p: 2,
           background: theme.palette.card.header,
@@ -87,7 +91,6 @@ export default function ShoppingListView({ categories = [] }) {
 
       <Collapse in={open} timeout="auto" unmountOnExit>
         <CardContent sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
-
           {/* Category selector */}
           <FormControl size="small" sx={{ maxWidth: 250 }}>
             <InputLabel>Category</InputLabel>
@@ -96,8 +99,10 @@ export default function ShoppingListView({ categories = [] }) {
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
             >
-              {categories.map(cat => (
-                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+              {categories.map((cat) => (
+                <MenuItem key={cat} value={cat}>
+                  {cat}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

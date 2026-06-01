@@ -13,7 +13,7 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Add as AddIcon, ListAlt } from '@mui/icons-material';
@@ -43,7 +43,12 @@ export default function WeeklyRecordsView() {
     }
   }, [categories, selectedCategory]);
 
-  const { data: records, isLoading: recordsLoading, isError, error } = useQuery({
+  const {
+    data: records,
+    isLoading: recordsLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['weekly-records', selectedCategory],
     queryFn: () => REST.getWeeklyListByCategory(selectedCategory),
     enabled: !!selectedCategory,
@@ -63,15 +68,17 @@ export default function WeeklyRecordsView() {
   return (
     <Box sx={{ py: 4 }}>
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{
-            borderRadius: 3,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 2
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 2,
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <ListAlt sx={{ fontSize: 32 }} />
@@ -108,14 +115,17 @@ export default function WeeklyRecordsView() {
 
         {/* Statistics Cards */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card elevation={6} sx={{
-            height: '100%',
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" fontWeight="600" mb={2}>
                 Rekordy w kategorii
@@ -128,23 +138,24 @@ export default function WeeklyRecordsView() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card elevation={6} sx={{
-            height: '100%',
-            borderRadius: 3,
-            background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            p: 3
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              background: 'linear-gradient(45deg, #2196f3, #1976d2)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 3,
+            }}
+          >
             <Box textAlign="center">
               <Typography variant="h3" fontWeight="700">
                 {categories.length}
               </Typography>
-              <Typography variant="body1">
-                Dostępnych kategorii
-              </Typography>
+              <Typography variant="body1">Dostępnych kategorii</Typography>
             </Box>
           </Card>
         </Grid>
@@ -157,7 +168,6 @@ export default function WeeklyRecordsView() {
             <WeeklyRecordsTable records={recordsList} />
           )}
         </Grid>
-
       </Grid>
 
       {/* Floating Action Button */}
@@ -170,7 +180,7 @@ export default function WeeklyRecordsView() {
           bottom: 32,
           right: 32,
           width: 64,
-          height: 64
+          height: 64,
         }}
       >
         <AddIcon sx={{ fontSize: 32 }} />

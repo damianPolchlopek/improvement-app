@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export function useInput(initialValue, validationFn) {
   const [value, setValue] = useState(initialValue);

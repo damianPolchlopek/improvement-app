@@ -1,16 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import {
-  MenuItem,
-  Select
-} from '@mui/material';
+import { MenuItem, Select } from '@mui/material';
 
-export default function TrainingTypeSelector({setTrainingType}) {
-    return <Select
-      onChange={e => setTrainingType(e.target.value)}
-      defaultValue="A"
-      displayEmpty
-    >
+export default function TrainingTypeSelector({ setTrainingType }) {
+  return (
+    <Select onChange={(e) => setTrainingType(e.target.value)} defaultValue="A" displayEmpty>
       <MenuItem value="F1">F1</MenuItem>
       <MenuItem value="F2">F2</MenuItem>
       <MenuItem value="F">5x5</MenuItem>
@@ -31,5 +25,6 @@ export default function TrainingTypeSelector({setTrainingType}) {
       <MenuItem value="A2">Siłowy A2</MenuItem>
       <MenuItem value="C2">Hipertroficzny C2</MenuItem>
       <MenuItem value="D2">Hipertroficzny D2</MenuItem>
-    </Select>;
-  }
+    </Select>
+  );
+}

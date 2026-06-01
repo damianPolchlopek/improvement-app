@@ -10,7 +10,7 @@ import {
   Typography,
   Chip,
   useTheme,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -31,7 +31,7 @@ export default function WeeklyRecordTableRow({ record }) {
     mutate,
     isPending: isPendingDeletion,
     isError: isErrorDeleting,
-    error
+    error,
   } = useMutation({
     mutationFn: (id) => REST.deleteProductFromWeeklyList(id),
     onSuccess: () => {
@@ -55,14 +55,16 @@ export default function WeeklyRecordTableRow({ record }) {
 
   return (
     <>
-      <StyledTableRow sx={{
-        '&:hover': {
-          backgroundColor: theme.palette.action.hover,
-          transform: 'translateY(-1px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-        },
-        transition: 'all 0.2s ease-in-out'
-      }}>
+      <StyledTableRow
+        sx={{
+          '&:hover': {
+            backgroundColor: theme.palette.action.hover,
+            transform: 'translateY(-1px)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          },
+          transition: 'all 0.2s ease-in-out',
+        }}
+      >
         <StyledTableCell>
           <Typography variant="body2" fontWeight="600">
             {record.name}
@@ -70,12 +72,10 @@ export default function WeeklyRecordTableRow({ record }) {
         </StyledTableCell>
 
         <StyledTableCell>
-          <Typography variant="body2">
-            {record.date}
-          </Typography>
+          <Typography variant="body2">{record.date}</Typography>
         </StyledTableCell>
 
-        <StyledTableCell sx={{ width: "100px" }}>
+        <StyledTableCell sx={{ width: '100px' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <IconButton
               aria-label="edit record"
@@ -86,9 +86,9 @@ export default function WeeklyRecordTableRow({ record }) {
                 '&:hover': {
                   backgroundColor: theme.palette.primary.main,
                   color: 'white',
-                  transform: 'scale(1.1)'
+                  transform: 'scale(1.1)',
                 },
-                transition: 'all 0.2s ease-in-out'
+                transition: 'all 0.2s ease-in-out',
               }}
             >
               <EditIcon fontSize="small" />
@@ -103,9 +103,9 @@ export default function WeeklyRecordTableRow({ record }) {
                 '&:hover': {
                   backgroundColor: theme.palette.error.main,
                   color: 'white',
-                  transform: 'scale(1.1)'
+                  transform: 'scale(1.1)',
                 },
-                transition: 'all 0.2s ease-in-out'
+                transition: 'all 0.2s ease-in-out',
               }}
             >
               <DeleteIcon fontSize="small" />
@@ -122,17 +122,19 @@ export default function WeeklyRecordTableRow({ record }) {
         PaperProps={{
           sx: {
             borderRadius: 3,
-            boxShadow: '0 12px 40px rgba(0,0,0,0.2)'
-          }
+            boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+          },
         }}
       >
-        <DialogTitle sx={{
-          background: 'linear-gradient(45deg, #f44336, #d32f2f)',
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1
-        }}>
+        <DialogTitle
+          sx={{
+            background: 'linear-gradient(45deg, #f44336, #d32f2f)',
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
           <DeleteIcon />
           Czy na pewno?
         </DialogTitle>
@@ -142,13 +144,15 @@ export default function WeeklyRecordTableRow({ record }) {
             Czy na pewno chcesz usunąć ten rekord?
           </Typography>
 
-          <Box sx={{
-            p: 2,
-            // backgroundColor: theme.palette.grey[50],
-            borderRadius: 2,
-            border: '1px solid',
-            borderColor: 'divider'
-          }}>
+          <Box
+            sx={{
+              p: 2,
+              // backgroundColor: theme.palette.grey[50],
+              borderRadius: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
             <Typography variant="body2" color="text.secondary">
               Nazwa: <strong>{record.name}</strong>
             </Typography>
@@ -161,19 +165,19 @@ export default function WeeklyRecordTableRow({ record }) {
           </Box>
 
           {isPendingDeletion && (
-            <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2,
-              mt: 2,
-              p: 2,
-              backgroundColor: theme.palette.warning.light,
-              borderRadius: 2
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+                mt: 2,
+                p: 2,
+                backgroundColor: theme.palette.warning.light,
+                borderRadius: 2,
+              }}
+            >
               <CircularProgress size={20} />
-              <Typography variant="body2">
-                Usuwanie...
-              </Typography>
+              <Typography variant="body2">Usuwanie...</Typography>
             </Box>
           )}
 

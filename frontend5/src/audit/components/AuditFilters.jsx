@@ -17,7 +17,7 @@ import {
   InputAdornment,
   Collapse,
   IconButton,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 
 import {
@@ -27,7 +27,7 @@ import {
   Category as CategoryIcon,
   Search as SearchIcon,
   ExpandMore as ExpandMoreIcon,
-  ExpandLess as ExpandLessIcon
+  ExpandLess as ExpandLessIcon,
 } from '@mui/icons-material';
 
 import Grid from '@mui/material/Grid';
@@ -37,7 +37,7 @@ const AuditFilters = ({ filters, setFilters }) => {
   const [isExpanded, setIsExpanded] = React.useState(true);
 
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const clearFilters = () => {
@@ -49,40 +49,41 @@ const AuditFilters = ({ filters, setFilters }) => {
     });
   };
 
-  const hasActiveFilters = 
-    filters.dateFrom || 
-    filters.dateTo || 
-    filters.revisionType !== 'ALL' || 
-    filters.searchTerm;
+  const hasActiveFilters =
+    filters.dateFrom || filters.dateTo || filters.revisionType !== 'ALL' || filters.searchTerm;
 
   const activeFiltersCount = [
     filters.dateFrom,
     filters.dateTo,
     filters.revisionType !== 'ALL',
-    filters.searchTerm
+    filters.searchTerm,
   ].filter(Boolean).length;
 
   return (
-    <Card elevation={6} sx={{
-      borderRadius: 3,
-      background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-    }}>
-      {/* Header */}
-      <Box sx={{ 
-        p: 2,
-        background: theme.palette.card.header,
-        borderBottom: isExpanded ? theme.palette.card.border : 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        }
+    <Card
+      elevation={6}
+      sx={{
+        borderRadius: 3,
+        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
       }}
-      onClick={() => setIsExpanded(!isExpanded)}
+    >
+      {/* Header */}
+      <Box
+        sx={{
+          p: 2,
+          background: theme.palette.card.header,
+          borderBottom: isExpanded ? theme.palette.card.border : 'none',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+          },
+        }}
+        onClick={() => setIsExpanded(!isExpanded)}
       >
         <Box display="flex" alignItems="center" gap={2}>
           <FilterListIcon sx={{ color: 'white', fontSize: 24 }} />
@@ -90,7 +91,7 @@ const AuditFilters = ({ filters, setFilters }) => {
             Filtry
           </Typography>
           {hasActiveFilters && (
-            <Chip 
+            <Chip
               label={`${activeFiltersCount} ${activeFiltersCount === 1 ? 'aktywny' : 'aktywne'}`}
               size="small"
               sx={{
@@ -98,12 +99,12 @@ const AuditFilters = ({ filters, setFilters }) => {
                 color: '#4caf50',
                 fontWeight: 600,
                 fontSize: '0.75rem',
-                height: '24px'
+                height: '24px',
               }}
             />
           )}
         </Box>
-        
+
         <Box display="flex" alignItems="center" gap={1}>
           {hasActiveFilters && (
             <Tooltip title="Wyczyść wszystkie filtry">
@@ -124,17 +125,17 @@ const AuditFilters = ({ filters, setFilters }) => {
                   '&:hover': {
                     borderColor: 'rgba(255, 255, 255, 0.5)',
                     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  }
+                  },
                 }}
               >
                 Wyczyść
               </Button>
             </Tooltip>
           )}
-          
+
           <IconButton
             size="small"
-            sx={{ 
+            sx={{
               color: 'white',
               transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
               transition: 'transform 0.3s ease',
@@ -149,7 +150,6 @@ const AuditFilters = ({ filters, setFilters }) => {
       <Collapse in={isExpanded} timeout="auto">
         <CardContent sx={{ p: 3 }}>
           <Grid container spacing={3}>
-            
             {/* Data od */}
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <TextField
@@ -269,8 +269,8 @@ const AuditFilters = ({ filters, setFilters }) => {
             {/* Typ rewizji */}
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <FormControl fullWidth>
-                <InputLabel 
-                  sx={{ 
+                <InputLabel
+                  sx={{
                     color: 'rgba(255, 255, 255, 0.7)',
                     '&.Mui-focused': {
                       color: '#4caf50',
@@ -410,25 +410,27 @@ const AuditFilters = ({ filters, setFilters }) => {
 
           {/* Active Filters Summary */}
           {hasActiveFilters && (
-            <Box sx={{ 
-              mt: 3, 
-              pt: 3, 
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)' 
-            }}>
-              <Typography 
-                variant="caption" 
+            <Box
+              sx={{
+                mt: 3,
+                pt: 3,
+                borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              }}
+            >
+              <Typography
+                variant="caption"
                 color="rgba(255, 255, 255, 0.6)"
-                sx={{ 
-                  mb: 1.5, 
+                sx={{
+                  mb: 1.5,
                   display: 'block',
                   textTransform: 'uppercase',
                   letterSpacing: 1,
-                  fontWeight: 600
+                  fontWeight: 600,
                 }}
               >
                 Aktywne filtry:
               </Typography>
-              
+
               <Box display="flex" flexWrap="wrap" gap={1}>
                 {filters.dateFrom && (
                   <Chip
@@ -449,7 +451,7 @@ const AuditFilters = ({ filters, setFilters }) => {
                     }}
                   />
                 )}
-                
+
                 {filters.dateTo && (
                   <Chip
                     label={`Do: ${filters.dateTo}`}
@@ -469,7 +471,7 @@ const AuditFilters = ({ filters, setFilters }) => {
                     }}
                   />
                 )}
-                
+
                 {filters.revisionType !== 'ALL' && (
                   <Chip
                     label={`Typ: ${filters.revisionType === 'ADD' ? 'Dodano' : filters.revisionType === 'MOD' ? 'Zmodyfikowano' : 'Usunięto'}`}
@@ -489,7 +491,7 @@ const AuditFilters = ({ filters, setFilters }) => {
                     }}
                   />
                 )}
-                
+
                 {filters.searchTerm && (
                   <Chip
                     label={`Szukaj: "${filters.searchTerm}"`}

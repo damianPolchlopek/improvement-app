@@ -15,14 +15,10 @@ import {
   CardContent,
   Box,
   Fade,
-  useTheme
+  useTheme,
 } from '@mui/material';
 
-import {
-  FitnessCenter,
-  ViewList,
-  Assessment
-} from '@mui/icons-material';
+import { FitnessCenter, ViewList, Assessment } from '@mui/icons-material';
 
 import StyledTableRow from '../../component/table/StyledTableRow';
 import StyledTableCell from '../../component/table/StyledTableCell';
@@ -41,7 +37,7 @@ export default function TrainingsView() {
     queryFn: () => REST.getAllTrainingNames(page, size),
     keepPreviousData: true,
     staleTime: 1000 * 60 * 5, // 5 minut
-    cacheTime: 1000 * 60 * 10 // trzymanie danych w cache przez 10 minut
+    cacheTime: 1000 * 60 * 10, // trzymanie danych w cache przez 10 minut
   });
 
   const handleChangeSize = (event) => {
@@ -74,16 +70,18 @@ export default function TrainingsView() {
   return (
     <Box sx={{ py: 4, minHeight: '100vh' }}>
       <Container maxWidth="xl" sx={{ width: '70%' }}>
-        
         {/* Header Section */}
-        <Card elevation={8} sx={{ 
-          borderRadius: 4,
-          background: theme.palette.card.header,
-          color: 'white',
-          mb: 4,
-          overflow: 'hidden',
-          border: theme.palette.card.border,
-        }}>
+        <Card
+          elevation={8}
+          sx={{
+            borderRadius: 4,
+            background: theme.palette.card.header,
+            color: 'white',
+            mb: 4,
+            overflow: 'hidden',
+            border: theme.palette.card.border,
+          }}
+        >
           <CardContent sx={{ p: 4 }}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>
               <ViewList sx={{ fontSize: 40 }} />
@@ -115,20 +113,25 @@ export default function TrainingsView() {
 
         {/* Main Content */}
         <Fade in={true} timeout={1000}>
-          <Card elevation={6} sx={{ 
-            borderRadius: 3,
-            background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            overflow: 'hidden'
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              overflow: 'hidden',
+            }}
+          >
             <Table>
               <TableBody>
                 <StyledTableRow>
                   <StyledTableCell colSpan={7} align="center" sx={{ p: 0 }}>
-                    <Box sx={{ 
-                      background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                      borderRadius: 2
-                    }}>
+                    <Box
+                      sx={{
+                        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                        borderRadius: 2,
+                      }}
+                    >
                       {data?.content?.map((training, index) => (
                         <SingleTraining key={index} trainingName={training} />
                       ))}
@@ -138,12 +141,14 @@ export default function TrainingsView() {
               </TableBody>
 
               <TableFooter>
-                <StyledTableRow sx={{
-                  '& .MuiTableCell-root': {
-                    background: theme.palette.card.header,
-                    border: theme.palette.card.border,
-                  }
-                }}>
+                <StyledTableRow
+                  sx={{
+                    '& .MuiTableCell-root': {
+                      background: theme.palette.card.header,
+                      border: theme.palette.card.border,
+                    },
+                  }}
+                >
                   <StyledTableCell colSpan={7} sx={{ p: 2 }}>
                     <TablePagination
                       rowsPerPageOptions={[5, 10, 25, 50]}
@@ -160,7 +165,6 @@ export default function TrainingsView() {
             </Table>
           </Card>
         </Fade>
-
       </Container>
     </Box>
   );

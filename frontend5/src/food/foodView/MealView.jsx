@@ -16,7 +16,7 @@ import {
   TextField,
   CircularProgress,
   Typography,
-  useTheme
+  useTheme,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
@@ -30,8 +30,8 @@ export default function MealView() {
   const [mealCategory, setMealCategory] = useState('Obiad');
   const [mealType, setMealType] = useState('All');
 
-  const labelIdCategory = "meal-category-select";
-  const labelIdType = "meal-type-select";
+  const labelIdCategory = 'meal-category-select';
+  const labelIdType = 'meal-type-select';
 
   // 🍽️ Pobierz listę kategorii i typów posiłków
   const { data: mealCategoryList = [] } = useQuery({
@@ -44,17 +44,22 @@ export default function MealView() {
     queryFn: REST.getMealTypeList,
   });
 
-  const { data: mealList = [], isLoading, isError, error } = useQuery({
+  const {
+    data: mealList = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['meals', mealCategory, mealType, mealName],
     queryFn: () => REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name', false),
     enabled: !!mealCategory && !!mealType, // upewnij się że są dostępne
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
   });
 
   const handleChange = (event, field) => {
     const value = event.target.value;
 
-    switch(field) {
+    switch (field) {
       case 'mealName':
         setMealName(value);
         break;
@@ -86,15 +91,17 @@ export default function MealView() {
   return (
     <Box sx={{ py: 4 }}>
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{
-            borderRadius: 3,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 2
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 2,
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Restaurant sx={{ fontSize: 32 }} />
@@ -111,14 +118,17 @@ export default function MealView() {
 
         {/* Search Section */}
         <Grid size={{ xs: 12, md: 12 }}>
-          <Card elevation={6} sx={{
-            height: '100%',
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Search sx={{ color: '#2196f3', fontSize: 28 }} />
@@ -135,7 +145,7 @@ export default function MealView() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
-                  }
+                  },
                 }}
               />
             </CardContent>
@@ -144,14 +154,17 @@ export default function MealView() {
 
         {/* Filters Section */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card elevation={6} sx={{
-            height: '100%',
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Category sx={{ color: '#ff9800', fontSize: 28 }} />
@@ -159,7 +172,7 @@ export default function MealView() {
                   Kategoria Posiłku
                 </Typography>
               </Box>
-              {mealCategoryList.length > 0 && 
+              {mealCategoryList.length > 0 && (
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
                   <Select
@@ -172,24 +185,29 @@ export default function MealView() {
                     }}
                   >
                     {mealCategoryList.map((cat, index) => (
-                      <MenuItem key={index} value={cat}>{cat}</MenuItem>
+                      <MenuItem key={index} value={cat}>
+                        {cat}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-              }
+              )}
             </CardContent>
           </Card>
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card elevation={6} sx={{
-            height: '100%',
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <FilterList sx={{ color: '#9c27b0', fontSize: 28 }} />
@@ -197,7 +215,7 @@ export default function MealView() {
                   Typ Posiłku
                 </Typography>
               </Box>
-              {mealTypeList.length > 0 && 
+              {mealTypeList.length > 0 && (
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
                   <Select
@@ -210,11 +228,13 @@ export default function MealView() {
                     }}
                   >
                     {mealTypeList.map((type, index) => (
-                      <MenuItem key={index} value={type}>{type}</MenuItem>
+                      <MenuItem key={index} value={type}>
+                        {type}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-              }
+              )}
             </CardContent>
           </Card>
         </Grid>
@@ -239,7 +259,6 @@ export default function MealView() {
             </CardContent>
           </Card>
         </Grid>
-
       </Grid>
     </Box>
   );

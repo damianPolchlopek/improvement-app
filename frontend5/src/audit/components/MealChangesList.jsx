@@ -12,7 +12,7 @@ import {
   Collapse,
   useTheme,
   alpha,
-  Divider
+  Divider,
 } from '@mui/material';
 
 import {
@@ -22,7 +22,7 @@ import {
   Edit as EditIcon,
   Restaurant as RestaurantIcon,
   TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon
+  TrendingDown as TrendingDownIcon,
 } from '@mui/icons-material';
 
 import Grid from '@mui/material/Grid';
@@ -32,7 +32,7 @@ const MealChangesList = ({ changes }) => {
   const [expandedMeals, setExpandedMeals] = useState(new Set());
 
   const toggleMeal = (mealId) => {
-    setExpandedMeals(prev => {
+    setExpandedMeals((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(mealId)) {
         newSet.delete(mealId);
@@ -43,20 +43,23 @@ const MealChangesList = ({ changes }) => {
     });
   };
 
-  const hasChanges = 
+  const hasChanges =
     changes.mealsAdded.length > 0 ||
     changes.mealsRemoved.length > 0 ||
     changes.mealsModified.length > 0;
 
   if (!hasChanges) {
     return (
-      <Card elevation={6} sx={{
-        borderRadius: 3,
-        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        p: 6,
-        textAlign: 'center'
-      }}>
+      <Card
+        elevation={6}
+        sx={{
+          borderRadius: 3,
+          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          p: 6,
+          textAlign: 'center',
+        }}
+      >
         <RestaurantIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
         <Typography variant="h6" color="rgba(255, 255, 255, 0.7)">
           Brak zmian w posiłkach
@@ -70,31 +73,36 @@ const MealChangesList = ({ changes }) => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      
       {/* Dodane posiłki */}
       {changes.mealsAdded.length > 0 && (
-        <Card elevation={6} sx={{
-          borderRadius: 3,
-          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-          border: '1px solid rgba(76, 175, 80, 0.3)',
-        }}>
-          <Box sx={{
-            p: 2,
-            background: 'linear-gradient(90deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.05) 100%)',
-            borderBottom: '1px solid rgba(76, 175, 80, 0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2
-          }}>
+        <Card
+          elevation={6}
+          sx={{
+            borderRadius: 3,
+            background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+            border: '1px solid rgba(76, 175, 80, 0.3)',
+          }}
+        >
+          <Box
+            sx={{
+              p: 2,
+              background:
+                'linear-gradient(90deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.05) 100%)',
+              borderBottom: '1px solid rgba(76, 175, 80, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
             <AddIcon sx={{ color: '#4caf50', fontSize: 28 }} />
             <Typography variant="h6" fontWeight="600" color="#4caf50">
               Dodane posiłki ({changes.mealsAdded.length})
             </Typography>
           </Box>
-          
+
           <CardContent sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {changes.mealsAdded.map(meal => (
+              {changes.mealsAdded.map((meal) => (
                 <MealCard key={meal.id} meal={meal} type="added" />
               ))}
             </Box>
@@ -104,28 +112,34 @@ const MealChangesList = ({ changes }) => {
 
       {/* Usunięte posiłki */}
       {changes.mealsRemoved.length > 0 && (
-        <Card elevation={6} sx={{
-          borderRadius: 3,
-          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-          border: '1px solid rgba(244, 67, 54, 0.3)',
-        }}>
-          <Box sx={{
-            p: 2,
-            background: 'linear-gradient(90deg, rgba(244, 67, 54, 0.2) 0%, rgba(244, 67, 54, 0.05) 100%)',
-            borderBottom: '1px solid rgba(244, 67, 54, 0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2
-          }}>
+        <Card
+          elevation={6}
+          sx={{
+            borderRadius: 3,
+            background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+            border: '1px solid rgba(244, 67, 54, 0.3)',
+          }}
+        >
+          <Box
+            sx={{
+              p: 2,
+              background:
+                'linear-gradient(90deg, rgba(244, 67, 54, 0.2) 0%, rgba(244, 67, 54, 0.05) 100%)',
+              borderBottom: '1px solid rgba(244, 67, 54, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
             <RemoveIcon sx={{ color: '#f44336', fontSize: 28 }} />
             <Typography variant="h6" fontWeight="600" color="#f44336">
               Usunięte posiłki ({changes.mealsRemoved.length})
             </Typography>
           </Box>
-          
+
           <CardContent sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              {changes.mealsRemoved.map(meal => (
+              {changes.mealsRemoved.map((meal) => (
                 <MealCard key={meal.id} meal={meal} type="removed" />
               ))}
             </Box>
@@ -135,25 +149,31 @@ const MealChangesList = ({ changes }) => {
 
       {/* Zmodyfikowane posiłki */}
       {changes.mealsModified.length > 0 && (
-        <Card elevation={6} sx={{
-          borderRadius: 3,
-          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-          border: '1px solid rgba(33, 150, 243, 0.3)',
-        }}>
-          <Box sx={{
-            p: 2,
-            background: 'linear-gradient(90deg, rgba(33, 150, 243, 0.2) 0%, rgba(33, 150, 243, 0.05) 100%)',
-            borderBottom: '1px solid rgba(33, 150, 243, 0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2
-          }}>
+        <Card
+          elevation={6}
+          sx={{
+            borderRadius: 3,
+            background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+            border: '1px solid rgba(33, 150, 243, 0.3)',
+          }}
+        >
+          <Box
+            sx={{
+              p: 2,
+              background:
+                'linear-gradient(90deg, rgba(33, 150, 243, 0.2) 0%, rgba(33, 150, 243, 0.05) 100%)',
+              borderBottom: '1px solid rgba(33, 150, 243, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+            }}
+          >
             <EditIcon sx={{ color: '#2196f3', fontSize: 28 }} />
             <Typography variant="h6" fontWeight="600" color="#2196f3">
               Zmodyfikowane posiłki ({changes.mealsModified.length})
             </Typography>
           </Box>
-          
+
           <CardContent sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               {changes.mealsModified.map(({ meal, changes: mealChanges }) => (
@@ -176,25 +196,24 @@ const MealChangesList = ({ changes }) => {
 // Karta dodanego/usuniętego posiłku
 const MealCard = ({ meal, type }) => {
   const isAdded = type === 'added';
-  const bgColor = isAdded 
-    ? 'rgba(76, 175, 80, 0.1)' 
-    : 'rgba(244, 67, 54, 0.1)';
-  const borderColor = isAdded 
-    ? 'rgba(76, 175, 80, 0.3)' 
-    : 'rgba(244, 67, 54, 0.3)';
+  const bgColor = isAdded ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)';
+  const borderColor = isAdded ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)';
   const textColor = isAdded ? '#4caf50' : '#f44336';
 
   return (
-    <Card elevation={2} sx={{
-      borderRadius: 2,
-      background: bgColor,
-      border: `2px solid ${borderColor}`,
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: `0 4px 12px ${alpha(textColor, 0.3)}`,
-      }
-    }}>
+    <Card
+      elevation={2}
+      sx={{
+        borderRadius: 2,
+        background: bgColor,
+        border: `2px solid ${borderColor}`,
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: `0 4px 12px ${alpha(textColor, 0.3)}`,
+        },
+      }}
+    >
       <CardContent sx={{ p: 3 }}>
         <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
           <Box flex={1}>
@@ -208,7 +227,7 @@ const MealCard = ({ meal, type }) => {
                 {meal.name}
               </Typography>
             </Box>
-            
+
             <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
               Porcja: <strong>{meal.portionMultiplier}x</strong>
             </Typography>
@@ -227,8 +246,8 @@ const MealCard = ({ meal, type }) => {
         {/* Makroskładniki */}
         <Grid container spacing={1}>
           <Grid size={4}>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 textAlign: 'center',
                 py: 1,
                 borderRadius: 1,
@@ -245,8 +264,8 @@ const MealCard = ({ meal, type }) => {
             </Box>
           </Grid>
           <Grid size={4}>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 textAlign: 'center',
                 py: 1,
                 borderRadius: 1,
@@ -263,8 +282,8 @@ const MealCard = ({ meal, type }) => {
             </Box>
           </Grid>
           <Grid size={4}>
-            <Box 
-              sx={{ 
+            <Box
+              sx={{
                 textAlign: 'center',
                 py: 1,
                 borderRadius: 1,
@@ -284,26 +303,28 @@ const MealCard = ({ meal, type }) => {
 
         {/* Składniki */}
         {meal.ingredients && meal.ingredients.length > 0 && (
-          <Box sx={{ 
-            mt: 2, 
-            pt: 2, 
-            borderTop: '1px solid rgba(255, 255, 255, 0.1)' 
-          }}>
-            <Typography 
-              variant="caption" 
+          <Box
+            sx={{
+              mt: 2,
+              pt: 2,
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+            }}
+          >
+            <Typography
+              variant="caption"
               color="rgba(255, 255, 255, 0.6)"
-              sx={{ 
-                mb: 1, 
+              sx={{
+                mb: 1,
                 display: 'block',
                 textTransform: 'uppercase',
                 letterSpacing: 1,
-                fontWeight: 600
+                fontWeight: 600,
               }}
             >
               Składniki ({meal.ingredients.length}):
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-              {meal.ingredients.slice(0, 3).map(ing => (
+              {meal.ingredients.slice(0, 3).map((ing) => (
                 <Typography key={ing.id} variant="body2" color="rgba(255, 255, 255, 0.8)">
                   • {ing.name}: {ing.amount} {ing.unit}
                 </Typography>
@@ -323,27 +344,30 @@ const MealCard = ({ meal, type }) => {
 
 // Karta zmodyfikowanego posiłku
 const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
-  const hasIngredientChanges = 
+  const hasIngredientChanges =
     changes.ingredientsAdded.length > 0 ||
     changes.ingredientsRemoved.length > 0 ||
     changes.ingredientsModified.length > 0;
 
-  const totalChanges = 
+  const totalChanges =
     (changes.portionChanged ? 1 : 0) +
-    (Object.values(changes.macrosChanged).some(v => v) ? 1 : 0) +
+    (Object.values(changes.macrosChanged).some((v) => v) ? 1 : 0) +
     (hasIngredientChanges ? 1 : 0);
 
   return (
-    <Card elevation={2} sx={{
-      borderRadius: 2,
-      background: 'rgba(33, 150, 243, 0.1)',
-      border: '2px solid rgba(33, 150, 243, 0.3)',
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: '0 4px 12px rgba(33, 150, 243, 0.3)',
-      }
-    }}>
+    <Card
+      elevation={2}
+      sx={{
+        borderRadius: 2,
+        background: 'rgba(33, 150, 243, 0.1)',
+        border: '2px solid rgba(33, 150, 243, 0.3)',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 4px 12px rgba(33, 150, 243, 0.3)',
+        },
+      }}
+    >
       <CardContent sx={{ p: 3 }}>
         <Box display="flex" justifyContent="space-between" alignItems="start">
           <Box flex={1}>
@@ -360,32 +384,32 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                   color: '#2196f3',
                   fontWeight: 600,
                   height: '20px',
-                  fontSize: '0.7rem'
+                  fontSize: '0.7rem',
                 }}
               />
             </Box>
-            
+
             {/* Lista zmian */}
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {changes.portionChanged && (
-                <ChangeIndicator 
+                <ChangeIndicator
                   icon={<RestaurantIcon sx={{ fontSize: 16 }} />}
                   text="Zmieniono wielkość porcji"
                   color="#2196f3"
                 />
               )}
               {changes.macrosChanged.kcal && (
-                <ChangeIndicator 
+                <ChangeIndicator
                   icon={<TrendingUpIcon sx={{ fontSize: 16 }} />}
                   text="Zmieniły się makroskładniki"
                   color="#ff9800"
                 />
               )}
               {hasIngredientChanges && (
-                <ChangeIndicator 
+                <ChangeIndicator
                   icon={<EditIcon sx={{ fontSize: 16 }} />}
                   text={`Zmiany w składnikach (${
-                    changes.ingredientsAdded.length + 
+                    changes.ingredientsAdded.length +
                     changes.ingredientsRemoved.length +
                     changes.ingredientsModified.length
                   })`}
@@ -403,7 +427,7 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
               transition: 'transform 0.3s ease',
               '&:hover': {
                 backgroundColor: 'rgba(33, 150, 243, 0.1)',
-              }
+              },
             }}
           >
             <ExpandMoreIcon />
@@ -413,7 +437,6 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
         {/* Expanded details */}
         <Collapse in={isExpanded} timeout="auto" unmountOnExit>
           <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            
             {/* Dodane składniki */}
             {changes.ingredientsAdded.length > 0 && (
               <Box sx={{ mb: 3 }}>
@@ -424,7 +447,7 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                  {changes.ingredientsAdded.map(ing => (
+                  {changes.ingredientsAdded.map((ing) => (
                     <Typography key={ing.id} variant="body2" color="rgba(255, 255, 255, 0.8)">
                       • {ing.name}: {ing.amount} {ing.unit}
                     </Typography>
@@ -443,13 +466,13 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                  {changes.ingredientsRemoved.map(ing => (
-                    <Typography 
-                      key={ing.id} 
-                      variant="body2" 
-                      sx={{ 
+                  {changes.ingredientsRemoved.map((ing) => (
+                    <Typography
+                      key={ing.id}
+                      variant="body2"
+                      sx={{
                         color: 'rgba(255, 255, 255, 0.6)',
-                        textDecoration: 'line-through'
+                        textDecoration: 'line-through',
                       }}
                     >
                       • {ing.name}: {ing.amount} {ing.unit}
@@ -475,11 +498,11 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                         • {ingredient.name}:
                       </Typography>
                       <Box display="flex" alignItems="center" gap={1} ml={2}>
-                        <Typography 
-                          variant="caption" 
-                          sx={{ 
+                        <Typography
+                          variant="caption"
+                          sx={{
                             textDecoration: 'line-through',
-                            color: 'rgba(255, 255, 255, 0.4)'
+                            color: 'rgba(255, 255, 255, 0.4)',
                           }}
                         >
                           {oldAmount} {ingredient.unit}
@@ -498,14 +521,15 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                             sx={{
                               height: '18px',
                               fontSize: '0.65rem',
-                              backgroundColor: newAmount > oldAmount 
-                                ? 'rgba(76, 175, 80, 0.2)' 
-                                : 'rgba(244, 67, 54, 0.2)',
+                              backgroundColor:
+                                newAmount > oldAmount
+                                  ? 'rgba(76, 175, 80, 0.2)'
+                                  : 'rgba(244, 67, 54, 0.2)',
                               color: newAmount > oldAmount ? '#4caf50' : '#f44336',
                               '& .MuiChip-icon': {
                                 fontSize: '0.75rem',
                                 color: newAmount > oldAmount ? '#4caf50' : '#f44336',
-                              }
+                              },
                             }}
                           />
                         )}

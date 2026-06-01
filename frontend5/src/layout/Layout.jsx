@@ -13,7 +13,7 @@ export default function Layout() {
   const [token, setToken] = useState(useLoaderData());
   const submit = useSubmit();
   const navigate = useNavigate();
-  
+
   const logoutTimeoutRef = useRef(null);
   const refreshTimeoutRef = useRef(null);
   const isRefreshingRef = useRef(false); // Zapobiega wielokrotnym odświeżeniom
@@ -31,12 +31,12 @@ export default function Layout() {
 
   const scheduleTokenRefresh = (currentToken) => {
     if (!currentToken || currentToken === 'EXPIRED') return;
-    
+
     clearAllTimeouts();
-    
+
     const tokenDuration = getTokenDuration();
     const refreshToken = getRefreshToken();
-        
+
     if (tokenDuration <= 0 || !refreshToken || refreshToken === 'EXPIRED') {
       submit(null, { action: '/logout', method: 'post' });
       return;
@@ -44,28 +44,27 @@ export default function Layout() {
 
     // Odśwież token 5 minut przed wygaśnięciem
     const refreshTime = Math.max(tokenDuration - 300000, 60000); // Minimum 1 minuta
-    
+
     console.log('Scheduling refresh in:', refreshTime, 'ms');
-    
+
     refreshTimeoutRef.current = setTimeout(async () => {
       if (isRefreshingRef.current) {
         console.log('Already refreshing, skipping...');
         return;
       }
-      
+
       try {
         isRefreshingRef.current = true;
         console.log('Attempting to refresh token...');
-        
+
         const newToken = await refreshAccessToken();
         console.log('Token refreshed successfully');
-        
+
         // Aktualizuj lokalny stan zamiast przeładowywać stronę
         setToken(newToken);
-        
+
         // Zaplanuj następne odświeżenie
         scheduleTokenRefresh(newToken);
-        
       } catch (error) {
         console.error('Failed to refresh token:', error);
         submit(null, { action: '/logout', method: 'post' });
@@ -109,7 +108,7 @@ export default function Layout() {
   return (
     <Box sx={{ display: 'flex', flex: '100vh' }}>
       <TokenRefreshNotification />
-      
+
       <Drawer
         PaperProps={{ style: { width: 200 } }}
         variant="temporary"
@@ -117,9 +116,9 @@ export default function Layout() {
         onClose={handleDrawerToggle}
       />
 
-      <Box sx={{ flex: 1}}>
-        {token !== null ? <Header onDrawerToggle={handleDrawerToggle}/> : null}
-        <Box component="main" sx={{ flex: 1, py: 6, px: 4}}>
+      <Box sx={{ flex: 1 }}>
+        {token !== null ? <Header onDrawerToggle={handleDrawerToggle} /> : null}
+        <Box component="main" sx={{ flex: 1, py: 6, px: 4 }}>
           <Outlet />
         </Box>
       </Box>

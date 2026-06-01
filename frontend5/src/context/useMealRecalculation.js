@@ -11,7 +11,7 @@ export function useMealRecalculation() {
     mutationFn: (dailyMeal) => REST.recalculateMealMacro({ dailyMeal }),
     onError: () => {
       showSnackbar(t('food.failedCalculateDiet'), 'error');
-    }
+    },
   });
 
   return { recalculateMeal };

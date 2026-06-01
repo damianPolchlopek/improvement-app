@@ -11,13 +11,17 @@ import ShoppingListView from './ShoppingListView';
 import PageLoader from '../component/loader/PageLoader';
 import ErrorAlert from '../component/error/ErrorAlert';
 
-
 export default function ShoppingListPage() {
   const theme = useTheme();
 
-  const { data: categories, isLoading, isError, error } = useQuery({
+  const {
+    data: categories,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ['shopping-categories'],
-    queryFn: () => REST.getAllCategoryProducts().then(res => res.entity),
+    queryFn: () => REST.getAllCategoryProducts().then((res) => res.entity),
   });
 
   if (isLoading) {
@@ -30,14 +34,18 @@ export default function ShoppingListPage() {
 
   return (
     <Box sx={{ py: 4 }}>
-      <Box sx={{ maxWidth: 800, mx: 'auto', px: 2, display: 'flex', flexDirection: 'column', gap: 3 }}>
-
+      <Box
+        sx={{ maxWidth: 800, mx: 'auto', px: 2, display: 'flex', flexDirection: 'column', gap: 3 }}
+      >
         {/* Header */}
-        <Card elevation={6} sx={{
-          borderRadius: 3,
-          background: theme.palette.card.header,
-          color: 'white',
-        }}>
+        <Card
+          elevation={6}
+          sx={{
+            borderRadius: 3,
+            background: theme.palette.card.header,
+            color: 'white',
+          }}
+        >
           <CardContent sx={{ p: 3 }}>
             <Box display="flex" alignItems="center" gap={2}>
               <Analytics sx={{ fontSize: 32 }} />
@@ -54,7 +62,6 @@ export default function ShoppingListPage() {
         {/* Add + List */}
         <ShoppingAdd categories={categories} />
         <ShoppingListView categories={categories} />
-
       </Box>
     </Box>
   );

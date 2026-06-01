@@ -22,7 +22,7 @@ import {
   useTheme,
   InputAdornment,
   IconButton,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 
 import {
@@ -30,7 +30,7 @@ import {
   Search as SearchIcon,
   Visibility as VisibilityIcon,
   CalendarToday as CalendarIcon,
-  Restaurant as RestaurantIcon
+  Restaurant as RestaurantIcon,
 } from '@mui/icons-material';
 
 import Grid from '@mui/material/Grid';
@@ -63,30 +63,32 @@ const DietAuditSelectorPage = () => {
   if (isLoading) {
     return <PageLoader text="Ładowanie podsumowań diet..." />;
   }
-  
+
   if (isError) {
     return <ErrorAlert error={error} />;
   }
 
-  const filteredData = data?.content?.filter(item => 
+  const filteredData = data?.content?.filter((item) =>
     item.date.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <Box sx={{ py: 4, minHeight: '100vh' }}>
       <Container maxWidth="xl" sx={{ width: '70%' }}>
-        
         {/* Header Section */}
         <Grid container spacing={3}>
           <Grid size={12}>
-            <Card elevation={8} sx={{ 
-              borderRadius: 4,
-              background: theme.palette.card.header,
-              color: 'white',
-              mb: 4,
-              overflow: 'hidden',
-              border: theme.palette.card.border,
-            }}>
+            <Card
+              elevation={8}
+              sx={{
+                borderRadius: 4,
+                background: theme.palette.card.header,
+                color: 'white',
+                mb: 4,
+                overflow: 'hidden',
+                border: theme.palette.card.border,
+              }}
+            >
               <CardContent sx={{ p: 4 }}>
                 <Box display="flex" alignItems="center" gap={2} mb={2}>
                   <HistoryIcon sx={{ fontSize: 40 }} />
@@ -99,7 +101,7 @@ const DietAuditSelectorPage = () => {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box display="flex" gap={3} sx={{ mt: 3 }}>
                   <Box display="flex" alignItems="center" gap={1}>
                     <RestaurantIcon sx={{ fontSize: 20 }} />
@@ -120,11 +122,14 @@ const DietAuditSelectorPage = () => {
 
           {/* Search Bar */}
           <Grid size={12}>
-            <Card elevation={6} sx={{
-              borderRadius: 3,
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-            }}>
+            <Card
+              elevation={6}
+              sx={{
+                borderRadius: 3,
+                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+              }}
+            >
               <CardContent sx={{ p: 3 }}>
                 <TextField
                   fullWidth
@@ -161,18 +166,23 @@ const DietAuditSelectorPage = () => {
 
           {/* Table */}
           <Grid size={12}>
-            <Card elevation={8} sx={{ 
-              borderRadius: 4, 
-              overflow: 'hidden',
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-            }}>
+            <Card
+              elevation={8}
+              sx={{
+                borderRadius: 4,
+                overflow: 'hidden',
+                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+              }}
+            >
               {/* Table Header */}
-              <Box sx={{ 
-                p: 3,
-                background: theme.palette.card.header,
-                borderBottom: theme.palette.card.border,
-              }}>
+              <Box
+                sx={{
+                  p: 3,
+                  background: theme.palette.card.header,
+                  borderBottom: theme.palette.card.border,
+                }}
+              >
                 <Typography variant="h5" fontWeight="600" color="white">
                   Lista Podsumowań Diet
                 </Typography>
@@ -182,14 +192,16 @@ const DietAuditSelectorPage = () => {
               <TableContainer>
                 <Table>
                   <TableHead>
-                    <TableRow sx={{
-                      '& th': {
-                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        fontWeight: 600,
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                      }
-                    }}>
+                    <TableRow
+                      sx={{
+                        '& th': {
+                          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                          color: 'rgba(255, 255, 255, 0.9)',
+                          fontWeight: 600,
+                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                        },
+                      }}
+                    >
                       <TableCell>ID</TableCell>
                       <TableCell>Data</TableCell>
                       <TableCell align="right">Kalorie</TableCell>
@@ -200,11 +212,11 @@ const DietAuditSelectorPage = () => {
                       <TableCell align="center">Akcje</TableCell>
                     </TableRow>
                   </TableHead>
-                  
+
                   <TableBody>
                     {filteredData && filteredData.length > 0 ? (
                       filteredData.map((dietSummary) => (
-                        <TableRow 
+                        <TableRow
                           key={dietSummary.id}
                           sx={{
                             '&:hover': {
@@ -213,11 +225,11 @@ const DietAuditSelectorPage = () => {
                             '& td': {
                               color: 'rgba(255, 255, 255, 0.9)',
                               borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                            }
+                            },
                           }}
                         >
                           <TableCell>
-                            <Chip 
+                            <Chip
                               label={`#${dietSummary.id}`}
                               size="small"
                               sx={{
@@ -229,7 +241,9 @@ const DietAuditSelectorPage = () => {
                           </TableCell>
                           <TableCell>
                             <Box display="flex" alignItems="center" gap={1}>
-                              <CalendarIcon sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.5)' }} />
+                              <CalendarIcon
+                                sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.5)' }}
+                              />
                               {dietSummary.date}
                             </Box>
                           </TableCell>
@@ -254,7 +268,7 @@ const DietAuditSelectorPage = () => {
                             </Typography>
                           </TableCell>
                           <TableCell align="center">
-                            <Chip 
+                            <Chip
                               label={dietSummary.meals.length}
                               size="small"
                               sx={{
@@ -272,7 +286,7 @@ const DietAuditSelectorPage = () => {
                                   color: '#4caf50',
                                   '&:hover': {
                                     backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                                  }
+                                  },
                                 }}
                               >
                                 <HistoryIcon />
@@ -295,10 +309,12 @@ const DietAuditSelectorPage = () => {
               </TableContainer>
 
               {/* Pagination */}
-              <Box sx={{
-                background: theme.palette.card.header,
-                borderTop: theme.palette.card.border,
-              }}>
+              <Box
+                sx={{
+                  background: theme.palette.card.header,
+                  borderTop: theme.palette.card.border,
+                }}
+              >
                 <TablePagination
                   component="div"
                   count={data?.totalElements || 0}
@@ -321,7 +337,6 @@ const DietAuditSelectorPage = () => {
             </Card>
           </Grid>
         </Grid>
-
       </Container>
     </Box>
   );

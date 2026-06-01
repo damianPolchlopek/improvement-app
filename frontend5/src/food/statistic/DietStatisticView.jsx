@@ -15,7 +15,7 @@ import {
   Box,
   Card,
   CardContent,
-  useTheme
+  useTheme,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
@@ -23,7 +23,7 @@ import { Restaurant, Analytics, TrendingUp } from '@mui/icons-material';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
-import DietStatisticTableRow from "./DietStatisticTableRow";
+import DietStatisticTableRow from './DietStatisticTableRow';
 
 import PageLoader from '../../component/loader/PageLoader';
 import ErrorAlert from '../../component/error/ErrorAlert';
@@ -53,7 +53,7 @@ export default function DietStatisticView() {
   if (isLoading) {
     return <PageLoader text={t('messages.loading')} />;
   }
-  
+
   if (isError) {
     return <ErrorAlert error={error} />;
   }
@@ -61,15 +61,17 @@ export default function DietStatisticView() {
   return (
     <Box sx={{ py: 4 }}>
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{
-            borderRadius: 3,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 2
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 2,
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Analytics sx={{ fontSize: 32 }} />
@@ -86,14 +88,17 @@ export default function DietStatisticView() {
 
         {/* Statistics Cards */}
         <Grid size={{ xs: 12, md: 4 }}>
-          <Card elevation={6} sx={{
-            height: '100%',
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Restaurant sx={{ color: '#4caf50', fontSize: 28 }} />
@@ -109,47 +114,49 @@ export default function DietStatisticView() {
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <Card elevation={4} sx={{
-            height: '100%',
-            borderRadius: 3,
-            background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            p: 3
-          }}>
+          <Card
+            elevation={4}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              background: 'linear-gradient(45deg, #ff9800, #f57c00)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              p: 3,
+            }}
+          >
             <Box>
               <Typography variant="h3" fontWeight="700">
                 {data?.content?.length || 0}
               </Typography>
-              <Typography variant="body1">
-                Wyświetlanych rekordów
-              </Typography>
+              <Typography variant="body1">Wyświetlanych rekordów</Typography>
             </Box>
           </Card>
         </Grid>
 
         <Grid size={{ xs: 12, md: 4 }}>
-          <Card elevation={4} sx={{
-            height: '100%',
-            borderRadius: 3,
-            background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            p: 3
-          }}>
+          <Card
+            elevation={4}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              background: 'linear-gradient(45deg, #2196f3, #1976d2)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              p: 3,
+            }}
+          >
             <Box>
               <Typography variant="h3" fontWeight="700">
                 {data?.totalPages || 0}
               </Typography>
-              <Typography variant="body1">
-                Wszystkich stron
-              </Typography>
+              <Typography variant="body1">Wszystkich stron</Typography>
             </Box>
           </Card>
         </Grid>
@@ -157,14 +164,16 @@ export default function DietStatisticView() {
         {/* Main Data Table */}
         <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
-            <Box sx={{
-              p: 3,
-              background: theme.palette.card.header,
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2
-            }}>
+            <Box
+              sx={{
+                p: 3,
+                background: theme.palette.card.header,
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
               <TrendingUp sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
                 Historia Diety
@@ -175,7 +184,7 @@ export default function DietStatisticView() {
               <Table>
                 <TableHead>
                   <StyledTableRow>
-                    <StyledTableCell sx={{ width: "50px" }}></StyledTableCell>
+                    <StyledTableCell sx={{ width: '50px' }}></StyledTableCell>
                     <StyledTableCell>{t('food.date')}</StyledTableCell>
                     <StyledTableCell>{t('food.kcal')}</StyledTableCell>
                     <StyledTableCell>{t('food.protein')}</StyledTableCell>
@@ -213,7 +222,6 @@ export default function DietStatisticView() {
             </TableContainer>
           </Card>
         </Grid>
-
       </Grid>
     </Box>
   );

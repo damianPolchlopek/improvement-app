@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Logo from './Logo';
 
 import { useTranslation } from 'react-i18next';
-import { MENU_ITEMS as menuItems } from './MenuItems'; 
+import { MENU_ITEMS as menuItems } from './MenuItems';
 
 function HeaderDesktop() {
   const [anchorElDropdown, setAnchorElDropdown] = React.useState({});
@@ -19,7 +19,7 @@ function HeaderDesktop() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1,  display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
         <Logo />
       </Box>

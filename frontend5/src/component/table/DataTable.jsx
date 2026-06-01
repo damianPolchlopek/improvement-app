@@ -6,10 +6,10 @@ import {
   Paper,
   Box,
   CircularProgress,
-  Typography
+  Typography,
 } from '@mui/material';
-import StyledTableRow  from './StyledTableRow'; 
-import StyledTableCell from './StyledTableCell'
+import StyledTableRow from './StyledTableRow';
+import StyledTableCell from './StyledTableCell';
 import ErrorAlert from '../error/ErrorAlert';
 
 export default function DataTable({
@@ -22,9 +22,8 @@ export default function DataTable({
   loadingMessage = 'Ładowanie...',
   emptyMessage = 'Brak danych do wyświetlenia',
   containerProps = {},
-  tableProps = {}
+  tableProps = {},
 }) {
-
   if (isLoading) {
     return (
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -68,7 +67,7 @@ export default function DataTable({
             ))}
           </StyledTableRow>
         </TableHead>
-        
+
         <TableBody>
           {data.map((row, rowIndex) => (
             <StyledTableRow
@@ -76,10 +75,10 @@ export default function DataTable({
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               {columns.map((column, colIndex) => {
-                const cellValue = column.accessor 
-                  ? (typeof column.accessor === 'function' 
-                      ? column.accessor(row) 
-                      : row[column.accessor])
+                const cellValue = column.accessor
+                  ? typeof column.accessor === 'function'
+                    ? column.accessor(row)
+                    : row[column.accessor]
                   : row[column.key];
 
                 return (

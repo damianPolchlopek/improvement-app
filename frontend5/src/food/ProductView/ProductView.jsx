@@ -17,7 +17,7 @@ import {
   InputAdornment,
   useTheme,
   Chip,
-  IconButton
+  IconButton,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
@@ -42,7 +42,7 @@ export default function ProductView() {
     error: categoryError,
   } = useQuery({
     queryKey: ['product-categories'],
-    queryFn: REST.getProductCategoryList
+    queryFn: REST.getProductCategoryList,
   });
 
   const selectedCategory = productCategoryList[tabIndex] || 'ALL';
@@ -55,11 +55,12 @@ export default function ProductView() {
     error: productError,
   } = useQuery({
     queryKey: ['products', selectedCategory, typedProductName],
-    queryFn: () => REST.getProductFiltredByCategoryAndName(selectedCategory, typedProductName || ' '),
+    queryFn: () =>
+      REST.getProductFiltredByCategoryAndName(selectedCategory, typedProductName || ' '),
     select: (res) => res.entity,
     enabled: !!selectedCategory,
     keepPreviousData: true,
-    staleTime: 1000 * 60 * 5 // 5 minutes
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const handleChange = (event, newValue) => {
@@ -81,28 +82,25 @@ export default function ProductView() {
       label: t('food.name'),
       accessor: 'name',
       render: (value) => (
-        <Typography variant="body2" fontWeight="600" sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: 1 
-        }}>
+        <Typography
+          variant="body2"
+          fontWeight="600"
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
           {value}
         </Typography>
-      )
+      ),
     },
     {
       key: 'kcal',
       label: t('food.kcal'),
       accessor: 'kcal',
       align: 'right',
-      render: (value) => (
-        <Chip 
-          label={value} 
-          color="warning" 
-          variant="outlined" 
-          size="small" 
-        />
-      )
+      render: (value) => <Chip label={value} color="warning" variant="outlined" size="small" />,
     },
     {
       key: 'protein',
@@ -110,27 +108,15 @@ export default function ProductView() {
       accessor: 'protein',
       align: 'right',
       render: (value) => (
-        <Chip 
-          label={`${value}g`} 
-          color="success" 
-          variant="outlined" 
-          size="small" 
-        />
-      )
+        <Chip label={`${value}g`} color="success" variant="outlined" size="small" />
+      ),
     },
     {
       key: 'carbohydrates',
       label: t('food.carbs'),
       accessor: 'carbohydrates',
       align: 'right',
-      render: (value) => (
-        <Chip 
-          label={`${value}g`} 
-          color="info" 
-          variant="outlined" 
-          size="small" 
-        />
-      )
+      render: (value) => <Chip label={`${value}g`} color="info" variant="outlined" size="small" />,
     },
     {
       key: 'fat',
@@ -138,40 +124,37 @@ export default function ProductView() {
       accessor: 'fat',
       align: 'right',
       render: (value) => (
-        <Chip 
-          label={`${value}g`} 
-          color="secondary" 
-          variant="outlined" 
-          size="small" 
-        />
-      )
+        <Chip label={`${value}g`} color="secondary" variant="outlined" size="small" />
+      ),
     },
     {
       key: 'amount',
       label: t('food.amount'),
       accessor: 'amount',
-      align: 'right'
+      align: 'right',
     },
     {
       key: 'unit',
       label: t('food.unit'),
       accessor: 'unit',
-      align: 'center'
-    }
+      align: 'center',
+    },
   ];
 
   return (
     <Box sx={{ py: 4 }}>
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{
-            borderRadius: 3,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 2
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 2,
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <RestaurantMenuIcon sx={{ fontSize: 32 }} />
@@ -188,13 +171,16 @@ export default function ProductView() {
 
         {/* Search Section */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card elevation={6} sx={{
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <SearchIcon sx={{ color: theme.palette.primary.main, fontSize: 28 }} />
@@ -242,17 +228,20 @@ export default function ProductView() {
 
         {/* Statistics Section */}
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card elevation={4} sx={{
-            height: '100%',
-            borderRadius: 3,
-            background: 'linear-gradient(45deg, #4caf50, #2e7d32)',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            p: 3
-          }}>
+          <Card
+            elevation={4}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              background: 'linear-gradient(45deg, #4caf50, #2e7d32)',
+              color: 'white',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              p: 3,
+            }}
+          >
             <Box>
               <Typography variant="h3" fontWeight="700">
                 {productList?.length || 0}
@@ -272,14 +261,16 @@ export default function ProductView() {
         {/* Categories and Products Section */}
         <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
-            <Box sx={{
-              p: 3,
-              background: theme.palette.card.header,
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2
-            }}>
+            <Box
+              sx={{
+                p: 3,
+                background: theme.palette.card.header,
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
               <CategoryIcon sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
                 Kategorie Produktów
@@ -321,28 +312,28 @@ export default function ProductView() {
                       transition: 'all 0.2s ease-in-out',
                       '&:hover': {
                         backgroundColor: theme.palette.action.hover,
-                        transform: 'translateY(-2px)'
+                        transform: 'translateY(-2px)',
                       },
                       '&.Mui-selected': {
                         color: theme.palette.primary.main,
-                        fontWeight: 700
-                      }
+                        fontWeight: 700,
+                      },
                     },
                     '& .MuiTabs-indicator': {
                       height: 3,
-                      borderRadius: '3px 3px 0 0'
-                    }
+                      borderRadius: '3px 3px 0 0',
+                    },
                   }}
                 >
                   {productCategoryList.map((productCategory, index) => (
-                    <Tab 
-                      key={index} 
+                    <Tab
+                      key={index}
                       label={
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <CategoryIcon sx={{ fontSize: 18 }} />
                           {productCategory}
                         </Box>
-                      } 
+                      }
                     />
                   ))}
                 </Tabs>
@@ -358,21 +349,21 @@ export default function ProductView() {
                         error={productError}
                         loadingMessage="Ładowanie produktów..."
                         emptyMessage={
-                          typedProductName 
+                          typedProductName
                             ? `Brak produktów zawierających "${typedProductName}" w kategorii ${productCategory}`
                             : `Brak produktów w kategorii ${productCategory}`
                         }
-                        containerProps={{ 
+                        containerProps={{
                           component: 'div',
                           elevation: 0,
-                          sx: { 
+                          sx: {
                             backgroundColor: 'transparent',
                             '& .MuiTableContainer-root': {
                               borderRadius: 2,
                               border: '1px solid',
-                              borderColor: 'divider'
-                            }
-                          }
+                              borderColor: 'divider',
+                            },
+                          },
                         }}
                       />
                     </Box>
@@ -382,7 +373,6 @@ export default function ProductView() {
             )}
           </Card>
         </Grid>
-
       </Grid>
     </Box>
   );

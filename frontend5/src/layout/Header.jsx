@@ -17,9 +17,9 @@ import HeaderMobile from './HeaderMobile';
 import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router-dom';
 
-const settings = ( t ) => ['Profile', 'Settings', 'Logout'];
+const settings = (t) => ['Profile', 'Settings', 'Logout'];
 
-function ResponsiveAppBar({onDrawerToggle}) {
+function ResponsiveAppBar({ onDrawerToggle }) {
   const submit = useSubmit();
   const { t } = useTranslation();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -27,7 +27,7 @@ function ResponsiveAppBar({onDrawerToggle}) {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
-  
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -41,13 +41,10 @@ function ResponsiveAppBar({onDrawerToggle}) {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          
-          <HeaderMobile
-            onDrawerToggle={onDrawerToggle}
-          />
-          
+          <HeaderMobile onDrawerToggle={onDrawerToggle} />
+
           <HeaderDesktop />
-          
+
           <LanguageSwitcher />
 
           <Box sx={{ flexGrow: 0 }}>
@@ -56,7 +53,7 @@ function ResponsiveAppBar({onDrawerToggle}) {
                 <Avatar alt="D" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
-            
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -76,16 +73,13 @@ function ResponsiveAppBar({onDrawerToggle}) {
               {settings(t).map((setting) => (
                 <MenuItem
                   key={setting}
-                  onClick={
-                    setting === 'Logout' ? handleLogout : handleCloseUserMenu
-                  }
+                  onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}
                 >
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          
         </Toolbar>
       </Container>
     </AppBar>

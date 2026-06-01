@@ -6,32 +6,29 @@ const MealSelectionContext = createContext();
 
 export function MealSelectionProvider({ children, initialSelected = [] }) {
   const [selectedMeals, setSelectedMeals] = useState(
-    initialSelected.map(meal => ({
+    initialSelected.map((meal) => ({
       ...meal,
-      amount: meal.amount || 1 // Ensure amount is always present
+      amount: meal.amount || 1, // Ensure amount is always present
     }))
   );
-  
+
   const [dietSummary, setDietSummary] = useState({
     kcal: 0,
     protein: 0,
     carbohydrates: 0,
     fat: 0,
   });
-  
 
   const { calculateDiet } = useDietCalculation();
 
   // Recalculate diet when selected meals change
   useEffect(() => {
     if (selectedMeals.length > 0) {
-
       calculateDiet.mutate(selectedMeals, {
-        onSuccess: (response) => setDietSummary(response)
+        onSuccess: (response) => setDietSummary(response),
       });
 
       // calculateMacro.mutate(selectedMeals);
-
     } else {
       // Reset summary if no meals selected
       setDietSummary({
@@ -44,25 +41,31 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   }, [selectedMeals]);
 
   // Check if a meal is selected by ID
-  const isMealSelected = useCallback((mealId) => {
-    return selectedMeals.some(meal => meal.mealRecipeId === mealId);
-  }, [selectedMeals]);
+  const isMealSelected = useCallback(
+    (mealId) => {
+      return selectedMeals.some((meal) => meal.mealRecipeId === mealId);
+    },
+    [selectedMeals]
+  );
 
   // Toggle meal selection with amount
   const toggleMealSelection = useCallback((meal, amount = 1) => {
-    setSelectedMeals(prev => {
-      const existingIndex = prev.findIndex(item => item.mealRecipeId === meal.mealRecipeId);
-      
+    setSelectedMeals((prev) => {
+      const existingIndex = prev.findIndex((item) => item.mealRecipeId === meal.mealRecipeId);
+
       // If meal exists, remove it
       if (existingIndex >= 0) {
         return prev.filter((_, index) => index !== existingIndex);
-      } 
+      }
       // Otherwise add it with amount
       else {
-        return [...prev, { 
-          ...meal, 
-          amount: parseInt(amount, 10) || 1 
-        }];
+        return [
+          ...prev,
+          {
+            ...meal,
+            amount: parseInt(amount, 10) || 1,
+          },
+        ];
       }
     });
   }, []);
@@ -70,31 +73,30 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   // Update meal amount for already selected meal
   const updateMealAmount = useCallback((mealId, newAmount) => {
     const parsedAmount = parseFloat(newAmount) || 1;
-    
-    setSelectedMeals(prev => 
-      prev.map(meal => 
-        meal.mealRecipeId === mealId ? { ...meal, amount: parsedAmount } : meal
-      )
+
+    setSelectedMeals((prev) =>
+      prev.map((meal) => (meal.mealRecipeId === mealId ? { ...meal, amount: parsedAmount } : meal))
     );
   }, []);
 
   const updateMealIngredient = useCallback((mealId, productId, newMealIngredientAmount) => {
-    setSelectedMeals(prev => 
-      prev.map(meal => 
-        meal.mealRecipeId === mealId ? { 
-          ...meal, 
-          ingredients: meal.ingredients.map(ingredient => 
-            ingredient.productId === productId ? 
-              {...ingredient, amount: newMealIngredientAmount } : 
-              ingredient
-          ) 
-        } : meal
+    setSelectedMeals((prev) =>
+      prev.map((meal) =>
+        meal.mealRecipeId === mealId
+          ? {
+              ...meal,
+              ingredients: meal.ingredients.map((ingredient) =>
+                ingredient.productId === productId
+                  ? { ...ingredient, amount: newMealIngredientAmount }
+                  : ingredient
+              ),
+            }
+          : meal
       )
     );
 
     // call do backendu o rekalkulacje posilku
   }, []);
-
 
   // Reset all selections
   const clearSelections = useCallback(() => {
@@ -110,14 +112,10 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     toggleMealSelection,
     updateMealAmount,
     updateMealIngredient,
-    clearSelections
+    clearSelections,
   };
 
-  return (
-    <MealSelectionContext.Provider value={value}>
-      {children}
-    </MealSelectionContext.Provider>
-  );
+  return <MealSelectionContext.Provider value={value}>{children}</MealSelectionContext.Provider>;
 }
 
 // Custom hook to use meal selection context
@@ -126,6 +124,6 @@ export function useMealSelection() {
   if (!context) {
     throw new Error('useMealSelection must be used within a MealSelectionProvider');
   }
-  
+
   return context;
 }

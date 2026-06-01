@@ -1,10 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-const ResultModal = forwardRef(function ResultModal(
-  { targetTime, remainingTime, onReset },
-  ref
-) {
+const ResultModal = forwardRef(function ResultModal({ targetTime, remainingTime, onReset }, ref) {
   const dialog = useRef();
 
   const userLost = remainingTime <= 0;
@@ -21,7 +18,7 @@ const ResultModal = forwardRef(function ResultModal(
 
   const modalContainer = document.getElementById('modal');
   if (!modalContainer) {
-    console.error("Error: Target container is not a DOM element.");
+    console.error('Error: Target container is not a DOM element.');
     return null;
   }
 
@@ -33,8 +30,7 @@ const ResultModal = forwardRef(function ResultModal(
         The target time was <strong>{targetTime} seconds.</strong>
       </p>
       <p>
-        You stopped the timer with{' '}
-        <strong>{formattedRemainingTime} seconds left.</strong>
+        You stopped the timer with <strong>{formattedRemainingTime} seconds left.</strong>
       </p>
       <form method="dialog" onSubmit={onReset}>
         <button>Close</button>

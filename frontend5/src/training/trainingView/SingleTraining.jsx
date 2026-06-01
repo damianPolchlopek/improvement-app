@@ -2,11 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 
-import {
-  Collapse,
-  Typography,
-  Box
-} from '@mui/material';
+import { Collapse, Typography, Box } from '@mui/material';
 
 import REST from '../../utils/REST';
 import DataTable from '../../component/table/DataTable';
@@ -35,11 +31,11 @@ export default function SingleTraining({ trainingName }) {
     enabled: isOpen,
     keepPreviousData: true,
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10
+    cacheTime: 1000 * 60 * 10,
   });
 
   const handleClick = () => {
-    setIsOpen(open => !open);
+    setIsOpen((open) => !open);
   };
 
   const handleCellClick = (row, column, value) => {
@@ -55,25 +51,25 @@ export default function SingleTraining({ trainingName }) {
       key: 'date',
       label: t('exercise.date'),
       accessor: 'date',
-      align: 'right'
+      align: 'right',
     },
     {
       key: 'name',
       label: t('exercise.name'),
-      accessor: 'name'
+      accessor: 'name',
     },
     {
       key: 'reps',
       label: t('exercise.reps'),
       accessor: 'reps',
-      align: 'right'
+      align: 'right',
     },
     {
       key: 'weight',
       label: t('exercise.weight'),
       accessor: 'weight',
-      align: 'right'
-    }
+      align: 'right',
+    },
   ];
 
   return (
@@ -85,7 +81,7 @@ export default function SingleTraining({ trainingName }) {
           cursor: 'pointer',
           padding: '10px',
           backgroundColor: isOpen ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
-          borderBottom: '1px solid rgba(0, 0, 0, 0.1)'
+          borderBottom: '1px solid rgba(0, 0, 0, 0.1)',
         }}
       >
         <Typography>{trainingName}</Typography>

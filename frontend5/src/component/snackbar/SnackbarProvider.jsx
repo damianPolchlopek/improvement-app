@@ -7,7 +7,7 @@ const SnackbarContext = createContext();
 const initialState = {
   open: false,
   message: '',
-  severity: 'info'
+  severity: 'info',
 };
 
 function snackbarReducer(state, action) {
@@ -17,12 +17,12 @@ function snackbarReducer(state, action) {
         ...state,
         open: true,
         message: action.message,
-        severity: action.severity || 'info'
+        severity: action.severity || 'info',
       };
     case 'CLOSE_SNACKBAR':
       return {
         ...state,
-        open: false
+        open: false,
       };
     default:
       return state;
@@ -46,7 +46,7 @@ export default function SnackbarProvider({ children }) {
       <Snackbar
         open={state.open}
         severity={state.severity}
-        onClose={hideSnackbar}  
+        onClose={hideSnackbar}
         message={state.message}
       />
     </SnackbarContext.Provider>

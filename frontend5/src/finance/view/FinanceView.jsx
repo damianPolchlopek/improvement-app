@@ -40,13 +40,23 @@ function calculateDays(prevDate) {
 export default function FinanceView() {
   const theme = useTheme();
 
-  const { data: cryptoDataResponse, isLoading: loadingPrices, isError: errorPrices, error: priceError } = useQuery({
+  const {
+    data: cryptoDataResponse,
+    isLoading: loadingPrices,
+    isError: errorPrices,
+    error: priceError,
+  } = useQuery({
     queryKey: ['crypto-prices', COIN_LIST.join(',')],
     queryFn: () => REST.getFinanceCryptoPrice(COIN_LIST.join(','), 'USD'),
     staleTime: 1000 * 60 * 5,
   });
 
-  const { data: cryptoDescription, isLoading: loadingDesc, isError: errorDesc, error: descError } = useQuery({
+  const {
+    data: cryptoDescription,
+    isLoading: loadingDesc,
+    isError: errorDesc,
+    error: descError,
+  } = useQuery({
     queryKey: ['crypto-description'],
     queryFn: () => REST.getFinanceCryptoDescription(),
     staleTime: 1000 * 60 * 5,
@@ -70,15 +80,17 @@ export default function FinanceView() {
   return (
     <Box sx={{ py: 4 }}>
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{
-            borderRadius: 3,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 2
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 2,
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Analytics sx={{ fontSize: 32 }} />
@@ -97,14 +109,17 @@ export default function FinanceView() {
         {btcStats && (
           <>
             <Grid size={{ xs: 12, md: 4 }}>
-              <Card elevation={6} sx={{
-                height: '100%',
-                borderRadius: 3,
-                transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                '&:hover': {
-                  boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-                }
-              }}>
+              <Card
+                elevation={6}
+                sx={{
+                  height: '100%',
+                  borderRadius: 3,
+                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                  '&:hover': {
+                    boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+                  },
+                }}
+              >
                 <CardContent sx={{ p: 3 }}>
                   <Box display="flex" alignItems="center" gap={2} mb={3}>
                     <TrendingUp sx={{ color: '#4caf50', fontSize: 28 }} />
@@ -120,47 +135,49 @@ export default function FinanceView() {
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-              <Card elevation={4} sx={{
-                height: '100%',
-                borderRadius: 3,
-                background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                p: 3
-              }}>
+              <Card
+                elevation={4}
+                sx={{
+                  height: '100%',
+                  borderRadius: 3,
+                  background: 'linear-gradient(45deg, #ff9800, #f57c00)',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  p: 3,
+                }}
+              >
                 <Box>
                   <Typography variant="h3" fontWeight="700">
                     {(calculateDays('2022-11-21') / 7).toFixed(1)}
                   </Typography>
-                  <Typography variant="body1">
-                    Tygodnie od dołka
-                  </Typography>
+                  <Typography variant="body1">Tygodnie od dołka</Typography>
                 </Box>
               </Card>
             </Grid>
 
             <Grid size={{ xs: 12, md: 4 }}>
-              <Card elevation={4} sx={{
-                height: '100%',
-                borderRadius: 3,
-                background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                p: 3
-              }}>
+              <Card
+                elevation={4}
+                sx={{
+                  height: '100%',
+                  borderRadius: 3,
+                  background: 'linear-gradient(45deg, #2196f3, #1976d2)',
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                  p: 3,
+                }}
+              >
                 <Box>
                   <Typography variant="h3" fontWeight="700">
                     {((calculateDays('2024-04-26') / 7) * -1).toFixed(1)}
                   </Typography>
-                  <Typography variant="body1">
-                    Tyg. do halvingu
-                  </Typography>
+                  <Typography variant="body1">Tyg. do halvingu</Typography>
                 </Box>
               </Card>
             </Grid>
@@ -170,14 +187,16 @@ export default function FinanceView() {
         {/* Main Crypto Table */}
         <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
-            <Box sx={{
-              p: 3,
-              background: theme.palette.card.header,
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2
-            }}>
+            <Box
+              sx={{
+                p: 3,
+                background: theme.palette.card.header,
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
               <ShowChart sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
                 Tabela Kryptowalut
@@ -201,20 +220,21 @@ export default function FinanceView() {
                   </StyledTableRow>
                 </TableHead>
                 <TableBody>
-                  {cryptoData && cryptoDescription && COIN_LIST.map((symbol) => (
-                    <CryptoPricesTableRow
-                      key={symbol}
-                      symbol={symbol}
-                      coinData={cryptoData[symbol]}
-                      coinDescription={cryptoDescription[symbol]}
-                    />
-                  ))}
+                  {cryptoData &&
+                    cryptoDescription &&
+                    COIN_LIST.map((symbol) => (
+                      <CryptoPricesTableRow
+                        key={symbol}
+                        symbol={symbol}
+                        coinData={cryptoData[symbol]}
+                        coinDescription={cryptoDescription[symbol]}
+                      />
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </Card>
         </Grid>
-
       </Grid>
     </Box>
   );

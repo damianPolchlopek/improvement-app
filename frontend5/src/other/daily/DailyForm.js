@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import REST from "../../utils/REST";
-import { useMutation } from "@tanstack/react-query";
-import { queryClient } from "../../utils/REST";
-import { useTranslation } from "react-i18next";
-import { useSnackbar } from "../../component/snackbar/SnackbarProvider";
+import React, { useState } from 'react';
+import REST from '../../utils/REST';
+import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../utils/REST';
+import { useTranslation } from 'react-i18next';
+import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 
-import Grid from "@mui/material/Grid";
+import Grid from '@mui/material/Grid';
 import {
   Typography,
   Card,
@@ -15,8 +15,8 @@ import {
   Checkbox,
   Button,
   useTheme,
-} from "@mui/material";
-import { ChecklistRtl } from "@mui/icons-material";
+} from '@mui/material';
+import { ChecklistRtl } from '@mui/icons-material';
 
 export default function DailyForm() {
   const { showSnackbar } = useSnackbar();
@@ -33,12 +33,12 @@ export default function DailyForm() {
   const { mutate, isPending } = useMutation({
     mutationFn: () => REST.addDaily(dailyFields),
     onSuccess: () => {
-      queryClient.invalidateQueries(["daily-list"]);
-      showSnackbar(t("common.addedSuccessfully"), "success");
+      queryClient.invalidateQueries(['daily-list']);
+      showSnackbar(t('common.addedSuccessfully'), 'success');
       setDailyFields({ smoking: false, exercise: false, book: false, work: false });
     },
     onError: () => {
-      showSnackbar(t("common.addFailed"), "error");
+      showSnackbar(t('common.addFailed'), 'error');
     },
     retry: false,
   });
@@ -52,15 +52,15 @@ export default function DailyForm() {
 
   return (
     <Box sx={{ py: 2 }}>
-      <Card elevation={6} sx={{ borderRadius: 3, overflow: "hidden" }}>
+      <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
         {/* Header */}
         <Box
           sx={{
             p: 3,
             background: theme.palette.card.header,
-            color: "white",
-            display: "flex",
-            alignItems: "center",
+            color: 'white',
+            display: 'flex',
+            alignItems: 'center',
             gap: 2,
           }}
         >
@@ -107,7 +107,7 @@ export default function DailyForm() {
                 disabled={isPending}
                 sx={{ minWidth: 120 }}
               >
-                {isPending ? t("common.saving") : "Submit"}
+                {isPending ? t('common.saving') : 'Submit'}
               </Button>
             </Grid>
           </Grid>

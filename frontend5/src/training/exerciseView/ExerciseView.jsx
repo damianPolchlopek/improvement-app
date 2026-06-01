@@ -14,15 +14,11 @@ import {
   Card,
   CardContent,
   Typography,
-  useTheme
+  useTheme,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
-import { 
-  FitnessCenter, 
-  ViewList,
-  TrendingUp
-} from '@mui/icons-material';
+import { FitnessCenter, ViewList, TrendingUp } from '@mui/icons-material';
 
 export default function ExerciseView() {
   const [selectedTrainingType, setSelectedTrainingType] = useState('A');
@@ -35,23 +31,23 @@ export default function ExerciseView() {
     data: trainingData,
     isLoading: isTrainingLoading,
     isError: isTrainingError,
-    error: trainingError
+    error: trainingError,
   } = useQuery({
     queryKey: ['training-by-type', selectedTrainingType, page, size],
     queryFn: () => REST.getTrainingByType(selectedTrainingType, page, size),
     keepPreviousData: true,
-    staleTime: 1000 * 60 * 5
+    staleTime: 1000 * 60 * 5,
   });
 
   const {
     data: templateData,
     isLoading: isTemplateLoading,
     isError: isTemplateError,
-    error: templateError
+    error: templateError,
   } = useQuery({
     queryKey: ['training-template', selectedTrainingType],
     queryFn: () => REST.getTrainingTemplate(selectedTrainingType),
-    staleTime: 1000 * 60 * 10
+    staleTime: 1000 * 60 * 10,
   });
 
   const handleChangeSize = (event) => {
@@ -80,7 +76,7 @@ export default function ExerciseView() {
 
   const createTrainingColumns = () => {
     if (!templateData?.exercises) return [];
-    
+
     const columns = [
       {
         key: 'date',
@@ -90,12 +86,12 @@ export default function ExerciseView() {
           <Typography variant="body1" fontWeight="500">
             {value || 'Brak danych'}
           </Typography>
-        )
-      }
+        ),
+      },
     ];
 
     // Dodaj kolumny dla każdego ćwiczenia
-    templateData.exercises.forEach(exerciseName => {
+    templateData.exercises.forEach((exerciseName) => {
       columns.push({
         key: exerciseName,
         label: exerciseName,
@@ -109,7 +105,7 @@ export default function ExerciseView() {
               <strong>{t('exercise.reps')}:</strong> {exerciseData.reps || 'N/A'}
             </Typography>
           </Box>
-        )
+        ),
       });
     });
 
@@ -119,19 +115,23 @@ export default function ExerciseView() {
   const trainingColumns = createTrainingColumns();
 
   return (
-    <Box sx={{ 
-      py: 4,
-    }}>
+    <Box
+      sx={{
+        py: 4,
+      }}
+    >
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{ 
-            borderRadius: 3,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 2
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 2,
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <TrendingUp sx={{ fontSize: 32 }} />
@@ -148,14 +148,17 @@ export default function ExerciseView() {
 
         {/* Training Type Selector */}
         <Grid size={{ xs: 12, md: 4 }}>
-          <Card elevation={6} sx={{ 
-            height: '100%',
-            borderRadius: 3,
-            transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-            '&:hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.15)'
-            }
-          }}>
+          <Card
+            elevation={6}
+            sx={{
+              height: '100%',
+              borderRadius: 3,
+              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+              '&:hover': {
+                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
+              },
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
@@ -163,7 +166,7 @@ export default function ExerciseView() {
                   Typ Treningu
                 </Typography>
               </Box>
-              
+
               <FormControl fullWidth>
                 <TrainingTypeSelector setTrainingType={setSelectedTrainingType} />
               </FormControl>
@@ -175,36 +178,38 @@ export default function ExerciseView() {
         <Grid size={{ xs: 12, md: 8 }}>
           <Grid container spacing={2} sx={{ height: '100%' }}>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Card elevation={4} sx={{ 
-                height: '100%',
-                borderRadius: 3,
-                background: 'linear-gradient(45deg, #4caf50, #45a049)',
-                color: 'white'
-              }}>
+              <Card
+                elevation={4}
+                sx={{
+                  height: '100%',
+                  borderRadius: 3,
+                  background: 'linear-gradient(45deg, #4caf50, #45a049)',
+                  color: 'white',
+                }}
+              >
                 <CardContent sx={{ p: 3, textAlign: 'center' }}>
                   <Typography variant="h3" fontWeight="700">
                     {trainingData?.totalElements || 0}
                   </Typography>
-                  <Typography variant="body1">
-                    Łączna liczba treningów
-                  </Typography>
+                  <Typography variant="body1">Łączna liczba treningów</Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid size={{ xs: 12, sm: 6 }}>
-              <Card elevation={4} sx={{ 
-                height: '100%',
-                borderRadius: 3,
-                background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-                color: 'white'
-              }}>
+              <Card
+                elevation={4}
+                sx={{
+                  height: '100%',
+                  borderRadius: 3,
+                  background: 'linear-gradient(45deg, #ff9800, #f57c00)',
+                  color: 'white',
+                }}
+              >
                 <CardContent sx={{ p: 3, textAlign: 'center' }}>
                   <Typography variant="h3" fontWeight="700">
                     {templateData?.exercises?.length || 0}
                   </Typography>
-                  <Typography variant="body1">
-                    Liczba ćwiczeń
-                  </Typography>
+                  <Typography variant="body1">Liczba ćwiczeń</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -214,14 +219,16 @@ export default function ExerciseView() {
         {/* Main Table */}
         <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
-            <Box sx={{
-              p: 3,
-              background: theme.palette.card.header,
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 2
-            }}>
+            <Box
+              sx={{
+                p: 3,
+                background: theme.palette.card.header,
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
               <ViewList sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
                 Historia Treningów - Typ {selectedTrainingType}
@@ -252,7 +259,6 @@ export default function ExerciseView() {
             )}
           </Card>
         </Grid>
-
       </Grid>
     </Box>
   );

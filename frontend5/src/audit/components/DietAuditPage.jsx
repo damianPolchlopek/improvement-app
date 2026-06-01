@@ -22,7 +22,7 @@ import {
   Chip,
   useTheme,
   IconButton,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 
 import {
@@ -31,7 +31,7 @@ import {
   Visibility as VisibilityIcon,
   ArrowBack as ArrowBackIcon,
   History as HistoryIcon,
-  Assessment as AssessmentIcon
+  Assessment as AssessmentIcon,
 } from '@mui/icons-material';
 
 import Grid from '@mui/material/Grid';
@@ -47,7 +47,8 @@ const DietAuditPage = () => {
   const { filters, setFilters, filteredRevisions } = useAuditFilters(revisions);
 
   const handleRevisionSelect = (revision) => {
-    if (viewMode === 1) { // compare mode
+    if (viewMode === 1) {
+      // compare mode
       if (selectedRevisions.length < 2) {
         setSelectedRevisions([...selectedRevisions, revision]);
       } else {
@@ -66,20 +67,22 @@ const DietAuditPage = () => {
 
   if (isLoading) {
     return (
-      <Box sx={{ 
-        minHeight: '100vh', 
-        py: 4,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}>
-        <CircularProgress 
-          size={60} 
-          sx={{ 
+      <Box
+        sx={{
+          minHeight: '100vh',
+          py: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress
+          size={60}
+          sx={{
             mb: 3,
-            color: '#4caf50'
-          }} 
+            color: '#4caf50',
+          }}
         />
         <Typography variant="h6" color="white" fontWeight="600">
           Ładowanie historii zmian...
@@ -95,9 +98,9 @@ const DietAuditPage = () => {
     return (
       <Box sx={{ minHeight: '100vh', py: 4 }}>
         <Container maxWidth="xl" sx={{ width: '70%' }}>
-          <Alert 
-            severity="error" 
-            sx={{ 
+          <Alert
+            severity="error"
+            sx={{
               borderRadius: 3,
               fontSize: '1.1rem',
               backgroundColor: 'rgba(211, 47, 47, 0.1)',
@@ -105,7 +108,7 @@ const DietAuditPage = () => {
               border: '1px solid rgba(211, 47, 47, 0.3)',
               '& .MuiAlert-icon': {
                 color: '#f44336',
-              }
+              },
             }}
           >
             Błąd ładowania historii zmian: {error.message}
@@ -118,30 +121,32 @@ const DietAuditPage = () => {
   return (
     <Box sx={{ py: 4, minHeight: '100vh' }}>
       <Container maxWidth="xl" sx={{ width: '70%' }}>
-        
         {/* Header Section */}
         <Grid container spacing={3}>
           <Grid size={12}>
-            <Card elevation={8} sx={{ 
-              borderRadius: 4,
-              background: theme.palette.card.header,
-              color: 'white',
-              mb: 4,
-              overflow: 'hidden',
-              border: theme.palette.card.border,
-            }}>
+            <Card
+              elevation={8}
+              sx={{
+                borderRadius: 4,
+                background: theme.palette.card.header,
+                color: 'white',
+                mb: 4,
+                overflow: 'hidden',
+                border: theme.palette.card.border,
+              }}
+            >
               <CardContent sx={{ p: 4 }}>
                 {/* Back Button */}
                 <Tooltip title="Powrót do listy">
                   <IconButton
                     onClick={() => navigate(-1)}
-                    sx={{ 
+                    sx={{
                       mb: 2,
                       color: 'rgba(255, 255, 255, 0.8)',
                       '&:hover': {
                         color: 'white',
                         backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      }
+                      },
                     }}
                   >
                     <ArrowBackIcon />
@@ -161,46 +166,42 @@ const DietAuditPage = () => {
                 </Box>
 
                 <Box display="flex" gap={2} sx={{ mt: 3 }} flexWrap="wrap">
-                  <Chip 
+                  <Chip
                     label={`ID: ${dietSummaryId}`}
-                    sx={{ 
+                    sx={{
                       backgroundColor: 'rgba(255, 255, 255, 0.2)',
                       color: 'white',
                       fontWeight: 600,
-                      fontSize: '0.9rem'
+                      fontSize: '0.9rem',
                     }}
                   />
-                  <Chip 
+                  <Chip
                     label={`Rewizji: ${revisions?.length || 0}`}
                     icon={<HistoryIcon sx={{ color: 'white !important' }} />}
-                    sx={{ 
+                    sx={{
                       backgroundColor: 'rgba(76, 175, 80, 0.3)',
                       color: 'white',
                       fontWeight: 600,
-                      fontSize: '0.9rem'
+                      fontSize: '0.9rem',
                     }}
                   />
-                  <Chip 
+                  <Chip
                     label={`Wyświetlono: ${filteredRevisions?.length || 0}`}
-                    sx={{ 
+                    sx={{
                       backgroundColor: 'rgba(33, 150, 243, 0.3)',
                       color: 'white',
                       fontWeight: 600,
-                      fontSize: '0.9rem'
+                      fontSize: '0.9rem',
                     }}
                   />
-                  <Chip 
+                  <Chip
                     icon={<AssessmentIcon sx={{ color: 'white !important' }} />}
-                    label={
-                      viewMode === 0 ? "Oś czasu" : 
-                      viewMode === 1 ? "Porównanie" : 
-                      "Podgląd"
-                    }
-                    sx={{ 
+                    label={viewMode === 0 ? 'Oś czasu' : viewMode === 1 ? 'Porównanie' : 'Podgląd'}
+                    sx={{
                       backgroundColor: 'rgba(255, 152, 0, 0.3)',
                       color: 'white',
                       fontWeight: 600,
-                      fontSize: '0.9rem'
+                      fontSize: '0.9rem',
                     }}
                   />
                 </Box>
@@ -210,14 +211,17 @@ const DietAuditPage = () => {
 
           {/* Tabs Navigation */}
           <Grid size={12}>
-            <Card elevation={6} sx={{
-              borderRadius: 3,
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              overflow: 'hidden'
-            }}>
-              <Tabs 
-                value={viewMode} 
+            <Card
+              elevation={6}
+              sx={{
+                borderRadius: 3,
+                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                overflow: 'hidden',
+              }}
+            >
+              <Tabs
+                value={viewMode}
                 onChange={handleViewModeChange}
                 variant="fullWidth"
                 sx={{
@@ -237,20 +241,12 @@ const DietAuditPage = () => {
                     },
                     '&:hover': {
                       backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    }
+                    },
                   },
                 }}
               >
-                <Tab 
-                  icon={<TimelineIcon />} 
-                  iconPosition="start" 
-                  label="Oś czasu" 
-                />
-                <Tab 
-                  icon={<CompareIcon />} 
-                  iconPosition="start" 
-                  label="Porównaj wersje" 
-                />
+                <Tab icon={<TimelineIcon />} iconPosition="start" label="Oś czasu" />
+                <Tab icon={<CompareIcon />} iconPosition="start" label="Porównaj wersje" />
               </Tabs>
             </Card>
           </Grid>
@@ -280,12 +276,10 @@ const DietAuditPage = () => {
                     availableRevisions={filteredRevisions}
                   />
                 )}
-
               </Box>
             </Fade>
           </Grid>
         </Grid>
-
       </Container>
     </Box>
   );

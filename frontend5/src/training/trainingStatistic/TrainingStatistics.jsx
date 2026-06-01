@@ -15,13 +15,10 @@ import {
   Box,
   Fade,
   Alert,
-  useTheme
+  useTheme,
 } from '@mui/material';
 
-import {
-  DesktopDatePicker,
-  LocalizationProvider,
-} from '@mui/x-date-pickers';
+import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -38,7 +35,7 @@ import {
   DateRange,
   TrendingUp,
   Assessment,
-  QueryStats
+  QueryStats,
 } from '@mui/icons-material';
 
 function formatXAxis(tickItem) {
@@ -56,14 +53,13 @@ export default function TrainingStatistic() {
   const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
 
   // useQuery for exercises
-  const { data: exercises, isLoading, isError, error } = useQuery({
-    queryKey: [
-      'training-statistic',
-      selectedExerciseName,
-      selectedChartType,
-      beginDate,
-      endDate
-    ],
+  const {
+    data: exercises,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['training-statistic', selectedExerciseName, selectedChartType, beginDate, endDate],
     queryFn: () =>
       REST.getTrainingStatistic(
         selectedExerciseName,
@@ -105,17 +101,19 @@ export default function TrainingStatistic() {
   return (
     <Box sx={{ py: 4, minHeight: '100vh' }}>
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        
         {/* Header Section */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ 
-            borderRadius: 4,
-            background: theme.palette.card.header,
-            color: 'white',
-            mb: 3,
-            overflow: 'hidden',
-            border: theme.palette.card.border,
-          }}>
+          <Card
+            elevation={8}
+            sx={{
+              borderRadius: 4,
+              background: theme.palette.card.header,
+              color: 'white',
+              mb: 3,
+              overflow: 'hidden',
+              border: theme.palette.card.border,
+            }}
+          >
             <CardContent sx={{ p: 4 }}>
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Analytics sx={{ fontSize: 40 }} />
@@ -148,32 +146,39 @@ export default function TrainingStatistic() {
 
         {/* Controls Section */}
         <Grid size={12}>
-          <Card elevation={6} sx={{ 
-            borderRadius: 3,
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-            color: 'white'
-          }}>
-            <Box sx={{ 
-              p: 2,
-              background: theme.palette.card.header,
-              borderBottom: theme.palette.card.border,
-            }}>
+          <Card
+            elevation={6}
+            sx={{
+              borderRadius: 3,
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+              color: 'white',
+            }}
+          >
+            <Box
+              sx={{
+                p: 2,
+                background: theme.palette.card.header,
+                borderBottom: theme.palette.card.border,
+              }}
+            >
               <Typography variant="h6" fontWeight="600" color="white">
                 Parametry Wykresu
               </Typography>
             </Box>
             <CardContent sx={{ p: 3 }}>
               <Grid container spacing={3}>
-                
                 {/* Exercise Selection */}
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Card elevation={2} sx={{ 
-                    borderRadius: 2,
-                    border: '1px solid rgba(76, 175, 80, 0.3)',
-                    background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                    color: 'white'
-                  }}>
+                  <Card
+                    elevation={2}
+                    sx={{
+                      borderRadius: 2,
+                      border: '1px solid rgba(76, 175, 80, 0.3)',
+                      background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                      color: 'white',
+                    }}
+                  >
                     <CardContent sx={{ p: 3 }}>
                       <Box display="flex" alignItems="center" gap={2} mb={3}>
                         <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
@@ -181,7 +186,7 @@ export default function TrainingStatistic() {
                           Wybór Ćwiczenia
                         </Typography>
                       </Box>
-                      
+
                       <Grid container spacing={2}>
                         <Grid size={12}>
                           <FormControl fullWidth>
@@ -193,8 +198,8 @@ export default function TrainingStatistic() {
                                 options={exerciseNames}
                                 onChange={handleExerciseNameChange}
                                 renderInput={(params) => (
-                                  <TextField 
-                                    {...params} 
+                                  <TextField
+                                    {...params}
                                     label={t('chart.exerciseName')}
                                     variant="outlined"
                                     sx={{
@@ -237,8 +242,8 @@ export default function TrainingStatistic() {
                               options={['Weight', 'Capacity']}
                               onChange={handleChartTypeChange}
                               renderInput={(params) => (
-                                <TextField 
-                                  {...params} 
+                                <TextField
+                                  {...params}
                                   label={t('chart.chartType')}
                                   variant="outlined"
                                   sx={{
@@ -278,12 +283,15 @@ export default function TrainingStatistic() {
 
                 {/* Date Selection */}
                 <Grid size={{ xs: 12, md: 6 }}>
-                  <Card elevation={2} sx={{ 
-                    borderRadius: 2,
-                    border: '1px solid rgba(255, 152, 0, 0.3)',
-                    background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                    color: 'white'
-                  }}>
+                  <Card
+                    elevation={2}
+                    sx={{
+                      borderRadius: 2,
+                      border: '1px solid rgba(255, 152, 0, 0.3)',
+                      background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                      color: 'white',
+                    }}
+                  >
                     <CardContent sx={{ p: 3 }}>
                       <Box display="flex" alignItems="center" gap={2} mb={3}>
                         <DateRange sx={{ color: '#ff9800', fontSize: 28 }} />
@@ -291,7 +299,7 @@ export default function TrainingStatistic() {
                           Zakres Dat
                         </Typography>
                       </Box>
-                      
+
                       <Grid container spacing={2}>
                         <Grid size={12}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -300,8 +308,8 @@ export default function TrainingStatistic() {
                               value={beginDate}
                               onChange={handleChangeBeginDate}
                               renderInput={(params) => (
-                                <TextField 
-                                  {...params} 
+                                <TextField
+                                  {...params}
                                   fullWidth
                                   sx={{
                                     '& .MuiOutlinedInput-root': {
@@ -340,8 +348,8 @@ export default function TrainingStatistic() {
                               value={endDate}
                               onChange={handleChangeEndDate}
                               renderInput={(params) => (
-                                <TextField 
-                                  {...params} 
+                                <TextField
+                                  {...params}
                                   fullWidth
                                   sx={{
                                     '& .MuiOutlinedInput-root': {
@@ -385,20 +393,25 @@ export default function TrainingStatistic() {
         {/* Chart Section */}
         <Grid size={12}>
           <Fade in={true} timeout={1000}>
-            <Card elevation={8} sx={{ 
-              borderRadius: 4,
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              overflow: 'hidden'
-            }}>
-              <Box sx={{ 
-                p: 3,
-                background: theme.palette.card.header,
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2
-              }}>
+            <Card
+              elevation={8}
+              sx={{
+                borderRadius: 4,
+                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                overflow: 'hidden',
+              }}
+            >
+              <Box
+                sx={{
+                  p: 3,
+                  background: theme.palette.card.header,
+                  color: 'white',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                }}
+              >
                 <TrendingUp sx={{ fontSize: 32 }} />
                 <Box>
                   <Typography variant="h5" fontWeight="600">
@@ -409,24 +422,26 @@ export default function TrainingStatistic() {
                   </Typography>
                 </Box>
               </Box>
-              
+
               <CardContent sx={{ p: 4 }}>
                 {isLoading ? (
-                  <Box sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    py: 8,
-                    background: 'linear-gradient(45deg, #1a2e3d 0%, #243441 100%)',
-                    borderRadius: 3,
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
-                  }}>
-                    <CircularProgress 
-                      size={60} 
-                      sx={{ 
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      py: 8,
+                      background: 'linear-gradient(45deg, #1a2e3d 0%, #243441 100%)',
+                      borderRadius: 3,
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                    }}
+                  >
+                    <CircularProgress
+                      size={60}
+                      sx={{
                         mb: 3,
-                        color: '#4caf50'
-                      }} 
+                        color: '#4caf50',
+                      }}
                     />
                     <Typography variant="h6" color="white" fontWeight="600">
                       Ładowanie danych wykresu...
@@ -436,9 +451,9 @@ export default function TrainingStatistic() {
                     </Typography>
                   </Box>
                 ) : isError ? (
-                  <Alert 
-                    severity="error" 
-                    sx={{ 
+                  <Alert
+                    severity="error"
+                    sx={{
                       borderRadius: 3,
                       fontSize: '1.1rem',
                       backgroundColor: 'rgba(211, 47, 47, 0.1)',
@@ -446,29 +461,27 @@ export default function TrainingStatistic() {
                       border: '1px solid rgba(211, 47, 47, 0.3)',
                       '& .MuiAlert-icon': {
                         color: '#f44336',
-                      }
+                      },
                     }}
                   >
                     <ErrorAlert error={error} />
                   </Alert>
                 ) : (
                   <Box sx={{ mt: 2 }}>
-                    <ExerciseChart
-                      exercises={exercises}
-                      beginDate={beginDate}
-                      endDate={endDate}
-                    />
+                    <ExerciseChart exercises={exercises} beginDate={beginDate} endDate={endDate} />
                   </Box>
                 )}
               </CardContent>
 
               {/* Footer with current selection info */}
               {!isLoading && !isError && exercises && (
-                <Box sx={{ 
-                  p: 3,
-                  background: theme.palette.card.header,
-                  borderTop: theme.palette.card.border,
-                }}>
+                <Box
+                  sx={{
+                    p: 3,
+                    background: theme.palette.card.header,
+                    borderTop: theme.palette.card.border,
+                  }}
+                >
                   <Grid container spacing={2}>
                     <Grid size={{ xs: 12, sm: 4 }}>
                       <Box textAlign="center">
@@ -513,5 +526,5 @@ export default function TrainingStatistic() {
 
 export async function loader() {
   const exerciseNames = await REST.getExerciseNames();
-  return exerciseNames.content.map(r => r.name);
+  return exerciseNames.content.map((r) => r.name);
 }

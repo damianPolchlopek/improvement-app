@@ -8,104 +8,107 @@
  */
 export const ERROR_DEFINITIONS = {
   // Błędy autoryzacji
-  'EMAIL_NOT_VERIFIED': {
+  EMAIL_NOT_VERIFIED: {
     severity: 'warning',
     titleKey: 'login.errors.emailNotVerified.title',
     messageKey: 'login.errors.emailNotVerified.message',
     defaultTitle: 'Email not verified',
     defaultMessage: 'Please check your email and click the verification link.',
     showResendButton: true,
-    category: 'auth'
+    category: 'auth',
   },
-  'INVALID_CREDENTIALS': {
+  INVALID_CREDENTIALS: {
     severity: 'error',
     titleKey: 'login.errors.invalidCredentials.title',
     messageKey: 'login.errors.invalidCredentials.message',
     defaultTitle: 'Invalid credentials',
-    defaultMessage: 'Please check your username and password. Too many failed attempts will temporarily lock your account.',
+    defaultMessage:
+      'Please check your username and password. Too many failed attempts will temporarily lock your account.',
     showResendButton: false,
-    category: 'auth'
+    category: 'auth',
   },
-  'ACCOUNT_LOCKED': {
+  ACCOUNT_LOCKED: {
     severity: 'warning',
     titleKey: 'login.errors.accountLocked.title',
     messageKey: 'login.errors.accountLocked.message',
     defaultTitle: 'Account temporarily locked',
-    defaultMessage: 'Your account has been locked for 15 minutes due to too many failed login attempts. Please try again later.',
+    defaultMessage:
+      'Your account has been locked for 15 minutes due to too many failed login attempts. Please try again later.',
     showResendButton: false,
-    category: 'auth'
+    category: 'auth',
   },
-  'RATE_LIMIT_EXCEEDED': {
+  RATE_LIMIT_EXCEEDED: {
     severity: 'warning',
     titleKey: 'login.errors.rateLimitExceeded.title',
     messageKey: 'login.errors.rateLimitExceeded.message',
     defaultTitle: 'Too many requests',
-    defaultMessage: 'You have exceeded the allowed number of requests. Please wait and try again later.',
+    defaultMessage:
+      'You have exceeded the allowed number of requests. Please wait and try again later.',
     showResendButton: false,
-    category: 'auth'
+    category: 'auth',
   },
-  'FORBIDDEN': {
+  FORBIDDEN: {
     severity: 'error',
     titleKey: 'login.errors.forbidden.title',
     messageKey: 'login.errors.forbidden.message',
     defaultTitle: 'Access denied',
     defaultMessage: 'You do not have permission to perform this operation.',
     showResendButton: false,
-    category: 'auth'
+    category: 'auth',
   },
-  'INVALID_TOKEN': {
+  INVALID_TOKEN: {
     severity: 'error',
     titleKey: 'login.errors.invalidToken.title',
     messageKey: 'login.errors.invalidToken.message',
     defaultTitle: 'Authorization error',
     defaultMessage: 'Please try logging in again.',
     showResendButton: false,
-    category: 'auth'
+    category: 'auth',
   },
 
   // Błędy walidacji
-  'INVALID_INPUT': {
+  INVALID_INPUT: {
     severity: 'error',
     titleKey: 'login.errors.invalidInput.title',
     messageKey: 'login.errors.invalidInput.message',
     defaultTitle: 'Invalid input',
     defaultMessage: 'Please fill in all required fields.',
     showResendButton: false,
-    category: 'validation'
+    category: 'validation',
   },
 
   // Błędy serwera
-  'SERVER_ERROR': {
+  SERVER_ERROR: {
     severity: 'error',
     titleKey: 'login.errors.serverError.title',
     messageKey: 'login.errors.serverError.message',
     defaultTitle: 'Server error',
     defaultMessage: 'Please try again later or contact support.',
     showResendButton: false,
-    category: 'server'
+    category: 'server',
   },
 
   // Błędy sieci
-  'NETWORK_ERROR': {
+  NETWORK_ERROR: {
     severity: 'error',
     titleKey: 'login.errors.networkError.title',
     messageKey: 'login.errors.networkError.message',
     defaultTitle: 'Connection error',
     defaultMessage: 'Please check your internet connection.',
     showResendButton: false,
-    category: 'network'
+    category: 'network',
   },
 
   // Błędy ogólne
-  'UNKNOWN_ERROR': {
+  UNKNOWN_ERROR: {
     severity: 'error',
     titleKey: 'login.errors.generic.title',
     messageKey: 'login.errors.generic.message',
     defaultTitle: 'Application error',
     defaultMessage: 'An unexpected error occurred.',
     showResendButton: false,
-    category: 'generic'
-  }
+    category: 'generic',
+  },
 };
 
 /**
@@ -117,7 +120,7 @@ export const HTTP_ERROR_MAPPINGS = {
   500: 'SERVER_ERROR',
   502: 'SERVER_ERROR',
   503: 'SERVER_ERROR',
-  504: 'SERVER_ERROR'
+  504: 'SERVER_ERROR',
 };
 
 /**
@@ -130,20 +133,20 @@ export const RESEND_MESSAGES = {
     noUsernameKey: 'login.errors.resend.noUsername',
     noUsernameDefault: 'Please enter your username/email',
     failedKey: 'login.errors.resend.failed',
-    failedDefault: 'Failed to send verification email'
+    failedDefault: 'Failed to send verification email',
   },
   success: {
     titleKey: 'login.resend.success.title',
     messageKey: 'login.resend.success.message',
     defaultTitle: 'Email sent!',
-    defaultMessage: 'Please check your email.'
+    defaultMessage: 'Please check your email.',
   },
   button: {
     buttonKey: 'login.resend.button',
     sendingKey: 'login.resend.sending',
     buttonDefault: 'Send again',
-    sendingDefault: 'Sending...'
-  }
+    sendingDefault: 'Sending...',
+  },
 };
 
 // ===== FUNKCJE HTTP ERROR HANDLING =====
@@ -206,8 +209,8 @@ const createErrorResponse = (code, serverData = null, context = 'generic') => {
       details: serverData?.details || null,
       timestamp: serverData?.timestamp || new Date().toISOString(),
       context,
-      ...serverData // Dodatkowe dane z serwera
-    }
+      ...serverData, // Dodatkowe dane z serwera
+    },
   };
 };
 
@@ -218,8 +221,8 @@ const createErrorResponse = (code, serverData = null, context = 'generic') => {
  * @returns {object|null} Obiekt błędu lub null
  */
 export const validateRequiredFields = (data, requiredFields) => {
-  const missingFields = requiredFields.filter(field => !data[field]?.trim());
-  
+  const missingFields = requiredFields.filter((field) => !data[field]?.trim());
+
   if (missingFields.length > 0) {
     return {
       error: {
@@ -227,11 +230,11 @@ export const validateRequiredFields = (data, requiredFields) => {
         message: `Missing required fields: ${missingFields.join(', ')}`,
         details: 'Please fill in all required fields',
         missingFields,
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     };
   }
-  
+
   return null;
 };
 
@@ -255,13 +258,13 @@ export const handleTokenValidationError = (error) => {
  */
 export const getErrorInfo = (code, t) => {
   const errorDef = ERROR_DEFINITIONS[code] || ERROR_DEFINITIONS['UNKNOWN_ERROR'];
-  
+
   return {
     severity: errorDef.severity,
     title: t(errorDef.titleKey, errorDef.defaultTitle),
     message: t(errorDef.messageKey, errorDef.defaultMessage),
     showResendButton: errorDef.showResendButton,
-    category: errorDef.category
+    category: errorDef.category,
   };
 };
 
@@ -274,16 +277,16 @@ export const getResendMessages = (t) => ({
   error: {
     title: t(RESEND_MESSAGES.error.titleKey, RESEND_MESSAGES.error.defaultTitle),
     noUsername: t(RESEND_MESSAGES.error.noUsernameKey, RESEND_MESSAGES.error.noUsernameDefault),
-    failed: t(RESEND_MESSAGES.error.failedKey, RESEND_MESSAGES.error.failedDefault)
+    failed: t(RESEND_MESSAGES.error.failedKey, RESEND_MESSAGES.error.failedDefault),
   },
   success: {
     title: t(RESEND_MESSAGES.success.titleKey, RESEND_MESSAGES.success.defaultTitle),
-    message: t(RESEND_MESSAGES.success.messageKey, RESEND_MESSAGES.success.defaultMessage)
+    message: t(RESEND_MESSAGES.success.messageKey, RESEND_MESSAGES.success.defaultMessage),
   },
   button: {
     text: t(RESEND_MESSAGES.button.buttonKey, RESEND_MESSAGES.button.buttonDefault),
-    sending: t(RESEND_MESSAGES.button.sendingKey, RESEND_MESSAGES.button.sendingDefault)
-  }
+    sending: t(RESEND_MESSAGES.button.sendingKey, RESEND_MESSAGES.button.sendingDefault),
+  },
 });
 
 // ===== FUNKCJE POMOCNICZE =====
@@ -314,8 +317,9 @@ export const isTemporaryError = (errorCode) => {
  * @returns {Array} Lista kodów błędów
  */
 export const getErrorsByCategory = (category) => {
-  return Object.keys(ERROR_DEFINITIONS)
-    .filter(code => ERROR_DEFINITIONS[code].category === category);
+  return Object.keys(ERROR_DEFINITIONS).filter(
+    (code) => ERROR_DEFINITIONS[code].category === category
+  );
 };
 
 // ===== SPECJALIZOWANE FUNKCJE =====

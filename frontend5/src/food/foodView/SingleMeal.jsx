@@ -11,22 +11,22 @@ import {
   TableCell,
   TableContainer,
   TableRow,
-  Tabs, 
+  Tabs,
   Typography,
   useTheme,
   Chip,
-  Paper
+  Paper,
 } from '@mui/material';
 
-import { 
-  Restaurant, 
-  Info, 
-  Kitchen, 
+import {
+  Restaurant,
+  Info,
+  Kitchen,
   MenuBook,
   LocalFireDepartment,
   FitnessCenter,
   Grain,
-  Opacity
+  Opacity,
 } from '@mui/icons-material';
 
 import TabPanel from '../component/TabPanel';
@@ -44,56 +44,61 @@ export default function SingleMeal({ meal }) {
   const tabs = [
     { label: t('food.summary'), icon: <Info /> },
     { label: t('food.products'), icon: <Kitchen /> },
-    { label: t('food.recipes'), icon: <MenuBook /> }
+    { label: t('food.recipes'), icon: <MenuBook /> },
   ];
 
   const nutritionData = [
-    { 
-      icon: <LocalFireDepartment sx={{ color: '#ff5722' }} />, 
-      label: t('food.kcal'), 
+    {
+      icon: <LocalFireDepartment sx={{ color: '#ff5722' }} />,
+      label: t('food.kcal'),
       value: meal.kcal,
-      color: '#ff5722'
+      color: '#ff5722',
     },
-    { 
-      icon: <FitnessCenter sx={{ color: '#2196f3' }} />, 
-      label: t('food.protein'), 
+    {
+      icon: <FitnessCenter sx={{ color: '#2196f3' }} />,
+      label: t('food.protein'),
       value: meal.protein,
-      color: '#2196f3'
+      color: '#2196f3',
     },
-    { 
-      icon: <Grain sx={{ color: '#ff9800' }} />, 
-      label: t('food.carbs'), 
+    {
+      icon: <Grain sx={{ color: '#ff9800' }} />,
+      label: t('food.carbs'),
       value: meal.carbohydrates,
-      color: '#ff9800'
+      color: '#ff9800',
     },
-    { 
-      icon: <Opacity sx={{ color: '#4caf50' }} />, 
-      label: t('food.fat'), 
+    {
+      icon: <Opacity sx={{ color: '#4caf50' }} />,
+      label: t('food.fat'),
       value: meal.fat,
-      color: '#4caf50'
-    }
+      color: '#4caf50',
+    },
   ];
 
   return (
-    <Card elevation={6} sx={{
-      borderRadius: 3,
-      overflow: 'hidden',
-      height: '100%',
-      transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-      '&:hover': {
-        transform: 'translateY(-4px)',
-        boxShadow: '0 12px 30px rgba(0,0,0,0.2)'
-      }
-    }}>
+    <Card
+      elevation={6}
+      sx={{
+        borderRadius: 3,
+        overflow: 'hidden',
+        height: '100%',
+        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.2)',
+        },
+      }}
+    >
       {/* Header with meal name */}
-      <Box sx={{
-        p: 3,
-        background: theme.palette.card.header,
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 2
-      }}>
+      <Box
+        sx={{
+          p: 3,
+          background: theme.palette.card.header,
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+        }}
+      >
         <Restaurant sx={{ fontSize: 28 }} />
         <Typography variant="h6" fontWeight="600">
           {meal.name}
@@ -112,20 +117,20 @@ export default function SingleMeal({ meal }) {
           borderColor: 'divider',
           '& .MuiTab-root': {
             minHeight: 64,
-            fontWeight: 500
-          }
+            fontWeight: 500,
+          },
         }}
       >
         {tabs.map((tab, index) => (
-          <Tab 
-            key={index} 
+          <Tab
+            key={index}
             label={tab.label}
             icon={tab.icon}
             iconPosition="start"
             sx={{
               '&.Mui-selected': {
-                fontWeight: 600
-              }
+                fontWeight: 600,
+              },
             }}
           />
         ))}
@@ -140,13 +145,17 @@ export default function SingleMeal({ meal }) {
             </Typography>
             <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} mb={3}>
               {nutritionData.map((item, index) => (
-                <Paper key={index} elevation={2} sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  textAlign: 'center',
-                  background: `linear-gradient(45deg, ${item.color}20, ${item.color}10)`,
-                  border: `1px solid ${item.color}30`
-                }}>
+                <Paper
+                  key={index}
+                  elevation={2}
+                  sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    textAlign: 'center',
+                    background: `linear-gradient(45deg, ${item.color}20, ${item.color}10)`,
+                    border: `1px solid ${item.color}30`,
+                  }}
+                >
                   <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1}>
                     {item.icon}
                     <Typography variant="body2" fontWeight="500" color="text.secondary">
@@ -183,25 +192,23 @@ export default function SingleMeal({ meal }) {
                     </TableCell>
                     <TableCell>
                       {meal.url ? (
-                        <Typography 
-                          component="a" 
-                          href={meal.url} 
-                          target="_blank" 
+                        <Typography
+                          component="a"
+                          href={meal.url}
+                          target="_blank"
                           rel="noopener noreferrer"
-                          sx={{ 
+                          sx={{
                             color: 'primary.main',
                             textDecoration: 'none',
                             '&:hover': {
-                              textDecoration: 'underline'
-                            }
+                              textDecoration: 'underline',
+                            },
                           }}
                         >
                           Zobacz przepis
                         </Typography>
                       ) : (
-                        <Typography color="text.secondary">
-                          Brak linku
-                        </Typography>
+                        <Typography color="text.secondary">Brak linku</Typography>
                       )}
                     </TableCell>
                   </TableRow>
@@ -212,7 +219,7 @@ export default function SingleMeal({ meal }) {
         </TabPanel>
 
         <TabPanel value={tabIndex} index={1}>
-          <TabPanelMealIngredients meal={meal}/>
+          <TabPanelMealIngredients meal={meal} />
         </TabPanel>
 
         <TabPanel value={tabIndex} index={2}>
@@ -224,11 +231,7 @@ export default function SingleMeal({ meal }) {
               <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
                 {meal.recipe.map((recipeRow, index) => (
                   <Box key={index} sx={{ mb: 2 }}>
-                    <Typography 
-                      variant="body1" 
-                    >
-                      {recipeRow}
-                    </Typography>
+                    <Typography variant="body1">{recipeRow}</Typography>
                   </Box>
                 ))}
               </Paper>

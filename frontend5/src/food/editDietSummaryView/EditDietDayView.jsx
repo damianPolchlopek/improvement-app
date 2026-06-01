@@ -2,10 +2,7 @@ import { useEffect } from 'react';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Button,
-  CircularProgress
-} from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 
 import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 
@@ -22,7 +19,6 @@ export default function EditDietDayView() {
   const { showSnackbar } = useSnackbar();
   const { selectedMeals, setSelectedMeals } = useMealSelection();
 
- 
   useEffect(() => {
     setSelectedMeals(mealsDietDay.meals);
   }, [mealsDietDay]);
@@ -30,31 +26,30 @@ export default function EditDietDayView() {
   // Mutation: edit diet summary
   const updateDietSummaryMutation = useMutation({
     mutationFn: () => {
-      
       const objectToUpdate = {
-      dietSummaryId: mealsDietDay.id,
-      meals: selectedMeals.map(meal => ({
+        dietSummaryId: mealsDietDay.id,
+        meals: selectedMeals.map((meal) => ({
           ...meal,
           mealRecipeId: meal.id,
           portionMultiplier: meal.amount || 1,
 
-          ingredients: (meal.ingredients || []).map(mealIngredient => ({
+          ingredients: (meal.ingredients || []).map((mealIngredient) => ({
             ...mealIngredient,
             mealRecipeIngredientId: mealIngredient.id,
-          }))
-        }))
-    };
-      
-      return REST.updateDietSummary(objectToUpdate)
+          })),
+        })),
+      };
+
+      return REST.updateDietSummary(objectToUpdate);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
       navigate('/app/food/statistics');
-      showSnackbar( t('food.updatedDietSummary'), 'success' );
+      showSnackbar(t('food.updatedDietSummary'), 'success');
     },
     onError: () => {
-      showSnackbar( t('food.failedUpdateDietSummary'), 'error' );
-    }
+      showSnackbar(t('food.failedUpdateDietSummary'), 'error');
+    },
   });
 
   const handleUpdate = () => {
@@ -62,23 +57,25 @@ export default function EditDietDayView() {
   };
 
   return (
-    selectedMeals && <>
-    {console.log('Update component view')}
-      <DietDaySummaryForm>
-        <Button
-          variant="contained"
-          onClick={handleUpdate}
-          disabled={updateDietSummaryMutation.isLoading}
-          startIcon={
-            updateDietSummaryMutation.isLoading ? (
-              <CircularProgress color="inherit" size={20} />
-            ) : null
-          }
-        >
-          {t('food.updateDietDay')}
-        </Button>
-      </DietDaySummaryForm>
-    </>
+    selectedMeals && (
+      <>
+        {console.log('Update component view')}
+        <DietDaySummaryForm>
+          <Button
+            variant="contained"
+            onClick={handleUpdate}
+            disabled={updateDietSummaryMutation.isLoading}
+            startIcon={
+              updateDietSummaryMutation.isLoading ? (
+                <CircularProgress color="inherit" size={20} />
+              ) : null
+            }
+          >
+            {t('food.updateDietDay')}
+          </Button>
+        </DietDaySummaryForm>
+      </>
+    )
   );
 }
 

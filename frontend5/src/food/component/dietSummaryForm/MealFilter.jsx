@@ -1,4 +1,4 @@
-import { MenuItem, Select, Toolbar, Typography } from "@mui/material";
+import { MenuItem, Select, Toolbar, Typography } from '@mui/material';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
@@ -10,9 +10,7 @@ export default function MealFilter({ mealPopularity, setMealPopularity }) {
 
   return (
     <Toolbar>
-      <Typography sx={{ marginRight: '20px' }}>
-        {t('food.mealPopularity')}
-      </Typography>
+      <Typography sx={{ marginRight: '20px' }}>{t('food.mealPopularity')}</Typography>
 
       <Select
         value={mealPopularity}
@@ -23,11 +21,7 @@ export default function MealFilter({ mealPopularity, setMealPopularity }) {
         <MenuItem value="HIGH">{t('food.popular')}</MenuItem>
         <MenuItem value="LOW">{t('food.rare')}</MenuItem>
       </Select>
-      <Button
-        variant="contained"
-        sx={{ marginLeft: 'auto' }}
-        onClick={clearSelections}
-      >
+      <Button variant="contained" sx={{ marginLeft: 'auto' }} onClick={clearSelections}>
         Clear Selections
       </Button>
     </Toolbar>
@@ -36,5 +30,5 @@ export default function MealFilter({ mealPopularity, setMealPopularity }) {
 
 MealFilter.propTypes = {
   mealPopularity: PropTypes.string.isRequired,
-  setMealPopularity: PropTypes.func.isRequired
+  setMealPopularity: PropTypes.func.isRequired,
 };

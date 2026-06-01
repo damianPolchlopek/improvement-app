@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import REST from "../../utils/REST";
+import React, { useEffect, useState } from 'react';
+import REST from '../../utils/REST';
 
 import {
   Button,
@@ -17,25 +17,25 @@ import {
   IconButton,
   Chip,
   Fade,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
 import { useTranslation } from 'react-i18next';
-import { useLoaderData, Form, useNavigate } from "react-router-dom";
+import { useLoaderData, Form, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../utils/REST.js';
-import ErrorAlert from "../../component/error/ErrorAlert.jsx";
+import ErrorAlert from '../../component/error/ErrorAlert.jsx';
 
-import { TrainingViewUrl } from "../../utils/URLHelper.js";
-import { 
-  Add, 
-  Remove, 
-  FitnessCenter, 
+import { TrainingViewUrl } from '../../utils/URLHelper.js';
+import {
+  Add,
+  Remove,
+  FitnessCenter,
   Send,
   LocationOn,
   Category,
-  TrendingUp
+  TrendingUp,
 } from '@mui/icons-material';
 
 function withStableKey(exercise, fallbackIndex) {
@@ -43,19 +43,17 @@ function withStableKey(exercise, fallbackIndex) {
 }
 
 export default function TrainingForm({ exercises, isSimpleForm }) {
-  const [exercisesFields, setExercisesFields] = useState(() =>
-    exercises.map(withStableKey)
-  );
+  const [exercisesFields, setExercisesFields] = useState(() => exercises.map(withStableKey));
   const [validationError, setValidationError] = useState('');
   const {
     exerciseNames = [],
     exercisePlaces = [],
     exerciseProgresses = [],
-    exerciseTypes = []
+    exerciseTypes = [],
   } = useLoaderData() || {};
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
+
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (exercises) => REST.addTraining(exercises),
     onSuccess: () => {
@@ -72,7 +70,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   }, [exercises]);
 
   function handleSubmit() {
-    const invalid = exercisesFields.some(f => !f.name || !f.reps || !f.weight);
+    const invalid = exercisesFields.some((f) => !f.name || !f.reps || !f.weight);
     if (invalid) {
       setValidationError('Uzupełnij nazwę, powtórzenia i ciężar dla każdego ćwiczenia.');
       return;
@@ -85,50 +83,59 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     let data = [...exercisesFields];
     data[index][attribut] = event.target.value;
     setExercisesFields(data);
-  }
+  };
 
   const addFields = (index) => {
     let data = [...exercisesFields];
     data.splice(index + 1, 0, {
       _key: crypto.randomUUID(),
-      type: '', place: '', name: '', reps: '', weight: '', progress: ''
+      type: '',
+      place: '',
+      name: '',
+      reps: '',
+      weight: '',
+      progress: '',
     });
-    setExercisesFields(data)
-  }
+    setExercisesFields(data);
+  };
 
   const removeFields = (index) => {
     let data = [...exercisesFields];
-    data.splice(index, 1)
-    setExercisesFields(data)
-  }
+    data.splice(index, 1);
+    setExercisesFields(data);
+  };
 
   // Jeśli brak ćwiczeń, dodaj pierwsze puste
   if (exercisesFields.length === 0) {
-    return <Card 
-      elevation={2} sx={{ 
-      py: 6,
-      borderRadius: 3,
-      background: 'color.second'
-    }}>
-      <FitnessCenter sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
-      <Typography variant="h6" color="text.secondary" gutterBottom>
-        Brak ćwiczeń w treningu
-      </Typography>
-      <Typography variant="body2" color="text.secondary" mb={3}>
-        Załaduj szablon treningu lub dodaj pierwsze ćwiczenie ręcznie
-      </Typography>
-      <Button 
-        variant="contained" 
-        startIcon={<Add />}
-        onClick={() => addFields(-1)}
-        sx={{ 
-          borderRadius: 25,
-          px: 4
+    return (
+      <Card
+        elevation={2}
+        sx={{
+          py: 6,
+          borderRadius: 3,
+          background: 'color.second',
         }}
       >
-        Dodaj pierwsze ćwiczenie
-      </Button>
-    </Card>
+        <FitnessCenter sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+          Brak ćwiczeń w treningu
+        </Typography>
+        <Typography variant="body2" color="text.secondary" mb={3}>
+          Załaduj szablon treningu lub dodaj pierwsze ćwiczenie ręcznie
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => addFields(-1)}
+          sx={{
+            borderRadius: 25,
+            px: 4,
+          }}
+        >
+          Dodaj pierwsze ćwiczenie
+        </Button>
+      </Card>
+    );
   }
 
   return (
@@ -143,37 +150,32 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     {/* Header z numerem ćwiczenia */}
                     <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
                       <Box display="flex" alignItems="center" gap={2}>
-                        <Chip 
-                          label={`#${index + 1}`}
-                          color="primary" 
-                        />
-                        <Typography variant="h6">
-                          Ćwiczenie {index + 1}
-                        </Typography>
+                        <Chip label={`#${index + 1}`} color="primary" />
+                        <Typography variant="h6">Ćwiczenie {index + 1}</Typography>
                       </Box>
-                      
+
                       <Box display="flex" gap={1}>
                         <Tooltip title="Dodaj ćwiczenie">
-                          <IconButton 
-                            color="success" 
+                          <IconButton
+                            color="success"
                             onClick={() => addFields(index)}
-                            sx={{ 
+                            sx={{
                               bgcolor: 'rgba(76, 175, 80, 0.1)',
-                              '&:hover': { bgcolor: 'rgba(76, 175, 80, 0.2)' }
+                              '&:hover': { bgcolor: 'rgba(76, 175, 80, 0.2)' },
                             }}
                           >
                             <Add />
                           </IconButton>
                         </Tooltip>
-                        
+
                         {exercisesFields.length > 1 && (
                           <Tooltip title="Usuń ćwiczenie">
-                            <IconButton 
-                              color="error" 
+                            <IconButton
+                              color="error"
                               onClick={() => removeFields(index)}
-                              sx={{ 
+                              sx={{
                                 bgcolor: 'rgba(244, 67, 54, 0.1)',
-                                '&:hover': { bgcolor: 'rgba(244, 67, 54, 0.2)' }
+                                '&:hover': { bgcolor: 'rgba(244, 67, 54, 0.2)' },
                               }}
                             >
                               <Remove />
@@ -202,7 +204,9 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                               label={t('exercise.type')}
                             >
                               {exerciseTypes.map((et, i) => (
-                                <MenuItem key={i} value={et.name}>{et.name}</MenuItem>
+                                <MenuItem key={i} value={et.name}>
+                                  {et.name}
+                                </MenuItem>
                               ))}
                             </Select>
                           </FormControl>
@@ -224,11 +228,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                             <Select
                               name={`place-${index}`}
                               value={input.place}
-                              onChange={event => handleFormChange(index, 'place', event)}
+                              onChange={(event) => handleFormChange(index, 'place', event)}
                               label={t('exercise.place')}
                             >
                               {exercisePlaces.map((ep, i) => (
-                                <MenuItem key={i} value={ep.name}>{ep.name}</MenuItem>
+                                <MenuItem key={i} value={ep.name}>
+                                  {ep.name}
+                                </MenuItem>
                               ))}
                             </Select>
                           </FormControl>
@@ -249,11 +255,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                           <Select
                             name={`name-${index}`}
                             value={input.name}
-                            onChange={event => handleFormChange(index, 'name', event)}
+                            onChange={(event) => handleFormChange(index, 'name', event)}
                             label={t('exercise.name')}
                           >
                             {exerciseNames.map((en, i) => (
-                              <MenuItem key={i} value={en.name}>{en.name}</MenuItem>
+                              <MenuItem key={i} value={en.name}>
+                                {en.name}
+                              </MenuItem>
                             ))}
                           </Select>
                         </FormControl>
@@ -266,7 +274,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                           label={t('exercise.reps')}
                           name={`reps-${index}`}
                           value={input.reps}
-                          onChange={event => handleFormChange(index, 'reps', event)}
+                          onChange={(event) => handleFormChange(index, 'reps', event)}
                           variant="outlined"
                           size="small"
                           inputProps={{ min: 0 }}
@@ -280,12 +288,16 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                           label={t('exercise.weight')}
                           name={`weight-${index}`}
                           value={input.weight}
-                          onChange={event => handleFormChange(index, 'weight', event)}
+                          onChange={(event) => handleFormChange(index, 'weight', event)}
                           variant="outlined"
                           size="small"
                           inputProps={{ min: 0, step: 0.5 }}
                           InputProps={{
-                            endAdornment: <Typography variant="body2" color="text.secondary">kg</Typography>
+                            endAdornment: (
+                              <Typography variant="body2" color="text.secondary">
+                                kg
+                              </Typography>
+                            ),
                           }}
                         />
                       </Grid>
@@ -302,11 +314,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                           <Select
                             name={`progress-${index}`}
                             value={input.progress}
-                            onChange={event => handleFormChange(index, 'progress', event)}
+                            onChange={(event) => handleFormChange(index, 'progress', event)}
                             label={t('exercise.progress')}
                           >
                             {exerciseProgresses.map((ep, i) => (
-                              <MenuItem key={i} value={ep.name}>{ep.name}</MenuItem>
+                              <MenuItem key={i} value={ep.name}>
+                                {ep.name}
+                              </MenuItem>
                             ))}
                           </Select>
                         </FormControl>
@@ -336,8 +350,8 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
               '&:hover': {
                 borderWidth: 2,
                 transform: 'translateY(-2px)',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-              }
+                boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+              },
             }}
           >
             Dodaj kolejne ćwiczenie
@@ -346,14 +360,16 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       )}
 
       {/* Przycisk wysyłania */}
-      <Box sx={{ 
-        position: 'sticky',
-        bottom: 20,
-        zIndex: 1000,
-        textAlign: 'center'
-      }}>
-        <Button 
-          variant="contained" 
+      <Box
+        sx={{
+          position: 'sticky',
+          bottom: 20,
+          zIndex: 1000,
+          textAlign: 'center',
+        }}
+      >
+        <Button
+          variant="contained"
           size="large"
           type="submit"
           disabled={isPending || exercisesFields.length === 0}
@@ -369,12 +385,12 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             '&:hover': {
               background: 'linear-gradient(45deg, #5a67d8, #6b46c1)',
               boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)',
-              transform: 'translateY(-2px)'
+              transform: 'translateY(-2px)',
             },
             '&:disabled': {
               background: 'rgba(0,0,0,0.12)',
-              boxShadow: 'none'
-            }
+              boxShadow: 'none',
+            },
           }}
         >
           {isPending ? (
@@ -417,6 +433,6 @@ export async function loader() {
     exerciseNames: exercisesNames.content,
     exercisePlaces: exercisesPlaces.content,
     exerciseProgresses: exercisesProgresses.content,
-    exerciseTypes: exercisesTypes.content
+    exerciseTypes: exercisesTypes.content,
   };
 }

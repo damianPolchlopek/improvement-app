@@ -1,9 +1,9 @@
-import { Paper } from "@mui/material";
+import { Paper } from '@mui/material';
 
 export default function StyledPaper({ children, sx = {}, ...props }) {
   return (
-    <Paper 
-      elevation={18} 
+    <Paper
+      elevation={18}
       sx={{
         width: '100%',
         maxWidth: '500px',
@@ -23,7 +23,7 @@ export default function StyledPaper({ children, sx = {}, ...props }) {
           margin: '16px',
         },
         // Łączenie z przekazanymi stylami
-        ...sx
+        ...sx,
       }}
       {...props}
     >

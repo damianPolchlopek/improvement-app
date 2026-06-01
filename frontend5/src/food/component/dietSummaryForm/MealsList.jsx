@@ -1,18 +1,11 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import REST from "../../../utils/REST";
+import REST from '../../../utils/REST';
 import { useTranslation } from 'react-i18next';
-import {
-  Collapse,
-  Table,
-  TableBody,
-  TableHead,
-  CircularProgress
-} from '@mui/material';
+import { Collapse, Table, TableBody, TableHead, CircularProgress } from '@mui/material';
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
 import MealRow from './MealRow';
-
 
 const categoryTranslation = new Map([
   ['Other', 'All'],
@@ -37,25 +30,30 @@ function translateMealPopularity(arg) {
   return popularityTranslation.get(arg) ?? 'ALL';
 }
 
-
-export default function MealsList({ 
-  isOpen, 
-  mealCategory, 
-  mealPopularity 
-}) {
+export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
   const { t } = useTranslation();
 
-  const { data: mealList = [], isLoading, isError } = useQuery({
+  const {
+    data: mealList = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['mealList', mealCategory, mealPopularity],
-    queryFn: () => REST.getMealList(translateMealCategory(mealCategory), 'ALL', '', 
-                                    translateMealPopularity(mealPopularity), 'category', true),
-                                    
+    queryFn: () =>
+      REST.getMealList(
+        translateMealCategory(mealCategory),
+        'ALL',
+        '',
+        translateMealPopularity(mealPopularity),
+        'category',
+        true
+      ),
+
     enabled: !!mealCategory && !!mealPopularity && isOpen,
     keepPreviousData: true,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 10 // cache data for 10 minutes
+    cacheTime: 1000 * 60 * 10, // cache data for 10 minutes
   });
-
 
   if (isLoading) {
     return (
@@ -84,11 +82,7 @@ export default function MealsList({
   return (
     <StyledTableRow>
       <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-        <Collapse
-          in={isOpen}
-          timeout="auto"
-          unmountOnExit
-        >
+        <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <Table size="small">
             <TableHead>
               <StyledTableRow>
@@ -104,11 +98,7 @@ export default function MealsList({
             </TableHead>
             <TableBody>
               {mealList.map((meal, index) => (
-                <MealRow 
-                  key={meal.id || index} 
-                  meal={meal} 
-                  index={index} 
-                />
+                <MealRow key={meal.id || index} meal={meal} index={index} />
               ))}
             </TableBody>
           </Table>

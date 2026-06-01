@@ -1,6 +1,9 @@
 import React from 'react';
 import { Typography, Box, Chip } from '@mui/material';
-import { TrendingUp as TrendingUpIcon, TrendingDown as TrendingDownIcon } from '@mui/icons-material';
+import {
+  TrendingUp as TrendingUpIcon,
+  TrendingDown as TrendingDownIcon,
+} from '@mui/icons-material';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -22,7 +25,7 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
   const percentChange90d = coinPrice.percent_change_90d.toFixed(2);
   const isPositive90d = percentChange90d >= 0;
 
-  const percentATH = ((price - coinDescription.ath) / coinDescription.ath * 100).toFixed(2);
+  const percentATH = (((price - coinDescription.ath) / coinDescription.ath) * 100).toFixed(2);
   const isPositiveATH = percentATH >= 0;
 
   const renderChangeCell = (percent, isPositive) => (
@@ -32,8 +35,8 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
       ) : (
         <TrendingDownIcon sx={{ fontSize: 20, color: 'error.main' }} />
       )}
-      <Typography 
-        variant="body2" 
+      <Typography
+        variant="body2"
         fontWeight="600"
         sx={{ color: isPositive ? 'success.main' : 'error.main' }}
       >
@@ -43,21 +46,18 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
   );
 
   return (
-    <StyledTableRow sx={{
-      '&:hover': {
-        backgroundColor: 'action.hover',
-        transform: 'translateY(-1px)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-      },
-      transition: 'all 0.2s ease-in-out'
-    }}>
+    <StyledTableRow
+      sx={{
+        '&:hover': {
+          backgroundColor: 'action.hover',
+          transform: 'translateY(-1px)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+        },
+        transition: 'all 0.2s ease-in-out',
+      }}
+    >
       <StyledTableCell>
-        <Chip 
-          label={coinMarketCapIndex}
-          color="primary"
-          size="small"
-          sx={{ fontWeight: 'bold' }}
-        />
+        <Chip label={coinMarketCapIndex} color="primary" size="small" sx={{ fontWeight: 'bold' }} />
       </StyledTableCell>
 
       <StyledTableCell>
@@ -72,21 +72,13 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
         </Typography>
       </StyledTableCell>
 
-      <StyledTableCell>
-        {renderChangeCell(percentChange24h, isPositive24h)}
-      </StyledTableCell>
+      <StyledTableCell>{renderChangeCell(percentChange24h, isPositive24h)}</StyledTableCell>
 
-      <StyledTableCell>
-        {renderChangeCell(percentChange7d, isPositive7d)}
-      </StyledTableCell>
+      <StyledTableCell>{renderChangeCell(percentChange7d, isPositive7d)}</StyledTableCell>
 
-      <StyledTableCell>
-        {renderChangeCell(percentChange30d, isPositive30d)}
-      </StyledTableCell>
+      <StyledTableCell>{renderChangeCell(percentChange30d, isPositive30d)}</StyledTableCell>
 
-      <StyledTableCell>
-        {renderChangeCell(percentChange90d, isPositive90d)}
-      </StyledTableCell>
+      <StyledTableCell>{renderChangeCell(percentChange90d, isPositive90d)}</StyledTableCell>
 
       <StyledTableCell>
         <Typography variant="body2" color="text.secondary">
@@ -100,9 +92,7 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
         </Typography>
       </StyledTableCell>
 
-      <StyledTableCell>
-        {renderChangeCell(percentATH, isPositiveATH)}
-      </StyledTableCell>
+      <StyledTableCell>{renderChangeCell(percentATH, isPositiveATH)}</StyledTableCell>
     </StyledTableRow>
   );
 }

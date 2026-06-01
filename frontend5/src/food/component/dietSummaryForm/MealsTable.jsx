@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import MealFilter from "./MealFilter";
+import MealFilter from './MealFilter';
 import MealCategoryRow from './MealCategoryRow';
 
-import {
-  Table,
-  TableBody,
-  TableContainer,
-  Paper
-} from '@mui/material';
+import { Table, TableBody, TableContainer, Paper } from '@mui/material';
 
 // components/MealTable/
 // ├── MealCategoryRow.jsx     (pojedyncza kategoria posiłków)
@@ -28,15 +23,12 @@ export default function MealsTable() {
     t('food.hotDish'),
     t('food.dinner'),
     t('food.sweets'),
-    t('food.other')
+    t('food.other'),
   ];
 
   return (
     <Paper sx={{ minWidth: 700 }}>
-      <MealFilter
-        mealPopularity={mealPopularity}
-        setMealPopularity={setMealPopularity}
-      />
+      <MealFilter mealPopularity={mealPopularity} setMealPopularity={setMealPopularity} />
       <TableContainer>
         <Table aria-label="collapsible table" sx={{ minWidth: 700 }}>
           <TableBody>
@@ -45,7 +37,7 @@ export default function MealsTable() {
                 key={index}
                 mealCategory={mealCategory}
                 mealPopularity={mealPopularity}
-                sx={{textAlign: 'left'}}
+                sx={{ textAlign: 'left' }}
               />
             ))}
           </TableBody>

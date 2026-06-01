@@ -16,13 +16,13 @@ let theme = createTheme({
     },
     card: {
       header: 'linear-gradient(90deg, #1e3a52 0%, #2d5374 100%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)'
-    }
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+    },
   },
   typography: {
     h6: {
-      fontWeight: "600",
-      color: "text.primary"
+      fontWeight: '600',
+      color: 'text.primary',
     },
     h5: {
       fontWeight: 500,
@@ -156,12 +156,12 @@ theme = {
     MuiCard: {
       styleOverrides: {
         root: {
-          textAlign: 'center', 
+          textAlign: 'center',
           borderRadius: 16,
           transition: 'all 0.3s ease',
           border: '1px solid rgba(0,0,0,0.08)',
           '&:hover': {
-            boxShadow: '0 8px 25px rgba(0,0,0,0.12)'          
+            boxShadow: '0 8px 25px rgba(0,0,0,0.12)',
           },
         },
       },
@@ -187,17 +187,17 @@ theme = {
         inputFormat: 'DD/MM/YYYY',
       },
     },
-   MuiAlert: {
+    MuiAlert: {
       styleOverrides: {
         root: {
           marginBottom: '16px',
-          textAlign: 'center'
+          textAlign: 'center',
         },
         message: {
           width: '100%',
-          textAlign: 'center'
-        }
-      }
+          textAlign: 'center',
+        },
+      },
     },
     MuiGrid: {
       defaultProps: {

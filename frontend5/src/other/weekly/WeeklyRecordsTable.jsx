@@ -8,7 +8,7 @@ import {
   Paper,
   Box,
   Typography,
-  useTheme
+  useTheme,
 } from '@mui/material';
 import { TrendingUp } from '@mui/icons-material';
 import StyledTableCell from '../../component/table/StyledTableCell';
@@ -22,14 +22,16 @@ export default function WeeklyRecordsTable({ records }) {
 
   return (
     <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
-      <Box sx={{
-        p: 3,
-        background: theme.palette.card.header,
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 2
-      }}>
+      <Box
+        sx={{
+          p: 3,
+          background: theme.palette.card.header,
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+        }}
+      >
         <TrendingUp sx={{ fontSize: 28 }} />
         <Typography variant="h5" fontWeight="600">
           Lista Rekordów
@@ -48,10 +50,7 @@ export default function WeeklyRecordsTable({ records }) {
           <TableBody>
             {records.length > 0 ? (
               records.map((record, index) => (
-                <WeeklyRecordTableRow
-                  key={record.id || index}
-                  record={record}
-                />
+                <WeeklyRecordTableRow key={record.id || index} record={record} />
               ))
             ) : (
               <StyledTableRow>

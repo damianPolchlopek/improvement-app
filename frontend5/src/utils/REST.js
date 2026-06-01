@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 import { QueryClient } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient();
@@ -35,240 +35,269 @@ const statistic = 'statistic/';
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 60000;
 
-const get = (url) => axios.get(url).then(r => r.data);
-const post = (url, data) => axios.post(url, data).then(r => r.data);
-const put = (url, data) => axios.put(url, data).then(r => r.data);
-const deleteMethod = (url) => axios.delete(url).then(r => r.data);
+const get = (url) => axios.get(url).then((r) => r.data);
+const post = (url, data) => axios.post(url, data).then((r) => r.data);
+const put = (url, data) => axios.put(url, data).then((r) => r.data);
+const deleteMethod = (url) => axios.delete(url).then((r) => r.data);
 
 export default class REST {
-    // Training module
-    static getAllTrainingNames(page, size) {
-        return get(serverUrl + exercise + 'trainingName?page=' + page + '&size=' + size);
-    }
+  // Training module
+  static getAllTrainingNames(page, size) {
+    return get(serverUrl + exercise + 'trainingName?page=' + page + '&size=' + size);
+  }
 
-    static getExercises(trainingName) {
-        return get(serverUrl + exercise + 'trainingName/' + trainingName);
-    }
+  static getExercises(trainingName) {
+    return get(serverUrl + exercise + 'trainingName/' + trainingName);
+  }
 
-    static getExercisesByDate(date) {
-        return get(serverUrl + exercise + 'date/' + date);
-    }
+  static getExercisesByDate(date) {
+    return get(serverUrl + exercise + 'date/' + date);
+  }
 
-    static getExercisesByName(name) {
-        return get(serverUrl + exercise + 'name/' + name);
-    }
+  static getExercisesByName(name) {
+    return get(serverUrl + exercise + 'name/' + name);
+  }
 
-    static getExerciseNames() {
-        return get(serverUrl + exercise + dictionary + exerciseName);
-    }
+  static getExerciseNames() {
+    return get(serverUrl + exercise + dictionary + exerciseName);
+  }
 
-    static getExercisePlaces() {
-        return get(serverUrl + exercise + dictionary + exercisePlace);
-    }
+  static getExercisePlaces() {
+    return get(serverUrl + exercise + dictionary + exercisePlace);
+  }
 
-    static getExerciseProgresses() {
-        return get(serverUrl + exercise + dictionary + exerciseProgress);
-    }
+  static getExerciseProgresses() {
+    return get(serverUrl + exercise + dictionary + exerciseProgress);
+  }
 
-    static getExerciseTypes() {
-        return get(serverUrl + exercise + dictionary + exerciseType);
-    }
+  static getExerciseTypes() {
+    return get(serverUrl + exercise + dictionary + exerciseType);
+  }
 
-    static getTrainingTemplate(type) {
-        return get(serverUrl + exercise + dictionary + 'training/' + type);
-    }
+  static getTrainingTemplate(type) {
+    return get(serverUrl + exercise + dictionary + 'training/' + type);
+  }
 
+  static initTrainingModule() {
+    return get(serverUrl + drive + 'initApplication');
+  }
 
-    static initTrainingModule() {
-        return get(serverUrl + drive + 'initApplication');
-    }
+  static getTestStatistic(exerciseName) {
+    return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
+  }
 
+  static getTrainingStatistic(exerciseName, chartType, beginDate, endDate) {
+    return get(
+      serverUrl +
+        exercise +
+        statistic +
+        exerciseName +
+        '/' +
+        chartType +
+        '/' +
+        beginDate +
+        '/' +
+        endDate
+    );
+  }
 
-    static getTestStatistic(exerciseName) {
-        return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
-    }
+  static getATHTraining(type) {
+    return get(serverUrl + exercise + 'training/' + type + '/maximum');
+  }
 
-    static getTrainingStatistic(exerciseName, chartType, beginDate, endDate) {
-        return get(serverUrl + exercise + statistic + exerciseName + '/' + chartType + '/' + beginDate + '/' + endDate);
-    }
+  static getTrainingTemplateByType(type) {
+    return get(serverUrl + exercise + 'trainingType/' + type);
+  }
 
-    static getATHTraining(type) {
-        return get(serverUrl + exercise + 'training/' + type + '/maximum');
-    }
+  static getTrainingByType(type, page, size) {
+    return get(serverUrl + exercise + 'training/' + type + '?page=' + page + '&size=' + size);
+  }
 
-    static getTrainingTemplateByType(type) {
-        return get(serverUrl + exercise + 'trainingType/' + type);
-    }
+  static addTraining(data) {
+    return post(serverUrl + exercise + 'addTraining', data);
+  }
 
-    static getTrainingByType(type, page, size) {
-        return get(serverUrl + exercise + 'training/' + type + '?page=' + page + '&size=' + size);
-    }
+  // Food module
+  static initFoodModule() {
+    return get(serverUrl + drive + 'initFoodModule');
+  }
 
-    static addTraining(data) {
-        return post(serverUrl + exercise + "addTraining", data);
-    }
+  static getProductFiltredByCategoryAndName(productCategory, productName) {
+    return get(
+      serverUrl +
+        food +
+        'product?productCategory=' +
+        productCategory +
+        '&productName=' +
+        productName
+    );
+  }
 
+  static getProductCategoryList() {
+    return get(serverUrl + food + 'product/categories');
+  }
 
-    // Food module
-    static initFoodModule() {
-        return get(serverUrl + drive + 'initFoodModule');
-    }
+  //mealCategory=All&mealType=All&mealName=&mealPopularity=&sortBy=
+  static getMealList(mealCategory, mealType, mealName, mealPopularity, sortBy, onOnePortion) {
+    return get(
+      serverUrl +
+        food +
+        'meal?mealCategory=' +
+        mealCategory +
+        '&mealType=' +
+        mealType +
+        '&mealName=' +
+        mealName +
+        '&mealPopularity=' +
+        mealPopularity +
+        '&sortBy=' +
+        sortBy +
+        '&onOnePortion=' +
+        onOnePortion
+    );
+  }
 
-    static getProductFiltredByCategoryAndName(productCategory, productName) {
-        return get(serverUrl + food + 'product?productCategory=' + productCategory + "&productName=" + productName);
-    }
+  static getMealIngredients(mealId) {
+    return get(serverUrl + food + 'meal/' + mealId + '/ingredients');
+  }
 
-    static getProductCategoryList() {
-        return get(serverUrl + food + 'product/categories');
-    }
+  static getMealCategoryList() {
+    return get(serverUrl + food + 'meal/categories');
+  }
 
-    //mealCategory=All&mealType=All&mealName=&mealPopularity=&sortBy=
-    static getMealList(mealCategory, mealType, mealName, mealPopularity, sortBy, onOnePortion) {
-        return get(serverUrl + food + 'meal?mealCategory=' + mealCategory + '&mealType=' + mealType + "&mealName=" + mealName
-                                    + "&mealPopularity=" + mealPopularity + "&sortBy=" + sortBy + "&onOnePortion=" + onOnePortion);
-    }
+  static getMealTypeList() {
+    return get(serverUrl + food + 'meal/types');
+  }
 
-    static getMealIngredients(mealId) {
-        return get(serverUrl + food + 'meal/' + mealId + '/ingredients');
-    }
+  static calculateDiet(selectedMeals) {
+    return post(serverUrl + food + 'macro/calculate', selectedMeals);
+  }
 
-    static getMealCategoryList() {
-        return get(serverUrl + food + 'meal/categories');
-    }
+  static createDietSummary(selectedMealsId) {
+    return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
+  }
 
-    static getMealTypeList() {
-        return get(serverUrl + food + 'meal/types');
-    }
+  static recalculateMealMacro(selectedMeal) {
+    return post(serverUrl + food + 'macro/meal/recalculate', selectedMeal);
+  }
 
-    static calculateDiet(selectedMeals) {
-        return post(serverUrl + food + 'macro/calculate', selectedMeals);
-    }
+  static getDietSummaries(page, size) {
+    return get(serverUrl + food + 'diet/day-summary?page=' + page + '&size=' + size);
+  }
 
-    static createDietSummary(selectedMealsId) {
-        return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
-    }
+  static deleteDietSummaries(id) {
+    return deleteMethod(serverUrl + food + 'diet/day-summary/' + id);
+  }
 
-    static recalculateMealMacro(selectedMeal) {
-        return post(serverUrl + food + 'macro/meal/recalculate', selectedMeal);
-    }
+  static getDietSummariesById(id) {
+    return get(serverUrl + food + 'diet/day-summary/' + id);
+  }
 
-    static getDietSummaries(page, size) {
-        return get(serverUrl + food + 'diet/day-summary?page=' + page + '&size=' + size);
-    }
+  static updateDietSummary(updatedDietSummary) {
+    return put(serverUrl + food + 'diet/day-summary', updatedDietSummary);
+  }
 
-    static deleteDietSummaries(id) {
-        return deleteMethod(serverUrl + food + 'diet/day-summary/' + id);
-    }
+  // Shopping module
+  static getShoppingListByCategory(category) {
+    return get(serverUrl + shopping + 'category/' + category);
+  }
 
-    static getDietSummariesById(id) {
-        return get(serverUrl + food + 'diet/day-summary/' + id);
-    }
-    
-    static updateDietSummary(updatedDietSummary) {
-        return put(serverUrl + food + 'diet/day-summary', updatedDietSummary);
-    }
+  static deleteProductFromShoppingList(productId) {
+    return deleteMethod(serverUrl + shopping + productId);
+  }
 
+  static addProductToShoppingList(product) {
+    return post(serverUrl + shopping, product);
+  }
 
+  static getAllCategoryProducts() {
+    return get(serverUrl + shopping + 'categories');
+  }
 
-    // Shopping module
-    static getShoppingListByCategory(category) {
-        return get(serverUrl + shopping + 'category/' + category);
-    }
+  // Weekly module
+  static getWeeklyListByCategory(category) {
+    return get(serverUrl + weekly + category);
+  }
 
-    static deleteProductFromShoppingList(productId) {
-        return deleteMethod(serverUrl + shopping + productId);
-    }
+  static deleteProductFromWeeklyList(productId) {
+    return deleteMethod(serverUrl + weekly + productId);
+  }
 
-    static addProductToShoppingList(product) {
-        return post(serverUrl + shopping, product);
-    }
+  static addRecordToWeeklyList(product) {
+    return post(serverUrl + 'weekly', product);
+  }
 
-    static getAllCategoryProducts() {
-        return get(serverUrl + shopping + 'categories');
-    }
+  static getAllCategoryWeeklyRecords() {
+    return get(serverUrl + weekly + 'categories');
+  }
 
+  // daily
+  static getDaily(page, size) {
+    return get(serverUrl + 'daily?page=' + page + '&size=' + size);
+  }
 
-    // Weekly module
-    static getWeeklyListByCategory(category) {
-        return get(serverUrl + weekly + category);
-    }
+  static deleteDaily(id) {
+    return deleteMethod(serverUrl + daily + id);
+  }
 
-    static deleteProductFromWeeklyList(productId) {
-        return deleteMethod(serverUrl + weekly + productId);
-    }
+  static addDaily(data) {
+    return post(serverUrl + daily, data);
+  }
 
-    static addRecordToWeeklyList(product) {
-        return post(serverUrl + 'weekly', product);
-    }
+  //finance
+  static getFinanceCryptoPrice(coins, currency) {
+    return get(serverUrl + finance + crypto + 'price/' + coins + '/' + currency);
+  }
 
-    static getAllCategoryWeeklyRecords() {
-        return get(serverUrl + weekly + 'categories');
-    }
+  static getFinanceCryptoDescription() {
+    return get(serverUrl + finance + crypto + 'description');
+  }
 
+  // Login module
+  static loginUser(user) {
+    return post(serverUrl + 'api/auth/signin', user);
+  }
 
-    // daily
-    static getDaily(page, size) {
-        return get(serverUrl + 'daily?page=' + page + '&size=' + size);
-    }
+  static registerUser(user) {
+    return post(serverUrl + 'api/auth/signup', user);
+  }
 
-    static deleteDaily(id) {
-        return deleteMethod(serverUrl + daily + id);
-    }
+  static refreshTokenRequest() {
+    // refresh_token jest wysyłany automatycznie jako httpOnly cookie
+    return post(serverUrl + 'api/auth/refresh-token', {});
+  }
 
-    static addDaily(data) {
-        return post(serverUrl + daily, data);
-    }
+  static logoutUser() {
+    return post(serverUrl + 'api/auth/logout', {});
+  }
 
+  static verifyEmail(token) {
+    return get(serverUrl + 'api/auth/verify-email?token=' + encodeURIComponent(token));
+  }
 
-    //finance
-    static getFinanceCryptoPrice(coins, currency) {
-        return get(serverUrl + finance + crypto + "price/" + coins + "/" + currency);
-    }
+  static resendVerificationEmail(username) {
+    return post(serverUrl + 'api/auth/resend-verification', username);
+  }
 
-    static getFinanceCryptoDescription() {
-        return get(serverUrl + finance + crypto + "description");
-    }
+  // Audit
+  static getRevisions(dietSummaryId) {
+    return get(serverUrl + 'api/audit/diet-summary/' + dietSummaryId + '/revisions');
+  }
 
+  static getRevisionDetails(dietSummaryId, revisionNumber) {
+    return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber);
+  }
 
-    // Login module
-    static loginUser(user) {
-        return post(serverUrl + 'api/auth/signin', user);
-    }
-
-    static registerUser(user) {
-        return post(serverUrl + 'api/auth/signup', user);
-    }
-
-    static refreshTokenRequest() {
-        // refresh_token jest wysyłany automatycznie jako httpOnly cookie
-        return post(serverUrl + 'api/auth/refresh-token', {});
-    }
-
-    static logoutUser() {
-        return post(serverUrl + 'api/auth/logout', {});
-    }
-
-    static verifyEmail(token) {
-        return get(serverUrl + 'api/auth/verify-email?token=' + encodeURIComponent(token));
-    }
-
-    static resendVerificationEmail(username) {
-        return post(serverUrl + 'api/auth/resend-verification', username );
-    }
-
-    // Audit
-    static getRevisions(dietSummaryId) {
-        return get(serverUrl + 'api/audit/diet-summary/' + dietSummaryId + '/revisions');
-    }
-
-    static getRevisionDetails(dietSummaryId, revisionNumber) {
-        return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber);
-    }
-
-    // compare?olderRevision=23&newerRevision=26
-    static getRevisionComparsion(dietSummaryId, olderRevisionId, newerRevisionId) {
-        return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/revisions/compare?olderRevision=' 
-            + olderRevisionId + '&newerRevision=' + newerRevisionId);
-    }
-
+  // compare?olderRevision=23&newerRevision=26
+  static getRevisionComparsion(dietSummaryId, olderRevisionId, newerRevisionId) {
+    return get(
+      serverUrl +
+        'api/audit/food/diet-summary/' +
+        dietSummaryId +
+        '/revisions/compare?olderRevision=' +
+        olderRevisionId +
+        '&newerRevision=' +
+        newerRevisionId
+    );
+  }
 }

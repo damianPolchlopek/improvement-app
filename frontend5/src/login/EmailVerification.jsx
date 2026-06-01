@@ -9,16 +9,10 @@ import {
   CircularProgress,
   Alert,
   Container,
-  Stack
+  Stack,
 } from '@mui/material';
 
-import {
-  CheckCircle,
-  Error,
-  Refresh,
-  Home,
-  Login
-} from '@mui/icons-material';
+import { CheckCircle, Error, Refresh, Home, Login } from '@mui/icons-material';
 
 import REST from '../utils/REST';
 import { LoginUrl, HomeViewUrl } from '../utils/URLHelper';
@@ -33,13 +27,13 @@ const EmailVerification = () => {
     // Pobierz token z URL-a
     const urlParams = new URLSearchParams(window.location.search);
     const tokenParam = urlParams.get('token');
-    
+
     if (!tokenParam) {
       setStatus('error');
       setMessage('Brak tokenu weryfikacyjnego w URL-u');
       return;
     }
-    
+
     setToken(tokenParam);
     verifyEmail(tokenParam);
   }, []);
@@ -47,9 +41,9 @@ const EmailVerification = () => {
   const verifyEmail = async (token) => {
     try {
       setStatus('loading');
-      
+
       const responseData = await REST.verifyEmail(token);
-      
+
       if (responseData) {
         const result = responseData.message || 'Email został pomyślnie zweryfikowany!';
         setStatus('success');
@@ -58,12 +52,11 @@ const EmailVerification = () => {
         setStatus('error');
         setMessage('Nie otrzymano odpowiedzi z serwera');
       }
-      
     } catch (error) {
-      
       // Sprawdź czy to błąd axios z response
       if (error.response) {
-        const errorMessage = error.response.data?.message || `Błąd serwera: ${error.response.status}`;
+        const errorMessage =
+          error.response.data?.message || `Błąd serwera: ${error.response.status}`;
         setStatus('error');
         setMessage(errorMessage);
       } else if (error.request) {
@@ -83,11 +76,11 @@ const EmailVerification = () => {
   };
 
   const handleGoToLogin = () => {
-     navigate(LoginUrl);
+    navigate(LoginUrl);
   };
 
   const handleGoHome = () => {
-     navigate(HomeViewUrl);
+    navigate(HomeViewUrl);
   };
 
   return (
@@ -98,7 +91,7 @@ const EmailVerification = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          py: 4
+          py: 4,
         }}
       >
         <Card sx={{ width: '100%', maxWidth: 500 }}>
@@ -115,7 +108,7 @@ const EmailVerification = () => {
                   </Typography>
                 </Stack>
               )}
-              
+
               {status === 'success' && (
                 <Stack spacing={3} alignItems="center">
                   <CheckCircle sx={{ fontSize: 64, color: 'success.main' }} />
@@ -137,7 +130,7 @@ const EmailVerification = () => {
                   </Button>
                 </Stack>
               )}
-              
+
               {status === 'error' && (
                 <Stack spacing={3} alignItems="center">
                   <Error sx={{ fontSize: 64, color: 'error.main' }} />
@@ -172,7 +165,6 @@ const EmailVerification = () => {
                 </Stack>
               )}
             </Box>
-            
           </CardContent>
         </Card>
       </Box>

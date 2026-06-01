@@ -17,7 +17,7 @@ import {
   Alert,
   useTheme,
   alpha,
-  Divider
+  Divider,
 } from '@mui/material';
 
 import {
@@ -26,16 +26,16 @@ import {
   TrendingDown as TrendingDownIcon,
   Remove as RemoveIcon,
   Check as CheckIcon,
-  ArrowForward as ArrowForwardIcon
+  ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
 
 import Grid from '@mui/material/Grid';
 
-const RevisionCompare = ({ 
-  dietSummaryId, 
-  selectedRevisions, 
+const RevisionCompare = ({
+  dietSummaryId,
+  selectedRevisions,
   onRevisionSelect,
-  availableRevisions 
+  availableRevisions,
 }) => {
   const theme = useTheme();
   const { dietSummaryId: paramDietSummaryId } = useParams();
@@ -46,19 +46,22 @@ const RevisionCompare = ({
   const olderRevisionNumber = selectedRevisions[0]?.revisionNumber;
   const newerRevisionNumber = selectedRevisions[1]?.revisionNumber;
 
-  const { data: comparisonData, isLoading, isError } = useRevisionComparison(
-    actualDietSummaryId,
-    olderRevisionNumber,
-    newerRevisionNumber
-  );
+  const {
+    data: comparisonData,
+    isLoading,
+    isError,
+  } = useRevisionComparison(actualDietSummaryId, olderRevisionNumber, newerRevisionNumber);
 
   if (needsSelection) {
     return (
-      <Card elevation={6} sx={{
-        borderRadius: 3,
-        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-      }}>
+      <Card
+        elevation={6}
+        sx={{
+          borderRadius: 3,
+          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
         <CardContent sx={{ p: 4 }}>
           <Box textAlign="center" mb={4}>
             <CompareArrowsIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
@@ -68,33 +71,33 @@ const RevisionCompare = ({
             <Typography variant="body1" color="rgba(255, 255, 255, 0.7)">
               Wybrano: {selectedRevisions.length}/2 wersji
             </Typography>
-            
+
             {selectedRevisions.length === 1 && (
-              <Alert 
-                severity="info" 
-                sx={{ 
+              <Alert
+                severity="info"
+                sx={{
                   mt: 3,
                   backgroundColor: 'rgba(33, 150, 243, 0.1)',
                   color: 'white',
                   border: '1px solid rgba(33, 150, 243, 0.3)',
                   '& .MuiAlert-icon': {
                     color: '#2196f3',
-                  }
+                  },
                 }}
               >
                 Wybierz drugą wersję do porównania
               </Alert>
             )}
           </Box>
-          
+
           {/* Lista dostępnych rewizji */}
           <Grid container spacing={2}>
-            {availableRevisions.map(revision => {
+            {availableRevisions.map((revision) => {
               const isSelected = selectedRevisions.some(
-                r => r.revisionNumber === revision.revisionNumber
+                (r) => r.revisionNumber === revision.revisionNumber
               );
               const selectionOrder = selectedRevisions.findIndex(
-                r => r.revisionNumber === revision.revisionNumber
+                (r) => r.revisionNumber === revision.revisionNumber
               );
 
               return (
@@ -106,17 +109,17 @@ const RevisionCompare = ({
                       cursor: 'pointer',
                       borderRadius: 2,
                       transition: 'all 0.3s ease',
-                      background: isSelected 
+                      background: isSelected
                         ? 'linear-gradient(145deg, #243441 0%, #2d4a5a 100%)'
                         : 'rgba(255, 255, 255, 0.05)',
-                      border: isSelected 
-                        ? '2px solid #4caf50' 
+                      border: isSelected
+                        ? '2px solid #4caf50'
                         : '1px solid rgba(255, 255, 255, 0.1)',
                       '&:hover': {
                         transform: 'translateY(-4px)',
                         boxShadow: '0 8px 24px rgba(76, 175, 80, 0.3)',
                         border: '2px solid rgba(76, 175, 80, 0.5)',
-                      }
+                      },
                     }}
                   >
                     <CardContent sx={{ p: 2 }}>
@@ -154,13 +157,16 @@ const RevisionCompare = ({
   // Loading state
   if (isLoading) {
     return (
-      <Card elevation={6} sx={{
-        borderRadius: 3,
-        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        p: 8,
-        textAlign: 'center'
-      }}>
+      <Card
+        elevation={6}
+        sx={{
+          borderRadius: 3,
+          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          p: 8,
+          textAlign: 'center',
+        }}
+      >
         <CircularProgress size={60} sx={{ mb: 3, color: '#4caf50' }} />
         <Typography variant="h6" color="white" fontWeight="600">
           Ładowanie danych do porównania...
@@ -171,25 +177,24 @@ const RevisionCompare = ({
 
   // Error state
   if (isError || !comparisonData) {
-    return (
-      <Alert severity="error">
-        Nie udało się załadować porównania rewizji
-      </Alert>
-    );
+    return <Alert severity="error">Nie udało się załadować porównania rewizji</Alert>;
   }
 
-  const { olderRevision, newerRevision, macroChanges, mealsAdded, mealsRemoved, mealsModified } = comparisonData;
+  const { olderRevision, newerRevision, macroChanges, mealsAdded, mealsRemoved, mealsModified } =
+    comparisonData;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      
       {/* Header z wybranymi wersjami */}
-      <Card elevation={8} sx={{
-        borderRadius: 4,
-        background: theme.palette.card.header,
-        border: theme.palette.card.border,
-        overflow: 'hidden'
-      }}>
+      <Card
+        elevation={8}
+        sx={{
+          borderRadius: 4,
+          background: theme.palette.card.header,
+          border: theme.palette.card.border,
+          overflow: 'hidden',
+        }}
+      >
         <CardContent sx={{ p: 4 }}>
           <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
             <Box display="flex" alignItems="center" gap={2}>
@@ -198,7 +203,7 @@ const RevisionCompare = ({
                 Porównanie wersji
               </Typography>
             </Box>
-            
+
             <Button
               variant="outlined"
               onClick={() => onRevisionSelect(null)}
@@ -208,7 +213,7 @@ const RevisionCompare = ({
                 '&:hover': {
                   borderColor: 'rgba(255, 255, 255, 0.5)',
                   backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                }
+                },
               }}
             >
               Wybierz inne wersje
@@ -217,20 +222,20 @@ const RevisionCompare = ({
 
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, md: 5 }}>
-              <VersionInfo 
+              <VersionInfo
                 title="Wersja starsza"
                 revision={olderRevision}
                 color="rgba(255, 152, 0, 0.3)"
                 borderColor="rgba(255, 152, 0, 0.5)"
               />
             </Grid>
-            
+
             <Grid xs={12} md={2} display="flex" alignItems="center" justifyContent="center">
               <ArrowForwardIcon sx={{ fontSize: 40, color: '#4caf50' }} />
             </Grid>
-            
+
             <Grid size={{ xs: 12, md: 5 }}>
-              <VersionInfo 
+              <VersionInfo
                 title="Wersja nowsza"
                 revision={newerRevision}
                 color="rgba(76, 175, 80, 0.3)"
@@ -242,25 +247,30 @@ const RevisionCompare = ({
       </Card>
 
       {/* Zmiany w makroskładnikach */}
-      <Card elevation={6} sx={{
-        borderRadius: 3,
-        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-      }}>
-        <Box sx={{
-          p: 2,
-          background: theme.palette.card.header,
-          borderBottom: theme.palette.card.border,
-        }}>
+      <Card
+        elevation={6}
+        sx={{
+          borderRadius: 3,
+          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        <Box
+          sx={{
+            p: 2,
+            background: theme.palette.card.header,
+            borderBottom: theme.palette.card.border,
+          }}
+        >
           <Typography variant="h6" fontWeight="600" color="white">
             Zmiany w makroskładnikach
           </Typography>
         </Box>
-        
+
         <CardContent sx={{ p: 3 }}>
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange 
+              <MacroChange
                 label="Kalorie"
                 changeDetail={macroChanges.kcal}
                 unit="kcal"
@@ -268,7 +278,7 @@ const RevisionCompare = ({
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange 
+              <MacroChange
                 label="Białko"
                 changeDetail={macroChanges.protein}
                 unit="g"
@@ -276,7 +286,7 @@ const RevisionCompare = ({
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange 
+              <MacroChange
                 label="Węglowodany"
                 changeDetail={macroChanges.carbohydrates}
                 unit="g"
@@ -284,7 +294,7 @@ const RevisionCompare = ({
               />
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange 
+              <MacroChange
                 label="Tłuszcze"
                 changeDetail={macroChanges.fat}
                 unit="g"
@@ -296,33 +306,33 @@ const RevisionCompare = ({
       </Card>
 
       {/* Zmiany w posiłkach */}
-        <MealChangesList 
+      <MealChangesList
         changes={{
-            mealsAdded,
-            mealsRemoved,
-            mealsModified
+          mealsAdded,
+          mealsRemoved,
+          mealsModified,
         }}
-        />
+      />
     </Box>
   );
 };
 
 // Helper Components
 const VersionInfo = ({ title, revision, color, borderColor }) => (
-  <Card 
+  <Card
     elevation={4}
     sx={{
       borderRadius: 2,
       background: color,
       border: `2px solid ${borderColor}`,
-      height: '100%'
+      height: '100%',
     }}
   >
     <CardContent sx={{ p: 3 }}>
       <Typography variant="h6" fontWeight="600" color="white" mb={2}>
         {title}
       </Typography>
-      
+
       <Box display="flex" flexDirection="column" gap={1}>
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
@@ -332,7 +342,7 @@ const VersionInfo = ({ title, revision, color, borderColor }) => (
             #{revision.revisionNumber}
           </Typography>
         </Box>
-        
+
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
             Data:
@@ -341,7 +351,7 @@ const VersionInfo = ({ title, revision, color, borderColor }) => (
             {new Date(revision.revisionTimestamp).toLocaleDateString('pl-PL')}
           </Typography>
         </Box>
-        
+
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
             Godzina:
@@ -352,7 +362,7 @@ const VersionInfo = ({ title, revision, color, borderColor }) => (
         </Box>
 
         <Divider sx={{ my: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
-        
+
         <Box display="flex" justifyContent="space-between">
           <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
             Kalorie:
@@ -378,39 +388,42 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
   };
 
   return (
-    <Card elevation={2} sx={{
-      borderRadius: 2,
-      background: 'rgba(0, 0, 0, 0.2)',
-      border: `1px solid ${alpha(color, 0.3)}`,
-      transition: 'all 0.3s ease',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
-      }
-    }}>
+    <Card
+      elevation={2}
+      sx={{
+        borderRadius: 2,
+        background: 'rgba(0, 0, 0, 0.2)',
+        border: `1px solid ${alpha(color, 0.3)}`,
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
+        },
+      }}
+    >
       <CardContent sx={{ p: 2 }}>
-        <Typography 
-          variant="caption" 
+        <Typography
+          variant="caption"
           color="rgba(255, 255, 255, 0.7)"
-          sx={{ 
+          sx={{
             mb: 1.5,
             display: 'block',
             textTransform: 'uppercase',
             letterSpacing: 1,
-            fontWeight: 600
+            fontWeight: 600,
           }}
         >
           {label}
         </Typography>
-        
+
         {/* Stara wartość */}
         <Box display="flex" alignItems="baseline" gap={1} mb={1}>
-          <Typography 
-            variant="h6" 
-            sx={{ 
+          <Typography
+            variant="h6"
+            sx={{
               textDecoration: 'line-through',
               color: 'rgba(255, 255, 255, 0.4)',
-              fontWeight: 500
+              fontWeight: 500,
             }}
           >
             {oldValue.toFixed(1)}
@@ -419,7 +432,7 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
             {unit}
           </Typography>
         </Box>
-        
+
         {/* Nowa wartość */}
         <Box display="flex" alignItems="baseline" gap={1} mb={2}>
           <Typography variant="h5" fontWeight="700" sx={{ color }}>
@@ -429,12 +442,12 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
             {unit}
           </Typography>
         </Box>
-        
+
         {/* Zmiana */}
         {hasChange && (
-          <Box 
-            display="flex" 
-            alignItems="center" 
+          <Box
+            display="flex"
+            alignItems="center"
             justifyContent="space-between"
             sx={{
               pt: 1.5,
@@ -452,14 +465,10 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
                 border: `1px solid ${alpha(changeColor, 0.3)}`,
                 '& .MuiChip-icon': {
                   color: changeColor,
-                }
+                },
               }}
             />
-            <Typography 
-              variant="caption" 
-              fontWeight="600"
-              sx={{ color: changeColor }}
-            >
+            <Typography variant="caption" fontWeight="600" sx={{ color: changeColor }}>
               {percentChange.toFixed(1)}%
             </Typography>
           </Box>

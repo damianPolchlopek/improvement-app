@@ -32,10 +32,11 @@ export const useRevisionComparison = (dietSummaryId, olderRevision, newerRevisio
   return useQuery({
     queryKey: ['revision-comparison', dietSummaryId, olderRevision, newerRevision],
     queryFn: () => REST.getRevisionComparsion(dietSummaryId, olderRevision, newerRevision),
-    enabled: !!dietSummaryId && 
-             olderRevision !== undefined && 
-             olderRevision !== null &&
-             newerRevision !== undefined && 
-             newerRevision !== null,
+    enabled:
+      !!dietSummaryId &&
+      olderRevision !== undefined &&
+      olderRevision !== null &&
+      newerRevision !== undefined &&
+      newerRevision !== null,
   });
 };
