@@ -11,7 +11,7 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 - [Dostępne skrypty](#dostępne-skrypty)
 - [Struktura katalogów](#struktura-katalogów)
 - [Najważniejsze biblioteki](#najważniejsze-biblioteki)
-- [Konfiguracja ESLint i przeglądarki](#konfiguracja-eslint-i-przeglądarki)
+- [Konfiguracja ESLint, Prettier i przeglądarki](#konfiguracja-eslint-prettier-i-przeglądarki)
 - [Testowanie](#testowanie)
 - [Budowanie produkcyjne](#budowanie-produkcyjne)
 - [Międzynarodowość (i18n)](#miedzynarodowosc-i18n)
@@ -47,6 +47,8 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 - `npm test` – Interaktywny tryb testowania z użyciem React Testing Library
 - `npm run build` – Tworzy zoptymalizowaną wersję produkcyjną w katalogu `build`
 - `npm run eject` – Wyodrębnia konfigurację narzędzi do projektu (operacja nieodwracalna)
+- `npm run format` – Formatuje kod w `src/` przy użyciu Prettiera
+- `npm run format:check` – Sprawdza formatowanie bez wprowadzania zmian
 
 ---
 
@@ -54,10 +56,16 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 
 - `src/` – Główny kod źródłowy aplikacji
   - `index.js` – Punkt wejścia (renderowanie komponentu `<App />`)
-  - `App.js` – Główny komponent aplikacji
-  - `components/`, `pages/` – Komponenty i widoki
-  - `i18n/` – Konfiguracja tłumaczeń (i18next)
-  - `api/` – Warstwa komunikacji z backendem (np. przez axios)
+  - `App.js` – Główny komponent aplikacji (routing, layout)
+  - `theme.js` – Konfiguracja motywu Material UI
+  - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table`)
+  - `context/` – Konteksty React (m.in. stan globalny)
+  - `layout/` – Elementy układu strony (nawigacja, szkielet widoku)
+  - `language/` – Konfiguracja tłumaczeń (`i18n.js`) i przełącznik języka
+  - `utils/` – Funkcje pomocnicze i komunikacja z API (axios)
+  - `assets/` – Zasoby statyczne
+  - **Moduły funkcjonalne:** `food/`, `training/`, `finance/`, `shopping/`, `other/`,
+    `audit/`, `home/`, `login/`, `projects/`
 - `public/` – Statyczne pliki serwowane przez aplikację
 
 ---
@@ -74,12 +82,14 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 - **WebSockety** (`@stomp/stompjs`, `sockjs-client`, `stompjs`) – komunikacja w czasie rzeczywistym
 - **Recharts** – wykresy i wizualizacja danych
 - **Universal-cookie** – obsługa cookies
+- **jwt-decode** – dekodowanie tokenów JWT po stronie klienta
 
 ---
 
-## Konfiguracja ESLint i przeglądarki
+## Konfiguracja ESLint, Prettier i przeglądarki
 
-- Konfiguracja ESLint oparta na domyślnych ustawieniach Create React App.
+- Konfiguracja ESLint oparta na domyślnych ustawieniach Create React App (`react-app`, `react-app/jest`).
+- Formatowanie kodu zapewnia **Prettier** (konfiguracja w `.prettierrc`, wykluczenia w `.prettierignore`). Uruchom `npm run format`.
 - Obsługiwane przeglądarki:
   - produkcja: >0.2%, nie martwe, nie Opera Mini
   - deweloperski: ostatnia wersja Chrome, Firefox, Safari
@@ -109,7 +119,7 @@ Wynik znajdziesz w katalogu `build`.
 
 ## Międzynarodowość (i18n)
 
-Aplikacja posiada wsparcie dla wielu języków dzięki **i18next**. Pliki tłumaczeń znajdują się w katalogu `src/i18n`.
+Aplikacja posiada wsparcie dla wielu języków dzięki **i18next** i **react-i18next**. Konfiguracja oraz przełącznik języka znajdują się w katalogu `src/language` (`i18n.js`, `LanguageSwitcher.jsx`).
 
 ---
 
@@ -133,12 +143,12 @@ Do komunikacji w czasie rzeczywistym wykorzystywane są biblioteki:
 
 ---
 
-## Autorzy
+## Autor
 
-Projekt rozwijany przez zespół Improvement App.
+Damian Polchłopek — [github.com/damianPolchlopek](https://github.com/damianPolchlopek)
 
 ---
 
 ## Licencja
 
-Projekt przeznaczony do użytku wewnętrznego.
+Projekt prywatny (`"private": true` w `package.json`) — bez licencji open source.

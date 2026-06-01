@@ -1,197 +1,197 @@
-# Dokumentacja architektury Improvement App – Backend
+# Improvement App – Backend
 
 ## Spis treści
 
 1. [Wstęp](#wstęp)
-2. [Struktura katalogów](#struktura-katalogów)
-3. [Opis architektury i domen](#opis-architektury-i-domen)
-4. [Przegląd warstw i domen](#przegląd-warstw-i-domen)
-5. [Obsługa wyjątków](#obsługa-wyjątków)
-6. [Konfiguracje i narzędzia](#konfiguracje-i-narzędzia)
-7. [Podsumowanie](#podsumowanie)
+2. [Technologie](#technologie)
+3. [Struktura katalogów](#struktura-katalogów)
+4. [Opis architektury i domen](#opis-architektury-i-domen)
+5. [Przegląd modułów](#przegląd-modułów)
+6. [Bazy danych i migracje](#bazy-danych-i-migracje)
+7. [Konfiguracja i profile](#konfiguracja-i-profile)
+8. [Dokumentacja API](#dokumentacja-api)
+9. [Obsługa wyjątków](#obsługa-wyjątków)
+10. [Testy](#testy)
+11. [Budowanie i uruchamianie](#budowanie-i-uruchamianie)
 
 ---
 
 ## Wstęp
 
-Projekt Improvement App to modularna aplikacja backendowa napisana w Javie z użyciem Spring Boot. Każda domena funkcjonalna posiada własny pakiet i podział na warstwy, co znacząco ułatwia rozwój, testowanie i utrzymanie kodu.
+Backend Improvement App to modularna aplikacja napisana w Javie 17 z użyciem Spring Boot 3.3.4. Każda domena funkcjonalna posiada własny pakiet i podział na warstwy, co ułatwia rozwój, testowanie i utrzymanie kodu. Moduł `food` został dodatkowo zorganizowany według architektury heksagonalnej (porty i adaptery).
+
+---
+
+## Technologie
+
+- **Java 17 + Spring Boot 3.3.4** – Security, Web, Data JPA, Data MongoDB, Jersey, WebSocket, Mail, OAuth2 Client, Actuator
+- **PostgreSQL** (JPA/Hibernate, pula HikariCP) oraz **MongoDB**
+- **Liquibase** – migracje schematu bazy
+- **Hibernate Envers** – audyt zmian encji
+- **Springdoc OpenAPI** – Swagger UI (`/swagger-ui.html`)
+- **JWT (jjwt)**, **BCrypt**, **OAuth2 (Google)** – uwierzytelnianie i autoryzacja
+- **Apache POI** (Excel), **Jsoup** (HTML)
+- **Log4j2**, **Micrometer / Prometheus** – logowanie i metryki
+- **Lombok** – ograniczenie boilerplate
+- **Maven** (wrapper `mvnw`) – budowanie
+- **Testy** – JUnit, Spring Security Test, Testcontainers (PostgreSQL), REST Assured, Datafaker
 
 ---
 
 ## Struktura katalogów
 
+Kod źródłowy znajduje się w pakiecie `com.improvement_app`, podzielonym na moduły domenowe:
+
 ```
 com/improvement_app/
-├── ImprovementAppBackendApplication.java
-├── exceptions/
-│   ├── ErrorResponse.java
-│   ├── FieldValidationError.java
-│   ├── GlobalExceptionHandler.java
-│   └── ValidationErrorResponse.java
-├── finance/
-│   ├── controller/
-│   ├── entity/
-│   ├── repository/
-│   ├── service/
-│   └── util/
-├── food/
-│   ├── FoodModuleVariables.java
-│   ├── application/
-│   ├── domain/
-│   ├── infrastructure/
-│   └── ui/
-├── googledrive/
-│   ├── config/
-│   ├── entity/
-│   ├── exceptions/
-│   ├── service/
-│   └── types/
-├── mainappcontroller/
-│   ├── JacksonConfiguration.java
-│   └── RootController.java
-├── other/
-│   ├── daily/
-│   └── weekly/
-├── parser/
-│   ├── controller/
-│   ├── entity/
-│   ├── examle.html
-│   ├── repository/
-│   └── service/
-├── security/
-│   ├── command/
-│   ├── config/
-│   ├── controllers/
-│   ├── entity/
-│   ├── exceptions/
-│   ├── jwt/
-│   ├── repository/
-│   └── services/
-├── shopping/
-│   ├── controller/
-│   ├── entity/
-│   └── repository/
-├── util/
-│   ├── ListResponse.java
-│   ├── Page.java
-│   └── PaginationHelper.java
-└── workouts/
-    ├── TrainingModuleVariables.java
-    ├── controllers/
-    ├── entity/
-    ├── exceptions/
-    ├── helpers/
-    ├── repository/
-    └── services/
+├── ImprovementAppBackendApplication.java   # punkt wejścia
+├── food/          # Żywienie – produkty, posiłki, przepisy, diety (architektura heksagonalna)
+├── workouts/      # Treningi – ćwiczenia, plany, szablony, statystyki
+├── finance/       # Finanse i notowania kryptowalut (CoinMarketCap)
+├── shopping/      # Listy zakupów
+├── other/         # Zadania okresowe (dzienne / tygodniowe)
+├── parser/        # Parsowanie i przechowywanie danych o technologiach
+├── googledrive/   # Integracja z Google Drive
+├── security/      # Uwierzytelnianie i autoryzacja (JWT, OAuth2, rate limiting)
+├── audit/         # Audyt zmian encji (Hibernate Envers)
+├── common/        # Współdzielone konfiguracje i kontrolery
+├── exceptions/    # Globalna obsługa wyjątków i walidacji
+└── util/          # Klasy pomocnicze (paginacja, odpowiedzi listowe)
 ```
+
+> Drzewo celowo zatrzymano na poziomie modułów — wewnętrzny podział na warstwy
+> (`controller`, `service`, `repository`, `entity`, …) opisano słownie poniżej, dzięki czemu
+> dokumentacja nie dezaktualizuje się przy każdym refaktorze plików.
 
 ---
 
 ## Opis architektury i domen
 
-Aplikacja oparta jest na modularnej architekturze, w której każda domena (np. finanse, jedzenie, treningi, zakupy, parser, bezpieczeństwo, Google Drive) wydzielona jest w osobny pakiet. Domeny stosują typowy podział na warstwy:
+Aplikacja oparta jest na architekturze modularnej, w której każda domena wydzielona jest w osobny pakiet. Domeny stosują typowy podział na warstwy:
 
-- **controller** – obsługa żądań HTTP (REST API)
-- **entity** – definicje encji (mapowanie na bazę danych)
-- **repository** – interfejsy repozytoriów (Spring Data)
-- **service** – logika biznesowa
-- **util/helpers** – klasy pomocnicze
-- **config** – konfiguracje (np. serializacja, bezpieczeństwo, integracje)
+- **controller / controllers** – obsługa żądań HTTP (REST API)
+- **entity** – encje (mapowanie na bazę danych)
+- **repository** – interfejsy repozytoriów (Spring Data JPA / MongoDB)
+- **service / services** – logika biznesowa
+- **request / response** – obiekty wejściowe i wyjściowe (DTO)
+- **util / helpers / converters** – klasy pomocnicze i konwertery
+- **config** – konfiguracje (serializacja, bezpieczeństwo, integracje)
 
-W niektórych domenach zastosowano dodatkowy podział zgodny z architekturą hexagonalną (np. food: application, domain, infrastructure, ui).
+Moduł `food` stosuje dodatkowo architekturę heksagonalną: `application` (przypadki użycia i porty), `domain` (logika domenowa), `infrastructure` (adaptery i persystencja), `ui` (warstwa REST).
 
 ---
 
-## Przegląd warstw i domen
+## Przegląd modułów
 
-### 1. `exceptions/`
-Globalna obsługa wyjątków oraz walidacji:
+### `audit/`
+Audyt historii zmian encji oparty o Hibernate Envers. Udostępnia podgląd rewizji (`controller`, `service`, `envers`, `response`).
 
-- **GlobalExceptionHandler.java** – centralny handler błędów dla aplikacji
-- **ErrorResponse.java**, **ValidationErrorResponse.java**, **FieldValidationError.java** – formatowanie odpowiedzi na błędy i walidacje
+### `common/`
+Współdzielone konfiguracje i kontrolery: `JacksonConfiguration` (serializacja JSON) oraz `RootController`.
 
-### 2. `finance/`
-Moduł do obsługi finansów:
+### `exceptions/`
+Globalna obsługa wyjątków i walidacji: `GlobalExceptionHandler` (centralny handler) oraz klasy formatujące odpowiedzi błędów (`ErrorResponse`, `ValidationErrorResponse`, `FieldValidationError`).
 
-- **controller/** – REST API finansowe
-- **entity/** – encje związane z finansami
-- **repository/** – repozytoria danych
-- **service/** – logika biznesowa
-- **util/** – klasy pomocnicze
+### `finance/`
+Śledzenie finansów oraz notowań kryptowalut (integracja z CoinMarketCap). Podział: `controller`, `entity`, `repository`, `service`, `util`.
 
-### 3. `food/`
-Obsługa funkcjonalności związanej z jedzeniem:
+### `food/`
+Najbardziej rozbudowany moduł (architektura heksagonalna): zarządzanie produktami, posiłkami, przepisami, dziennymi podsumowaniami diety i wyliczaniem makroskładników. Zawiera parsery plików z Google Drive.
 
-- **FoodModuleVariables.java** – zmienne/stałe modułu
-- **application/**, **domain/**, **infrastructure/**, **ui/** – podział DDD/hexagonalny
+### `googledrive/`
+Integracja z Google Drive (dostęp do API przez konto serwisowe) – import/eksport plików.
 
-### 4. `googledrive/`
-Integracja z Google Drive:
+### `other/`
+Zadania okresowe z podziałem na `daily` i `weekly`.
 
-- **config/** – konfiguracja dostępu do API
-- **entity/** – modele danych
-- **exceptions/** – obsługa błędów integracji
-- **service/** – logika biznesowa
-- **types/** – typy pomocnicze
+### `parser/`
+Przechowywanie i parsowanie danych o technologiach (`Technology`, `TechnologyList`).
 
-### 5. `mainappcontroller/`
-Konfiguracje globalne i bazowy kontroler:
+### `security/`
+Pełna obsługa uwierzytelniania: JWT (access + refresh token, `jwt`), logowanie przez Google (`oauth2`), kontrolery uwierzytelniania (`controllers`), konfiguracja zabezpieczeń i CORS (`config`), rate limiting prób logowania oraz weryfikacja e-mail.
 
-- **JacksonConfiguration.java** – konfiguracja serializacji/deserializacji JSON
-- **RootController.java** – główny kontroler aplikacji
+### `shopping/`
+Listy zakupów – podstawowe operacje CRUD.
 
-### 6. `other/`
-Dodatkowe funkcjonalności, np. zadania okresowe:
+### `util/`
+Wsparcie paginacji i uniwersalnych odpowiedzi REST (`ListResponse`, `Page`, `PaginationHelper`).
 
-- **daily/**, **weekly/** – grupowanie zadań dziennych/tygodniowych
+### `workouts/`
+Treningi: ćwiczenia, plany i szablony, statystyki, rekordy. Zawiera konwertery oraz obiekty `request`/`response`.
 
-### 7. `parser/`
-Moduł parsowania (np. HTML):
+---
 
-- **controller/**, **entity/**, **repository/**, **service/** – typowy podział warstwowy
-- **examle.html** – plik testowy/parsingowy
+## Bazy danych i migracje
 
-### 8. `security/`
-Bezpieczeństwo i autoryzacja:
+- **PostgreSQL** – główne dane relacyjne (JPA/Hibernate). Schemat zarządzany przez **Liquibase** – changelogi w `src/main/resources/db/changelog/` (master: `changelog.yaml`).
+- **MongoDB** – dane dokumentowe.
+- **Audyt** – tabele Enversa w schemacie `audit` (sufiks `_AUD`).
 
-- **command/**, **config/**, **controllers/**, **entity/**, **exceptions/**, **jwt/**, **repository/**, **services/** – pełna obsługa użytkowników, JWT, konfiguracja zabezpieczeń
+Skrypty inicjalizujące bazy dla środowiska kontenerowego znajdują się w katalogu `StartupScripts/` w katalogu głównym repozytorium.
 
-### 9. `shopping/`
-Moduł zakupów:
+---
 
-- **controller/**, **entity/**, **repository/** – podstawowe warstwy CRUD
+## Konfiguracja i profile
 
-### 10. `util/`
-Klasy pomocnicze:
+Konfiguracja znajduje się w `src/main/resources/`:
 
-- **ListResponse.java**, **Page.java**, **PaginationHelper.java** – wsparcie paginacji i odpowiedzi REST
+- `application.yaml` – konfiguracja wspólna (profil domyślny: `dev`)
+- `application-dev.yaml` – środowisko lokalne
+- `application-compose.yaml` – Docker Compose
+- `application-smallhost.yaml` – produkcja
 
-### 11. `workouts/`
-Moduł treningowy:
+Profil wybiera się parametrem `--spring.profiles.active=<profil>`.
 
-- **TrainingModuleVariables.java** – zmienne modułu
-- **controllers/**, **entity/**, **exceptions/**, **helpers/**, **repository/**, **services/** – pełna obsługa CRUD dla treningów
+Sekrety i dane dostępowe wstrzykiwane są przez zmienne środowiskowe. Lokalnie skopiuj
+[`.env.example`](.env.example) do `.env` i uzupełnij wartości (plik `.env` jest w `.gitignore`
+i nie może trafić do repozytorium). Pełny opis zmiennych znajduje się w
+[README głównym](../README.md#konfiguracja-i-zmienne-środowiskowe).
+
+---
+
+## Dokumentacja API
+
+Pełna, zawsze aktualna specyfikacja REST API generowana jest automatycznie przez **Springdoc OpenAPI**
+i dostępna po uruchomieniu aplikacji:
+
+- **Swagger UI:** `http://localhost:8080/swagger-ui.html`
+- **OpenAPI (JSON):** `http://localhost:8080/v3/api-docs`
+
+Endpointów nie opisujemy ręcznie w dokumentacji — Swagger UI jest jedynym źródłem prawdy,
+dzięki czemu specyfikacja nie dezaktualizuje się względem kodu.
 
 ---
 
 ## Obsługa wyjątków
 
-Obsługa błędów realizowana jest centralnie w pakiecie `exceptions/`. Dzięki temu wszystkie wyjątki, walidacje oraz niestandardowe błędy aplikacji są zwracane w sposób ustandaryzowany, zgodnie z dobrymi praktykami REST.
+Obsługa błędów realizowana jest centralnie w pakiecie `exceptions/` (`GlobalExceptionHandler`). Dzięki temu wyjątki, błędy walidacji oraz niestandardowe błędy aplikacji zwracane są w ustandaryzowanym formacie zgodnym z dobrymi praktykami REST.
 
 ---
 
-## Konfiguracje i narzędzia
+## Testy
 
-- **util/** – klasy do paginacji, uniwersalne odpowiedzi listowe, helpery
-- **mainappcontroller/** – konfiguracja serializacji JSON, główny kontroler
-- **security/config/** – ustawienia zabezpieczeń, JWT itd.
-- **googledrive/config/** – konfiguracja integracji z Google Drive
+Testy znajdują się w `src/test/java/com/improvement_app/` (moduły `food`, `workouts`, `security`). Wykorzystują JUnit, Spring Security Test, **Testcontainers** (PostgreSQL), **REST Assured** oraz **Datafaker** do generowania danych. Uruchomienie:
 
----
-
-## Podsumowanie
-
-Projekt cechuje modularność, czytelny podział na warstwy i domeny oraz centralna obsługa wyjątków i konfiguracji. Pozwala to na łatwą rozbudowę, testy i utrzymanie kodu. Dobrze oddzielone domeny i warstwy gwarantują zgodność z najlepszymi praktykami architektury aplikacji Spring Boot.
+```bash
+./mvnw test
+```
 
 ---
 
+## Budowanie i uruchamianie
+
+```bash
+# Build (z katalogu Backend/)
+./mvnw package
+
+# Uruchomienie
+java -jar target/improvement-app-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev --server.port=8080
+```
+
+**Docker:**
+```bash
+docker build -t improvement-app-backend .
+docker run -p 8080:8080 improvement-app-backend
+```
+
+Po starcie dostępne są: Swagger UI (`/swagger-ui.html`), healthcheck (`/actuator/health`) oraz metryki Prometheus (`/actuator/prometheus`).
