@@ -23,7 +23,7 @@ import {
   LocalDining as LocalDiningIcon,
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 const RevisionCard = ({ revision, onClick, isSelected }) => {
   const { dietSummaryId } = useParams();
@@ -166,7 +166,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             }}>
               <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
                 <Grid container spacing={2}>
-                  <Grid xs={3}>
+                  <Grid size={3}>
                     <MacroDisplay 
                       label="Kalorie" 
                       value={dietSummary.kcal} 
@@ -174,7 +174,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                       color="#ff9800"
                     />
                   </Grid>
-                  <Grid xs={3}>
+                  <Grid size={3}>
                     <MacroDisplay 
                       label="Białko" 
                       value={dietSummary.protein} 
@@ -182,7 +182,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                       color="#2196f3"
                     />
                   </Grid>
-                  <Grid xs={3}>
+                  <Grid size={3}>
                     <MacroDisplay 
                       label="Węgle" 
                       value={dietSummary.carbohydrates} 
@@ -190,7 +190,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                       color="#4caf50"
                     />
                   </Grid>
-                  <Grid xs={3}>
+                  <Grid size={3}>
                     <MacroDisplay 
                       label="Tłuszcze" 
                       value={dietSummary.fat} 

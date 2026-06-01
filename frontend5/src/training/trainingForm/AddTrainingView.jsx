@@ -20,7 +20,7 @@ import {
   Chip
 } from "@mui/material";
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import TrainingTypeSelector from "../component/TrainingTypeSelector";
 import { 
   Settings, 
@@ -61,7 +61,7 @@ export default function AddTrainingView() {
       <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
 
         {/* Training Template Loader */}
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{ 
             height: '100%',
             minHeight: 400, // Dodana minimalna wysokość
@@ -138,7 +138,7 @@ export default function AddTrainingView() {
         </Grid>
 
         {/* Settings Panel */}
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{ 
             height: '100%',
             minHeight: 400, // Dodana minimalna wysokość
@@ -216,7 +216,7 @@ export default function AddTrainingView() {
 
         {/* Error Display */}
         {isError && (
-          <Grid xs={12}>
+          <Grid size={12}>
             <Fade in={true}>
               <Alert 
                 severity="error" 
@@ -232,7 +232,7 @@ export default function AddTrainingView() {
         )}
 
         {/* Training Form */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Paper elevation={8} sx={{ 
             borderRadius: 4,
             overflow: 'hidden',

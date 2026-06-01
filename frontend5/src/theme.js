@@ -199,7 +199,7 @@ theme = {
         }
       }
     },
-    MuiGrid2: {
+    MuiGrid: {
       defaultProps: {
         spacing: 3,
         justifyContent: 'center',

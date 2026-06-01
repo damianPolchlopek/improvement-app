@@ -11,7 +11,7 @@ import {
   Box
 } from '@mui/material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import CenteredContainer from '../component/CenteredContainer';
 import Input from './Input';
 import { useInput } from './hooks/useInput';
@@ -222,7 +222,7 @@ export default function SignUpView() {
         
         <Grid container spacing={2}>
           {/* Nowe pola: Imię i Nazwisko obok siebie na większych ekranach */}
-          <Grid xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Input
               label="Imię"
               id="name"
@@ -234,7 +234,7 @@ export default function SignUpView() {
             />
           </Grid>
 
-          <Grid xs={12} sm={6}>
+          <Grid size={{ xs: 12, sm: 6 }}>
             <Input
               label="Nazwisko"
               id="surname"
@@ -246,7 +246,7 @@ export default function SignUpView() {
             />
           </Grid>
 
-          <Grid xs={12}>
+          <Grid size={12}>
             <Input
               label={t('signup.username')}
               id="username"
@@ -258,7 +258,7 @@ export default function SignUpView() {
             />
           </Grid>
 
-          <Grid xs={12}>
+          <Grid size={12}>
             <Input
               label={t('signup.email')}
               id="email"
@@ -271,7 +271,7 @@ export default function SignUpView() {
             />
           </Grid>
 
-          <Grid xs={12}>
+          <Grid size={12}>
             <Input
               label={t('signup.password')}
               id="password"
@@ -284,7 +284,7 @@ export default function SignUpView() {
             />
           </Grid>
 
-          <Grid xs={12}>
+          <Grid size={12}>
             <Input
               label={t('signup.confirmPassword')}
               id="confirmPassword"
@@ -297,7 +297,7 @@ export default function SignUpView() {
             />
           </Grid>
 
-          <Grid xs={12}>
+          <Grid size={12}>
             <Button 
               variant="contained" 
               fullWidth

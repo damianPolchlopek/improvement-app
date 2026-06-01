@@ -29,7 +29,7 @@ import {
   ArrowForward as ArrowForwardIcon
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 const RevisionCompare = ({ 
   dietSummaryId, 
@@ -216,7 +216,7 @@ const RevisionCompare = ({
           </Box>
 
           <Grid container spacing={3}>
-            <Grid xs={12} md={5}>
+            <Grid size={{ xs: 12, md: 5 }}>
               <VersionInfo 
                 title="Wersja starsza"
                 revision={olderRevision}
@@ -229,7 +229,7 @@ const RevisionCompare = ({
               <ArrowForwardIcon sx={{ fontSize: 40, color: '#4caf50' }} />
             </Grid>
             
-            <Grid xs={12} md={5}>
+            <Grid size={{ xs: 12, md: 5 }}>
               <VersionInfo 
                 title="Wersja nowsza"
                 revision={newerRevision}
@@ -259,7 +259,7 @@ const RevisionCompare = ({
         
         <CardContent sx={{ p: 3 }}>
           <Grid container spacing={3}>
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange 
                 label="Kalorie"
                 changeDetail={macroChanges.kcal}
@@ -267,7 +267,7 @@ const RevisionCompare = ({
                 color="#ff9800"
               />
             </Grid>
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange 
                 label="Białko"
                 changeDetail={macroChanges.protein}
@@ -275,7 +275,7 @@ const RevisionCompare = ({
                 color="#2196f3"
               />
             </Grid>
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange 
                 label="Węglowodany"
                 changeDetail={macroChanges.carbohydrates}
@@ -283,7 +283,7 @@ const RevisionCompare = ({
                 color="#4caf50"
               />
             </Grid>
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange 
                 label="Tłuszcze"
                 changeDetail={macroChanges.fat}

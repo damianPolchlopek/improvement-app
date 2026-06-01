@@ -5,7 +5,7 @@ import { queryClient } from "../../utils/REST";
 import { useTranslation } from "react-i18next";
 import { useSnackbar } from "../../component/snackbar/SnackbarProvider";
 
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid";
 import {
   Typography,
   Card,
@@ -73,7 +73,7 @@ export default function DailyForm() {
         {/* Form body */}
         <CardContent sx={{ p: 3 }}>
           <Grid container spacing={2}>
-            <Grid xs={12}>
+            <Grid size={12}>
               <FormControlLabel
                 control={<Checkbox checked={dailyFields.smoking} />}
                 name="smoking"
@@ -100,7 +100,7 @@ export default function DailyForm() {
               />
             </Grid>
 
-            <Grid xs={12}>
+            <Grid size={12}>
               <Button
                 variant="contained"
                 onClick={() => mutate()}

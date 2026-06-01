@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Divider
 } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { useInput } from './hooks/useInput';
 import Input from './Input';
 import CenteredContainer from '../component/CenteredContainer';
@@ -187,20 +187,20 @@ export default function LoginView() {
       <StyledPaper>
         <Form method="post">
           <Grid container>
-            <Grid xs={12}>
+            <Grid size={12}>
               <Typography variant="h5" component="div">
                 {t('login.loginPanel')}
               </Typography>
             </Grid>
 
             {/* Wyświetlanie błędów */}
-            <Grid xs={12}>
+            <Grid size={12}>
               {renderResendSuccess()}
               {renderResendError()}
               {renderError()}
             </Grid>
 
-            <Grid xs={12}>
+            <Grid size={12}>
               <Input
                 label={t('login.username')}
                 id="username"
@@ -213,7 +213,7 @@ export default function LoginView() {
               />
             </Grid>
 
-            <Grid xs={12}>
+            <Grid size={12}>
               <Input
                 label={t('login.password')}
                 id="password"
@@ -227,7 +227,7 @@ export default function LoginView() {
               />
             </Grid>
 
-            <Grid xs={12}>
+            <Grid size={12}>
               <Button
                 variant="contained"
                 sx={{ width: '25vh' }}
@@ -238,7 +238,7 @@ export default function LoginView() {
               </Button>
             </Grid>
 
-            <Grid xs={12}>
+            <Grid size={12}>
               <Button
                 variant="outlined"
                 sx={{

@@ -20,7 +20,7 @@ import {
   IconButton
 } from '@mui/material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import TabPanel from '../component/TabPanel';
 import SearchIcon from '@mui/icons-material/Search';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
@@ -165,7 +165,7 @@ export default function ProductView() {
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
 
         {/* Header Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={6} sx={{
             borderRadius: 3,
             background: theme.palette.card.header,
@@ -187,7 +187,7 @@ export default function ProductView() {
         </Grid>
 
         {/* Search Section */}
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{
             borderRadius: 3,
             transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
@@ -241,7 +241,7 @@ export default function ProductView() {
         </Grid>
 
         {/* Statistics Section */}
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={4} sx={{
             height: '100%',
             borderRadius: 3,
@@ -270,7 +270,7 @@ export default function ProductView() {
         </Grid>
 
         {/* Categories and Products Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
             <Box sx={{
               p: 3,

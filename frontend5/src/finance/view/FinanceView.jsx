@@ -15,7 +15,7 @@ import {
   useTheme,
 } from '@mui/material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { TrendingUp, Analytics, ShowChart } from '@mui/icons-material';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
@@ -72,7 +72,7 @@ export default function FinanceView() {
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
 
         {/* Header Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={6} sx={{
             borderRadius: 3,
             background: theme.palette.card.header,
@@ -96,7 +96,7 @@ export default function FinanceView() {
         {/* Bitcoin Statistics Cards */}
         {btcStats && (
           <>
-            <Grid xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card elevation={6} sx={{
                 height: '100%',
                 borderRadius: 3,
@@ -119,7 +119,7 @@ export default function FinanceView() {
               </Card>
             </Grid>
 
-            <Grid xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card elevation={4} sx={{
                 height: '100%',
                 borderRadius: 3,
@@ -142,7 +142,7 @@ export default function FinanceView() {
               </Card>
             </Grid>
 
-            <Grid xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Card elevation={4} sx={{
                 height: '100%',
                 borderRadius: 3,
@@ -168,7 +168,7 @@ export default function FinanceView() {
         )}
 
         {/* Main Crypto Table */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
             <Box sx={{
               p: 3,

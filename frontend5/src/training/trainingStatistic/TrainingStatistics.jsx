@@ -26,7 +26,7 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import moment from 'moment';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { useLoaderData } from 'react-router-dom';
 
 import ErrorAlert from '../../component/error/ErrorAlert';
@@ -94,7 +94,7 @@ export default function TrainingStatistic() {
     return (
       <Box sx={{ minHeight: '100vh', py: 4 }}>
         <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
-          <Grid xs={12}>
+          <Grid size={12}>
             <InformationComponent>Trainings have not been added yet!</InformationComponent>
           </Grid>
         </Grid>
@@ -107,7 +107,7 @@ export default function TrainingStatistic() {
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
         
         {/* Header Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={8} sx={{ 
             borderRadius: 4,
             background: theme.palette.card.header,
@@ -147,7 +147,7 @@ export default function TrainingStatistic() {
         </Grid>
 
         {/* Controls Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={6} sx={{ 
             borderRadius: 3,
             border: '1px solid rgba(255, 255, 255, 0.1)',
@@ -167,7 +167,7 @@ export default function TrainingStatistic() {
               <Grid container spacing={3}>
                 
                 {/* Exercise Selection */}
-                <Grid xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Card elevation={2} sx={{ 
                     borderRadius: 2,
                     border: '1px solid rgba(76, 175, 80, 0.3)',
@@ -183,7 +183,7 @@ export default function TrainingStatistic() {
                       </Box>
                       
                       <Grid container spacing={2}>
-                        <Grid xs={12}>
+                        <Grid size={12}>
                           <FormControl fullWidth>
                             {exerciseNames.length > 0 && (
                               <Autocomplete
@@ -228,7 +228,7 @@ export default function TrainingStatistic() {
                             )}
                           </FormControl>
                         </Grid>
-                        <Grid xs={12}>
+                        <Grid size={12}>
                           <FormControl fullWidth>
                             <Autocomplete
                               disableClearable
@@ -277,7 +277,7 @@ export default function TrainingStatistic() {
                 </Grid>
 
                 {/* Date Selection */}
-                <Grid xs={12} md={6}>
+                <Grid size={{ xs: 12, md: 6 }}>
                   <Card elevation={2} sx={{ 
                     borderRadius: 2,
                     border: '1px solid rgba(255, 152, 0, 0.3)',
@@ -293,7 +293,7 @@ export default function TrainingStatistic() {
                       </Box>
                       
                       <Grid container spacing={2}>
-                        <Grid xs={12}>
+                        <Grid size={12}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DesktopDatePicker
                               label={t('chart.beginDate')}
@@ -333,7 +333,7 @@ export default function TrainingStatistic() {
                             />
                           </LocalizationProvider>
                         </Grid>
-                        <Grid xs={12}>
+                        <Grid size={12}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
                             <DesktopDatePicker
                               label={t('chart.endDate')}
@@ -383,7 +383,7 @@ export default function TrainingStatistic() {
         </Grid>
 
         {/* Chart Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Fade in={true} timeout={1000}>
             <Card elevation={8} sx={{ 
               borderRadius: 4,
@@ -470,7 +470,7 @@ export default function TrainingStatistic() {
                   borderTop: theme.palette.card.border,
                 }}>
                   <Grid container spacing={2}>
-                    <Grid xs={12} sm={4}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
                       <Box textAlign="center">
                         <Typography variant="h6" fontWeight="700" color="white">
                           {selectedExerciseName}
@@ -480,7 +480,7 @@ export default function TrainingStatistic() {
                         </Typography>
                       </Box>
                     </Grid>
-                    <Grid xs={12} sm={4}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
                       <Box textAlign="center">
                         <Typography variant="h6" fontWeight="700" color="#4caf50">
                           {selectedChartType}
@@ -490,7 +490,7 @@ export default function TrainingStatistic() {
                         </Typography>
                       </Box>
                     </Grid>
-                    <Grid xs={12} sm={4}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
                       <Box textAlign="center">
                         <Typography variant="h6" fontWeight="700" color="#ff9800">
                           {exercises?.length || 0}

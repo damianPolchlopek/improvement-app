@@ -20,7 +20,7 @@ import {
   Tooltip
 } from '@mui/material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, Form, useNavigate } from "react-router-dom";
 import { useMutation } from '@tanstack/react-query';
@@ -187,7 +187,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     <Grid container spacing={2}>
                       {/* Typ ćwiczenia */}
                       {!isSimpleForm ? (
-                        <Grid xs={12} sm={6} md={3}>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                           <FormControl fullWidth variant="outlined" size="small">
                             <InputLabel>
                               <Box display="flex" alignItems="center" gap={1}>
@@ -213,7 +213,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
 
                       {/* Miejsce ćwiczenia */}
                       {!isSimpleForm ? (
-                        <Grid xs={12} sm={6} md={3}>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                           <FormControl fullWidth variant="outlined" size="small">
                             <InputLabel>
                               <Box display="flex" alignItems="center" gap={1}>
@@ -238,7 +238,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                       )}
 
                       {/* Nazwa ćwiczenia */}
-                      <Grid xs={12} md={isSimpleForm ? 12 : 6}>
+                      <Grid size={{ xs: 12, md: isSimpleForm ? 12 : 6 }}>
                         <FormControl fullWidth variant="outlined" size="small">
                           <InputLabel>
                             <Box>
@@ -260,7 +260,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                       </Grid>
 
                       {/* Powtórzenia */}
-                      <Grid xs={6} sm={3}>
+                      <Grid size={{ xs: 6, sm: 3 }}>
                         <TextField
                           fullWidth
                           label={t('exercise.reps')}
@@ -274,7 +274,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                       </Grid>
 
                       {/* Ciężar */}
-                      <Grid xs={6} sm={3}>
+                      <Grid size={{ xs: 6, sm: 3 }}>
                         <TextField
                           fullWidth
                           label={t('exercise.weight')}
@@ -291,7 +291,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                       </Grid>
 
                       {/* Postęp */}
-                      <Grid xs={12} sm={6}>
+                      <Grid size={{ xs: 12, sm: 6 }}>
                         <FormControl fullWidth variant="outlined" size="small">
                           <InputLabel>
                             <Box display="flex" alignItems="center" gap={1}>

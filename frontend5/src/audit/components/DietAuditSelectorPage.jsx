@@ -33,7 +33,7 @@ import {
   Restaurant as RestaurantIcon
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 import PageLoader from '../../component/loader/PageLoader';
 import ErrorAlert from '../../component/error/ErrorAlert';
@@ -78,7 +78,7 @@ const DietAuditSelectorPage = () => {
         
         {/* Header Section */}
         <Grid container spacing={3}>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Card elevation={8} sx={{ 
               borderRadius: 4,
               background: theme.palette.card.header,
@@ -119,7 +119,7 @@ const DietAuditSelectorPage = () => {
           </Grid>
 
           {/* Search Bar */}
-          <Grid xs={12}>
+          <Grid size={12}>
             <Card elevation={6} sx={{
               borderRadius: 3,
               background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
@@ -160,7 +160,7 @@ const DietAuditSelectorPage = () => {
           </Grid>
 
           {/* Table */}
-          <Grid xs={12}>
+          <Grid size={12}>
             <Card elevation={8} sx={{ 
               borderRadius: 4, 
               overflow: 'hidden',

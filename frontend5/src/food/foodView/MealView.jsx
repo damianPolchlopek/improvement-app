@@ -19,7 +19,7 @@ import {
   useTheme
 } from '@mui/material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { Restaurant, Search, Category, FilterList } from '@mui/icons-material';
 
 export default function MealView() {
@@ -88,7 +88,7 @@ export default function MealView() {
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
 
         {/* Header Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={6} sx={{
             borderRadius: 3,
             background: theme.palette.card.header,
@@ -110,7 +110,7 @@ export default function MealView() {
         </Grid>
 
         {/* Search Section */}
-        <Grid xs={12} md={12}>
+        <Grid size={{ xs: 12, md: 12 }}>
           <Card elevation={6} sx={{
             height: '100%',
             borderRadius: 3,
@@ -143,7 +143,7 @@ export default function MealView() {
         </Grid>
 
         {/* Filters Section */}
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{
             height: '100%',
             borderRadius: 3,
@@ -181,7 +181,7 @@ export default function MealView() {
           </Card>
         </Grid>
 
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{
             height: '100%',
             borderRadius: 3,
@@ -220,7 +220,7 @@ export default function MealView() {
         </Grid>
 
         {/* Results Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
             <CardContent sx={{ p: 3 }}>
               {isLoading ? (

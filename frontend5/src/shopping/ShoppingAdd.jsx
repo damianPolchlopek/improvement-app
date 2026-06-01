@@ -20,9 +20,7 @@ import {
   CircularProgress
 } from '@mui/material';
 
-import { ShoppingCartIcon, AddIcon } from '@mui/icons-material';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 

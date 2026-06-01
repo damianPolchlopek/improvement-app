@@ -34,7 +34,7 @@ import {
   Assessment as AssessmentIcon
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 const DietAuditPage = () => {
   const { dietSummaryId } = useParams();
@@ -121,7 +121,7 @@ const DietAuditPage = () => {
         
         {/* Header Section */}
         <Grid container spacing={3}>
-          <Grid xs={12}>
+          <Grid size={12}>
             <Card elevation={8} sx={{ 
               borderRadius: 4,
               background: theme.palette.card.header,
@@ -209,7 +209,7 @@ const DietAuditPage = () => {
           </Grid>
 
           {/* Tabs Navigation */}
-          <Grid xs={12}>
+          <Grid size={12}>
             <Card elevation={6} sx={{
               borderRadius: 3,
               background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
@@ -256,12 +256,12 @@ const DietAuditPage = () => {
           </Grid>
 
           {/* Filters */}
-          <Grid xs={12}>
+          <Grid size={12}>
             <AuditFilters filters={filters} setFilters={setFilters} />
           </Grid>
 
           {/* Content based on view mode */}
-          <Grid xs={12}>
+          <Grid size={12}>
             <Fade in={true} timeout={500}>
               <Box>
                 {viewMode === 0 && (

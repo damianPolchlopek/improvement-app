@@ -30,7 +30,7 @@ import {
   ExpandLess as ExpandLessIcon
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 const AuditFilters = ({ filters, setFilters }) => {
   const theme = useTheme();
@@ -151,7 +151,7 @@ const AuditFilters = ({ filters, setFilters }) => {
           <Grid container spacing={3}>
             
             {/* Data od */}
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <TextField
                 fullWidth
                 type="date"
@@ -209,7 +209,7 @@ const AuditFilters = ({ filters, setFilters }) => {
             </Grid>
 
             {/* Data do */}
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <TextField
                 fullWidth
                 type="date"
@@ -267,7 +267,7 @@ const AuditFilters = ({ filters, setFilters }) => {
             </Grid>
 
             {/* Typ rewizji */}
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <FormControl fullWidth>
                 <InputLabel 
                   sx={{ 
@@ -356,7 +356,7 @@ const AuditFilters = ({ filters, setFilters }) => {
             </Grid>
 
             {/* Wyszukiwanie */}
-            <Grid xs={12} sm={6} md={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <TextField
                 fullWidth
                 label="Szukaj posiłku"

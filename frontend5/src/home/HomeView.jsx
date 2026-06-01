@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import REST from '../utils/REST';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import {
@@ -78,7 +78,7 @@ function HomeView() {
             '100%': { opacity: 1, transform: 'translateY(0)' }
           }
         }}>
-          <Grid xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card elevation={6} sx={{ 
               borderRadius: 3,
               background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
@@ -132,7 +132,7 @@ function HomeView() {
             </Card>
           </Grid>
 
-          <Grid xs={12} md={6}>
+          <Grid size={{ xs: 12, md: 6 }}>
             <Card elevation={6} sx={{ 
               borderRadius: 3,
               background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',

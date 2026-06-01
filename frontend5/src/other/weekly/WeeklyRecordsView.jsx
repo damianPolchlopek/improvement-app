@@ -15,7 +15,7 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { Add as AddIcon, ListAlt } from '@mui/icons-material';
 
 import PageLoader from '../../component/loader/PageLoader';
@@ -65,7 +65,7 @@ export default function WeeklyRecordsView() {
       <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
         
         {/* Header Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={6} sx={{
             borderRadius: 3,
             background: theme.palette.card.header,
@@ -87,7 +87,7 @@ export default function WeeklyRecordsView() {
         </Grid>
 
         {/* Category Filter */}
-        <Grid xs={12}>
+        <Grid size={12}>
           <Card elevation={4} sx={{ borderRadius: 3, p: 2 }}>
             <FormControl fullWidth>
               <InputLabel>Wybierz kategorię</InputLabel>
@@ -107,7 +107,7 @@ export default function WeeklyRecordsView() {
         </Grid>
 
         {/* Statistics Cards */}
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{
             height: '100%',
             borderRadius: 3,
@@ -127,7 +127,7 @@ export default function WeeklyRecordsView() {
           </Card>
         </Grid>
 
-        <Grid xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Card elevation={6} sx={{
             height: '100%',
             borderRadius: 3,
@@ -150,7 +150,7 @@ export default function WeeklyRecordsView() {
         </Grid>
 
         {/* Table Section */}
-        <Grid xs={12}>
+        <Grid size={12}>
           {recordsLoading ? (
             <PageLoader text="Ładowanie rekordów..." />
           ) : (

@@ -25,7 +25,7 @@ import {
   TrendingDown as TrendingDownIcon
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 
 const MealChangesList = ({ changes }) => {
   const theme = useTheme();
@@ -226,7 +226,7 @@ const MealCard = ({ meal, type }) => {
 
         {/* Makroskładniki */}
         <Grid container spacing={1}>
-          <Grid xs={4}>
+          <Grid size={4}>
             <Box 
               sx={{ 
                 textAlign: 'center',
@@ -244,7 +244,7 @@ const MealCard = ({ meal, type }) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid xs={4}>
+          <Grid size={4}>
             <Box 
               sx={{ 
                 textAlign: 'center',
@@ -262,7 +262,7 @@ const MealCard = ({ meal, type }) => {
               </Typography>
             </Box>
           </Grid>
-          <Grid xs={4}>
+          <Grid size={4}>
             <Box 
               sx={{ 
                 textAlign: 'center',
