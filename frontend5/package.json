@@ -39,7 +39,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write src/**/*.{js,jsx}",
-    "format:check": "prettier --check src/**/*.{js,jsx}"
+    "format:check": "prettier --check src/**/*.{js,jsx}",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
@@ -60,6 +61,13 @@
     ]
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "prettier": "^3.8.3"
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "prettier --write"
+    ]
   }
 }

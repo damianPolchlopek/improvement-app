@@ -1,0 +1,2 @@
+#!/bin/sh
+cd frontend5 && npx lint-staged
