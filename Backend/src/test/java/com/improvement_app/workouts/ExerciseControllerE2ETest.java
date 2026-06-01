@@ -1,6 +1,7 @@
 package com.improvement_app.workouts;
 
 import com.improvement_app.security.entity.UserEntity;
+import com.improvement_app.workouts.converters.TrainingTypeConverter;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import org.junit.jupiter.api.DisplayName;
@@ -126,7 +127,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
     @DisplayName("GET /exercises/trainingType/{type}: zwraca ćwiczenia z szablonu z ostatnimi wykonaniami")
     void shouldReturnLatestExercisesPerTemplateEntry() throws Exception {
         UserEntity u = persistUser("user1");
-        persistTemplate(templateNameFor("A"), ExerciseName.POMPKI);
+        persistTemplate(TrainingTypeConverter.toTrainingTemplate("A"), ExerciseName.POMPKI);
         trainingRepository.save(training(u, LocalDate.of(2024, 1, 15),
                 exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 80.0))));
 

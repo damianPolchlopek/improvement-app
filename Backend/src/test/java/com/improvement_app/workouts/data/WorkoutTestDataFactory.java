@@ -2,8 +2,10 @@ package com.improvement_app.workouts.data;
 
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.workouts.entity.ExerciseEntity;
+import com.improvement_app.workouts.entity.ExerciseNameEntity;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;
+import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
 import com.improvement_app.workouts.entity.enums.ExercisePlace;
 import com.improvement_app.workouts.entity.enums.ExerciseProgress;
@@ -89,5 +91,32 @@ public final class WorkoutTestDataFactory {
                 "001 - 28.05.2024r. - A",
                 0
         );
+    }
+
+    /**
+     * Buduje ExerciseEntity + minimalny TrainingEntity tylko z datą (bez usera, bez nazwy).
+     * Użyteczne w UNIT testach gdzie liczy się tylko data + ćwiczenie, nie pełna integralność.
+     * Do testów E2E z DB użyj training(user, date, exercises).
+     */
+    public static ExerciseEntity datedExercise(LocalDate date, ExerciseName name, ExerciseType type,
+                                                ExerciseSetEntity... sets) {
+        ExerciseEntity ex = exercise(name, type, sets);
+        TrainingEntity shell = new TrainingEntity();
+        shell.setDate(date);
+        ex.setTraining(shell);
+        return ex;
+    }
+
+    /**
+     * Buduje TrainingTemplateEntity z transient ExerciseNameEntity dla podanych nazw.
+     * Bez persistu — do unit testów. Do testów E2E użyj AbstractWorkoutE2ETest#persistTemplate
+     * który zapisuje ExerciseNameEntity osobno (ManyToMany nie ma cascade).
+     */
+    public static TrainingTemplateEntity template(String name, ExerciseName... exercises) {
+        TrainingTemplateEntity template = new TrainingTemplateEntity(name);
+        for (ExerciseName ex : exercises) {
+            template.addExercise(new ExerciseNameEntity(ex.getValue()));
+        }
+        return template;
     }
 }

@@ -12,7 +12,6 @@ import com.improvement_app.workouts.data.WorkoutTestDataFactory;
 import com.improvement_app.workouts.entity.ExerciseNameEntity;
 import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
-import com.improvement_app.workouts.entity.enums.ExerciseType;
 import com.improvement_app.workouts.repository.ExerciseEntityRepository;
 import com.improvement_app.workouts.repository.ExerciseNameEntityRepository;
 import com.improvement_app.workouts.repository.TrainingEntityRepository;
@@ -82,7 +81,8 @@ public abstract class AbstractWorkoutE2ETest {
 
     /**
      * Seeds a training template required by /trainingType/{type} and /training/{type}/maximum.
-     * ExerciseNameEntity must be saved first — ManyToMany relacja nie ma cascade.
+     * ExerciseNameEntity musi być zapisany osobno (ManyToMany bez cascade), więc nie używamy
+     * factory.template() bezpośrednio — potrzebujemy persistowanych ExerciseNameEntity.
      */
     protected TrainingTemplateEntity persistTemplate(String name, ExerciseName... exercises) {
         TrainingTemplateEntity template = new TrainingTemplateEntity(name);
@@ -93,15 +93,4 @@ public abstract class AbstractWorkoutE2ETest {
         return templateRepository.save(template);
     }
 
-    /** Short type code → backend template name (see TrainingTypeConverter). */
-    protected String templateNameFor(String code) {
-        return switch (code) {
-            case "A" -> "Siłowy#1-A";
-            case "B" -> "Siłowy#1-B";
-            case "C" -> "Hipertroficzny#1-C";
-            case "D" -> "Hipertroficzny#1-D";
-            case "K1" -> "Kettle#1-K1";
-            default -> "Siłowy#1-A";
-        };
-    }
 }
