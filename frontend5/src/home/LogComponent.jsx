@@ -20,7 +20,7 @@ const LogComponent = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
 
-  const host_url = process.env.REACT_APP_API_URL;
+  const host_url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const client = new Client({

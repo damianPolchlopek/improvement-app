@@ -273,7 +273,7 @@ export default function LoginView() {
                   gap: 1,
                 }}
                 onClick={() =>
-                  (window.location.href = `${process.env.REACT_APP_API_URL}oauth2/authorization/google`)
+                  (window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`)
                 }
               >
                 <GoogleIcon />
