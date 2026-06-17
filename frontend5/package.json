@@ -6,15 +6,11 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^7.3.11",
-    "@mui/lab": "^9.0.0-beta.1",
     "@mui/material": "^7.3.11",
     "@mui/x-data-grid": "^7.29.13",
     "@mui/x-date-pickers": "^7.29.4",
     "@stomp/stompjs": "^7.0.1",
     "@tanstack/react-query": "^5.74.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.6",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
@@ -26,7 +22,6 @@
     "react-dom": "^19.0.0",
     "react-i18next": "^15.4.1",
     "react-router-dom": "^6.4.1",
-    "react-scripts": "^5.0.1",
     "recharts": "^2.3.2",
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
@@ -37,34 +32,29 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "react-scripts test",
+    "test": "vitest",
+    "test:run": "vitest run",
     "format": "prettier --write src/**/*.{js,jsx}",
     "format:check": "prettier --check src/**/*.{js,jsx}",
     "prepare": "husky",
     "lint": "eslint \"src/**/*.{js,jsx}\""
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
+    "jsdom": "^29.1.1",
     "lint-staged": "^17.0.7",
     "prettier": "^3.8.3",
-    "vite-plugin-checker": "^0.14.4"
+    "vite-plugin-checker": "^0.14.4",
+    "vitest": "^4.1.9"
   },
   "lint-staged": {
     "src/**/*.{js,jsx}": [
