@@ -38,7 +38,7 @@ export default function SingleTraining({ trainingName }) {
     setIsOpen((open) => !open);
   };
 
-  const handleCellClick = (row, column, value) => {
+  const handleCellClick = (row, column) => {
     if (column.key === 'date') {
       setFilter({ type: 'date', value: row.date });
     } else if (column.key === 'name') {

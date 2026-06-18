@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import ResultModal from './ResultModal.jsx';
 
@@ -12,10 +12,12 @@ function TimerChallenge({ title, targetTime }) {
 
   const timerIsActive = timeRemaining > 0 && timeRemaining < targetTime * 1000;
 
-  if (timeRemaining <= 0) {
-    clearInterval(timer.current);
-    dialog.current.open();
-  }
+  useEffect(() => {
+    if (timeRemaining <= 0) {
+      clearInterval(timer.current);
+      dialog.current.open();
+    }
+  }, [timeRemaining]);
 
   function handleReset() {
     setTimeRemaining(targetTime * 1000);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -23,22 +23,7 @@ const EmailVerification = () => {
   const [token, setToken] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Pobierz token z URL-a
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenParam = urlParams.get('token');
-
-    if (!tokenParam) {
-      setStatus('error');
-      setMessage('Brak tokenu weryfikacyjnego w URL-u');
-      return;
-    }
-
-    setToken(tokenParam);
-    verifyEmail(tokenParam);
-  }, []);
-
-  const verifyEmail = async (token) => {
+  const verifyEmail = useCallback(async (token) => {
     try {
       setStatus('loading');
 
@@ -67,7 +52,22 @@ const EmailVerification = () => {
         setMessage(`Błąd: ${error.message || 'Nieznany błąd'}`);
       }
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    // Pobierz token z URL-a
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get('token');
+
+    if (!tokenParam) {
+      setStatus('error');
+      setMessage('Brak tokenu weryfikacyjnego w URL-u');
+      return;
+    }
+
+    setToken(tokenParam);
+    verifyEmail(tokenParam);
+  }, [verifyEmail]);
 
   const handleRetry = () => {
     if (token) {

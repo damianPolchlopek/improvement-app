@@ -15,7 +15,6 @@ function HolidayPickerMain() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [availablePlaces, setAvailablePlaces] = useState([]);
   const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
-  const modalContainerRef = useRef(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -68,11 +67,7 @@ function HolidayPickerMain() {
 
   return (
     <>
-      <Modal
-        open={modalIsOpen}
-        onClose={handleStopRemovePlace}
-        container={modalContainerRef.current}
-      >
+      <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation onCancel={handleStopRemovePlace} onConfirm={handleRemovePlace} />
       </Modal>
 
