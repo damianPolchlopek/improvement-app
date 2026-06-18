@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import REST from '../utils/REST';
 
 import Grid from '@mui/material/Grid';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
 import { useTranslation } from 'react-i18next';
 import { Box, Card, CardContent, Typography, Container, useTheme } from '@mui/material';
 import { FitnessCenter, Restaurant, Home as HomeIcon } from '@mui/icons-material';
@@ -105,7 +105,7 @@ function HomeView() {
                 >
                   Inicjalizuj system treningowy do zarządzania ćwiczeniami i planami treningowymi
                 </Typography>
-                <LoadingButton
+                <Button
                   size="large"
                   onClick={handleClickTrainingModule}
                   loading={loadingTrainingModule}
@@ -130,7 +130,7 @@ function HomeView() {
                   }}
                 >
                   {t('home.initTrainingModule')}
-                </LoadingButton>
+                </Button>
               </CardContent>
             </Card>
           </Grid>
@@ -166,7 +166,7 @@ function HomeView() {
                 >
                   Inicjalizuj system żywieniowy do zarządzania dietą i kaloriami
                 </Typography>
-                <LoadingButton
+                <Button
                   variant="contained"
                   size="large"
                   onClick={handleClickFoodModule}
@@ -191,7 +191,7 @@ function HomeView() {
                   }}
                 >
                   {t('home.initFoodModule')}
-                </LoadingButton>
+                </Button>
               </CardContent>
             </Card>
           </Grid>
