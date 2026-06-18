@@ -18,11 +18,12 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import moment from 'moment';
+import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid';
 import { useLoaderData } from 'react-router-dom';
 
@@ -42,10 +43,39 @@ function formatXAxis(tickItem) {
   return moment(tickItem).format('DD-MM-YYYY');
 }
 
+const dateFieldSx = {
+  '& .MuiOutlinedInput-root': {
+    borderRadius: 2,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    color: 'white',
+    '& fieldset': {
+      borderColor: 'rgba(255, 255, 255, 0.3)',
+    },
+    '&:hover fieldset': {
+      borderColor: '#ff9800',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#ff9800',
+    },
+  },
+  '& .MuiInputLabel-root': {
+    color: 'rgba(255, 255, 255, 0.7)',
+    '&.Mui-focused': {
+      color: '#ff9800',
+    },
+  },
+  '& .MuiIconButton-root': {
+    color: 'white',
+  },
+};
+
 export default function TrainingStatistic() {
   const exerciseNames = useLoaderData() || [];
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const theme = useTheme();
+
+  // Format daty zależny od aktywnego języka (reaktywny na zmianę języka)
+  const dateFormat = i18n.language === 'pl' ? 'DD/MM/YYYY' : 'MM/DD/YYYY';
 
   const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
   const [selectedChartType, setSelectedChartType] = useState('Capacity');
@@ -79,11 +109,15 @@ export default function TrainingStatistic() {
   };
 
   const handleChangeBeginDate = (newValue) => {
-    setBeginDate(newValue.toDate());
+    if (newValue && newValue.isValid()) {
+      setBeginDate(newValue.valueOf());
+    }
   };
 
   const handleChangeEndDate = (newValue) => {
-    setEndDate(newValue.toDate());
+    if (newValue && newValue.isValid()) {
+      setEndDate(newValue.valueOf());
+    }
   };
 
   if (exercises && exercises.length === 0) {
@@ -303,81 +337,27 @@ export default function TrainingStatistic() {
                       <Grid container spacing={2}>
                         <Grid size={12}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DesktopDatePicker
+                            <DatePicker
                               label={t('chart.beginDate')}
-                              value={beginDate}
+                              value={dayjs(beginDate)}
                               onChange={handleChangeBeginDate}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  fullWidth
-                                  sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                      borderRadius: 2,
-                                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                      color: 'white',
-                                      '& fieldset': {
-                                        borderColor: 'rgba(255, 255, 255, 0.3)',
-                                      },
-                                      '&:hover fieldset': {
-                                        borderColor: '#ff9800',
-                                      },
-                                      '&.Mui-focused fieldset': {
-                                        borderColor: '#ff9800',
-                                      },
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                      color: 'rgba(255, 255, 255, 0.7)',
-                                      '&.Mui-focused': {
-                                        color: '#ff9800',
-                                      },
-                                    },
-                                    '& .MuiIconButton-root': {
-                                      color: 'white',
-                                    },
-                                  }}
-                                />
-                              )}
+                              format={dateFormat}
+                              slotProps={{
+                                textField: { fullWidth: true, sx: dateFieldSx },
+                              }}
                             />
                           </LocalizationProvider>
                         </Grid>
                         <Grid size={12}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DesktopDatePicker
+                            <DatePicker
                               label={t('chart.endDate')}
-                              value={endDate}
+                              value={dayjs(endDate)}
                               onChange={handleChangeEndDate}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  fullWidth
-                                  sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                      borderRadius: 2,
-                                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                      color: 'white',
-                                      '& fieldset': {
-                                        borderColor: 'rgba(255, 255, 255, 0.3)',
-                                      },
-                                      '&:hover fieldset': {
-                                        borderColor: '#ff9800',
-                                      },
-                                      '&.Mui-focused fieldset': {
-                                        borderColor: '#ff9800',
-                                      },
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                      color: 'rgba(255, 255, 255, 0.7)',
-                                      '&.Mui-focused': {
-                                        color: '#ff9800',
-                                      },
-                                    },
-                                    '& .MuiIconButton-root': {
-                                      color: 'white',
-                                    },
-                                  }}
-                                />
-                              )}
+                              format={dateFormat}
+                              slotProps={{
+                                textField: { fullWidth: true, sx: dateFieldSx },
+                              }}
                             />
                           </LocalizationProvider>
                         </Grid>
