@@ -1,7 +1,6 @@
 // features/diet-audit/hooks/useDietAudit.js
 
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import REST from '../../utils/REST';
 
 /**

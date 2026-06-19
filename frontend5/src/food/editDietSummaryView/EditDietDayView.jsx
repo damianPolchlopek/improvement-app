@@ -21,7 +21,7 @@ export default function EditDietDayView() {
 
   useEffect(() => {
     setSelectedMeals(mealsDietDay.meals);
-  }, [mealsDietDay]);
+  }, [mealsDietDay, setSelectedMeals]);
 
   // Mutation: edit diet summary
   const updateDietSummaryMutation = useMutation({

@@ -26,11 +26,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
   const [expanded, setExpanded] = useState(false);
 
   // Lazy loading - pobierz pełne dane dopiero gdy karta jest wybrana
-  const {
-    data: fullRevision,
-    isLoading: isLoadingDetails,
-    error: detailsError,
-  } = useRevisionDetails(
+  const { data: fullRevision, isLoading: isLoadingDetails } = useRevisionDetails(
     dietSummaryId,
     isSelected ? revision.revisionNumber : null // Pobieraj tylko gdy wybrana
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Card,
   Table,
@@ -14,10 +14,8 @@ import { TrendingUp } from '@mui/icons-material';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import WeeklyRecordTableRow from './WeeklyRecordTableRow';
-import { useTranslation } from 'react-i18next';
 
 export default function WeeklyRecordsTable({ records }) {
-  const { t } = useTranslation();
   const theme = useTheme();
 
   return (

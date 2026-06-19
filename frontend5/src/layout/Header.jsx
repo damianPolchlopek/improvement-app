@@ -14,14 +14,12 @@ import LanguageSwitcher from '../language/LanguageSwitcher';
 import HeaderDesktop from './HeaderDesktop';
 import HeaderMobile from './HeaderMobile';
 
-import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router-dom';
 
-const settings = (t) => ['Profile', 'Settings', 'Logout'];
+const settings = () => ['Profile', 'Settings', 'Logout'];
 
 function ResponsiveAppBar({ onDrawerToggle }) {
   const submit = useSubmit();
-  const { t } = useTranslation();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -70,7 +68,7 @@ function ResponsiveAppBar({ onDrawerToggle }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings(t).map((setting) => (
+              {settings().map((setting) => (
                 <MenuItem
                   key={setting}
                   onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}

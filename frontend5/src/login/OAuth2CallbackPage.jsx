@@ -21,7 +21,7 @@ export default function OAuth2CallbackPage() {
     const roles = rolesParam.split(',').filter(Boolean);
     setTokens(parseInt(accessTokenExpiresAt), parseInt(refreshTokenExpiresAt), roles);
     navigate(HomeViewUrl, { replace: true });
-  }, []);
+  }, [searchParams, navigate]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>

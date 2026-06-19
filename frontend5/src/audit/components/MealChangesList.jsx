@@ -10,7 +10,6 @@ import {
   Chip,
   IconButton,
   Collapse,
-  useTheme,
   alpha,
   Divider,
 } from '@mui/material';
@@ -28,7 +27,6 @@ import {
 import Grid from '@mui/material/Grid';
 
 const MealChangesList = ({ changes }) => {
-  const theme = useTheme();
   const [expandedMeals, setExpandedMeals] = useState(new Set());
 
   const toggleMeal = (mealId) => {

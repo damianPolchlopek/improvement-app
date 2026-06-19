@@ -168,7 +168,7 @@ export default function SignUpView() {
     try {
       await REST.resendVerificationEmail(enteredEmail);
       setSuccess('Email weryfikacyjny został wysłany ponownie.');
-    } catch (err) {
+    } catch {
       setError('Błąd podczas wysyłania emaila weryfikacyjnego.');
     }
   };

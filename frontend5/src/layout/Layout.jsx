@@ -18,70 +18,72 @@ export default function Layout() {
   const refreshTimeoutRef = useRef(null);
   const isRefreshingRef = useRef(false); // Zapobiega wielokrotnym odświeżeniom
 
-  const clearAllTimeouts = () => {
-    if (logoutTimeoutRef.current) {
-      clearTimeout(logoutTimeoutRef.current);
-      logoutTimeoutRef.current = null;
-    }
-    if (refreshTimeoutRef.current) {
-      clearTimeout(refreshTimeoutRef.current);
-      refreshTimeoutRef.current = null;
-    }
-  };
+  // Główny useEffect do zarządzania tokenami.
+  // Funkcje pomocnicze są zdefiniowane w środku, bo używa ich wyłącznie ten efekt
+  // (i rekurencyjny setTimeout). Dzięki temu zależności to stabilne [token, submit, navigate].
+  useEffect(() => {
+    const clearAllTimeouts = () => {
+      if (logoutTimeoutRef.current) {
+        clearTimeout(logoutTimeoutRef.current);
+        logoutTimeoutRef.current = null;
+      }
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+        refreshTimeoutRef.current = null;
+      }
+    };
 
-  const scheduleTokenRefresh = (currentToken) => {
-    if (!currentToken || currentToken === 'EXPIRED') return;
+    const scheduleTokenRefresh = (currentToken) => {
+      if (!currentToken || currentToken === 'EXPIRED') return;
 
-    clearAllTimeouts();
+      clearAllTimeouts();
 
-    const tokenDuration = getTokenDuration();
-    const refreshToken = getRefreshToken();
+      const tokenDuration = getTokenDuration();
+      const refreshToken = getRefreshToken();
 
-    if (tokenDuration <= 0 || !refreshToken || refreshToken === 'EXPIRED') {
-      submit(null, { action: '/logout', method: 'post' });
-      return;
-    }
-
-    // Odśwież token 5 minut przed wygaśnięciem
-    const refreshTime = Math.max(tokenDuration - 300000, 60000); // Minimum 1 minuta
-
-    console.log('Scheduling refresh in:', refreshTime, 'ms');
-
-    refreshTimeoutRef.current = setTimeout(async () => {
-      if (isRefreshingRef.current) {
-        console.log('Already refreshing, skipping...');
+      if (tokenDuration <= 0 || !refreshToken || refreshToken === 'EXPIRED') {
+        submit(null, { action: '/logout', method: 'post' });
         return;
       }
 
-      try {
-        isRefreshingRef.current = true;
-        console.log('Attempting to refresh token...');
+      // Odśwież token 5 minut przed wygaśnięciem
+      const refreshTime = Math.max(tokenDuration - 300000, 60000); // Minimum 1 minuta
 
-        const newToken = await refreshAccessToken();
-        console.log('Token refreshed successfully');
+      console.log('Scheduling refresh in:', refreshTime, 'ms');
 
-        // Aktualizuj lokalny stan zamiast przeładowywać stronę
-        setToken(newToken);
+      refreshTimeoutRef.current = setTimeout(async () => {
+        if (isRefreshingRef.current) {
+          console.log('Already refreshing, skipping...');
+          return;
+        }
 
-        // Zaplanuj następne odświeżenie
-        scheduleTokenRefresh(newToken);
-      } catch (error) {
-        console.error('Failed to refresh token:', error);
+        try {
+          isRefreshingRef.current = true;
+          console.log('Attempting to refresh token...');
+
+          const newToken = await refreshAccessToken();
+          console.log('Token refreshed successfully');
+
+          // Aktualizuj lokalny stan zamiast przeładowywać stronę
+          setToken(newToken);
+
+          // Zaplanuj następne odświeżenie
+          scheduleTokenRefresh(newToken);
+        } catch (error) {
+          console.error('Failed to refresh token:', error);
+          submit(null, { action: '/logout', method: 'post' });
+        } finally {
+          isRefreshingRef.current = false;
+        }
+      }, refreshTime);
+
+      // Ustaw timeout na wylogowanie jako backup
+      logoutTimeoutRef.current = setTimeout(() => {
+        console.log('Token expired, logging out');
         submit(null, { action: '/logout', method: 'post' });
-      } finally {
-        isRefreshingRef.current = false;
-      }
-    }, refreshTime);
+      }, tokenDuration);
+    };
 
-    // Ustaw timeout na wylogowanie jako backup
-    logoutTimeoutRef.current = setTimeout(() => {
-      console.log('Token expired, logging out');
-      submit(null, { action: '/logout', method: 'post' });
-    }, tokenDuration);
-  };
-
-  // Główny useEffect do zarządzania tokenami
-  useEffect(() => {
     if (!token) {
       navigate('/login');
       return;
@@ -99,7 +101,7 @@ export default function Layout() {
       clearAllTimeouts();
       isRefreshingRef.current = false;
     };
-  }, [token, submit]);
+  }, [token, submit, navigate]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevValue) => !prevValue);

@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
 import { queryClient } from '../../utils/REST';
 import REST from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
@@ -28,7 +27,6 @@ function formatDate(timestamp) {
 }
 
 export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
-  const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
   const [formData, setFormData] = useState({
     name: '',

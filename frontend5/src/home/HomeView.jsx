@@ -17,14 +17,14 @@ function HomeView() {
 
   function handleClickTrainingModule() {
     setLoadingTrainingModule(true);
-    REST.initTrainingModule().then((response) => {
+    REST.initTrainingModule().then(() => {
       setLoadingTrainingModule(false);
     });
   }
 
   function handleClickFoodModule() {
     setLoadingFoodModule(true);
-    REST.initFoodModule().then((response) => {
+    REST.initFoodModule().then(() => {
       setLoadingFoodModule(false);
     });
   }
