@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import REST from '../utils/REST';
 import { useTranslation } from 'react-i18next';
 import { Button, Typography, Alert, Box, CircularProgress, Divider } from '@mui/material';
@@ -51,17 +51,21 @@ export default function LoginView() {
   const [resendingEmail, setResendingEmail] = useState(false);
   const [resendSuccess, setResendSuccess] = useState(false);
   const [resendError, setResendError] = useState(null);
+  const [prevActionError, setPrevActionError] = useState(actionData?.error);
 
   // Pobieranie komunikatów resend
   const resendMessages = getResendMessages(t);
 
-  useEffect(() => {
+  // Reset komunikatów, gdy pojawi się NOWY błąd akcji
+  // (wzorzec React: adjust state during render zamiast useEffect + setState)
+  if (actionData?.error !== prevActionError) {
+    setPrevActionError(actionData?.error);
     if (actionData?.error) {
       setErrorVisible(true);
       setResendSuccess(false);
       setResendError(null);
     }
-  }, [actionData?.error]);
+  }
 
   // Funkcja do ponownego wysłania maila weryfikacyjnego
   const handleResendEmail = async () => {

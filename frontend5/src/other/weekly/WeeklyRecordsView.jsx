@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
@@ -34,14 +34,10 @@ export default function WeeklyRecordsView() {
     queryFn: () => REST.getAllCategoryWeeklyRecords(),
   });
 
-  const categories = categoriesData?.entity || [];
+  const categories = useMemo(() => categoriesData?.entity || [], [categoriesData]);
 
-  // Ustaw domyślną kategorię gdy się załadują
-  React.useEffect(() => {
-    if (categories.length > 0 && !selectedCategory) {
-      setSelectedCategory(categories[0]);
-    }
-  }, [categories, selectedCategory]);
+  // Domyślna kategoria jako wartość pochodna (bez efektu / setState)
+  const effectiveCategory = selectedCategory || categories[0] || '';
 
   const {
     data: records,
@@ -49,9 +45,9 @@ export default function WeeklyRecordsView() {
     isError,
     error,
   } = useQuery({
-    queryKey: ['weekly-records', selectedCategory],
-    queryFn: () => REST.getWeeklyListByCategory(selectedCategory),
-    enabled: !!selectedCategory,
+    queryKey: ['weekly-records', effectiveCategory],
+    queryFn: () => REST.getWeeklyListByCategory(effectiveCategory),
+    enabled: !!effectiveCategory,
     staleTime: 1000 * 60 * 5,
   });
 
@@ -99,7 +95,7 @@ export default function WeeklyRecordsView() {
             <FormControl fullWidth>
               <InputLabel>Wybierz kategorię</InputLabel>
               <Select
-                value={selectedCategory}
+                value={effectiveCategory}
                 label="Wybierz kategorię"
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >

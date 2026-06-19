@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import REST from '../../utils/REST';
 
 import {
@@ -44,7 +44,9 @@ function withStableKey(exercise, fallbackIndex) {
 
 export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(() => exercises.map(withStableKey));
+  const [prevExercises, setPrevExercises] = useState(exercises);
   const [validationError, setValidationError] = useState('');
+
   const {
     exerciseNames = [],
     exercisePlaces = [],
@@ -65,9 +67,12 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     },
   });
 
-  useEffect(() => {
+  // Resetuj pola formularza, gdy zmieni się prop `exercises`
+  // (wzorzec React: adjust state during render zamiast useEffect + setState)
+  if (exercises !== prevExercises) {
+    setPrevExercises(exercises);
     setExercisesFields(exercises.map(withStableKey));
-  }, [exercises]);
+  }
 
   function handleSubmit() {
     const invalid = exercisesFields.some((f) => !f.name || !f.reps || !f.weight);

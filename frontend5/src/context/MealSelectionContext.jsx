@@ -4,6 +4,8 @@ import { useDietCalculation } from './useDietCalculation';
 // Create the context
 const MealSelectionContext = createContext();
 
+const EMPTY_SUMMARY = { kcal: 0, protein: 0, carbohydrates: 0, fat: 0 };
+
 export function MealSelectionProvider({ children, initialSelected = [] }) {
   const [selectedMeals, setSelectedMeals] = useState(
     initialSelected.map((meal) => ({
@@ -12,33 +14,23 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     }))
   );
 
-  const [dietSummary, setDietSummary] = useState({
-    kcal: 0,
-    protein: 0,
-    carbohydrates: 0,
-    fat: 0,
-  });
+  const [dietSummary, setDietSummary] = useState(EMPTY_SUMMARY);
 
   const { calculateDiet } = useDietCalculation();
+  const { mutate: calculateDietMutate } = calculateDiet; // stabilna referencja (react-query)
 
-  // Recalculate diet when selected meals change
+  // Przelicz dietę, gdy zmienią się wybrane posiłki.
+  // Reset do zer jest wartością pochodną (poniżej), więc tu nie ma synchronicznego setState.
   useEffect(() => {
-    if (selectedMeals.length > 0) {
-      calculateDiet.mutate(selectedMeals, {
-        onSuccess: (response) => setDietSummary(response),
-      });
+    if (selectedMeals.length === 0) return;
 
-      // calculateMacro.mutate(selectedMeals);
-    } else {
-      // Reset summary if no meals selected
-      setDietSummary({
-        kcal: 0,
-        protein: 0,
-        carbohydrates: 0,
-        fat: 0,
-      });
-    }
-  }, [selectedMeals]);
+    calculateDietMutate(selectedMeals, {
+      onSuccess: (response) => setDietSummary(response),
+    });
+  }, [selectedMeals, calculateDietMutate]);
+
+  // Gdy brak posiłków, pokazujemy zera bez dodatkowego setState/renderu
+  const summary = selectedMeals.length > 0 ? dietSummary : EMPTY_SUMMARY;
 
   // Check if a meal is selected by ID
   const isMealSelected = useCallback(
@@ -107,7 +99,7 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
   const value = {
     selectedMeals,
     setSelectedMeals,
-    dietSummary,
+    dietSummary: summary,
     isMealSelected,
     toggleMealSelection,
     updateMealAmount,

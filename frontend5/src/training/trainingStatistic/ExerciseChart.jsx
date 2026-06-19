@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
@@ -44,17 +44,16 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function ExerciseChart({ exercises, beginDate, endDate }) {
-  const [dataExercise, setDataExercise] = useState([]);
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const updatedExercises = exercises.map((element) => ({
-      ...element,
-      localDate: convertLocalDateToEpoch(element.localDate),
-    }));
-
-    setDataExercise(updatedExercises);
-  }, [exercises, beginDate, endDate]);
+  const dataExercise = useMemo(
+    () =>
+      exercises.map((element) => ({
+        ...element,
+        localDate: convertLocalDateToEpoch(element.localDate),
+      })),
+    [exercises]
+  );
 
   if (dataExercise.length === 0) {
     return (

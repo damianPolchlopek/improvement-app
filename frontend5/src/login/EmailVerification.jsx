@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -18,60 +18,59 @@ import REST from '../utils/REST';
 import { LoginUrl, HomeViewUrl } from '../utils/URLHelper';
 
 const EmailVerification = () => {
-  const [status, setStatus] = useState('loading'); // loading, success, error
-  const [message, setMessage] = useState('');
-  const [token, setToken] = useState('');
+  // Token z URL czytany raz przy inicjalizacji (bez efektu / setState)
+  const [token] = useState(() => new URLSearchParams(window.location.search).get('token') || '');
+  const [status, setStatus] = useState(token ? 'loading' : 'error'); // loading, success, error
+  const [message, setMessage] = useState(token ? '' : 'Brak tokenu weryfikacyjnego w URL-u');
   const navigate = useNavigate();
 
-  const verifyEmail = useCallback(async (token) => {
-    try {
-      setStatus('loading');
-
-      const responseData = await REST.verifyEmail(token);
-
-      if (responseData) {
-        const result = responseData.message || 'Email został pomyślnie zweryfikowany!';
-        setStatus('success');
-        setMessage(result);
-      } else {
-        setStatus('error');
-        setMessage('Nie otrzymano odpowiedzi z serwera');
-      }
-    } catch (error) {
-      // Sprawdź czy to błąd axios z response
-      if (error.response) {
-        const errorMessage =
-          error.response.data?.message || `Błąd serwera: ${error.response.status}`;
-        setStatus('error');
-        setMessage(errorMessage);
-      } else if (error.request) {
-        setStatus('error');
-        setMessage('Brak odpowiedzi z serwera. Sprawdź połączenie internetowe.');
-      } else {
-        setStatus('error');
-        setMessage(`Błąd: ${error.message || 'Nieznany błąd'}`);
-      }
-    }
-  }, []);
+  // Licznik prób — bump w handleRetry ponownie uruchamia efekt weryfikacji
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    // Pobierz token z URL-a
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenParam = urlParams.get('token');
+    if (!token) return;
 
-    if (!tokenParam) {
-      setStatus('error');
-      setMessage('Brak tokenu weryfikacyjnego w URL-u');
-      return;
-    }
+    let active = true;
 
-    setToken(tokenParam);
-    verifyEmail(tokenParam);
-  }, [verifyEmail]);
+    (async () => {
+      try {
+        const responseData = await REST.verifyEmail(token);
+        if (!active) return;
+
+        if (responseData) {
+          setStatus('success');
+          setMessage(responseData.message || 'Email został pomyślnie zweryfikowany!');
+        } else {
+          setStatus('error');
+          setMessage('Nie otrzymano odpowiedzi z serwera');
+        }
+      } catch (error) {
+        if (!active) return;
+
+        // Sprawdź czy to błąd axios z response
+        if (error.response) {
+          setStatus('error');
+          setMessage(error.response.data?.message || `Błąd serwera: ${error.response.status}`);
+        } else if (error.request) {
+          setStatus('error');
+          setMessage('Brak odpowiedzi z serwera. Sprawdź połączenie internetowe.');
+        } else {
+          setStatus('error');
+          setMessage(`Błąd: ${error.message || 'Nieznany błąd'}`);
+        }
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [token, attempt]);
 
   const handleRetry = () => {
     if (token) {
-      verifyEmail(token);
+      setStatus('loading');
+      setMessage('');
+      setAttempt((prev) => prev + 1);
     }
   };
 
