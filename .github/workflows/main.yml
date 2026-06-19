@@ -70,4 +70,4 @@ jobs:
 
       - name: Upload frontend files to server
         run: |
-          scp -r frontend5/build/* mutarexx@s2.small.pl:/home/mutarexx/domains/mutarexx.smallhost.pl/public_html/
+          scp -r frontend5/dist/* mutarexx@s2.small.pl:/home/mutarexx/domains/mutarexx.smallhost.pl/public_html/
