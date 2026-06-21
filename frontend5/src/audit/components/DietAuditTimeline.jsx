@@ -1,6 +1,7 @@
 // features/diet-audit/components/DietAuditTimeline.jsx
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import RevisionCard from './RevisionCard';
 import { formatTimestamp } from '../utils/auditFormatters';
 
@@ -9,6 +10,7 @@ import { Box, Typography, Card, Divider, useTheme, Fade } from '@mui/material';
 import { Circle as CircleIcon, TrendingUp as TrendingUpIcon } from '@mui/icons-material';
 
 const DietAuditTimeline = ({ revisions, onRevisionSelect, selectedRevision }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   if (!revisions || revisions.length === 0) {
@@ -25,10 +27,10 @@ const DietAuditTimeline = ({ revisions, onRevisionSelect, selectedRevision }) =>
       >
         <TrendingUpIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
         <Typography variant="h6" color="rgba(255, 255, 255, 0.7)">
-          Brak wpisów w historii zmian
+          {t('audit.noEntries')}
         </Typography>
         <Typography variant="body2" color="rgba(255, 255, 255, 0.5)" sx={{ mt: 1 }}>
-          Nie znaleziono rewizji spełniających kryteria filtrowania
+          {t('audit.noEntriesDesc')}
         </Typography>
       </Card>
     );
@@ -239,7 +241,7 @@ const DietAuditTimeline = ({ revisions, onRevisionSelect, selectedRevision }) =>
               fontWeight: 600,
             }}
           >
-            Koniec historii
+            {t('audit.endOfHistory')}
           </Typography>
           <Divider
             sx={{

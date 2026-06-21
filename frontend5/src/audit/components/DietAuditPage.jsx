@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useDietRevisions } from '../hooks/useDietAudit';
 import { useAuditFilters } from '../hooks/useAuditFilters';
 import DietAuditTimeline from './DietAuditTimeline';
@@ -37,6 +38,7 @@ import {
 import Grid from '@mui/material/Grid';
 
 const DietAuditPage = () => {
+  const { t } = useTranslation();
   const { dietSummaryId } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -85,10 +87,10 @@ const DietAuditPage = () => {
           }}
         />
         <Typography variant="h6" color="white" fontWeight="600">
-          Ładowanie historii zmian...
+          {t('audit.loadingHistory')}
         </Typography>
         <Typography variant="body2" color="rgba(255, 255, 255, 0.7)" sx={{ mt: 1 }}>
-          Pobieranie rewizji z bazy danych
+          {t('audit.fetchingRevisions')}
         </Typography>
       </Box>
     );
@@ -111,7 +113,7 @@ const DietAuditPage = () => {
               },
             }}
           >
-            Błąd ładowania historii zmian: {error.message}
+            {t('audit.errorLoadingHistory')}: {error.message}
           </Alert>
         </Container>
       </Box>
@@ -137,7 +139,7 @@ const DietAuditPage = () => {
             >
               <CardContent sx={{ p: 4 }}>
                 {/* Back Button */}
-                <Tooltip title="Powrót do listy">
+                <Tooltip title={t('audit.backToList')}>
                   <IconButton
                     onClick={() => navigate(-1)}
                     sx={{
@@ -157,10 +159,10 @@ const DietAuditPage = () => {
                   <HistoryIcon sx={{ fontSize: 40 }} />
                   <Box>
                     <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
-                      Historia Zmian
+                      {t('audit.changeHistory')}
                     </Typography>
                     <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                      Przeglądaj wszystkie rewizje podsumowania diety
+                      {t('audit.changeHistoryDesc')}
                     </Typography>
                   </Box>
                 </Box>
@@ -176,7 +178,7 @@ const DietAuditPage = () => {
                     }}
                   />
                   <Chip
-                    label={`Rewizji: ${revisions?.length || 0}`}
+                    label={t('audit.revisionsCount', { count: revisions?.length || 0 })}
                     icon={<HistoryIcon sx={{ color: 'white !important' }} />}
                     sx={{
                       backgroundColor: 'rgba(76, 175, 80, 0.3)',
@@ -186,7 +188,7 @@ const DietAuditPage = () => {
                     }}
                   />
                   <Chip
-                    label={`Wyświetlono: ${filteredRevisions?.length || 0}`}
+                    label={t('audit.displayed', { count: filteredRevisions?.length || 0 })}
                     sx={{
                       backgroundColor: 'rgba(33, 150, 243, 0.3)',
                       color: 'white',
@@ -196,7 +198,13 @@ const DietAuditPage = () => {
                   />
                   <Chip
                     icon={<AssessmentIcon sx={{ color: 'white !important' }} />}
-                    label={viewMode === 0 ? 'Oś czasu' : viewMode === 1 ? 'Porównanie' : 'Podgląd'}
+                    label={
+                      viewMode === 0
+                        ? t('audit.timeline')
+                        : viewMode === 1
+                          ? t('audit.comparison')
+                          : t('audit.preview')
+                    }
                     sx={{
                       backgroundColor: 'rgba(255, 152, 0, 0.3)',
                       color: 'white',
@@ -245,8 +253,12 @@ const DietAuditPage = () => {
                   },
                 }}
               >
-                <Tab icon={<TimelineIcon />} iconPosition="start" label="Oś czasu" />
-                <Tab icon={<CompareIcon />} iconPosition="start" label="Porównaj wersje" />
+                <Tab icon={<TimelineIcon />} iconPosition="start" label={t('audit.timeline')} />
+                <Tab
+                  icon={<CompareIcon />}
+                  iconPosition="start"
+                  label={t('audit.compareVersions')}
+                />
               </Tabs>
             </Card>
           </Grid>

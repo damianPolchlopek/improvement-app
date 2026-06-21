@@ -1,6 +1,7 @@
 // features/diet-audit/components/AuditFilters.jsx
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Card,
@@ -33,6 +34,7 @@ import {
 import Grid from '@mui/material/Grid';
 
 const AuditFilters = ({ filters, setFilters }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const [isExpanded, setIsExpanded] = React.useState(true);
 
@@ -88,11 +90,11 @@ const AuditFilters = ({ filters, setFilters }) => {
         <Box display="flex" alignItems="center" gap={2}>
           <FilterListIcon sx={{ color: 'white', fontSize: 24 }} />
           <Typography variant="h6" fontWeight="600" color="white">
-            Filtry
+            {t('audit.filters')}
           </Typography>
           {hasActiveFilters && (
             <Chip
-              label={`${activeFiltersCount} ${activeFiltersCount === 1 ? 'aktywny' : 'aktywne'}`}
+              label={t('audit.activeFilters', { count: activeFiltersCount })}
               size="small"
               sx={{
                 backgroundColor: 'rgba(76, 175, 80, 0.3)',
@@ -107,7 +109,7 @@ const AuditFilters = ({ filters, setFilters }) => {
 
         <Box display="flex" alignItems="center" gap={1}>
           {hasActiveFilters && (
-            <Tooltip title="Wyczyść wszystkie filtry">
+            <Tooltip title={t('audit.clearAll')}>
               <Button
                 variant="outlined"
                 size="small"
@@ -128,7 +130,7 @@ const AuditFilters = ({ filters, setFilters }) => {
                   },
                 }}
               >
-                Wyczyść
+                {t('audit.clear')}
               </Button>
             </Tooltip>
           )}
@@ -155,7 +157,7 @@ const AuditFilters = ({ filters, setFilters }) => {
               <TextField
                 fullWidth
                 type="date"
-                label="Data od"
+                label={t('audit.dateFrom')}
                 value={filters.dateFrom || ''}
                 onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
                 InputLabelProps={{
@@ -213,7 +215,7 @@ const AuditFilters = ({ filters, setFilters }) => {
               <TextField
                 fullWidth
                 type="date"
-                label="Data do"
+                label={t('audit.dateTo')}
                 value={filters.dateTo || ''}
                 onChange={(e) => handleFilterChange('dateTo', e.target.value)}
                 InputLabelProps={{
@@ -277,12 +279,12 @@ const AuditFilters = ({ filters, setFilters }) => {
                     },
                   }}
                 >
-                  Typ zmiany
+                  {t('audit.changeType')}
                 </InputLabel>
                 <Select
                   value={filters.revisionType}
                   onChange={(e) => handleFilterChange('revisionType', e.target.value)}
-                  label="Typ zmiany"
+                  label={t('audit.changeType')}
                   startAdornment={
                     <InputAdornment position="start">
                       <CategoryIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
@@ -330,25 +332,25 @@ const AuditFilters = ({ filters, setFilters }) => {
                 >
                   <MenuItem value="ALL">
                     <Box display="flex" alignItems="center" gap={1}>
-                      <Typography>Wszystkie</Typography>
+                      <Typography>{t('audit.all')}</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="ADD">
                     <Box display="flex" alignItems="center" gap={1}>
                       <span style={{ fontSize: '1.2rem' }}>➕</span>
-                      <Typography>Dodano</Typography>
+                      <Typography>{t('audit.added')}</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="MOD">
                     <Box display="flex" alignItems="center" gap={1}>
                       <span style={{ fontSize: '1.2rem' }}>✏️</span>
-                      <Typography>Zmodyfikowano</Typography>
+                      <Typography>{t('audit.modified')}</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="DEL">
                     <Box display="flex" alignItems="center" gap={1}>
                       <span style={{ fontSize: '1.2rem' }}>🗑️</span>
-                      <Typography>Usunięto</Typography>
+                      <Typography>{t('audit.removed')}</Typography>
                     </Box>
                   </MenuItem>
                 </Select>
@@ -359,8 +361,8 @@ const AuditFilters = ({ filters, setFilters }) => {
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <TextField
                 fullWidth
-                label="Szukaj posiłku"
-                placeholder="Nazwa posiłku..."
+                label={t('audit.searchMealLabel')}
+                placeholder={t('audit.mealNamePlaceholder')}
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
                 InputProps={{
@@ -428,13 +430,13 @@ const AuditFilters = ({ filters, setFilters }) => {
                   fontWeight: 600,
                 }}
               >
-                Aktywne filtry:
+                {t('audit.activeFiltersLabel')}
               </Typography>
 
               <Box display="flex" flexWrap="wrap" gap={1}>
                 {filters.dateFrom && (
                   <Chip
-                    label={`Od: ${filters.dateFrom}`}
+                    label={t('audit.fromLabel', { date: filters.dateFrom })}
                     onDelete={() => handleFilterChange('dateFrom', null)}
                     size="small"
                     icon={<CalendarIcon />}
@@ -454,7 +456,7 @@ const AuditFilters = ({ filters, setFilters }) => {
 
                 {filters.dateTo && (
                   <Chip
-                    label={`Do: ${filters.dateTo}`}
+                    label={t('audit.toLabel', { date: filters.dateTo })}
                     onDelete={() => handleFilterChange('dateTo', null)}
                     size="small"
                     icon={<CalendarIcon />}
@@ -474,7 +476,11 @@ const AuditFilters = ({ filters, setFilters }) => {
 
                 {filters.revisionType !== 'ALL' && (
                   <Chip
-                    label={`Typ: ${filters.revisionType === 'ADD' ? 'Dodano' : filters.revisionType === 'MOD' ? 'Zmodyfikowano' : 'Usunięto'}`}
+                    label={t('audit.typeChip', {
+                      type: t(
+                        `audit.${filters.revisionType === 'ADD' ? 'added' : filters.revisionType === 'MOD' ? 'modified' : 'removed'}`
+                      ),
+                    })}
                     onDelete={() => handleFilterChange('revisionType', 'ALL')}
                     size="small"
                     icon={<CategoryIcon />}
@@ -494,7 +500,7 @@ const AuditFilters = ({ filters, setFilters }) => {
 
                 {filters.searchTerm && (
                   <Chip
-                    label={`Szukaj: "${filters.searchTerm}"`}
+                    label={t('audit.searchChip', { term: filters.searchTerm })}
                     onDelete={() => handleFilterChange('searchTerm', '')}
                     size="small"
                     icon={<SearchIcon />}

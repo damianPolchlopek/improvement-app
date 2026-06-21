@@ -1,6 +1,7 @@
 // features/diet-audit/components/RevisionCompare.jsx
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useRevisionComparison } from '../hooks/useDietAudit';
 import { useParams } from 'react-router-dom';
 import { formatMacroChange, getMacroChangeColor } from '../utils/auditFormatters';
@@ -37,6 +38,7 @@ const RevisionCompare = ({
   onRevisionSelect,
   availableRevisions,
 }) => {
+  const { t } = useTranslation();
   const theme = useTheme();
   const { dietSummaryId: paramDietSummaryId } = useParams();
   const actualDietSummaryId = dietSummaryId || paramDietSummaryId;
@@ -66,10 +68,10 @@ const RevisionCompare = ({
           <Box textAlign="center" mb={4}>
             <CompareArrowsIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
             <Typography variant="h5" fontWeight="600" color="white" mb={1}>
-              Wybierz dwie wersje do porównania
+              {t('audit.selectTwo')}
             </Typography>
             <Typography variant="body1" color="rgba(255, 255, 255, 0.7)">
-              Wybrano: {selectedRevisions.length}/2 wersji
+              {t('audit.selectedCount', { count: selectedRevisions.length })}
             </Typography>
 
             {selectedRevisions.length === 1 && (
@@ -85,7 +87,7 @@ const RevisionCompare = ({
                   },
                 }}
               >
-                Wybierz drugą wersję do porównania
+                {t('audit.selectSecond')}
               </Alert>
             )}
           </Box>
@@ -129,7 +131,7 @@ const RevisionCompare = ({
                         </Typography>
                         {isSelected && (
                           <Chip
-                            label={selectionOrder === 0 ? 'Starsza' : 'Nowsza'}
+                            label={selectionOrder === 0 ? t('audit.older') : t('audit.newer')}
                             size="small"
                             icon={<CheckIcon />}
                             sx={{
@@ -169,7 +171,7 @@ const RevisionCompare = ({
       >
         <CircularProgress size={60} sx={{ mb: 3, color: '#4caf50' }} />
         <Typography variant="h6" color="white" fontWeight="600">
-          Ładowanie danych do porównania...
+          {t('audit.loadingComparison')}
         </Typography>
       </Card>
     );
@@ -177,7 +179,7 @@ const RevisionCompare = ({
 
   // Error state
   if (isError || !comparisonData) {
-    return <Alert severity="error">Nie udało się załadować porównania rewizji</Alert>;
+    return <Alert severity="error">{t('audit.comparisonError')}</Alert>;
   }
 
   const { olderRevision, newerRevision, macroChanges, mealsAdded, mealsRemoved, mealsModified } =
@@ -200,7 +202,7 @@ const RevisionCompare = ({
             <Box display="flex" alignItems="center" gap={2}>
               <CompareArrowsIcon sx={{ fontSize: 32, color: 'white' }} />
               <Typography variant="h4" fontWeight="700" color="white">
-                Porównanie wersji
+                {t('audit.versionComparison')}
               </Typography>
             </Box>
 
@@ -216,14 +218,14 @@ const RevisionCompare = ({
                 },
               }}
             >
-              Wybierz inne wersje
+              {t('audit.selectOther')}
             </Button>
           </Box>
 
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, md: 5 }}>
               <VersionInfo
-                title="Wersja starsza"
+                title={t('audit.olderVersion')}
                 revision={olderRevision}
                 color="rgba(255, 152, 0, 0.3)"
                 borderColor="rgba(255, 152, 0, 0.5)"
@@ -236,7 +238,7 @@ const RevisionCompare = ({
 
             <Grid size={{ xs: 12, md: 5 }}>
               <VersionInfo
-                title="Wersja nowsza"
+                title={t('audit.newerVersion')}
                 revision={newerRevision}
                 color="rgba(76, 175, 80, 0.3)"
                 borderColor="rgba(76, 175, 80, 0.5)"
@@ -263,7 +265,7 @@ const RevisionCompare = ({
           }}
         >
           <Typography variant="h6" fontWeight="600" color="white">
-            Zmiany w makroskładnikach
+            {t('audit.macroChanges')}
           </Typography>
         </Box>
 
@@ -271,7 +273,7 @@ const RevisionCompare = ({
           <Grid container spacing={3}>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange
-                label="Kalorie"
+                label={t('audit.calories')}
                 changeDetail={macroChanges.kcal}
                 unit="kcal"
                 color="#ff9800"
@@ -279,7 +281,7 @@ const RevisionCompare = ({
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange
-                label="Białko"
+                label={t('food.protein')}
                 changeDetail={macroChanges.protein}
                 unit="g"
                 color="#2196f3"
@@ -287,7 +289,7 @@ const RevisionCompare = ({
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange
-                label="Węglowodany"
+                label={t('audit.carbohydrates')}
                 changeDetail={macroChanges.carbohydrates}
                 unit="g"
                 color="#4caf50"
@@ -295,7 +297,7 @@ const RevisionCompare = ({
             </Grid>
             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <MacroChange
-                label="Tłuszcze"
+                label={t('food.fat')}
                 changeDetail={macroChanges.fat}
                 unit="g"
                 color="#fdd835"
@@ -318,63 +320,66 @@ const RevisionCompare = ({
 };
 
 // Helper Components
-const VersionInfo = ({ title, revision, color, borderColor }) => (
-  <Card
-    elevation={4}
-    sx={{
-      borderRadius: 2,
-      background: color,
-      border: `2px solid ${borderColor}`,
-      height: '100%',
-    }}
-  >
-    <CardContent sx={{ p: 3 }}>
-      <Typography variant="h6" fontWeight="600" color="white" mb={2}>
-        {title}
-      </Typography>
+const VersionInfo = ({ title, revision, color, borderColor }) => {
+  const { t } = useTranslation();
+  return (
+    <Card
+      elevation={4}
+      sx={{
+        borderRadius: 2,
+        background: color,
+        border: `2px solid ${borderColor}`,
+        height: '100%',
+      }}
+    >
+      <CardContent sx={{ p: 3 }}>
+        <Typography variant="h6" fontWeight="600" color="white" mb={2}>
+          {title}
+        </Typography>
 
-      <Box display="flex" flexDirection="column" gap={1}>
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
-            Rewizja:
-          </Typography>
-          <Typography variant="body2" fontWeight="600" color="white">
-            #{revision.revisionNumber}
-          </Typography>
+        <Box display="flex" flexDirection="column" gap={1}>
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+              {t('audit.revision')}:
+            </Typography>
+            <Typography variant="body2" fontWeight="600" color="white">
+              #{revision.revisionNumber}
+            </Typography>
+          </Box>
+
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+              {t('audit.date')}:
+            </Typography>
+            <Typography variant="body2" fontWeight="600" color="white">
+              {new Date(revision.revisionTimestamp).toLocaleDateString('pl-PL')}
+            </Typography>
+          </Box>
+
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+              {t('audit.time')}:
+            </Typography>
+            <Typography variant="body2" fontWeight="600" color="white">
+              {new Date(revision.revisionTimestamp).toLocaleTimeString('pl-PL')}
+            </Typography>
+          </Box>
+
+          <Divider sx={{ my: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
+
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+              {t('audit.calories')}:
+            </Typography>
+            <Typography variant="body2" fontWeight="600" color="white">
+              {revision.dietSummary.kcal.toFixed(1)} kcal
+            </Typography>
+          </Box>
         </Box>
-
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
-            Data:
-          </Typography>
-          <Typography variant="body2" fontWeight="600" color="white">
-            {new Date(revision.revisionTimestamp).toLocaleDateString('pl-PL')}
-          </Typography>
-        </Box>
-
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
-            Godzina:
-          </Typography>
-          <Typography variant="body2" fontWeight="600" color="white">
-            {new Date(revision.revisionTimestamp).toLocaleTimeString('pl-PL')}
-          </Typography>
-        </Box>
-
-        <Divider sx={{ my: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
-
-        <Box display="flex" justifyContent="space-between">
-          <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
-            Kalorie:
-          </Typography>
-          <Typography variant="body2" fontWeight="600" color="white">
-            {revision.dietSummary.kcal.toFixed(1)} kcal
-          </Typography>
-        </Box>
-      </Box>
-    </CardContent>
-  </Card>
-);
+      </CardContent>
+    </Card>
+  );
+};
 
 const MacroChange = ({ label, changeDetail, unit, color }) => {
   const { oldValue, newValue, diff, percentChange } = changeDetail;

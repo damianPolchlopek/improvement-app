@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useDietSummaries } from '../hooks/useDietSummaries';
 
 import {
@@ -39,6 +40,7 @@ import PageLoader from '../../component/loader/PageLoader';
 import ErrorAlert from '../../component/error/ErrorAlert';
 
 const DietAuditSelectorPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const theme = useTheme();
   const [page, setPage] = useState(0);
@@ -61,7 +63,7 @@ const DietAuditSelectorPage = () => {
   };
 
   if (isLoading) {
-    return <PageLoader text="Ładowanie podsumowań diet..." />;
+    return <PageLoader text={t('audit.loadingSummaries')} />;
   }
 
   if (isError) {
@@ -94,10 +96,10 @@ const DietAuditSelectorPage = () => {
                   <HistoryIcon sx={{ fontSize: 40 }} />
                   <Box>
                     <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
-                      Audyt Podsumowań Diet
+                      {t('audit.title')}
                     </Typography>
                     <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                      Wybierz podsumowanie diety, aby przejrzeć historię zmian
+                      {t('audit.titleDesc')}
                     </Typography>
                   </Box>
                 </Box>
@@ -106,13 +108,13 @@ const DietAuditSelectorPage = () => {
                   <Box display="flex" alignItems="center" gap={1}>
                     <RestaurantIcon sx={{ fontSize: 20 }} />
                     <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                      {data?.totalElements || 0} podsumowań
+                      {t('audit.summariesCount', { count: data?.totalElements || 0 })}
                     </Typography>
                   </Box>
                   <Box display="flex" alignItems="center" gap={1}>
                     <VisibilityIcon sx={{ fontSize: 20 }} />
                     <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                      Historia zmian dostępna dla każdego wpisu
+                      {t('audit.historyAvailable')}
                     </Typography>
                   </Box>
                 </Box>
@@ -133,7 +135,7 @@ const DietAuditSelectorPage = () => {
               <CardContent sx={{ p: 3 }}>
                 <TextField
                   fullWidth
-                  placeholder="Szukaj po dacie (np. 2024-01-27)..."
+                  placeholder={t('audit.searchByDate')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   InputProps={{
@@ -184,7 +186,7 @@ const DietAuditSelectorPage = () => {
                 }}
               >
                 <Typography variant="h5" fontWeight="600" color="white">
-                  Lista Podsumowań Diet
+                  {t('audit.summariesList')}
                 </Typography>
               </Box>
 
@@ -203,13 +205,13 @@ const DietAuditSelectorPage = () => {
                       }}
                     >
                       <TableCell>ID</TableCell>
-                      <TableCell>Data</TableCell>
-                      <TableCell align="right">Kalorie</TableCell>
-                      <TableCell align="right">Białko</TableCell>
-                      <TableCell align="right">Węgle</TableCell>
-                      <TableCell align="right">Tłuszcze</TableCell>
-                      <TableCell align="center">Posiłki</TableCell>
-                      <TableCell align="center">Akcje</TableCell>
+                      <TableCell>{t('audit.date')}</TableCell>
+                      <TableCell align="right">{t('audit.calories')}</TableCell>
+                      <TableCell align="right">{t('food.protein')}</TableCell>
+                      <TableCell align="right">{t('food.carbs')}</TableCell>
+                      <TableCell align="right">{t('food.fat')}</TableCell>
+                      <TableCell align="center">{t('audit.meals')}</TableCell>
+                      <TableCell align="center">{t('food.actions')}</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -279,7 +281,7 @@ const DietAuditSelectorPage = () => {
                             />
                           </TableCell>
                           <TableCell align="center">
-                            <Tooltip title="Zobacz historię zmian">
+                            <Tooltip title={t('audit.viewHistory')}>
                               <IconButton
                                 onClick={() => handleViewAudit(dietSummary.id)}
                                 sx={{
@@ -299,7 +301,7 @@ const DietAuditSelectorPage = () => {
                       <TableRow>
                         <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
                           <Typography variant="h6" color="rgba(255, 255, 255, 0.5)">
-                            Brak wyników
+                            {t('audit.noResults')}
                           </Typography>
                         </TableCell>
                       </TableRow>
