@@ -79,11 +79,11 @@ export default function WeeklyRecordsView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <ListAlt sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Tygodniowe Zapisy
+                  {t('weekly.title')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Zarządzaj swoimi tygodniowymi rekordami
+                {t('weekly.subtitle')}
               </Typography>
             </CardContent>
           </Card>
@@ -93,10 +93,10 @@ export default function WeeklyRecordsView() {
         <Grid size={12}>
           <Card elevation={4} sx={{ borderRadius: 3, p: 2 }}>
             <FormControl fullWidth>
-              <InputLabel>Wybierz kategorię</InputLabel>
+              <InputLabel>{t('weekly.selectCategory')}</InputLabel>
               <Select
                 value={effectiveCategory}
-                label="Wybierz kategorię"
+                label={t('weekly.selectCategory')}
                 onChange={(e) => setSelectedCategory(e.target.value)}
               >
                 {categories.map((category) => (
@@ -124,7 +124,7 @@ export default function WeeklyRecordsView() {
           >
             <CardContent sx={{ p: 3 }}>
               <Typography variant="h6" fontWeight="600" mb={2}>
-                Rekordy w kategorii
+                {t('weekly.recordsInCategory')}
               </Typography>
               <Typography variant="h3" fontWeight="700" color="primary">
                 {recordsLoading ? '...' : recordsList.length}
@@ -151,7 +151,7 @@ export default function WeeklyRecordsView() {
               <Typography variant="h3" fontWeight="700">
                 {categories.length}
               </Typography>
-              <Typography variant="body1">Dostępnych kategorii</Typography>
+              <Typography variant="body1">{t('weekly.availableCategories')}</Typography>
             </Box>
           </Card>
         </Grid>
@@ -159,7 +159,7 @@ export default function WeeklyRecordsView() {
         {/* Table Section */}
         <Grid size={12}>
           {recordsLoading ? (
-            <PageLoader text="Ładowanie rekordów..." />
+            <PageLoader text={t('weekly.loadingRecords')} />
           ) : (
             <WeeklyRecordsTable records={recordsList} />
           )}

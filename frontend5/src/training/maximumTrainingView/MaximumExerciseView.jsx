@@ -72,11 +72,11 @@ export default function MaximumExerciseView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <BarChart sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Maksymalne Wyniki
+                  {t('training.maxResults')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Sprawdź swoje najlepsze osiągnięcia w ćwiczeniach
+                {t('training.maxResultsDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -99,7 +99,7 @@ export default function MaximumExerciseView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Typ Treningu
+                  {t('training.type')}
                 </Typography>
               </Box>
               <FormControl fullWidth>
@@ -129,7 +129,7 @@ export default function MaximumExerciseView() {
               <Typography variant="h3" fontWeight="700">
                 {data?.content?.length || 0}
               </Typography>
-              <Typography variant="body1">Liczba zapisanych rekordów maksymalnych</Typography>
+              <Typography variant="body1">{t('training.maxRecordsCount')}</Typography>
             </Box>
           </Card>
         </Grid>
@@ -148,7 +148,7 @@ export default function MaximumExerciseView() {
             >
               <TrendingUp sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
-                Najlepsze Wyniki - Typ {trainingType}
+                {t('training.bestResultsForType', { type: trainingType })}
               </Typography>
             </Box>
 
@@ -158,8 +158,8 @@ export default function MaximumExerciseView() {
               isError={isError}
               error={error}
               columns={maximumExerciseColumns}
-              loadingMessage="Ładowanie maksymalnych wyników..."
-              emptyMessage="Brak rekordów maksymalnych"
+              loadingMessage={t('training.loadingMaxResults')}
+              emptyMessage={t('training.noMaxRecords')}
             />
           </Card>
         </Grid>

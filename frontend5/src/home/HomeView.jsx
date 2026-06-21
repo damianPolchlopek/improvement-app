@@ -50,10 +50,10 @@ function HomeView() {
               <HomeIcon sx={{ fontSize: 40, color: '#4caf50' }} />
               <Box>
                 <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
-                  Panel Główny
+                  {t('home.title')}
                 </Typography>
                 <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                  Zarządzaj modułami aplikacji
+                  {t('home.subtitle')}
                 </Typography>
               </Box>
             </Box>
@@ -95,7 +95,7 @@ function HomeView() {
                 <Box display="flex" alignItems="center" gap={2} mb={3}>
                   <FitnessCenter sx={{ fontSize: 32, color: '#4caf50' }} />
                   <Typography variant="h5" fontWeight="600" color="white">
-                    Moduł Treningowy
+                    {t('home.trainingModule')}
                   </Typography>
                 </Box>
                 <Typography
@@ -103,7 +103,7 @@ function HomeView() {
                   color="rgba(255, 255, 255, 0.8)"
                   sx={{ mb: 3, flexGrow: 1 }}
                 >
-                  Inicjalizuj system treningowy do zarządzania ćwiczeniami i planami treningowymi
+                  {t('home.trainingModuleDesc')}
                 </Typography>
                 <Button
                   size="large"
@@ -156,7 +156,7 @@ function HomeView() {
                 <Box display="flex" alignItems="center" gap={2} mb={3}>
                   <Restaurant sx={{ fontSize: 32, color: '#ff9800' }} />
                   <Typography variant="h5" fontWeight="600" color="white">
-                    Moduł Żywieniowy
+                    {t('home.foodModule')}
                   </Typography>
                 </Box>
                 <Typography
@@ -164,7 +164,7 @@ function HomeView() {
                   color="rgba(255, 255, 255, 0.8)"
                   sx={{ mb: 3, flexGrow: 1 }}
                 >
-                  Inicjalizuj system żywieniowy do zarządzania dietą i kaloriami
+                  {t('home.foodModuleDesc')}
                 </Typography>
                 <Button
                   variant="contained"

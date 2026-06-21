@@ -15,11 +15,18 @@ import HeaderDesktop from './HeaderDesktop';
 import HeaderMobile from './HeaderMobile';
 
 import { useSubmit } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const settings = () => ['Profile', 'Settings', 'Logout'];
+// Stabilny `key` steruje logiką (logout), `label` jest tłumaczony
+const settings = (t) => [
+  { key: 'profile', label: t('header.profile') },
+  { key: 'settings', label: t('menu.settings') },
+  { key: 'logout', label: t('header.logout') },
+];
 
 function ResponsiveAppBar({ onDrawerToggle }) {
   const submit = useSubmit();
+  const { t } = useTranslation();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleOpenUserMenu = (event) => {
@@ -46,7 +53,7 @@ function ResponsiveAppBar({ onDrawerToggle }) {
           <LanguageSwitcher />
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title={t('header.openSettings')}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="D" src="/static/images/avatar/2.jpg" />
               </IconButton>
@@ -68,12 +75,9 @@ function ResponsiveAppBar({ onDrawerToggle }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings().map((setting) => (
-                <MenuItem
-                  key={setting}
-                  onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}
-                >
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+              {settings(t).map(({ key, label }) => (
+                <MenuItem key={key} onClick={key === 'logout' ? handleLogout : handleCloseUserMenu}>
+                  <Typography sx={{ textAlign: 'center' }}>{label}</Typography>
                 </MenuItem>
               ))}
             </Menu>

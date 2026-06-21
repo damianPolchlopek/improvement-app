@@ -67,7 +67,7 @@ export default function ExerciseView() {
       <Box sx={{ minHeight: '100vh', py: 4 }}>
         <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
           <Grid size={12}>
-            <InformationComponent>Trainings have not been added yet!</InformationComponent>
+            <InformationComponent>{t('training.noTrainings')}</InformationComponent>
           </Grid>
         </Grid>
       </Box>
@@ -80,11 +80,11 @@ export default function ExerciseView() {
     const columns = [
       {
         key: 'date',
-        label: 'Data',
+        label: t('training.date'),
         accessor: 'date',
         render: (value) => (
           <Typography variant="body1" fontWeight="500">
-            {value || 'Brak danych'}
+            {value || t('training.noData')}
           </Typography>
         ),
       },
@@ -136,11 +136,11 @@ export default function ExerciseView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <TrendingUp sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Historia Treningów
+                  {t('training.history')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Przeglądaj historię swoich treningów i śledź postępy
+                {t('training.historyDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -163,7 +163,7 @@ export default function ExerciseView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Typ Treningu
+                  {t('training.type')}
                 </Typography>
               </Box>
 
@@ -191,7 +191,7 @@ export default function ExerciseView() {
                   <Typography variant="h3" fontWeight="700">
                     {trainingData?.totalElements || 0}
                   </Typography>
-                  <Typography variant="body1">Łączna liczba treningów</Typography>
+                  <Typography variant="body1">{t('training.totalTrainings')}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -209,7 +209,7 @@ export default function ExerciseView() {
                   <Typography variant="h3" fontWeight="700">
                     {templateData?.exercises?.length || 0}
                   </Typography>
-                  <Typography variant="body1">Liczba ćwiczeń</Typography>
+                  <Typography variant="body1">{t('training.exerciseCount')}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -231,7 +231,7 @@ export default function ExerciseView() {
             >
               <ViewList sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
-                Historia Treningów - Typ {selectedTrainingType}
+                {t('training.historyForType', { type: selectedTrainingType })}
               </Typography>
             </Box>
 
@@ -241,8 +241,8 @@ export default function ExerciseView() {
               isError={isError}
               error={trainingError || templateError}
               columns={trainingColumns}
-              loadingMessage="Ładowanie historii treningów..."
-              emptyMessage="Brak treningów do wyświetlenia"
+              loadingMessage={t('training.loadingHistory')}
+              emptyMessage={t('training.noTrainingsToShow')}
             />
 
             {/* Paginacja */}

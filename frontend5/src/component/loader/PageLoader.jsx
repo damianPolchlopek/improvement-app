@@ -1,6 +1,8 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
-export default function PageLoader({ text = 'Ładowanie...' }) {
+export default function PageLoader({ text }) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -20,7 +22,7 @@ export default function PageLoader({ text = 'Ładowanie...' }) {
         }}
       />
       <Typography variant="h6" color="white" fontWeight="600">
-        {text}
+        {text || t('messages.loading')}
       </Typography>
     </Box>
   );

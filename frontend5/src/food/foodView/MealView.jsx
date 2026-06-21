@@ -80,7 +80,7 @@ export default function MealView() {
         <Card elevation={6} sx={{ borderRadius: 3, p: 3, maxWidth: 600 }}>
           <CardContent sx={{ textAlign: 'center' }}>
             <Typography variant="h6" color="error">
-              Error: {error?.message || 'Unknown error'}
+              {t('food.error')}: {error?.message || t('food.unknownError')}
             </Typography>
           </CardContent>
         </Card>
@@ -106,11 +106,11 @@ export default function MealView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Restaurant sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Przeglądaj Posiłki
+                  {t('food.browseMeals')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Znajdź idealne posiłki dopasowane do Twoich potrzeb
+                {t('food.browseMealsDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -133,7 +133,7 @@ export default function MealView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Search sx={{ color: '#2196f3', fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Wyszukaj Posiłek
+                  {t('food.searchMeal')}
                 </Typography>
               </Box>
               <TextField
@@ -169,7 +169,7 @@ export default function MealView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Category sx={{ color: '#ff9800', fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Kategoria Posiłku
+                  {t('food.mealCategory')}
                 </Typography>
               </Box>
               {mealCategoryList.length > 0 && (
@@ -212,7 +212,7 @@ export default function MealView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <FilterList sx={{ color: '#9c27b0', fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Typ Posiłku
+                  {t('food.mealType')}
                 </Typography>
               </Box>
               {mealTypeList.length > 0 && (

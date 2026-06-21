@@ -1,6 +1,7 @@
 // features/diet-audit/components/MealChangesList.jsx
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   Box,
@@ -27,6 +28,7 @@ import {
 import Grid from '@mui/material/Grid';
 
 const MealChangesList = ({ changes }) => {
+  const { t } = useTranslation();
   const [expandedMeals, setExpandedMeals] = useState(new Set());
 
   const toggleMeal = (mealId) => {
@@ -60,10 +62,10 @@ const MealChangesList = ({ changes }) => {
       >
         <RestaurantIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
         <Typography variant="h6" color="rgba(255, 255, 255, 0.7)">
-          Brak zmian w posiłkach
+          {t('audit.noMealChanges')}
         </Typography>
         <Typography variant="body2" color="rgba(255, 255, 255, 0.5)" sx={{ mt: 1 }}>
-          Między tymi wersjami nie dokonano zmian w składzie posiłków
+          {t('audit.noMealChangesDesc')}
         </Typography>
       </Card>
     );
@@ -94,7 +96,7 @@ const MealChangesList = ({ changes }) => {
           >
             <AddIcon sx={{ color: '#4caf50', fontSize: 28 }} />
             <Typography variant="h6" fontWeight="600" color="#4caf50">
-              Dodane posiłki ({changes.mealsAdded.length})
+              {t('audit.mealsAddedCount', { count: changes.mealsAdded.length })}
             </Typography>
           </Box>
 
@@ -131,7 +133,7 @@ const MealChangesList = ({ changes }) => {
           >
             <RemoveIcon sx={{ color: '#f44336', fontSize: 28 }} />
             <Typography variant="h6" fontWeight="600" color="#f44336">
-              Usunięte posiłki ({changes.mealsRemoved.length})
+              {t('audit.mealsRemovedCount', { count: changes.mealsRemoved.length })}
             </Typography>
           </Box>
 
@@ -168,7 +170,7 @@ const MealChangesList = ({ changes }) => {
           >
             <EditIcon sx={{ color: '#2196f3', fontSize: 28 }} />
             <Typography variant="h6" fontWeight="600" color="#2196f3">
-              Zmodyfikowane posiłki ({changes.mealsModified.length})
+              {t('audit.mealsModifiedCount', { count: changes.mealsModified.length })}
             </Typography>
           </Box>
 
@@ -193,6 +195,7 @@ const MealChangesList = ({ changes }) => {
 
 // Karta dodanego/usuniętego posiłku
 const MealCard = ({ meal, type }) => {
+  const { t } = useTranslation();
   const isAdded = type === 'added';
   const bgColor = isAdded ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)';
   const borderColor = isAdded ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)';
@@ -227,7 +230,7 @@ const MealCard = ({ meal, type }) => {
             </Box>
 
             <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
-              Porcja: <strong>{meal.portionMultiplier}x</strong>
+              {t('audit.portion')}: <strong>{meal.portionMultiplier}x</strong>
             </Typography>
           </Box>
 
@@ -254,7 +257,7 @@ const MealCard = ({ meal, type }) => {
               }}
             >
               <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
-                Białko
+                {t('food.protein')}
               </Typography>
               <Typography variant="body1" fontWeight="700" color="#2196f3">
                 {meal.cachedProtein.toFixed(1)}g
@@ -272,7 +275,7 @@ const MealCard = ({ meal, type }) => {
               }}
             >
               <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
-                Węgle
+                {t('food.carbs')}
               </Typography>
               <Typography variant="body1" fontWeight="700" color="#4caf50">
                 {meal.cachedCarbohydrates.toFixed(1)}g
@@ -290,7 +293,7 @@ const MealCard = ({ meal, type }) => {
               }}
             >
               <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
-                Tłuszcze
+                {t('food.fat')}
               </Typography>
               <Typography variant="body1" fontWeight="700" color="#fdd835">
                 {meal.cachedFat.toFixed(1)}g
@@ -319,7 +322,7 @@ const MealCard = ({ meal, type }) => {
                 fontWeight: 600,
               }}
             >
-              Składniki ({meal.ingredients.length}):
+              {t('audit.ingredientsCount', { count: meal.ingredients.length })}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
               {meal.ingredients.slice(0, 3).map((ing) => (
@@ -329,7 +332,7 @@ const MealCard = ({ meal, type }) => {
               ))}
               {meal.ingredients.length > 3 && (
                 <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-                  ... i {meal.ingredients.length - 3} więcej
+                  {t('audit.andMore', { count: meal.ingredients.length - 3 })}
                 </Typography>
               )}
             </Box>
@@ -342,6 +345,7 @@ const MealCard = ({ meal, type }) => {
 
 // Karta zmodyfikowanego posiłku
 const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
+  const { t } = useTranslation();
   const hasIngredientChanges =
     changes.ingredientsAdded.length > 0 ||
     changes.ingredientsRemoved.length > 0 ||
@@ -375,7 +379,7 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                 {meal.name}
               </Typography>
               <Chip
-                label={`${totalChanges} ${totalChanges === 1 ? 'zmiana' : 'zmiany'}`}
+                label={t('audit.changesCount', { count: totalChanges })}
                 size="small"
                 sx={{
                   backgroundColor: 'rgba(33, 150, 243, 0.3)',
@@ -392,25 +396,26 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
               {changes.portionChanged && (
                 <ChangeIndicator
                   icon={<RestaurantIcon sx={{ fontSize: 16 }} />}
-                  text="Zmieniono wielkość porcji"
+                  text={t('audit.portionChanged')}
                   color="#2196f3"
                 />
               )}
               {changes.macrosChanged.kcal && (
                 <ChangeIndicator
                   icon={<TrendingUpIcon sx={{ fontSize: 16 }} />}
-                  text="Zmieniły się makroskładniki"
+                  text={t('audit.macrosChangedText')}
                   color="#ff9800"
                 />
               )}
               {hasIngredientChanges && (
                 <ChangeIndicator
                   icon={<EditIcon sx={{ fontSize: 16 }} />}
-                  text={`Zmiany w składnikach (${
-                    changes.ingredientsAdded.length +
-                    changes.ingredientsRemoved.length +
-                    changes.ingredientsModified.length
-                  })`}
+                  text={t('audit.ingredientChangesCount', {
+                    count:
+                      changes.ingredientsAdded.length +
+                      changes.ingredientsRemoved.length +
+                      changes.ingredientsModified.length,
+                  })}
                   color="#4caf50"
                 />
               )}
@@ -441,7 +446,7 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                 <Box display="flex" alignItems="center" gap={1} mb={1}>
                   <AddIcon sx={{ fontSize: 18, color: '#4caf50' }} />
                   <Typography variant="body2" fontWeight="600" color="#4caf50">
-                    Dodane składniki:
+                    {t('audit.ingredientsAdded')}
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
@@ -460,7 +465,7 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                 <Box display="flex" alignItems="center" gap={1} mb={1}>
                   <RemoveIcon sx={{ fontSize: 18, color: '#f44336' }} />
                   <Typography variant="body2" fontWeight="600" color="#f44336">
-                    Usunięte składniki:
+                    {t('audit.ingredientsRemoved')}
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
@@ -486,7 +491,7 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                 <Box display="flex" alignItems="center" gap={1} mb={1}>
                   <EditIcon sx={{ fontSize: 18, color: '#2196f3' }} />
                   <Typography variant="body2" fontWeight="600" color="#2196f3">
-                    Zmodyfikowane składniki:
+                    {t('audit.ingredientsModified')}
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>

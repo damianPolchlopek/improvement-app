@@ -159,11 +159,11 @@ export default function ProductView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <RestaurantMenuIcon sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Baza Produktów
+                  {t('food.productDatabase')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Przeglądaj i wyszukuj produkty spożywcze według kategorii
+                {t('food.productDatabaseDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -185,7 +185,7 @@ export default function ProductView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <SearchIcon sx={{ color: theme.palette.primary.main, fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Wyszukaj Produkt
+                  {t('food.searchProduct')}
                 </Typography>
               </Box>
               <TextField
@@ -193,7 +193,7 @@ export default function ProductView() {
                 value={typedProductName}
                 onChange={handleProductTyped}
                 label={t('food.product')}
-                placeholder="Wpisz nazwę produktu..."
+                placeholder={t('food.enterProductName')}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -247,11 +247,11 @@ export default function ProductView() {
                 {productList?.length || 0}
               </Typography>
               <Typography variant="body1">
-                {typedProductName ? 'Znalezionych produktów' : 'Produktów w kategorii'}
+                {typedProductName ? t('food.foundProducts') : t('food.productsInCategory')}
               </Typography>
               {typedProductName && (
                 <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
-                  dla: "{typedProductName}"
+                  {t('food.forQuery', { query: typedProductName })}
                 </Typography>
               )}
             </Box>
@@ -273,7 +273,7 @@ export default function ProductView() {
             >
               <CategoryIcon sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
-                Kategorie Produktów
+                {t('food.productCategories')}
               </Typography>
             </Box>
 
@@ -281,16 +281,16 @@ export default function ProductView() {
               <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
                 <CircularProgress size={60} />
                 <Typography variant="h6" sx={{ mt: 2, ml: 2 }}>
-                  Ładowanie kategorii...
+                  {t('food.loadingCategories')}
                 </Typography>
               </Box>
             ) : isCategoryError ? (
               <Box sx={{ p: 4, textAlign: 'center' }}>
                 <Typography color="error" variant="h6">
-                  Błąd ładowania kategorii
+                  {t('food.errorLoadingCategories')}
                 </Typography>
                 <Typography color="error" variant="body2">
-                  {categoryError?.message || 'Nieznany błąd'}
+                  {categoryError?.message || t('food.unknownError')}
                 </Typography>
               </Box>
             ) : (
@@ -347,11 +347,14 @@ export default function ProductView() {
                         isLoading={isLoadingProducts}
                         isError={isProductError}
                         error={productError}
-                        loadingMessage="Ładowanie produktów..."
+                        loadingMessage={t('food.loadingProducts')}
                         emptyMessage={
                           typedProductName
-                            ? `Brak produktów zawierających "${typedProductName}" w kategorii ${productCategory}`
-                            : `Brak produktów w kategorii ${productCategory}`
+                            ? t('food.noProductsMatching', {
+                                query: typedProductName,
+                                category: productCategory,
+                              })
+                            : t('food.noProductsInCategory', { category: productCategory })
                         }
                         containerProps={{
                           component: 'div',

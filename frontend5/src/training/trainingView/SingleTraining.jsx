@@ -95,8 +95,8 @@ export default function SingleTraining({ trainingName }) {
           error={error}
           columns={exerciseColumns}
           onCellClick={handleCellClick}
-          loadingMessage="Ładowanie ćwiczeń..."
-          emptyMessage="Brak ćwiczeń do wyświetlenia"
+          loadingMessage={t('training.loadingExercises')}
+          emptyMessage={t('training.noExercises')}
         />
       </Collapse>
     </>

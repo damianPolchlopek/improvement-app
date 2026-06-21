@@ -76,11 +76,11 @@ export default function DietStatisticView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Analytics sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Statystyki Diety
+                  {t('food.dietStats')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Przegląd Twoich dziennych podsumowań żywieniowych
+                {t('food.dietStatsDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -103,7 +103,7 @@ export default function DietStatisticView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Restaurant sx={{ color: '#4caf50', fontSize: 28 }} />
                 <Typography variant="h6" fontWeight="600">
-                  Łączna liczba dni
+                  {t('food.totalDays')}
                 </Typography>
               </Box>
               <Typography variant="h3" fontWeight="700" color="primary">
@@ -132,7 +132,7 @@ export default function DietStatisticView() {
               <Typography variant="h3" fontWeight="700">
                 {data?.content?.length || 0}
               </Typography>
-              <Typography variant="body1">Wyświetlanych rekordów</Typography>
+              <Typography variant="body1">{t('food.displayedRecords')}</Typography>
             </Box>
           </Card>
         </Grid>
@@ -156,7 +156,7 @@ export default function DietStatisticView() {
               <Typography variant="h3" fontWeight="700">
                 {data?.totalPages || 0}
               </Typography>
-              <Typography variant="body1">Wszystkich stron</Typography>
+              <Typography variant="body1">{t('food.totalPagesCount')}</Typography>
             </Box>
           </Card>
         </Grid>
@@ -176,7 +176,7 @@ export default function DietStatisticView() {
             >
               <TrendingUp sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
-                Historia Diety
+                {t('food.dietHistory')}
               </Typography>
             </Box>
 

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Alert, Snackbar } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import { getTokenDuration } from '../login/Authentication.js';
 
 export default function TokenRefreshNotification() {
+  const { t } = useTranslation();
   const [showWarning, setShowWarning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
 
@@ -28,7 +30,7 @@ export default function TokenRefreshNotification() {
   return (
     <Snackbar open={showWarning} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
       <Alert severity="warning" onClose={() => setShowWarning(false)}>
-        Twoja sesja wygaśnie za {timeLeft} minut.
+        {t('login.sessionExpiring', { minutes: timeLeft })}
       </Alert>
     </Snackbar>
   );

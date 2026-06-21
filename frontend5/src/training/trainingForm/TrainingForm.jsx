@@ -77,7 +77,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   function handleSubmit() {
     const invalid = exercisesFields.some((f) => !f.name || !f.reps || !f.weight);
     if (invalid) {
-      setValidationError('Uzupełnij nazwę, powtórzenia i ciężar dla każdego ćwiczenia.');
+      setValidationError(t('training.fillAllFields'));
       return;
     }
     setValidationError('');
@@ -123,10 +123,10 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       >
         <FitnessCenter sx={{ fontSize: 64, color: 'text.secondary', mb: 2 }} />
         <Typography variant="h6" color="text.secondary" gutterBottom>
-          Brak ćwiczeń w treningu
+          {t('training.noExercisesInTraining')}
         </Typography>
         <Typography variant="body2" color="text.secondary" mb={3}>
-          Załaduj szablon treningu lub dodaj pierwsze ćwiczenie ręcznie
+          {t('training.loadTemplateOrAdd')}
         </Typography>
         <Button
           variant="contained"
@@ -137,7 +137,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             px: 4,
           }}
         >
-          Dodaj pierwsze ćwiczenie
+          {t('training.addFirstExercise')}
         </Button>
       </Card>
     );
@@ -156,11 +156,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
                       <Box display="flex" alignItems="center" gap={2}>
                         <Chip label={`#${index + 1}`} color="primary" />
-                        <Typography variant="h6">Ćwiczenie {index + 1}</Typography>
+                        <Typography variant="h6">
+                          {t('training.exerciseN', { n: index + 1 })}
+                        </Typography>
                       </Box>
 
                       <Box display="flex" gap={1}>
-                        <Tooltip title="Dodaj ćwiczenie">
+                        <Tooltip title={t('training.addExercise')}>
                           <IconButton
                             color="success"
                             onClick={() => addFields(index)}
@@ -174,7 +176,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                         </Tooltip>
 
                         {exercisesFields.length > 1 && (
-                          <Tooltip title="Usuń ćwiczenie">
+                          <Tooltip title={t('training.removeExercise')}>
                             <IconButton
                               color="error"
                               onClick={() => removeFields(index)}
@@ -359,7 +361,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
               },
             }}
           >
-            Dodaj kolejne ćwiczenie
+            {t('training.addAnotherExercise')}
           </Button>
         </Box>
       )}
@@ -404,7 +406,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
               {t('messages.submitting')}
             </Box>
           ) : (
-            t('messages.submit') || 'Zapisz Trening'
+            t('training.saveTraining')
           )}
         </Button>
       </Box>

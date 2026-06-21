@@ -90,7 +90,7 @@ export default function AddTrainingView() {
 
               <Box sx={{ mb: 3, flex: 1 }}>
                 <Typography variant="body2" color="text.secondary" mb={2}>
-                  Wybierz typ treningu:
+                  {t('training.selectType')}
                 </Typography>
                 <FormControl fullWidth>
                   <TrainingTypeSelector setTrainingType={setTrainingType} />
@@ -131,7 +131,7 @@ export default function AddTrainingView() {
                       sx={{ mt: 2, borderRadius: 2 }}
                       icon={<CheckCircle />}
                     >
-                      Szablon załadowany! Znaleziono {exercises.content.length} ćwiczeń.
+                      {t('training.templateLoaded', { count: exercises.content.length })}
                     </Alert>
                   </Fade>
                 )}
@@ -167,7 +167,7 @@ export default function AddTrainingView() {
               <Box display="flex" alignItems="center" gap={2} mb={3}>
                 <Settings sx={{ color: '#ff9800', fontSize: 28 }} />
                 <Typography variant="h5" fontWeight="600">
-                  Ustawienia Formularza
+                  {t('training.formSettings')}
                 </Typography>
               </Box>
 
@@ -201,7 +201,7 @@ export default function AddTrainingView() {
                         {t('messages.enableMoreAccurateForm') || 'Formularz Zaawansowany'}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        Więcej opcji i szczegółowych ustawień
+                        {t('training.moreOptions')}
                       </Typography>
                     </Box>
                   }
@@ -210,11 +210,15 @@ export default function AddTrainingView() {
 
               <Box sx={{ mt: 3, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                 <Chip
-                  label={isSimpleForm ? 'Tryb Prosty' : 'Tryb Zaawansowany'}
+                  label={isSimpleForm ? t('training.simpleMode') : t('training.advancedMode')}
                   color={isSimpleForm ? 'default' : 'warning'}
                   variant={isSimpleForm ? 'outlined' : 'filled'}
                 />
-                <Chip label={`Typ: ${trainingType}`} color="primary" variant="outlined" />
+                <Chip
+                  label={t('training.typeLabel', { type: trainingType })}
+                  color="primary"
+                  variant="outlined"
+                />
               </Box>
             </CardContent>
           </Card>
@@ -226,7 +230,7 @@ export default function AddTrainingView() {
             <Fade in={true}>
               <Alert severity="error" sx={{ borderRadius: 2 }} onClose={() => {}}>
                 <Typography fontWeight="500">
-                  {t('messages.errorLoadingTraining') || 'Błąd podczas ładowania'}: {error.message}
+                  {t('training.errorLoading')}: {error.message}
                 </Typography>
               </Alert>
             </Fade>
@@ -252,7 +256,7 @@ export default function AddTrainingView() {
               }}
             >
               <Typography variant="h5" fontWeight="600">
-                Formularz Treningu
+                {t('training.formTitle')}
               </Typography>
             </Box>
             <Box sx={{ p: 4 }}>

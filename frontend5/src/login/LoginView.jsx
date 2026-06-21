@@ -223,10 +223,7 @@ export default function LoginView() {
                 onBlur={handleUsernameBlur}
                 onChange={handleUsernameChange}
                 value={enteredUsername}
-                error={
-                  usernameIsInvalid &&
-                  t('login.validation.usernameRequired', 'Wprowadź prawidłowy login!')
-                }
+                error={usernameIsInvalid && t('login.validation.usernameRequired')}
                 disabled={isSubmitting}
               />
             </Grid>
@@ -240,10 +237,7 @@ export default function LoginView() {
                 onBlur={handlePasswordBlur}
                 onChange={handlePasswordChange}
                 value={enteredPassword}
-                error={
-                  passwordIsInvalid &&
-                  t('login.validation.passwordRequired', 'Wprowadź prawidłowe hasło!')
-                }
+                error={passwordIsInvalid && t('login.validation.passwordRequired')}
                 disabled={isSubmitting}
               />
             </Grid>
@@ -255,7 +249,7 @@ export default function LoginView() {
                 type="submit"
                 disabled={isSubmitting || usernameIsInvalid || passwordIsInvalid}
               >
-                {isSubmitting ? t('login.submitting', 'Logowanie...') : t('login.submit')}
+                {isSubmitting ? t('login.submitting') : t('login.submit')}
               </Button>
             </Grid>
 
@@ -281,7 +275,7 @@ export default function LoginView() {
                 }
               >
                 <GoogleIcon />
-                Zaloguj przez Google
+                {t('login.loginWithGoogle')}
               </Button>
             </Grid>
           </Grid>

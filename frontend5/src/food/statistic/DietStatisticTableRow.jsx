@@ -57,10 +57,10 @@ export default function DietStatisticTableRow({ dietSummary }) {
     mutationFn: (id) => REST.deleteDietSummaries(id),
     onSuccess: () => {
       queryClient.invalidateQueries(['diet-summaries']);
-      showSnackbar(`Success removed diet summary from ${dietSummary.date}`, 'success');
+      showSnackbar(t('food.deleteSuccess', { date: dietSummary.date }), 'success');
     },
     onError: () => {
-      showSnackbar(`Failed removed diet summary from ${dietSummary.date}`, 'error');
+      showSnackbar(t('food.deleteError', { date: dietSummary.date }), 'error');
     },
 
     retry: false,
@@ -337,10 +337,10 @@ export default function DietStatisticTableRow({ dietSummary }) {
             }}
           >
             <Typography variant="body2" color="text.secondary">
-              Data: <strong>{formatDate(dietSummary.date)}</strong>
+              {t('food.date')}: <strong>{formatDate(dietSummary.date)}</strong>
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Kalorie: <strong>{formatInput(dietSummary.kcal)}</strong>
+              {t('food.calories')}: <strong>{formatInput(dietSummary.kcal)}</strong>
             </Typography>
           </Box>
 

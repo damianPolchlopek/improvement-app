@@ -84,7 +84,7 @@ export default function SignUpView() {
         });
 
         setFieldErrors(newFieldErrors);
-        setError(`Błędy walidacji: ${errorMessages.join(', ')}`);
+        setError(t('signup.validationErrors', { errors: errorMessages.join(', ') }));
       }
       // Jeśli mamy ogólny komunikat błędu
       else if (errorData.message) {
@@ -92,16 +92,16 @@ export default function SignUpView() {
       }
       // Fallback na kod błędu
       else if (errorData.code) {
-        setError(`Błąd: ${errorData.code}`);
+        setError(t('signup.errorWithCode', { code: errorData.code }));
       } else {
-        setError('Wystąpił nieznany błąd serwera.');
+        setError(t('signup.unknownServerError'));
       }
     }
     // Jeśli nie ma szczegółów odpowiedzi
     else if (error.message) {
       setError(error.message);
     } else {
-      setError('Rejestracja nie powiodła się.');
+      setError(t('signup.registrationFailed'));
     }
   };
 
@@ -115,7 +115,7 @@ export default function SignUpView() {
       passwordIsInvalid ||
       confirmPasswordIsInvalid
     ) {
-      setError('Proszę poprawić błędy w formularzu.');
+      setError(t('signup.fixFormErrors'));
       return;
     }
 
@@ -127,7 +127,7 @@ export default function SignUpView() {
       !enteredPassword ||
       !enteredConfirmPassword
     ) {
-      setError('Proszę wypełnić wszystkie pola.');
+      setError(t('signup.fillAllFields'));
       return;
     }
 
@@ -161,15 +161,15 @@ export default function SignUpView() {
 
   const handleResendVerification = async () => {
     if (!enteredEmail) {
-      setError('Proszę podać adres email.');
+      setError(t('signup.emailRequired'));
       return;
     }
 
     try {
       await REST.resendVerificationEmail(enteredEmail);
-      setSuccess('Email weryfikacyjny został wysłany ponownie.');
+      setSuccess(t('signup.resendSuccess'));
     } catch {
-      setError('Błąd podczas wysyłania emaila weryfikacyjnego.');
+      setError(t('signup.resendError'));
     }
   };
 
@@ -178,22 +178,22 @@ export default function SignUpView() {
       <CenteredContainer>
         <StyledPaper sx={{ maxWidth: 600, width: '100%' }}>
           <Alert severity="success" sx={{ mb: 3 }}>
-            <Typography variant="h6">Rejestracja pomyślna!</Typography>
+            <Typography variant="h6">{t('signup.successTitle')}</Typography>
             <Typography variant="body1" sx={{ mt: 1 }}>
               {success}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1 }}>
-              Zostaniesz przekierowany do strony logowania za chwilę...
+              {t('signup.redirectInfo')}
             </Typography>
           </Alert>
 
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
             <Button variant="outlined" onClick={handleResendVerification} fullWidth>
-              Wyślij ponownie email weryfikacyjny
+              {t('signup.resendEmailButton')}
             </Button>
 
             <Button variant="contained" onClick={() => navigate('/login')} fullWidth>
-              Przejdź do logowania
+              {t('signup.goToLogin')}
             </Button>
           </Box>
         </StyledPaper>
@@ -221,28 +221,25 @@ export default function SignUpView() {
           {/* Nowe pola: Imię i Nazwisko obok siebie na większych ekranach */}
           <Grid size={{ xs: 12, sm: 6 }}>
             <Input
-              label="Imię"
+              label={t('signup.name')}
               id="name"
               name="name"
               onBlur={handleNameBlur}
               onChange={handleNameChange}
               value={enteredName}
-              error={(nameIsInvalid && 'Imię musi mieć co najmniej 2 znaki') || fieldErrors.name}
+              error={(nameIsInvalid && t('signup.nameError')) || fieldErrors.name}
             />
           </Grid>
 
           <Grid size={{ xs: 12, sm: 6 }}>
             <Input
-              label="Nazwisko"
+              label={t('signup.surname')}
               id="surname"
               name="surname"
               onBlur={handleSurnameBlur}
               onChange={handleSurnameChange}
               value={enteredSurname}
-              error={
-                (surnameIsInvalid && 'Nazwisko musi mieć co najmniej 2 znaki') ||
-                fieldErrors.surname
-              }
+              error={(surnameIsInvalid && t('signup.surnameError')) || fieldErrors.surname}
             />
           </Grid>
 
@@ -280,10 +277,7 @@ export default function SignUpView() {
               onBlur={handlePasswordBlur}
               onChange={handlePasswordChange}
               value={enteredPassword}
-              error={
-                (passwordIsInvalid && 'Hasło musi mieć co najmniej 6 znaków') ||
-                fieldErrors.password
-              }
+              error={(passwordIsInvalid && t('signup.passwordError')) || fieldErrors.password}
             />
           </Grid>
 

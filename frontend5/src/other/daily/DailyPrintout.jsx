@@ -71,7 +71,7 @@ export default function DailyPrintout() {
         >
           <TrendingUp sx={{ fontSize: 28 }} />
           <Typography variant="h5" fontWeight="600">
-            Daily History
+            {t('daily.history')}
           </Typography>
         </Box>
 
@@ -80,11 +80,11 @@ export default function DailyPrintout() {
           <Table>
             <TableHead>
               <StyledTableRow>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Smoking</StyledTableCell>
-                <StyledTableCell>Exercise</StyledTableCell>
-                <StyledTableCell>Book</StyledTableCell>
-                <StyledTableCell>Work</StyledTableCell>
+                <StyledTableCell>{t('daily.date')}</StyledTableCell>
+                <StyledTableCell>{t('daily.smoking')}</StyledTableCell>
+                <StyledTableCell>{t('daily.exercise')}</StyledTableCell>
+                <StyledTableCell>{t('daily.book')}</StyledTableCell>
+                <StyledTableCell>{t('daily.work')}</StyledTableCell>
               </StyledTableRow>
             </TableHead>
 
@@ -105,7 +105,7 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.smoking ? 'Yes' : 'No'}
+                      label={daily.smoking ? t('common.yes') : t('common.no')}
                       color={daily.smoking ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
@@ -113,7 +113,7 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.exercise ? 'Yes' : 'No'}
+                      label={daily.exercise ? t('common.yes') : t('common.no')}
                       color={daily.exercise ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
@@ -121,7 +121,7 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.book ? 'Yes' : 'No'}
+                      label={daily.book ? t('common.yes') : t('common.no')}
                       color={daily.book ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
@@ -129,7 +129,7 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.work ? 'Yes' : 'No'}
+                      label={daily.work ? t('common.yes') : t('common.no')}
                       color={daily.work ? 'success' : 'error'}
                       variant="outlined"
                       size="small"

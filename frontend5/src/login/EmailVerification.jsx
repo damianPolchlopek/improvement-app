@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Card,
@@ -18,10 +19,15 @@ import REST from '../utils/REST';
 import { LoginUrl, HomeViewUrl } from '../utils/URLHelper';
 
 const EmailVerification = () => {
+  const { t } = useTranslation();
   // Token z URL czytany raz przy inicjalizacji (bez efektu / setState)
   const [token] = useState(() => new URLSearchParams(window.location.search).get('token') || '');
   const [status, setStatus] = useState(token ? 'loading' : 'error'); // loading, success, error
-  const [message, setMessage] = useState(token ? '' : 'Brak tokenu weryfikacyjnego w URL-u');
+  // Komunikat jako { key, params } lub { text }, tłumaczony przy renderze — dzięki temu
+  // `t` nie trafia do zależności efektu i zmiana języka nie wymusza ponownej weryfikacji.
+  const [messageInfo, setMessageInfo] = useState(
+    token ? null : { key: 'emailVerification.noToken' }
+  );
   const navigate = useNavigate();
 
   // Licznik prób — bump w handleRetry ponownie uruchamia efekt weryfikacji
@@ -39,10 +45,14 @@ const EmailVerification = () => {
 
         if (responseData) {
           setStatus('success');
-          setMessage(responseData.message || 'Email został pomyślnie zweryfikowany!');
+          setMessageInfo(
+            responseData.message
+              ? { text: responseData.message }
+              : { key: 'emailVerification.success' }
+          );
         } else {
           setStatus('error');
-          setMessage('Nie otrzymano odpowiedzi z serwera');
+          setMessageInfo({ key: 'emailVerification.noResponse' });
         }
       } catch (error) {
         if (!active) return;
@@ -50,13 +60,21 @@ const EmailVerification = () => {
         // Sprawdź czy to błąd axios z response
         if (error.response) {
           setStatus('error');
-          setMessage(error.response.data?.message || `Błąd serwera: ${error.response.status}`);
+          setMessageInfo(
+            error.response.data?.message
+              ? { text: error.response.data.message }
+              : { key: 'emailVerification.serverError', params: { status: error.response.status } }
+          );
         } else if (error.request) {
           setStatus('error');
-          setMessage('Brak odpowiedzi z serwera. Sprawdź połączenie internetowe.');
+          setMessageInfo({ key: 'emailVerification.noServerResponse' });
         } else {
           setStatus('error');
-          setMessage(`Błąd: ${error.message || 'Nieznany błąd'}`);
+          setMessageInfo(
+            error.message
+              ? { key: 'emailVerification.genericError', params: { message: error.message } }
+              : { key: 'emailVerification.unknownError' }
+          );
         }
       }
     })();
@@ -69,7 +87,7 @@ const EmailVerification = () => {
   const handleRetry = () => {
     if (token) {
       setStatus('loading');
-      setMessage('');
+      setMessageInfo(null);
       setAttempt((prev) => prev + 1);
     }
   };
@@ -81,6 +99,9 @@ const EmailVerification = () => {
   const handleGoHome = () => {
     navigate(HomeViewUrl);
   };
+
+  // Tłumaczenie komunikatu przy renderze (reaguje na zmianę języka, bez ponownej weryfikacji)
+  const message = messageInfo?.text ?? (messageInfo ? t(messageInfo.key, messageInfo.params) : '');
 
   return (
     <Container maxWidth="sm">
@@ -100,10 +121,10 @@ const EmailVerification = () => {
                 <Stack spacing={3} alignItems="center">
                   <CircularProgress size={64} color="primary" />
                   <Typography variant="h4" component="h1" gutterBottom>
-                    Weryfikacja emaila...
+                    {t('emailVerification.loading')}
                   </Typography>
                   <Typography variant="body1" color="text.secondary">
-                    Proszę czekać, trwa weryfikacja Twojego adresu email.
+                    {t('emailVerification.pleaseWait')}
                   </Typography>
                 </Stack>
               )}
@@ -112,7 +133,7 @@ const EmailVerification = () => {
                 <Stack spacing={3} alignItems="center">
                   <CheckCircle sx={{ fontSize: 64, color: 'success.main' }} />
                   <Typography variant="h4" component="h1" color="success.main" gutterBottom>
-                    Weryfikacja zakończona!
+                    {t('emailVerification.successTitle')}
                   </Typography>
                   <Alert severity="success" sx={{ width: '100%' }}>
                     {message}
@@ -125,7 +146,7 @@ const EmailVerification = () => {
                     onClick={handleGoToLogin}
                     fullWidth
                   >
-                    Przejdź do logowania
+                    {t('emailVerification.goToLogin')}
                   </Button>
                 </Stack>
               )}
@@ -134,7 +155,7 @@ const EmailVerification = () => {
                 <Stack spacing={3} alignItems="center">
                   <Error sx={{ fontSize: 64, color: 'error.main' }} />
                   <Typography variant="h4" component="h1" color="error.main" gutterBottom>
-                    Błąd weryfikacji
+                    {t('emailVerification.errorTitle')}
                   </Typography>
                   <Alert severity="error" sx={{ width: '100%' }}>
                     {message}
@@ -148,7 +169,7 @@ const EmailVerification = () => {
                       onClick={handleRetry}
                       fullWidth
                     >
-                      Spróbuj ponownie
+                      {t('emailVerification.retry')}
                     </Button>
                     <Button
                       variant="outlined"
@@ -158,7 +179,7 @@ const EmailVerification = () => {
                       onClick={handleGoHome}
                       fullWidth
                     >
-                      Wróć do strony głównej
+                      {t('emailVerification.goHome')}
                     </Button>
                   </Stack>
                 </Stack>

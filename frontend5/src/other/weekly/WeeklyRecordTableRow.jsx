@@ -21,8 +21,10 @@ import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import ErrorAlert from '../../component/error/ErrorAlert';
+import { useTranslation } from 'react-i18next';
 
 export default function WeeklyRecordTableRow({ record }) {
+  const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const theme = useTheme();
@@ -36,10 +38,10 @@ export default function WeeklyRecordTableRow({ record }) {
     mutationFn: (id) => REST.deleteProductFromWeeklyList(id),
     onSuccess: () => {
       queryClient.invalidateQueries(['weekly-records']);
-      showSnackbar(`Pomyślnie usunięto rekord: ${record.name}`, 'success');
+      showSnackbar(t('weekly.deleteSuccess', { name: record.name }), 'success');
     },
     onError: () => {
-      showSnackbar(`Nie udało się usunąć rekordu: ${record.name}`, 'error');
+      showSnackbar(t('weekly.deleteError', { name: record.name }), 'error');
     },
     retry: false,
   });
@@ -136,12 +138,12 @@ export default function WeeklyRecordTableRow({ record }) {
           }}
         >
           <DeleteIcon />
-          Czy na pewno?
+          {t('weekly.confirmTitle')}
         </DialogTitle>
 
         <DialogContent sx={{ p: 3 }}>
           <Typography variant="body1" sx={{ mb: 2 }}>
-            Czy na pewno chcesz usunąć ten rekord?
+            {t('weekly.confirmDeleteRecord')}
           </Typography>
 
           <Box
@@ -154,13 +156,13 @@ export default function WeeklyRecordTableRow({ record }) {
             }}
           >
             <Typography variant="body2" color="text.secondary">
-              Nazwa: <strong>{record.name}</strong>
+              {t('weekly.name')}: <strong>{record.name}</strong>
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Kategoria: <strong>{record.category}</strong>
+              {t('weekly.category')}: <strong>{record.category}</strong>
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Data: <strong>{record.date}</strong>
+              {t('weekly.date')}: <strong>{record.date}</strong>
             </Typography>
           </Box>
 
@@ -177,7 +179,7 @@ export default function WeeklyRecordTableRow({ record }) {
               }}
             >
               <CircularProgress size={20} />
-              <Typography variant="body2">Usuwanie...</Typography>
+              <Typography variant="body2">{t('weekly.deleting')}</Typography>
             </Box>
           )}
 
@@ -195,7 +197,7 @@ export default function WeeklyRecordTableRow({ record }) {
             size="large"
             sx={{ minWidth: 100 }}
           >
-            Anuluj
+            {t('common.cancel')}
           </Button>
           <Button
             onClick={handleConfirmDelete}
@@ -205,7 +207,7 @@ export default function WeeklyRecordTableRow({ record }) {
             sx={{ minWidth: 100 }}
             disabled={isPendingDeletion}
           >
-            Usuń
+            {t('weekly.delete')}
           </Button>
         </DialogActions>
       </Dialog>

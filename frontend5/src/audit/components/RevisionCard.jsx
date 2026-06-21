@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useRevisionDetails } from '../hooks/useDietAudit';
 import { formatRevisionType, formatTimestamp } from '../utils/auditFormatters';
 
@@ -22,6 +23,7 @@ import { ExpandMore as ExpandMoreIcon, LocalDining as LocalDiningIcon } from '@m
 import Grid from '@mui/material/Grid';
 
 const RevisionCard = ({ revision, onClick, isSelected }) => {
+  const { t } = useTranslation();
   const { dietSummaryId } = useParams();
   const [expanded, setExpanded] = useState(false);
 
@@ -95,7 +97,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
 
             <Box>
               <Typography variant="h6" fontWeight="700" color="white">
-                Rewizja #{revision.revisionNumber}
+                {t('audit.revisionNo', { number: revision.revisionNumber })}
               </Typography>
               <Chip
                 label={typeInfo.label}
@@ -148,7 +150,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             <Box display="flex" alignItems="center" justifyContent="center" gap={2} py={3}>
               <CircularProgress size={24} sx={{ color: '#4caf50' }} />
               <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
-                Ładowanie szczegółów rewizji...
+                {t('audit.loadingDetails')}
               </Typography>
             </Box>
           </Card>
@@ -168,7 +170,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                 <Grid container spacing={2}>
                   <Grid size={3}>
                     <MacroDisplay
-                      label="Kalorie"
+                      label={t('audit.calories')}
                       value={dietSummary.kcal}
                       unit="kcal"
                       color="#ff9800"
@@ -176,7 +178,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                   </Grid>
                   <Grid size={3}>
                     <MacroDisplay
-                      label="Białko"
+                      label={t('food.protein')}
                       value={dietSummary.protein}
                       unit="g"
                       color="#2196f3"
@@ -184,7 +186,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                   </Grid>
                   <Grid size={3}>
                     <MacroDisplay
-                      label="Węgle"
+                      label={t('food.carbs')}
                       value={dietSummary.carbohydrates}
                       unit="g"
                       color="#4caf50"
@@ -192,7 +194,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                   </Grid>
                   <Grid size={3}>
                     <MacroDisplay
-                      label="Tłuszcze"
+                      label={t('food.fat')}
                       value={dietSummary.fat}
                       unit="g"
                       color="#fdd835"
@@ -216,12 +218,13 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
               <Box display="flex" alignItems="center" gap={1}>
                 <LocalDiningIcon sx={{ fontSize: 18, color: 'rgba(255, 255, 255, 0.6)' }} />
                 <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
-                  Posiłków: <strong style={{ color: 'white' }}>{meals.length}</strong>
+                  {t('audit.mealsCount', { count: meals.length })}
                 </Typography>
               </Box>
 
               <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
-                Data diety: <strong style={{ color: 'white' }}>{dietSummary.date}</strong>
+                {t('audit.dietDate')}:{' '}
+                <strong style={{ color: 'white' }}>{dietSummary.date}</strong>
               </Typography>
 
               {meals.length > 0 && (
@@ -256,7 +259,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                       fontWeight: 600,
                     }}
                   >
-                    Lista posiłków:
+                    {t('audit.mealsList')}
                   </Typography>
 
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -279,7 +282,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             }}
           >
             <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" align="center">
-              Kliknij aby zobaczyć szczegóły
+              {t('audit.clickToSee')}
             </Typography>
           </Card>
         ) : (
@@ -293,7 +296,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             }}
           >
             <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" align="center">
-              Kliknij aby zobaczyć szczegóły
+              {t('audit.clickToSee')}
             </Typography>
           </Card>
         )}
@@ -331,51 +334,54 @@ const MacroDisplay = ({ label, value, unit, color }) => (
   </Box>
 );
 
-const MealCard = ({ meal, index }) => (
-  <Card
-    elevation={0}
-    sx={{
-      background: 'rgba(255, 255, 255, 0.05)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      borderRadius: 2,
-    }}
-  >
-    <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-      <Box display="flex" justifyContent="space-between" alignItems="start">
-        <Box flex={1}>
-          <Box display="flex" alignItems="center" gap={1} mb={0.5}>
-            <Chip
-              label={`#${index + 1}`}
-              size="small"
-              sx={{
-                height: '20px',
-                fontSize: '0.7rem',
-                backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                color: '#4caf50',
-                fontWeight: 700,
-              }}
-            />
-            <Typography variant="body2" color="white" fontWeight="600">
-              {meal.name}
+const MealCard = ({ meal, index }) => {
+  const { t } = useTranslation();
+  return (
+    <Card
+      elevation={0}
+      sx={{
+        background: 'rgba(255, 255, 255, 0.05)',
+        border: '1px solid rgba(255, 255, 255, 0.1)',
+        borderRadius: 2,
+      }}
+    >
+      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+        <Box display="flex" justifyContent="space-between" alignItems="start">
+          <Box flex={1}>
+            <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+              <Chip
+                label={`#${index + 1}`}
+                size="small"
+                sx={{
+                  height: '20px',
+                  fontSize: '0.7rem',
+                  backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                  color: '#4caf50',
+                  fontWeight: 700,
+                }}
+              />
+              <Typography variant="body2" color="white" fontWeight="600">
+                {meal.name}
+              </Typography>
+            </Box>
+
+            <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+              {t('audit.portion')}: {meal.portionMultiplier}x
             </Typography>
           </Box>
 
-          <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
-            Porcja: {meal.portionMultiplier}x
-          </Typography>
+          <Box textAlign="right">
+            <Typography variant="h6" fontWeight="700" sx={{ color: '#ff9800' }}>
+              {meal.cachedKcal.toFixed(0)}
+            </Typography>
+            <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
+              kcal
+            </Typography>
+          </Box>
         </Box>
-
-        <Box textAlign="right">
-          <Typography variant="h6" fontWeight="700" sx={{ color: '#ff9800' }}>
-            {meal.cachedKcal.toFixed(0)}
-          </Typography>
-          <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
-            kcal
-          </Typography>
-        </Box>
-      </Box>
-    </CardContent>
-  </Card>
-);
+      </CardContent>
+    </Card>
+  );
+};
 
 export default RevisionCard;

@@ -14,8 +14,10 @@ import { TrendingUp } from '@mui/icons-material';
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
 import WeeklyRecordTableRow from './WeeklyRecordTableRow';
+import { useTranslation } from 'react-i18next';
 
 export default function WeeklyRecordsTable({ records }) {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   return (
@@ -32,7 +34,7 @@ export default function WeeklyRecordsTable({ records }) {
       >
         <TrendingUp sx={{ fontSize: 28 }} />
         <Typography variant="h5" fontWeight="600">
-          Lista Rekordów
+          {t('weekly.recordsList')}
         </Typography>
       </Box>
 
@@ -40,9 +42,9 @@ export default function WeeklyRecordsTable({ records }) {
         <Table>
           <TableHead>
             <StyledTableRow>
-              <StyledTableCell>Nazwa</StyledTableCell>
-              <StyledTableCell>Data</StyledTableCell>
-              <StyledTableCell>Akcje</StyledTableCell>
+              <StyledTableCell>{t('weekly.name')}</StyledTableCell>
+              <StyledTableCell>{t('weekly.date')}</StyledTableCell>
+              <StyledTableCell>{t('weekly.actions')}</StyledTableCell>
             </StyledTableRow>
           </TableHead>
           <TableBody>
@@ -54,7 +56,7 @@ export default function WeeklyRecordsTable({ records }) {
               <StyledTableRow>
                 <StyledTableCell colSpan={4} align="center">
                   <Typography variant="body1" color="text.secondary" sx={{ py: 4 }}>
-                    Brak rekordów tygodniowych
+                    {t('weekly.noRecords')}
                   </Typography>
                 </StyledTableCell>
               </StyledTableRow>

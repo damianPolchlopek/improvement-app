@@ -50,7 +50,7 @@ export default function TrainingsView() {
   };
 
   if (isLoading) {
-    return <PageLoader text="Ładowanie treningów..." />;
+    return <PageLoader text={t('training.loadingTrainings')} />;
   }
 
   if (isError) {
@@ -61,7 +61,7 @@ export default function TrainingsView() {
     return (
       <Box sx={{ minHeight: '100vh', py: 4 }}>
         <Container maxWidth="xl" sx={{ width: '70%' }}>
-          <InformationComponent>Training have not been added yet!</InformationComponent>
+          <InformationComponent>{t('training.noTrainings')}</InformationComponent>
         </Container>
       </Box>
     );
@@ -90,7 +90,7 @@ export default function TrainingsView() {
                   {t('messages.trainingView')}
                 </Typography>
                 <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                  Przeglądaj wszystkie swoje treningi
+                  {t('training.browseAll')}
                 </Typography>
               </Box>
             </Box>
@@ -98,13 +98,13 @@ export default function TrainingsView() {
               <Box display="flex" alignItems="center" gap={1}>
                 <FitnessCenter sx={{ fontSize: 20 }} />
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  {data?.totalElements || 0} treningów
+                  {t('training.trainingsCount', { count: data?.totalElements || 0 })}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
                 <Assessment sx={{ fontSize: 20 }} />
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                  Szczegółowe statystyki
+                  {t('training.detailedStats')}
                 </Typography>
               </Box>
             </Box>

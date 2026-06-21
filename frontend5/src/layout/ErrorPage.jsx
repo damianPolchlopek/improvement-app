@@ -1,14 +1,16 @@
 import Navigator from './Drawer';
 import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Box } from '@mui/material';
 
 function ErrorPage() {
+  const { t } = useTranslation();
   const error = useRouteError();
   // Tymczasowe logowanie diagnostyczne — pokazuje prawdziwą przyczynę błędu trasy
   console.error('Route error:', error);
 
-  let message = 'Could not find this page!';
+  let message = t('errorPage.notFound');
   if (isRouteErrorResponse(error)) {
     message = `${error.status} ${error.statusText}`;
   } else if (error instanceof Error) {
@@ -27,7 +29,7 @@ function ErrorPage() {
       </Box>
       {/* <Navigator  /> */}
       <main>
-        <h1>An error occurred!</h1>
+        <h1>{t('errorPage.title')}</h1>
         <p>{message}</p>
         {error instanceof Error && error.stack && (
           <pre style={{ whiteSpace: 'pre-wrap', color: 'crimson' }}>{error.stack}</pre>

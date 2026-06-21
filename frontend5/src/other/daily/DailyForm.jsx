@@ -66,7 +66,7 @@ export default function DailyForm() {
         >
           <ChecklistRtl sx={{ fontSize: 28 }} />
           <Typography variant="h5" fontWeight="600">
-            Daily Schema
+            {t('daily.title')}
           </Typography>
         </Box>
 
@@ -78,25 +78,25 @@ export default function DailyForm() {
                 control={<Checkbox checked={dailyFields.smoking} />}
                 name="smoking"
                 onChange={handleFormChange}
-                label="Palenie papierosów"
+                label={t('daily.smoking')}
               />
               <FormControlLabel
                 control={<Checkbox checked={dailyFields.exercise} />}
                 name="exercise"
                 onChange={handleFormChange}
-                label="Ćwiczenia na postawę"
+                label={t('daily.exercise')}
               />
               <FormControlLabel
                 control={<Checkbox checked={dailyFields.book} />}
                 name="book"
                 onChange={handleFormChange}
-                label="Książka"
+                label={t('daily.book')}
               />
               <FormControlLabel
                 control={<Checkbox checked={dailyFields.work} />}
                 name="work"
                 onChange={handleFormChange}
-                label="Cloud"
+                label={t('daily.cloud')}
               />
             </Grid>
 
@@ -107,7 +107,7 @@ export default function DailyForm() {
                 disabled={isPending}
                 sx={{ minWidth: 120 }}
               >
-                {isPending ? t('common.saving') : 'Submit'}
+                {isPending ? t('common.saving') : t('messages.submit')}
               </Button>
             </Grid>
           </Grid>

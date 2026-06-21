@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import REST from '../../utils/REST';
 
 import {
@@ -38,6 +39,7 @@ function calculateDays(prevDate) {
 }
 
 export default function FinanceView() {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const {
@@ -67,7 +69,7 @@ export default function FinanceView() {
   const error = priceError || descError;
 
   if (isLoading) {
-    return <PageLoader text="Ładowanie danych kryptowalut..." />;
+    return <PageLoader text={t('finance.loadingCrypto')} />;
   }
 
   if (isError) {
@@ -95,11 +97,11 @@ export default function FinanceView() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Analytics sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Ceny Kryptowalut
+                  {t('finance.cryptoPrices')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Aktualne ceny i statystyki wybranych kryptowalut
+                {t('finance.cryptoPricesDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -124,7 +126,7 @@ export default function FinanceView() {
                   <Box display="flex" alignItems="center" gap={2} mb={3}>
                     <TrendingUp sx={{ color: '#4caf50', fontSize: 28 }} />
                     <Typography variant="h6" fontWeight="600">
-                      Tygodnie od ATH
+                      {t('finance.weeksFromAth')}
                     </Typography>
                   </Box>
                   <Typography variant="h3" fontWeight="700" color="primary">
@@ -153,7 +155,7 @@ export default function FinanceView() {
                   <Typography variant="h3" fontWeight="700">
                     {(calculateDays('2022-11-21') / 7).toFixed(1)}
                   </Typography>
-                  <Typography variant="body1">Tygodnie od dołka</Typography>
+                  <Typography variant="body1">{t('finance.weeksFromBottom')}</Typography>
                 </Box>
               </Card>
             </Grid>
@@ -177,7 +179,7 @@ export default function FinanceView() {
                   <Typography variant="h3" fontWeight="700">
                     {((calculateDays('2024-04-26') / 7) * -1).toFixed(1)}
                   </Typography>
-                  <Typography variant="body1">Tyg. do halvingu</Typography>
+                  <Typography variant="body1">{t('finance.weeksToHalving')}</Typography>
                 </Box>
               </Card>
             </Grid>
@@ -199,7 +201,7 @@ export default function FinanceView() {
             >
               <ShowChart sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
-                Tabela Kryptowalut
+                {t('finance.cryptoTable')}
               </Typography>
             </Box>
 
@@ -208,15 +210,15 @@ export default function FinanceView() {
                 <TableHead>
                   <StyledTableRow>
                     <StyledTableCell>#</StyledTableCell>
-                    <StyledTableCell>Nazwa</StyledTableCell>
-                    <StyledTableCell>Cena</StyledTableCell>
+                    <StyledTableCell>{t('finance.name')}</StyledTableCell>
+                    <StyledTableCell>{t('finance.price')}</StyledTableCell>
                     <StyledTableCell>24h</StyledTableCell>
                     <StyledTableCell>7d</StyledTableCell>
                     <StyledTableCell>30d</StyledTableCell>
                     <StyledTableCell>90d</StyledTableCell>
-                    <StyledTableCell>ATH Data</StyledTableCell>
+                    <StyledTableCell>{t('finance.athDate')}</StyledTableCell>
                     <StyledTableCell>ATH</StyledTableCell>
-                    <StyledTableCell>Od ATH</StyledTableCell>
+                    <StyledTableCell>{t('finance.fromAth')}</StyledTableCell>
                   </StyledTableRow>
                 </TableHead>
                 <TableBody>

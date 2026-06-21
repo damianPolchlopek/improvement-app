@@ -14,8 +14,10 @@ import {
   Chip,
 } from '@mui/material';
 import { Message as MessageIcon, Circle as CircleIcon } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const LogComponent = () => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
@@ -72,7 +74,7 @@ const LogComponent = () => {
           <Box display="flex" alignItems="center" gap={2}>
             <MessageIcon sx={{ fontSize: 32, color: '#4caf50' }} />
             <Typography variant="h5" fontWeight="600" color="white">
-              Dziennik Aktywności
+              {t('home.activityLog')}
             </Typography>
           </Box>
 
@@ -82,7 +84,7 @@ const LogComponent = () => {
               <Box display="flex" alignItems="center" gap={1}>
                 <CircularProgress size={16} sx={{ color: '#ff9800' }} />
                 <Chip
-                  label="Łączenie..."
+                  label={t('home.connecting')}
                   size="small"
                   sx={{
                     backgroundColor: 'rgba(255, 152, 0, 0.2)',
@@ -94,7 +96,7 @@ const LogComponent = () => {
             ) : (
               <Chip
                 icon={<CircleIcon sx={{ fontSize: 12 }} />}
-                label={isConnected ? 'Połączono' : 'Rozłączono'}
+                label={isConnected ? t('home.connected') : t('home.disconnected')}
                 size="small"
                 sx={{
                   backgroundColor: isConnected
@@ -111,7 +113,7 @@ const LogComponent = () => {
         </Box>
 
         <Typography variant="body2" color="rgba(255, 255, 255, 0.7)" sx={{ mb: 3 }}>
-          Ostatnie 10 wiadomości systemowych
+          {t('home.last10Messages')}
         </Typography>
 
         {/* Messages List */}
@@ -208,7 +210,7 @@ const LogComponent = () => {
                     fontWeight: 500,
                   }}
                 >
-                  Brak wiadomości
+                  {t('home.noMessages')}
                 </Typography>
                 <Typography
                   variant="body2"
@@ -217,7 +219,7 @@ const LogComponent = () => {
                     mt: 1,
                   }}
                 >
-                  Wiadomości będą wyświetlane tutaj gdy pojawią się w systemie
+                  {t('home.messagesWillAppear')}
                 </Typography>
               </CardContent>
             </Card>

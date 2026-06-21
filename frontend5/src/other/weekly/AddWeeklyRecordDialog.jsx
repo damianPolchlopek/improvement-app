@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { queryClient } from '../../utils/REST';
 import REST from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
@@ -27,6 +28,7 @@ function formatDate(timestamp) {
 }
 
 export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
+  const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
   const [formData, setFormData] = useState({
     name: '',
@@ -38,11 +40,11 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
     mutationFn: (data) => REST.addRecordToWeeklyList(data),
     onSuccess: () => {
       queryClient.invalidateQueries(['weekly-records']);
-      showSnackbar('Pomyślnie dodano rekord tygodniowy', 'success');
+      showSnackbar(t('weekly.addSuccess'), 'success');
       handleClose();
     },
     onError: () => {
-      showSnackbar('Nie udało się dodać rekordu', 'error');
+      showSnackbar(t('weekly.addError'), 'error');
     },
     retry: false,
   });
@@ -59,7 +61,7 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!formData.name.trim()) {
-      showSnackbar('Nazwa rekordu jest wymagana', 'warning');
+      showSnackbar(t('weekly.nameRequired'), 'warning');
       return;
     }
     mutate(formData);
@@ -95,15 +97,15 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
         }}
       >
         <AddIcon />
-        Dodaj Rekord Tygodniowy
+        {t('weekly.addRecord')}
       </DialogTitle>
 
       <form onSubmit={handleSubmit}>
         <DialogContent sx={{ p: 3 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
             <TextField
-              label="Nazwa rekordu"
-              placeholder="Wpisz nazwę..."
+              label={t('weekly.recordName')}
+              placeholder={t('weekly.enterName')}
               variant="outlined"
               fullWidth
               value={formData.name}
@@ -113,10 +115,10 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
             />
 
             <FormControl fullWidth>
-              <InputLabel>Kategoria</InputLabel>
+              <InputLabel>{t('weekly.category')}</InputLabel>
               <Select
                 value={formData.category}
-                label="Kategoria"
+                label={t('weekly.category')}
                 onChange={(e) => handleChange('category', e.target.value)}
               >
                 {categories.map((category) => (
@@ -128,12 +130,12 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
             </FormControl>
 
             <TextField
-              label="Data"
+              label={t('weekly.date')}
               variant="outlined"
               fullWidth
               value={formData.date}
               disabled
-              helperText="Data jest automatycznie ustawiana na dzisiejszą"
+              helperText={t('weekly.dateAutoHelper')}
             />
 
             {isPending && (
@@ -148,7 +150,7 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
                 }}
               >
                 <CircularProgress size={20} />
-                <Typography variant="body2">Dodawanie rekordu...</Typography>
+                <Typography variant="body2">{t('weekly.addingRecord')}</Typography>
               </Box>
             )}
 
@@ -158,7 +160,7 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
 
         <DialogActions sx={{ p: 3, gap: 1 }}>
           <Button onClick={handleClose} variant="outlined" size="large" disabled={isPending}>
-            Anuluj
+            {t('common.cancel')}
           </Button>
           <Button
             type="submit"
@@ -167,7 +169,7 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
             disabled={isPending}
             sx={{ minWidth: 120 }}
           >
-            Dodaj
+            {t('weekly.add')}
           </Button>
         </DialogActions>
       </form>

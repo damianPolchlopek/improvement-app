@@ -11,6 +11,7 @@ import {
 import StyledTableRow from './StyledTableRow';
 import StyledTableCell from './StyledTableCell';
 import ErrorAlert from '../error/ErrorAlert';
+import { useTranslation } from 'react-i18next';
 
 export default function DataTable({
   data,
@@ -19,20 +20,19 @@ export default function DataTable({
   error,
   columns,
   onCellClick,
-  loadingMessage = 'Ładowanie...',
-  emptyMessage = 'Brak danych do wyświetlenia',
+  loadingMessage,
+  emptyMessage,
   containerProps = {},
   tableProps = {},
 }) {
+  const { t } = useTranslation();
   if (isLoading) {
     return (
       <Box sx={{ p: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <CircularProgress />
-        {loadingMessage && (
-          <Typography variant="body2" sx={{ ml: 2 }}>
-            {loadingMessage}
-          </Typography>
-        )}
+        <Typography variant="body2" sx={{ ml: 2 }}>
+          {loadingMessage || t('messages.loading')}
+        </Typography>
       </Box>
     );
   }
@@ -45,7 +45,7 @@ export default function DataTable({
     return (
       <Box sx={{ p: 3, textAlign: 'center' }}>
         <Typography variant="body1" color="text.secondary">
-          {emptyMessage}
+          {emptyMessage || t('common.noData')}
         </Typography>
       </Box>
     );

@@ -22,7 +22,7 @@ export default function MealFilter({ mealPopularity, setMealPopularity }) {
         <MenuItem value="LOW">{t('food.rare')}</MenuItem>
       </Select>
       <Button variant="contained" sx={{ marginLeft: 'auto' }} onClick={clearSelections}>
-        Clear Selections
+        {t('food.clearSelections')}
       </Button>
     </Toolbar>
   );

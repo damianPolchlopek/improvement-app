@@ -141,7 +141,7 @@ export default function SingleMeal({ meal }) {
           {/* Nutrition Cards Grid */}
           <Box sx={{ mb: 3 }}>
             <Typography variant="h6" fontWeight="600" gutterBottom>
-              Wartości Odżywcze
+              {t('food.nutritionValues')}
             </Typography>
             <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} mb={3}>
               {nutritionData.map((item, index) => (
@@ -173,7 +173,7 @@ export default function SingleMeal({ meal }) {
           {/* Additional Info */}
           <Box>
             <Typography variant="h6" fontWeight="600" gutterBottom>
-              Szczegóły
+              {t('food.details')}
             </Typography>
             <TableContainer component={Paper} elevation={1} sx={{ borderRadius: 2 }}>
               <Table>
@@ -205,10 +205,10 @@ export default function SingleMeal({ meal }) {
                             },
                           }}
                         >
-                          Zobacz przepis
+                          {t('food.viewRecipe')}
                         </Typography>
                       ) : (
-                        <Typography color="text.secondary">Brak linku</Typography>
+                        <Typography color="text.secondary">{t('food.noLink')}</Typography>
                       )}
                     </TableCell>
                   </TableRow>
@@ -226,7 +226,7 @@ export default function SingleMeal({ meal }) {
           {meal.recipe?.length > 0 ? (
             <Box>
               <Typography variant="h6" fontWeight="600" gutterBottom>
-                Sposób Przygotowania
+                {t('food.preparation')}
               </Typography>
               <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
                 {meal.recipe.map((recipeRow, index) => (

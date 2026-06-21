@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   Table,
@@ -23,6 +24,7 @@ import StyledTableCell from '../component/table/StyledTableCell';
 import StyledTableRow from '../component/table/StyledTableRow';
 
 export default function FinanceInformation() {
+  const { t } = useTranslation();
   const theme = useTheme();
 
   return (
@@ -43,11 +45,11 @@ export default function FinanceInformation() {
               <Box display="flex" alignItems="center" gap={2} mb={2}>
                 <Info sx={{ fontSize: 32 }} />
                 <Typography variant="h4" fontWeight="600">
-                  Informacje o Rynku Krypto
+                  {t('finance.marketInfo')}
                 </Typography>
               </Box>
               <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                Historyczne dane i kluczowe informacje o cyklach bitcoina
+                {t('finance.marketInfoDesc')}
               </Typography>
             </CardContent>
           </Card>
@@ -68,7 +70,7 @@ export default function FinanceInformation() {
             >
               <TrendingUp sx={{ fontSize: 28 }} />
               <Typography variant="h5" fontWeight="600">
-                Historyczne Cykle BTC
+                {t('finance.btcCycles')}
               </Typography>
             </Box>
 
@@ -84,7 +86,9 @@ export default function FinanceInformation() {
                 </TableHead>
                 <TableBody>
                   <StyledTableRow>
-                    <StyledTableCell sx={{ fontWeight: '600' }}>Spadki % BTC</StyledTableCell>
+                    <StyledTableCell sx={{ fontWeight: '600' }}>
+                      {t('finance.btcDrops')}
+                    </StyledTableCell>
                     <StyledTableCell>86%</StyledTableCell>
                     <StyledTableCell>84%</StyledTableCell>
                     <StyledTableCell>78%</StyledTableCell>
@@ -92,7 +96,7 @@ export default function FinanceInformation() {
 
                   <StyledTableRow>
                     <StyledTableCell sx={{ fontWeight: '600' }}>
-                      Cykle wzrostowe [tygodnie]
+                      {t('finance.bullCycles')}
                     </StyledTableCell>
                     <StyledTableCell>142</StyledTableCell>
                     <StyledTableCell>152</StyledTableCell>
@@ -101,7 +105,7 @@ export default function FinanceInformation() {
 
                   <StyledTableRow>
                     <StyledTableCell sx={{ fontWeight: '600' }}>
-                      Cykle spadkowe [tygodnie]
+                      {t('finance.bearCycles')}
                     </StyledTableCell>
                     <StyledTableCell>59</StyledTableCell>
                     <StyledTableCell>50</StyledTableCell>
@@ -110,7 +114,7 @@ export default function FinanceInformation() {
 
                   <StyledTableRow>
                     <StyledTableCell sx={{ fontWeight: '600' }}>
-                      Wzrosty i spadki [tygodnie]
+                      {t('finance.fullCycles')}
                     </StyledTableCell>
                     <StyledTableCell>201</StyledTableCell>
                     <StyledTableCell>202</StyledTableCell>
@@ -132,7 +136,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">Dołek zazwyczaj jest 365 dni po górce</Typography>
+              <Typography variant="body1">{t('finance.note1')}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -146,10 +150,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">
-                Wzrosty zaczynają się: - 1 - 1.5 rok przed halvingiem - wzrosty trwają do około roku
-                po halvingu
-              </Typography>
+              <Typography variant="body1">{t('finance.note2')}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -163,7 +164,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">Następny halving około Kwiecień 2024</Typography>
+              <Typography variant="body1">{t('finance.note3')}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -177,9 +178,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">
-                Decyzja o wprowadzeniu ETF na BTC przez BlackRock około luty 2024
-              </Typography>
+              <Typography variant="body1">{t('finance.note4')}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -194,21 +193,20 @@ export default function FinanceInformation() {
           >
             <CardContent sx={{ p: 3 }}>
               <Typography variant="body1" sx={{ mb: 2 }}>
-                Istotne katalizatory zmian sentymentu w ciągu kolejnych 12 miesięcy, które zbiegną
-                się w czasie z halvingiem to m.in.:
+                {t('finance.note5')}
               </Typography>
               <List dense>
                 <ListItem>
-                  <ListItemText primary="rozprawa sądowa między SEC a Grayscale w sierpniu 2023" />
+                  <ListItemText primary={t('finance.note5item1')} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="decyzje dotyczące ETF spot ArkInvest we wrześniu 2023" />
+                  <ListItemText primary={t('finance.note5item2')} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="rozwiązanie sprawy Ripple również we wrześniu 2023" />
+                  <ListItemText primary={t('finance.note5item3')} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="decyzje dotyczące wniosków BlackRock i Fidelity w marcu 2024" />
+                  <ListItemText primary={t('finance.note5item4')} />
                 </ListItem>
               </List>
             </CardContent>
@@ -224,10 +222,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">
-                Krypto rozważane przez SEC za security: BNB, XRP, ADA, SOL, MATIC, ATOM, NEAR, SAND,
-                ALGO, MANA
-              </Typography>
+              <Typography variant="body1">{t('finance.note6')}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -241,10 +236,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">
-                PlanB: BTC najlepiej kupić 6 miesięcy przed Halvingiem, a najlepiej sprzedać 18
-                miesięcy po halvingu.
-              </Typography>
+              <Typography variant="body1">{t('finance.note7')}</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -258,11 +250,7 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">
-                Jarzombek: TENET - token z Re-Staking. Pokazuje to jak silna może stać się narracja
-                na projekty oferujące Re-Staking, które z czasem mogą doświadczyć znacznych
-                wzrostów.
-              </Typography>
+              <Typography variant="body1">{t('finance.note8')}</Typography>
             </CardContent>
           </Card>
         </Grid>
