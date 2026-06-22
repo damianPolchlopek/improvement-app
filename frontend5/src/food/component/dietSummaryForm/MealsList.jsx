@@ -7,24 +7,11 @@ import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
 import MealRow from './MealRow';
 
-const categoryTranslation = new Map([
-  ['Other', 'All'],
-  ['Lunch', 'Obiad'],
-  ['Breakfast', 'Śniadanie'],
-  ['Hot Dish', 'Ciepły Posiłek'],
-  ['Sweets', 'Słodycze'],
-  ['Dinner', 'Kolacja'],
-]);
-
 const popularityTranslation = new Map([
   ['ALL', 'All'],
   ['HIGH', 'Wysoka'],
   ['LOW', 'Niska'],
 ]);
-
-function translateMealCategory(arg) {
-  return categoryTranslation.get(arg) ?? 'Other';
-}
 
 function translateMealPopularity(arg) {
   return popularityTranslation.get(arg) ?? 'ALL';
@@ -41,7 +28,7 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
     queryKey: ['mealList', mealCategory, mealPopularity],
     queryFn: () =>
       REST.getMealList(
-        translateMealCategory(mealCategory),
+        mealCategory,
         'ALL',
         '',
         translateMealPopularity(mealPopularity),

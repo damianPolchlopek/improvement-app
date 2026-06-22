@@ -148,7 +148,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={3}>
           {exercisesFields.map((input, index) => (
-            <Grid xs={12} key={input._key}>
+            <Grid size={12} key={input._key}>
               <Fade in={true} timeout={300 + index * 100}>
                 <Card elevation={4}>
                   <CardContent sx={{ p: 3 }}>

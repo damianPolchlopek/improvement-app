@@ -250,7 +250,7 @@ export default function MealView() {
               ) : (
                 <Grid container spacing={3}>
                   {mealList.map((meal, index) => (
-                    <Grid key={index} xs={12} md={6}>
+                    <Grid key={index} size={{ xs: 12, md: 6 }}>
                       <SingleMeal meal={meal} />
                     </Grid>
                   ))}

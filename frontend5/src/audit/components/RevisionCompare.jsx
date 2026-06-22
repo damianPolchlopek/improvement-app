@@ -103,7 +103,7 @@ const RevisionCompare = ({
               );
 
               return (
-                <Grid xs={12} sm={6} md={4} key={revision.revisionNumber}>
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={revision.revisionNumber}>
                   <Card
                     onClick={() => onRevisionSelect(revision)}
                     elevation={isSelected ? 8 : 2}
@@ -232,7 +232,12 @@ const RevisionCompare = ({
               />
             </Grid>
 
-            <Grid xs={12} md={2} display="flex" alignItems="center" justifyContent="center">
+            <Grid
+              size={{ xs: 12, md: 2 }}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
               <ArrowForwardIcon sx={{ fontSize: 40, color: '#4caf50' }} />
             </Grid>
 

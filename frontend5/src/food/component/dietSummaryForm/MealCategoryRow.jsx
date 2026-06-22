@@ -10,7 +10,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import MealsList from './MealsList';
 
-export default function MealCategoryRow({ mealPopularity, mealCategory }) {
+export default function MealCategoryRow({ mealPopularity, mealCategory, mealCategoryLabel }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = () => {
@@ -26,7 +26,7 @@ export default function MealCategoryRow({ mealPopularity, mealCategory }) {
           </IconButton>
         </StyledTableCell>
         <StyledTableCell component="th" scope="row">
-          {mealCategory}
+          {mealCategoryLabel}
         </StyledTableCell>
       </StyledTableRow>
 
