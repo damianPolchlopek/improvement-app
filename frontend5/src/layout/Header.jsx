@@ -38,7 +38,6 @@ function ResponsiveAppBar({ onDrawerToggle }) {
   };
 
   const handleLogout = () => {
-    console.log('User logged out');
     submit(null, { method: 'post', action: '/logout' });
   };
 

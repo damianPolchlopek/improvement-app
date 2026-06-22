@@ -64,6 +64,28 @@ export async function refreshAccessToken() {
   }
 }
 
-export function tokenLoader() {
-  return getAuthToken();
+export async function tokenLoader() {
+  const token = getAuthToken();
+  // sessionStorage zna sesję ('cookie' albo 'EXPIRED') → zwróć od razu
+  if (token) return token;
+
+  // Brak lokalnego stanu sesji (np. świeża karta), ale httpOnly cookie może być
+  // wciąż ważne. Spróbuj cicho odtworzyć sesję z cookie przez refresh — dzięki temu
+  // otwarcie nowej karty nie wymusza ponownego logowania, gdy cookie wciąż żyje.
+  try {
+    const data = await REST.refreshTokenRequest();
+    sessionStorage.setItem('isLoggedIn', 'true');
+    if (data?.accessTokenExpiresAt != null) {
+      sessionStorage.setItem('accessTokenExpiresAt', data.accessTokenExpiresAt.toString());
+    }
+    if (data?.refreshTokenExpiresAt != null) {
+      sessionStorage.setItem('refreshTokenExpiresAt', data.refreshTokenExpiresAt.toString());
+    }
+    if (data?.roles != null) {
+      sessionStorage.setItem('role', JSON.stringify(data.roles));
+    }
+    return 'cookie';
+  } catch {
+    return null; // brak ważnej sesji → Layout przekieruje na /login
+  }
 }

@@ -9,8 +9,6 @@ export function useDietCalculation() {
 
   const calculateDiet = useMutation({
     mutationFn: (meals) => {
-      console.log('Before calculation:', meals);
-
       const mealsWithAmounts = meals.map((meal) => ({
         ...meal,
         amount: meal.amount || 1,
@@ -22,8 +20,6 @@ export function useDietCalculation() {
           mealRecipeIngredientId: mealIngredient.id,
         })),
       }));
-
-      console.log('Calculating diet with meals:', mealsWithAmounts);
 
       return REST.calculateDiet({ dailyMeals: mealsWithAmounts });
     },

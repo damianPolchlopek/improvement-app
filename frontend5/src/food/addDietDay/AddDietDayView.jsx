@@ -16,7 +16,6 @@ export default function AddDietDayView() {
 
   const createDietSummaryMutation = useMutation({
     mutationFn: () => {
-      console.log('Selected meals:', selectedMeals);
       const dietDayToSave = {
         meals: selectedMeals.map((meal) => ({
           ...meal,
@@ -29,7 +28,6 @@ export default function AddDietDayView() {
           })),
         })),
       };
-      console.log('Transferred Selected meals:', dietDayToSave);
       return REST.createDietSummary(dietDayToSave);
     },
     onSuccess: () => {

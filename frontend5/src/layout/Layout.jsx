@@ -49,20 +49,15 @@ export default function Layout() {
       // Odśwież token 5 minut przed wygaśnięciem
       const refreshTime = Math.max(tokenDuration - 300000, 60000); // Minimum 1 minuta
 
-      console.log('Scheduling refresh in:', refreshTime, 'ms');
-
       refreshTimeoutRef.current = setTimeout(async () => {
         if (isRefreshingRef.current) {
-          console.log('Already refreshing, skipping...');
           return;
         }
 
         try {
           isRefreshingRef.current = true;
-          console.log('Attempting to refresh token...');
 
           const newToken = await refreshAccessToken();
-          console.log('Token refreshed successfully');
 
           // Aktualizuj lokalny stan zamiast przeładowywać stronę
           setToken(newToken);
@@ -79,7 +74,6 @@ export default function Layout() {
 
       // Ustaw timeout na wylogowanie jako backup
       logoutTimeoutRef.current = setTimeout(() => {
-        console.log('Token expired, logging out');
         submit(null, { action: '/logout', method: 'post' });
       }, tokenDuration);
     };

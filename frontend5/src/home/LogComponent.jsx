@@ -29,7 +29,6 @@ const LogComponent = () => {
       webSocketFactory: () => new SockJS(`${host_url}ws`),
       reconnectDelay: 5000,
       onConnect: () => {
-        console.log('✅ Połączono z WebSocket STOMP!');
         setIsConnected(true);
         setIsConnecting(false);
         client.subscribe('/topic/messages', (message) => {
