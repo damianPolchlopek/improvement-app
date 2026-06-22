@@ -21,7 +21,7 @@ export default function MaximumExerciseView() {
     queryKey: ['ath-training', trainingType],
     queryFn: () => REST.getATHTraining(trainingType),
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 10,
   });
 
   const maximumExerciseColumns = [

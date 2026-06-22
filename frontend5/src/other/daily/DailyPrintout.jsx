@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +34,7 @@ export default function DailyPrintout() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['daily-list', page, size],
     queryFn: () => REST.getDaily(page, size),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
   });
 

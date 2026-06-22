@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import DataTable from '../../component/table/DataTable';
 import { useTranslation } from 'react-i18next';
@@ -59,7 +59,7 @@ export default function ProductView() {
       REST.getProductFiltredByCategoryAndName(selectedCategory, typedProductName || ' '),
     select: (res) => res.entity,
     enabled: !!selectedCategory,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 

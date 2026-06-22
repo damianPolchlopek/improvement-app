@@ -40,7 +40,7 @@ export default function AddTrainingView() {
     queryFn: () => REST.getTrainingTemplateByType(trainingType),
     enabled: false,
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 10,
   });
 
   const handleLoadTraining = () => {

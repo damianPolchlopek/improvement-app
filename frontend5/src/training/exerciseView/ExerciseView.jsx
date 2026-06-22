@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
@@ -35,7 +35,7 @@ export default function ExerciseView() {
   } = useQuery({
     queryKey: ['training-by-type', selectedTrainingType, page, size],
     queryFn: () => REST.getTrainingByType(selectedTrainingType, page, size),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
   });
 

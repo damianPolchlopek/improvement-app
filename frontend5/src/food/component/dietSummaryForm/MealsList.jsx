@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../../utils/REST';
 import { useTranslation } from 'react-i18next';
 import { Collapse, Table, TableBody, TableHead, CircularProgress } from '@mui/material';
@@ -37,9 +37,9 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
       ),
 
     enabled: !!mealCategory && !!mealPopularity && isOpen,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 10, // cache data for 10 minutes
+    gcTime: 1000 * 60 * 10, // cache data for 10 minutes
   });
 
   if (isLoading) {

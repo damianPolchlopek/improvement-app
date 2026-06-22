@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import ExerciseChart from './ExerciseChart';
 import { useTranslation } from 'react-i18next';
@@ -97,7 +97,7 @@ export default function TrainingStatistic() {
         formatXAxis(beginDate),
         formatXAxis(endDate)
       ),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const handleExerciseNameChange = (event, newValue) => {

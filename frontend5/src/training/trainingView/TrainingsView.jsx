@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import SingleTraining from './SingleTraining';
 import { useTranslation } from 'react-i18next';
@@ -35,9 +35,9 @@ export default function TrainingsView() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['training-names', page, size],
     queryFn: () => REST.getAllTrainingNames(page, size),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5, // 5 minut
-    cacheTime: 1000 * 60 * 10, // trzymanie danych w cache przez 10 minut
+    gcTime: 1000 * 60 * 10, // trzymanie danych w cache przez 10 minut
   });
 
   const handleChangeSize = (event) => {

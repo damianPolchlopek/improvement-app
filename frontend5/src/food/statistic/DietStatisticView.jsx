@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
@@ -37,7 +37,7 @@ export default function DietStatisticView() {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['diet-summaries', page, size],
     queryFn: () => REST.getDietSummaries(page, size),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
   });
 

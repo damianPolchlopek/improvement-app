@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 
 import { Collapse, Typography, Box } from '@mui/material';
 
@@ -29,9 +29,9 @@ export default function SingleTraining({ trainingName }) {
       }
     },
     enabled: isOpen,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 10,
+    gcTime: 1000 * 60 * 10,
   });
 
   const handleClick = () => {
