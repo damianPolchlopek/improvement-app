@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { QueryClient } from '@tanstack/react-query';
+import { LoginUrl } from './URLHelper';
 
 export const queryClient = new QueryClient();
 
@@ -34,6 +35,76 @@ const statistic = 'statistic/';
 // Przeglądarka automatycznie wysyła httpOnly cookies przy każdym requeście
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 60000;
+
+// === Interceptor 401: automatyczne odświeżenie tokenu albo wylogowanie ===
+// Frontend nie widzi httpOnly cookie z JWT — gdy backend odrzuci request (401),
+// próbujemy raz odświeżyć sesję i ponowić; jeśli się nie uda, sprowadzamy front
+// do stanu "wylogowany" (koniec rozjazdu sessionStorage ↔ realna sesja na backendzie).
+let isRefreshing = false;
+let pendingRequests = [];
+
+const flushQueue = (error) => {
+  pendingRequests.forEach(({ resolve, reject }) => (error ? reject(error) : resolve()));
+  pendingRequests = [];
+};
+
+const forceLogout = () => {
+  sessionStorage.removeItem('isLoggedIn');
+  sessionStorage.removeItem('accessTokenExpiresAt');
+  sessionStorage.removeItem('refreshTokenExpiresAt');
+  sessionStorage.removeItem('role');
+  // Interceptor żyje poza Reactem → twarde przekierowanie na login
+  if (!window.location.pathname.startsWith(LoginUrl)) {
+    window.location.assign(LoginUrl);
+  }
+};
+
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const { response, config } = error;
+
+    // Brak odpowiedzi (sieć/timeout) lub status inny niż 401 → przepuść dalej
+    if (!response || response.status !== 401 || !config) {
+      return Promise.reject(error);
+    }
+
+    // Endpointy auth (signin/refresh/logout/...) obsługują 401 same → nie odświeżaj
+    if (config.url?.includes('api/auth/')) {
+      return Promise.reject(error);
+    }
+
+    // Ten request już raz ponawialiśmy → nie zapętlaj
+    if (config._retry) {
+      return Promise.reject(error);
+    }
+    config._retry = true;
+
+    // Jeśli odświeżanie już trwa, poczekaj na jego wynik i ponów request
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        pendingRequests.push({ resolve, reject });
+      }).then(() => axios(config));
+    }
+
+    isRefreshing = true;
+    try {
+      const { data } = await axios.post(serverUrl + 'api/auth/refresh-token', {});
+      // Zaktualizuj lokalny zapis czasu wygaśnięcia (bookkeeping front-endu)
+      if (data?.accessTokenExpiresAt) {
+        sessionStorage.setItem('accessTokenExpiresAt', data.accessTokenExpiresAt.toString());
+      }
+      flushQueue(null);
+      return axios(config); // ponów oryginalny request — nowe cookie jest już ustawione
+    } catch (refreshError) {
+      flushQueue(refreshError);
+      forceLogout();
+      return Promise.reject(refreshError);
+    } finally {
+      isRefreshing = false;
+    }
+  }
+);
 
 const get = (url) => axios.get(url).then((r) => r.data);
 const post = (url, data) => axios.post(url, data).then((r) => r.data);
