@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient, keepPreviousData } from '@tanstack/react-query';
 import REST from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 
@@ -43,7 +43,7 @@ export default function ShoppingListView({ categories = [] }) {
     queryKey: ['shopping-list', selectedCategory],
     queryFn: () => REST.getShoppingListByCategory(selectedCategory).then((res) => res.entity),
     enabled: !!selectedCategory,
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   });
 
   const { mutate: deleteProduct, isPending: isDeleting } = useMutation({

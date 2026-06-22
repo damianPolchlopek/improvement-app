@@ -57,7 +57,6 @@ export default function ProductView() {
     queryKey: ['products', selectedCategory, typedProductName],
     queryFn: () =>
       REST.getProductFiltredByCategoryAndName(selectedCategory, typedProductName || ' '),
-    select: (res) => res.entity,
     enabled: !!selectedCategory,
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5, // 5 minutes
