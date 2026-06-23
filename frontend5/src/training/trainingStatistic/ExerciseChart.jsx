@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useMemo } from 'react';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 
@@ -14,78 +13,113 @@ import {
   YAxis,
 } from 'recharts';
 
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-function formatXAxis(tickItem) {
+// Single source of truth for series colors. The order matches the order of the
+// selected exercises, so the chips in the picker and the lines here stay in sync.
+export const CHART_COLORS = [
+  '#4caf50',
+  '#ff9800',
+  '#42a5f5',
+  '#ec407a',
+  '#ab47bc',
+  '#26c6da',
+  '#ffca28',
+  '#8d6e63',
+  '#ef5350',
+  '#5c6bc0',
+];
+
+function formatAxisDate(tickItem) {
   return moment(tickItem).format('DD/MM/YYYY');
 }
 
-function convertLocalDateToEpoch(date) {
-  return moment(date).valueOf();
-}
-
-const CustomTooltip = ({ active, payload, label }) => {
-  const { t } = useTranslation();
-
-  if (active && payload && payload.length) {
-    return (
-      <div style={{ backgroundColor: 'black', padding: '5px', color: 'white' }}>
-        <p>
-          {t('chart.date')}: {formatXAxis(label)}
-        </p>
-        <p>
-          {t('chart.value')}: {payload[0]?.value || 'No data'}
-        </p>
-      </div>
-    );
-  }
-
-  return null;
-};
-
-export default function ExerciseChart({ exercises, beginDate, endDate }) {
-  const { t } = useTranslation();
-
-  const dataExercise = useMemo(
-    () =>
-      exercises.map((element) => ({
-        ...element,
-        localDate: convertLocalDateToEpoch(element.localDate),
-      })),
-    [exercises]
-  );
-
-  if (dataExercise.length === 0) {
-    return (
-      <Typography variant="body2" style={{ color: '#a0aec0' }}>
-        {t('messages.loading')}
-      </Typography>
-    );
+const CustomTooltip = ({ active, payload, label, t }) => {
+  if (!active || !payload || !payload.length) {
+    return null;
   }
 
   return (
-    <>
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart
-          width={730}
-          height={250}
-          data={dataExercise}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+    <Box
+      sx={{
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        border: '1px solid rgba(255, 255, 255, 0.15)',
+        borderRadius: 1.5,
+        p: 1.5,
+        minWidth: 160,
+      }}
+    >
+      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+        {t('chart.date')}: {formatAxisDate(label)}
+      </Typography>
+      {payload.map((entry) => (
+        <Box
+          key={entry.dataKey}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 2,
+            mt: 0.75,
+          }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="localDate"
-            domain={[convertLocalDateToEpoch(beginDate), convertLocalDateToEpoch(endDate)]}
-            scale="time"
-            type="number"
-            tickFormatter={formatXAxis}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                backgroundColor: entry.color,
+                flexShrink: 0,
+              }}
+            />
+            <Typography variant="body2" sx={{ color: 'white' }} noWrap>
+              {entry.dataKey}
+            </Typography>
+          </Box>
+          <Typography variant="body2" fontWeight={700} sx={{ color: 'white' }}>
+            {entry.value}
+          </Typography>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+export default function ExerciseChart({ data, series, beginDate, endDate }) {
+  const { t } = useTranslation();
+
+  return (
+    <ResponsiveContainer width="100%" height={460}>
+      <LineChart data={data} margin={{ top: 8, right: 24, left: 4, bottom: 8 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+        <XAxis
+          dataKey="localDate"
+          domain={[beginDate, endDate]}
+          scale="time"
+          type="number"
+          tickFormatter={formatAxisDate}
+          stroke="rgba(255, 255, 255, 0.6)"
+          tick={{ fontSize: 12 }}
+          minTickGap={32}
+        />
+        <YAxis stroke="rgba(255, 255, 255, 0.6)" tick={{ fontSize: 12 }} width={44} />
+        <Tooltip content={(props) => <CustomTooltip {...props} t={t} />} />
+        <Legend wrapperStyle={{ paddingTop: 12 }} />
+        {series.map((name, index) => (
+          <Line
+            key={name}
+            type="monotone"
+            dataKey={name}
+            name={name}
+            stroke={CHART_COLORS[index % CHART_COLORS.length]}
+            strokeWidth={2}
+            dot={{ r: 3 }}
+            activeDot={{ r: 5 }}
+            connectNulls
           />
-          <YAxis />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" />
-        </LineChart>
-      </ResponsiveContainer>
-    </>
+        ))}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }

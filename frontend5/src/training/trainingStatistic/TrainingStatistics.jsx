@@ -1,25 +1,26 @@
-import React, { useState } from 'react';
-import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import React, { useMemo, useState } from 'react';
+import { useQueries, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
-import ExerciseChart from './ExerciseChart';
+import ExerciseChart, { CHART_COLORS } from './ExerciseChart';
 import { useTranslation } from 'react-i18next';
 
 import {
   Autocomplete,
-  FormControl,
   TextField,
   CircularProgress,
   Card,
   CardContent,
   Typography,
   Box,
-  Fade,
+  Stack,
+  Chip,
+  ToggleButton,
+  ToggleButtonGroup,
   Alert,
   useTheme,
 } from '@mui/material';
 
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import moment from 'moment';
@@ -30,43 +31,39 @@ import { useLoaderData } from 'react-router-dom';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import InformationComponent from '../../component/InformationComponent';
 
-import {
-  Analytics,
-  FitnessCenter,
-  DateRange,
-  TrendingUp,
-  Assessment,
-  QueryStats,
-} from '@mui/icons-material';
+import { Analytics, TrendingUp } from '@mui/icons-material';
 
-function formatXAxis(tickItem) {
-  return moment(tickItem).format('DD-MM-YYYY');
+// Backend expects dd-MM-yyyy path params (see StatisticController).
+function formatApiDate(epoch) {
+  return moment(epoch).format('DD-MM-YYYY');
 }
 
-const dateFieldSx = {
+// Default range start when "All" is selected – early enough to cover all data.
+const ALL_TIME_BEGIN = moment('2015-01-01').valueOf();
+
+const RANGE_PRESETS = [
+  { key: '1M', months: 1 },
+  { key: '3M', months: 3 },
+  { key: '6M', months: 6 },
+  { key: '12M', months: 12 },
+  { key: 'all', months: null },
+];
+
+const fieldSx = {
   '& .MuiOutlinedInput-root': {
     borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     color: 'white',
-    '& fieldset': {
-      borderColor: 'rgba(255, 255, 255, 0.3)',
-    },
-    '&:hover fieldset': {
-      borderColor: '#ff9800',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#ff9800',
-    },
+    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.25)' },
+    '&:hover fieldset': { borderColor: '#4caf50' },
+    '&.Mui-focused fieldset': { borderColor: '#4caf50' },
   },
   '& .MuiInputLabel-root': {
     color: 'rgba(255, 255, 255, 0.7)',
-    '&.Mui-focused': {
-      color: '#ff9800',
-    },
+    '&.Mui-focused': { color: '#4caf50' },
   },
-  '& .MuiIconButton-root': {
-    color: 'white',
-  },
+  '& .MuiIconButton-root': { color: 'white' },
+  '& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator': { color: 'white' },
 };
 
 export default function TrainingStatistic() {
@@ -74,53 +71,65 @@ export default function TrainingStatistic() {
   const { t, i18n } = useTranslation();
   const theme = useTheme();
 
-  // Format daty zależny od aktywnego języka (reaktywny na zmianę języka)
   const dateFormat = i18n.language === 'pl' ? 'DD/MM/YYYY' : 'MM/DD/YYYY';
 
-  const [selectedExerciseName, setSelectedExerciseName] = useState('Bieżnia');
-  const [selectedChartType, setSelectedChartType] = useState('Capacity');
-  const [beginDate, setBeginDate] = useState(1653145460000);
+  const [selectedExercises, setSelectedExercises] = useState(() =>
+    exerciseNames.length > 0 ? [exerciseNames[0]] : []
+  );
+  const [chartType, setChartType] = useState('Capacity');
+  const [beginDate, setBeginDate] = useState(ALL_TIME_BEGIN);
   const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
 
-  // useQuery for exercises
-  const {
-    data: exercises,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['training-statistic', selectedExerciseName, selectedChartType, beginDate, endDate],
-    queryFn: () =>
-      REST.getTrainingStatistic(
-        selectedExerciseName,
-        selectedChartType,
-        formatXAxis(beginDate),
-        formatXAxis(endDate)
-      ),
-    placeholderData: keepPreviousData,
+  // One query per selected exercise; merged into a single series-per-exercise dataset.
+  const queryResults = useQueries({
+    queries: selectedExercises.map((name) => ({
+      queryKey: ['training-statistic', name, chartType, beginDate, endDate],
+      queryFn: () =>
+        REST.getTrainingStatistic(
+          name,
+          chartType,
+          formatApiDate(beginDate),
+          formatApiDate(endDate)
+        ),
+      placeholderData: keepPreviousData,
+      enabled: Boolean(name),
+    })),
   });
 
-  const handleExerciseNameChange = (event, newValue) => {
-    setSelectedExerciseName(newValue);
-  };
+  const isLoading = selectedExercises.length > 0 && queryResults.some((r) => r.isLoading);
+  const errorResult = queryResults.find((r) => r.isError);
 
-  const handleChartTypeChange = (event, newValue) => {
-    setSelectedChartType(newValue);
+  const chartData = useMemo(() => {
+    const byDate = new Map();
+    queryResults.forEach((result, index) => {
+      const name = selectedExercises[index];
+      (result.data || []).forEach((point) => {
+        const epoch = moment(point.localDate).valueOf();
+        const row = byDate.get(epoch) || { localDate: epoch };
+        row[name] = point.value;
+        byDate.set(epoch, row);
+      });
+    });
+    return Array.from(byDate.values()).sort((a, b) => a.localDate - b.localDate);
+  }, [queryResults, selectedExercises]);
+
+  const applyPreset = (preset) => {
+    const end = moment().add(1, 'day');
+    setEndDate(end.valueOf());
+    setBeginDate(
+      preset.months ? moment().subtract(preset.months, 'month').valueOf() : ALL_TIME_BEGIN
+    );
   };
 
   const handleChangeBeginDate = (newValue) => {
-    if (newValue && newValue.isValid()) {
-      setBeginDate(newValue.valueOf());
-    }
+    if (newValue && newValue.isValid()) setBeginDate(newValue.valueOf());
   };
 
   const handleChangeEndDate = (newValue) => {
-    if (newValue && newValue.isValid()) {
-      setEndDate(newValue.valueOf());
-    }
+    if (newValue && newValue.isValid()) setEndDate(newValue.valueOf());
   };
 
-  if (exercises && exercises.length === 0) {
+  if (exerciseNames.length === 0) {
     return (
       <Box sx={{ minHeight: '100vh', py: 4 }}>
         <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
@@ -133,371 +142,222 @@ export default function TrainingStatistic() {
   }
 
   return (
-    <Box sx={{ py: 4, minHeight: '100vh' }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={8}
-            sx={{
-              borderRadius: 4,
-              background: theme.palette.card.header,
-              color: 'white',
-              mb: 3,
-              overflow: 'hidden',
-              border: theme.palette.card.border,
-            }}
-          >
-            <CardContent sx={{ p: 4 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
-                <Analytics sx={{ fontSize: 40 }} />
-                <Box>
-                  <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
-                    Statystyki Treningu
-                  </Typography>
-                  <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                    Analizuj swoje postępy i osiągnięcia
-                  </Typography>
-                </Box>
-              </Box>
-              <Box display="flex" gap={3} sx={{ mt: 3 }}>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <QueryStats sx={{ fontSize: 20 }} />
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                    Interaktywne wykresy
-                  </Typography>
-                </Box>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Assessment sx={{ fontSize: 20 }} />
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                    Szczegółowe analizy
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Controls Section */}
+    <Box sx={{ py: 3, minHeight: '100vh' }}>
+      <Grid container spacing={2} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
+        {/* Compact controls toolbar */}
         <Grid size={12}>
           <Card
             elevation={6}
             sx={{
               borderRadius: 3,
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              border: theme.palette.card.border,
               background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
               color: 'white',
+              textAlign: 'left',
             }}
           >
-            <Box
-              sx={{
-                p: 2,
-                background: theme.palette.card.header,
-                borderBottom: theme.palette.card.border,
-              }}
-            >
-              <Typography variant="h6" fontWeight="600" color="white">
-                Parametry Wykresu
-              </Typography>
-            </Box>
-            <CardContent sx={{ p: 3 }}>
-              <Grid container spacing={3}>
-                {/* Exercise Selection */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Card
-                    elevation={2}
-                    sx={{
-                      borderRadius: 2,
-                      border: '1px solid rgba(76, 175, 80, 0.3)',
-                      background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                      color: 'white',
-                    }}
-                  >
-                    <CardContent sx={{ p: 3 }}>
-                      <Box display="flex" alignItems="center" gap={2} mb={3}>
-                        <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
-                        <Typography variant="h6" fontWeight="600" color="white">
-                          Wybór Ćwiczenia
-                        </Typography>
-                      </Box>
+            <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
+              <Stack direction="row" alignItems="center" gap={1.5} mb={2}>
+                <Analytics sx={{ color: '#4caf50' }} />
+                <Typography variant="h6" fontWeight={700} color="white">
+                  {t('chart.title')}
+                </Typography>
+              </Stack>
 
-                      <Grid container spacing={2}>
-                        <Grid size={12}>
-                          <FormControl fullWidth>
-                            {exerciseNames.length > 0 && (
-                              <Autocomplete
-                                disableClearable
-                                id="exercise-name-autocomplete"
-                                value={selectedExerciseName}
-                                options={exerciseNames}
-                                onChange={handleExerciseNameChange}
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    label={t('chart.exerciseName')}
-                                    variant="outlined"
-                                    sx={{
-                                      '& .MuiOutlinedInput-root': {
-                                        borderRadius: 2,
-                                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                        color: 'white',
-                                        '& fieldset': {
-                                          borderColor: 'rgba(255, 255, 255, 0.3)',
-                                        },
-                                        '&:hover fieldset': {
-                                          borderColor: '#4caf50',
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                          borderColor: '#4caf50',
-                                        },
-                                      },
-                                      '& .MuiInputLabel-root': {
-                                        color: 'rgba(255, 255, 255, 0.7)',
-                                        '&.Mui-focused': {
-                                          color: '#4caf50',
-                                        },
-                                      },
-                                      '& .MuiAutocomplete-popupIndicator': {
-                                        color: 'white',
-                                      },
-                                    }}
-                                  />
-                                )}
-                              />
-                            )}
-                          </FormControl>
-                        </Grid>
-                        <Grid size={12}>
-                          <FormControl fullWidth>
-                            <Autocomplete
-                              disableClearable
-                              id="chart-type-autocomplete"
-                              value={selectedChartType}
-                              options={['Weight', 'Capacity']}
-                              onChange={handleChartTypeChange}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label={t('chart.chartType')}
-                                  variant="outlined"
-                                  sx={{
-                                    '& .MuiOutlinedInput-root': {
-                                      borderRadius: 2,
-                                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                                      color: 'white',
-                                      '& fieldset': {
-                                        borderColor: 'rgba(255, 255, 255, 0.3)',
-                                      },
-                                      '&:hover fieldset': {
-                                        borderColor: '#4caf50',
-                                      },
-                                      '&.Mui-focused fieldset': {
-                                        borderColor: '#4caf50',
-                                      },
-                                    },
-                                    '& .MuiInputLabel-root': {
-                                      color: 'rgba(255, 255, 255, 0.7)',
-                                      '&.Mui-focused': {
-                                        color: '#4caf50',
-                                      },
-                                    },
-                                    '& .MuiAutocomplete-popupIndicator': {
-                                      color: 'white',
-                                    },
-                                  }}
-                                />
-                              )}
-                            />
-                          </FormControl>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                </Grid>
+              <Stack direction={{ xs: 'column', md: 'row' }} gap={2} alignItems="stretch">
+                {/* Exercises (multi-select) */}
+                <Autocomplete
+                  multiple
+                  disableCloseOnSelect
+                  id="exercise-name-autocomplete"
+                  value={selectedExercises}
+                  options={exerciseNames}
+                  onChange={(event, newValue) => setSelectedExercises(newValue)}
+                  sx={{ flex: 1, minWidth: 240 }}
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => {
+                      const { key, ...tagProps } = getTagProps({ index });
+                      return (
+                        <Chip
+                          key={key}
+                          label={option}
+                          size="small"
+                          {...tagProps}
+                          sx={{
+                            backgroundColor: CHART_COLORS[index % CHART_COLORS.length],
+                            color: '#0b1c25',
+                            fontWeight: 700,
+                            '& .MuiChip-deleteIcon': { color: 'rgba(0,0,0,0.5)' },
+                          }}
+                        />
+                      );
+                    })
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('chart.exercises')}
+                      placeholder={t('chart.selectExercises')}
+                      variant="outlined"
+                      sx={fieldSx}
+                    />
+                  )}
+                />
 
-                {/* Date Selection */}
-                <Grid size={{ xs: 12, md: 6 }}>
-                  <Card
-                    elevation={2}
-                    sx={{
-                      borderRadius: 2,
-                      border: '1px solid rgba(255, 152, 0, 0.3)',
-                      background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                      color: 'white',
-                    }}
-                  >
-                    <CardContent sx={{ p: 3 }}>
-                      <Box display="flex" alignItems="center" gap={2} mb={3}>
-                        <DateRange sx={{ color: '#ff9800', fontSize: 28 }} />
-                        <Typography variant="h6" fontWeight="600" color="white">
-                          Zakres Dat
-                        </Typography>
-                      </Box>
+                {/* Metric toggle */}
+                <ToggleButtonGroup
+                  value={chartType}
+                  exclusive
+                  onChange={(event, value) => value && setChartType(value)}
+                  size="small"
+                  sx={{
+                    alignSelf: { xs: 'flex-start', md: 'center' },
+                    '& .MuiToggleButton-root': {
+                      color: 'rgba(255,255,255,0.7)',
+                      borderColor: 'rgba(255,255,255,0.25)',
+                      px: 2,
+                    },
+                    '& .Mui-selected': {
+                      color: '#0b1c25 !important',
+                      backgroundColor: '#4caf50 !important',
+                      fontWeight: 700,
+                    },
+                  }}
+                >
+                  <ToggleButton value="Weight">{t('chart.weight')}</ToggleButton>
+                  <ToggleButton value="Capacity">{t('chart.capacity')}</ToggleButton>
+                </ToggleButtonGroup>
+              </Stack>
 
-                      <Grid container spacing={2}>
-                        <Grid size={12}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              label={t('chart.beginDate')}
-                              value={dayjs(beginDate)}
-                              onChange={handleChangeBeginDate}
-                              format={dateFormat}
-                              slotProps={{
-                                textField: { fullWidth: true, sx: dateFieldSx },
-                              }}
-                            />
-                          </LocalizationProvider>
-                        </Grid>
-                        <Grid size={12}>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                              label={t('chart.endDate')}
-                              value={dayjs(endDate)}
-                              onChange={handleChangeEndDate}
-                              format={dateFormat}
-                              slotProps={{
-                                textField: { fullWidth: true, sx: dateFieldSx },
-                              }}
-                            />
-                          </LocalizationProvider>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              </Grid>
+              {/* Date range row */}
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                gap={2}
+                alignItems={{ xs: 'stretch', sm: 'center' }}
+                mt={2}
+              >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label={t('chart.beginDate')}
+                    value={dayjs(beginDate)}
+                    onChange={handleChangeBeginDate}
+                    format={dateFormat}
+                    slotProps={{ textField: { size: 'small', sx: { ...fieldSx, minWidth: 160 } } }}
+                  />
+                  <DatePicker
+                    label={t('chart.endDate')}
+                    value={dayjs(endDate)}
+                    onChange={handleChangeEndDate}
+                    format={dateFormat}
+                    slotProps={{ textField: { size: 'small', sx: { ...fieldSx, minWidth: 160 } } }}
+                  />
+                </LocalizationProvider>
+
+                <Stack direction="row" gap={1} flexWrap="wrap">
+                  {RANGE_PRESETS.map((preset) => (
+                    <Chip
+                      key={preset.key}
+                      label={preset.months ? preset.key : t('chart.allTime')}
+                      onClick={() => applyPreset(preset)}
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        color: 'white',
+                        borderColor: 'rgba(255,255,255,0.3)',
+                        '&:hover': {
+                          borderColor: '#4caf50',
+                          backgroundColor: 'rgba(76,175,80,0.12)',
+                        },
+                      }}
+                    />
+                  ))}
+                </Stack>
+              </Stack>
             </CardContent>
           </Card>
         </Grid>
 
-        {/* Chart Section */}
+        {/* Chart */}
         <Grid size={12}>
-          <Fade in={true} timeout={1000}>
-            <Card
-              elevation={8}
+          <Card
+            elevation={8}
+            sx={{
+              borderRadius: 3,
+              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+              border: theme.palette.card.border,
+              overflow: 'hidden',
+            }}
+          >
+            <Box
               sx={{
-                borderRadius: 4,
-                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                overflow: 'hidden',
+                px: 3,
+                py: 2,
+                background: theme.palette.card.header,
+                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 2,
               }}
             >
-              <Box
-                sx={{
-                  p: 3,
-                  background: theme.palette.card.header,
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 2,
-                }}
-              >
-                <TrendingUp sx={{ fontSize: 32 }} />
-                <Box>
-                  <Typography variant="h5" fontWeight="600">
-                    Wykres Postępów
-                  </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                    {selectedExerciseName} - {selectedChartType}
-                  </Typography>
-                </Box>
+              <TrendingUp />
+              <Box sx={{ textAlign: 'left' }}>
+                <Typography variant="h6" fontWeight={600}>
+                  {chartType === 'Weight' ? t('chart.weight') : t('chart.capacity')}
+                </Typography>
+                <Typography variant="caption" sx={{ opacity: 0.85 }}>
+                  {selectedExercises.length > 0
+                    ? `${selectedExercises.length} ${t('chart.exercises')} · ${chartData.length} ${t('chart.dataPoints')}`
+                    : t('chart.subtitle')}
+                </Typography>
               </Box>
+            </Box>
 
-              <CardContent sx={{ p: 4 }}>
-                {isLoading ? (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      py: 8,
-                      background: 'linear-gradient(45deg, #1a2e3d 0%, #243441 100%)',
-                      borderRadius: 3,
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                    }}
-                  >
-                    <CircularProgress
-                      size={60}
-                      sx={{
-                        mb: 3,
-                        color: '#4caf50',
-                      }}
-                    />
-                    <Typography variant="h6" color="white" fontWeight="600">
-                      Ładowanie danych wykresu...
-                    </Typography>
-                    <Typography variant="body2" color="rgba(255, 255, 255, 0.7)" sx={{ mt: 1 }}>
-                      Przygotowywanie statystyk treningu
-                    </Typography>
-                  </Box>
-                ) : isError ? (
-                  <Alert
-                    severity="error"
-                    sx={{
-                      borderRadius: 3,
-                      fontSize: '1.1rem',
-                      backgroundColor: 'rgba(211, 47, 47, 0.1)',
-                      color: 'white',
-                      border: '1px solid rgba(211, 47, 47, 0.3)',
-                      '& .MuiAlert-icon': {
-                        color: '#f44336',
-                      },
-                    }}
-                  >
-                    <ErrorAlert error={error} />
-                  </Alert>
-                ) : (
-                  <Box sx={{ mt: 2 }}>
-                    <ExerciseChart exercises={exercises} beginDate={beginDate} endDate={endDate} />
-                  </Box>
-                )}
-              </CardContent>
-
-              {/* Footer with current selection info */}
-              {!isLoading && !isError && exercises && (
+            <CardContent sx={{ p: { xs: 1.5, sm: 3 } }}>
+              {selectedExercises.length === 0 ? (
+                <Alert severity="info" sx={{ borderRadius: 2 }}>
+                  {t('chart.noExercisesSelected')}
+                </Alert>
+              ) : isLoading && chartData.length === 0 ? (
                 <Box
                   sx={{
-                    p: 3,
-                    background: theme.palette.card.header,
-                    borderTop: theme.palette.card.border,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    py: 8,
                   }}
                 >
-                  <Grid container spacing={2}>
-                    <Grid size={{ xs: 12, sm: 4 }}>
-                      <Box textAlign="center">
-                        <Typography variant="h6" fontWeight="700" color="white">
-                          {selectedExerciseName}
-                        </Typography>
-                        <Typography variant="caption" color="rgba(255, 255, 255, 0.7)">
-                          Wybrane ćwiczenie
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 4 }}>
-                      <Box textAlign="center">
-                        <Typography variant="h6" fontWeight="700" color="#4caf50">
-                          {selectedChartType}
-                        </Typography>
-                        <Typography variant="caption" color="rgba(255, 255, 255, 0.7)">
-                          Typ wykresu
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 4 }}>
-                      <Box textAlign="center">
-                        <Typography variant="h6" fontWeight="700" color="#ff9800">
-                          {exercises?.length || 0}
-                        </Typography>
-                        <Typography variant="caption" color="rgba(255, 255, 255, 0.7)">
-                          Punkty danych
-                        </Typography>
-                      </Box>
-                    </Grid>
-                  </Grid>
+                  <CircularProgress size={48} sx={{ mb: 2, color: '#4caf50' }} />
+                  <Typography variant="body1" color="white">
+                    {t('chart.loadingChart')}
+                  </Typography>
                 </Box>
+              ) : errorResult ? (
+                <Alert
+                  severity="error"
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                    color: 'white',
+                    border: '1px solid rgba(211, 47, 47, 0.3)',
+                    '& .MuiAlert-icon': { color: '#f44336' },
+                  }}
+                >
+                  <ErrorAlert error={errorResult.error} />
+                </Alert>
+              ) : chartData.length === 0 ? (
+                <Alert severity="info" sx={{ borderRadius: 2 }}>
+                  {t('chart.noData')}
+                </Alert>
+              ) : (
+                <ExerciseChart
+                  data={chartData}
+                  series={selectedExercises}
+                  beginDate={beginDate}
+                  endDate={endDate}
+                />
               )}
-            </Card>
-          </Fade>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </Box>
