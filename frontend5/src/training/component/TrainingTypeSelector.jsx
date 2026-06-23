@@ -1,10 +1,19 @@
 import React from 'react';
 
-import { MenuItem, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-export default function TrainingTypeSelector({ setTrainingType }) {
-  return (
-    <Select onChange={(e) => setTrainingType(e.target.value)} defaultValue="A" displayEmpty>
+export default function TrainingTypeSelector({ setTrainingType, value, size = 'medium', label }) {
+  // Kontrolowany, gdy podano `value`; w przeciwnym razie niekontrolowany z domyślnym 'A'
+  const selectionProps = value === undefined ? { defaultValue: 'A' } : { value };
+
+  const select = (
+    <Select
+      {...selectionProps}
+      size={size}
+      label={label}
+      displayEmpty
+      onChange={(e) => setTrainingType(e.target.value)}
+    >
       <MenuItem value="F1">F1</MenuItem>
       <MenuItem value="F2">F2</MenuItem>
       <MenuItem value="F">5x5</MenuItem>
@@ -26,5 +35,14 @@ export default function TrainingTypeSelector({ setTrainingType }) {
       <MenuItem value="C2">Hipertroficzny C2</MenuItem>
       <MenuItem value="D2">Hipertroficzny D2</MenuItem>
     </Select>
+  );
+
+  if (!label) return select;
+
+  return (
+    <FormControl size={size} sx={{ minWidth: 200 }}>
+      <InputLabel>{label}</InputLabel>
+      {select}
+    </FormControl>
   );
 }

@@ -136,6 +136,7 @@ i18n.use(initReactI18next).init({
           fillAllFields: 'Fill in name, reps and weight for each exercise.',
           addAnotherExercise: 'Add another exercise',
           saveTraining: 'Save Training',
+          saveHint: 'Tip: Enter jumps to the next field · Ctrl+Enter saves',
         },
         finance: {
           cryptoPrices: 'Cryptocurrency Prices',
@@ -631,6 +632,7 @@ i18n.use(initReactI18next).init({
           fillAllFields: 'Uzupełnij nazwę, powtórzenia i ciężar dla każdego ćwiczenia.',
           addAnotherExercise: 'Dodaj kolejne ćwiczenie',
           saveTraining: 'Zapisz Trening',
+          saveHint: 'Wskazówka: Enter przechodzi do następnego pola · Ctrl+Enter zapisuje',
         },
         finance: {
           cryptoPrices: 'Ceny Kryptowalut',

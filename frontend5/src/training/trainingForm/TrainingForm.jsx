@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import REST from '../../utils/REST';
 
 import {
+  Autocomplete,
   Button,
   CircularProgress,
   FormControl,
@@ -22,7 +23,7 @@ import {
 
 import Grid from '@mui/material/Grid';
 import { useTranslation } from 'react-i18next';
-import { useLoaderData, Form, useNavigate } from 'react-router-dom';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../utils/REST.js';
 import ErrorAlert from '../../component/error/ErrorAlert.jsx';
@@ -46,6 +47,10 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(() => exercises.map(withStableKey));
   const [prevExercises, setPrevExercises] = useState(exercises);
   const [validationError, setValidationError] = useState('');
+
+  // Referencje do pól nazwy ćwiczeń, by po dodaniu nowego wiersza ustawić w nim kursor
+  const nameInputRefs = useRef({});
+  const pendingFocusKey = useRef(null);
 
   const {
     exerciseNames = [],
@@ -74,7 +79,17 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     setExercisesFields(exercises.map(withStableKey));
   }
 
-  function handleSubmit() {
+  // Po dodaniu wiersza (Enter na ostatnim polu) ustaw kursor w nazwie nowego ćwiczenia
+  useEffect(() => {
+    if (pendingFocusKey.current) {
+      const el = nameInputRefs.current[pendingFocusKey.current];
+      if (el) el.focus();
+      pendingFocusKey.current = null;
+    }
+  }, [exercisesFields]);
+
+  function handleSubmit(event) {
+    if (event) event.preventDefault();
     const invalid = exercisesFields.some((f) => !f.name || !f.reps || !f.weight);
     if (invalid) {
       setValidationError(t('training.fillAllFields'));
@@ -84,10 +99,59 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     mutate(exercisesFields);
   }
 
+  const setField = (index, attribut, value) => {
+    setExercisesFields((prev) => {
+      const data = [...prev];
+      data[index] = { ...data[index], [attribut]: value };
+      return data;
+    });
+  };
+
   const handleFormChange = (index, attribut, event) => {
-    let data = [...exercisesFields];
-    data[index][attribut] = event.target.value;
-    setExercisesFields(data);
+    setField(index, attribut, event.target.value);
+  };
+
+  // Dodaje nowe ćwiczenie na końcu i zaznacza je do ustawienia kursora (useEffect powyżej)
+  const addRowAndFocus = () => {
+    const newKey = crypto.randomUUID();
+    setExercisesFields((prev) => [
+      ...prev,
+      { _key: newKey, type: '', place: '', name: '', reps: '', weight: '', progress: '' },
+    ]);
+    pendingFocusKey.current = newKey;
+  };
+
+  // Enter = przejdź do następnego pola (a na ostatnim dodaj ćwiczenie); Ctrl/Cmd+Enter = zapisz
+  const handleKeyDown = (event) => {
+    if (event.key !== 'Enter') return;
+
+    if (event.ctrlKey || event.metaKey) {
+      event.preventDefault();
+      handleSubmit();
+      return;
+    }
+
+    // Gdy lista podpowiedzi nazwy jest otwarta, zostaw Enter dla wyboru opcji
+    if (document.querySelector('.MuiAutocomplete-popper')) return;
+
+    const target = event.target;
+    if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') return;
+
+    event.preventDefault();
+
+    const fields = Array.from(event.currentTarget.querySelectorAll('input')).filter(
+      (el) => el.type !== 'hidden' && el.tabIndex !== -1 && el.offsetParent !== null && !el.disabled
+    );
+    const idx = fields.indexOf(target);
+    if (idx === -1) return;
+
+    if (idx < fields.length - 1) {
+      const next = fields[idx + 1];
+      next.focus();
+      if (next.select) next.select();
+    } else {
+      addRowAndFocus();
+    }
   };
 
   const addFields = (index) => {
@@ -144,7 +208,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
       <Box sx={{ mb: 4 }}>
         <Grid container spacing={3}>
           {exercisesFields.map((input, index) => (
@@ -252,26 +316,33 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
 
                       {/* Nazwa ćwiczenia */}
                       <Grid size={{ xs: 12, md: isSimpleForm ? 12 : 6 }}>
-                        <FormControl fullWidth variant="outlined" size="small">
-                          <InputLabel>
-                            <Box>
-                              <FitnessCenter fontSize="small" />
-                              {t('exercise.name')}
-                            </Box>
-                          </InputLabel>
-                          <Select
-                            name={`name-${index}`}
-                            value={input.name}
-                            onChange={(event) => handleFormChange(index, 'name', event)}
-                            label={t('exercise.name')}
-                          >
-                            {exerciseNames.map((en, i) => (
-                              <MenuItem key={i} value={en.name}>
-                                {en.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
+                        <Autocomplete
+                          freeSolo
+                          autoHighlight
+                          fullWidth
+                          size="small"
+                          options={exerciseNames.map((en) => en.name)}
+                          inputValue={input.name || ''}
+                          onInputChange={(event, newValue) =>
+                            setField(index, 'name', newValue ?? '')
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label={t('exercise.name')}
+                              autoFocus={index === 0}
+                              inputRef={(el) => {
+                                if (el) nameInputRefs.current[input._key] = el;
+                              }}
+                              InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                  <FitnessCenter fontSize="small" sx={{ mr: 1, opacity: 0.6 }} />
+                                ),
+                              }}
+                            />
+                          )}
+                        />
                       </Grid>
 
                       {/* Powtórzenia */}
@@ -409,6 +480,9 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             t('training.saveTraining')
           )}
         </Button>
+        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+          {t('training.saveHint')}
+        </Typography>
       </Box>
 
       {/* Błąd walidacji */}
@@ -426,7 +500,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           <ErrorAlert error={error} />
         </Box>
       )}
-    </Form>
+    </form>
   );
 }
 
