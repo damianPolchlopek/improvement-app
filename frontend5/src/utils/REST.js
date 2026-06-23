@@ -129,6 +129,15 @@ export default class REST {
     return get(serverUrl + exercise + 'name/' + name);
   }
 
+  // Najświeższe reps/weight dla danej nazwy ćwiczenia (podpowiedź "ostatnio").
+  // Reużywa istniejącego /name/{name} (zwraca historię od najnowszej) i bierze pierwszy wpis;
+  // brak historii zwraca 404 -> traktujemy jako brak danych.
+  static getLastExerciseByName(name) {
+    return get(serverUrl + exercise + 'name/' + name)
+      .then((res) => res?.content?.[0] ?? null)
+      .catch(() => null);
+  }
+
   static getExerciseNames() {
     return get(serverUrl + exercise + dictionary + exerciseName);
   }

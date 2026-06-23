@@ -136,7 +136,15 @@ i18n.use(initReactI18next).init({
           fillAllFields: 'Fill in name, reps and weight for each exercise.',
           addAnotherExercise: 'Add another exercise',
           saveTraining: 'Save Training',
-          saveHint: 'Tip: Enter jumps to the next field · Ctrl+Enter saves',
+          saveHint: 'Enter — next field · Tab — next column · Alt+↑/↓ — move · Ctrl+Enter — save',
+          lastTime: 'last time',
+          setsCount: '{{count}} sets',
+          volumeShort: 'Σ {{value}} kg',
+          duplicateExercise: 'Duplicate exercise',
+          moveUp: 'Move up',
+          moveDown: 'Move down',
+          seriesMismatch: 'Exercise #{{n}}: the number of sets in reps and weight must match.',
+          invalidNumber: 'Exercise #{{n}}: reps and weight must be numbers separated by "/".',
         },
         finance: {
           cryptoPrices: 'Cryptocurrency Prices',
@@ -632,7 +640,18 @@ i18n.use(initReactI18next).init({
           fillAllFields: 'Uzupełnij nazwę, powtórzenia i ciężar dla każdego ćwiczenia.',
           addAnotherExercise: 'Dodaj kolejne ćwiczenie',
           saveTraining: 'Zapisz Trening',
-          saveHint: 'Wskazówka: Enter przechodzi do następnego pola · Ctrl+Enter zapisuje',
+          saveHint:
+            'Enter — następne pole · Tab — następna kolumna · Alt+↑/↓ — przenieś · Ctrl+Enter — zapisz',
+          lastTime: 'ostatnio',
+          setsCount: '{{count}} serie',
+          volumeShort: 'Σ {{value}} kg',
+          duplicateExercise: 'Duplikuj ćwiczenie',
+          moveUp: 'Przenieś w górę',
+          moveDown: 'Przenieś w dół',
+          seriesMismatch:
+            'Ćwiczenie #{{n}}: liczba serii w powtórzeniach i ciężarze musi być taka sama.',
+          invalidNumber:
+            'Ćwiczenie #{{n}}: powtórzenia i ciężar muszą być liczbami oddzielonymi „/".',
         },
         finance: {
           cryptoPrices: 'Ceny Kryptowalut',
