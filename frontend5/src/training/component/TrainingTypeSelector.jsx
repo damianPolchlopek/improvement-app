@@ -2,6 +2,31 @@ import React from 'react';
 
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
+// Single source of truth for the available training templates (shortcut + label).
+// Reused by the statistics view to load all exercises of a chosen template.
+export const TRAINING_TYPES = [
+  { value: 'F1', label: 'F1' },
+  { value: 'F2', label: 'F2' },
+  { value: 'F', label: '5x5' },
+  { value: 'K1', label: 'Kettle K1' },
+  { value: 'K2', label: 'Kettle K2' },
+  { value: 'K3', label: 'Kettle K3' },
+  { value: 'R', label: 'Rower' },
+  { value: 'A', label: 'Siłowy A' },
+  { value: 'B', label: 'Siłowy B' },
+  { value: 'C', label: 'Hipertroficzny C' },
+  { value: 'D', label: 'Hipertroficzny D' },
+  { value: 'E', label: 'Basen' },
+  { value: 'A1', label: 'Siłowy A1' },
+  { value: 'B1', label: 'Siłowy B1' },
+  { value: 'C1', label: 'Hipertroficzny C1' },
+  { value: 'D1', label: 'Hipertroficzny D1' },
+  { value: 'B2', label: 'Siłowy B2' },
+  { value: 'A2', label: 'Siłowy A2' },
+  { value: 'C2', label: 'Hipertroficzny C2' },
+  { value: 'D2', label: 'Hipertroficzny D2' },
+];
+
 export default function TrainingTypeSelector({ setTrainingType, value, size = 'medium', label }) {
   // Kontrolowany, gdy podano `value`; w przeciwnym razie niekontrolowany z domyślnym 'A'
   const selectionProps = value === undefined ? { defaultValue: 'A' } : { value };
@@ -14,26 +39,11 @@ export default function TrainingTypeSelector({ setTrainingType, value, size = 'm
       displayEmpty
       onChange={(e) => setTrainingType(e.target.value)}
     >
-      <MenuItem value="F1">F1</MenuItem>
-      <MenuItem value="F2">F2</MenuItem>
-      <MenuItem value="F">5x5</MenuItem>
-      <MenuItem value="K1">Kettle K1</MenuItem>
-      <MenuItem value="K2">Kettle K2</MenuItem>
-      <MenuItem value="K3">Kettle K3</MenuItem>
-      <MenuItem value="R">Rower</MenuItem>
-      <MenuItem value="A">Siłowy A</MenuItem>
-      <MenuItem value="B">Siłowy B</MenuItem>
-      <MenuItem value="C">Hipertroficzny C</MenuItem>
-      <MenuItem value="D">Hipertroficzny D</MenuItem>
-      <MenuItem value="E">Basen</MenuItem>
-      <MenuItem value="A1">Siłowy A1</MenuItem>
-      <MenuItem value="B1">Siłowy B1</MenuItem>
-      <MenuItem value="C1">Hipertroficzny C1</MenuItem>
-      <MenuItem value="D1">Hipertroficzny D1</MenuItem>
-      <MenuItem value="B2">Siłowy B2</MenuItem>
-      <MenuItem value="A2">Siłowy A2</MenuItem>
-      <MenuItem value="C2">Hipertroficzny C2</MenuItem>
-      <MenuItem value="D2">Hipertroficzny D2</MenuItem>
+      {TRAINING_TYPES.map((type) => (
+        <MenuItem key={type.value} value={type.value}>
+          {type.label}
+        </MenuItem>
+      ))}
     </Select>
   );
 

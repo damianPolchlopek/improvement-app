@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { useQueries, keepPreviousData } from '@tanstack/react-query';
-import REST from '../../utils/REST';
+import REST, { queryClient } from '../../utils/REST';
 import ExerciseChart, { CHART_COLORS } from './ExerciseChart';
+import { TRAINING_TYPES } from '../component/TrainingTypeSelector';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -76,6 +77,8 @@ export default function TrainingStatistic() {
   const [selectedExercises, setSelectedExercises] = useState(() =>
     exerciseNames.length > 0 ? [exerciseNames[0]] : []
   );
+  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [isTemplateLoading, setIsTemplateLoading] = useState(false);
   const [chartType, setChartType] = useState('Capacity');
   const [beginDate, setBeginDate] = useState(ALL_TIME_BEGIN);
   const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
@@ -119,6 +122,30 @@ export default function TrainingStatistic() {
     setBeginDate(
       preset.months ? moment().subtract(preset.months, 'month').valueOf() : ALL_TIME_BEGIN
     );
+  };
+
+  // Manual edits to the exercise list detach it from the loaded template.
+  const handleExercisesChange = (newValue) => {
+    setSelectedExercises(newValue);
+    setSelectedTemplate(null);
+  };
+
+  // Load every exercise that belongs to the chosen training template into the chart.
+  const handleTemplateChange = async (option) => {
+    setSelectedTemplate(option);
+    if (!option) return;
+
+    setIsTemplateLoading(true);
+    try {
+      const template = await queryClient.fetchQuery({
+        queryKey: ['training-template', option.value],
+        queryFn: () => REST.getTrainingTemplate(option.value),
+        staleTime: 1000 * 60 * 10,
+      });
+      setSelectedExercises(template?.exercises ?? []);
+    } finally {
+      setIsTemplateLoading(false);
+    }
   };
 
   const handleChangeBeginDate = (newValue) => {
@@ -172,7 +199,7 @@ export default function TrainingStatistic() {
                   id="exercise-name-autocomplete"
                   value={selectedExercises}
                   options={exerciseNames}
-                  onChange={(event, newValue) => setSelectedExercises(newValue)}
+                  onChange={(event, newValue) => handleExercisesChange(newValue)}
                   sx={{ flex: 1, minWidth: 240 }}
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => {
@@ -200,6 +227,38 @@ export default function TrainingStatistic() {
                       placeholder={t('chart.selectExercises')}
                       variant="outlined"
                       sx={fieldSx}
+                    />
+                  )}
+                />
+
+                {/* Load all exercises from a training template */}
+                <Autocomplete
+                  id="training-template-autocomplete"
+                  value={selectedTemplate}
+                  options={TRAINING_TYPES}
+                  getOptionLabel={(option) => option.label}
+                  isOptionEqualToValue={(option, val) => option.value === val.value}
+                  onChange={(event, option) => handleTemplateChange(option)}
+                  loading={isTemplateLoading}
+                  sx={{ minWidth: 220 }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t('chart.fromTemplate')}
+                      placeholder={t('chart.selectTemplate')}
+                      variant="outlined"
+                      sx={fieldSx}
+                      InputProps={{
+                        ...params.InputProps,
+                        endAdornment: (
+                          <>
+                            {isTemplateLoading ? (
+                              <CircularProgress size={18} sx={{ color: '#4caf50' }} />
+                            ) : null}
+                            {params.InputProps.endAdornment}
+                          </>
+                        ),
+                      }}
                     />
                   )}
                 />
