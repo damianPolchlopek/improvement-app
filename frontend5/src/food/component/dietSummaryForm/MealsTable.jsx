@@ -30,7 +30,7 @@ export default function MealsTable() {
   ];
 
   return (
-    <Paper sx={{ minWidth: 700 }}>
+    <Paper sx={{ width: '50%', minWidth: 700, mx: 'auto' }}>
       <MealFilter
         mealPopularity={mealPopularity}
         setMealPopularity={setMealPopularity}
@@ -38,7 +38,10 @@ export default function MealsTable() {
         setSearchTerm={setSearchTerm}
       />
       <TableContainer>
-        <Table aria-label="collapsible table" sx={{ minWidth: 700 }}>
+        <Table
+          aria-label="collapsible table"
+          sx={{ minWidth: 700, width: '100%', tableLayout: 'fixed' }}
+        >
           <TableBody>
             {MEAL_CATEGORIES.map((category) => (
               <MealCategoryRow

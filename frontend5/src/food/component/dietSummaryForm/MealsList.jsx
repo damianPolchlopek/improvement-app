@@ -45,7 +45,7 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
   if (isLoading) {
     return (
       <StyledTableRow>
-        <StyledTableCell colSpan={8} align="center">
+        <StyledTableCell colSpan={2} align="center">
           <CircularProgress />
         </StyledTableCell>
       </StyledTableRow>
@@ -55,7 +55,7 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
   if (isError) {
     return (
       <StyledTableRow>
-        <StyledTableCell colSpan={8} align="center">
+        <StyledTableCell colSpan={2} align="center">
           {t('food.errorLoadingMeals')}
         </StyledTableCell>
       </StyledTableRow>
@@ -64,7 +64,7 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
 
   return (
     <StyledTableRow>
-      <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+      <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <Table size="small">
             <TableHead>
