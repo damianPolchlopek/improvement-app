@@ -15,6 +15,7 @@ import { Table, TableBody, TableContainer, Paper } from '@mui/material';
 
 export default function MealsTable() {
   const [mealPopularity, setMealPopularity] = useState('HIGH');
+  const [searchTerm, setSearchTerm] = useState('');
   const { t } = useTranslation();
 
   // value = stała wartość wysyłana do backendu (niezależna od języka),
@@ -30,7 +31,12 @@ export default function MealsTable() {
 
   return (
     <Paper sx={{ minWidth: 700 }}>
-      <MealFilter mealPopularity={mealPopularity} setMealPopularity={setMealPopularity} />
+      <MealFilter
+        mealPopularity={mealPopularity}
+        setMealPopularity={setMealPopularity}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <TableContainer>
         <Table aria-label="collapsible table" sx={{ minWidth: 700 }}>
           <TableBody>
@@ -40,6 +46,7 @@ export default function MealsTable() {
                 mealCategory={category.value}
                 mealCategoryLabel={category.label}
                 mealPopularity={mealPopularity}
+                searchTerm={searchTerm}
                 sx={{ textAlign: 'left' }}
               />
             ))}

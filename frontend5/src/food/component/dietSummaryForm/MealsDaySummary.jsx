@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
 import CenteredContainer from '../../../component/CenteredContainer';
 import { useTranslation } from 'react-i18next';
 import { formatInput } from '../../../utils/common';
@@ -6,7 +6,7 @@ import { useMealSelection } from '../../../context/MealSelectionContext';
 
 export default function MealsDaySummary() {
   const { t } = useTranslation();
-  const { dietSummary } = useMealSelection();
+  const { dietSummary, selectedMeals, toggleMealSelection } = useMealSelection();
 
   if (!dietSummary) return null;
 
@@ -28,6 +28,19 @@ export default function MealsDaySummary() {
           {t('food.fat')}: {formatInput(fat)}
         </span>
       </Typography>
+
+      {selectedMeals.length > 0 && (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 1, mt: 1 }}>
+          {selectedMeals.map((meal) => (
+            <Chip
+              key={meal.mealRecipeId}
+              size="small"
+              label={meal.amount > 1 ? `${meal.name} ×${meal.amount}` : meal.name}
+              onDelete={() => toggleMealSelection(meal)}
+            />
+          ))}
+        </Box>
+      )}
     </CenteredContainer>
   );
 }

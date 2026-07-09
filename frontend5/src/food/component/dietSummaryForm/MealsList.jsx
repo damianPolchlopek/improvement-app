@@ -17,7 +17,7 @@ function translateMealPopularity(arg) {
   return popularityTranslation.get(arg) ?? 'ALL';
 }
 
-export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
+export default function MealsList({ isOpen, mealCategory, mealPopularity, searchTerm = '' }) {
   const { t } = useTranslation();
 
   const {
@@ -25,12 +25,12 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['mealList', mealCategory, mealPopularity],
+    queryKey: ['mealList', mealCategory, mealPopularity, searchTerm],
     queryFn: () =>
       REST.getMealList(
         mealCategory,
         'ALL',
-        '',
+        searchTerm,
         translateMealPopularity(mealPopularity),
         'category',
         true
@@ -44,25 +44,21 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
 
   if (isLoading) {
     return (
-      <TableBody>
-        <StyledTableRow>
-          <StyledTableCell colSpan={8} align="center">
-            <CircularProgress />
-          </StyledTableCell>
-        </StyledTableRow>
-      </TableBody>
+      <StyledTableRow>
+        <StyledTableCell colSpan={8} align="center">
+          <CircularProgress />
+        </StyledTableCell>
+      </StyledTableRow>
     );
   }
 
   if (isError) {
     return (
-      <TableBody>
-        <StyledTableRow>
-          <StyledTableCell colSpan={8} align="center">
-            {t('food.errorLoadingMeals')}
-          </StyledTableCell>
-        </StyledTableRow>
-      </TableBody>
+      <StyledTableRow>
+        <StyledTableCell colSpan={8} align="center">
+          {t('food.errorLoadingMeals')}
+        </StyledTableCell>
+      </StyledTableRow>
     );
   }
 
@@ -84,9 +80,17 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity }) {
               </StyledTableRow>
             </TableHead>
             <TableBody>
-              {mealList.map((meal, index) => (
-                <MealRow key={meal.id || index} meal={meal} index={index} />
-              ))}
+              {mealList.length === 0 ? (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={8} align="center">
+                    {t('food.noMealsFound')}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ) : (
+                mealList.map((meal, index) => (
+                  <MealRow key={meal.id || index} meal={{ ...meal, mealCategory }} index={index} />
+                ))
+              )}
             </TableBody>
           </Table>
         </Collapse>
