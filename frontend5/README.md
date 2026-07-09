@@ -1,17 +1,17 @@
 # Frontend5 – Improvement App
 
-Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany w oparciu o React 19 oraz Material-UI. Projekt został wygenerowany narzędziem [Create React App](https://github.com/facebook/create-react-app), co zapewnia strukturę przyjazną do dalszego rozwoju i prostą konfigurację.
+Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany w oparciu o React 19 oraz Material-UI. Projekt korzysta z [Vite](https://vitejs.dev/) jako buildera i dev servera oraz [Vitest](https://vitest.dev/) do testów.
 
 ---
 
 ## Spis treści
 
 - [Wymagania](#wymagania)
-- [Instalacja](#instalacja)
+- [Instalacja i uruchomienie](#instalacja-i-uruchomienie)
 - [Dostępne skrypty](#dostępne-skrypty)
 - [Struktura katalogów](#struktura-katalogów)
 - [Najważniejsze biblioteki](#najważniejsze-biblioteki)
-- [Konfiguracja ESLint, Prettier i przeglądarki](#konfiguracja-eslint-prettier-i-przeglądarki)
+- [Konfiguracja ESLint, Prettier i Husky](#konfiguracja-eslint-prettier-i-husky)
 - [Testowanie](#testowanie)
 - [Budowanie produkcyjne](#budowanie-produkcyjne)
 - [Międzynarodowość (i18n)](#miedzynarodowosc-i18n)
@@ -28,7 +28,9 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 
 ---
 
-## Instalacja
+## Instalacja i uruchomienie
+
+> Frontend komunikuje się z backendem przez REST API i WebSocket — do pełnego działania aplikacji uruchom też backend (zob. [Backend/README.md](../Backend/README.md) lub `docker-compose up` w katalogu głównym).
 
 1. Przejdź do katalogu `frontend5`:
     ```bash
@@ -38,15 +40,24 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
     ```bash
     npm install
     ```
+3. Uruchom serwer deweloperski:
+    ```bash
+    npm start
+    ```
+    Aplikacja będzie dostępna pod [http://localhost:3000](http://localhost:3000).
+
+Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VITE_API_URL` w plikach `.env.development` / `.env.production` (domyślnie `http://localhost:8080/` w trybie deweloperskim).
 
 ---
 
 ## Dostępne skrypty
 
-- `npm start` – Uruchamia aplikację w trybie deweloperskim ([http://localhost:3000](http://localhost:3000))
-- `npm test` – Interaktywny tryb testowania z użyciem React Testing Library
-- `npm run build` – Tworzy zoptymalizowaną wersję produkcyjną w katalogu `build`
-- `npm run eject` – Wyodrębnia konfigurację narzędzi do projektu (operacja nieodwracalna)
+- `npm start` – Uruchamia serwer deweloperski Vite ([http://localhost:3000](http://localhost:3000))
+- `npm test` – Interaktywny tryb testowania (Vitest, watch mode)
+- `npm run test:run` – Jednorazowe uruchomienie testów (np. w CI)
+- `npm run build` – Tworzy zoptymalizowaną wersję produkcyjną w katalogu `dist`
+- `npm run preview` – Podgląd zbudowanej wersji produkcyjnej lokalnie
+- `npm run lint` – Sprawdza kod w `src/` za pomocą ESLint
 - `npm run format` – Formatuje kod w `src/` przy użyciu Prettiera
 - `npm run format:check` – Sprawdza formatowanie bez wprowadzania zmian
 
@@ -54,9 +65,10 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 
 ## Struktura katalogów
 
+- `index.html` – Punkt wejścia Vite (ładuje `src/index.jsx`); zastąpił `public/index.html` z czasów Create React App
 - `src/` – Główny kod źródłowy aplikacji
-  - `index.js` – Punkt wejścia (renderowanie komponentu `<App />`)
-  - `App.js` – Główny komponent aplikacji (routing, layout)
+  - `index.jsx` – Renderowanie komponentu `<App />`
+  - `App.jsx` – Główny komponent aplikacji (routing, layout)
   - `theme.js` – Konfiguracja motywu Material UI
   - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table`)
   - `context/` – Konteksty React (m.in. stan globalny)
@@ -66,12 +78,13 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
   - `assets/` – Zasoby statyczne
   - **Moduły funkcjonalne:** `food/`, `training/`, `finance/`, `shopping/`, `other/`,
     `audit/`, `home/`, `login/`, `projects/`
-- `public/` – Statyczne pliki serwowane przez aplikację
+- `public/` – Statyczne zasoby serwowane bez przetwarzania (favicon, manifest)
 
 ---
 
 ## Najważniejsze biblioteki
 
+- **Vite** – builder i dev server
 - **React** (v19)
 - **Material UI** (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/x-data-grid`, `@mui/x-date-pickers`)
 - **React Router** (`react-router-dom`) – routing aplikacji
@@ -86,23 +99,23 @@ Moduł **frontend5** to nowoczesny frontend aplikacji Improvement App, zbudowany
 
 ---
 
-## Konfiguracja ESLint, Prettier i przeglądarki
+## Konfiguracja ESLint, Prettier i Husky
 
-- Konfiguracja ESLint oparta na domyślnych ustawieniach Create React App (`react-app`, `react-app/jest`).
+- ESLint skonfigurowany jako flat config w [`eslint.config.js`](eslint.config.js) (`@eslint/js`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh`). Uruchom `npm run lint`.
 - Formatowanie kodu zapewnia **Prettier** (konfiguracja w `.prettierrc`, wykluczenia w `.prettierignore`). Uruchom `npm run format`.
-- Obsługiwane przeglądarki:
-  - produkcja: >0.2%, nie martwe, nie Opera Mini
-  - deweloperski: ostatnia wersja Chrome, Firefox, Safari
+- **Husky** + **lint-staged**: hook `pre-commit` (`.husky/pre-commit`) automatycznie formatuje Prettierem zmienione pliki `.js`/`.jsx` przed każdym commitem.
+- Podczas `npm start` działa dodatkowo `vite-plugin-checker`, który na bieżąco pokazuje błędy ESLint w konsoli/przeglądarce.
 
 ---
 
 ## Testowanie
 
-Projekt korzysta z **React Testing Library** oraz **Jest**. Testy znajdują się w plikach z rozszerzeniem `.test.js`.
+Projekt korzysta z **Vitest** (środowisko `jsdom`) oraz **React Testing Library** (`@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`). Konfiguracja testów znajduje się w [`vite.config.js`](vite.config.js), plik startowy to `src/setupTests.js`. Testy znajdują się w plikach z rozszerzeniem `.test.js` / `.test.jsx`.
 
 Uruchom testy:
 ```bash
-npm test
+npm test        # tryb watch
+npm run test:run  # jednorazowe uruchomienie (np. CI)
 ```
 
 ---
@@ -113,7 +126,7 @@ Aby zbudować aplikację do wdrożenia:
 ```bash
 npm run build
 ```
-Wynik znajdziesz w katalogu `build`.
+Wynik znajdziesz w katalogu `dist` (zgodnie z konwencją Vite). Podgląd builda lokalnie: `npm run preview`.
 
 ---
 
@@ -134,7 +147,8 @@ Do komunikacji w czasie rzeczywistym wykorzystywane są biblioteki:
 
 ## Przydatne linki
 
-- [Create React App – dokumentacja](https://facebook.github.io/create-react-app/docs/getting-started)
+- [Vite – dokumentacja](https://vitejs.dev/)
+- [Vitest – dokumentacja](https://vitest.dev/)
 - [React – dokumentacja](https://react.dev/)
 - [Material UI – dokumentacja](https://mui.com/)
 - [React Query](https://tanstack.com/query/latest)

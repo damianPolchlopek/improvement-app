@@ -38,7 +38,7 @@ Po starcie: frontend → http://localhost:3000, backend → http://localhost:808
 ```
 improvement-app/
 ├── Backend/            # Spring Boot 3.3.4, Java 17 (REST API, WebSocket)
-├── frontend5/          # React 19 + Material UI (Create React App)
+├── frontend5/          # React 19 + Material UI (Vite)
 ├── StartupScripts/     # Skrypty inicjalizujące bazy (mongodb/, postgres/, flyway/)
 ├── docker-compose.yml  # Uruchomienie całego stacku (backend, frontend, Postgres, Mongo, pgAdmin)
 └── .github/workflows/  # GitHub Actions – build i deploy
@@ -128,7 +128,7 @@ Frontend to aplikacja React (Create React App). Pozwala użytkownikowi:
 
 ### Architektura i technologie
 
-- **React 19** + Create React App
+- **React 19** + **Vite** (build i dev server) + **Vitest** (testy)
 - **Material UI v7** (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/x-data-grid`, `@mui/x-date-pickers`)
 - **React Router** (`react-router-dom`) – routing
 - **React Query** (`@tanstack/react-query`) – pobieranie danych i cache
@@ -145,19 +145,19 @@ Pełna lista zależności w [frontend5/package.json](frontend5/package.json).
 **Zmienne środowiskowe:**
 - `.env.development`
   ```
-  REACT_APP_API_URL=http://localhost:8080/
+  VITE_API_URL=http://localhost:8080/
   ```
 - `.env.production`
   ```
-  REACT_APP_API_URL=https://mutarexx.smallhost.pl:37786/
+  VITE_API_URL=https://mutarexx.smallhost.pl:37786/
   ```
 
 **Instalacja i uruchomienie** (z katalogu `frontend5/`):
 ```bash
 cd frontend5
 npm install
-npm start       # tryb developerski (http://localhost:3000)
-npm run build   # build produkcyjny (do katalogu build/)
+npm start       # tryb developerski, Vite (http://localhost:3000)
+npm run build   # build produkcyjny (do katalogu dist/)
 ```
 
 ---
