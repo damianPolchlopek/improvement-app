@@ -14,6 +14,7 @@ import {
   CircularProgress,
   Fade,
   Chip,
+  useTheme,
 } from '@mui/material';
 
 import TrainingTypeSelector from '../component/TrainingTypeSelector';
@@ -23,6 +24,7 @@ export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
   const [trainingType, setTrainingType] = useState('F'); // domyślnie 5x5
   const { t } = useTranslation();
+  const theme = useTheme();
 
   // Szablon ładuje się automatycznie przy wejściu i po każdej zmianie typu
   // (queryKey zawiera trainingType, więc React Query sam pobiera dane na nowo).
@@ -106,15 +108,15 @@ export default function AddTrainingView() {
         )}
 
         {/* Formularz treningu */}
-        <Paper elevation={6} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+        <Paper elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
           <Box
             sx={{
               p: 2,
-              background: 'linear-gradient(90deg, #667eea, #764ba2)',
+              background: theme.palette.card.header,
               color: 'white',
             }}
           >
-            <Typography variant="h6" fontWeight="600">
+            <Typography variant="subtitle1" fontWeight="600">
               {t('training.formTitle')}
             </Typography>
           </Box>

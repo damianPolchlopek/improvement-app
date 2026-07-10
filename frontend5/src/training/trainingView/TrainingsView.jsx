@@ -72,37 +72,32 @@ export default function TrainingsView() {
       <Container maxWidth="xl" sx={{ width: '70%' }}>
         {/* Header Section */}
         <Card
-          elevation={8}
+          elevation={2}
           sx={{
-            borderRadius: 4,
+            borderRadius: 3,
             background: theme.palette.card.header,
             color: 'white',
-            mb: 4,
+            mb: 3,
             overflow: 'hidden',
             border: theme.palette.card.border,
           }}
         >
-          <CardContent sx={{ p: 4 }}>
+          <CardContent sx={{ p: 3 }}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>
-              <ViewList sx={{ fontSize: 40 }} />
-              <Box>
-                <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
-                  {t('messages.trainingView')}
-                </Typography>
-                <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                  {t('training.browseAll')}
-                </Typography>
-              </Box>
+              <ViewList sx={{ fontSize: 32 }} />
+              <Typography variant="h4" fontWeight="600">
+                {t('messages.trainingView')}
+              </Typography>
             </Box>
-            <Box display="flex" gap={3} sx={{ mt: 3 }}>
+            <Box display="flex" gap={3} flexWrap="wrap">
               <Box display="flex" alignItems="center" gap={1}>
-                <FitnessCenter sx={{ fontSize: 20 }} />
+                <FitnessCenter sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
                   {t('training.trainingsCount', { count: data?.totalElements || 0 })}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center" gap={1}>
-                <Assessment sx={{ fontSize: 20 }} />
+                <Assessment sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
                   {t('training.detailedStats')}
                 </Typography>
@@ -114,7 +109,7 @@ export default function TrainingsView() {
         {/* Main Content */}
         <Fade in={true} timeout={1000}>
           <Card
-            elevation={6}
+            elevation={2}
             sx={{
               borderRadius: 3,
               background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
@@ -151,6 +146,7 @@ export default function TrainingsView() {
                 >
                   <StyledTableCell colSpan={7} sx={{ p: 2 }}>
                     <TablePagination
+                      size="small"
                       rowsPerPageOptions={[5, 10, 25, 50]}
                       count={data?.totalElements || 0}
                       rowsPerPage={size}

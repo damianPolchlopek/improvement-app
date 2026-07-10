@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
-import { Restaurant, Analytics, TrendingUp } from '@mui/icons-material';
+import { Analytics, CalendarMonth, ListAlt, Layers, TrendingUp } from '@mui/icons-material';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -86,87 +86,59 @@ export default function DietStatisticView() {
           </Card>
         </Grid>
 
-        {/* Statistics Cards */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <Restaurant sx={{ color: '#4caf50', fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
+        {/* Stats summary */}
+        <Grid size={12}>
+          <Card elevation={1} sx={{ borderRadius: 3 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                columnGap: 4,
+                rowGap: 1.5,
+                px: 3,
+                py: 1.5,
+              }}
+            >
+              <Box display="flex" alignItems="center" gap={1}>
+                <CalendarMonth fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
                   {t('food.totalDays')}
                 </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {data?.totalElements || 0}
+                </Typography>
               </Box>
-              <Typography variant="h3" fontWeight="700" color="primary">
-                {data?.totalElements || 0}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
 
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            elevation={4}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              p: 3,
-            }}
-          >
-            <Box>
-              <Typography variant="h3" fontWeight="700">
-                {data?.content?.length || 0}
-              </Typography>
-              <Typography variant="body1">{t('food.displayedRecords')}</Typography>
-            </Box>
-          </Card>
-        </Grid>
+              <Box display="flex" alignItems="center" gap={1}>
+                <ListAlt fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('food.displayedRecords')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {data?.content?.length || 0}
+                </Typography>
+              </Box>
 
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            elevation={4}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              p: 3,
-            }}
-          >
-            <Box>
-              <Typography variant="h3" fontWeight="700">
-                {data?.totalPages || 0}
-              </Typography>
-              <Typography variant="body1">{t('food.totalPagesCount')}</Typography>
+              <Box display="flex" alignItems="center" gap={1}>
+                <Layers fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('food.totalPagesCount')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {data?.totalPages || 0}
+                </Typography>
+              </Box>
             </Box>
           </Card>
         </Grid>
 
         {/* Main Data Table */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
             <Box
               sx={{
-                p: 3,
+                p: 2,
                 background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
@@ -174,8 +146,8 @@ export default function DietStatisticView() {
                 gap: 2,
               }}
             >
-              <TrendingUp sx={{ fontSize: 28 }} />
-              <Typography variant="h5" fontWeight="600">
+              <TrendingUp sx={{ fontSize: 22 }} />
+              <Typography variant="subtitle1" fontWeight="600">
                 {t('food.dietHistory')}
               </Typography>
             </Box>
@@ -204,6 +176,7 @@ export default function DietStatisticView() {
                 <TableFooter>
                   <StyledTableRow>
                     <TablePagination
+                      size="small"
                       rowsPerPageOptions={[5, 10, 25]}
                       colSpan={7}
                       count={data.totalElements}

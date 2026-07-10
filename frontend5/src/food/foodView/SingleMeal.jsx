@@ -75,23 +75,11 @@ export default function SingleMeal({ meal }) {
   ];
 
   return (
-    <Card
-      elevation={6}
-      sx={{
-        borderRadius: 3,
-        overflow: 'hidden',
-        height: '100%',
-        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: '0 12px 30px rgba(0,0,0,0.2)',
-        },
-      }}
-    >
+    <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden', height: '100%' }}>
       {/* Header with meal name */}
       <Box
         sx={{
-          p: 3,
+          p: 2,
           background: theme.palette.card.header,
           color: 'white',
           display: 'flex',
@@ -99,7 +87,7 @@ export default function SingleMeal({ meal }) {
           gap: 2,
         }}
       >
-        <Restaurant sx={{ fontSize: 28 }} />
+        <Restaurant sx={{ fontSize: 24 }} />
         <Typography variant="h6" fontWeight="600">
           {meal.name}
         </Typography>
@@ -115,8 +103,9 @@ export default function SingleMeal({ meal }) {
         sx={{
           borderBottom: 1,
           borderColor: 'divider',
+          minHeight: 44,
           '& .MuiTab-root': {
-            minHeight: 64,
+            minHeight: 44,
             fontWeight: 500,
           },
         }}
@@ -136,27 +125,22 @@ export default function SingleMeal({ meal }) {
         ))}
       </Tabs>
 
-      <CardContent sx={{ p: 3 }}>
+      <CardContent sx={{ p: 2 }}>
         <TabPanel value={tabIndex} index={0}>
           {/* Nutrition Cards Grid */}
-          <Box sx={{ mb: 3 }}>
-            <Typography variant="h6" fontWeight="600" gutterBottom>
-              {t('food.nutritionValues')}
-            </Typography>
-            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={2} mb={3}>
+          <Box sx={{ mb: 2 }}>
+            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={1.5} mb={2}>
               {nutritionData.map((item, index) => (
                 <Paper
                   key={index}
-                  elevation={2}
+                  variant="outlined"
                   sx={{
-                    p: 2,
+                    p: 1.5,
                     borderRadius: 2,
                     textAlign: 'center',
-                    background: `linear-gradient(45deg, ${item.color}20, ${item.color}10)`,
-                    border: `1px solid ${item.color}30`,
                   }}
                 >
-                  <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1}>
+                  <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={0.5}>
                     {item.icon}
                     <Typography variant="body2" fontWeight="500" color="text.secondary">
                       {item.label}
@@ -172,11 +156,11 @@ export default function SingleMeal({ meal }) {
 
           {/* Additional Info */}
           <Box>
-            <Typography variant="h6" fontWeight="600" gutterBottom>
+            <Typography variant="subtitle2" fontWeight="600" color="text.secondary" gutterBottom>
               {t('food.details')}
             </Typography>
-            <TableContainer component={Paper} elevation={1} sx={{ borderRadius: 2 }}>
-              <Table>
+            <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
+              <Table size="small">
                 <TableBody>
                   <TableRow>
                     <TableCell variant="head" sx={{ fontWeight: 600 }}>
@@ -225,10 +209,10 @@ export default function SingleMeal({ meal }) {
         <TabPanel value={tabIndex} index={2}>
           {meal.recipe?.length > 0 ? (
             <Box>
-              <Typography variant="h6" fontWeight="600" gutterBottom>
+              <Typography variant="subtitle2" fontWeight="600" color="text.secondary" gutterBottom>
                 {t('food.preparation')}
               </Typography>
-              <Paper elevation={1} sx={{ p: 3, borderRadius: 2 }}>
+              <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
                 {meal.recipe.map((recipeRow, index) => (
                   <Box key={index} sx={{ mb: 2 }}>
                     <Typography variant="body1">{recipeRow}</Typography>

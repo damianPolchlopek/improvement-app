@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import DataTable from '../../component/table/DataTable';
 
-import { FormControl, Box, Card, CardContent, Typography, useTheme } from '@mui/material';
+import { Box, Card, CardContent, Toolbar, Typography, useTheme } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
 import { FitnessCenter, TrendingUp, BarChart } from '@mui/icons-material';
@@ -60,7 +60,7 @@ export default function MaximumExerciseView() {
         {/* Header Section */}
         <Grid size={12}>
           <Card
-            elevation={6}
+            elevation={2}
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
@@ -82,63 +82,44 @@ export default function MaximumExerciseView() {
           </Card>
         </Grid>
 
-        {/* Training Type Selector */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
-                  {t('training.type')}
+        {/* Filters + stats */}
+        <Grid size={12}>
+          <Card elevation={2} sx={{ borderRadius: 3 }}>
+            <Toolbar
+              sx={{
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                columnGap: 3,
+                rowGap: 1.5,
+                py: 1.5,
+                minHeight: 'auto',
+              }}
+            >
+              <TrainingTypeSelector
+                value={trainingType}
+                setTrainingType={setTrainingType}
+                size="small"
+                label={t('training.type')}
+              />
+
+              <Box display="flex" alignItems="center" gap={1}>
+                <FitnessCenter fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('training.maxRecordsCount')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {data?.content?.length || 0}
                 </Typography>
               </Box>
-              <FormControl fullWidth>
-                <TrainingTypeSelector setTrainingType={setTrainingType} />
-              </FormControl>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Statistics Card */}
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Card
-            elevation={4}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              p: 3,
-            }}
-          >
-            <Box>
-              <Typography variant="h3" fontWeight="700">
-                {data?.content?.length || 0}
-              </Typography>
-              <Typography variant="body1">{t('training.maxRecordsCount')}</Typography>
-            </Box>
+            </Toolbar>
           </Card>
         </Grid>
 
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
             <Box
               sx={{
-                p: 3,
+                p: 2,
                 background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
@@ -146,8 +127,8 @@ export default function MaximumExerciseView() {
                 gap: 2,
               }}
             >
-              <TrendingUp sx={{ fontSize: 28 }} />
-              <Typography variant="h5" fontWeight="600">
+              <TrendingUp sx={{ fontSize: 22 }} />
+              <Typography variant="subtitle1" fontWeight="600">
                 {t('training.bestResultsForType', { type: trainingType })}
               </Typography>
             </Box>

@@ -8,11 +8,11 @@ import InformationComponent from '../../component/InformationComponent';
 import DataTable from '../../component/table/DataTable';
 
 import {
-  FormControl,
   Box,
   TablePagination,
   Card,
   CardContent,
+  Toolbar,
   Typography,
   useTheme,
 } from '@mui/material';
@@ -124,7 +124,7 @@ export default function ExerciseView() {
         {/* Header Section */}
         <Grid size={12}>
           <Card
-            elevation={6}
+            elevation={2}
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
@@ -146,82 +146,55 @@ export default function ExerciseView() {
           </Card>
         </Grid>
 
-        {/* Training Type Selector */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <FitnessCenter sx={{ color: '#4caf50', fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
-                  {t('training.type')}
+        {/* Filters + stats */}
+        <Grid size={12}>
+          <Card elevation={2} sx={{ borderRadius: 3 }}>
+            <Toolbar
+              sx={{
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                columnGap: 3,
+                rowGap: 1.5,
+                py: 1.5,
+                minHeight: 'auto',
+              }}
+            >
+              <TrainingTypeSelector
+                value={selectedTrainingType}
+                setTrainingType={setSelectedTrainingType}
+                size="small"
+                label={t('training.type')}
+              />
+
+              <Box display="flex" alignItems="center" gap={1}>
+                <FitnessCenter fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('training.totalTrainings')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {trainingData?.totalElements || 0}
                 </Typography>
               </Box>
 
-              <FormControl fullWidth>
-                <TrainingTypeSelector setTrainingType={setSelectedTrainingType} />
-              </FormControl>
-            </CardContent>
+              <Box display="flex" alignItems="center" gap={1}>
+                <ViewList fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('training.exerciseCount')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {templateData?.exercises?.length || 0}
+                </Typography>
+              </Box>
+            </Toolbar>
           </Card>
-        </Grid>
-
-        {/* Statistics Cards */}
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Grid container spacing={2} sx={{ height: '100%' }}>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Card
-                elevation={4}
-                sx={{
-                  height: '100%',
-                  borderRadius: 3,
-                  background: 'linear-gradient(45deg, #4caf50, #45a049)',
-                  color: 'white',
-                }}
-              >
-                <CardContent sx={{ p: 3, textAlign: 'center' }}>
-                  <Typography variant="h3" fontWeight="700">
-                    {trainingData?.totalElements || 0}
-                  </Typography>
-                  <Typography variant="body1">{t('training.totalTrainings')}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6 }}>
-              <Card
-                elevation={4}
-                sx={{
-                  height: '100%',
-                  borderRadius: 3,
-                  background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-                  color: 'white',
-                }}
-              >
-                <CardContent sx={{ p: 3, textAlign: 'center' }}>
-                  <Typography variant="h3" fontWeight="700">
-                    {templateData?.exercises?.length || 0}
-                  </Typography>
-                  <Typography variant="body1">{t('training.exerciseCount')}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
         </Grid>
 
         {/* Main Table */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
             <Box
               sx={{
-                p: 3,
+                p: 2,
                 background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
@@ -229,8 +202,8 @@ export default function ExerciseView() {
                 gap: 2,
               }}
             >
-              <ViewList sx={{ fontSize: 28 }} />
-              <Typography variant="h5" fontWeight="600">
+              <ViewList sx={{ fontSize: 22 }} />
+              <Typography variant="subtitle1" fontWeight="600">
                 {t('training.historyForType', { type: selectedTrainingType })}
               </Typography>
             </Box>
@@ -248,6 +221,7 @@ export default function ExerciseView() {
             {/* Paginacja */}
             {trainingData && (
               <TablePagination
+                size="small"
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 count={trainingData.totalElements}
                 rowsPerPage={size}

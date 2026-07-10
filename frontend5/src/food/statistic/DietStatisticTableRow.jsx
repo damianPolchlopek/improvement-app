@@ -15,9 +15,7 @@ import {
   Typography,
   Chip,
   useTheme,
-  Card,
-  CardContent,
-  Divider,
+  Paper,
   CircularProgress,
 } from '@mui/material';
 
@@ -98,10 +96,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
         sx={{
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
-            transform: 'translateY(-1px)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
           },
-          transition: 'all 0.2s ease-in-out',
         }}
       >
         <StyledTableCell sx={{ width: '50px' }}>
@@ -116,7 +111,6 @@ export default function DietStatisticTableRow({ dietSummary }) {
                 backgroundColor: theme.palette.primary.main,
                 color: 'white',
               },
-              transition: 'all 0.2s ease-in-out',
             }}
           >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -181,9 +175,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                 '&:hover': {
                   backgroundColor: theme.palette.primary.main,
                   color: 'white',
-                  transform: 'scale(1.1)',
                 },
-                transition: 'all 0.2s ease-in-out',
               }}
             >
               <EditIcon fontSize="small" />
@@ -198,9 +190,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                 '&:hover': {
                   backgroundColor: theme.palette.error.main,
                   color: 'white',
-                  transform: 'scale(1.1)',
                 },
-                transition: 'all 0.2s ease-in-out',
               }}
             >
               <DeleteIcon fontSize="small" />
@@ -213,85 +203,81 @@ export default function DietStatisticTableRow({ dietSummary }) {
         <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={7}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 2 }}>
-              <Card elevation={4} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-                <CardContent sx={{ p: 0 }}>
-                  <Table size="small">
-                    <TableHead>
-                      <StyledTableRow sx={{ backgroundColor: theme.palette.grey[50] }}>
-                        <StyledTableCell
-                          sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}
-                        >
-                          {t('food.name')}
+              <Paper variant="outlined" sx={{ borderRadius: 2, overflow: 'hidden' }}>
+                <Table size="small">
+                  <TableHead>
+                    <StyledTableRow sx={{ backgroundColor: theme.palette.grey[50] }}>
+                      <StyledTableCell
+                        sx={{ fontWeight: 'bold', color: theme.palette.primary.main }}
+                      >
+                        {t('food.name')}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{ fontWeight: 'bold', color: theme.palette.warning.main }}
+                      >
+                        {t('food.kcal')}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{ fontWeight: 'bold', color: theme.palette.success.main }}
+                      >
+                        {t('food.protein')}
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ fontWeight: 'bold', color: theme.palette.info.main }}>
+                        {t('food.carbs')}
+                      </StyledTableCell>
+                      <StyledTableCell
+                        sx={{ fontWeight: 'bold', color: theme.palette.secondary.main }}
+                      >
+                        {t('food.fat')}
+                      </StyledTableCell>
+                      <StyledTableCell sx={{ fontWeight: 'bold' }}>
+                        {t('food.portionMultiplier')}
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  </TableHead>
+                  <TableBody>
+                    {dietSummary.meals?.map((meal, index) => (
+                      <StyledTableRow
+                        key={meal.id || index}
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: theme.palette.action.hover,
+                          },
+                        }}
+                      >
+                        <StyledTableCell>
+                          <Typography variant="body2" fontWeight="500">
+                            {meal.name}
+                          </Typography>
                         </StyledTableCell>
-                        <StyledTableCell
-                          sx={{ fontWeight: 'bold', color: theme.palette.warning.main }}
-                        >
-                          {t('food.kcal')}
+                        <StyledTableCell>
+                          <Typography variant="body2" color="warning.main">
+                            {meal.kcal}
+                          </Typography>
                         </StyledTableCell>
-                        <StyledTableCell
-                          sx={{ fontWeight: 'bold', color: theme.palette.success.main }}
-                        >
-                          {t('food.protein')}
+                        <StyledTableCell>
+                          <Typography variant="body2" color="success.main">
+                            {meal.protein}
+                          </Typography>
                         </StyledTableCell>
-                        <StyledTableCell
-                          sx={{ fontWeight: 'bold', color: theme.palette.info.main }}
-                        >
-                          {t('food.carbs')}
+                        <StyledTableCell>
+                          <Typography variant="body2" color="info.main">
+                            {meal.carbohydrates}
+                          </Typography>
                         </StyledTableCell>
-                        <StyledTableCell
-                          sx={{ fontWeight: 'bold', color: theme.palette.secondary.main }}
-                        >
-                          {t('food.fat')}
+                        <StyledTableCell>
+                          <Typography variant="body2" color="secondary.main">
+                            {meal.fat}
+                          </Typography>
                         </StyledTableCell>
-                        <StyledTableCell sx={{ fontWeight: 'bold' }}>
-                          {t('food.portionMultiplier')}
+                        <StyledTableCell>
+                          <Typography variant="body2">{meal.portionMultiplier}</Typography>
                         </StyledTableCell>
                       </StyledTableRow>
-                    </TableHead>
-                    <TableBody>
-                      {dietSummary.meals?.map((meal, index) => (
-                        <StyledTableRow
-                          key={meal.id || index}
-                          sx={{
-                            '&:hover': {
-                              backgroundColor: theme.palette.action.hover,
-                            },
-                          }}
-                        >
-                          <StyledTableCell>
-                            <Typography variant="body2" fontWeight="500">
-                              {meal.name}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <Typography variant="body2" color="warning.main">
-                              {meal.kcal}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <Typography variant="body2" color="success.main">
-                              {meal.protein}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <Typography variant="body2" color="info.main">
-                              {meal.carbohydrates}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <Typography variant="body2" color="secondary.main">
-                              {meal.fat}
-                            </Typography>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <Typography variant="body2">{meal.portionMultiplier}</Typography>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </CardContent>
-              </Card>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Paper>
             </Box>
           </Collapse>
         </TableCell>

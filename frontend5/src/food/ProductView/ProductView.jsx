@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import DataTable from '../../component/table/DataTable';
@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 
 import {
   Box,
-  Paper,
   Tab,
   Tabs,
   TextField,
@@ -15,6 +14,7 @@ import {
   Card,
   CardContent,
   InputAdornment,
+  Toolbar,
   useTheme,
   Chip,
   IconButton,
@@ -25,14 +25,20 @@ import TabPanel from '../component/TabPanel';
 import SearchIcon from '@mui/icons-material/Search';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
 import CategoryIcon from '@mui/icons-material/Category';
-import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import ClearIcon from '@mui/icons-material/Clear';
 
 export default function ProductView() {
   const { t } = useTranslation();
   const theme = useTheme();
   const [tabIndex, setTabIndex] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
   const [typedProductName, setTypedProductName] = useState('');
+
+  // Debounce: nie odpytujemy backendu na każdy znak.
+  useEffect(() => {
+    const id = setTimeout(() => setTypedProductName(searchInput.trim()), 300);
+    return () => clearTimeout(id);
+  }, [searchInput]);
 
   // Fetch category list
   const {
@@ -64,14 +70,6 @@ export default function ProductView() {
 
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
-  };
-
-  const handleProductTyped = (e) => {
-    setTypedProductName(e.target.value);
-  };
-
-  const handleClearSearch = () => {
-    setTypedProductName('');
   };
 
   // Definicja kolumn dla DataTable
@@ -168,101 +166,64 @@ export default function ProductView() {
           </Card>
         </Grid>
 
-        {/* Search Section */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <SearchIcon sx={{ color: theme.palette.primary.main, fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
-                  {t('food.searchProduct')}
-                </Typography>
-              </Box>
+        {/* Filters */}
+        <Grid size={12}>
+          <Card elevation={2} sx={{ borderRadius: 3 }}>
+            <Toolbar
+              sx={{
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                columnGap: 2,
+                rowGap: 1.5,
+                py: 1.5,
+                minHeight: 'auto',
+              }}
+            >
               <TextField
-                fullWidth
-                value={typedProductName}
-                onChange={handleProductTyped}
-                label={t('food.product')}
+                size="small"
                 placeholder={t('food.enterProductName')}
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                sx={{ minWidth: 220 }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon color="action" />
+                      <SearchIcon fontSize="small" />
                     </InputAdornment>
                   ),
-                  endAdornment: typedProductName && (
+                  endAdornment: searchInput ? (
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="clear search"
-                        onClick={handleClearSearch}
-                        edge="end"
                         size="small"
+                        aria-label="clear search"
+                        onClick={() => setSearchInput('')}
                       >
-                        <ClearIcon />
+                        <ClearIcon fontSize="small" />
                       </IconButton>
                     </InputAdornment>
-                  ),
-                }}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                    '&:hover fieldset': {
-                      borderColor: theme.palette.primary.main,
-                    },
-                  },
+                  ) : null,
                 }}
               />
-            </CardContent>
-          </Card>
-        </Grid>
 
-        {/* Statistics Section */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={4}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              background: 'linear-gradient(45deg, #4caf50, #2e7d32)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              p: 3,
-            }}
-          >
-            <Box>
-              <Typography variant="h3" fontWeight="700">
-                {productList?.length || 0}
-              </Typography>
-              <Typography variant="body1">
-                {typedProductName ? t('food.foundProducts') : t('food.productsInCategory')}
-              </Typography>
-              {typedProductName && (
-                <Typography variant="body2" sx={{ mt: 1, opacity: 0.9 }}>
-                  {t('food.forQuery', { query: typedProductName })}
+              <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>
+                {typedProductName
+                  ? t('food.forQuery', { query: typedProductName })
+                  : t('food.productsInCategory')}
+                {': '}
+                <Typography component="span" variant="subtitle1" fontWeight="600">
+                  {productList?.length || 0}
                 </Typography>
-              )}
-            </Box>
+              </Typography>
+            </Toolbar>
           </Card>
         </Grid>
 
         {/* Categories and Products Section */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
             <Box
               sx={{
-                p: 3,
+                p: 2,
                 background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
@@ -270,8 +231,8 @@ export default function ProductView() {
                 gap: 2,
               }}
             >
-              <CategoryIcon sx={{ fontSize: 28 }} />
-              <Typography variant="h5" fontWeight="600">
+              <CategoryIcon sx={{ fontSize: 22 }} />
+              <Typography variant="subtitle1" fontWeight="600">
                 {t('food.productCategories')}
               </Typography>
             </Box>
@@ -304,23 +265,18 @@ export default function ProductView() {
                   sx={{
                     borderBottom: '1px solid',
                     borderColor: 'divider',
+                    minHeight: 44,
                     '& .MuiTab-root': {
                       fontWeight: 600,
-                      minHeight: 60,
+                      minHeight: 44,
                       fontSize: '0.95rem',
-                      transition: 'all 0.2s ease-in-out',
                       '&:hover': {
                         backgroundColor: theme.palette.action.hover,
-                        transform: 'translateY(-2px)',
                       },
                       '&.Mui-selected': {
                         color: theme.palette.primary.main,
                         fontWeight: 700,
                       },
-                    },
-                    '& .MuiTabs-indicator': {
-                      height: 3,
-                      borderRadius: '3px 3px 0 0',
                     },
                   }}
                 >

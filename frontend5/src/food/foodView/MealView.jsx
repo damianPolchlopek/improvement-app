@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import REST from '../../utils/REST';
 import SingleMeal from './SingleMeal';
@@ -10,28 +10,38 @@ import {
   Card,
   CardContent,
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
   TextField,
   CircularProgress,
+  Toolbar,
   Typography,
   useTheme,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
-import { Restaurant, Search, Category, FilterList } from '@mui/icons-material';
+import { Restaurant, Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
 
 export default function MealView() {
   const { t } = useTranslation();
   const theme = useTheme();
 
   const [mealName, setMealName] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const [mealCategory, setMealCategory] = useState('Obiad');
   const [mealType, setMealType] = useState('All');
 
   const labelIdCategory = 'meal-category-select';
   const labelIdType = 'meal-type-select';
+
+  // Debounce: nie odpytujemy backendu na każdy znak.
+  useEffect(() => {
+    const id = setTimeout(() => setMealName(searchInput.trim()), 300);
+    return () => clearTimeout(id);
+  }, [searchInput]);
 
   // 🍽️ Pobierz listę kategorii i typów posiłków
   const { data: mealCategoryList = [] } = useQuery({
@@ -60,9 +70,6 @@ export default function MealView() {
     const value = event.target.value;
 
     switch (field) {
-      case 'mealName':
-        setMealName(value);
-        break;
       case 'mealCategory':
         setMealCategory(value);
         break;
@@ -116,73 +123,53 @@ export default function MealView() {
           </Card>
         </Grid>
 
-        {/* Search Section */}
-        <Grid size={{ xs: 12, md: 12 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <Search sx={{ color: '#2196f3', fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
-                  {t('food.searchMeal')}
-                </Typography>
-              </Box>
+        {/* Filters */}
+        <Grid size={12}>
+          <Card elevation={2} sx={{ borderRadius: 3 }}>
+            <Toolbar
+              sx={{
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                columnGap: 2,
+                rowGap: 1.5,
+                py: 1.5,
+                minHeight: 'auto',
+              }}
+            >
               <TextField
-                fullWidth
-                label={t('food.meal')}
-                value={mealName}
-                onChange={(event) => handleChange(event, 'mealName')}
-                variant="outlined"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2,
-                  },
+                size="small"
+                placeholder={t('food.searchMeal')}
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                sx={{ minWidth: 220 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon fontSize="small" />
+                    </InputAdornment>
+                  ),
+                  endAdornment: searchInput ? (
+                    <InputAdornment position="end">
+                      <IconButton
+                        size="small"
+                        aria-label="clear search"
+                        onClick={() => setSearchInput('')}
+                      >
+                        <ClearIcon fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  ) : null,
                 }}
               />
-            </CardContent>
-          </Card>
-        </Grid>
 
-        {/* Filters Section */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <Category sx={{ color: '#ff9800', fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
-                  {t('food.mealCategory')}
-                </Typography>
-              </Box>
               {mealCategoryList.length > 0 && (
-                <FormControl fullWidth variant="outlined">
+                <FormControl size="small" sx={{ minWidth: 160 }}>
                   <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
                   <Select
                     labelId={labelIdCategory}
                     value={mealCategory}
                     onChange={(event) => handleChange(event, 'mealCategory')}
                     label={t('food.mealCategory')}
-                    sx={{
-                      borderRadius: 2,
-                    }}
                   >
                     {mealCategoryList.map((cat, index) => (
                       <MenuItem key={index} value={cat}>
@@ -192,40 +179,15 @@ export default function MealView() {
                   </Select>
                 </FormControl>
               )}
-            </CardContent>
-          </Card>
-        </Grid>
 
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={3}>
-                <FilterList sx={{ color: '#9c27b0', fontSize: 28 }} />
-                <Typography variant="h6" fontWeight="600">
-                  {t('food.mealType')}
-                </Typography>
-              </Box>
               {mealTypeList.length > 0 && (
-                <FormControl fullWidth variant="outlined">
+                <FormControl size="small" sx={{ minWidth: 160 }}>
                   <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
                   <Select
                     labelId={labelIdType}
                     value={mealType}
                     onChange={(event) => handleChange(event, 'mealType')}
                     label={t('food.mealType')}
-                    sx={{
-                      borderRadius: 2,
-                    }}
                   >
                     {mealTypeList.map((type, index) => (
                       <MenuItem key={index} value={type}>
@@ -235,29 +197,29 @@ export default function MealView() {
                   </Select>
                 </FormControl>
               )}
-            </CardContent>
+            </Toolbar>
           </Card>
         </Grid>
 
-        {/* Results Section */}
+        {/* Results */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
-            <CardContent sx={{ p: 3 }}>
-              {isLoading ? (
-                <Box display="flex" justifyContent="center" py={4}>
-                  <CircularProgress size={40} />
-                </Box>
-              ) : (
-                <Grid container spacing={3}>
-                  {mealList.map((meal, index) => (
-                    <Grid key={index} size={{ xs: 12, md: 6 }}>
-                      <SingleMeal meal={meal} />
-                    </Grid>
-                  ))}
+          {isLoading ? (
+            <Box display="flex" justifyContent="center" py={4}>
+              <CircularProgress size={40} />
+            </Box>
+          ) : mealList.length === 0 ? (
+            <Box textAlign="center" py={4}>
+              <Typography color="text.secondary">{t('food.noMealsFound')}</Typography>
+            </Box>
+          ) : (
+            <Grid container spacing={3}>
+              {mealList.map((meal, index) => (
+                <Grid key={index} size={{ xs: 12, md: 6 }}>
+                  <SingleMeal meal={meal} />
                 </Grid>
-              )}
-            </CardContent>
-          </Card>
+              ))}
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </Box>
