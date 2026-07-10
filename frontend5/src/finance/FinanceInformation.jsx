@@ -11,6 +11,8 @@ import {
   Box,
   Card,
   CardContent,
+  Stack,
+  Divider,
   useTheme,
   List,
   ListItem,
@@ -33,7 +35,7 @@ export default function FinanceInformation() {
         {/* Header Section */}
         <Grid size={12}>
           <Card
-            elevation={6}
+            elevation={2}
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
@@ -57,10 +59,10 @@ export default function FinanceInformation() {
 
         {/* Historical Cycles Table */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
             <Box
               sx={{
-                p: 3,
+                p: 2,
                 background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
@@ -68,8 +70,8 @@ export default function FinanceInformation() {
                 gap: 2,
               }}
             >
-              <TrendingUp sx={{ fontSize: 28 }} />
-              <Typography variant="h5" fontWeight="600">
+              <TrendingUp sx={{ fontSize: 22 }} />
+              <Typography variant="subtitle1" fontWeight="600">
                 {t('finance.btcCycles')}
               </Typography>
             </Box>
@@ -126,131 +128,38 @@ export default function FinanceInformation() {
           </Card>
         </Grid>
 
-        {/* Info Cards */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
+        {/* Notes */}
+        <Grid size={12}>
+          <Card elevation={2} sx={{ borderRadius: 3 }}>
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note1')}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note2')}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note3')}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note4')}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                {t('finance.note5')}
-              </Typography>
-              <List dense>
-                <ListItem>
-                  <ListItemText primary={t('finance.note5item1')} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary={t('finance.note5item2')} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary={t('finance.note5item3')} />
-                </ListItem>
-                <ListItem>
-                  <ListItemText primary={t('finance.note5item4')} />
-                </ListItem>
-              </List>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note6')}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note7')}</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="body1">{t('finance.note8')}</Typography>
+              <Stack divider={<Divider />} spacing={2}>
+                <Typography variant="body1">{t('finance.note1')}</Typography>
+                <Typography variant="body1">{t('finance.note2')}</Typography>
+                <Typography variant="body1">{t('finance.note3')}</Typography>
+                <Typography variant="body1">{t('finance.note4')}</Typography>
+                <Box>
+                  <Typography variant="body1" sx={{ mb: 1 }}>
+                    {t('finance.note5')}
+                  </Typography>
+                  <List dense disablePadding>
+                    <ListItem disableGutters>
+                      <ListItemText primary={t('finance.note5item1')} />
+                    </ListItem>
+                    <ListItem disableGutters>
+                      <ListItemText primary={t('finance.note5item2')} />
+                    </ListItem>
+                    <ListItem disableGutters>
+                      <ListItemText primary={t('finance.note5item3')} />
+                    </ListItem>
+                    <ListItem disableGutters>
+                      <ListItemText primary={t('finance.note5item4')} />
+                    </ListItem>
+                  </List>
+                </Box>
+                <Typography variant="body1">{t('finance.note6')}</Typography>
+                <Typography variant="body1">{t('finance.note7')}</Typography>
+                <Typography variant="body1">{t('finance.note8')}</Typography>
+              </Stack>
             </CardContent>
           </Card>
         </Grid>

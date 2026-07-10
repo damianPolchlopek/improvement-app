@@ -51,7 +51,7 @@ export default function ShoppingAdd({ categories = [] }) {
   };
 
   return (
-    <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+    <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
       {/* Header */}
       <Box
         onClick={() => setOpen((prev) => !prev)}

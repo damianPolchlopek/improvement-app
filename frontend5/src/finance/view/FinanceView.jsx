@@ -13,11 +13,12 @@ import {
   Box,
   Card,
   CardContent,
+  Toolbar,
   useTheme,
 } from '@mui/material';
 
 import Grid from '@mui/material/Grid';
-import { TrendingUp, Analytics, ShowChart } from '@mui/icons-material';
+import { TrendingUp, TrendingDown, Analytics, ShowChart } from '@mui/icons-material';
 
 import StyledTableCell from '../../component/table/StyledTableCell';
 import StyledTableRow from '../../component/table/StyledTableRow';
@@ -85,7 +86,7 @@ export default function FinanceView() {
         {/* Header Section */}
         <Grid size={12}>
           <Card
-            elevation={6}
+            elevation={2}
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
@@ -107,91 +108,60 @@ export default function FinanceView() {
           </Card>
         </Grid>
 
-        {/* Bitcoin Statistics Cards */}
+        {/* Bitcoin Statistics */}
         {btcStats && (
-          <>
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card
-                elevation={6}
+          <Grid size={12}>
+            <Card elevation={2} sx={{ borderRadius: 3 }}>
+              <Toolbar
                 sx={{
-                  height: '100%',
-                  borderRadius: 3,
-                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                  '&:hover': {
-                    boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-                  },
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  columnGap: 4,
+                  rowGap: 1.5,
+                  py: 1.5,
+                  minHeight: 'auto',
                 }}
               >
-                <CardContent sx={{ p: 3 }}>
-                  <Box display="flex" alignItems="center" gap={2} mb={3}>
-                    <TrendingUp sx={{ color: '#4caf50', fontSize: 28 }} />
-                    <Typography variant="h6" fontWeight="600">
-                      {t('finance.weeksFromAth')}
-                    </Typography>
-                  </Box>
-                  <Typography variant="h3" fontWeight="700" color="primary">
+                <Box display="flex" alignItems="center" gap={1}>
+                  <TrendingUp fontSize="small" color="action" />
+                  <Typography variant="body2" color="text.secondary">
+                    {t('finance.weeksFromAth')}
+                  </Typography>
+                  <Typography variant="subtitle1" fontWeight="600">
                     {(calculateDays(btcStats.athDate) / 7).toFixed(1)}
                   </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+                </Box>
 
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card
-                elevation={4}
-                sx={{
-                  height: '100%',
-                  borderRadius: 3,
-                  background: 'linear-gradient(45deg, #ff9800, #f57c00)',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  p: 3,
-                }}
-              >
-                <Box>
-                  <Typography variant="h3" fontWeight="700">
+                <Box display="flex" alignItems="center" gap={1}>
+                  <TrendingUp fontSize="small" color="action" />
+                  <Typography variant="body2" color="text.secondary">
+                    {t('finance.weeksFromBottom')}
+                  </Typography>
+                  <Typography variant="subtitle1" fontWeight="600">
                     {(calculateDays('2022-11-21') / 7).toFixed(1)}
                   </Typography>
-                  <Typography variant="body1">{t('finance.weeksFromBottom')}</Typography>
                 </Box>
-              </Card>
-            </Grid>
 
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Card
-                elevation={4}
-                sx={{
-                  height: '100%',
-                  borderRadius: 3,
-                  background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-                  color: 'white',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  p: 3,
-                }}
-              >
-                <Box>
-                  <Typography variant="h3" fontWeight="700">
+                <Box display="flex" alignItems="center" gap={1}>
+                  <TrendingDown fontSize="small" color="action" />
+                  <Typography variant="body2" color="text.secondary">
+                    {t('finance.weeksToHalving')}
+                  </Typography>
+                  <Typography variant="subtitle1" fontWeight="600">
                     {((calculateDays('2024-04-26') / 7) * -1).toFixed(1)}
                   </Typography>
-                  <Typography variant="body1">{t('finance.weeksToHalving')}</Typography>
                 </Box>
-              </Card>
-            </Grid>
-          </>
+              </Toolbar>
+            </Card>
+          </Grid>
         )}
 
         {/* Main Crypto Table */}
         <Grid size={12}>
-          <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
             <Box
               sx={{
-                p: 3,
+                p: 2,
                 background: theme.palette.card.header,
                 color: 'white',
                 display: 'flex',
@@ -199,8 +169,8 @@ export default function FinanceView() {
                 gap: 2,
               }}
             >
-              <ShowChart sx={{ fontSize: 28 }} />
-              <Typography variant="h5" fontWeight="600">
+              <ShowChart sx={{ fontSize: 22 }} />
+              <Typography variant="subtitle1" fontWeight="600">
                 {t('finance.cryptoTable')}
               </Typography>
             </Box>

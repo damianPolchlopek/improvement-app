@@ -39,7 +39,7 @@ export default function ShoppingListPage() {
       >
         {/* Header */}
         <Card
-          elevation={6}
+          elevation={2}
           sx={{
             borderRadius: 3,
             background: theme.palette.card.header,

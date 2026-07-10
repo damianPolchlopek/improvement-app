@@ -61,10 +61,7 @@ export default function WeeklyRecordTableRow({ record }) {
         sx={{
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
-            transform: 'translateY(-1px)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
           },
-          transition: 'all 0.2s ease-in-out',
         }}
       >
         <StyledTableCell>
@@ -88,9 +85,7 @@ export default function WeeklyRecordTableRow({ record }) {
                 '&:hover': {
                   backgroundColor: theme.palette.primary.main,
                   color: 'white',
-                  transform: 'scale(1.1)',
                 },
-                transition: 'all 0.2s ease-in-out',
               }}
             >
               <EditIcon fontSize="small" />
@@ -105,9 +100,7 @@ export default function WeeklyRecordTableRow({ record }) {
                 '&:hover': {
                   backgroundColor: theme.palette.error.main,
                   color: 'white',
-                  transform: 'scale(1.1)',
                 },
-                transition: 'all 0.2s ease-in-out',
               }}
             >
               <DeleteIcon fontSize="small" />

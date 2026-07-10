@@ -63,7 +63,7 @@ export default function ShoppingListView({ categories = [] }) {
   }
 
   return (
-    <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+    <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
       {/* Header */}
       <Box
         onClick={() => setOpen((prev) => !prev)}
@@ -149,9 +149,7 @@ export default function ShoppingListView({ categories = [] }) {
                       '&:hover': {
                         backgroundColor: theme.palette.error.main,
                         color: 'white',
-                        transform: 'scale(1.1)',
                       },
-                      transition: 'all 0.2s ease-in-out',
                     }}
                   >
                     <DeleteIcon fontSize="small" />

@@ -7,6 +7,7 @@ import {
   Box,
   Card,
   CardContent,
+  Toolbar,
   Typography,
   useTheme,
   Fab,
@@ -16,7 +17,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { Add as AddIcon, ListAlt } from '@mui/icons-material';
+import { Add as AddIcon, Category, ListAlt } from '@mui/icons-material';
 
 import PageLoader from '../../component/loader/PageLoader';
 import ErrorAlert from '../../component/error/ErrorAlert';
@@ -67,7 +68,7 @@ export default function WeeklyRecordsView() {
         {/* Header Section */}
         <Grid size={12}>
           <Card
-            elevation={6}
+            elevation={2}
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
@@ -89,70 +90,54 @@ export default function WeeklyRecordsView() {
           </Card>
         </Grid>
 
-        {/* Category Filter */}
+        {/* Filters + stats */}
         <Grid size={12}>
-          <Card elevation={4} sx={{ borderRadius: 3, p: 2 }}>
-            <FormControl fullWidth>
-              <InputLabel>{t('weekly.selectCategory')}</InputLabel>
-              <Select
-                value={effectiveCategory}
-                label={t('weekly.selectCategory')}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                {categories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    {category}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Card>
-        </Grid>
+          <Card elevation={2} sx={{ borderRadius: 3 }}>
+            <Toolbar
+              sx={{
+                flexWrap: 'wrap',
+                alignItems: 'center',
+                columnGap: 3,
+                rowGap: 1.5,
+                py: 1.5,
+                minHeight: 'auto',
+              }}
+            >
+              <FormControl size="small" sx={{ minWidth: 200 }}>
+                <InputLabel>{t('weekly.selectCategory')}</InputLabel>
+                <Select
+                  value={effectiveCategory}
+                  label={t('weekly.selectCategory')}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      {category}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-        {/* Statistics Cards */}
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              transition: 'transform 0.2s ease-in-out',
-              '&:hover': {
-                boxShadow: '0 8px 25px rgba(0,0,0,0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" fontWeight="600" mb={2}>
-                {t('weekly.recordsInCategory')}
-              </Typography>
-              <Typography variant="h3" fontWeight="700" color="primary">
-                {recordsLoading ? '...' : recordsList.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+              <Box display="flex" alignItems="center" gap={1}>
+                <ListAlt fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('weekly.recordsInCategory')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {recordsLoading ? '...' : recordsList.length}
+                </Typography>
+              </Box>
 
-        <Grid size={{ xs: 12, md: 6 }}>
-          <Card
-            elevation={6}
-            sx={{
-              height: '100%',
-              borderRadius: 3,
-              background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-              color: 'white',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              p: 3,
-            }}
-          >
-            <Box textAlign="center">
-              <Typography variant="h3" fontWeight="700">
-                {categories.length}
-              </Typography>
-              <Typography variant="body1">{t('weekly.availableCategories')}</Typography>
-            </Box>
+              <Box display="flex" alignItems="center" gap={1}>
+                <Category fontSize="small" color="action" />
+                <Typography variant="body2" color="text.secondary">
+                  {t('weekly.availableCategories')}
+                </Typography>
+                <Typography variant="subtitle1" fontWeight="600">
+                  {categories.length}
+                </Typography>
+              </Box>
+            </Toolbar>
           </Card>
         </Grid>
 

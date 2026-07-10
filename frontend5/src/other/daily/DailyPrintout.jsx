@@ -57,11 +57,11 @@ export default function DailyPrintout() {
 
   return (
     <Box sx={{ py: 2 }}>
-      <Card elevation={8} sx={{ borderRadius: 4, overflow: 'hidden' }}>
+      <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
         {/* Header */}
         <Box
           sx={{
-            p: 3,
+            p: 2,
             background: theme.palette.card.header,
             color: 'white',
             display: 'flex',
@@ -69,8 +69,8 @@ export default function DailyPrintout() {
             gap: 2,
           }}
         >
-          <TrendingUp sx={{ fontSize: 28 }} />
-          <Typography variant="h5" fontWeight="600">
+          <TrendingUp sx={{ fontSize: 22 }} />
+          <Typography variant="subtitle1" fontWeight="600">
             {t('daily.history')}
           </Typography>
         </Box>
@@ -142,6 +142,7 @@ export default function DailyPrintout() {
             <TableFooter>
               <StyledTableRow>
                 <TablePagination
+                  size="small"
                   rowsPerPageOptions={[5, 10, 25]}
                   colSpan={5}
                   count={data?.totalElements || 0}

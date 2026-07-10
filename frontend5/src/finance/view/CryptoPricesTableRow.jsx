@@ -50,10 +50,7 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
       sx={{
         '&:hover': {
           backgroundColor: 'action.hover',
-          transform: 'translateY(-1px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
         },
-        transition: 'all 0.2s ease-in-out',
       }}
     >
       <StyledTableCell>

@@ -52,11 +52,11 @@ export default function DailyForm() {
 
   return (
     <Box sx={{ py: 2 }}>
-      <Card elevation={6} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+      <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
         {/* Header */}
         <Box
           sx={{
-            p: 3,
+            p: 2,
             background: theme.palette.card.header,
             color: 'white',
             display: 'flex',
@@ -64,8 +64,8 @@ export default function DailyForm() {
             gap: 2,
           }}
         >
-          <ChecklistRtl sx={{ fontSize: 28 }} />
-          <Typography variant="h5" fontWeight="600">
+          <ChecklistRtl sx={{ fontSize: 22 }} />
+          <Typography variant="subtitle1" fontWeight="600">
             {t('daily.title')}
           </Typography>
         </Box>
