@@ -5,6 +5,7 @@ import {
   Box,
   Card,
   CardContent,
+  Paper,
   Typography,
   List,
   ListItem,
@@ -62,7 +63,7 @@ const LogComponent = () => {
 
   return (
     <Card
-      elevation={6}
+      elevation={2}
       sx={{
         borderRadius: 3,
         bgcolor: 'background.surface',
@@ -72,7 +73,7 @@ const LogComponent = () => {
     >
       <Box
         sx={{
-          p: 3,
+          p: 2,
           background: theme.palette.card.header,
           display: 'flex',
           alignItems: 'center',
@@ -80,8 +81,8 @@ const LogComponent = () => {
         }}
       >
         <Box display="flex" alignItems="center" gap={2}>
-          <MessageIcon sx={{ fontSize: 32, color: 'success.main' }} />
-          <Typography variant="h5" fontWeight="600" color="text.primary">
+          <MessageIcon sx={{ fontSize: 24, color: 'success.main' }} />
+          <Typography variant="subtitle1" fontWeight="600" color="text.primary">
             {t('home.activityLog')}
           </Typography>
         </Box>
@@ -122,7 +123,7 @@ const LogComponent = () => {
         </Box>
       </Box>
 
-      <CardContent sx={{ p: 4 }}>
+      <CardContent sx={{ p: 3 }}>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
           {t('home.last10Messages')}
         </Typography>
@@ -158,82 +159,64 @@ const LogComponent = () => {
                       '&:last-child': { mb: 0 },
                     }}
                   >
-                    <Card
-                      elevation={2}
+                    <Paper
+                      variant="outlined"
                       sx={{
                         width: '100%',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        border: theme.palette.card.border,
                         borderRadius: 2,
-                        transition: 'all 0.2s ease',
+                        p: 2,
+                        textAlign: 'center',
                       }}
                     >
-                      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-                        <ListItemText
-                          primary={
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                color: 'success.main',
-                                fontWeight: 500,
-                                fontSize: '0.9rem',
-                                wordBreak: 'break-word',
-                              }}
-                            >
-                              {msg}
-                            </Typography>
-                          }
-                          secondary={
-                            <Typography
-                              variant="caption"
-                              sx={{
-                                color: 'text.disabled',
-                                fontSize: '0.75rem',
-                                mt: 0.5,
-                              }}
-                            >
-                              {new Date().toLocaleTimeString()}
-                            </Typography>
-                          }
-                        />
-                      </CardContent>
-                    </Card>
+                      <ListItemText
+                        primary={
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: 'success.main',
+                              fontWeight: 500,
+                              fontSize: '0.9rem',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {msg}
+                          </Typography>
+                        }
+                        secondary={
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              color: 'text.disabled',
+                              fontSize: '0.75rem',
+                              mt: 0.5,
+                            }}
+                          >
+                            {new Date().toLocaleTimeString()}
+                          </Typography>
+                        }
+                      />
+                    </Paper>
                   </ListItem>
                 </Fade>
               ))}
             </List>
           ) : (
-            <Card
-              elevation={0}
+            <Paper
+              variant="outlined"
               sx={{
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: 2,
                 py: 4,
+                textAlign: 'center',
               }}
             >
-              <CardContent sx={{ textAlign: 'center' }}>
-                <MessageIcon sx={{ fontSize: 48, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
-                <Typography
-                  variant="body1"
-                  sx={{
-                    color: 'rgba(255, 255, 255, 0.6)',
-                    fontWeight: 500,
-                  }}
-                >
-                  {t('home.noMessages')}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{
-                    color: 'rgba(255, 255, 255, 0.4)',
-                    mt: 1,
-                  }}
-                >
-                  {t('home.messagesWillAppear')}
-                </Typography>
-              </CardContent>
-            </Card>
+              <MessageIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 2 }} />
+              <Typography variant="body1" color="text.secondary" fontWeight="500">
+                {t('home.noMessages')}
+              </Typography>
+              <Typography variant="body2" color="text.disabled" sx={{ mt: 1 }}>
+                {t('home.messagesWillAppear')}
+              </Typography>
+            </Paper>
           )}
         </Box>
       </CardContent>

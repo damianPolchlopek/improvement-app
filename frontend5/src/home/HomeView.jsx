@@ -35,24 +35,24 @@ function HomeView() {
       <Container maxWidth="xl" sx={{ width: '90%' }}>
         {/* Header Section */}
         <Card
-          elevation={8}
+          elevation={2}
           sx={{
-            borderRadius: 4,
+            borderRadius: 3,
             background: theme.palette.card.header,
             color: 'text.primary',
-            mb: 4,
+            mb: 3,
             overflow: 'hidden',
             border: theme.palette.card.border,
           }}
         >
-          <CardContent sx={{ p: 4 }}>
+          <CardContent sx={{ p: 3 }}>
             <Box display="flex" alignItems="center" gap={2} mb={2}>
-              <HomeIcon sx={{ fontSize: 40, color: 'success.main' }} />
+              <HomeIcon sx={{ fontSize: 32, color: 'success.main' }} />
               <Box>
-                <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
+                <Typography variant="h4" fontWeight="700" sx={{ mb: 0.5 }}>
                   {t('home.title')}
                 </Typography>
-                <Typography variant="h6" sx={{ opacity: 0.9 }}>
+                <Typography variant="body1" sx={{ opacity: 0.9 }}>
                   {t('home.subtitle')}
                 </Typography>
               </Box>
@@ -76,25 +76,19 @@ function HomeView() {
         >
           <Grid size={{ xs: 12, md: 6 }}>
             <Card
-              elevation={6}
+              elevation={2}
               sx={{
                 borderRadius: 3,
                 background: theme.palette.card.header,
                 border: theme.palette.card.border,
                 overflow: 'hidden',
                 height: '100%',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)',
-                  border: `1px solid ${alpha(theme.palette.success.main, 0.3)}`,
-                },
               }}
             >
-              <CardContent sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Box display="flex" alignItems="center" gap={2} mb={3}>
-                  <FitnessCenter sx={{ fontSize: 32, color: 'success.main' }} />
-                  <Typography variant="h5" fontWeight="600" color="text.primary">
+                  <FitnessCenter sx={{ fontSize: 28, color: 'success.main' }} />
+                  <Typography variant="h6" fontWeight="600" color="text.primary">
                     {t('home.trainingModule')}
                   </Typography>
                 </Box>
@@ -133,25 +127,19 @@ function HomeView() {
 
           <Grid size={{ xs: 12, md: 6 }}>
             <Card
-              elevation={6}
+              elevation={2}
               sx={{
                 borderRadius: 3,
                 background: theme.palette.card.header,
                 border: theme.palette.card.border,
                 overflow: 'hidden',
                 height: '100%',
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.4)',
-                  border: `1px solid ${alpha(theme.palette.warning.main, 0.3)}`,
-                },
               }}
             >
-              <CardContent sx={{ p: 4, height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <CardContent sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <Box display="flex" alignItems="center" gap={2} mb={3}>
-                  <Restaurant sx={{ fontSize: 32, color: 'warning.main' }} />
-                  <Typography variant="h5" fontWeight="600" color="text.primary">
+                  <Restaurant sx={{ fontSize: 28, color: 'warning.main' }} />
+                  <Typography variant="h6" fontWeight="600" color="text.primary">
                     {t('home.foodModule')}
                   </Typography>
                 </Box>
