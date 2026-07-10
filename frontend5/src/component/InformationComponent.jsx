@@ -9,15 +9,10 @@ export default function InformationComponent({ children }) {
         justifyContent: 'center',
         alignItems: 'center',
         minHeight: '200px',
-        background: 'grey',
+        bgcolor: 'background.paper',
       }}
     >
-      <Typography
-        variant="h6"
-        color="text.secondary"
-        align="center"
-        sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
-      >
+      <Typography variant="h6" color="text.secondary" align="center">
         {children}
       </Typography>
     </Box>

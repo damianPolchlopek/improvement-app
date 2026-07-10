@@ -12,12 +12,15 @@ import {
   Fade,
   CircularProgress,
   Chip,
+  useTheme,
 } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { Message as MessageIcon, Circle as CircleIcon } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
 const LogComponent = () => {
   const { t } = useTranslation();
+  const theme = useTheme();
   const [messages, setMessages] = useState([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(true);
@@ -62,56 +65,65 @@ const LogComponent = () => {
       elevation={6}
       sx={{
         borderRadius: 3,
-        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
+        bgcolor: 'background.surface',
+        border: theme.palette.card.border,
         overflow: 'hidden',
       }}
     >
-      <CardContent sx={{ p: 4 }}>
-        {/* Header */}
-        <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
-          <Box display="flex" alignItems="center" gap={2}>
-            <MessageIcon sx={{ fontSize: 32, color: '#4caf50' }} />
-            <Typography variant="h5" fontWeight="600" color="white">
-              {t('home.activityLog')}
-            </Typography>
-          </Box>
-
-          {/* Connection Status */}
-          <Box display="flex" alignItems="center" gap={1}>
-            {isConnecting ? (
-              <Box display="flex" alignItems="center" gap={1}>
-                <CircularProgress size={16} sx={{ color: '#ff9800' }} />
-                <Chip
-                  label={t('home.connecting')}
-                  size="small"
-                  sx={{
-                    backgroundColor: 'rgba(255, 152, 0, 0.2)',
-                    color: '#ff9800',
-                    border: '1px solid rgba(255, 152, 0, 0.3)',
-                  }}
-                />
-              </Box>
-            ) : (
-              <Chip
-                icon={<CircleIcon sx={{ fontSize: 12 }} />}
-                label={isConnected ? t('home.connected') : t('home.disconnected')}
-                size="small"
-                sx={{
-                  backgroundColor: isConnected
-                    ? 'rgba(76, 175, 80, 0.2)'
-                    : 'rgba(244, 67, 54, 0.2)',
-                  color: isConnected ? '#4caf50' : '#f44336',
-                  border: `1px solid ${
-                    isConnected ? 'rgba(76, 175, 80, 0.3)' : 'rgba(244, 67, 54, 0.3)'
-                  }`,
-                }}
-              />
-            )}
-          </Box>
+      <Box
+        sx={{
+          p: 3,
+          background: theme.palette.card.header,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Box display="flex" alignItems="center" gap={2}>
+          <MessageIcon sx={{ fontSize: 32, color: 'success.main' }} />
+          <Typography variant="h5" fontWeight="600" color="text.primary">
+            {t('home.activityLog')}
+          </Typography>
         </Box>
 
-        <Typography variant="body2" color="rgba(255, 255, 255, 0.7)" sx={{ mb: 3 }}>
+        {/* Connection Status */}
+        <Box display="flex" alignItems="center" gap={1}>
+          {isConnecting ? (
+            <Box display="flex" alignItems="center" gap={1}>
+              <CircularProgress size={16} sx={{ color: 'warning.main' }} />
+              <Chip
+                label={t('home.connecting')}
+                size="small"
+                sx={{
+                  backgroundColor: alpha(theme.palette.warning.main, 0.2),
+                  color: 'warning.main',
+                  border: `1px solid ${alpha(theme.palette.warning.main, 0.3)}`,
+                }}
+              />
+            </Box>
+          ) : (
+            <Chip
+              icon={<CircleIcon sx={{ fontSize: 12 }} />}
+              label={isConnected ? t('home.connected') : t('home.disconnected')}
+              size="small"
+              sx={{
+                backgroundColor: alpha(
+                  isConnected ? theme.palette.success.main : theme.palette.error.main,
+                  0.2
+                ),
+                color: isConnected ? 'success.main' : 'error.main',
+                border: `1px solid ${alpha(
+                  isConnected ? theme.palette.success.main : theme.palette.error.main,
+                  0.3
+                )}`,
+              }}
+            />
+          )}
+        </Box>
+      </Box>
+
+      <CardContent sx={{ p: 4 }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
           {t('home.last10Messages')}
         </Typography>
 
@@ -151,7 +163,7 @@ const LogComponent = () => {
                       sx={{
                         width: '100%',
                         background: 'rgba(255, 255, 255, 0.05)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        border: theme.palette.card.border,
                         borderRadius: 2,
                         transition: 'all 0.2s ease',
                       }}
@@ -162,7 +174,7 @@ const LogComponent = () => {
                             <Typography
                               variant="body2"
                               sx={{
-                                color: '#4caf50',
+                                color: 'success.main',
                                 fontWeight: 500,
                                 fontSize: '0.9rem',
                                 wordBreak: 'break-word',
@@ -175,7 +187,7 @@ const LogComponent = () => {
                             <Typography
                               variant="caption"
                               sx={{
-                                color: 'rgba(255, 255, 255, 0.5)',
+                                color: 'text.disabled',
                                 fontSize: '0.75rem',
                                 mt: 0.5,
                               }}

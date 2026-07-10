@@ -13,6 +13,7 @@ import {
   Box,
   CircularProgress,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useMutation } from '@tanstack/react-query';
@@ -30,6 +31,7 @@ function formatDate(timestamp) {
 export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
   const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
+  const theme = useTheme();
   const [formData, setFormData] = useState({
     name: '',
     category: categories[0] || 'Waga',
@@ -89,8 +91,8 @@ export default function AddWeeklyRecordDialog({ open, onClose, categories }) {
     >
       <DialogTitle
         sx={{
-          background: 'linear-gradient(45deg, #2196f3, #1976d2)',
-          color: 'white',
+          background: `linear-gradient(45deg, ${theme.palette.info.main}, ${theme.palette.info.dark})`,
+          color: 'text.primary',
           display: 'flex',
           alignItems: 'center',
           gap: 1,

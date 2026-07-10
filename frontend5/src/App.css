@@ -1,15 +1,10 @@
 .App {
-  /* background-color: #1d2730; */
-  background: radial-gradient( #123146, #202c34);
-  /* background-color: #3c198d; */
-  /* background: radial-gradient(#186a5e, #053339); */
   text-align: center;
-  display: flex; 
+  display: flex;
   flex-direction: column;
   justify-content: center;
-  
+
   min-height: 100vh;
-  color: white;
 }
 
 .error-block {

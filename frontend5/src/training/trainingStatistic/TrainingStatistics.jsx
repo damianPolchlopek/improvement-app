@@ -33,6 +33,7 @@ import ErrorAlert from '../../component/error/ErrorAlert';
 import InformationComponent from '../../component/InformationComponent';
 
 import { Analytics, TrendingUp } from '@mui/icons-material';
+import { alpha } from '@mui/material/styles';
 
 // Backend expects dd-MM-yyyy path params (see StatisticController).
 function formatApiDate(epoch) {
@@ -54,17 +55,19 @@ const fieldSx = {
   '& .MuiOutlinedInput-root': {
     borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    color: 'white',
+    color: 'text.primary',
     '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.25)' },
-    '&:hover fieldset': { borderColor: '#4caf50' },
-    '&.Mui-focused fieldset': { borderColor: '#4caf50' },
+    '&:hover fieldset': { borderColor: 'success.main' },
+    '&.Mui-focused fieldset': { borderColor: 'success.main' },
   },
   '& .MuiInputLabel-root': {
-    color: 'rgba(255, 255, 255, 0.7)',
-    '&.Mui-focused': { color: '#4caf50' },
+    color: 'text.secondary',
+    '&.Mui-focused': { color: 'success.main' },
   },
-  '& .MuiIconButton-root': { color: 'white' },
-  '& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator': { color: 'white' },
+  '& .MuiIconButton-root': { color: 'text.primary' },
+  '& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator': {
+    color: 'text.primary',
+  },
 };
 
 export default function TrainingStatistic() {
@@ -178,15 +181,15 @@ export default function TrainingStatistic() {
             sx={{
               borderRadius: 3,
               border: theme.palette.card.border,
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-              color: 'white',
+              background: theme.palette.card.header,
+              color: 'text.primary',
               textAlign: 'left',
             }}
           >
             <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
               <Stack direction="row" alignItems="center" gap={1.5} mb={2}>
-                <Analytics sx={{ color: '#4caf50' }} />
-                <Typography variant="h6" fontWeight={700} color="white">
+                <Analytics sx={{ color: 'success.main' }} />
+                <Typography variant="h6" fontWeight={700} color="text.primary">
                   {t('chart.title')}
                 </Typography>
               </Stack>
@@ -253,7 +256,7 @@ export default function TrainingStatistic() {
                         endAdornment: (
                           <>
                             {isTemplateLoading ? (
-                              <CircularProgress size={18} sx={{ color: '#4caf50' }} />
+                              <CircularProgress size={18} sx={{ color: 'success.main' }} />
                             ) : null}
                             {params.InputProps.endAdornment}
                           </>
@@ -272,13 +275,13 @@ export default function TrainingStatistic() {
                   sx={{
                     alignSelf: { xs: 'flex-start', md: 'center' },
                     '& .MuiToggleButton-root': {
-                      color: 'rgba(255,255,255,0.7)',
+                      color: 'text.secondary',
                       borderColor: 'rgba(255,255,255,0.25)',
                       px: 2,
                     },
                     '& .Mui-selected': {
-                      color: '#0b1c25 !important',
-                      backgroundColor: '#4caf50 !important',
+                      color: `${theme.palette.success.contrastText} !important`,
+                      backgroundColor: `${theme.palette.success.main} !important`,
                       fontWeight: 700,
                     },
                   }}
@@ -321,11 +324,11 @@ export default function TrainingStatistic() {
                       variant="outlined"
                       size="small"
                       sx={{
-                        color: 'white',
+                        color: 'text.primary',
                         borderColor: 'rgba(255,255,255,0.3)',
                         '&:hover': {
-                          borderColor: '#4caf50',
-                          backgroundColor: 'rgba(76,175,80,0.12)',
+                          borderColor: 'success.main',
+                          backgroundColor: alpha(theme.palette.success.main, 0.12),
                         },
                       }}
                     />
@@ -342,7 +345,7 @@ export default function TrainingStatistic() {
             elevation={8}
             sx={{
               borderRadius: 3,
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
+              bgcolor: 'background.surface',
               border: theme.palette.card.border,
               overflow: 'hidden',
             }}
@@ -352,7 +355,7 @@ export default function TrainingStatistic() {
                 px: 3,
                 py: 2,
                 background: theme.palette.card.header,
-                color: 'white',
+                color: 'text.primary',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 2,
@@ -385,8 +388,8 @@ export default function TrainingStatistic() {
                     py: 8,
                   }}
                 >
-                  <CircularProgress size={48} sx={{ mb: 2, color: '#4caf50' }} />
-                  <Typography variant="body1" color="white">
+                  <CircularProgress size={48} sx={{ mb: 2, color: 'success.main' }} />
+                  <Typography variant="body1" color="text.primary">
                     {t('chart.loadingChart')}
                   </Typography>
                 </Box>
@@ -395,10 +398,10 @@ export default function TrainingStatistic() {
                   severity="error"
                   sx={{
                     borderRadius: 2,
-                    backgroundColor: 'rgba(211, 47, 47, 0.1)',
-                    color: 'white',
-                    border: '1px solid rgba(211, 47, 47, 0.3)',
-                    '& .MuiAlert-icon': { color: '#f44336' },
+                    backgroundColor: alpha(theme.palette.error.main, 0.1),
+                    color: 'text.primary',
+                    border: `1px solid ${alpha(theme.palette.error.main, 0.3)}`,
+                    '& .MuiAlert-icon': { color: 'error.main' },
                   }}
                 >
                   <ErrorAlert error={errorResult.error} />

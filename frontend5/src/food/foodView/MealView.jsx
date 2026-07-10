@@ -105,7 +105,7 @@ export default function MealView() {
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
-              color: 'white',
+              color: 'text.primary',
               mb: 2,
             }}
           >

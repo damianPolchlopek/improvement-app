@@ -18,15 +18,15 @@ import { MENU_ITEMS as menuItems } from './MenuItems';
 const category_style = {
   py: 2,
   px: 3,
-  color: 'rgba(255, 255, 255, 0.7)',
+  color: 'text.secondary',
 };
 
 const item = {
   py: '2px',
   px: 3,
-  color: 'rgba(255, 255, 255, 0.7)',
+  color: 'text.secondary',
   '&:hover, &:focus': {
-    bgcolor: 'rgba(255, 255, 255, 0.08)',
+    bgcolor: 'action.hover',
   },
 };
 
@@ -36,14 +36,14 @@ export default function DrawerComponent(props) {
   return (
     <Drawer {...props}>
       <List disablePadding>
-        <ListItem sx={{ ...item, px: 8, py: 2, fontSize: 22, color: '#fff' }}>
+        <ListItem sx={{ ...item, px: 8, py: 2, fontSize: 22, color: 'text.primary' }}>
           <Logo />
         </ListItem>
         {menuItems(t).map(({ category, subPages, icon }) => (
           <Box key={category} sx={{ bgcolor: '#101F33' }}>
             <ListItem sx={{ ...category_style }}>
               <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText sx={{ color: '#fff' }}>{category}</ListItemText>
+              <ListItemText sx={{ color: 'text.primary' }}>{category}</ListItemText>
             </ListItem>
             {subPages.map(({ name, icon, path }) => (
               <ListItem disablePadding key={name}>

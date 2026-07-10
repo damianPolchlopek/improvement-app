@@ -58,7 +58,7 @@ export default function DailyForm() {
           sx={{
             p: 2,
             background: theme.palette.card.header,
-            color: 'white',
+            color: 'text.primary',
             display: 'flex',
             alignItems: 'center',
             gap: 2,

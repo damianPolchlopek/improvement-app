@@ -90,7 +90,7 @@ export default function FinanceView() {
             sx={{
               borderRadius: 3,
               background: theme.palette.card.header,
-              color: 'white',
+              color: 'text.primary',
               mb: 2,
             }}
           >
@@ -163,7 +163,7 @@ export default function FinanceView() {
               sx={{
                 p: 2,
                 background: theme.palette.card.header,
-                color: 'white',
+                color: 'text.primary',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 2,

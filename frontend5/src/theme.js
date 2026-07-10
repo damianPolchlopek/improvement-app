@@ -11,8 +11,8 @@ let theme = createTheme({
     },
     background: {
       default: 'radial-gradient( #123146, #202c34)',
-      second: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
       paper: '#1d1d1d',
+      surface: '#202c34',
     },
     card: {
       header: 'linear-gradient(90deg, #1e3a52 0%, #2d5374 100%)',
@@ -22,7 +22,6 @@ let theme = createTheme({
   typography: {
     h6: {
       fontWeight: '600',
-      color: 'text.primary',
     },
     h5: {
       fontWeight: 500,
@@ -44,10 +43,17 @@ let theme = createTheme({
 theme = {
   ...theme,
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          background: theme.palette.background.default,
+        },
+      },
+    },
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          backgroundColor: '#1d1d1d',
+          backgroundColor: theme.palette.background.paper,
         },
       },
     },

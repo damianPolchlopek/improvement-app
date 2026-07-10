@@ -2,6 +2,7 @@ import React from 'react';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 
 export default function ErrorAlert({ error, severity = 'error' }) {
@@ -29,13 +30,13 @@ export default function ErrorAlert({ error, severity = 'error' }) {
           {t('common.error')}: {code}
         </AlertTitle>
         <div>{message}</div>
-        <div style={{ fontSize: '0.8rem', marginTop: 4, color: '#666' }}>
+        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
           {t('common.occurred')}: {timestamp}
-        </div>
+        </Typography>
         {details && (
-          <div style={{ fontSize: '0.9rem', marginTop: 4 }}>
+          <Typography variant="body2" sx={{ mt: 0.5 }}>
             {t('common.details')}: {details}
-          </div>
+          </Typography>
         )}
       </Alert>
     </Box>

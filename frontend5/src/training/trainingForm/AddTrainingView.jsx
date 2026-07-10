@@ -113,7 +113,7 @@ export default function AddTrainingView() {
             sx={{
               p: 2,
               background: theme.palette.card.header,
-              color: 'white',
+              color: 'text.primary',
             }}
           >
             <Typography variant="subtitle1" fontWeight="600">

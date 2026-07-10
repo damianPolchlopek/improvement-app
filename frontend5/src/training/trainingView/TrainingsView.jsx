@@ -76,7 +76,7 @@ export default function TrainingsView() {
           sx={{
             borderRadius: 3,
             background: theme.palette.card.header,
-            color: 'white',
+            color: 'text.primary',
             mb: 3,
             overflow: 'hidden',
             border: theme.palette.card.border,
@@ -112,8 +112,8 @@ export default function TrainingsView() {
             elevation={2}
             sx={{
               borderRadius: 3,
-              background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              bgcolor: 'background.surface',
+              border: theme.palette.card.border,
               overflow: 'hidden',
             }}
           >
@@ -123,7 +123,6 @@ export default function TrainingsView() {
                   <StyledTableCell colSpan={7} align="center" sx={{ p: 0 }}>
                     <Box
                       sx={{
-                        background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
                         borderRadius: 2,
                       }}
                     >
@@ -139,7 +138,6 @@ export default function TrainingsView() {
                 <StyledTableRow
                   sx={{
                     '& .MuiTableCell-root': {
-                      background: theme.palette.card.header,
                       border: theme.palette.card.border,
                     },
                   }}

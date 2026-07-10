@@ -70,7 +70,7 @@ export default function ShoppingListView({ categories = [] }) {
         sx={{
           p: 2,
           background: theme.palette.card.header,
-          color: 'white',
+          color: 'text.primary',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -84,7 +84,7 @@ export default function ShoppingListView({ categories = [] }) {
             Shopping List
           </Typography>
         </Box>
-        <IconButton sx={{ color: 'white' }} size="small">
+        <IconButton sx={{ color: 'text.primary' }} size="small">
           {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </IconButton>
       </Box>
@@ -148,7 +148,7 @@ export default function ShoppingListView({ categories = [] }) {
                       color: theme.palette.error.main,
                       '&:hover': {
                         backgroundColor: theme.palette.error.main,
-                        color: 'white',
+                        color: 'text.primary',
                       },
                     }}
                   >

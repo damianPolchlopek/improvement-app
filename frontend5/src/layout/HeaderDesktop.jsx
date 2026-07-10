@@ -28,7 +28,7 @@ function HeaderDesktop() {
           <Box key={category}>
             <Button
               onClick={(event) => handleOpenDropdownMenu(event, category)}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+              sx={{ my: 2, color: 'text.primary', display: 'block' }}
             >
               {category}
             </Button>

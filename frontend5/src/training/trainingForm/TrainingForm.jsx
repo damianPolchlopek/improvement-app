@@ -16,8 +16,10 @@ import {
   Card,
   IconButton,
   Tooltip,
+  useTheme,
 } from '@mui/material';
 
+import { alpha } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -99,6 +101,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   } = useLoaderData() || {};
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const nameOptions = useMemo(() => exerciseNames.map((en) => en.name), [exerciseNames]);
   const nameOptionsSet = useMemo(() => new Set(nameOptions), [nameOptions]);
@@ -623,11 +626,11 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             borderRadius: 25,
             fontSize: '1.05rem',
             fontWeight: 'bold',
-            background: 'linear-gradient(45deg, #667eea, #764ba2)',
-            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+            background: `linear-gradient(45deg, ${theme.palette.success.dark}, ${theme.palette.success.main})`,
+            boxShadow: `0 4px 15px ${alpha(theme.palette.success.main, 0.4)}`,
             '&:hover': {
-              background: 'linear-gradient(45deg, #5a67d8, #6b46c1)',
-              boxShadow: '0 6px 20px rgba(102, 126, 234, 0.6)',
+              background: `linear-gradient(45deg, ${theme.palette.success.dark}, ${theme.palette.success.light})`,
+              boxShadow: `0 6px 20px ${alpha(theme.palette.success.main, 0.6)}`,
             },
             '&:disabled': { background: 'rgba(0,0,0,0.12)', boxShadow: 'none' },
           }}

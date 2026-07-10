@@ -43,7 +43,7 @@ export default function ShoppingListPage() {
           sx={{
             borderRadius: 3,
             background: theme.palette.card.header,
-            color: 'white',
+            color: 'text.primary',
           }}
         >
           <CardContent sx={{ p: 3 }}>

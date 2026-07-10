@@ -84,7 +84,7 @@ export default function WeeklyRecordTableRow({ record }) {
                 color: theme.palette.primary.main,
                 '&:hover': {
                   backgroundColor: theme.palette.primary.main,
-                  color: 'white',
+                  color: 'text.primary',
                 },
               }}
             >
@@ -99,7 +99,7 @@ export default function WeeklyRecordTableRow({ record }) {
                 color: theme.palette.error.main,
                 '&:hover': {
                   backgroundColor: theme.palette.error.main,
-                  color: 'white',
+                  color: 'text.primary',
                 },
               }}
             >
@@ -123,8 +123,8 @@ export default function WeeklyRecordTableRow({ record }) {
       >
         <DialogTitle
           sx={{
-            background: 'linear-gradient(45deg, #f44336, #d32f2f)',
-            color: 'white',
+            background: `linear-gradient(45deg, ${theme.palette.error.main}, ${theme.palette.error.dark})`,
+            color: 'text.primary',
             display: 'flex',
             alignItems: 'center',
             gap: 1,

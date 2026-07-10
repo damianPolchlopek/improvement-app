@@ -15,7 +15,8 @@ import {
   YAxis,
 } from 'recharts';
 
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography, useTheme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { ZoomOutMap } from '@mui/icons-material';
 
 // Single source of truth for series colors. The order matches the order of the
@@ -52,7 +53,7 @@ const CustomTooltip = ({ active, payload, label, t }) => {
         minWidth: 160,
       }}
     >
-      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
         {t('chart.date')}: {formatAxisDate(label)}
       </Typography>
       {payload.map((entry) => (
@@ -76,11 +77,11 @@ const CustomTooltip = ({ active, payload, label, t }) => {
                 flexShrink: 0,
               }}
             />
-            <Typography variant="body2" sx={{ color: 'white' }} noWrap>
+            <Typography variant="body2" sx={{ color: 'text.primary' }} noWrap>
               {entry.dataKey}
             </Typography>
           </Box>
-          <Typography variant="body2" fontWeight={700} sx={{ color: 'white' }}>
+          <Typography variant="body2" fontWeight={700} sx={{ color: 'text.primary' }}>
             {entry.value}
           </Typography>
         </Box>
@@ -91,6 +92,7 @@ const CustomTooltip = ({ active, payload, label, t }) => {
 
 export default function ExerciseChart({ data, series, beginDate, endDate }) {
   const { t } = useTranslation();
+  const theme = useTheme();
 
   // Drag-to-zoom state: refArea* track the live selection, zoom holds the applied range.
   const [refAreaLeft, setRefAreaLeft] = useState('');
@@ -172,9 +174,12 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
             startIcon={<ZoomOutMap />}
             onClick={resetZoom}
             sx={{
-              color: 'white',
+              color: 'text.primary',
               borderColor: 'rgba(255,255,255,0.3)',
-              '&:hover': { borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.12)' },
+              '&:hover': {
+                borderColor: 'success.main',
+                backgroundColor: alpha(theme.palette.success.main, 0.12),
+              },
             }}
           >
             {t('chart.resetZoom')}
@@ -233,7 +238,7 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
                 x1={refAreaLeft}
                 x2={refAreaRight}
                 strokeOpacity={0.3}
-                fill="#4caf50"
+                fill={theme.palette.success.main}
                 fillOpacity={0.15}
               />
             )}
