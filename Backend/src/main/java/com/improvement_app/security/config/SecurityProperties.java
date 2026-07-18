@@ -32,6 +32,7 @@ public class SecurityProperties {
     @Data
     public static class Cookie {
         private boolean secure = false;
+        private String sameSite = "Lax";
     }
 
     @Data

@@ -42,9 +42,10 @@ google:
 
 app:
   frontend:
-    url: https://mutarexx.smallhost.pl
+    url: https://grindtrack.pl
   security:
     cookie:
       secure: true
+      same-site: None  # frontend (grindtrack.pl) i API (mutarexx.smallhost.pl) to różne domeny
     cors:
-      allowed-origins: "https://mutarexx.smallhost.pl"
+      allowed-origins: "https://grindtrack.pl"

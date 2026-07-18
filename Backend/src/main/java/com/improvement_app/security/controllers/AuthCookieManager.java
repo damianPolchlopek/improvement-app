@@ -29,7 +29,7 @@ public class AuthCookieManager {
                 .secure(securityProperties.getCookie().isSecure())
                 .path("/")
                 .maxAge(Duration.ofMillis(securityProperties.getJwt().getAccessTokenExpirationMs()))
-                .sameSite("Strict")
+                .sameSite(securityProperties.getCookie().getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
@@ -40,7 +40,7 @@ public class AuthCookieManager {
                 .secure(securityProperties.getCookie().isSecure())
                 .path(REFRESH_COOKIE_PATH)
                 .maxAge(Duration.ofMillis(securityProperties.getJwt().getRefreshTokenExpirationMs()))
-                .sameSite("Strict")
+                .sameSite(securityProperties.getCookie().getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
@@ -65,7 +65,7 @@ public class AuthCookieManager {
                 .secure(securityProperties.getCookie().isSecure())
                 .path(path)
                 .maxAge(0)
-                .sameSite("Strict")
+                .sameSite(securityProperties.getCookie().getSameSite())
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }

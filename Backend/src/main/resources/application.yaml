@@ -67,6 +67,7 @@ app:
       refresh-token-expiration-ms: 259_200_000  # 3 dni
     cookie:
       secure: false  # true na produkcji (HTTPS)
+      same-site: Lax  # frontend i backend na tej samej domenie (localhost) w dev
     rate-limit:
       max-login-attempts: 5
       lock-duration-minutes: 15
