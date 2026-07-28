@@ -76,4 +76,5 @@ jobs:
 
       - name: Upload frontend files to server
         run: |
+          shopt -s dotglob
           scp -r frontend5/dist/* mutarexx@s2.small.pl:/home/mutarexx/domains/grindtrack.pl/public_html/
