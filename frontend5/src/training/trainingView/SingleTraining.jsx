@@ -12,10 +12,8 @@ export default function SingleTraining({ trainingName }) {
   const [filter, setFilter] = useState(null);
   const { t } = useTranslation();
 
-  const modifiedTrainingName = trainingName?.replace(/ /g, '_');
-
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['exercises', modifiedTrainingName, filter],
+    queryKey: ['exercises', trainingName, filter],
     queryFn: async () => {
       if (filter?.type === 'date') {
         const res = await REST.getExercisesByDate(filter.value);
@@ -24,7 +22,7 @@ export default function SingleTraining({ trainingName }) {
         const res = await REST.getExercisesByName(filter.value);
         return res.content;
       } else {
-        const res = await REST.getExercises(modifiedTrainingName);
+        const res = await REST.getExercises(trainingName);
         return res.content;
       }
     },

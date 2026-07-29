@@ -6,7 +6,6 @@ import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
 import com.improvement_app.food.ui.requests.update.UpdateDietSummaryRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
@@ -14,9 +13,9 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -47,30 +46,15 @@ public class DietSummaryController {
     })
     @GetMapping("/day-summary")
     public ResponseEntity<Page<DietSummary>> getDayDietSummary(
-            @Parameter(description = "Numer strony (0-based)", example = "0")
-            @RequestParam(defaultValue = "0") @Min(0) int page,
-
-            @Parameter(description = "Liczba elementów na stronie", example = "10")
-            @RequestParam(defaultValue = "10") @Min(1) int size,
-
-            @Parameter(description = "Pole do sortowania", example = "date")
-            @RequestParam(defaultValue = "date") String sortField,
-
-            @Parameter(description = "Kierunek sortowania", example = "DESC", schema = @Schema(allowableValues = {"ASC", "DESC"}))
-            @RequestParam(defaultValue = "DESC") String direction,
-
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable,
             @AuthenticationPrincipal(expression = "id") Long userId) {
 
-        log.debug("User {} fetching diet summaries - page: {}, size: {}, sortField: {}, direction: {}",
-                userId, page, size, sortField, direction);
-
-        Sort.Direction sortDirection = Sort.Direction.valueOf(direction.toUpperCase());
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortField));
+        log.debug("User {} fetching diet summaries - pageable: {}", userId, pageable);
 
         Page<DietSummary> dietSummaries = dietSummaryManagementUseCase.getDietSummaries(userId, pageable);
 
         log.debug("User {} found {} diet summaries on page {} of {}",
-                userId, dietSummaries.getNumberOfElements(), page, dietSummaries.getTotalPages());
+                userId, dietSummaries.getNumberOfElements(), pageable.getPageNumber(), dietSummaries.getTotalPages());
 
         return ResponseEntity.ok(dietSummaries);
     }

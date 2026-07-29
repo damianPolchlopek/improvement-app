@@ -11,12 +11,11 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ExerciseNameService {
 
     private final ExerciseNameEntityRepository nameRepository;
 
-    @Transactional
     public List<ExerciseMetadataResponse> getExerciseNames() {
         return nameRepository.findAll()
                 .stream()
@@ -25,7 +24,6 @@ public class ExerciseNameService {
                 .toList();
     }
 
-    @Transactional
     public List<ExerciseNameEntity> recreateExerciseName(List<ExerciseNameEntity> nameList) {
         nameRepository.deleteAllInBatch();
         nameRepository.flush();

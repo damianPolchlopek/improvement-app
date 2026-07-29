@@ -4,9 +4,9 @@ import com.improvement_app.other.daily.entity.Daily;
 import com.improvement_app.other.daily.service.DailyService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +25,8 @@ public class DailyController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Daily>> getDaily(@RequestParam(defaultValue = "0") int page,
-                                                @RequestParam(defaultValue = "10") int size,
-                                                @RequestParam(defaultValue = "date") String sortField,
-                                                @RequestParam(defaultValue = "DESC") String direction) {
-
-        Pageable pageable = PageRequest.of(page, size,
-                Sort.by(Sort.Direction.valueOf(direction), sortField));
+    public ResponseEntity<Page<Daily>> getDaily(
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<Daily> allDailies = dailyService.getDailyList(pageable);
 
