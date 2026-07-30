@@ -150,6 +150,7 @@ public class ExerciseService {
         return trainings;
     }
 
+    @Transactional
     public TrainingEntity addTraining(Long userId, List<ExerciseRequest> exerciseRequest) {
         if (exerciseRequest == null || exerciseRequest.isEmpty()) {
             throw new IllegalArgumentException("Lista ćwiczeń nie może być pusta");
