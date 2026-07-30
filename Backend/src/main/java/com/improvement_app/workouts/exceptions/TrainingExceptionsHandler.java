@@ -16,22 +16,6 @@ import java.time.LocalDateTime;
 public class TrainingExceptionsHandler {
 
     /**
-     * Obsługa błędów związanych z nieznalezionymi ćwiczeniami
-     */
-    @ExceptionHandler(ExercisesNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleExercisesNotFound(ExercisesNotFoundException ex) {
-        log.warn("Exercises not found: {}", ex.getMessage());
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("EXERCISES_NOT_FOUND")
-                .message(ex.getMessage())
-                .timestamp(LocalDateTime.now())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-    }
-
-    /**
      * Obsługa błędów związanych z nieznalezionymi szablonami treningów
      */
     @ExceptionHandler(TrainingTemplateNotFoundException.class)

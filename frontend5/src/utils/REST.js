@@ -22,6 +22,7 @@ const weekly = 'weekly/';
 const daily = 'daily/';
 const finance = 'finance/';
 const crypto = 'crypto/';
+const search = 'search';
 
 const statistic = 'statistic/';
 
@@ -118,22 +119,21 @@ export default class REST {
   }
 
   static getExercises(trainingName) {
-    return get(serverUrl + exercise + 'trainingName/' + trainingName);
+    return get(serverUrl + exercise + search + `?trainingName=${encodeURIComponent(trainingName)}`);
   }
 
   static getExercisesByDate(date) {
-    return get(serverUrl + exercise + 'date/' + date);
+    return get(`${serverUrl}${exercise}search?date=${date}`);
   }
-
   static getExercisesByName(name) {
-    return get(serverUrl + exercise + 'name/' + name);
+    return get(`${serverUrl}${exercise}search?name=${encodeURIComponent(name)}`);
   }
 
   // Najświeższe reps/weight dla danej nazwy ćwiczenia (podpowiedź "ostatnio").
-  // Reużywa istniejącego /name/{name} (zwraca historię od najnowszej) i bierze pierwszy wpis;
-  // brak historii zwraca 404 -> traktujemy jako brak danych.
+  // Reużywa /search?name= (zwraca historię od najnowszej) i bierze pierwszy wpis;
+  // brak historii zwraca pustą listę -> traktujemy jako brak danych.
   static getLastExerciseByName(name) {
-    return get(serverUrl + exercise + 'name/' + name)
+    return REST.getExercisesByName(name)
       .then((res) => res?.content?.[0] ?? null)
       .catch(() => null);
   }

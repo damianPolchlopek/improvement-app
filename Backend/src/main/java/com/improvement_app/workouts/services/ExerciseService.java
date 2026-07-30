@@ -5,13 +5,13 @@ import com.improvement_app.googledrive.service.GoogleDriveFileService;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
 import com.improvement_app.workouts.converters.TrainingTypeConverter;
+import com.improvement_app.workouts.dto.ExerciseSearchCriteria;
 import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
 import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
-import com.improvement_app.workouts.exceptions.ExercisesNotFoundException;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.repository.ExerciseEntityRepository;
 import com.improvement_app.workouts.repository.TrainingEntityRepository;
@@ -29,13 +29,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ExerciseService {
 
     private final ExerciseEntityRepository exerciseRepository;
@@ -46,27 +47,32 @@ public class ExerciseService {
     private final GoogleDriveFileService googleDriveFileService;
     private final FilePathService filePathService;
 
-    @Transactional
-    public List<ExerciseEntity> findByDateOrderByIndex(Long userId, LocalDate date) {
-        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndTrainingDate(userId, date);
+    public List<ExerciseEntity> findExercises(Long userId, ExerciseSearchCriteria criteria) {
+        String name = blankToNull(criteria.name());
+        String trainingName = blankToNull(criteria.trainingName());
 
-        if (exercises.isEmpty()) {
-            throw new ExercisesNotFoundException("date", date.toString(), userId);
+        long provided = Stream.of(name, criteria.date(), trainingName)
+                .filter(Objects::nonNull)
+                .count();
+
+        if (provided != 1) {
+            throw new IllegalArgumentException("Podaj dokładnie jedno kryterium: date, name lub trainingName");
         }
 
-        return exercises;
+        if (criteria.date() != null) {
+            return exerciseRepository.findByTrainingUserIdAndTrainingDate(userId, criteria.date());
+        }
+
+        if (trainingName != null) {
+            return exerciseRepository.findByTrainingUserIdAndTrainingName(userId, trainingName);
+        }
+
+        ExerciseName exerciseName = ExerciseName.fromValue(name);
+        return exerciseRepository.findByTrainingUserIdAndNameOrderByTrainingDateDesc(userId, exerciseName);
     }
 
-    @Transactional
-    public List<ExerciseEntity> findByNameReverseSorted(Long userId, String name) {
-        ExerciseName exerciseName = ExerciseName.fromValue(name);
-        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndNameOrderByTrainingDateDesc(userId, exerciseName);
-
-        if (exercises.isEmpty()) {
-            throw new ExercisesNotFoundException("name", name, userId);
-        }
-
-        return exercises;
+    private static String blankToNull(String value) {
+        return (value == null || value.isBlank()) ? null : value;
     }
 
     @Transactional
@@ -82,22 +88,12 @@ public class ExerciseService {
     }
 
     @Transactional
-    public List<ExerciseEntity> findByTrainingNameOrderByIndex(Long userId, String trainingName) {
-        List<ExerciseEntity> exercises = exerciseRepository.findByTrainingUserIdAndTrainingName(userId, trainingName);
-
-        if (exercises.isEmpty()) {
-            throw new ExercisesNotFoundException("trainingName", trainingName, userId);
-        }
-
-        return exercises;
-    }
-
-    @Transactional
     public Page<String> getAllTrainingNames(Long userId, Pageable page) {
         return trainingRepository.findByUserId(userId, page)
                 .map(TrainingEntity::getName);
     }
 
+    @Transactional
     public List<ExerciseEntity> getATHExercise(Long userId, String trainingTypeShortcut) {
         TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut);
 

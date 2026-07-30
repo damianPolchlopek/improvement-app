@@ -74,9 +74,9 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
         assertThat(trainingRepository.count()).isEqualTo(countBefore);
     }
 
-    // ─── Happy path GET /date/{date} ─────────────────────────
+    // ─── Happy path GET /search?date= ─────────────────────────
     @Test
-    @DisplayName("GET /exercises/date/{date}: zwraca ćwiczenia z podanej daty")
+    @DisplayName("GET /exercises/search?date=: zwraca ćwiczenia z podanej daty")
     void shouldReturnExercisesForDate() throws Exception {
         UserEntity u = persistUser("user1");
         LocalDate date = LocalDate.of(2024, 1, 15);
@@ -86,7 +86,8 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 80.0))
         ));
 
-        mockMvc.perform(get("/exercises/date/2024-01-15")
+        mockMvc.perform(get("/exercises/search")
+                .param("date", "2024-01-15")
                 .with(authentication(authOf(u))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].name").exists());

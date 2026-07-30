@@ -1,6 +1,7 @@
 package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.util.ListResponse;
+import com.improvement_app.workouts.dto.ExerciseSearchCriteria;
 import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.response.ExerciseResponse;
@@ -9,7 +10,6 @@ import com.improvement_app.workouts.services.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
@@ -39,45 +39,25 @@ public class ExerciseController {
 
     private final ExerciseService exerciseService;
 
-    @Operation(description = "Get all exercises with provided date")
-    @GetMapping(value = "/date/{exerciseDate}", produces = MediaType.APPLICATION_JSON)
-    public ListResponse<ExerciseResponse> getExercisesByDate(@PathVariable LocalDate exerciseDate,
-                                                             @AuthenticationPrincipal(expression = "id") Long userId) {
-        List<ExerciseResponse> exercises = exerciseService.findByDateOrderByIndex(userId, exerciseDate)
+    @Operation(
+            summary = "Pobierz ćwiczenia po jednym z kryteriów",
+            description = "Podaj dokładnie jeden z parametrów: date, name lub trainingName"
+    )
+    @GetMapping(value = "/search", produces = MediaType.APPLICATION_JSON)
+    public ListResponse<ExerciseResponse> searchExercises(
+            @RequestParam(required = false) LocalDate date,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String trainingName,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+
+        List<ExerciseResponse> result = exerciseService
+                .findExercises(userId, new ExerciseSearchCriteria(date, name, trainingName))
                 .stream()
                 .map(ExerciseResponse::new)
                 .toList();
 
-        return ListResponse.of(exercises);
-    }
-
-    @Operation(description = "Get all exercises with provided name")
-    @GetMapping("/name/{exerciseName}")
-    public ListResponse<ExerciseResponse> getExercisesByName(@PathVariable
-                                                             @NotBlank(message = "Nazwa ćwiczenia nie może być pusta")
-                                                             String exerciseName,
-                                                             @AuthenticationPrincipal(expression = "id") Long userId) {
-        List<ExerciseResponse> exercises = exerciseService.findByNameReverseSorted(userId, exerciseName)
-                .stream()
-                .map(ExerciseResponse::new)
-                .toList();
-
-        return ListResponse.of(exercises);
-    }
-
-    @Operation(description = "Get all exercises with provided training name")
-    @GetMapping("/trainingName/{trainingName}")
-    public ListResponse<ExerciseResponse> getExercisesByTrainingName(@PathVariable
-                                                                     @NotBlank(message = "Nazwa treningu nie może być pusta")
-                                                                     String trainingName,
-                                                                     @AuthenticationPrincipal(expression = "id") Long userId) {
-
-        List<ExerciseResponse> exercises = exerciseService.findByTrainingNameOrderByIndex(userId, trainingName)
-                .stream()
-                .map(ExerciseResponse::new)
-                .toList();
-
-        return ListResponse.of(exercises);
+        return ListResponse.of(result);
     }
 
     @Operation(description = "Get all training names")
@@ -94,6 +74,7 @@ public class ExerciseController {
                                                                   @Pattern(regexp = TRAINING_TYPE_PATTERN, message = TRAINING_TYPE_MESSAGE)
                                                                   String trainingType,
                                                                   @AuthenticationPrincipal(expression = "id") Long userId) {
+
         List<ExerciseResponse> exercises = exerciseService.generateTrainingFromTemplate(userId, trainingType)
                 .stream()
                 .map(ExerciseResponse::new)
@@ -121,6 +102,7 @@ public class ExerciseController {
                                                                   @Pattern(regexp = TRAINING_TYPE_PATTERN, message = TRAINING_TYPE_MESSAGE)
                                                                   String trainingType,
                                                                   @AuthenticationPrincipal(expression = "id") Long userId) {
+
         List<ExerciseResponse> exercises = exerciseService.getATHExercise(userId, trainingType)
                 .stream()
                 .map(ExerciseResponse::new)
