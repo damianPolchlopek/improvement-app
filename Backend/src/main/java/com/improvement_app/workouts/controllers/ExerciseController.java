@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -132,8 +133,12 @@ public class ExerciseController {
     @PostMapping(value = "/addTraining", produces = MediaType.APPLICATION_JSON)
     public ResponseEntity<TrainingDayResponse> addTraining(@Valid @RequestBody List<ExerciseRequest> exercises,
                                                            @AuthenticationPrincipal(expression = "id") Long userId) {
+
         TrainingEntity training = exerciseService.addTraining(userId, exercises);
-        return ResponseEntity.ok(TrainingDayResponse.from(training));
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(TrainingDayResponse.from(training));
     }
 
 }

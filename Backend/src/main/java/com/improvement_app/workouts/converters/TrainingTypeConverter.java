@@ -1,64 +1,69 @@
 package com.improvement_app.workouts.converters;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class TrainingTypeConverter {
+
+    private static final Map<String, String> EXERCISE_TYPE_BY_CODE = Map.ofEntries(
+            Map.entry("A1", "SILOWY_A1"),
+            Map.entry("B1", "SILOWY_B1"),
+            Map.entry("A2", "SILOWY_A2"),
+            Map.entry("B2", "SILOWY_B2"),
+            Map.entry("A", "SILOWY_A"),
+            Map.entry("B", "SILOWY_B"),
+            Map.entry("C", "HIPERTROFICZNY_C"),
+            Map.entry("C1", "HIPERTROFICZNY_C1"),
+            Map.entry("C2", "HIPERTROFICZNY_C2"),
+            Map.entry("D", "HIPERTROFICZNY_D"),
+            Map.entry("D1", "HIPERTROFICZNY_D1"),
+            Map.entry("D2", "HIPERTROFICZNY_D2"),
+            Map.entry("E", "BASEN_E"),
+            Map.entry("K1", "KETTLE_K1"),
+            Map.entry("K2", "KETTLE_K2"),
+            Map.entry("K3", "KETTLE_K3"),
+            Map.entry("KARDIO", "KARDIO"),
+            Map.entry("F", "FBW_F"),
+            Map.entry("F1", "FBW_F_1"),
+            Map.entry("F2", "FBW_F_2")
+    );
+
+    private static final Map<String, String> TEMPLATE_NAME_BY_CODE = Map.ofEntries(
+            Map.entry("A1", "Siłowy#1-A1"),
+            Map.entry("B1", "Siłowy#1-B1"),
+            Map.entry("C1", "Hipertroficzny#1-C1"),
+            Map.entry("D1", "Hipertroficzny#1-D1"),
+            Map.entry("D2", "Hipertroficzny#1-D2"),
+            Map.entry("A", "Siłowy#1-A"),
+            Map.entry("B", "Siłowy#1-B"),
+            Map.entry("C", "Hipertroficzny#1-C"),
+            Map.entry("D", "Hipertroficzny#1-D"),
+            Map.entry("E", "Basen#1-E"),
+            Map.entry("K1", "Kettle#1-K1"),
+            Map.entry("K2", "Kettle#1-K2"),
+            Map.entry("K3", "Kettle#1-K3"),
+            Map.entry("F", "FBW#2-F"),
+            Map.entry("F1", "FBW#1-F1"),
+            Map.entry("F2", "FBW#1-F2")
+    );
 
     private TrainingTypeConverter() {
         // Private constructor to prevent instantiation
     }
 
     public static String toExerciseType(String type) {
-        Map<String, String> trainingTypeMap = new HashMap<>();
-
-        // Mapowanie kodów na nazwy enum-ów
-        trainingTypeMap.put("A1", "SILOWY_A1");
-        trainingTypeMap.put("B1", "SILOWY_B1");
-        trainingTypeMap.put("A2", "SILOWY_A2");
-        trainingTypeMap.put("B2", "SILOWY_B2");
-        trainingTypeMap.put("A", "SILOWY_A");
-        trainingTypeMap.put("B", "SILOWY_B");
-        trainingTypeMap.put("C", "HIPERTROFICZNY_C");
-        trainingTypeMap.put("C1", "HIPERTROFICZNY_C1");
-        trainingTypeMap.put("C2", "HIPERTROFICZNY_C2");
-        trainingTypeMap.put("D", "HIPERTROFICZNY_D");
-        trainingTypeMap.put("D1", "HIPERTROFICZNY_D1");
-        trainingTypeMap.put("D2", "HIPERTROFICZNY_D2");
-        trainingTypeMap.put("E", "BASEN_E");
-        trainingTypeMap.put("K1", "KETTLE_K1");
-        trainingTypeMap.put("K2", "KETTLE_K2");
-        trainingTypeMap.put("K3", "KETTLE_K3");
-        trainingTypeMap.put("KARDIO", "KARDIO");
-        trainingTypeMap.put("F", "FBW_F");
-        trainingTypeMap.put("F1", "FBW_F_1");
-        trainingTypeMap.put("F2", "FBW_F_2");
-
-        return trainingTypeMap.getOrDefault(type, "SILOWY_A");
+        String exerciseType = EXERCISE_TYPE_BY_CODE.get(type);
+        if (exerciseType == null) {
+            throw new IllegalArgumentException("Nieznany typ treningu: " + type);
+        }
+        return exerciseType;
     }
 
     public static String toTrainingTemplate(String type) {
-        final Map<String, String> trainingTypeMap = new HashMap<>();
-
-        trainingTypeMap.put("A1", "Siłowy#1-A1");
-        trainingTypeMap.put("B1", "Siłowy#1-B1");
-        trainingTypeMap.put("C1", "Hipertroficzny#1-C1");
-        trainingTypeMap.put("D1", "Hipertroficzny#1-D1");
-        trainingTypeMap.put("D2", "Hipertroficzny#1-D2");
-        trainingTypeMap.put("A", "Siłowy#1-A");
-        trainingTypeMap.put("B", "Siłowy#1-B");
-        trainingTypeMap.put("C", "Hipertroficzny#1-C");
-        trainingTypeMap.put("D", "Hipertroficzny#1-D");
-        trainingTypeMap.put("E", "Basen#1-E");
-        trainingTypeMap.put("K1", "Kettle#1-K1");
-        trainingTypeMap.put("K2", "Kettle#1-K2");
-        trainingTypeMap.put("K3", "Kettle#1-K3");
-        trainingTypeMap.put("F", "FBW#2-F");
-        trainingTypeMap.put("F1", "FBW#1-F1");
-        trainingTypeMap.put("F2", "FBW#1-F2");
-
-        return trainingTypeMap.getOrDefault(type, "Siłowy#1-A");
+        String templateName = TEMPLATE_NAME_BY_CODE.get(type);
+        if (templateName == null) {
+            throw new IllegalArgumentException("Brak szablonu dla typu treningu: " + type);
+        }
+        return templateName;
     }
-
 
 }
