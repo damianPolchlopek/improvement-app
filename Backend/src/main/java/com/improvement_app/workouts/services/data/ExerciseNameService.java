@@ -24,6 +24,7 @@ public class ExerciseNameService {
                 .toList();
     }
 
+    @Transactional
     public List<ExerciseNameEntity> recreateExerciseName(List<ExerciseNameEntity> nameList) {
         nameRepository.deleteAllInBatch();
         nameRepository.flush();

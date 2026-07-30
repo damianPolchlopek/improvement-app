@@ -180,6 +180,7 @@ public class ExerciseService {
         return exerciseRepository.findTopByTrainingUserIdOrderByTrainingDateDesc(userId);
     }
 
+    @Transactional
     private void uploadTrainingToDrive(List<ExerciseRequest> exercises, String trainingName) {
         String excelFileLocation = filePathService.getExcelPath(trainingName);
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
