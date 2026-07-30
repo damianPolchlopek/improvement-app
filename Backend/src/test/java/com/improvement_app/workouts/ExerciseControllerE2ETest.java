@@ -42,7 +42,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 .with(authentication(authOf(u)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.date").exists());
 
         verify(googleDriveFileService).uploadFile(any(), any(File.class), any());
