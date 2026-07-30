@@ -32,6 +32,9 @@ public class TrainingTypeConverter {
             Map.entry("B1", "Siłowy#1-B1"),
             Map.entry("C1", "Hipertroficzny#1-C1"),
             Map.entry("D1", "Hipertroficzny#1-D1"),
+            Map.entry("A2", "Siłowy#1-A2"),
+            Map.entry("B2", "Siłowy#1-B2"),
+            Map.entry("C2", "Hipertroficzny#1-C2"),
             Map.entry("D2", "Hipertroficzny#1-D2"),
             Map.entry("A", "Siłowy#1-A"),
             Map.entry("B", "Siłowy#1-B"),
@@ -41,6 +44,7 @@ public class TrainingTypeConverter {
             Map.entry("K1", "Kettle#1-K1"),
             Map.entry("K2", "Kettle#1-K2"),
             Map.entry("K3", "Kettle#1-K3"),
+            Map.entry("KARDIO", "Kardio"),
             Map.entry("F", "FBW#2-F"),
             Map.entry("F1", "FBW#1-F1"),
             Map.entry("F2", "FBW#1-F2")
