@@ -1,5 +1,6 @@
 package com.improvement_app.shopping.controller;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.shopping.entity.Category;
 import com.improvement_app.shopping.entity.Item;
 import com.improvement_app.shopping.repository.ItemRepository;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/shopping")
+@RequestMapping(ApiVersions.V1 + "/shopping")
 public class ShoppingController {
 
     private final ItemRepository itemRepository;

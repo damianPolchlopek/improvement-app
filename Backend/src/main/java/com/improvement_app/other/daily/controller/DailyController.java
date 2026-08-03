@@ -1,5 +1,6 @@
 package com.improvement_app.other.daily.controller;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.other.daily.entity.Daily;
 import com.improvement_app.other.daily.service.DailyService;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/daily")
+@RequestMapping(ApiVersions.V1 + "/daily")
 public class DailyController {
 
     private final DailyService dailyService;

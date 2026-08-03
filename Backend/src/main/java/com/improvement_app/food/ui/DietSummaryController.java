@@ -1,5 +1,6 @@
 package com.improvement_app.food.ui;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.food.application.ports.in.DietSummaryManagementUseCase;
 import com.improvement_app.food.domain.summary.DietSummary;
 import com.improvement_app.food.ui.requests.create.CreateDietSummaryRequest;
@@ -29,7 +30,7 @@ import java.time.LocalDate;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/food/diet")
+@RequestMapping(ApiVersions.V1 + "/food/diet")
 @PreAuthorize("hasRole('USER')") // Globalna ochrona dla całego kontrolera
 public class DietSummaryController {
 

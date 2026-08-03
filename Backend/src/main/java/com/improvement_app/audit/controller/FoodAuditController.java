@@ -1,6 +1,7 @@
 package com.improvement_app.audit.controller;
 
 import com.improvement_app.audit.response.DietSummaryRevision;
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.audit.response.RevisionComparisonDTO;
 import com.improvement_app.audit.service.FoodAuditService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Audit", description = "API do przeglądania historii zmian food")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/audit/food")
+@RequestMapping(ApiVersions.V1 + "/audit/food")
 public class FoodAuditController {
 
     private final FoodAuditService foodAuditService;

@@ -1,6 +1,7 @@
 package com.improvement_app.audit.controller;
 
 import com.improvement_app.audit.response.RevisionInfo;
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.audit.response.AuditRevisionDto;
 import com.improvement_app.audit.response.DietSummaryDto;
 import com.improvement_app.audit.service.GenericAuditService;
@@ -23,7 +24,7 @@ import java.util.List;
 @Tag(name = "Audit", description = "API do przeglądania historii zmian")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/audit")
+@RequestMapping(ApiVersions.V1 + "/audit")
 public class AuditController {
 
     private final GenericAuditService auditService;

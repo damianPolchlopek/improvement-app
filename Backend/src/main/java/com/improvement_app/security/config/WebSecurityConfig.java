@@ -89,13 +89,13 @@ public class WebSecurityConfig {
                         .requestMatchers("/error").permitAll()
 
                         // Publiczne endpointy
-                        .requestMatchers("/api/auth/signin").permitAll()
-                        .requestMatchers("/api/auth/signup").permitAll()
-                        .requestMatchers("/api/auth/refresh-token").permitAll()
-                        .requestMatchers("/api/auth/logout").permitAll()
-                        .requestMatchers("/api/auth/verify-email").permitAll()
-                        .requestMatchers("/api/auth/resend-verification").permitAll()
-                        .requestMatchers("/api/test/all").permitAll()
+                        .requestMatchers("/api/v1/auth/signin").permitAll()
+                        .requestMatchers("/api/v1/auth/signup").permitAll()
+                        .requestMatchers("/api/v1/auth/refresh-token").permitAll()
+                        .requestMatchers("/api/v1/auth/logout").permitAll()
+                        .requestMatchers("/api/v1/auth/verify-email").permitAll()
+                        .requestMatchers("/api/v1/auth/resend-verification").permitAll()
+                        .requestMatchers("/api/v1/test/all").permitAll()
 
                         // Swagger/OpenAPI - jeśli używasz
                         .requestMatchers(
@@ -108,9 +108,9 @@ public class WebSecurityConfig {
                         ).permitAll()
 
                         // Endpointy wymagające autoryzacji
-                        .requestMatchers(HttpMethod.GET, "/api/test/user")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/test/user")
                         .hasAnyRole("USER", "MODERATOR", "ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/test/admin")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/test/admin")
                         .hasRole("ADMIN")
 
                         // WSZYSTKIE INNE REQUESTY WYMAGAJĄ AUTORYZACJI!

@@ -75,7 +75,7 @@ class AuthControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         RestAssured.port = port;
-        RestAssured.basePath = "/api/auth";
+        RestAssured.basePath = "/api/v1/auth";
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
 
         // Rola ROLE_USER musi istnieć (signup szuka jej przez RoleRepository)

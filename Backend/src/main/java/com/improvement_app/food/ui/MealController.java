@@ -1,5 +1,6 @@
 package com.improvement_app.food.ui;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.exceptions.ErrorResponse;
 import com.improvement_app.food.application.ports.in.MealManagementUseCase;
 import com.improvement_app.food.domain.enums.MealCategory;
@@ -31,7 +32,7 @@ import java.util.Map;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/food")
+@RequestMapping(ApiVersions.V1 + "/food")
 public class MealController {
 
     private final MealManagementUseCase mealManagementUseCase;

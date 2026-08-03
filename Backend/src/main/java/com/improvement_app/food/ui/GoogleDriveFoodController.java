@@ -1,5 +1,6 @@
 package com.improvement_app.food.ui;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.food.application.InitializationDataService;
 import com.improvement_app.food.application.ports.in.InitializationUseCase;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/drive")
+@RequestMapping(ApiVersions.V1 + "/drive")
 public class GoogleDriveFoodController {
 
     private final InitializationUseCase initializationUseCase;

@@ -1,5 +1,6 @@
 package com.improvement_app.food.ui;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.exceptions.ErrorResponse;
 import com.improvement_app.food.application.ports.in.ProductManagementUseCase;
 import com.improvement_app.food.domain.enums.ProductCategory;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/food")
+@RequestMapping(ApiVersions.V1 + "/food")
 @Tag(name = "Products", description = "API do zarządzania produktami spożywczymi")
 @Validated
 public class ProductController {

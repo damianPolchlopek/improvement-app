@@ -1,5 +1,6 @@
 package com.improvement_app.food.ui;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.food.application.ports.in.CalculationManagementUseCase;
 import com.improvement_app.food.domain.calculate.CalculateResult;
 import com.improvement_app.food.ui.requests.calculate.CalculateDietRequest;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/food/macro")
+@RequestMapping(ApiVersions.V1 + "/food/macro")
 public class CalculateMacroController {
 
     private final CalculationManagementUseCase calculationManagementUseCase;

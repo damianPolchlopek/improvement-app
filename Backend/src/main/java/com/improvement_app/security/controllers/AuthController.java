@@ -1,5 +1,6 @@
 package com.improvement_app.security.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.security.request.ResendVerificationEmailRequest;
 import com.improvement_app.security.request.SignupRequest;
 import com.improvement_app.security.response.JwtResponse;
@@ -20,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(ApiVersions.V1 + "/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

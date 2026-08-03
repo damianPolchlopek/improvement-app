@@ -73,7 +73,7 @@ axios.interceptors.response.use(
     }
 
     // Endpointy auth (signin/refresh/logout/...) obsługują 401 same → nie odświeżaj
-    if (config.url?.includes('api/auth/')) {
+    if (config.url?.includes(`${apiV1}auth/`)) {
       return Promise.reject(error);
     }
 
@@ -92,7 +92,7 @@ axios.interceptors.response.use(
 
     isRefreshing = true;
     try {
-      const { data } = await axios.post(serverUrl + 'api/auth/refresh-token', {});
+      const { data } = await axios.post(serverUrl + apiV1 + 'auth/refresh-token', {});
       // Zaktualizuj lokalny zapis czasu wygaśnięcia (bookkeeping front-endu)
       if (data?.accessTokenExpiresAt) {
         sessionStorage.setItem('accessTokenExpiresAt', data.accessTokenExpiresAt.toString());
@@ -204,12 +204,13 @@ export default class REST {
 
   // Food module
   static initFoodModule() {
-    return get(serverUrl + drive + 'initFoodModule');
+    return get(serverUrl + apiV1 + drive + 'initFoodModule');
   }
 
   static getProductFiltredByCategoryAndName(productCategory, productName) {
     return get(
       serverUrl +
+        apiV1 +
         food +
         'product?productCategory=' +
         productCategory +
@@ -219,13 +220,14 @@ export default class REST {
   }
 
   static getProductCategoryList() {
-    return get(serverUrl + food + 'product/categories');
+    return get(serverUrl + apiV1 + food + 'product/categories');
   }
 
   //mealCategory=All&mealType=All&mealName=&mealPopularity=&sortBy=
   static getMealList(mealCategory, mealType, mealName, mealPopularity, sortBy, onOnePortion) {
     return get(
       serverUrl +
+        apiV1 +
         food +
         'meal?mealCategory=' +
         mealCategory +
@@ -243,141 +245,144 @@ export default class REST {
   }
 
   static getMealIngredients(mealId) {
-    return get(serverUrl + food + 'meal/' + mealId + '/ingredients');
+    return get(serverUrl + apiV1 + food + 'meal/' + mealId + '/ingredients');
   }
 
   static getMealCategoryList() {
-    return get(serverUrl + food + 'meal/categories');
+    return get(serverUrl + apiV1 + food + 'meal/categories');
   }
 
   static getMealTypeList() {
-    return get(serverUrl + food + 'meal/types');
+    return get(serverUrl + apiV1 + food + 'meal/types');
   }
 
   static calculateDiet(selectedMeals) {
-    return post(serverUrl + food + 'macro/calculate', selectedMeals);
+    return post(serverUrl + apiV1 + food + 'macro/calculate', selectedMeals);
   }
 
   static createDietSummary(selectedMealsId) {
-    return post(serverUrl + food + 'diet/day-summary', selectedMealsId);
+    return post(serverUrl + apiV1 + food + 'diet/day-summary', selectedMealsId);
   }
 
   static recalculateMealMacro(selectedMeal) {
-    return post(serverUrl + food + 'macro/meal/recalculate', selectedMeal);
+    return post(serverUrl + apiV1 + food + 'macro/meal/recalculate', selectedMeal);
   }
 
   static getDietSummaries(page, size) {
-    return get(serverUrl + food + 'diet/day-summary?page=' + page + '&size=' + size);
+    return get(serverUrl + apiV1 + food + 'diet/day-summary?page=' + page + '&size=' + size);
   }
 
   static deleteDietSummaries(id) {
-    return deleteMethod(serverUrl + food + 'diet/day-summary/' + id);
+    return deleteMethod(serverUrl + apiV1 + food + 'diet/day-summary/' + id);
   }
 
   static getDietSummariesById(id) {
-    return get(serverUrl + food + 'diet/day-summary/' + id);
+    return get(serverUrl + apiV1 + food + 'diet/day-summary/' + id);
   }
 
   static updateDietSummary(updatedDietSummary) {
-    return put(serverUrl + food + 'diet/day-summary', updatedDietSummary);
+    return put(serverUrl + apiV1 + food + 'diet/day-summary', updatedDietSummary);
   }
 
   // Shopping module
   static getShoppingListByCategory(category) {
-    return get(serverUrl + shopping + 'category/' + category);
+    return get(serverUrl + apiV1 + shopping + 'category/' + category);
   }
 
   static deleteProductFromShoppingList(productId) {
-    return deleteMethod(serverUrl + shopping + productId);
+    return deleteMethod(serverUrl + apiV1 + shopping + productId);
   }
 
   static addProductToShoppingList(product) {
-    return post(serverUrl + shopping, product);
+    return post(serverUrl + apiV1 + shopping, product);
   }
 
   static getAllCategoryProducts() {
-    return get(serverUrl + shopping + 'categories');
+    return get(serverUrl + apiV1 + shopping + 'categories');
   }
 
   // Weekly module
   static getWeeklyListByCategory(category) {
-    return get(serverUrl + weekly + category);
+    return get(serverUrl + apiV1 + weekly + category);
   }
 
   static deleteProductFromWeeklyList(productId) {
-    return deleteMethod(serverUrl + weekly + productId);
+    return deleteMethod(serverUrl + apiV1 + weekly + productId);
   }
 
   static addRecordToWeeklyList(product) {
-    return post(serverUrl + 'weekly', product);
+    return post(serverUrl + apiV1 + 'weekly', product);
   }
 
   static getAllCategoryWeeklyRecords() {
-    return get(serverUrl + weekly + 'categories');
+    return get(serverUrl + apiV1 + weekly + 'categories');
   }
 
   // daily
   static getDaily(page, size) {
-    return get(serverUrl + 'daily?page=' + page + '&size=' + size);
+    return get(serverUrl + apiV1 + 'daily?page=' + page + '&size=' + size);
   }
 
   static deleteDaily(id) {
-    return deleteMethod(serverUrl + daily + id);
+    return deleteMethod(serverUrl + apiV1 + daily + id);
   }
 
   static addDaily(data) {
-    return post(serverUrl + daily, data);
+    return post(serverUrl + apiV1 + daily, data);
   }
 
   //finance
   static getFinanceCryptoPrice(coins, currency) {
-    return get(serverUrl + finance + crypto + 'price/' + coins + '/' + currency);
+    return get(serverUrl + apiV1 + finance + crypto + 'price/' + coins + '/' + currency);
   }
 
   static getFinanceCryptoDescription() {
-    return get(serverUrl + finance + crypto + 'description');
+    return get(serverUrl + apiV1 + finance + crypto + 'description');
   }
 
   // Login module
   static loginUser(user) {
-    return post(serverUrl + 'api/auth/signin', user);
+    return post(serverUrl + apiV1 + 'auth/signin', user);
   }
 
   static registerUser(user) {
-    return post(serverUrl + 'api/auth/signup', user);
+    return post(serverUrl + apiV1 + 'auth/signup', user);
   }
 
   static refreshTokenRequest() {
     // refresh_token jest wysyłany automatycznie jako httpOnly cookie
-    return post(serverUrl + 'api/auth/refresh-token', {});
+    return post(serverUrl + apiV1 + 'auth/refresh-token', {});
   }
 
   static logoutUser() {
-    return post(serverUrl + 'api/auth/logout', {});
+    return post(serverUrl + apiV1 + 'auth/logout', {});
   }
 
   static verifyEmail(token) {
-    return get(serverUrl + 'api/auth/verify-email?token=' + encodeURIComponent(token));
+    return get(serverUrl + apiV1 + 'auth/verify-email?token=' + encodeURIComponent(token));
   }
 
   static resendVerificationEmail(username) {
-    return post(serverUrl + 'api/auth/resend-verification', username);
+    return post(serverUrl + apiV1 + 'auth/resend-verification', username);
   }
 
   // Audit
   static getRevisions(dietSummaryId) {
-    return get(serverUrl + 'api/audit/diet-summary/' + dietSummaryId + '/revisions');
+    return get(serverUrl + apiV1 + 'audit/diet-summary/' + dietSummaryId + '/revisions');
   }
 
   static getRevisionDetails(dietSummaryId, revisionNumber) {
-    return get(serverUrl + 'api/audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber);
+    return get(
+      serverUrl + apiV1 + 'audit/food/diet-summary/' + dietSummaryId + '/' + revisionNumber
+    );
   }
 
   // compare?olderRevision=23&newerRevision=26
   static getRevisionComparsion(dietSummaryId, olderRevisionId, newerRevisionId) {
     return get(
       serverUrl +
-        'api/audit/food/diet-summary/' +
+        apiV1 +
+        'audit/food/diet-summary/' +
         dietSummaryId +
         '/revisions/compare?olderRevision=' +
         olderRevisionId +

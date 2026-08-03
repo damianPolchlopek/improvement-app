@@ -1,5 +1,6 @@
 package com.improvement_app.other.weekly.controller;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.other.weekly.entity.Category;
 import com.improvement_app.other.weekly.entity.WeeklyRecord;
 import com.improvement_app.other.weekly.repository.WeeklyRepository;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/weekly")
+@RequestMapping(ApiVersions.V1 + "/weekly")
 public class WeeklyController {
 
     private final WeeklyRepository weeklyRepository;

@@ -1,5 +1,6 @@
 package com.improvement_app.parser.controller;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.parser.service.TechnologyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,7 +18,7 @@ public class TechnologyController {
 
     private final TechnologyService technologyService;
 
-    @GetMapping("/technology")
+    @GetMapping(ApiVersions.V1 + "/technology")
 //    @Scheduled(cron = "0 0 20 * * ?") // Uruchamia się codziennie o 4:00 rano
     private void addNewJavaOffer() throws IOException {
         System.out.println("[DPO] Uruchomilem sie");

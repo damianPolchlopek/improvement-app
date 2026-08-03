@@ -1,5 +1,6 @@
 package com.improvement_app.finance.controller;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.finance.repository.CryptoInformation;
 import com.improvement_app.finance.service.CoinMarketCapServiceImpl;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/finance/crypto")
+@RequestMapping(ApiVersions.V1 + "/finance/crypto")
 public class FinanceController {
 
     private final CoinMarketCapServiceImpl coinMarketCapService;
