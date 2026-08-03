@@ -37,7 +37,7 @@ class StatisticControllerE2ETest extends AbstractWorkoutE2ETest {
                 exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 80.0))
         ));
 
-        mockMvc.perform(get("/exercises/statistic/{name}/{type}/{begin}/{end}",
+        mockMvc.perform(get("/api/v1/exercises/statistic/{name}/{type}/{begin}/{end}",
                         ExerciseName.POMPKI.getValue(), "Weight", "01-01-2024", "31-01-2024")
                 .with(authentication(authOf(u))))
                 .andExpect(status().isOk())

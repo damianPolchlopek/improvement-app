@@ -8,6 +8,7 @@ export const queryClient = new QueryClient();
 // static BASE_URL = "http://localhost:8080/";
 // const serverUrl = 'https://mutarexx.smallhost.pl:24568/';
 const serverUrl = import.meta.env.VITE_API_URL;
+const apiV1 = 'api/v1/';
 const exercise = 'exercises/';
 const training = 'trainings/';
 const dictionary = 'dictionary/';
@@ -116,18 +117,20 @@ const deleteMethod = (url) => axios.delete(url).then((r) => r.data);
 export default class REST {
   // Training module
   static getAllTrainingNames(page, size) {
-    return get(serverUrl + training + 'names?page=' + page + '&size=' + size);
+    return get(serverUrl + apiV1 + training + 'names?page=' + page + '&size=' + size);
   }
 
   static getExercises(trainingName) {
-    return get(serverUrl + exercise + search + `?trainingName=${encodeURIComponent(trainingName)}`);
+    return get(
+      serverUrl + apiV1 + exercise + search + `?trainingName=${encodeURIComponent(trainingName)}`
+    );
   }
 
   static getExercisesByDate(date) {
-    return get(`${serverUrl}${exercise}search?date=${date}`);
+    return get(`${serverUrl}${apiV1}${exercise}search?date=${date}`);
   }
   static getExercisesByName(name) {
-    return get(`${serverUrl}${exercise}search?name=${encodeURIComponent(name)}`);
+    return get(`${serverUrl}${apiV1}${exercise}search?name=${encodeURIComponent(name)}`);
   }
 
   // Najświeższe reps/weight dla danej nazwy ćwiczenia (podpowiedź "ostatnio").
@@ -140,36 +143,37 @@ export default class REST {
   }
 
   static getExerciseNames() {
-    return get(serverUrl + exercise + dictionary + exerciseName);
+    return get(serverUrl + apiV1 + exercise + dictionary + exerciseName);
   }
 
   static getExercisePlaces() {
-    return get(serverUrl + exercise + dictionary + exercisePlace);
+    return get(serverUrl + apiV1 + exercise + dictionary + exercisePlace);
   }
 
   static getExerciseProgresses() {
-    return get(serverUrl + exercise + dictionary + exerciseProgress);
+    return get(serverUrl + apiV1 + exercise + dictionary + exerciseProgress);
   }
 
   static getExerciseTypes() {
-    return get(serverUrl + exercise + dictionary + exerciseType);
+    return get(serverUrl + apiV1 + exercise + dictionary + exerciseType);
   }
 
   static getTrainingTemplate(type) {
-    return get(serverUrl + exercise + dictionary + 'training/' + type);
+    return get(serverUrl + apiV1 + exercise + dictionary + 'training/' + type);
   }
 
   static initTrainingModule() {
-    return get(serverUrl + drive + 'initApplication');
+    return get(serverUrl + apiV1 + drive + 'initApplication');
   }
 
   static getTestStatistic(exerciseName) {
-    return get(serverUrl + exercise + statistic + 'capacity/statistic/' + exerciseName);
+    return get(serverUrl + apiV1 + exercise + statistic + 'capacity/statistic/' + exerciseName);
   }
 
   static getTrainingStatistic(exerciseName, chartType, beginDate, endDate) {
     return get(
       serverUrl +
+        apiV1 +
         exercise +
         statistic +
         exerciseName +
@@ -183,19 +187,19 @@ export default class REST {
   }
 
   static getATHTraining(type) {
-    return get(serverUrl + exercise + 'trainingType/' + type + '/maximum');
+    return get(serverUrl + apiV1 + exercise + 'trainingType/' + type + '/maximum');
   }
 
   static getTrainingTemplateByType(type) {
-    return get(serverUrl + exercise + 'trainingType/' + type);
+    return get(serverUrl + apiV1 + exercise + 'trainingType/' + type);
   }
 
   static getTrainingByType(type, page, size) {
-    return get(serverUrl + training + type + '?page=' + page + '&size=' + size);
+    return get(serverUrl + apiV1 + training + type + '?page=' + page + '&size=' + size);
   }
 
   static addTraining(data) {
-    return post(serverUrl + training, data);
+    return post(serverUrl + apiV1 + training, data);
   }
 
   // Food module

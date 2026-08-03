@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.util.ListResponse;
 import com.improvement_app.workouts.response.ExerciseMetadataResponse;
 import com.improvement_app.workouts.response.TrainingTemplateResponse;
@@ -18,7 +19,7 @@ import java.util.List;
 @Tag(name = "Dictionary API", description = "Example API operations")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("exercises/dictionary")
+@RequestMapping(ApiVersions.V1 + "/exercises/dictionary")
 public class DictionaryController {
 
     private final ExerciseNameService exerciseNameService;

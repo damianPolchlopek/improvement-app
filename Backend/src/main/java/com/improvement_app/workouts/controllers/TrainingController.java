@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.response.TrainingDayResponse;
@@ -26,7 +27,7 @@ import java.util.List;
 @Tag(name = "Training API", description = "Controller to handle all operation on training database.")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/trainings")
+@RequestMapping(ApiVersions.V1 + "/trainings")
 public class TrainingController {
 
     private final TrainingService trainingService;

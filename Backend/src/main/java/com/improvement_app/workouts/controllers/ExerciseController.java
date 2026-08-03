@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.util.ListResponse;
 import com.improvement_app.workouts.dto.ExerciseSearchCriteria;
 import com.improvement_app.workouts.response.ExerciseResponse;
@@ -20,7 +21,7 @@ import java.util.List;
 @Tag(name = "Exercise API", description = "Controller to handle all operation on exercise database.")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/exercises")
+@RequestMapping(ApiVersions.V1 + "/exercises")
 public class ExerciseController {
 
     private final ExerciseService exerciseService;

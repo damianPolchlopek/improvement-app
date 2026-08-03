@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.workouts.services.InitializationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import jakarta.ws.rs.core.MediaType;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/drive")
+@RequestMapping(ApiVersions.V1 + "/drive")
 public class GoogleDriveTrainingController {
 
     private final InitializationService initializationService;

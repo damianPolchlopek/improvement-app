@@ -1,5 +1,6 @@
 package com.improvement_app.workouts.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.workouts.response.ChartPoint;
 import com.improvement_app.workouts.services.StatisticService;
 import jakarta.validation.constraints.NotBlank;
@@ -20,7 +21,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/exercises/statistic/")
+@RequestMapping(ApiVersions.V1 + "/exercises/statistic/")
 public class StatisticController {
 
     private final StatisticService statisticService;

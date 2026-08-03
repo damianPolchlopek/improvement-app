@@ -38,7 +38,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 request(ExerciseType.SILOWY_A, ExerciseName.POMPKI, "10/8/6", "80/82.5/85")
         ));
 
-        mockMvc.perform(post("/trainings")
+        mockMvc.perform(post("/api/v1/trainings")
                 .with(authentication(authOf(u)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
@@ -65,7 +65,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 request(ExerciseType.SILOWY_A, ExerciseName.POMPKI, "10/8/6", "80/82.5/85")
         ));
 
-        mockMvc.perform(post("/trainings")
+        mockMvc.perform(post("/api/v1/trainings")
                 .with(authentication(authOf(u)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
@@ -86,7 +86,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 80.0))
         ));
 
-        mockMvc.perform(get("/exercises/search")
+        mockMvc.perform(get("/api/v1/exercises/search")
                 .param("date", "2024-01-15")
                 .with(authentication(authOf(u))))
                 .andExpect(status().isOk())
@@ -109,14 +109,14 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                     exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 90.0))));
         }
 
-        mockMvc.perform(get("/trainings/names")
+        mockMvc.perform(get("/api/v1/trainings/names")
                 .with(authentication(authOf(userA)))
                 .param("page", "0").param("size", "50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(2))
                 .andExpect(jsonPath("$.content[*]", everyItem(not(containsString("02.2024")))));
 
-        mockMvc.perform(get("/trainings/names")
+        mockMvc.perform(get("/api/v1/trainings/names")
                 .with(authentication(authOf(userB)))
                 .param("page", "0").param("size", "50"))
                 .andExpect(status().isOk())
@@ -132,7 +132,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
         trainingRepository.save(training(u, LocalDate.of(2024, 1, 15),
                 exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 80.0))));
 
-        mockMvc.perform(get("/exercises/trainingType/A")
+        mockMvc.perform(get("/api/v1/exercises/trainingType/A")
                 .with(authentication(authOf(u))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isNotEmpty())
