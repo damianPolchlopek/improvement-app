@@ -28,7 +28,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
 
     // ─── Happy path POST /addTraining ────────────────────────
     @Test
-    @DisplayName("POST /addTraining: zapisuje trening do DB + uploaduje na Google Drive")
+    @DisplayName("POST /trainings zapisuje trening do DB + uploaduje na Google Drive")
     void shouldPersistTrainingAndUploadToDrive() throws Exception {
         UserEntity u = persistUser("user1");
         seedPreviousTraining(u);  // generateFileName potrzebuje treningu z nazwą pasującą do regex
@@ -38,7 +38,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 request(ExerciseType.SILOWY_A, ExerciseName.POMPKI, "10/8/6", "80/82.5/85")
         ));
 
-        mockMvc.perform(post("/exercises/addTraining")
+        mockMvc.perform(post("/trainings")
                 .with(authentication(authOf(u)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
@@ -52,7 +52,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
 
     // ─── Drive failure → no DB save (Drive = source of truth) ────
     @Test
-    @DisplayName("POST /addTraining: gdy Google Drive padnie, w DB nie pojawia się trening")
+    @DisplayName("POST /trainings: gdy Google Drive padnie, w DB nie pojawia się trening")
     void shouldNotPersistWhenDriveFails() throws Exception {
         UserEntity u = persistUser("user1");
         seedPreviousTraining(u);
@@ -65,7 +65,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                 request(ExerciseType.SILOWY_A, ExerciseName.POMPKI, "10/8/6", "80/82.5/85")
         ));
 
-        mockMvc.perform(post("/exercises/addTraining")
+        mockMvc.perform(post("/trainings")
                 .with(authentication(authOf(u)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
@@ -95,7 +95,7 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
 
     // ─── User isolation (kanoniczny test izolacji dla modułu) ────
     @Test
-    @DisplayName("GET /exercises/trainingName: User A nie widzi treningów Usera B")
+    @DisplayName("GET /trainings/names: User A nie widzi treningów Usera B")
     void shouldNotLeakTrainingsAcrossUsers() throws Exception {
         UserEntity userA = persistUser("userA");
         UserEntity userB = persistUser("userB");
@@ -109,14 +109,14 @@ class ExerciseControllerE2ETest extends AbstractWorkoutE2ETest {
                     exercise(ExerciseName.POMPKI, ExerciseType.SILOWY_A, set(10.0, 90.0))));
         }
 
-        mockMvc.perform(get("/exercises/trainingName")
+        mockMvc.perform(get("/trainings/names")
                 .with(authentication(authOf(userA)))
                 .param("page", "0").param("size", "50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(2))
                 .andExpect(jsonPath("$.content[*]", everyItem(not(containsString("02.2024")))));
 
-        mockMvc.perform(get("/exercises/trainingName")
+        mockMvc.perform(get("/trainings/names")
                 .with(authentication(authOf(userB)))
                 .param("page", "0").param("size", "50"))
                 .andExpect(status().isOk())

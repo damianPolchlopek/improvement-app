@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface TrainingEntityRepository extends JpaRepository<TrainingEntity, Integer> {
 
@@ -19,4 +21,5 @@ public interface TrainingEntityRepository extends JpaRepository<TrainingEntity, 
            countQuery = "SELECT COUNT(t) FROM TrainingEntity t WHERE t.user.id = :userId AND EXISTS (SELECT e FROM ExerciseEntity e WHERE e.training = t AND e.type = :exerciseType)")
     Page<TrainingEntity> findByUserIdAndExercisesType(@Param("userId") Long userId, @Param("exerciseType") ExerciseType exerciseType, Pageable page);
 
+    Optional<TrainingEntity> findTopByUserIdOrderByDateDesc(Long userId);
 }

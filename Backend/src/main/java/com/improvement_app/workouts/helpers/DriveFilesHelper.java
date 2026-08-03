@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -222,10 +221,17 @@ public class DriveFilesHelper {
         return number + " - " + day + "." + month + "." + year + "r. - " + type;
     }
 
-    public static String generateFileName(ExerciseType exerciseType, ExerciseEntity lastExistedExercise) {
-        final String lastExerciseName = lastExistedExercise.getTraining().getName();
-        final String lastTrainingNumber = parseTrainingName(lastExerciseName, 1);
-        final int lastTrainingNumberInt = Integer.parseInt(lastTrainingNumber);
+    public static String generateFileName(ExerciseType exerciseType, TrainingEntity lastTraining) {
+        final int lastTrainingNumberInt;
+
+        if (lastTraining != null) {
+            final String lastTrainingName = lastTraining.getName();
+            final String lastTrainingNumber = parseTrainingName(lastTrainingName, 1);
+            lastTrainingNumberInt = Integer.parseInt(lastTrainingNumber);
+        } else {
+            lastTrainingNumberInt = 0;
+        }
+
         final String incrementedLastExerciseNumber = String.valueOf(lastTrainingNumberInt + 1);
 
         final String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));

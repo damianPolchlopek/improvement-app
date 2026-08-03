@@ -9,6 +9,7 @@ export const queryClient = new QueryClient();
 // const serverUrl = 'https://mutarexx.smallhost.pl:24568/';
 const serverUrl = import.meta.env.VITE_API_URL;
 const exercise = 'exercises/';
+const training = 'trainings/';
 const dictionary = 'dictionary/';
 const exerciseType = 'type';
 const exerciseName = 'name';
@@ -115,7 +116,7 @@ const deleteMethod = (url) => axios.delete(url).then((r) => r.data);
 export default class REST {
   // Training module
   static getAllTrainingNames(page, size) {
-    return get(serverUrl + exercise + 'trainingName?page=' + page + '&size=' + size);
+    return get(serverUrl + training + 'names?page=' + page + '&size=' + size);
   }
 
   static getExercises(trainingName) {
@@ -182,7 +183,7 @@ export default class REST {
   }
 
   static getATHTraining(type) {
-    return get(serverUrl + exercise + 'training/' + type + '/maximum');
+    return get(serverUrl + exercise + 'trainingType/' + type + '/maximum');
   }
 
   static getTrainingTemplateByType(type) {
@@ -190,11 +191,11 @@ export default class REST {
   }
 
   static getTrainingByType(type, page, size) {
-    return get(serverUrl + exercise + 'training/' + type + '?page=' + page + '&size=' + size);
+    return get(serverUrl + training + type + '?page=' + page + '&size=' + size);
   }
 
   static addTraining(data) {
-    return post(serverUrl + exercise + 'addTraining', data);
+    return post(serverUrl + training, data);
   }
 
   // Food module

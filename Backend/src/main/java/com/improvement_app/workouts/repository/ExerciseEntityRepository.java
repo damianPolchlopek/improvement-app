@@ -32,7 +32,4 @@ public interface ExerciseEntityRepository extends JpaRepository<ExerciseEntity, 
     @EntityGraph(attributePaths = {"training", "exerciseSets"})
     List<ExerciseEntity> findByTrainingUserIdAndTrainingName(Long userId, String trainingName);
 
-    @EntityGraph(attributePaths = {"training"})
-    ExerciseEntity findTopByTrainingUserIdOrderByTrainingDateDesc(Long userId);
-
 }

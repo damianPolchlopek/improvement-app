@@ -1,37 +1,23 @@
 package com.improvement_app.workouts.services;
 
-import com.improvement_app.googledrive.service.FilePathService;
-import com.improvement_app.googledrive.service.GoogleDriveFileService;
-import com.improvement_app.security.entity.UserEntity;
-import com.improvement_app.security.repository.UserRepository;
-import com.improvement_app.workouts.converters.TrainingTypeConverter;
 import com.improvement_app.workouts.dto.ExerciseSearchCriteria;
 import com.improvement_app.workouts.entity.ExerciseEntity;
 import com.improvement_app.workouts.entity.ExerciseSetEntity;
-import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.TrainingTemplateEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
-import com.improvement_app.workouts.entity.enums.ExerciseType;
-import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.repository.ExerciseEntityRepository;
-import com.improvement_app.workouts.repository.TrainingEntityRepository;
-import com.improvement_app.workouts.request.ExerciseRequest;
 import com.improvement_app.workouts.services.data.TrainingTemplateService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
-
-import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININGS_FOLDER_NAME;
 
 @Slf4j
 @Service
@@ -40,12 +26,8 @@ import static com.improvement_app.workouts.TrainingModuleVariables.DRIVE_TRAININ
 public class ExerciseService {
 
     private final ExerciseEntityRepository exerciseRepository;
-    private final TrainingEntityRepository trainingRepository;
-    private final UserRepository userRepository;
     private final TrainingTemplateService trainingTemplateService;
 
-    private final GoogleDriveFileService googleDriveFileService;
-    private final FilePathService filePathService;
 
     public List<ExerciseEntity> findExercises(Long userId, ExerciseSearchCriteria criteria) {
         String name = blankToNull(criteria.name());
@@ -88,12 +70,6 @@ public class ExerciseService {
     }
 
     @Transactional
-    public Page<String> getAllTrainingNames(Long userId, Pageable page) {
-        return trainingRepository.findByUserId(userId, page)
-                .map(TrainingEntity::getName);
-    }
-
-    @Transactional
     public List<ExerciseEntity> getATHExercise(Long userId, String trainingTypeShortcut) {
         TrainingTemplateEntity trainingTemplate = trainingTemplateService.getTrainingTemplate(trainingTypeShortcut);
 
@@ -132,59 +108,4 @@ public class ExerciseService {
                 .orElseGet(() -> new ExerciseEntity(exerciseName));
     }
 
-    public Page<TrainingEntity> getLastTrainings(Long userId, String type, Pageable page) {
-        final String dbExerciseType = TrainingTypeConverter.toExerciseType(type);
-        final ExerciseType exerciseType = ExerciseType.valueOf(dbExerciseType);
-
-        Page<TrainingEntity> trainings = trainingRepository.findByUserIdAndExercisesType(userId, exerciseType, page);
-
-        // @BatchSize(size=50) on both exercises and exerciseSets batches these into
-        // 2 SQL queries total instead of N×M individual selects.
-        trainings.getContent().forEach(training -> {
-            Hibernate.initialize(training.getExercises());
-            training.getExercises().forEach(exercise ->
-                    Hibernate.initialize(exercise.getExerciseSets())
-            );
-        });
-
-        return trainings;
-    }
-
-    @Transactional
-    public TrainingEntity addTraining(Long userId, List<ExerciseRequest> exerciseRequest) {
-        if (exerciseRequest == null || exerciseRequest.isEmpty()) {
-            throw new IllegalArgumentException("Lista ćwiczeń nie może być pusta");
-        }
-
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
-
-        ExerciseEntity latestExercise = findLatestExercise(userId);
-        ExerciseType type = ExerciseType.fromValue(exerciseRequest.get(0).getType());
-        String trainingName = DriveFilesHelper.generateFileName(type, latestExercise);
-
-        TrainingEntity training = TrainingEntity.from(exerciseRequest);
-        training.setName(trainingName);
-        training.setUser(userEntity);
-
-        // Google Drive is the source of truth — upload first.
-        // If Drive fails, we throw and nothing is persisted (consistent state).
-        // If DB fails after a successful Drive upload, initApplicationTrainings()
-        // can restore the DB from Drive at any time.
-        uploadTrainingToDrive(exerciseRequest, trainingName);
-
-        return trainingRepository.save(training);
-    }
-
-    private ExerciseEntity findLatestExercise(Long userId) {
-        return exerciseRepository.findTopByTrainingUserIdOrderByTrainingDateDesc(userId);
-    }
-
-    @Transactional
-    private void uploadTrainingToDrive(List<ExerciseRequest> exercises, String trainingName) {
-        String excelFileLocation = filePathService.getExcelPath(trainingName);
-        DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
-        File file = new File(excelFileLocation);
-        googleDriveFileService.uploadFile(DRIVE_TRAININGS_FOLDER_NAME, file, trainingName);
-    }
 }
