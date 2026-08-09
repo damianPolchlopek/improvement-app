@@ -199,7 +199,7 @@ export default class REST {
   }
 
   static addTraining(data) {
-    return post(serverUrl + apiV1 + training, data);
+    return post(serverUrl + apiV1 + 'trainings', data);
   }
 
   // Food module
