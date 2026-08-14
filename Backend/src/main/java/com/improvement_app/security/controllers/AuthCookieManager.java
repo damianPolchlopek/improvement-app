@@ -1,5 +1,6 @@
 package com.improvement_app.security.controllers;
 
+import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.security.config.SecurityProperties;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ public class AuthCookieManager {
 
     public static final String ACCESS_COOKIE = "access_token";
     public static final String REFRESH_COOKIE = "refresh_token";
-    public static final String REFRESH_COOKIE_PATH = "/api/auth/refresh-token";
+    public static final String REFRESH_COOKIE_PATH = ApiVersions.V1 + "/auth/refresh-token";
 
     private final SecurityProperties securityProperties;
 
