@@ -18,16 +18,24 @@ function HomeView() {
 
   function handleClickTrainingModule() {
     setLoadingTrainingModule(true);
-    REST.initTrainingModule().then(() => {
-      setLoadingTrainingModule(false);
-    });
+    REST.initTrainingModule()
+      .catch((error) => {
+        console.error('Failed to init training module', error);
+      })
+      .finally(() => {
+        setLoadingTrainingModule(false);
+      });
   }
 
   function handleClickFoodModule() {
     setLoadingFoodModule(true);
-    REST.initFoodModule().then(() => {
-      setLoadingFoodModule(false);
-    });
+    REST.initFoodModule()
+      .catch((error) => {
+        console.error('Failed to init food module', error);
+      })
+      .finally(() => {
+        setLoadingFoodModule(false);
+      });
   }
 
   return (
