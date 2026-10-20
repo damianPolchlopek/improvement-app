@@ -19,13 +19,14 @@
 │   GitHub Actions      │────────────────────▶│ convert_and_restart.sh      │
 │   (.github/workflows/ │  scp skryptu +       │ – source keystore.env      │
 │    main.yml)          │  odświeżenie hasła   │ – PEM → PKCS#12 (OpenSSL)  │
-│                       │  w keystore.env      │ – pkill + nohup java …     │
+│                       │  w keystore.env      │ – mv tmp → keystore.p12    │
 └──────────────────────┘   (B) restart appki   └──────────┬──────────────────┘
-                                                         │  (4) keystore.p12
-                                              ┌──────────▼───────────────┐
-                                              │     Spring Boot 3        │
-                                              │ (embedded Tomcat HTTPS)  │
-                                              └──────────────────────────┘
+          │                 z sekretami w env             │  (4) podmiana keystore.p12
+          │                                    ┌──────────▼───────────────┐
+          └───────────────────────────────────▶│     Spring Boot 3        │
+                                               │ (embedded Tomcat HTTPS,  │
+                                               │  SSL bundle hot reload)  │
+                                               └──────────────────────────┘
 ```
 
 **Opis kroków**
@@ -35,12 +36,12 @@
 3. Po pomyślnej walidacji klient pobiera **certyfikat** oraz **klucz prywatny** i wywołuje hook `convert_and_restart.sh`.
 4. **Niezależnie od crona**, każdy `push` na `main` uruchamia GitHub Actions (`.github/workflows/main.yml`), który:
    * (A) wgrywa aktualną wersję `convert_and_restart.sh` z repo na serwer (`scp` + `chmod +x`),
-   * (B) zapisuje bieżącą wartość GitHub Secret `SSL_KEYSTORE_PASSWORD` do pliku `keystore.env` na serwerze i restartuje aplikację z tym samym hasłem w zmiennej środowiskowej.
+   * (B) zapisuje bieżącą wartość GitHub Secret `SSL_KEYSTORE_PASSWORD` do pliku `keystore.env` na serwerze i restartuje aplikację, przekazując wszystkie sekrety (DB, JWT, Google, mail…) przez SSH jako zmienne środowiskowe. **Tylko deploy uruchamia aplikację** — poza hasłem do keystore'a żaden sekret nie jest zapisywany na dysku serwera.
 5. Hook `convert_and_restart.sh` (odpalany przez acme.sh przy odnowie *lub* ręcznie):
    * źródłuje `keystore.env`, żeby znać hasło do keystore'a,
-   * konwertuje pliki **PEM → PKCS#12** (`openssl pkcs12 -export …`),
-   * zabija starą instancję JVM (`pkill -f …`) i uruchamia nową (`nohup java -jar … &`).
-6. Spring Boot ładuje świeży `keystore.p12` i wystawia HTTPS na porcie `37786`.
+   * konwertuje pliki **PEM → PKCS#12** (`openssl pkcs12 -export …`) do pliku tymczasowego i atomowo podmienia nim `keystore.p12` (`mv`),
+   * **nie restartuje aplikacji** (nazwa skryptu jest historyczna — zostaje, bo acme.sh ma ją zapisaną jako `--reloadcmd`).
+6. Spring Boot obserwuje `keystore.p12` (`spring.ssl.bundle.jks.web.reload-on-update: true`) i po podmianie sam przeładowuje certyfikat w działającym Tomcacie — bez restartu i bez potrzeby znajomości sekretów aplikacji przez hook.
 
 Kluczowe: **hasło do keystore'a ma jedno źródło prawdy — GitHub Secret `SSL_KEYSTORE_PASSWORD`**. Zarówno rotacja certu (cron), jak i start aplikacji (deploy) czerpią je z tego samego pliku `keystore.env`, więc nie mogą się rozjechać.
 
@@ -54,8 +55,10 @@ Kluczowe: **hasło do keystore'a ma jedno źródło prawdy — GitHub Secret `SS
 | Hasło do keystore'a (`SSL_KEYSTORE_PASSWORD`) | GitHub Secrets (repo settings) | Ręcznie, przez GitHub UI — **to jest jedyne miejsce, w którym się je zmienia** |
 | `keystore.env` (kopia hasła w runtime) | Serwer: `/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.env`, poza gitem, `chmod 600` | Automatycznie odświeżany przy każdym deployu z GitHub Secret — nigdy nie edytuj go ręcznie na stałe, bo kolejny deploy i tak nadpisze |
 | Certyfikat + klucz prywatny (PEM) | Serwer: `~/.acme.sh/mutarexx.smallhost.pl_ecc/` | `acme.sh` (cron, Let's Encrypt) |
-| `keystore.p12` | Serwer: `/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12` | Generowany przez `convert_and_restart.sh` przy każdej odnowie certu |
-| Reszta sekretów aplikacji (DB, JWT, mail, itd.) | GitHub Secrets | Ręcznie, przez GitHub UI |
+| `keystore.p12` | Serwer: `/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12` | Generowany przez `convert_and_restart.sh` przy każdej odnowie certu; aplikacja przeładowuje go w locie |
+| Reszta sekretów aplikacji (DB, JWT, mail, itd.) | Tylko GitHub Secrets — **nie są zapisywane na serwerze** | Ręcznie, przez GitHub UI; trafiają do procesu JVM wyłącznie przy deployu |
+
+> **Ręczny start aplikacji na serwerze (`java -jar …`) nie zadziała** — brakuje sekretów (`DB_USERNAME`, `MONGODB_URI`…), w logu pojawi się np. `password authentication failed for user "${DB_USERNAME}"`. Żeby (re)startować aplikację, zrób push na `main` albo *Re-run* ostatniego workflow w GitHub Actions.
 
 Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHub Secret → czy był deploy po zmianie → `keystore.env` na serwerze → `keystore.p12` (czy powstał po ostatniej odnowie z tym hasłem).
 
@@ -69,8 +72,8 @@ Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHu
 | **Let's Encrypt** | Wystawca bezpłatnych certyfikatów DV.                                          | Globalnie zaufany; 90‑dniowe certyfikaty wymuszają pełną automatyzację. |
 | **OpenSSL 3**     | Konwersja PEM → PKCS#12 dla Spring Boota.                                      | Standardowy pakiet kryptograficzny, preinstalowany.                     |
 | **Cron**          | Harmonogram wywołań `acme.sh --cron`.                                          | Dostępny bez uprawnień root.                                            |
-| **pkill / pgrep** | Zabicie starej instancji JVM.                                                  | Jedna linijka, brak PID‑file.                                           |
-| **nohup … &**     | Uruchomienie Spring Boot w tle.                                                | Nie wymaga `systemd`, działa w każdym shellsessie.                      |
+| **pkill / pgrep** | Zabicie starej instancji JVM przy deployu (GitHub Actions).                    | Jedna linijka, brak PID‑file.                                           |
+| **nohup … &**     | Uruchomienie Spring Boot w tle przy deployu (GitHub Actions).                  | Nie wymaga `systemd`, działa w każdym shellsessie.                      |
 | **GitHub Actions**| Deploy skryptu hooka + odświeżanie hasła w `keystore.env` przy każdym pushu.   | Ten sam pipeline i tak już SSH'uje na serwer przy każdym deployu.       |
 | **Spring Boot 3** | Aplikacja docelowa; terminacja TLS.                                            | Embedded Tomcat upraszcza konfigurację (bez nginx).                     |
 
@@ -81,10 +84,10 @@ Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHu
 * **Brak `sudo` / `systemd`** – całość działa na prawach zwykłego użytkownika.
 * **Minimalne wymagania** – shell + curl/wget + OpenSSL (wszystko dostępne na hostingu).
 * **Prywatność** – certyfikaty i klucze znajdują się w katalogu użytkownika; publicznie widoczne są wyłącznie krótkotrwałe tokeny walidacyjne.
-* **Pełna automatyzacja** – od sprawdzenia daty po restart JVM.
+* **Pełna automatyzacja** – od sprawdzenia daty po przeładowanie certu w działającej aplikacji (SSL bundle hot reload, bez restartu JVM).
 * **Elastyczność** – zmiana CA lub typu klucza nie wymaga modyfikacji hooka (używamy zmiennych `$Le_Certpath`, `$Le_Keypath`).
 * **Jedno źródło prawdy dla hasła** – `SSL_KEYSTORE_PASSWORD` w GitHub Secrets napędza zarówno start aplikacji, jak i rotację certu; eliminuje to klasę błędów, w której hasło rozjeżdża się między dwoma niezależnie edytowanymi miejscami (zobacz sekcję "Historia incydentów" niżej).
-* **Łatwe debugowanie** – log odnowy w `~/renew.log`; aplikację można uruchomić w foreground i natychmiast zobaczyć stack‑trace.
+* **Łatwe debugowanie** – log odnowy w `~/renew.log`; logi aplikacji w `~/backend.log`.
 
 ---
 
@@ -137,18 +140,28 @@ WEBROOT="/home/mutarexx/domains/$DOMAIN/public_html"
   --reloadcmd "/home/mutarexx/scripts/convert_and_restart.sh"
 ```
 
-Po sukcesie `acme.sh` sam wywoła `convert_and_restart.sh` — skrypt zsource'uje już istniejący `keystore.env` (z kroku 3), wygeneruje `keystore.p12` i uruchomi aplikację. Od teraz aplikacja powinna wystartować poprawnie.
+Po sukcesie `acme.sh` sam wywoła `convert_and_restart.sh` — skrypt zsource'uje już istniejący `keystore.env` (z kroku 3) i wygeneruje `keystore.p12`. Skrypt nie uruchamia aplikacji, więc po pierwszym wydaniu certu zrób *Re-run* workflow w GitHub Actions (albo push na `main`) — od teraz aplikacja wystartuje poprawnie.
 
 ### 6. Konfiguracja Spring Boot (`application-smallhost.yaml`)
 
 ```yaml
+spring:
+  ssl:
+    bundle:
+      jks:
+        web:
+          reload-on-update: true   # przeładowanie certu po podmianie pliku, bez restartu
+          key:
+            alias: alias_name
+          keystore:
+            location: file:/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12
+            password: ${SSL_KEYSTORE_PASSWORD}
+            type: PKCS12
+
 server:
   port: 37786
   ssl:
-    key-store: /home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12
-    key-store-password: ${SSL_KEYSTORE_PASSWORD}
-    key-store-type: PKCS12
-    key-alias: alias_name
+    bundle: web
 ```
 
 ### 7. Test ręczny
@@ -163,7 +176,7 @@ curl -k https://mutarexx.smallhost.pl:37786/actuator/health  # 200 = OK
 ## Bieżące działanie (po skonfigurowaniu od zera)
 
 * **Każdy `push` na `main`** → nowa wersja `convert_and_restart.sh` na serwerze + świeży `keystore.env` + restart aplikacji z aktualnym hasłem.
-* **Codziennie o 00:00** → `acme.sh --cron` sprawdza ważność certu; jeśli zostało ≤ 30 dni, odnawia go i wywołuje `convert_and_restart.sh`, który używa hasła z `keystore.env` zapisanego przy ostatnim deployu.
+* **Codziennie o 00:00** → `acme.sh --cron` sprawdza ważność certu; jeśli zostało ≤ 30 dni, odnawia go i wywołuje `convert_and_restart.sh`, który używa hasła z `keystore.env` zapisanego przy ostatnim deployu i podmienia `keystore.p12`; działająca aplikacja przeładowuje cert sama (w `backend.log` pojawi się wpis o przeładowaniu SSL bundle).
 * Żeby zmienić hasło do keystore'a: zmień `SSL_KEYSTORE_PASSWORD` w GitHub Secrets i zrób dowolny push na `main` — reszta zsynchronizuje się sama.
 
 ---
@@ -171,7 +184,7 @@ curl -k https://mutarexx.smallhost.pl:37786/actuator/health  # 200 = OK
 ## Opcjonalne usprawnienia
 
 * **Reverse‑proxy (nginx/Traefik)** – HTTP/2, gzip, cache, rate‑limit.
-* **Watchdog procesu** – `nohup` nie restartuje aplikacji po crashu; prosty cron co kilka minut sprawdzający `pgrep` i uruchamiający ponownie zredukowałby ryzyko długich, niezauważonych przestojów (jak w incydencie z maja 2026).
+* **Watchdog procesu** – `nohup` nie restartuje aplikacji po crashu; prosty cron co kilka minut sprawdzający `pgrep` zredukowałby ryzyko długich, niezauważonych przestojów (jak w incydencie z maja 2026). Uwaga: sam restart z crona wymagałby sekretów na serwerze, więc watchdog powinien raczej wyzwalać workflow GitHub Actions (np. `workflow_dispatch` przez API) albo tylko powiadamiać.
 * **Fail2ban / Caddy WAF** – blokada brute‑force na endpointy.
 
 ---
