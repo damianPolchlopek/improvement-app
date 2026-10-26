@@ -85,7 +85,7 @@ Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHu
 * **Minimalne wymagania** – shell + curl/wget + OpenSSL (wszystko dostępne na hostingu).
 * **Prywatność** – certyfikaty i klucze znajdują się w katalogu użytkownika; publicznie widoczne są wyłącznie krótkotrwałe tokeny walidacyjne.
 * **Pełna automatyzacja** – od sprawdzenia daty po przeładowanie certu w działającej aplikacji (SSL bundle hot reload, bez restartu JVM).
-* **Elastyczność** – zmiana CA lub typu klucza nie wymaga modyfikacji hooka (używamy zmiennych `$Le_Certpath`, `$Le_Keypath`).
+* **Elastyczność** – zmiana CA lub typu klucza nie wymaga modyfikacji hooka (hook bierze ścieżki ze zmiennych `$CERT_KEY_PATH` / `$CERT_FULLCHAIN_PATH`, które acme.sh przekazuje do `--reloadcmd`; `$Le_Keypath`/`$Le_Certpath` są puste bez `--install-cert`).
 * **Jedno źródło prawdy dla hasła** – `SSL_KEYSTORE_PASSWORD` w GitHub Secrets napędza zarówno start aplikacji, jak i rotację certu; eliminuje to klasę błędów, w której hasło rozjeżdża się między dwoma niezależnie edytowanymi miejscami (zobacz sekcję "Historia incydentów" niżej).
 * **Łatwe debugowanie** – wszystkie logi w `~/logs/`: `backend.log` (aplikacja, rotacja 10 MB / 14 dni), `stdout.log` (błędy JVM sprzed startu logowania), `renew.log` (hook), `acme-cron.log` (cron acme.sh).
 

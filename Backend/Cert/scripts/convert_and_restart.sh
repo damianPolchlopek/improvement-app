@@ -16,9 +16,17 @@ ALIAS="alias_name"
 DEST="/home/mutarexx/backend/certs/keystore.p12"
 TMP="$DEST.tmp"
 
+# acme.sh przekazuje do --reloadcmd ścieżki w CERT_KEY_PATH / CERT_FULLCHAIN_PATH
+# (Le_Keypath/Le_Certpath są puste, jeśli nie użyto --install-cert). Fallback na
+# katalog acme.sh pozwala też odpalić hook ręcznie.
+ACME_DIR="$HOME/.acme.sh/grindtrack.pl_ecc"
+KEY="${CERT_KEY_PATH:-$ACME_DIR/grindtrack.pl.key}"
+# fullchain = cert + certyfikat pośredni; sam .cer nie wystarcza części klientów
+CHAIN="${CERT_FULLCHAIN_PATH:-$ACME_DIR/fullchain.cer}"
+
 openssl pkcs12 -export \
-  -inkey  "$Le_Keypath" \
-  -in     "$Le_Certpath" \
+  -inkey  "$KEY" \
+  -in     "$CHAIN" \
   -out    "$TMP" \
   -name   "$ALIAS" \
   -passout pass:"$SSL_KEYSTORE_PASSWORD"
