@@ -149,7 +149,7 @@ Pełna lista zależności w [frontend5/package.json](frontend5/package.json).
   ```
 - `.env.production`
   ```
-  VITE_API_URL=https://mutarexx.smallhost.pl:37786/
+  VITE_API_URL=https://grindtrack.pl:37786/
   ```
 
 **Instalacja i uruchomienie** (z katalogu `frontend5/`):

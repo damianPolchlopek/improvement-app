@@ -51,11 +51,11 @@ Kluczowe: **hasło do keystore'a ma jedno źródło prawdy — GitHub Secret `SS
 
 | Komponent | Gdzie żyje | Kto/co go aktualizuje |
 | --- | --- | --- |
-| `convert_and_restart.sh` (logika hooka) | Repo: [`Backend/Cert/scripts/convert_and_restart.sh`](scripts/convert_and_restart.sh) → serwer: `/home/mutarexx/scripts/convert_and_restart.sh` | Git (edycja + push); wgrywany automatycznie przy każdym deployu |
+| `convert_and_restart.sh` (logika hooka) | Repo: [`Backend/Cert/scripts/convert_and_restart.sh`](scripts/convert_and_restart.sh) → serwer: `/home/mutarexx/backend/scripts/convert_and_restart.sh` | Git (edycja + push); wgrywany automatycznie przy każdym deployu |
 | Hasło do keystore'a (`SSL_KEYSTORE_PASSWORD`) | GitHub Secrets (repo settings) | Ręcznie, przez GitHub UI — **to jest jedyne miejsce, w którym się je zmienia** |
-| `keystore.env` (kopia hasła w runtime) | Serwer: `/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.env`, poza gitem, `chmod 600` | Automatycznie odświeżany przy każdym deployu z GitHub Secret — nigdy nie edytuj go ręcznie na stałe, bo kolejny deploy i tak nadpisze |
-| Certyfikat + klucz prywatny (PEM) | Serwer: `~/.acme.sh/mutarexx.smallhost.pl_ecc/` | `acme.sh` (cron, Let's Encrypt) |
-| `keystore.p12` | Serwer: `/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12` | Generowany przez `convert_and_restart.sh` przy każdej odnowie certu; aplikacja przeładowuje go w locie |
+| `keystore.env` (kopia hasła w runtime) | Serwer: `/home/mutarexx/backend/certs/keystore.env`, poza gitem, `chmod 600` | Automatycznie odświeżany przy każdym deployu z GitHub Secret — nigdy nie edytuj go ręcznie na stałe, bo kolejny deploy i tak nadpisze |
+| Certyfikat + klucz prywatny (PEM) | Serwer: `~/.acme.sh/grindtrack.pl_ecc/` | `acme.sh` (cron, Let's Encrypt) |
+| `keystore.p12` | Serwer: `/home/mutarexx/backend/certs/keystore.p12` | Generowany przez `convert_and_restart.sh` przy każdej odnowie certu; aplikacja przeładowuje go w locie |
 | Reszta sekretów aplikacji (DB, JWT, mail, itd.) | Tylko GitHub Secrets — **nie są zapisywane na serwerze** | Ręcznie, przez GitHub UI; trafiają do procesu JVM wyłącznie przy deployu |
 
 > **Ręczny start aplikacji na serwerze (`java -jar …`) nie zadziała** — brakuje sekretów (`DB_USERNAME`, `MONGODB_URI`…), w logu pojawi się np. `password authentication failed for user "${DB_USERNAME}"`. Żeby (re)startować aplikację, zrób push na `main` albo *Re-run* ostatniego workflow w GitHub Actions.
@@ -87,7 +87,7 @@ Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHu
 * **Pełna automatyzacja** – od sprawdzenia daty po przeładowanie certu w działającej aplikacji (SSL bundle hot reload, bez restartu JVM).
 * **Elastyczność** – zmiana CA lub typu klucza nie wymaga modyfikacji hooka (używamy zmiennych `$Le_Certpath`, `$Le_Keypath`).
 * **Jedno źródło prawdy dla hasła** – `SSL_KEYSTORE_PASSWORD` w GitHub Secrets napędza zarówno start aplikacji, jak i rotację certu; eliminuje to klasę błędów, w której hasło rozjeżdża się między dwoma niezależnie edytowanymi miejscami (zobacz sekcję "Historia incydentów" niżej).
-* **Łatwe debugowanie** – log odnowy w `~/renew.log`; logi aplikacji w `~/backend.log`.
+* **Łatwe debugowanie** – wszystkie logi w `~/logs/`: `backend.log` (aplikacja, rotacja 10 MB / 14 dni), `stdout.log` (błędy JVM sprzed startu logowania), `renew.log` (hook), `acme-cron.log` (cron acme.sh).
 
 ---
 
@@ -105,14 +105,13 @@ Ustaw wszystkie sekrety używane w `.github/workflows/main.yml`, w tym:
 ### 2. Katalogi na serwerze
 
 ```bash
-mkdir -p /home/mutarexx/scripts
-mkdir -p /home/mutarexx/domains/mutarexx.smallhost.pl/certs
+mkdir -p /home/mutarexx/backend/scripts /home/mutarexx/backend/certs /home/mutarexx/logs
 ```
 
 ### 3. Pierwszy deploy (przed wydaniem certyfikatu!)
 
 Zrób `push` na `main`. Pipeline:
-* wgra `convert_and_restart.sh` do `/home/mutarexx/scripts/` i nada mu uprawnienia wykonywalne,
+* utworzy katalogi `~/backend/{scripts,certs}` i `~/logs`, wgra `convert_and_restart.sh` do `/home/mutarexx/backend/scripts/` i nada mu uprawnienia wykonywalne,
 * utworzy `keystore.env` z aktualnym `SSL_KEYSTORE_PASSWORD`,
 * spróbuje wystartować aplikację — **to się nie uda**, bo `keystore.p12` jeszcze nie istnieje (błąd "Could not load store" / brak pliku). To oczekiwane na tym etapie, kontynuuj do kroku 4.
 
@@ -129,15 +128,21 @@ Po instalacji klient dodaje do crona wpis:
 0 0 * * * ~/.acme.sh/acme.sh --cron
 ```
 
+Zmień przekierowanie wyjścia (domyślnie `> /dev/null`) na `>> /home/mutarexx/logs/acme-cron.log 2>&1` (`crontab -e`) — inaczej błędy odnowy giną po cichu (tak hook przestał działać w maju 2026 i nikt tego nie zauważył do października).
+
+```cron
+0 0 * * * ~/.acme.sh/acme.sh --cron >> /home/mutarexx/logs/acme-cron.log 2>&1
+```
+
 ### 5. Wydanie pierwszego certyfikatu
 
 ```bash
-DOMAIN="mutarexx.smallhost.pl"
+DOMAIN="grindtrack.pl"
 WEBROOT="/home/mutarexx/domains/$DOMAIN/public_html"
 
 ~/.acme.sh/acme.sh --issue -d "$DOMAIN" -w "$WEBROOT" \
   --keylength ec-256 \  # ECDSA 256 bit – szybszy i mniejszy
-  --reloadcmd "/home/mutarexx/scripts/convert_and_restart.sh"
+  --reloadcmd "/home/mutarexx/backend/scripts/convert_and_restart.sh"
 ```
 
 Po sukcesie `acme.sh` sam wywoła `convert_and_restart.sh` — skrypt zsource'uje już istniejący `keystore.env` (z kroku 3) i wygeneruje `keystore.p12`. Skrypt nie uruchamia aplikacji, więc po pierwszym wydaniu certu zrób *Re-run* workflow w GitHub Actions (albo push na `main`) — od teraz aplikacja wystartuje poprawnie.
@@ -154,7 +159,7 @@ spring:
           key:
             alias: alias_name
           keystore:
-            location: file:/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.p12
+            location: file:/home/mutarexx/backend/certs/keystore.p12
             password: ${SSL_KEYSTORE_PASSWORD}
             type: PKCS12
 
@@ -167,8 +172,8 @@ server:
 ### 7. Test ręczny
 
 ```bash
-~/.acme.sh/acme.sh --renew -d mutarexx.smallhost.pl --force
-curl -k https://mutarexx.smallhost.pl:37786/actuator/health  # 200 = OK
+~/.acme.sh/acme.sh --renew -d grindtrack.pl --force
+curl -k https://grindtrack.pl:37786/actuator/health  # 200 = OK
 ```
 
 ---
@@ -176,7 +181,7 @@ curl -k https://mutarexx.smallhost.pl:37786/actuator/health  # 200 = OK
 ## Bieżące działanie (po skonfigurowaniu od zera)
 
 * **Każdy `push` na `main`** → nowa wersja `convert_and_restart.sh` na serwerze + świeży `keystore.env` + restart aplikacji z aktualnym hasłem.
-* **Codziennie o 00:00** → `acme.sh --cron` sprawdza ważność certu; jeśli zostało ≤ 30 dni, odnawia go i wywołuje `convert_and_restart.sh`, który używa hasła z `keystore.env` zapisanego przy ostatnim deployu i podmienia `keystore.p12`; działająca aplikacja przeładowuje cert sama (w `backend.log` pojawi się wpis o przeładowaniu SSL bundle).
+* **Codziennie o 00:00** → `acme.sh --cron` sprawdza ważność certu; jeśli zostało ≤ 30 dni, odnawia go i wywołuje `convert_and_restart.sh`, który używa hasła z `keystore.env` zapisanego przy ostatnim deployu i podmienia `keystore.p12`; działająca aplikacja przeładowuje cert sama (w `~/logs/backend.log` pojawi się wpis o przeładowaniu SSL bundle).
 * Żeby zmienić hasło do keystore'a: zmień `SSL_KEYSTORE_PASSWORD` w GitHub Secrets i zrób dowolny push na `main` — reszta zsynchronizuje się sama.
 
 ---

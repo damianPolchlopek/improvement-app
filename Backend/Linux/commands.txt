@@ -1,2 +1,15 @@
 # Szukanie uruchomionego procesu po porcie, jesli ps nie pokazuje
 sockstat -4 | grep 24568
+
+
+
+# Sprawdzenie certyfikatu na serwerze
+
+[mutarexx@s2]:<~/domains/grindtrack.pl>$ echo | openssl s_client -connect grindtrack.pl:37786 -servername grindtrack.pl 2>/dev/null | openssl x509 -noout -dates -ext subjectAltName
+notBefore=May 21 00:00:00 2026 GMT
+notAfter=Aug 19 23:59:59 2026 GMT
+X509v3 Subject Alternative Name:
+    DNS:mutarexx.smallhost.pl
+[mutarexx@s2]:<~/domains/grindtrack.pl>$
+
+

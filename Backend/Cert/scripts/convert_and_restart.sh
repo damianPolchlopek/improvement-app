@@ -10,11 +10,10 @@ set -e
 # Hasło do keystore.p12 NIE jest tu hardkodowane - żyje tylko na serwerze,
 # w pliku odświeżanym przy każdym deployu z GitHub Secret SSL_KEYSTORE_PASSWORD
 # (patrz .github/workflows/main.yml, krok "Restart backend on server and wait for start").
-. "/home/mutarexx/domains/mutarexx.smallhost.pl/certs/keystore.env"
+. "/home/mutarexx/backend/certs/keystore.env"
 
-DOMAIN="$Le_Domain"
 ALIAS="alias_name"
-DEST="/home/mutarexx/domains/$DOMAIN/certs/keystore.p12"
+DEST="/home/mutarexx/backend/certs/keystore.p12"
 TMP="$DEST.tmp"
 
 openssl pkcs12 -export \
@@ -27,4 +26,4 @@ openssl pkcs12 -export \
 # Atomowa podmiana - Spring nie może wczytać w połowie zapisanego pliku.
 mv -f "$TMP" "$DEST"
 
-echo "[$(date)] Cert renewed, keystore.p12 replaced (app reloads it without restart)" >> "$HOME/renew.log"
+echo "[$(date)] Cert renewed, keystore.p12 replaced (app reloads it without restart)" >> "$HOME/logs/renew.log"
