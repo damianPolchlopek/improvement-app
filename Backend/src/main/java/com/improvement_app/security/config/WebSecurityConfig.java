@@ -1,5 +1,7 @@
 package com.improvement_app.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.improvement_app.common.ratelimit.RateLimitFilter;
 import com.improvement_app.security.jwt.AuthEntryPointJwt;
 import com.improvement_app.security.jwt.AuthTokenFilter;
 import com.improvement_app.security.oauth2.CustomOidcUserService;
@@ -7,6 +9,7 @@ import com.improvement_app.security.oauth2.OAuth2FailureHandler;
 import com.improvement_app.security.oauth2.OAuth2SuccessHandler;
 import com.improvement_app.security.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -47,6 +50,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public RateLimitFilter rateLimitFilter(ObjectMapper objectMapper) {
+        return new RateLimitFilter(securityProperties.getRateLimit().getHttp(), objectMapper);
+    }
+
+    // Filtr działa tylko w łańcuchu Security — bez tego Spring Boot zarejestrowałby go
+    // drugi raz jako zwykły filtr servletowy, przed uwierzytelnieniem.
+    @Bean
+    public FilterRegistrationBean<RateLimitFilter> rateLimitFilterRegistration(RateLimitFilter rateLimitFilter) {
+        FilterRegistrationBean<RateLimitFilter> registration = new FilterRegistrationBean<>(rateLimitFilter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
+    @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
@@ -60,7 +77,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, RateLimitFilter rateLimitFilter) throws Exception {
         http
                 // CORS - używamy własną konfigurację zamiast zewnętrznej klasy
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -139,6 +156,9 @@ public class WebSecurityConfig {
         // Dodanie naszego filtra JWT
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // Rate limiting za filtrem JWT — musi już znać zalogowanego użytkownika
+        http.addFilterAfter(rateLimitFilter, AuthTokenFilter.class);
 
         return http.build();
     }

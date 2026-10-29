@@ -1,4 +1,4 @@
-package com.improvement_app.common.config;
+package com.improvement_app.common.swagger;
 
 import com.improvement_app.security.controllers.AuthCookieManager;
 import io.swagger.v3.oas.models.Components;

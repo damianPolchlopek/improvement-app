@@ -40,6 +40,19 @@ public class SecurityProperties {
         private int maxLoginAttempts = 5;
         private int lockDurationMinutes = 15;
         private int maxEmailTokensPerHour = 3;
+        private HttpRateLimit http = new HttpRateLimit();
+    }
+
+    /**
+     * Limity żądań HTTP egzekwowane przez {@code RateLimitFilter}.
+     */
+    @Data
+    public static class HttpRateLimit {
+        private boolean enabled = true;
+        private int globalPerSecond = 500;
+        private int defaultPerMinute = 300;
+        private int authPerMinute = 10;
+        private int heavyPerMinute = 10;
     }
 
 

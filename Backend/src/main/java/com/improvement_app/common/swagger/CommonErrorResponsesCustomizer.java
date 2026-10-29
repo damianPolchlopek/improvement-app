@@ -1,4 +1,4 @@
-package com.improvement_app.common.config;
+package com.improvement_app.common.swagger;
 
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.responses.ApiResponse;

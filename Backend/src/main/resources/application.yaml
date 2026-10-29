@@ -1,3 +1,8 @@
+server:
+  # Za reverse proxy bierze IP klienta z X-Forwarded-For (Tomcat RemoteIpValve ufa tylko
+  # adresom z sieci prywatnych), bez proxy nic nie zmienia. Potrzebne m.in. dla RateLimitFilter.
+  forward-headers-strategy: native
+
 spring:
   profiles:
     active: dev
@@ -72,6 +77,12 @@ app:
       max-login-attempts: 5
       lock-duration-minutes: 15
       max-email-tokens-per-hour: 3
+      http:                      # limity żądań HTTP (RateLimitFilter), token bucket
+        enabled: true
+        global-per-second: 500   # cały serwer
+        default-per-minute: 300  # zwykłe API, per użytkownik/IP
+        auth-per-minute: 10      # signin/signup/refresh/verify, per IP
+        heavy-per-minute: 10     # /api/v1/drive/**, per użytkownik/IP
     cors:
       allowed-origins: "http://localhost:3000"
       allowed-methods: "GET, POST, PUT, DELETE, OPTIONS, PATCH"

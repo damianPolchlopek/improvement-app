@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,6 +101,11 @@ public class GoogleDriveFileService {
         final String filePath = filePathService.getExcelPath(file.getName());
 
         try {
+            final var parentDir = Paths.get(filePath).getParent();
+            if (parentDir != null) {
+                Files.createDirectories(parentDir);
+            }
+
             drive.files().export(file.getId(), MimeType.EXCEL.getType())
                     .executeMediaAndDownloadTo(new FileOutputStream(filePath));
         } catch (IOException e) {

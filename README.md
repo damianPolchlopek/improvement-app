@@ -62,7 +62,7 @@ Backend obsługuje całą logikę biznesową, autoryzację, dostęp do baz danyc
 - **Parser** – przechowywanie i parsowanie danych o technologiach (moduł `parser`)
 - **Integracja z Google Drive** – import/eksport plików (moduł `googledrive`)
 - **Audyt** – historia zmian encji oparta o Hibernate Envers (moduł `audit`)
-- **Bezpieczeństwo** – uwierzytelnianie JWT (access + refresh token w cookie), logowanie przez Google (OAuth2), weryfikacja e-mail, role użytkowników, rate limiting prób logowania
+- **Bezpieczeństwo** – uwierzytelnianie JWT (access + refresh token w cookie), logowanie przez Google (OAuth2), weryfikacja e-mail, role użytkowników, rate limiting prób logowania i żądań HTTP (Bucket4j)
 - **Monitoring** – endpointy Actuatora oraz metryki Prometheus
 
 ### Architektura i technologie

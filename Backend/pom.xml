@@ -163,6 +163,20 @@
             <version>1.18.30</version>
         </dependency>
 
+        <!-- Rate Limiter -->
+        <!-- Rate limiting: token bucket -->
+        <dependency>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j_jdk17-core</artifactId>
+            <version>8.19.0</version>
+        </dependency>
+
+        <!-- Cache per-user/per-IP bucketów, z automatyczną ewikcją -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
         <!-- Testing -->
         <!-- Test containers-->
         <dependency>

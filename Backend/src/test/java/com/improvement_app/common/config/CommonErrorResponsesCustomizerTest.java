@@ -1,5 +1,6 @@
 package com.improvement_app.common.config;
 
+import com.improvement_app.common.swagger.CommonErrorResponsesCustomizer;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
