@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0022-create-weekly-record-table
+      author: Damian Polchlopek
+      changes:
+        - sqlFile:
+            path: 001-create-weekly-record-table.sql
+            relativeToChangelogFile: true

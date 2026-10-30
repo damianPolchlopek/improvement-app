@@ -2,47 +2,53 @@ package com.improvement_app.other.weekly.controller;
 
 import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.other.weekly.entity.Category;
-import com.improvement_app.other.weekly.entity.WeeklyRecord;
-import com.improvement_app.other.weekly.repository.WeeklyRepository;
+import com.improvement_app.other.weekly.request.WeeklyRecordRequest;
+import com.improvement_app.other.weekly.response.WeeklyRecordResponse;
+import com.improvement_app.other.weekly.service.WeeklyService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.ws.rs.core.Response;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(ApiVersions.V1 + "/weekly")
 public class WeeklyController {
 
-    private final WeeklyRepository weeklyRepository;
+    private final WeeklyService weeklyService;
 
     @GetMapping("/{category}")
-    public Response getWeekly(@PathVariable Category category) {
-        List<WeeklyRecord> res = weeklyRepository.findAll().stream()
-                .filter(item -> item.getCategory() == category)
-                .sorted((w1, w2) -> w2.getDate().compareTo(w1.getDate()))
-                .collect(Collectors.toList());
-
-        return Response.ok(res).build();
+    public ResponseEntity<List<WeeklyRecordResponse>> getWeekly(
+            @PathVariable Category category,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        return ResponseEntity.ok(weeklyService.getWeeklyRecords(userId, category));
     }
 
     @GetMapping("/categories")
-    public Response getAllCategoryType() {
-        return Response.ok(Category.values()).build();
+    public ResponseEntity<Category[]> getAllCategoryType() {
+        return ResponseEntity.ok(Category.values());
     }
 
     @PostMapping
-    public Response addItem(@RequestBody WeeklyRecord item) {
-        WeeklyRecord savedItem = weeklyRepository.save(item);
-        return Response.ok(savedItem).build();
+    public ResponseEntity<WeeklyRecordResponse> addWeeklyRecord(
+            @Valid @RequestBody WeeklyRecordRequest request,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        WeeklyRecordResponse savedRecord = weeklyService.addWeeklyRecord(userId, request);
+        return ResponseEntity.ok(savedRecord);
     }
 
-    @DeleteMapping("{itemId}")
-    public Response deleteProduct(@PathVariable String itemId) {
-        weeklyRepository.deleteById(itemId);
-        return Response.ok().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteWeeklyRecord(
+            @PathVariable Long id,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        weeklyService.deleteWeeklyRecord(userId, id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -10,22 +10,20 @@ import {
   Toolbar,
   Typography,
   useTheme,
-  Fab,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
 } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { Add as AddIcon, Category, ListAlt } from '@mui/icons-material';
+import { Category, ListAlt } from '@mui/icons-material';
 
 import PageLoader from '../../component/loader/PageLoader';
 import ErrorAlert from '../../component/error/ErrorAlert';
-import AddWeeklyRecordDialog from './AddWeeklyRecordDialog';
+import WeeklyForm from './WeeklyForm';
 import WeeklyRecordsTable from './WeeklyRecordsTable';
 
 export default function WeeklyRecordsView() {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const { t } = useTranslation();
   const theme = useTheme();
@@ -35,7 +33,7 @@ export default function WeeklyRecordsView() {
     queryFn: () => REST.getAllCategoryWeeklyRecords(),
   });
 
-  const categories = useMemo(() => categoriesData?.entity || [], [categoriesData]);
+  const categories = useMemo(() => categoriesData || [], [categoriesData]);
 
   // Domyślna kategoria jako wartość pochodna (bez efektu / setState)
   const effectiveCategory = selectedCategory || categories[0] || '';
@@ -52,7 +50,7 @@ export default function WeeklyRecordsView() {
     staleTime: 1000 * 60 * 5,
   });
 
-  const recordsList = records?.entity || [];
+  const recordsList = records || [];
 
   if (categoriesLoading) {
     return <PageLoader text={t('messages.loading')} />;
@@ -141,6 +139,11 @@ export default function WeeklyRecordsView() {
           </Card>
         </Grid>
 
+        {/* Add form */}
+        <Grid size={12}>
+          <WeeklyForm categories={categories} defaultCategory={effectiveCategory} />
+        </Grid>
+
         {/* Table Section */}
         <Grid size={12}>
           {recordsLoading ? (
@@ -150,29 +153,6 @@ export default function WeeklyRecordsView() {
           )}
         </Grid>
       </Grid>
-
-      {/* Floating Action Button */}
-      <Fab
-        color="primary"
-        aria-label="add"
-        onClick={() => setDialogOpen(true)}
-        sx={{
-          position: 'fixed',
-          bottom: 32,
-          right: 32,
-          width: 64,
-          height: 64,
-        }}
-      >
-        <AddIcon sx={{ fontSize: 32 }} />
-      </Fab>
-
-      {/* Add Dialog */}
-      <AddWeeklyRecordDialog
-        open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
-        categories={categories}
-      />
     </Box>
   );
 }

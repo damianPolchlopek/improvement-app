@@ -104,7 +104,7 @@ Integracja z Google Drive (dostęp do API przez konto serwisowe) – import/eksp
 ### `other/`
 Zadania okresowe z podziałem na `daily` i `weekly`.
 - `daily` – dzienna checklista (zdrowie, ćwiczenia, książka, software) w PostgreSQL (`other.daily`), wpisy przypisane do zalogowanego użytkownika.
-- `weekly` – rekordy tygodniowe w MongoDB.
+- `weekly` – rekordy tygodniowe (np. waga) w PostgreSQL (`other.weekly_record`), wpisy przypisane do zalogowanego użytkownika; data ustawiana na serwerze.
 
 ### `parser/`
 Przechowywanie i parsowanie danych o technologiach (`Technology`, `TechnologyList`).

@@ -86,3 +86,11 @@ databaseChangeLog:
   - include:
       file: 0021_create_daily_table/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0022_create_weekly_record_table/changelog.yaml
+      relativeToChangelogFile: true
+
+  - include:
+      file: 0023_rename_daily_table/changelog.yaml
+      relativeToChangelogFile: true
