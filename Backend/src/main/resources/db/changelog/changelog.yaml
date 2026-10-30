@@ -94,3 +94,7 @@ databaseChangeLog:
   - include:
       file: 0023_rename_daily_table/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0024_create_shopping_item_table/changelog.yaml
+      relativeToChangelogFile: true

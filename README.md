@@ -44,7 +44,7 @@ improvement-app/
 └── .github/workflows/  # GitHub Actions – build i deploy
 ```
 
-Backend korzysta z dwóch baz danych: **PostgreSQL** (główne dane relacyjne przez JPA/Hibernate) oraz **MongoDB** (dane dokumentowe). Szczegóły każdego modułu opisano w [Backend/README.md](Backend/README.md) i [frontend5/README.md](frontend5/README.md).
+Backend korzysta z dwóch baz danych: **PostgreSQL** (główne dane relacyjne przez JPA/Hibernate) oraz **MongoDB** – połączenie wciąż skonfigurowane, ale wszystkie moduły (w tym daily, weekly i shopping) przechowują już dane w PostgreSQL. Szczegóły każdego modułu opisano w [Backend/README.md](Backend/README.md) i [frontend5/README.md](frontend5/README.md).
 
 ---
 

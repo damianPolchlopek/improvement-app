@@ -1,10 +1,11 @@
 package com.improvement_app.shopping.entity;
 
+// Etykiety wyświetlane w UI pochodzą z tłumaczeń frontendu (shopping.categories.*)
 public enum Category {
-    All,
-    SklepSpożywczy,
-    Ubrania,
-    Elektornika,
-    Apteka,
-    Other
+    ALL,
+    GROCERY,
+    CLOTHES,
+    ELECTRONICS,
+    PHARMACY,
+    OTHER
 }

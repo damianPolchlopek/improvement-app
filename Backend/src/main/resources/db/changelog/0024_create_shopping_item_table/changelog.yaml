@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0024-create-shopping-item-table
+      author: Damian Polchlopek
+      changes:
+        - sqlFile:
+            path: 001-create-shopping-item-table.sql
+            relativeToChangelogFile: true

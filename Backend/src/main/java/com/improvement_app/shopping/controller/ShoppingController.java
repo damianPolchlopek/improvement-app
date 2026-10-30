@@ -2,51 +2,53 @@ package com.improvement_app.shopping.controller;
 
 import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.shopping.entity.Category;
-import com.improvement_app.shopping.entity.Item;
-import com.improvement_app.shopping.repository.ItemRepository;
+import com.improvement_app.shopping.request.ShoppingItemRequest;
+import com.improvement_app.shopping.response.ShoppingItemResponse;
+import com.improvement_app.shopping.service.ShoppingService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(ApiVersions.V1 + "/shopping")
 public class ShoppingController {
 
-    private final ItemRepository itemRepository;
+    private final ShoppingService shoppingService;
 
     @GetMapping("/category/{category}")
-    public Response getProductByCategory(@PathVariable Category category) {
-        if (category == Category.All) {
-            return Response.ok(itemRepository.findAll()).build();
-        }
-
-        List<Item> res = itemRepository.findAll().stream()
-                .filter(item -> item.getCategory() == category)
-                .collect(Collectors.toList());
-
-        return Response.ok(res).build();
+    public ResponseEntity<List<ShoppingItemResponse>> getShoppingItems(
+            @PathVariable Category category,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        return ResponseEntity.ok(shoppingService.getShoppingItems(userId, category));
     }
 
     @GetMapping("/categories")
-    public Response getAllCategoryType() {
-        return Response.ok(Category.values()).build();
+    public ResponseEntity<Category[]> getAllCategoryType() {
+        return ResponseEntity.ok(Category.values());
     }
 
-    @PostMapping(value = "/", produces = MediaType.APPLICATION_JSON)
-    public Response addItem(@RequestBody Item item) {
-        Item savedItem = itemRepository.save(item);
-        return Response.ok(savedItem).build();
+    @PostMapping("/")
+    public ResponseEntity<ShoppingItemResponse> addShoppingItem(
+            @Valid @RequestBody ShoppingItemRequest request,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        ShoppingItemResponse savedItem = shoppingService.addShoppingItem(userId, request);
+        return ResponseEntity.ok(savedItem);
     }
 
-    @DeleteMapping("/{itemId}")
-    public Response deleteProduct(@PathVariable String itemId) {
-        itemRepository.deleteById(itemId);
-        return Response.ok().build();
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteShoppingItem(
+            @PathVariable Long id,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        shoppingService.deleteShoppingItem(userId, id);
+        return ResponseEntity.noContent().build();
     }
 
 }

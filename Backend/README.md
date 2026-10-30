@@ -113,7 +113,7 @@ Przechowywanie i parsowanie danych o technologiach (`Technology`, `TechnologyLis
 Pełna obsługa uwierzytelniania: JWT (access + refresh token, `jwt`), logowanie przez Google (`oauth2`), kontrolery uwierzytelniania (`controllers`), konfiguracja zabezpieczeń i CORS (`config`), rate limiting prób logowania oraz weryfikacja e-mail.
 
 ### `shopping/`
-Listy zakupów – podstawowe operacje CRUD.
+Listy zakupów w PostgreSQL (`shopping.shopping_item`) – dodawanie, filtrowanie po kategorii i usuwanie produktów zalogowanego użytkownika. Kategorie: `GROCERY`, `CLOTHES`, `ELECTRONICS`, `PHARMACY`, `OTHER` (etykiety tłumaczone we frontendzie); `ALL` służy tylko do filtrowania listy.
 
 ### `util/`
 Wsparcie paginacji i uniwersalnych odpowiedzi REST (`ListResponse`, `Page`, `PaginationHelper`).
@@ -126,7 +126,7 @@ Treningi: ćwiczenia, plany i szablony, statystyki, rekordy. Zawiera konwertery 
 ## Bazy danych i migracje
 
 - **PostgreSQL** – główne dane relacyjne (JPA/Hibernate). Schemat zarządzany przez **Liquibase** – changelogi w `src/main/resources/db/changelog/` (master: `changelog.yaml`).
-- **MongoDB** – dane dokumentowe.
+- **MongoDB** – połączenie wciąż skonfigurowane, ale żaden moduł już z niej nie korzysta (daily, weekly i shopping przeniesione do PostgreSQL).
 - **Audyt** – tabele Enversa w schemacie `audit` (sufiks `_AUD`).
 
 Skrypty inicjalizujące bazy dla środowiska kontenerowego znajdują się w katalogu `StartupScripts/` w katalogu głównym repozytorium.
