@@ -2,9 +2,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}

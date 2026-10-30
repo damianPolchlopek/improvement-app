@@ -39,12 +39,12 @@ Po starcie: frontend → http://localhost:3000, backend → http://localhost:808
 improvement-app/
 ├── Backend/            # Spring Boot 3.3.4, Java 17 (REST API, WebSocket)
 ├── frontend5/          # React 19 + Material UI (Vite)
-├── StartupScripts/     # Skrypty inicjalizujące bazy (mongodb/, postgres/, flyway/)
-├── docker-compose.yml  # Uruchomienie całego stacku (backend, frontend, Postgres, Mongo, pgAdmin)
+├── StartupScripts/     # Skrypty inicjalizujące bazę (postgres/)
+├── docker-compose.yml  # Uruchomienie całego stacku (backend, frontend, Postgres, pgAdmin)
 └── .github/workflows/  # GitHub Actions – build i deploy
 ```
 
-Backend korzysta z dwóch baz danych: **PostgreSQL** (główne dane relacyjne przez JPA/Hibernate) oraz **MongoDB** – połączenie wciąż skonfigurowane, ale wszystkie moduły (w tym daily, weekly i shopping) przechowują już dane w PostgreSQL. Szczegóły każdego modułu opisano w [Backend/README.md](Backend/README.md) i [frontend5/README.md](frontend5/README.md).
+Backend przechowuje wszystkie dane w **PostgreSQL** (JPA/Hibernate, schemat zarządzany przez Liquibase). Szczegóły każdego modułu opisano w [Backend/README.md](Backend/README.md) i [frontend5/README.md](frontend5/README.md).
 
 ---
 
@@ -67,8 +67,8 @@ Backend obsługuje całą logikę biznesową, autoryzację, dostęp do baz danyc
 
 ### Architektura i technologie
 
-- **Java 17 + Spring Boot 3.3.4** – Security, Web, Data JPA, Data MongoDB, Jersey, WebSocket, Mail, OAuth2 Client, Actuator
-- **Bazy danych** – PostgreSQL (JPA/Hibernate, pula połączeń HikariCP) oraz MongoDB
+- **Java 17 + Spring Boot 3.3.4** – Security, Web, Data JPA, Jersey, WebSocket, Mail, OAuth2 Client, Actuator
+- **Baza danych** – PostgreSQL (JPA/Hibernate, pula połączeń HikariCP)
 - **Liquibase** – migracje schematu bazy (`src/main/resources/db/changelog`)
 - **Hibernate Envers** – audyt zmian encji
 - **Springdoc OpenAPI** – dokumentacja REST (Swagger UI pod `/swagger-ui.html`)
@@ -91,7 +91,6 @@ Sekrety wstrzykiwane są przez zmienne środowiskowe. Lokalnie skopiuj [`Backend
 | `MAIL_USERNAME`, `MAIL_PASSWORD` | Konto SMTP (Gmail) do wysyłki e-maili |
 | `COINMARKETCAP_API_KEY` | Klucz API do notowań kryptowalut |
 | `DB_USERNAME`, `DB_PASSWORD` | Dane dostępowe do PostgreSQL |
-| `MONGODB_URI` | URI połączenia z MongoDB |
 | `SSL_KEYSTORE_PASSWORD` | Hasło keystore (HTTPS, profil produkcyjny) |
 
 ### Budowanie i uruchamianie
@@ -169,7 +168,7 @@ Z katalogu głównego repozytorium:
 docker-compose up --build
 ```
 
-Compose uruchamia: backend (port 8080, profil `compose`), frontend (port 3000), PostgreSQL (5432), MongoDB (27017) oraz pgAdmin (5050). Skrypty inicjalizujące bazy znajdują się w `StartupScripts/`.
+Compose uruchamia: backend (port 8080, profil `compose`), frontend (port 3000), PostgreSQL (5432) oraz pgAdmin (5050). Skrypt inicjalizujący bazę znajdują się w `StartupScripts/`.
 
 ---
 

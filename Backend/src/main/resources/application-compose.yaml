@@ -1,13 +1,4 @@
-# MongoDB
 spring:
-  data:
-    mongodb:
-      host: mongo
-      port: 27017
-      database: workout-app
-      username: user_app
-      password: user_app
-
   # Postgres
   jpa:
     hibernate:

@@ -2,11 +2,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-  data:
-    mongodb:
-      uri: ${MONGODB_URI}
-      socket-timeout: 10000 # w milisekundach
-      connect-timeout: 10000 # w milisekundach
   datasource:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
@@ -26,7 +21,6 @@ path:
 # Logging
 logging:
   level:
-    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
 #    io.hypersistence.utils: DEBUG
 #    org.hibernate.type: TRACE
 

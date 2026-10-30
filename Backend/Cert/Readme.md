@@ -58,7 +58,7 @@ Kluczowe: **hasło do keystore'a ma jedno źródło prawdy — GitHub Secret `SS
 | `keystore.p12` | Serwer: `/home/mutarexx/backend/certs/keystore.p12` | Generowany przez `convert_and_restart.sh` przy każdej odnowie certu; aplikacja przeładowuje go w locie |
 | Reszta sekretów aplikacji (DB, JWT, mail, itd.) | Tylko GitHub Secrets — **nie są zapisywane na serwerze** | Ręcznie, przez GitHub UI; trafiają do procesu JVM wyłącznie przy deployu |
 
-> **Ręczny start aplikacji na serwerze (`java -jar …`) nie zadziała** — brakuje sekretów (`DB_USERNAME`, `MONGODB_URI`…), w logu pojawi się np. `password authentication failed for user "${DB_USERNAME}"`. Żeby (re)startować aplikację, zrób push na `main` albo *Re-run* ostatniego workflow w GitHub Actions.
+> **Ręczny start aplikacji na serwerze (`java -jar …`) nie zadziała** — brakuje sekretów (`DB_USERNAME`, `DB_PASSWORD`…), w logu pojawi się np. `password authentication failed for user "${DB_USERNAME}"`. Żeby (re)startować aplikację, zrób push na `main` albo *Re-run* ostatniego workflow w GitHub Actions.
 
 Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHub Secret → czy był deploy po zmianie → `keystore.env` na serwerze → `keystore.p12` (czy powstał po ostatniej odnowie z tym hasłem).
 
@@ -100,7 +100,7 @@ Kolejność jest istotna — `convert_and_restart.sh` zależy od pliku `keystore
 Ustaw wszystkie sekrety używane w `.github/workflows/main.yml`, w tym:
 * `DEPLOY_KEY` — prywatny klucz SSH do serwera,
 * `SSL_KEYSTORE_PASSWORD` — dowolne, nowe hasło do keystore'a (to jedyne miejsce, gdzie je wymyślasz i wpisujesz),
-* pozostałe sekrety aplikacji (`DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `COINMARKETCAP_API_KEY`, `MONGODB_URI`).
+* pozostałe sekrety aplikacji (`DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `MAIL_USERNAME`, `MAIL_PASSWORD`, `COINMARKETCAP_API_KEY`).
 
 ### 2. Katalogi na serwerze
 

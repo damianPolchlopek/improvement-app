@@ -24,8 +24,8 @@ Backend Improvement App to modularna aplikacja napisana w Javie 17 z użyciem Sp
 
 ## Technologie
 
-- **Java 17 + Spring Boot 3.3.4** – Security, Web, Data JPA, Data MongoDB, Jersey, WebSocket, Mail, OAuth2 Client, Actuator
-- **PostgreSQL** (JPA/Hibernate, pula HikariCP) oraz **MongoDB**
+- **Java 17 + Spring Boot 3.3.4** – Security, Web, Data JPA, Jersey, WebSocket, Mail, OAuth2 Client, Actuator
+- **PostgreSQL** (JPA/Hibernate, pula HikariCP)
 - **Liquibase** – migracje schematu bazy
 - **Hibernate Envers** – audyt zmian encji
 - **Springdoc OpenAPI** – Swagger UI (`/swagger-ui.html`)
@@ -71,7 +71,7 @@ Aplikacja oparta jest na architekturze modularnej, w której każda domena wydzi
 
 - **controller / controllers** – obsługa żądań HTTP (REST API)
 - **entity** – encje (mapowanie na bazę danych)
-- **repository** – interfejsy repozytoriów (Spring Data JPA / MongoDB)
+- **repository** – interfejsy repozytoriów (Spring Data JPA)
 - **service / services** – logika biznesowa
 - **request / response** – obiekty wejściowe i wyjściowe (DTO)
 - **util / helpers / converters** – klasy pomocnicze i konwertery
@@ -126,7 +126,6 @@ Treningi: ćwiczenia, plany i szablony, statystyki, rekordy. Zawiera konwertery 
 ## Bazy danych i migracje
 
 - **PostgreSQL** – główne dane relacyjne (JPA/Hibernate). Schemat zarządzany przez **Liquibase** – changelogi w `src/main/resources/db/changelog/` (master: `changelog.yaml`).
-- **MongoDB** – połączenie wciąż skonfigurowane, ale żaden moduł już z niej nie korzysta (daily, weekly i shopping przeniesione do PostgreSQL).
 - **Audyt** – tabele Enversa w schemacie `audit` (sufiks `_AUD`).
 
 Skrypty inicjalizujące bazy dla środowiska kontenerowego znajdują się w katalogu `StartupScripts/` w katalogu głównym repozytorium.
