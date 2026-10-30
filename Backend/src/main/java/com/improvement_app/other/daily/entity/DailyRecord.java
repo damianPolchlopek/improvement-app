@@ -1,7 +1,7 @@
 package com.improvement_app.other.daily.entity;
 
 import com.improvement_app.audit.basic.AuditableEntity;
-import com.improvement_app.other.daily.request.DailyRequest;
+import com.improvement_app.other.daily.request.DailyRecordRequest;
 import com.improvement_app.security.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,12 +12,12 @@ import lombok.ToString;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "daily", schema = "other")
+@Table(name = "daily_record", schema = "other")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = false, exclude = {"user"})
 @ToString(exclude = {"user"})
-public class Daily extends AuditableEntity {
+public class DailyRecord extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,14 +35,14 @@ public class Daily extends AuditableEntity {
     private boolean book;
     private boolean software;
 
-    public static Daily from(DailyRequest request, UserEntity user) {
-        Daily daily = new Daily();
-        daily.user = user;
-        daily.date = LocalDate.now();
-        daily.health = request.health();
-        daily.exercise = request.exercise();
-        daily.book = request.book();
-        daily.software = request.software();
-        return daily;
+    public static DailyRecord from(DailyRecordRequest request, UserEntity user) {
+        DailyRecord dailyRecord = new DailyRecord();
+        dailyRecord.user = user;
+        dailyRecord.date = LocalDate.now();
+        dailyRecord.health = request.health();
+        dailyRecord.exercise = request.exercise();
+        dailyRecord.book = request.book();
+        dailyRecord.software = request.software();
+        return dailyRecord;
     }
 }

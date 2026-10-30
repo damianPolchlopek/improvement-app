@@ -1,9 +1,9 @@
 package com.improvement_app.other.daily.service;
 
-import com.improvement_app.other.daily.entity.Daily;
+import com.improvement_app.other.daily.entity.DailyRecord;
 import com.improvement_app.other.daily.repository.DailyRepository;
-import com.improvement_app.other.daily.request.DailyRequest;
-import com.improvement_app.other.daily.response.DailyResponse;
+import com.improvement_app.other.daily.request.DailyRecordRequest;
+import com.improvement_app.other.daily.response.DailyRecordResponse;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.security.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,18 +21,18 @@ public class DailyService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public Page<DailyResponse> getDailyList(Long userId, Pageable pageable) {
+    public Page<DailyRecordResponse> getDailyList(Long userId, Pageable pageable) {
         return dailyRepository.findByUserId(userId, pageable)
-                .map(DailyResponse::from);
+                .map(DailyRecordResponse::from);
     }
 
     @Transactional
-    public DailyResponse addDaily(Long userId, DailyRequest request) {
+    public DailyRecordResponse addDaily(Long userId, DailyRecordRequest request) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-        Daily saved = dailyRepository.save(Daily.from(request, user));
-        return DailyResponse.from(saved);
+        DailyRecord saved = dailyRepository.save(DailyRecord.from(request, user));
+        return DailyRecordResponse.from(saved);
     }
 
 }

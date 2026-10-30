@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: 0023-rename-daily-table
+      author: Damian Polchlopek
+      changes:
+        - sqlFile:
+            path: 001-rename-daily-table.sql
+            relativeToChangelogFile: true

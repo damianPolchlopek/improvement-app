@@ -1,11 +1,11 @@
 package com.improvement_app.other.daily.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.improvement_app.other.daily.entity.Daily;
+import com.improvement_app.other.daily.entity.DailyRecord;
 
 import java.time.LocalDate;
 
-public record DailyResponse(
+public record DailyRecordResponse(
         Long id,
         @JsonFormat(pattern = "dd-MM-yyyy") LocalDate date,
         boolean health,
@@ -13,8 +13,8 @@ public record DailyResponse(
         boolean book,
         boolean software
 ) {
-    public static DailyResponse from(Daily daily) {
-        return new DailyResponse(
+    public static DailyRecordResponse from(DailyRecord daily) {
+        return new DailyRecordResponse(
                 daily.getId(),
                 daily.getDate(),
                 daily.isHealth(),
