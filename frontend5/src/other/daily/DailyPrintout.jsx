@@ -81,10 +81,10 @@ export default function DailyPrintout() {
             <TableHead>
               <StyledTableRow>
                 <StyledTableCell>{t('daily.date')}</StyledTableCell>
-                <StyledTableCell>{t('daily.smoking')}</StyledTableCell>
+                <StyledTableCell>{t('daily.health')}</StyledTableCell>
                 <StyledTableCell>{t('daily.exercise')}</StyledTableCell>
                 <StyledTableCell>{t('daily.book')}</StyledTableCell>
-                <StyledTableCell>{t('daily.work')}</StyledTableCell>
+                <StyledTableCell>{t('daily.software')}</StyledTableCell>
               </StyledTableRow>
             </TableHead>
 
@@ -105,8 +105,8 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.smoking ? t('common.yes') : t('common.no')}
-                      color={daily.smoking ? 'success' : 'error'}
+                      label={daily.health ? t('common.yes') : t('common.no')}
+                      color={daily.health ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
                     />
@@ -129,8 +129,8 @@ export default function DailyPrintout() {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Chip
-                      label={daily.work ? t('common.yes') : t('common.no')}
-                      color={daily.work ? 'success' : 'error'}
+                      label={daily.software ? t('common.yes') : t('common.no')}
+                      color={daily.software ? 'success' : 'error'}
                       variant="outlined"
                       size="small"
                     />

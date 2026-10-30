@@ -82,3 +82,7 @@ databaseChangeLog:
   - include:
       file: 0020_add_oauth2_columns/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0021_create_daily_table/changelog.yaml
+      relativeToChangelogFile: true

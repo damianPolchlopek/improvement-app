@@ -1,7 +1,8 @@
 package com.improvement_app.other.daily.controller;
 
 import com.improvement_app.common.web.ApiVersions;
-import com.improvement_app.other.daily.entity.Daily;
+import com.improvement_app.other.daily.request.DailyRequest;
+import com.improvement_app.other.daily.response.DailyResponse;
 import com.improvement_app.other.daily.service.DailyService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,16 +21,21 @@ public class DailyController {
     private final DailyService dailyService;
 
     @PostMapping("/")
-    public ResponseEntity<Daily> addDaily(@RequestBody Daily dailyList) {
-        Daily savedDaily = dailyService.addDaily(dailyList);
+    public ResponseEntity<DailyResponse> addDaily(
+            @RequestBody DailyRequest request,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
+        DailyResponse savedDaily = dailyService.addDaily(userId, request);
         return ResponseEntity.ok(savedDaily);
     }
 
     @GetMapping
-    public ResponseEntity<Page<Daily>> getDaily(
-            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<DailyResponse>> getDaily(
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal(expression = "id") Long userId
+    ) {
 
-        Page<Daily> allDailies = dailyService.getDailyList(pageable);
+        Page<DailyResponse> allDailies = dailyService.getDailyList(userId, pageable);
 
         return ResponseEntity.ok(allDailies);
     }

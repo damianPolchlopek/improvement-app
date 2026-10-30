@@ -1,11 +1,11 @@
 package com.improvement_app.other.daily.entity;
 
 public enum DailyType {
-    SMOKING("Smoking"),
+    HEALTH("Health"),
     EXERCISE("Exercise"),
     WAKE_UP("WakeUp"),
     BOOK("Book"),
-    WORK("Work");
+    SOFTWARE("Software");
 
     private final String name;
 

@@ -1,35 +1,48 @@
 package com.improvement_app.other.daily.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.improvement_app.audit.basic.AuditableEntity;
+import com.improvement_app.other.daily.request.DailyRequest;
+import com.improvement_app.security.entity.UserEntity;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Generated;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "daily", schema = "other")
 @Data
-@Document
 @NoArgsConstructor
-public class Daily {
+@EqualsAndHashCode(callSuper = false, exclude = {"user"})
+@ToString(exclude = {"user"})
+public class Daily extends AuditableEntity {
+
     @Id
-    @Generated
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    boolean smoking;
-    boolean exercise;
-    boolean book;
-    boolean work;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    LocalDate date;
+    @Column(nullable = false)
+    private LocalDate date;
 
-    public Daily(Daily daily) {
-        this.smoking = daily.isSmoking();
-        this.exercise = daily.isExercise();
-        this.book = daily.isBook();
-        this.work = daily.isWork();
-        this.date = LocalDate.now();
+    private boolean health;
+    private boolean exercise;
+    private boolean book;
+    private boolean software;
+
+    public static Daily from(DailyRequest request, UserEntity user) {
+        Daily daily = new Daily();
+        daily.user = user;
+        daily.date = LocalDate.now();
+        daily.health = request.health();
+        daily.exercise = request.exercise();
+        daily.book = request.book();
+        daily.software = request.software();
+        return daily;
     }
 }

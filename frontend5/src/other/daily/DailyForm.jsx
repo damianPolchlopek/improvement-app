@@ -24,10 +24,10 @@ export default function DailyForm() {
   const theme = useTheme();
 
   const [dailyFields, setDailyFields] = useState({
-    smoking: false,
+    health: false,
     exercise: false,
     book: false,
-    work: false,
+    software: false,
   });
 
   const { mutate, isPending } = useMutation({
@@ -35,7 +35,7 @@ export default function DailyForm() {
     onSuccess: () => {
       queryClient.invalidateQueries(['daily-list']);
       showSnackbar(t('common.addedSuccessfully'), 'success');
-      setDailyFields({ smoking: false, exercise: false, book: false, work: false });
+      setDailyFields({ health: false, exercise: false, book: false, software: false });
     },
     onError: () => {
       showSnackbar(t('common.addFailed'), 'error');
@@ -75,10 +75,10 @@ export default function DailyForm() {
           <Grid container spacing={2}>
             <Grid size={12}>
               <FormControlLabel
-                control={<Checkbox checked={dailyFields.smoking} />}
-                name="smoking"
+                control={<Checkbox checked={dailyFields.health} />}
+                name="health"
                 onChange={handleFormChange}
-                label={t('daily.smoking')}
+                label={t('daily.health')}
               />
               <FormControlLabel
                 control={<Checkbox checked={dailyFields.exercise} />}
@@ -93,10 +93,10 @@ export default function DailyForm() {
                 label={t('daily.book')}
               />
               <FormControlLabel
-                control={<Checkbox checked={dailyFields.work} />}
-                name="work"
+                control={<Checkbox checked={dailyFields.software} />}
+                name="software"
                 onChange={handleFormChange}
-                label={t('daily.cloud')}
+                label={t('daily.software')}
               />
             </Grid>
 
