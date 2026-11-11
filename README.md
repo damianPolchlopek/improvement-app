@@ -176,6 +176,14 @@ Compose uruchamia: backend (port 8080, profil `compose`), frontend (port 3000), 
 
 Deploy realizowany jest przez **GitHub Actions** ([.github/workflows/main.yml](.github/workflows/main.yml)): po pushu na gałąź `main` budowany jest backend (Maven) i frontend (npm), a artefakty wgrywane są przez SSH na serwer produkcyjny. Sekrety (klucze API, dane SMTP, JWT itd.) przechowywane są w GitHub Secrets.
 
+Aktualizacje zależności proponuje **Renovate** ([renovate.json](renovate.json):
+- PR-y raz w tygodniu (poniedziałek przed 9:00 czasu polskiego); łatki bezpieczeństwa przychodzą od razu,
+- wersje opublikowane co najmniej 3 dni temu,
+- grupy: Spring (minor/patch) oraz frontend (minor/patch),
+- duże wersje (major) dopiero po zatwierdzeniu w issue „Dependency Dashboard”,
+- raz w miesiącu odświeżenie `package-lock.json`,
+- bez automerge — PR-y merguje się ręcznie, a merge na `main` od razu uruchamia deploy.
+
 ---
 
 **Kod źródłowy:**
