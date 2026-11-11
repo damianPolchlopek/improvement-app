@@ -1,6 +1,6 @@
 package com.improvement_app.common.ratelimit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.improvement_app.exceptions.ErrorResponse;

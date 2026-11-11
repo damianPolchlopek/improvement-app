@@ -1,6 +1,6 @@
 package com.improvement_app.workouts;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.improvement_app.food.config.PermitAllSecurityConfig;
 import com.improvement_app.food.config.TestContainersConfiguration;
 import com.improvement_app.googledrive.service.FilePathService;
@@ -18,7 +18,7 @@ import com.improvement_app.workouts.repository.TrainingEntityRepository;
 import com.improvement_app.workouts.repository.TrainingTemplateEntityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;

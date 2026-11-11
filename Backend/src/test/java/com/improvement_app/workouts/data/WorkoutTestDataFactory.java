@@ -37,6 +37,9 @@ public final class WorkoutTestDataFactory {
                 .password("$2a$10$test")
                 .name("Test")
                 .surname("User")
+                // @Builder pomija domyślne wartości pól encji, a kolumny są NOT NULL w schemacie z migracji
+                .isActive(false)
+                .emailVerified(false)
                 .build();
     }
 

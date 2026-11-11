@@ -101,6 +101,9 @@ public class TestDataFactory {
                 .surname(lastName)
                 .username(faker.name().username())
                 .password("password")
+                // @Builder pomija domyślne wartości pól encji, a kolumny są NOT NULL w schemacie z migracji
+                .isActive(false)
+                .emailVerified(false)
                 .email(String.format("%s.%s.%s@example.test",
                         firstName.toLowerCase(), lastName.toLowerCase(), UUID.randomUUID().toString().substring(0, 6)));
 

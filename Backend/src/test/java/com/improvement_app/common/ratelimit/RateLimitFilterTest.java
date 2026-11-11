@@ -1,8 +1,8 @@
 package com.improvement_app.common.ratelimit;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.improvement_app.security.config.SecurityProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class RateLimitFilterTest {
     private static final String SIGNIN_PATH = "/api/v1/auth/signin";
     private static final String DRIVE_PATH = "/api/v1/drive/initApplication";
 
-    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+    private final ObjectMapper objectMapper = JsonMapper.builder().build();
     private SecurityProperties.HttpRateLimit config;
     private RateLimitFilter filter;
 
@@ -75,8 +75,8 @@ class RateLimitFilterTest {
         assertThat(response.getHeader(RateLimitFilter.REMAINING_HEADER)).isEqualTo("0");
 
         JsonNode body = objectMapper.readTree(response.getContentAsString());
-        assertThat(body.get("code").asText()).isEqualTo("RATE_LIMIT_EXCEEDED");
-        assertThat(body.get("message").asText()).isEqualTo("Zbyt wiele żądań, spróbuj za chwilę.");
+        assertThat(body.get("code").asString()).isEqualTo("RATE_LIMIT_EXCEEDED");
+        assertThat(body.get("message").asString()).isEqualTo("Zbyt wiele żądań, spróbuj za chwilę.");
         assertThat(body.hasNonNull("timestamp")).isTrue();
     }
 
@@ -151,7 +151,7 @@ class RateLimitFilterTest {
         MockHttpServletResponse response = send("GET", API_PATH, "10.0.0.3");
 
         assertThat(response.getStatus()).isEqualTo(429);
-        assertThat(objectMapper.readTree(response.getContentAsString()).get("message").asText())
+        assertThat(objectMapper.readTree(response.getContentAsString()).get("message").asString())
                 .isEqualTo("Zbyt duże obciążenie serwera, spróbuj później.");
     }
 

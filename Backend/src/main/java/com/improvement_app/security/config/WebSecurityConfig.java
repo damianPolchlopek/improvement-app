@@ -1,6 +1,6 @@
 package com.improvement_app.security.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.improvement_app.common.ratelimit.RateLimitFilter;
 import com.improvement_app.security.jwt.AuthEntryPointJwt;
 import com.improvement_app.security.jwt.AuthTokenFilter;

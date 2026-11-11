@@ -18,13 +18,13 @@
 
 ## Wstęp
 
-Backend Improvement App to modularna aplikacja napisana w Javie 21 z użyciem Spring Boot 3.5.6. Każda domena funkcjonalna posiada własny pakiet i podział na warstwy, co ułatwia rozwój, testowanie i utrzymanie kodu. Moduł `food` został dodatkowo zorganizowany według architektury heksagonalnej (porty i adaptery).
+Backend Improvement App to modularna aplikacja napisana w Javie 21 z użyciem Spring Boot 4.1.2. Każda domena funkcjonalna posiada własny pakiet i podział na warstwy, co ułatwia rozwój, testowanie i utrzymanie kodu. Moduł `food` został dodatkowo zorganizowany według architektury heksagonalnej (porty i adaptery).
 
 ---
 
 ## Technologie
 
-- **Java 21 + Spring Boot 3.5.6** – Security, Web, Data JPA, Validation, WebSocket, Mail, OAuth2 Client, Actuator
+- **Java 21 + Spring Boot 4.1.2** – Security, Web, Data JPA, Validation, WebSocket, Mail, OAuth2 Client, Actuator
 - **PostgreSQL** (JPA/Hibernate, pula HikariCP)
 - **Liquibase** – migracje schematu bazy
 - **Hibernate Envers** – audyt zmian encji
@@ -88,7 +88,7 @@ Moduł `food` stosuje dodatkowo architekturę heksagonalną: `application` (przy
 Audyt historii zmian encji oparty o Hibernate Envers. Udostępnia podgląd rewizji (`controller`, `service`, `envers`, `response`).
 
 ### `common/`
-Współdzielone konfiguracje i kontrolery: `JacksonConfiguration` (serializacja JSON), `RootController` oraz `ratelimit/RateLimitFilter` – limitowanie żądań HTTP (Bucket4j, token bucket). Filtr działa w łańcuchu Spring Security za filtrem JWT i ma osobne limity per użytkownik/IP dla logowania (`/api/v1/auth/*`, per IP), Google Drive (`/api/v1/drive/**`) i reszty API, plus limit globalny. Po przekroczeniu zwraca `429` z `Retry-After`; limity w `app.security.rate-limit.http` (`application.yaml`).
+Współdzielone konfiguracje i kontrolery: `JacksonConfiguration` (serializacja JSON, Jackson 3), `RootController` oraz `ratelimit/RateLimitFilter` – limitowanie żądań HTTP (Bucket4j, token bucket). Filtr działa w łańcuchu Spring Security za filtrem JWT i ma osobne limity per użytkownik/IP dla logowania (`/api/v1/auth/*`, per IP), Google Drive (`/api/v1/drive/**`) i reszty API, plus limit globalny. Po przekroczeniu zwraca `429` z `Retry-After`; limity w `app.security.rate-limit.http` (`application.yaml`).
 
 ### `exceptions/`
 Globalna obsługa wyjątków i walidacji: `GlobalExceptionHandler` (centralny handler) oraz klasy formatujące odpowiedzi błędów (`ErrorResponse`, `ValidationErrorResponse`, `FieldValidationError`).

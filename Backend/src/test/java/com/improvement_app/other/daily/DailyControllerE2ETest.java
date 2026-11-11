@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -150,6 +150,32 @@ class DailyControllerE2ETest {
                 .andExpect(status().isBadRequest());
 
         assertThat(dailyRepository.count()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("POST /daily/ z nieczytelnym body zwraca 400 zamiast 500")
+    void shouldRejectUnreadableBodyWithBadRequest() throws Exception {
+        UserEntity u = userRepository.save(user("daily-malformed"));
+
+        // Zły format daty — Jackson wskazuje pole
+        mockMvc.perform(post("/api/v1/daily/")
+                        .with(authentication(authOf(u)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"date\": \"2026-11-11\", \"health\": true}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"))
+                .andExpect(jsonPath("$.message").value("Invalid value for field 'date'"));
+
+        // Uszkodzony JSON — brak ścieżki pola
+        mockMvc.perform(post("/api/v1/daily/")
+                        .with(authentication(authOf(u)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"health\": tru"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("MALFORMED_REQUEST"))
+                .andExpect(jsonPath("$.message").value("Malformed request body"));
+
+        assertThat(dailyRepository.count()).isZero();
     }
 
     @Test

@@ -7,6 +7,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import tools.jackson.core.JacksonException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -139,6 +141,29 @@ public class GlobalExceptionHandler {
     }
 
     /**
+     * Obsługa nieczytelnego body żądania: niepoprawny JSON, zły format daty, nieznana wartość enuma.
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleNotReadable(HttpMessageNotReadableException e) {
+        log.warn("Unreadable request body: {}", e.getMessage());
+
+        String field = e.getCause() instanceof JacksonException jacksonException
+                ? fieldPath(jacksonException)
+                : "";
+        String message = field.isEmpty()
+                ? "Malformed request body"
+                : "Invalid value for field '" + field + "'";
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code("MALFORMED_REQUEST")
+                .message(message)
+                .timestamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    /**
      * Obsługa nieoczekiwanych błędów
      */
     @ExceptionHandler(RuntimeException.class)
@@ -168,6 +193,22 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
+
+    /** Ścieżka pola z wyjątku Jacksona, np. "date" albo "meals[0].name"; pusta, gdy JSON jest nieczytelny. */
+    private String fieldPath(JacksonException e) {
+        StringBuilder path = new StringBuilder();
+        for (JacksonException.Reference reference : e.getPath()) {
+            if (reference.getPropertyName() != null) {
+                if (!path.isEmpty()) {
+                    path.append('.');
+                }
+                path.append(reference.getPropertyName());
+            } else if (reference.getIndex() >= 0) {
+                path.append('[').append(reference.getIndex()).append(']');
+            }
+        }
+        return path.toString();
     }
 
     private FieldValidationError mapToFieldValidationError(FieldError fieldError) {

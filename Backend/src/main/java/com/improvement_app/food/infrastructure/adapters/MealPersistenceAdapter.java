@@ -18,6 +18,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Repository
 @Transactional
@@ -56,15 +58,18 @@ public class MealPersistenceAdapter implements MealPersistencePort {
     }
 
     private Specification<MealRecipeEntity> buildSpecification(MealSearchCriteria criteria) {
-        // allOf pomija null, więc filtr "ALL" po prostu nie dodaje warunku
-        return Specification.allOf(
-                criteria.category() != MealCategory.ALL ?
-                        MealRecipeSpecifications.hasCategory(criteria.category()) : null,
-                criteria.type() != MealType.ALL ?
-                        MealRecipeSpecifications.hasType(criteria.type()) : null,
-                criteria.popularity() != MealPopularity.ALL ?
-                        MealRecipeSpecifications.hasPopularity(criteria.popularity()) : null,
-                MealRecipeSpecifications.hasNameContaining(criteria.nameContains()));
+        // Filtr "ALL" nie dodaje warunku; Spring Data 4 nie przyjmuje null w allOf, więc je odsiewamy
+        List<Specification<MealRecipeEntity>> specifications = Stream.of(
+                        criteria.category() != MealCategory.ALL ?
+                                MealRecipeSpecifications.hasCategory(criteria.category()) : null,
+                        criteria.type() != MealType.ALL ?
+                                MealRecipeSpecifications.hasType(criteria.type()) : null,
+                        criteria.popularity() != MealPopularity.ALL ?
+                                MealRecipeSpecifications.hasPopularity(criteria.popularity()) : null,
+                        MealRecipeSpecifications.hasNameContaining(criteria.nameContains()))
+                .filter(Objects::nonNull)
+                .toList();
+        return Specification.allOf(specifications);
     }
 
     private Sort buildSort(MealSortCriteria sortCriteria) {
