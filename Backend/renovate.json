@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "group:java"
+  ],
+  "packageRules": [
+    {
+      "description": "Grupuj wszystkie zależności Spring Boot oraz Spring Cloud razem",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackagePatterns": [
+        "^org\\.springframework",
+        "^org\\.springframework\\.boot",
+        "^org\\.springframework\\.cloud"
+      ],
+      "groupName": "spring-boot ecosystem"
+    }
+  ],
+  "schedule": [
+    "before 9am on monday"
+  ]
+}
