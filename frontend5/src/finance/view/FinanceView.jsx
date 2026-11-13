@@ -95,9 +95,9 @@ export default function FinanceView() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <Analytics sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('finance.cryptoPrices')}
                 </Typography>
               </Box>
@@ -122,32 +122,32 @@ export default function FinanceView() {
                   minHeight: 'auto',
                 }}
               >
-                <Box display="flex" alignItems="center" gap={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <TrendingUp fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {t('finance.weeksFromAth')}
                   </Typography>
-                  <Typography variant="subtitle1" fontWeight="600">
+                  <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                     {(calculateDays(btcStats.athDate) / 7).toFixed(1)}
                   </Typography>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <TrendingUp fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {t('finance.weeksFromBottom')}
                   </Typography>
-                  <Typography variant="subtitle1" fontWeight="600">
+                  <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                     {(calculateDays('2022-11-21') / 7).toFixed(1)}
                   </Typography>
                 </Box>
 
-                <Box display="flex" alignItems="center" gap={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <TrendingDown fontSize="small" color="action" />
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {t('finance.weeksToHalving')}
                   </Typography>
-                  <Typography variant="subtitle1" fontWeight="600">
+                  <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                     {((calculateDays('2024-04-26') / 7) * -1).toFixed(1)}
                   </Typography>
                 </Box>
@@ -170,7 +170,7 @@ export default function FinanceView() {
               }}
             >
               <ShowChart sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" fontWeight="600">
+              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                 {t('finance.cryptoTable')}
               </Typography>
             </Box>

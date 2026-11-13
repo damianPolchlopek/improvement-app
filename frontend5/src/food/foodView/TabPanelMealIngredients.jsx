@@ -43,9 +43,9 @@ export default function TabPanelMealIngredients({ meal }) {
 
   if (Object.keys(mealIngredients).length === 0) {
     return (
-      <Box textAlign="center" py={4}>
+      <Box sx={{ textAlign: 'center', py: 4 }}>
         <Kitchen sx={{ fontSize: 48, color: 'grey.400', mb: 2 }} />
-        <Typography variant="h6" color="text.secondary">
+        <Typography variant="h6" sx={{ color: 'text.secondary' }}>
           {t('food.noProducts')}
         </Typography>
       </Box>

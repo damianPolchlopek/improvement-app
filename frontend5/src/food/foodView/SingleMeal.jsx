@@ -88,7 +88,7 @@ export default function SingleMeal({ meal }) {
         }}
       >
         <Restaurant sx={{ fontSize: 24 }} />
-        <Typography variant="h6" fontWeight="600">
+        <Typography variant="h6" sx={{ fontWeight: '600' }}>
           {meal.name}
         </Typography>
       </Box>
@@ -129,7 +129,7 @@ export default function SingleMeal({ meal }) {
         <TabPanel value={tabIndex} index={0}>
           {/* Nutrition Cards Grid */}
           <Box sx={{ mb: 2 }}>
-            <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap={1.5} mb={2}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 1.5, mb: 2 }}>
               {nutritionData.map((item, index) => (
                 <Paper
                   key={index}
@@ -140,13 +140,21 @@ export default function SingleMeal({ meal }) {
                     textAlign: 'center',
                   }}
                 >
-                  <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={0.5}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 1,
+                      mb: 0.5,
+                    }}
+                  >
                     {item.icon}
-                    <Typography variant="body2" fontWeight="500" color="text.secondary">
+                    <Typography variant="body2" sx={{ fontWeight: '500', color: 'text.secondary' }}>
                       {item.label}
                     </Typography>
                   </Box>
-                  <Typography variant="h6" fontWeight="600" color={item.color}>
+                  <Typography variant="h6" sx={{ fontWeight: '600', color: item.color }}>
                     {item.value}
                   </Typography>
                 </Paper>
@@ -156,7 +164,11 @@ export default function SingleMeal({ meal }) {
 
           {/* Additional Info */}
           <Box>
-            <Typography variant="subtitle2" fontWeight="600" color="text.secondary" gutterBottom>
+            <Typography
+              variant="subtitle2"
+              sx={{ fontWeight: '600', color: 'text.secondary' }}
+              gutterBottom
+            >
               {t('food.details')}
             </Typography>
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
@@ -192,7 +204,7 @@ export default function SingleMeal({ meal }) {
                           {t('food.viewRecipe')}
                         </Typography>
                       ) : (
-                        <Typography color="text.secondary">{t('food.noLink')}</Typography>
+                        <Typography sx={{ color: 'text.secondary' }}>{t('food.noLink')}</Typography>
                       )}
                     </TableCell>
                   </TableRow>
@@ -209,7 +221,11 @@ export default function SingleMeal({ meal }) {
         <TabPanel value={tabIndex} index={2}>
           {meal.recipe?.length > 0 ? (
             <Box>
-              <Typography variant="subtitle2" fontWeight="600" color="text.secondary" gutterBottom>
+              <Typography
+                variant="subtitle2"
+                sx={{ fontWeight: '600', color: 'text.secondary' }}
+                gutterBottom
+              >
                 {t('food.preparation')}
               </Typography>
               <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
@@ -221,9 +237,9 @@ export default function SingleMeal({ meal }) {
               </Paper>
             </Box>
           ) : (
-            <Box textAlign="center" py={4}>
+            <Box sx={{ textAlign: 'center', py: 4 }}>
               <MenuBook sx={{ fontSize: 48, color: 'grey.400', mb: 2 }} />
-              <Typography variant="h6" color="text.secondary">
+              <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                 {t('food.noRecipes')}
               </Typography>
             </Box>

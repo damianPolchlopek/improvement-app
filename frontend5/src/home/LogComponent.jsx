@@ -60,26 +60,29 @@ const LogComponent = () => {
 
   return (
     <Box>
-      <Box display="flex" alignItems="center" justifyContent="space-between" mb={1}>
-        <Box display="flex" alignItems="center" gap={1}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <MessageIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-          <Typography variant="body2" fontWeight="600" color="text.secondary">
+          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.secondary' }}>
             {t('home.activityLog')}
           </Typography>
         </Box>
 
         {/* Connection Status */}
         {isConnecting ? (
-          <Box display="flex" alignItems="center" gap={1}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <CircularProgress size={12} sx={{ color: 'warning.main' }} />
-            <Typography variant="caption" color="warning.main">
+            <Typography variant="caption" sx={{ color: 'warning.main' }}>
               {t('home.connecting')}
             </Typography>
           </Box>
         ) : (
-          <Box display="flex" alignItems="center" gap={0.5}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <CircleIcon sx={{ fontSize: 10, color: isConnected ? 'success.main' : 'error.main' }} />
-            <Typography variant="caption" color={isConnected ? 'success.main' : 'error.main'}>
+            <Typography
+              variant="caption"
+              sx={{ color: isConnected ? 'success.main' : 'error.main' }}
+            >
               {isConnected ? t('home.connected') : t('home.disconnected')}
             </Typography>
           </Box>
@@ -93,8 +96,7 @@ const LogComponent = () => {
               <ListItem disableGutters sx={{ py: 0.25, gap: 1.5, alignItems: 'baseline' }}>
                 <Typography
                   variant="caption"
-                  color="text.disabled"
-                  sx={{ fontFamily: 'monospace', flexShrink: 0 }}
+                  sx={{ color: 'text.disabled', fontFamily: 'monospace', flexShrink: 0 }}
                 >
                   {msg.time}
                 </Typography>
@@ -106,7 +108,7 @@ const LogComponent = () => {
           ))}
         </List>
       ) : (
-        <Typography variant="caption" color="text.disabled">
+        <Typography variant="caption" sx={{ color: 'text.disabled' }}>
           {t('home.messagesWillAppear')}
         </Typography>
       )}

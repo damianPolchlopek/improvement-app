@@ -116,23 +116,28 @@ const EmailVerification = () => {
       >
         <Card sx={{ width: '100%', maxWidth: 500 }}>
           <CardContent sx={{ p: 4 }}>
-            <Box textAlign="center">
+            <Box sx={{ textAlign: 'center' }}>
               {status === 'loading' && (
-                <Stack spacing={3} alignItems="center">
+                <Stack spacing={3} sx={{ alignItems: 'center' }}>
                   <CircularProgress size={64} color="primary" />
                   <Typography variant="h4" component="h1" gutterBottom>
                     {t('emailVerification.loading')}
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
+                  <Typography variant="body1" sx={{ color: 'text.secondary' }}>
                     {t('emailVerification.pleaseWait')}
                   </Typography>
                 </Stack>
               )}
 
               {status === 'success' && (
-                <Stack spacing={3} alignItems="center">
+                <Stack spacing={3} sx={{ alignItems: 'center' }}>
                   <CheckCircle sx={{ fontSize: 64, color: 'success.main' }} />
-                  <Typography variant="h4" component="h1" color="success.main" gutterBottom>
+                  <Typography
+                    variant="h4"
+                    component="h1"
+                    sx={{ color: 'success.main' }}
+                    gutterBottom
+                  >
                     {t('emailVerification.successTitle')}
                   </Typography>
                   <Alert severity="success" sx={{ width: '100%' }}>
@@ -152,9 +157,9 @@ const EmailVerification = () => {
               )}
 
               {status === 'error' && (
-                <Stack spacing={3} alignItems="center">
+                <Stack spacing={3} sx={{ alignItems: 'center' }}>
                   <Error sx={{ fontSize: 64, color: 'error.main' }} />
-                  <Typography variant="h4" component="h1" color="error.main" gutterBottom>
+                  <Typography variant="h4" component="h1" sx={{ color: 'error.main' }} gutterBottom>
                     {t('emailVerification.errorTitle')}
                   </Typography>
                   <Alert severity="error" sx={{ width: '100%' }}>

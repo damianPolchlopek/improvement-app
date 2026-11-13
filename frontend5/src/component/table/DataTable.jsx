@@ -44,7 +44,7 @@ export default function DataTable({
   if (!data || data.length === 0) {
     return (
       <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" sx={{ color: 'text.secondary' }}>
           {emptyMessage || t('common.noData')}
         </Typography>
       </Box>

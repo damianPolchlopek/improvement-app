@@ -26,10 +26,10 @@ const DietAuditTimeline = ({ revisions, onRevisionSelect, selectedRevision }) =>
         }}
       >
         <TrendingUpIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
-        <Typography variant="h6" color="rgba(255, 255, 255, 0.7)">
+        <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
           {t('audit.noEntries')}
         </Typography>
-        <Typography variant="body2" color="rgba(255, 255, 255, 0.5)" sx={{ mt: 1 }}>
+        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mt: 1 }}>
           {t('audit.noEntriesDesc')}
         </Typography>
       </Card>
@@ -79,8 +79,8 @@ const DietAuditTimeline = ({ revisions, onRevisionSelect, selectedRevision }) =>
               >
                 <Typography
                   variant="h6"
-                  fontWeight="700"
                   sx={{
+                    fontWeight: '700',
                     color: 'white',
                     letterSpacing: 0.5,
                     textTransform: 'uppercase',
@@ -234,8 +234,8 @@ const DietAuditTimeline = ({ revisions, onRevisionSelect, selectedRevision }) =>
           />
           <Typography
             variant="caption"
-            color="rgba(255, 255, 255, 0.5)"
             sx={{
+              color: 'rgba(255, 255, 255, 0.5)',
               textTransform: 'uppercase',
               letterSpacing: 1,
               fontWeight: 600,

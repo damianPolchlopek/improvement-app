@@ -44,9 +44,9 @@ export default function FinanceInformation() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <Info sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('finance.marketInfo')}
                 </Typography>
               </Box>
@@ -71,7 +71,7 @@ export default function FinanceInformation() {
               }}
             >
               <TrendingUp sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" fontWeight="600">
+              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                 {t('finance.btcCycles')}
               </Typography>
             </Box>

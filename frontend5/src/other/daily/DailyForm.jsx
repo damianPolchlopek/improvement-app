@@ -74,7 +74,7 @@ export default function DailyForm() {
           }}
         >
           <ChecklistRtl sx={{ fontSize: 22 }} />
-          <Typography variant="subtitle1" fontWeight="600">
+          <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
             {t('daily.title')}
           </Typography>
         </Box>

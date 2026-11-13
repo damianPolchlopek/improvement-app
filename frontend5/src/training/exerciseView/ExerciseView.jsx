@@ -83,7 +83,7 @@ export default function ExerciseView() {
         label: t('training.date'),
         accessor: 'date',
         render: (value) => (
-          <Typography variant="body1" fontWeight="500">
+          <Typography variant="body1" sx={{ fontWeight: '500' }}>
             {value || t('training.noData')}
           </Typography>
         ),
@@ -98,10 +98,10 @@ export default function ExerciseView() {
         accessor: (row) => row.exercises?.[exerciseName] || {},
         render: (exerciseData) => (
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography variant="body2" color="text.primary">
+            <Typography variant="body2" sx={{ color: 'text.primary' }}>
               <strong>{t('exercise.weight')}:</strong> {exerciseData.weight || 'N/A'}
             </Typography>
-            <Typography variant="body2" color="text.primary">
+            <Typography variant="body2" sx={{ color: 'text.primary' }}>
               <strong>{t('exercise.reps')}:</strong> {exerciseData.reps || 'N/A'}
             </Typography>
           </Box>
@@ -133,9 +133,9 @@ export default function ExerciseView() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <TrendingUp sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('training.history')}
                 </Typography>
               </Box>
@@ -166,22 +166,22 @@ export default function ExerciseView() {
                 label={t('training.type')}
               />
 
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <FitnessCenter fontSize="small" color="action" />
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {t('training.totalTrainings')}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="600">
+                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                   {trainingData?.totalElements || 0}
                 </Typography>
               </Box>
 
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <ViewList fontSize="small" color="action" />
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {t('training.exerciseCount')}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="600">
+                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                   {templateData?.exercises?.length || 0}
                 </Typography>
               </Box>
@@ -203,7 +203,7 @@ export default function ExerciseView() {
               }}
             >
               <ViewList sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" fontWeight="600">
+              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                 {t('training.historyForType', { type: selectedTrainingType })}
               </Typography>
             </Box>

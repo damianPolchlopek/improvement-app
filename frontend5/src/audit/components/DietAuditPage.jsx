@@ -86,10 +86,10 @@ const DietAuditPage = () => {
             color: '#4caf50',
           }}
         />
-        <Typography variant="h6" color="white" fontWeight="600">
+        <Typography variant="h6" sx={{ color: 'white', fontWeight: '600' }}>
           {t('audit.loadingHistory')}
         </Typography>
-        <Typography variant="body2" color="rgba(255, 255, 255, 0.7)" sx={{ mt: 1 }}>
+        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', mt: 1 }}>
           {t('audit.fetchingRevisions')}
         </Typography>
       </Box>
@@ -155,10 +155,10 @@ const DietAuditPage = () => {
                   </IconButton>
                 </Tooltip>
 
-                <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                   <HistoryIcon sx={{ fontSize: 40 }} />
                   <Box>
-                    <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
+                    <Typography variant="h3" sx={{ fontWeight: '700', mb: 1 }}>
                       {t('audit.changeHistory')}
                     </Typography>
                     <Typography variant="h6" sx={{ opacity: 0.9 }}>
@@ -167,7 +167,7 @@ const DietAuditPage = () => {
                   </Box>
                 </Box>
 
-                <Box display="flex" gap={2} sx={{ mt: 3 }} flexWrap="wrap">
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mt: 3 }}>
                   <Chip
                     label={`ID: ${dietSummaryId}`}
                     sx={{

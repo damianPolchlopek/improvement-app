@@ -37,8 +37,7 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
       )}
       <Typography
         variant="body2"
-        fontWeight="600"
-        sx={{ color: isPositive ? 'success.main' : 'error.main' }}
+        sx={{ fontWeight: '600', color: isPositive ? 'success.main' : 'error.main' }}
       >
         {percent}%
       </Typography>
@@ -58,13 +57,13 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
       </StyledTableCell>
 
       <StyledTableCell>
-        <Typography variant="body1" fontWeight="700">
+        <Typography variant="body1" sx={{ fontWeight: '700' }}>
           {symbol}
         </Typography>
       </StyledTableCell>
 
       <StyledTableCell>
-        <Typography variant="body1" fontWeight="600" color="primary">
+        <Typography variant="body1" sx={{ fontWeight: '600', color: 'primary' }}>
           ${price}
         </Typography>
       </StyledTableCell>
@@ -78,13 +77,13 @@ export default function CryptoPricesTableRow({ symbol, coinData, coinDescription
       <StyledTableCell>{renderChangeCell(percentChange90d, isPositive90d)}</StyledTableCell>
 
       <StyledTableCell>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           {coinDescription.athDate}
         </Typography>
       </StyledTableCell>
 
       <StyledTableCell>
-        <Typography variant="body2" fontWeight="600">
+        <Typography variant="body2" sx={{ fontWeight: '600' }}>
           ${coinDescription.ath}
         </Typography>
       </StyledTableCell>

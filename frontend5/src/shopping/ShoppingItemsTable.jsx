@@ -51,7 +51,7 @@ export default function ShoppingItemsTable({ items }) {
         }}
       >
         <ShoppingBasket sx={{ fontSize: 22 }} />
-        <Typography variant="subtitle1" fontWeight="600">
+        <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
           {t('shopping.itemsList')}
         </Typography>
       </Box>
@@ -73,7 +73,7 @@ export default function ShoppingItemsTable({ items }) {
                   sx={{ '&:hover': { backgroundColor: theme.palette.action.hover } }}
                 >
                   <StyledTableCell>
-                    <Typography variant="body2" fontWeight="600">
+                    <Typography variant="body2" sx={{ fontWeight: '600' }}>
                       {item.name}
                     </Typography>
                   </StyledTableCell>
@@ -105,7 +105,7 @@ export default function ShoppingItemsTable({ items }) {
             ) : (
               <StyledTableRow>
                 <StyledTableCell colSpan={3} align="center">
-                  <Typography variant="body1" color="text.secondary" sx={{ py: 4 }}>
+                  <Typography variant="body1" sx={{ color: 'text.secondary', py: 4 }}>
                     {t('shopping.noItems')}
                   </Typography>
                 </StyledTableCell>

@@ -83,20 +83,20 @@ export default function TrainingsView() {
           }}
         >
           <CardContent sx={{ p: 3 }}>
-            <Box display="flex" alignItems="center" gap={2} mb={2}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
               <ViewList sx={{ fontSize: 32 }} />
-              <Typography variant="h4" fontWeight="600">
+              <Typography variant="h4" sx={{ fontWeight: '600' }}>
                 {t('messages.trainingView')}
               </Typography>
             </Box>
-            <Box display="flex" gap={3} flexWrap="wrap">
-              <Box display="flex" alignItems="center" gap={1}>
+            <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <FitnessCenter sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
                   {t('training.trainingsCount', { count: data?.totalElements || 0 })}
                 </Typography>
               </Box>
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Assessment sx={{ fontSize: 18 }} />
                 <Typography variant="body2" sx={{ opacity: 0.9 }}>
                   {t('training.detailedStats')}

@@ -52,7 +52,7 @@ function HeaderDesktop() {
                   component={Link}
                   to={subPage.path}
                 >
-                  <Typography textAlign="center">{subPage.name}</Typography>
+                  <Typography sx={{ textAlign: 'center' }}>{subPage.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>

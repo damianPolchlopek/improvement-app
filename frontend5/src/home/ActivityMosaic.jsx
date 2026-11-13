@@ -15,7 +15,7 @@ export default function ActivityMosaic({ summary }) {
 
   return (
     <Box sx={{ mb: 4 }}>
-      <Typography variant="subtitle1" fontWeight="600" sx={{ mb: 1.5 }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1.5 }}>
         {t('home.last35Days')}
       </Typography>
 
@@ -31,7 +31,7 @@ export default function ActivityMosaic({ summary }) {
           const filled = new Set(summary[daysField]);
           return (
             <React.Fragment key={key}>
-              <Typography variant="caption" color="text.secondary" noWrap>
+              <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
                 {t(`home.module.${key}`)}
               </Typography>
               {days.map((day, index) => {

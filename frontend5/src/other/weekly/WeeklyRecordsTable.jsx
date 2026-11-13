@@ -33,7 +33,7 @@ export default function WeeklyRecordsTable({ records }) {
         }}
       >
         <TrendingUp sx={{ fontSize: 22 }} />
-        <Typography variant="subtitle1" fontWeight="600">
+        <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
           {t('weekly.recordsList')}
         </Typography>
       </Box>
@@ -55,7 +55,7 @@ export default function WeeklyRecordsTable({ records }) {
             ) : (
               <StyledTableRow>
                 <StyledTableCell colSpan={4} align="center">
-                  <Typography variant="body1" color="text.secondary" sx={{ py: 4 }}>
+                  <Typography variant="body1" sx={{ color: 'text.secondary', py: 4 }}>
                     {t('weekly.noRecords')}
                   </Typography>
                 </StyledTableCell>

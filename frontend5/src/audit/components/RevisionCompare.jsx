@@ -65,12 +65,12 @@ const RevisionCompare = ({
         }}
       >
         <CardContent sx={{ p: 4 }}>
-          <Box textAlign="center" mb={4}>
+          <Box sx={{ textAlign: 'center', mb: 4 }}>
             <CompareArrowsIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
-            <Typography variant="h5" fontWeight="600" color="white" mb={1}>
+            <Typography variant="h5" sx={{ fontWeight: '600', color: 'white', mb: 1 }}>
               {t('audit.selectTwo')}
             </Typography>
-            <Typography variant="body1" color="rgba(255, 255, 255, 0.7)">
+            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
               {t('audit.selectedCount', { count: selectedRevisions.length })}
             </Typography>
 
@@ -125,8 +125,15 @@ const RevisionCompare = ({
                     }}
                   >
                     <CardContent sx={{ p: 2 }}>
-                      <Box display="flex" justifyContent="space-between" alignItems="start" mb={1}>
-                        <Typography variant="h6" fontWeight="700" color="white">
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'start',
+                          mb: 1,
+                        }}
+                      >
+                        <Typography variant="h6" sx={{ fontWeight: '700', color: 'white' }}>
                           #{revision.revisionNumber}
                         </Typography>
                         {isSelected && (
@@ -142,7 +149,7 @@ const RevisionCompare = ({
                           />
                         )}
                       </Box>
-                      <Typography variant="caption" color="rgba(255, 255, 255, 0.7)">
+                      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                         {new Date(revision.revisionTimestamp).toLocaleString('pl-PL')}
                       </Typography>
                     </CardContent>
@@ -170,7 +177,7 @@ const RevisionCompare = ({
         }}
       >
         <CircularProgress size={60} sx={{ mb: 3, color: '#4caf50' }} />
-        <Typography variant="h6" color="white" fontWeight="600">
+        <Typography variant="h6" sx={{ color: 'white', fontWeight: '600' }}>
           {t('audit.loadingComparison')}
         </Typography>
       </Card>
@@ -198,10 +205,12 @@ const RevisionCompare = ({
         }}
       >
         <CardContent sx={{ p: 4 }}>
-          <Box display="flex" alignItems="center" justifyContent="space-between" mb={3}>
-            <Box display="flex" alignItems="center" gap={2}>
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <CompareArrowsIcon sx={{ fontSize: 32, color: 'white' }} />
-              <Typography variant="h4" fontWeight="700" color="white">
+              <Typography variant="h4" sx={{ fontWeight: '700', color: 'white' }}>
                 {t('audit.versionComparison')}
               </Typography>
             </Box>
@@ -234,9 +243,7 @@ const RevisionCompare = ({
 
             <Grid
               size={{ xs: 12, md: 2 }}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
               <ArrowForwardIcon sx={{ fontSize: 40, color: '#4caf50' }} />
             </Grid>
@@ -269,7 +276,7 @@ const RevisionCompare = ({
             borderBottom: theme.palette.card.border,
           }}
         >
-          <Typography variant="h6" fontWeight="600" color="white">
+          <Typography variant="h6" sx={{ fontWeight: '600', color: 'white' }}>
             {t('audit.macroChanges')}
           </Typography>
         </Box>
@@ -338,45 +345,45 @@ const VersionInfo = ({ title, revision, color, borderColor }) => {
       }}
     >
       <CardContent sx={{ p: 3 }}>
-        <Typography variant="h6" fontWeight="600" color="white" mb={2}>
+        <Typography variant="h6" sx={{ fontWeight: '600', color: 'white', mb: 2 }}>
           {title}
         </Typography>
 
-        <Box display="flex" flexDirection="column" gap={1}>
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               {t('audit.revision')}:
             </Typography>
-            <Typography variant="body2" fontWeight="600" color="white">
+            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
               #{revision.revisionNumber}
             </Typography>
           </Box>
 
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               {t('audit.date')}:
             </Typography>
-            <Typography variant="body2" fontWeight="600" color="white">
+            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
               {new Date(revision.revisionTimestamp).toLocaleDateString('pl-PL')}
             </Typography>
           </Box>
 
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               {t('audit.time')}:
             </Typography>
-            <Typography variant="body2" fontWeight="600" color="white">
+            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
               {new Date(revision.revisionTimestamp).toLocaleTimeString('pl-PL')}
             </Typography>
           </Box>
 
           <Divider sx={{ my: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
 
-          <Box display="flex" justifyContent="space-between">
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.8)">
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
               {t('audit.calories')}:
             </Typography>
-            <Typography variant="body2" fontWeight="600" color="white">
+            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
               {revision.dietSummary.kcal.toFixed(1)} kcal
             </Typography>
           </Box>
@@ -414,8 +421,8 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
       <CardContent sx={{ p: 2 }}>
         <Typography
           variant="caption"
-          color="rgba(255, 255, 255, 0.7)"
           sx={{
+            color: 'rgba(255, 255, 255, 0.7)',
             mb: 1.5,
             display: 'block',
             textTransform: 'uppercase',
@@ -427,7 +434,7 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
         </Typography>
 
         {/* Stara wartość */}
-        <Box display="flex" alignItems="baseline" gap={1} mb={1}>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
           <Typography
             variant="h6"
             sx={{
@@ -438,17 +445,17 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
           >
             {oldValue.toFixed(1)}
           </Typography>
-          <Typography variant="caption" color="rgba(255, 255, 255, 0.4)">
+          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)' }}>
             {unit}
           </Typography>
         </Box>
 
         {/* Nowa wartość */}
-        <Box display="flex" alignItems="baseline" gap={1} mb={2}>
-          <Typography variant="h5" fontWeight="700" sx={{ color }}>
+        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
+          <Typography variant="h5" sx={{ fontWeight: '700', color }}>
             {newValue.toFixed(1)}
           </Typography>
-          <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
             {unit}
           </Typography>
         </Box>
@@ -456,10 +463,10 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
         {/* Zmiana */}
         {hasChange && (
           <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
             sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
               pt: 1.5,
               borderTop: '1px solid rgba(255, 255, 255, 0.1)',
             }}
@@ -478,7 +485,7 @@ const MacroChange = ({ label, changeDetail, unit, color }) => {
                 },
               }}
             />
-            <Typography variant="caption" fontWeight="600" sx={{ color: changeColor }}>
+            <Typography variant="caption" sx={{ fontWeight: '600', color: changeColor }}>
               {percentChange.toFixed(1)}%
             </Typography>
           </Box>

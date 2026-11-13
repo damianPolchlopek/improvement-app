@@ -15,12 +15,14 @@ export default function ErrorAlert({ error, severity = 'error' }) {
 
   return (
     <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      flexDirection="column"
-      minHeight="200px"
-      marginTop={2}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        minHeight: '200px',
+        marginTop: 2,
+      }}
     >
       <Alert
         severity={severity}
@@ -30,7 +32,7 @@ export default function ErrorAlert({ error, severity = 'error' }) {
           {t('common.error')}: {code}
         </AlertTitle>
         <div>{message}</div>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 0.5 }}>
           {t('common.occurred')}: {timestamp}
         </Typography>
         {details && (

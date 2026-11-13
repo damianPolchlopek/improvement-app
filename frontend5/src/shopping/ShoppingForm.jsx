@@ -68,7 +68,7 @@ export default function ShoppingForm({ categories, defaultCategory }) {
         }}
       >
         <AddShoppingCart sx={{ fontSize: 22 }} />
-        <Typography variant="subtitle1" fontWeight="600">
+        <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
           {t('shopping.addItem')}
         </Typography>
       </Box>
@@ -76,7 +76,7 @@ export default function ShoppingForm({ categories, defaultCategory }) {
       {/* Form body */}
       <CardContent sx={{ p: 3 }}>
         <form onSubmit={handleSubmit}>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={2} sx={{ alignItems: 'center' }}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 label={t('shopping.name')}

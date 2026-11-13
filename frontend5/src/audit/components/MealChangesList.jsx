@@ -61,10 +61,10 @@ const MealChangesList = ({ changes }) => {
         }}
       >
         <RestaurantIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
-        <Typography variant="h6" color="rgba(255, 255, 255, 0.7)">
+        <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
           {t('audit.noMealChanges')}
         </Typography>
-        <Typography variant="body2" color="rgba(255, 255, 255, 0.5)" sx={{ mt: 1 }}>
+        <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.5)', mt: 1 }}>
           {t('audit.noMealChangesDesc')}
         </Typography>
       </Card>
@@ -95,7 +95,7 @@ const MealChangesList = ({ changes }) => {
             }}
           >
             <AddIcon sx={{ color: '#4caf50', fontSize: 28 }} />
-            <Typography variant="h6" fontWeight="600" color="#4caf50">
+            <Typography variant="h6" sx={{ fontWeight: '600', color: '#4caf50' }}>
               {t('audit.mealsAddedCount', { count: changes.mealsAdded.length })}
             </Typography>
           </Box>
@@ -132,7 +132,7 @@ const MealChangesList = ({ changes }) => {
             }}
           >
             <RemoveIcon sx={{ color: '#f44336', fontSize: 28 }} />
-            <Typography variant="h6" fontWeight="600" color="#f44336">
+            <Typography variant="h6" sx={{ fontWeight: '600', color: '#f44336' }}>
               {t('audit.mealsRemovedCount', { count: changes.mealsRemoved.length })}
             </Typography>
           </Box>
@@ -169,7 +169,7 @@ const MealChangesList = ({ changes }) => {
             }}
           >
             <EditIcon sx={{ color: '#2196f3', fontSize: 28 }} />
-            <Typography variant="h6" fontWeight="600" color="#2196f3">
+            <Typography variant="h6" sx={{ fontWeight: '600', color: '#2196f3' }}>
               {t('audit.mealsModifiedCount', { count: changes.mealsModified.length })}
             </Typography>
           </Box>
@@ -216,29 +216,29 @@ const MealCard = ({ meal, type }) => {
       }}
     >
       <CardContent sx={{ p: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="start" mb={2}>
-          <Box flex={1}>
-            <Box display="flex" alignItems="center" gap={1} mb={1}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               {isAdded ? (
                 <AddIcon sx={{ color: textColor, fontSize: 20 }} />
               ) : (
                 <RemoveIcon sx={{ color: textColor, fontSize: 20 }} />
               )}
-              <Typography variant="h6" fontWeight="700" color="white">
+              <Typography variant="h6" sx={{ fontWeight: '700', color: 'white' }}>
                 {meal.name}
               </Typography>
             </Box>
 
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
               {t('audit.portion')}: <strong>{meal.portionMultiplier}x</strong>
             </Typography>
           </Box>
 
-          <Box textAlign="right">
-            <Typography variant="h5" fontWeight="700" sx={{ color: '#ff9800', mb: 0.5 }}>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography variant="h5" sx={{ fontWeight: '700', color: '#ff9800', mb: 0.5 }}>
               {meal.cachedKcal.toFixed(0)}
             </Typography>
-            <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               kcal
             </Typography>
           </Box>
@@ -256,10 +256,10 @@ const MealCard = ({ meal, type }) => {
                 border: '1px solid rgba(33, 150, 243, 0.2)',
               }}
             >
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+              <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                 {t('food.protein')}
               </Typography>
-              <Typography variant="body1" fontWeight="700" color="#2196f3">
+              <Typography variant="body1" sx={{ fontWeight: '700', color: '#2196f3' }}>
                 {meal.cachedProtein.toFixed(1)}g
               </Typography>
             </Box>
@@ -274,10 +274,10 @@ const MealCard = ({ meal, type }) => {
                 border: '1px solid rgba(76, 175, 80, 0.2)',
               }}
             >
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+              <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                 {t('food.carbs')}
               </Typography>
-              <Typography variant="body1" fontWeight="700" color="#4caf50">
+              <Typography variant="body1" sx={{ fontWeight: '700', color: '#4caf50' }}>
                 {meal.cachedCarbohydrates.toFixed(1)}g
               </Typography>
             </Box>
@@ -292,10 +292,10 @@ const MealCard = ({ meal, type }) => {
                 border: '1px solid rgba(253, 216, 53, 0.2)',
               }}
             >
-              <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+              <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                 {t('food.fat')}
               </Typography>
-              <Typography variant="body1" fontWeight="700" color="#fdd835">
+              <Typography variant="body1" sx={{ fontWeight: '700', color: '#fdd835' }}>
                 {meal.cachedFat.toFixed(1)}g
               </Typography>
             </Box>
@@ -313,8 +313,8 @@ const MealCard = ({ meal, type }) => {
           >
             <Typography
               variant="caption"
-              color="rgba(255, 255, 255, 0.6)"
               sx={{
+                color: 'rgba(255, 255, 255, 0.6)',
                 mb: 1,
                 display: 'block',
                 textTransform: 'uppercase',
@@ -326,12 +326,12 @@ const MealCard = ({ meal, type }) => {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
               {meal.ingredients.slice(0, 3).map((ing) => (
-                <Typography key={ing.id} variant="body2" color="rgba(255, 255, 255, 0.8)">
+                <Typography key={ing.id} variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                   • {ing.name}: {ing.amount} {ing.unit}
                 </Typography>
               ))}
               {meal.ingredients.length > 3 && (
-                <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
+                <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                   {t('audit.andMore', { count: meal.ingredients.length - 3 })}
                 </Typography>
               )}
@@ -371,11 +371,11 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
       }}
     >
       <CardContent sx={{ p: 3 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="start">
-          <Box flex={1}>
-            <Box display="flex" alignItems="center" gap={1} mb={2}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
               <EditIcon sx={{ color: '#2196f3', fontSize: 20 }} />
-              <Typography variant="h6" fontWeight="700" color="white">
+              <Typography variant="h6" sx={{ fontWeight: '700', color: 'white' }}>
                 {meal.name}
               </Typography>
               <Chip
@@ -443,15 +443,19 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
             {/* Dodane składniki */}
             {changes.ingredientsAdded.length > 0 && (
               <Box sx={{ mb: 3 }}>
-                <Box display="flex" alignItems="center" gap={1} mb={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <AddIcon sx={{ fontSize: 18, color: '#4caf50' }} />
-                  <Typography variant="body2" fontWeight="600" color="#4caf50">
+                  <Typography variant="body2" sx={{ fontWeight: '600', color: '#4caf50' }}>
                     {t('audit.ingredientsAdded')}
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                   {changes.ingredientsAdded.map((ing) => (
-                    <Typography key={ing.id} variant="body2" color="rgba(255, 255, 255, 0.8)">
+                    <Typography
+                      key={ing.id}
+                      variant="body2"
+                      sx={{ color: 'rgba(255, 255, 255, 0.8)' }}
+                    >
                       • {ing.name}: {ing.amount} {ing.unit}
                     </Typography>
                   ))}
@@ -462,9 +466,9 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
             {/* Usunięte składniki */}
             {changes.ingredientsRemoved.length > 0 && (
               <Box sx={{ mb: 3 }}>
-                <Box display="flex" alignItems="center" gap={1} mb={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <RemoveIcon sx={{ fontSize: 18, color: '#f44336' }} />
-                  <Typography variant="body2" fontWeight="600" color="#f44336">
+                  <Typography variant="body2" sx={{ fontWeight: '600', color: '#f44336' }}>
                     {t('audit.ingredientsRemoved')}
                   </Typography>
                 </Box>
@@ -488,19 +492,19 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
             {/* Zmodyfikowane składniki */}
             {changes.ingredientsModified.length > 0 && (
               <Box>
-                <Box display="flex" alignItems="center" gap={1} mb={1}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <EditIcon sx={{ fontSize: 18, color: '#2196f3' }} />
-                  <Typography variant="body2" fontWeight="600" color="#2196f3">
+                  <Typography variant="body2" sx={{ fontWeight: '600', color: '#2196f3' }}>
                     {t('audit.ingredientsModified')}
                   </Typography>
                 </Box>
                 <Box sx={{ pl: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
                   {changes.ingredientsModified.map(({ ingredient, oldAmount, newAmount }) => (
                     <Box key={ingredient.id}>
-                      <Typography variant="body2" color="white" fontWeight="600">
+                      <Typography variant="body2" sx={{ color: 'white', fontWeight: '600' }}>
                         • {ingredient.name}:
                       </Typography>
-                      <Box display="flex" alignItems="center" gap={1} ml={2}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 2 }}>
                         <Typography
                           variant="caption"
                           sx={{
@@ -510,10 +514,10 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
                         >
                           {oldAmount} {ingredient.unit}
                         </Typography>
-                        <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+                        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                           →
                         </Typography>
-                        <Typography variant="caption" fontWeight="700" color="#4caf50">
+                        <Typography variant="caption" sx={{ fontWeight: '700', color: '#4caf50' }}>
                           {newAmount} {ingredient.unit}
                         </Typography>
                         {oldAmount !== newAmount && (
@@ -551,9 +555,9 @@ const ModifiedMealCard = ({ meal, changes, isExpanded, onToggle }) => {
 
 // Helper component
 const ChangeIndicator = ({ icon, text, color }) => (
-  <Box display="flex" alignItems="center" gap={1}>
+  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
     <Box sx={{ color }}>{icon}</Box>
-    <Typography variant="body2" color="rgba(255, 255, 255, 0.9)">
+    <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.9)' }}>
       {text}
     </Typography>
   </Box>

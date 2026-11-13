@@ -21,7 +21,7 @@ export default function PageLoader({ text }) {
           color: 'primary.main',
         }}
       />
-      <Typography variant="h6" color="text.primary" fontWeight="600">
+      <Typography variant="h6" sx={{ color: 'text.primary', fontWeight: '600' }}>
         {text || t('messages.loading')}
       </Typography>
     </Box>

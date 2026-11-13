@@ -30,7 +30,7 @@ export default function MaximumExerciseView() {
       label: t('exercise.date'),
       accessor: 'date',
       render: (value) => (
-        <Typography variant="body1" fontWeight="500">
+        <Typography variant="body1" sx={{ fontWeight: '500' }}>
           {value}
         </Typography>
       ),
@@ -69,9 +69,9 @@ export default function MaximumExerciseView() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <BarChart sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('training.maxResults')}
                 </Typography>
               </Box>
@@ -102,12 +102,12 @@ export default function MaximumExerciseView() {
                 label={t('training.type')}
               />
 
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <FitnessCenter fontSize="small" color="action" />
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {t('training.maxRecordsCount')}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="600">
+                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                   {data?.content?.length || 0}
                 </Typography>
               </Box>
@@ -128,7 +128,7 @@ export default function MaximumExerciseView() {
               }}
             >
               <TrendingUp sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" fontWeight="600">
+              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                 {t('training.bestResultsForType', { type: trainingType })}
               </Typography>
             </Box>

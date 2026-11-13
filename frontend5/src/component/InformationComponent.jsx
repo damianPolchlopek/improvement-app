@@ -12,7 +12,7 @@ export default function InformationComponent({ children }) {
         bgcolor: 'background.paper',
       }}
     >
-      <Typography variant="h6" color="text.secondary" align="center">
+      <Typography variant="h6" sx={{ color: 'text.secondary' }} align="center">
         {children}
       </Typography>
     </Box>

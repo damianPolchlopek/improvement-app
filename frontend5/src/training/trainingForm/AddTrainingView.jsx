@@ -100,7 +100,7 @@ export default function AddTrainingView() {
         {isError && (
           <Fade in>
             <Alert severity="error" sx={{ borderRadius: 2, mb: 3 }}>
-              <Typography fontWeight="500">
+              <Typography sx={{ fontWeight: '500' }}>
                 {t('training.errorLoading')}: {error.message}
               </Typography>
             </Alert>
@@ -116,7 +116,7 @@ export default function AddTrainingView() {
               color: 'text.primary',
             }}
           >
-            <Typography variant="subtitle1" fontWeight="600">
+            <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
               {t('training.formTitle')}
             </Typography>
           </Box>

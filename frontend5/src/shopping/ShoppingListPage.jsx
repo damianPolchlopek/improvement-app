@@ -83,9 +83,9 @@ export default function ShoppingListPage() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <ShoppingCart sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('shopping.title')}
                 </Typography>
               </Box>
@@ -124,12 +124,12 @@ export default function ShoppingListPage() {
                 </Select>
               </FormControl>
 
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <ListAlt fontSize="small" color="action" />
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                   {t('shopping.itemsInCategory')}
                 </Typography>
-                <Typography variant="subtitle1" fontWeight="600">
+                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                   {itemsLoading ? '...' : itemsList.length}
                 </Typography>
               </Box>

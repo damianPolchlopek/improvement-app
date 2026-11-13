@@ -83,8 +83,8 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
     >
       <CardContent sx={{ p: 3 }}>
         {/* Header */}
-        <Box display="flex" justifyContent="space-between" alignItems="start" mb={3}>
-          <Box display="flex" alignItems="center" gap={2}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <Box
               sx={{
                 fontSize: '2.5rem',
@@ -96,7 +96,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             </Box>
 
             <Box>
-              <Typography variant="h6" fontWeight="700" color="white">
+              <Typography variant="h6" sx={{ fontWeight: '700', color: 'white' }}>
                 {t('audit.revisionNo', { number: revision.revisionNumber })}
               </Typography>
               <Chip
@@ -114,12 +114,10 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
             </Box>
           </Box>
 
-          <Box textAlign="right">
+          <Box sx={{ textAlign: 'right' }}>
             <Typography
               variant="body2"
-              color="rgba(255, 255, 255, 0.9)"
-              fontWeight="600"
-              sx={{ mb: 0.5 }}
+              sx={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: '600', mb: 0.5 }}
             >
               {timeInfo.time}
             </Typography>
@@ -147,9 +145,17 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
               p: 2,
             }}
           >
-            <Box display="flex" alignItems="center" justifyContent="center" gap={2} py={3}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 2,
+                py: 3,
+              }}
+            >
               <CircularProgress size={24} sx={{ color: '#4caf50' }} />
-              <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                 {t('audit.loadingDetails')}
               </Typography>
             </Box>
@@ -206,23 +212,23 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
 
             {/* Footer Info */}
             <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
               sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 pb: expanded ? 2 : 0,
                 borderBottom: expanded ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
                 transition: 'all 0.3s ease',
               }}
             >
-              <Box display="flex" alignItems="center" gap={1}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <LocalDiningIcon sx={{ fontSize: 18, color: 'rgba(255, 255, 255, 0.6)' }} />
-                <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                   {t('audit.mealsCount', { count: meals.length })}
                 </Typography>
               </Box>
 
-              <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
                 {t('audit.dietDate')}:{' '}
                 <strong style={{ color: 'white' }}>{dietSummary.date}</strong>
               </Typography>
@@ -250,8 +256,8 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
                 <Box sx={{ mt: 2, pt: 2 }}>
                   <Typography
                     variant="caption"
-                    color="rgba(255, 255, 255, 0.6)"
                     sx={{
+                      color: 'rgba(255, 255, 255, 0.6)',
                       mb: 2,
                       display: 'block',
                       textTransform: 'uppercase',
@@ -281,7 +287,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
               p: 2,
             }}
           >
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" align="center">
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }} align="center">
               {t('audit.clickToSee')}
             </Typography>
           </Card>
@@ -295,7 +301,7 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
               p: 2,
             }}
           >
-            <Typography variant="body2" color="rgba(255, 255, 255, 0.6)" align="center">
+            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }} align="center">
               {t('audit.clickToSee')}
             </Typography>
           </Card>
@@ -307,11 +313,11 @@ const RevisionCard = ({ revision, onClick, isSelected }) => {
 
 // Helper Components
 const MacroDisplay = ({ label, value, unit, color }) => (
-  <Box textAlign="center">
+  <Box sx={{ textAlign: 'center' }}>
     <Typography
       variant="caption"
-      color="rgba(255, 255, 255, 0.6)"
       sx={{
+        color: 'rgba(255, 255, 255, 0.6)',
         mb: 0.5,
         display: 'block',
         textTransform: 'uppercase',
@@ -321,7 +327,7 @@ const MacroDisplay = ({ label, value, unit, color }) => (
     >
       {label}
     </Typography>
-    <Typography variant="h6" fontWeight="700" sx={{ color, lineHeight: 1 }}>
+    <Typography variant="h6" sx={{ fontWeight: '700', color, lineHeight: 1 }}>
       {value.toFixed(1)}
     </Typography>
     <Typography
@@ -346,9 +352,9 @@ const MealCard = ({ meal, index }) => {
       }}
     >
       <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-        <Box display="flex" justifyContent="space-between" alignItems="start">
-          <Box flex={1}>
-            <Box display="flex" alignItems="center" gap={1} mb={0.5}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+          <Box sx={{ flex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
               <Chip
                 label={`#${index + 1}`}
                 size="small"
@@ -360,21 +366,21 @@ const MealCard = ({ meal, index }) => {
                   fontWeight: 700,
                 }}
               />
-              <Typography variant="body2" color="white" fontWeight="600">
+              <Typography variant="body2" sx={{ color: 'white', fontWeight: '600' }}>
                 {meal.name}
               </Typography>
             </Box>
 
-            <Typography variant="caption" color="rgba(255, 255, 255, 0.6)">
+            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               {t('audit.portion')}: {meal.portionMultiplier}x
             </Typography>
           </Box>
 
-          <Box textAlign="right">
-            <Typography variant="h6" fontWeight="700" sx={{ color: '#ff9800' }}>
+          <Box sx={{ textAlign: 'right' }}>
+            <Typography variant="h6" sx={{ fontWeight: '700', color: '#ff9800' }}>
               {meal.cachedKcal.toFixed(0)}
             </Typography>
-            <Typography variant="caption" color="rgba(255, 255, 255, 0.5)">
+            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
               kcal
             </Typography>
           </Box>
