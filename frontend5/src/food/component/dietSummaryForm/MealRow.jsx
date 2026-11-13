@@ -121,15 +121,17 @@ export default function MealRow({ meal: single, index }) {
           <TextField
             value={currentAmount}
             size="small"
-            inputProps={{
-              style: { width: 60 },
-              type: 'number',
-              min: 1,
-              step: 1,
-            }}
             variant="outlined"
             onChange={handleMealAmountChange}
             onClick={handleAmountInputClick}
+            slotProps={{
+              htmlInput: {
+                style: { width: 60 },
+                type: 'number',
+                min: 1,
+                step: 1,
+              },
+            }}
           />
         </StyledTableCell>
       </StyledTableRow>

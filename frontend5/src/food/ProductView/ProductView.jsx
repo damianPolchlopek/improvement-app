@@ -81,12 +81,7 @@ export default function ProductView() {
       render: (value) => (
         <Typography
           variant="body2"
-          fontWeight="600"
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
+          sx={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: 1 }}
         >
           {value}
         </Typography>
@@ -153,9 +148,9 @@ export default function ProductView() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <RestaurantMenuIcon sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('food.productDatabase')}
                 </Typography>
               </Box>
@@ -185,32 +180,34 @@ export default function ProductView() {
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
                 sx={{ minWidth: 220 }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: searchInput ? (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        aria-label="clear search"
-                        onClick={() => setSearchInput('')}
-                      >
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ) : null,
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon fontSize="small" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: searchInput ? (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          aria-label="clear search"
+                          onClick={() => setSearchInput('')}
+                        >
+                          <ClearIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ) : null,
+                  },
                 }}
               />
 
-              <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary', ml: 'auto' }}>
                 {typedProductName
                   ? t('food.forQuery', { query: typedProductName })
                   : t('food.productsInCategory')}
                 {': '}
-                <Typography component="span" variant="subtitle1" fontWeight="600">
+                <Typography component="span" variant="subtitle1" sx={{ fontWeight: '600' }}>
                   {productList?.length || 0}
                 </Typography>
               </Typography>
@@ -232,7 +229,7 @@ export default function ProductView() {
               }}
             >
               <CategoryIcon sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" fontWeight="600">
+              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
                 {t('food.productCategories')}
               </Typography>
             </Box>
@@ -246,10 +243,10 @@ export default function ProductView() {
               </Box>
             ) : isCategoryError ? (
               <Box sx={{ p: 4, textAlign: 'center' }}>
-                <Typography color="error" variant="h6">
+                <Typography sx={{ color: 'error' }} variant="h6">
                   {t('food.errorLoadingCategories')}
                 </Typography>
-                <Typography color="error" variant="body2">
+                <Typography sx={{ color: 'error' }} variant="body2">
                   {categoryError?.message || t('food.unknownError')}
                 </Typography>
               </Box>

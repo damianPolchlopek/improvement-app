@@ -208,8 +208,14 @@ theme = {
     MuiGrid: {
       defaultProps: {
         spacing: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
+      },
+      // MUI v9 usunął system props, więc justifyContent/alignItems w defaultProps
+      // byłyby ignorowane — te same domyślne wartości ustawiamy jako style
+      styleOverrides: {
+        root: {
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
       },
     },
   },

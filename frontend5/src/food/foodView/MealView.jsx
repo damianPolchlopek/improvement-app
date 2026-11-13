@@ -86,7 +86,7 @@ export default function MealView() {
       <CenteredContainer>
         <Card elevation={6} sx={{ borderRadius: 3, p: 3, maxWidth: 600 }}>
           <CardContent sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" color="error">
+            <Typography variant="h6" sx={{ color: 'error' }}>
               {t('food.error')}: {error?.message || t('food.unknownError')}
             </Typography>
           </CardContent>
@@ -110,9 +110,9 @@ export default function MealView() {
             }}
           >
             <CardContent sx={{ p: 3 }}>
-              <Box display="flex" alignItems="center" gap={2} mb={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                 <Restaurant sx={{ fontSize: 32 }} />
-                <Typography variant="h4" fontWeight="600">
+                <Typography variant="h4" sx={{ fontWeight: '600' }}>
                   {t('food.browseMeals')}
                 </Typography>
               </Box>
@@ -142,23 +142,25 @@ export default function MealView() {
                 value={searchInput}
                 onChange={(event) => setSearchInput(event.target.value)}
                 sx={{ minWidth: 220 }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon fontSize="small" />
-                    </InputAdornment>
-                  ),
-                  endAdornment: searchInput ? (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        aria-label="clear search"
-                        onClick={() => setSearchInput('')}
-                      >
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ) : null,
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon fontSize="small" />
+                      </InputAdornment>
+                    ),
+                    endAdornment: searchInput ? (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          aria-label="clear search"
+                          onClick={() => setSearchInput('')}
+                        >
+                          <ClearIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ) : null,
+                  },
                 }}
               />
 
@@ -204,12 +206,12 @@ export default function MealView() {
         {/* Results */}
         <Grid size={12}>
           {isLoading ? (
-            <Box display="flex" justifyContent="center" py={4}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
               <CircularProgress size={40} />
             </Box>
           ) : mealList.length === 0 ? (
-            <Box textAlign="center" py={4}>
-              <Typography color="text.secondary">{t('food.noMealsFound')}</Typography>
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography sx={{ color: 'text.secondary' }}>{t('food.noMealsFound')}</Typography>
             </Box>
           ) : (
             <Grid container spacing={3}>

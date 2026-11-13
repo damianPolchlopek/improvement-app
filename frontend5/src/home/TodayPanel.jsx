@@ -65,7 +65,7 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
         backgroundColor: alpha(color, status.due ? 0.06 : 0.04),
       }}
     >
-      <Box display="flex" alignItems="center" gap={1.5} sx={{ mb: status.due ? 1.5 : 0 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: status.due ? 1.5 : 0 }}>
         <Box
           sx={{
             width: 36,
@@ -81,14 +81,14 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
         >
           {status.due ? ICONS[moduleKey] : <CheckIcon fontSize="small" />}
         </Box>
-        <Box minWidth={0}>
-          <Typography variant="subtitle2" fontWeight="600">
+        <Box sx={{ minWidth: 0 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
             {t(`home.module.${moduleKey}`)}
           </Typography>
           <Typography
             variant="caption"
             component="div"
-            color={status.due ? 'error.main' : 'text.secondary'}
+            sx={{ color: status.due ? 'error.main' : 'text.secondary' }}
           >
             {caption}
           </Typography>
@@ -121,7 +121,7 @@ function DailyAction() {
 
   return (
     <>
-      <Box display="flex" flexWrap="wrap" gap={0.75} sx={{ mb: 1.5 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.75, mb: 1.5 }}>
         {DAILY_FIELDS.map((field) => (
           <Chip
             key={field}
@@ -233,19 +233,18 @@ export default function TodayPanel({ summary }) {
     >
       <Typography
         variant="body2"
-        color="text.secondary"
-        sx={{ '&::first-letter': { textTransform: 'uppercase' } }}
+        sx={{ color: 'text.secondary', '&::first-letter': { textTransform: 'uppercase' } }}
       >
         {dateLabel}
       </Typography>
-      <Typography variant="h4" fontWeight="700" sx={{ mb: 1.5 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1.5 }}>
         {doneCount === modules.length
           ? t('home.allDone')
           : t('home.todayProgress', { done: doneCount, total: modules.length })}
       </Typography>
 
       {/* Pasek postępu: jeden segment na moduł */}
-      <Box display="flex" gap={0.75} sx={{ mb: 3 }} aria-hidden="true">
+      <Box sx={{ display: 'flex', gap: 0.75, mb: 3 }} aria-hidden="true">
         {modules.map((module, index) => (
           <Box
             key={module.key}

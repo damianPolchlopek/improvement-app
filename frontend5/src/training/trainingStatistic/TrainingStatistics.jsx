@@ -52,7 +52,8 @@ const RANGE_PRESETS = [
 ];
 
 const fieldSx = {
-  '& .MuiOutlinedInput-root': {
+  // MUI X v8+: pickery renderują PickersOutlinedInput zamiast OutlinedInput
+  '& .MuiOutlinedInput-root, & .MuiPickersOutlinedInput-root': {
     borderRadius: 2,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     color: 'text.primary',
@@ -187,14 +188,14 @@ export default function TrainingStatistic() {
             }}
           >
             <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
-              <Stack direction="row" alignItems="center" gap={1.5} mb={2}>
+              <Stack direction="row" sx={{ alignItems: 'center', gap: 1.5, mb: 2 }}>
                 <Analytics sx={{ color: 'success.main' }} />
-                <Typography variant="h6" fontWeight={700} color="text.primary">
+                <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
                   {t('chart.title')}
                 </Typography>
               </Stack>
 
-              <Stack direction={{ xs: 'column', md: 'row' }} gap={2} alignItems="stretch">
+              <Stack direction={{ xs: 'column', md: 'row' }} sx={{ gap: 2, alignItems: 'stretch' }}>
                 {/* Exercises (multi-select) */}
                 <Autocomplete
                   multiple
@@ -204,9 +205,9 @@ export default function TrainingStatistic() {
                   options={exerciseNames}
                   onChange={(event, newValue) => handleExercisesChange(newValue)}
                   sx={{ flex: 1, minWidth: 240 }}
-                  renderTags={(value, getTagProps) =>
+                  renderValue={(value, getItemProps) =>
                     value.map((option, index) => {
-                      const { key, ...tagProps } = getTagProps({ index });
+                      const { key, ...tagProps } = getItemProps({ index });
                       return (
                         <Chip
                           key={key}
@@ -251,16 +252,19 @@ export default function TrainingStatistic() {
                       placeholder={t('chart.selectTemplate')}
                       variant="outlined"
                       sx={fieldSx}
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <>
-                            {isTemplateLoading ? (
-                              <CircularProgress size={18} sx={{ color: 'success.main' }} />
-                            ) : null}
-                            {params.InputProps.endAdornment}
-                          </>
-                        ),
+                      slotProps={{
+                        ...params.slotProps,
+                        input: {
+                          ...params.slotProps.input,
+                          endAdornment: (
+                            <>
+                              {isTemplateLoading ? (
+                                <CircularProgress size={18} sx={{ color: 'success.main' }} />
+                              ) : null}
+                              {params.slotProps.input.endAdornment}
+                            </>
+                          ),
+                        },
                       }}
                     />
                   )}
@@ -294,9 +298,7 @@ export default function TrainingStatistic() {
               {/* Date range row */}
               <Stack
                 direction={{ xs: 'column', sm: 'row' }}
-                gap={2}
-                alignItems={{ xs: 'stretch', sm: 'center' }}
-                mt={2}
+                sx={{ gap: 2, alignItems: { xs: 'stretch', sm: 'center' }, mt: 2 }}
               >
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
@@ -315,7 +317,7 @@ export default function TrainingStatistic() {
                   />
                 </LocalizationProvider>
 
-                <Stack direction="row" gap={1} flexWrap="wrap">
+                <Stack direction="row" sx={{ gap: 1, flexWrap: 'wrap' }}>
                   {RANGE_PRESETS.map((preset) => (
                     <Chip
                       key={preset.key}
@@ -363,7 +365,7 @@ export default function TrainingStatistic() {
             >
               <TrendingUp />
               <Box sx={{ textAlign: 'left' }}>
-                <Typography variant="h6" fontWeight={600}>
+                <Typography variant="h6" sx={{ fontWeight: 600 }}>
                   {chartType === 'Weight' ? t('chart.weight') : t('chart.capacity')}
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.85 }}>
@@ -389,7 +391,7 @@ export default function TrainingStatistic() {
                   }}
                 >
                   <CircularProgress size={48} sx={{ mb: 2, color: 'success.main' }} />
-                  <Typography variant="body1" color="text.primary">
+                  <Typography variant="body1" sx={{ color: 'text.primary' }}>
                     {t('chart.loadingChart')}
                   </Typography>
                 </Box>

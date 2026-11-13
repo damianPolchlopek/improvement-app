@@ -65,7 +65,7 @@ export default function WeeklyRecordTableRow({ record }) {
         }}
       >
         <StyledTableCell>
-          <Typography variant="body2" fontWeight="600">
+          <Typography variant="body2" sx={{ fontWeight: '600' }}>
             {record.name}
           </Typography>
         </StyledTableCell>
@@ -114,10 +114,12 @@ export default function WeeklyRecordTableRow({ record }) {
         onClose={() => setConfirmOpen(false)}
         maxWidth="sm"
         fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 3,
+              boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+            },
           },
         }}
       >
@@ -148,13 +150,13 @@ export default function WeeklyRecordTableRow({ record }) {
               borderColor: 'divider',
             }}
           >
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {t('weekly.name')}: <strong>{record.name}</strong>
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {t('weekly.category')}: <strong>{record.category}</strong>
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {t('weekly.date')}: <strong>{record.date}</strong>
             </Typography>
           </Box>

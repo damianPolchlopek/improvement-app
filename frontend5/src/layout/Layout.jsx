@@ -106,7 +106,7 @@ export default function Layout() {
       <TokenRefreshNotification />
 
       <Drawer
-        PaperProps={{ style: { width: 200 } }}
+        slotProps={{ paper: { style: { width: 200 } } }}
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}

@@ -120,7 +120,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
         <StyledTableCell>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <RestaurantIcon sx={{ color: theme.palette.primary.main, fontSize: 20 }} />
-            <Typography variant="body2" fontWeight="600">
+            <Typography variant="body2" sx={{ fontWeight: '600' }}>
               {formatDate(dietSummary.date)}
             </Typography>
           </Box>
@@ -246,27 +246,27 @@ export default function DietStatisticTableRow({ dietSummary }) {
                         }}
                       >
                         <StyledTableCell>
-                          <Typography variant="body2" fontWeight="500">
+                          <Typography variant="body2" sx={{ fontWeight: '500' }}>
                             {meal.name}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <Typography variant="body2" color="warning.main">
+                          <Typography variant="body2" sx={{ color: 'warning.main' }}>
                             {meal.kcal}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <Typography variant="body2" color="success.main">
+                          <Typography variant="body2" sx={{ color: 'success.main' }}>
                             {meal.protein}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <Typography variant="body2" color="info.main">
+                          <Typography variant="body2" sx={{ color: 'info.main' }}>
                             {meal.carbohydrates}
                           </Typography>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <Typography variant="body2" color="secondary.main">
+                          <Typography variant="body2" sx={{ color: 'secondary.main' }}>
                             {meal.fat}
                           </Typography>
                         </StyledTableCell>
@@ -288,10 +288,12 @@ export default function DietStatisticTableRow({ dietSummary }) {
         onClose={() => setConfirmOpen(false)}
         maxWidth="sm"
         fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: 3,
+              boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+            },
           },
         }}
       >
@@ -322,10 +324,10 @@ export default function DietStatisticTableRow({ dietSummary }) {
               borderColor: 'divider',
             }}
           >
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {t('food.date')}: <strong>{formatDate(dietSummary.date)}</strong>
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {t('food.calories')}: <strong>{formatInput(dietSummary.kcal)}</strong>
             </Typography>
           </Box>

@@ -60,19 +60,25 @@ export default function MealFilter({
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}
         sx={{ minWidth: 220 }}
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon fontSize="small" />
-            </InputAdornment>
-          ),
-          endAdornment: searchInput ? (
-            <InputAdornment position="end">
-              <IconButton size="small" aria-label="clear search" onClick={() => setSearchInput('')}>
-                <ClearIcon fontSize="small" />
-              </IconButton>
-            </InputAdornment>
-          ) : null,
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+            endAdornment: searchInput ? (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  aria-label="clear search"
+                  onClick={() => setSearchInput('')}
+                >
+                  <ClearIcon fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ) : null,
+          },
         }}
       />
 

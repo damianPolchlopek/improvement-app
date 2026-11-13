@@ -18,11 +18,13 @@ export default function IngredientRow({ ingredient, ingredientAmount, onAmountCh
           size="small"
           variant="outlined"
           onChange={handleAmountChange}
-          inputProps={{
-            style: { width: 80 },
-            type: 'number',
-            min: 0,
-            step: 0.1,
+          slotProps={{
+            htmlInput: {
+              style: { width: 80 },
+              type: 'number',
+              min: 0,
+              step: 0.1,
+            },
           }}
         />
       </StyledTableCell>

@@ -81,7 +81,7 @@ const CustomTooltip = ({ active, payload, label, t }) => {
               {entry.dataKey}
             </Typography>
           </Box>
-          <Typography variant="body2" fontWeight={700} sx={{ color: 'text.primary' }}>
+          <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.primary' }}>
             {entry.value}
           </Typography>
         </Box>
@@ -192,9 +192,9 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
           <LineChart
             data={data}
             margin={{ top: 8, right: 24, left: 4, bottom: 8 }}
-            onMouseDown={(e) => e && e.activeLabel != null && setRefAreaLeft(e.activeLabel)}
+            onMouseDown={(e) => e?.activeLabel != null && setRefAreaLeft(Number(e.activeLabel))}
             onMouseMove={(e) =>
-              refAreaLeft !== '' && e && e.activeLabel != null && setRefAreaRight(e.activeLabel)
+              refAreaLeft !== '' && e?.activeLabel != null && setRefAreaRight(Number(e.activeLabel))
             }
             onMouseUp={handleZoom}
           >

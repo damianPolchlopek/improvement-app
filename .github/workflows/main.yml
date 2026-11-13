@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Set up SSH
         run: |
@@ -26,9 +26,8 @@ jobs:
           ssh mutarexx@s2.small.pl "chmod +x /home/mutarexx/backend/scripts/convert_and_restart.sh"
 
       # === BACKEND ===
-      # Domyślna Java na runnerze to 17 — backend wymaga 21
       - name: Set up Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '21'

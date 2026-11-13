@@ -87,9 +87,9 @@ const AuditFilters = ({ filters, setFilters }) => {
         }}
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <Box display="flex" alignItems="center" gap={2}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <FilterListIcon sx={{ color: 'white', fontSize: 24 }} />
-          <Typography variant="h6" fontWeight="600" color="white">
+          <Typography variant="h6" sx={{ fontWeight: '600', color: 'white' }}>
             {t('audit.filters')}
           </Typography>
           {hasActiveFilters && (
@@ -107,7 +107,7 @@ const AuditFilters = ({ filters, setFilters }) => {
           )}
         </Box>
 
-        <Box display="flex" alignItems="center" gap={1}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {hasActiveFilters && (
             <Tooltip title={t('audit.clearAll')}>
               <Button
@@ -160,27 +160,6 @@ const AuditFilters = ({ filters, setFilters }) => {
                 label={t('audit.dateFrom')}
                 value={filters.dateFrom || ''}
                 onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CalendarIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: filters.dateFrom && (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleFilterChange('dateFrom', null)}
-                        sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                      >
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
@@ -205,6 +184,30 @@ const AuditFilters = ({ filters, setFilters }) => {
                   },
                   '& input[type="date"]::-webkit-calendar-picker-indicator': {
                     filter: 'invert(1)',
+                  },
+                }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CalendarIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: filters.dateFrom && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleFilterChange('dateFrom', null)}
+                          sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
+                        >
+                          <ClearIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+
+                  inputLabel: {
+                    shrink: true,
                   },
                 }}
               />
@@ -218,27 +221,6 @@ const AuditFilters = ({ filters, setFilters }) => {
                 label={t('audit.dateTo')}
                 value={filters.dateTo || ''}
                 onChange={(e) => handleFilterChange('dateTo', e.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <CalendarIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: filters.dateTo && (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleFilterChange('dateTo', null)}
-                        sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                      >
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
@@ -263,6 +245,30 @@ const AuditFilters = ({ filters, setFilters }) => {
                   },
                   '& input[type="date"]::-webkit-calendar-picker-indicator': {
                     filter: 'invert(1)',
+                  },
+                }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CalendarIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: filters.dateTo && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleFilterChange('dateTo', null)}
+                          sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
+                        >
+                          <ClearIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+
+                  inputLabel: {
+                    shrink: true,
                   },
                 }}
               />
@@ -309,20 +315,22 @@ const AuditFilters = ({ filters, setFilters }) => {
                     },
                   }}
                   MenuProps={{
-                    PaperProps: {
-                      sx: {
-                        backgroundColor: '#243441',
-                        color: 'white',
-                        borderRadius: 2,
-                        mt: 1,
-                        '& .MuiMenuItem-root': {
-                          '&:hover': {
-                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                          },
-                          '&.Mui-selected': {
-                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    slotProps: {
+                      paper: {
+                        sx: {
+                          backgroundColor: '#243441',
+                          color: 'white',
+                          borderRadius: 2,
+                          mt: 1,
+                          '& .MuiMenuItem-root': {
                             '&:hover': {
-                              backgroundColor: 'rgba(76, 175, 80, 0.3)',
+                              backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            },
+                            '&.Mui-selected': {
+                              backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                              '&:hover': {
+                                backgroundColor: 'rgba(76, 175, 80, 0.3)',
+                              },
                             },
                           },
                         },
@@ -331,24 +339,24 @@ const AuditFilters = ({ filters, setFilters }) => {
                   }}
                 >
                   <MenuItem value="ALL">
-                    <Box display="flex" alignItems="center" gap={1}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Typography>{t('audit.all')}</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="ADD">
-                    <Box display="flex" alignItems="center" gap={1}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <span style={{ fontSize: '1.2rem' }}>➕</span>
                       <Typography>{t('audit.added')}</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="MOD">
-                    <Box display="flex" alignItems="center" gap={1}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <span style={{ fontSize: '1.2rem' }}>✏️</span>
                       <Typography>{t('audit.modified')}</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="DEL">
-                    <Box display="flex" alignItems="center" gap={1}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <span style={{ fontSize: '1.2rem' }}>🗑️</span>
                       <Typography>{t('audit.removed')}</Typography>
                     </Box>
@@ -365,24 +373,6 @@ const AuditFilters = ({ filters, setFilters }) => {
                 placeholder={t('audit.mealNamePlaceholder')}
                 value={filters.searchTerm}
                 onChange={(e) => handleFilterChange('searchTerm', e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
-                    </InputAdornment>
-                  ),
-                  endAdornment: filters.searchTerm && (
-                    <InputAdornment position="end">
-                      <IconButton
-                        size="small"
-                        onClick={() => handleFilterChange('searchTerm', '')}
-                        sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                      >
-                        <ClearIcon fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     borderRadius: 2,
@@ -406,6 +396,26 @@ const AuditFilters = ({ filters, setFilters }) => {
                     },
                   },
                 }}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: 20 }} />
+                      </InputAdornment>
+                    ),
+                    endAdornment: filters.searchTerm && (
+                      <InputAdornment position="end">
+                        <IconButton
+                          size="small"
+                          onClick={() => handleFilterChange('searchTerm', '')}
+                          sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
+                        >
+                          <ClearIcon fontSize="small" />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
               />
             </Grid>
           </Grid>
@@ -421,8 +431,8 @@ const AuditFilters = ({ filters, setFilters }) => {
             >
               <Typography
                 variant="caption"
-                color="rgba(255, 255, 255, 0.6)"
                 sx={{
+                  color: 'rgba(255, 255, 255, 0.6)',
                   mb: 1.5,
                   display: 'block',
                   textTransform: 'uppercase',
@@ -433,7 +443,7 @@ const AuditFilters = ({ filters, setFilters }) => {
                 {t('audit.activeFiltersLabel')}
               </Typography>
 
-              <Box display="flex" flexWrap="wrap" gap={1}>
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 {filters.dateFrom && (
                   <Chip
                     label={t('audit.fromLabel', { date: filters.dateFrom })}

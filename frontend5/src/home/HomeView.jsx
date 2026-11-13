@@ -80,13 +80,13 @@ function HomeView() {
             border: theme.palette.card.border,
           }}
         >
-          <Box display="flex" alignItems="center" gap={1} sx={{ mb: 1.5 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
             <CloudDownload fontSize="small" />
-            <Typography variant="subtitle1" fontWeight="600">
+            <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
               {t('home.importTitle')}
             </Typography>
           </Box>
-          <Box display="flex" flexWrap="wrap" gap={1} sx={{ mb: 1.5 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 1.5 }}>
             <Button
               variant="outlined"
               color="success"

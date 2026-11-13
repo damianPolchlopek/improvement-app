@@ -23,7 +23,7 @@ function ErrorPage() {
     <>
       <Box component="nav" sx={{ width: { sm: 200 }, flexShrink: { sm: 0 } }}>
         <Navigator
-          PaperProps={{ style: { width: 200 } }}
+          slotProps={{ paper: { style: { width: 200 } } }}
           sx={{ display: { sm: 'block', xs: 'none' } }}
         />
       </Box>

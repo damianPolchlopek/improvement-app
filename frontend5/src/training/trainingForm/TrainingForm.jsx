@@ -30,7 +30,7 @@ import { TrainingViewUrl } from '../../utils/URLHelper.js';
 import {
   Add,
   ContentCopy,
-  DeleteOutline,
+  DeleteOutlined,
   KeyboardArrowUp,
   KeyboardArrowDown,
   FitnessCenter,
@@ -334,10 +334,10 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
         sx={{ py: 6, textAlign: 'center', border: '1px dashed', borderColor: 'divider' }}
       >
         <FitnessCenter sx={{ fontSize: 56, color: 'text.secondary', mb: 2 }} />
-        <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Typography variant="h6" sx={{ color: 'text.secondary' }} gutterBottom>
           {t('training.noExercisesInTraining')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>
+        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
           {t('training.loadTemplateOrAdd')}
         </Typography>
         <Button
@@ -368,16 +368,16 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           borderColor: 'divider',
         }}
       >
-        <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
+        <Typography variant="caption" sx={{ color: 'text.secondary', textAlign: 'center' }}>
           #
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
           {t('exercise.name')}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
           {t('exercise.reps')}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
           {t('exercise.weight')} (kg)
         </Typography>
         <span />
@@ -392,13 +392,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           let meta = null;
           if (err === 'series') {
             meta = (
-              <Typography variant="caption" color="error">
+              <Typography variant="caption" sx={{ color: 'error' }}>
                 {t('training.seriesMismatch', { n: index + 1 })}
               </Typography>
             );
           } else if (err === 'number') {
             meta = (
-              <Typography variant="caption" color="error">
+              <Typography variant="caption" sx={{ color: 'error' }}>
                 {t('training.invalidNumber', { n: index + 1 })}
               </Typography>
             );
@@ -423,7 +423,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             }
             if (parts.length) {
               meta = (
-                <Typography variant="caption" color="text.secondary">
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   {parts.join('  ·  ')}
                 </Typography>
               );
@@ -452,7 +452,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   alignItems: 'center',
                 }}
               >
-                <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+                <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>
                   {index + 1}
                 </Typography>
 
@@ -529,7 +529,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                         disabled={exercisesFields.length <= 1}
                         onClick={() => removeFields(index)}
                       >
-                        <DeleteOutline fontSize="small" />
+                        <DeleteOutlined fontSize="small" />
                       </IconButton>
                     </span>
                   </Tooltip>
@@ -636,7 +636,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           }}
         >
           {isPending ? (
-            <Box display="flex" alignItems="center" gap={2}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
               <CircularProgress size={20} color="inherit" />
               {t('messages.submitting')}
             </Box>
@@ -644,7 +644,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             t('training.saveTraining')
           )}
         </Button>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 1 }}>
           {t('training.saveHint')}
         </Typography>
       </Box>

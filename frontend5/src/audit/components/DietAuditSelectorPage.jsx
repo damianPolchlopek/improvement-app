@@ -92,10 +92,10 @@ const DietAuditSelectorPage = () => {
               }}
             >
               <CardContent sx={{ p: 4 }}>
-                <Box display="flex" alignItems="center" gap={2} mb={2}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
                   <HistoryIcon sx={{ fontSize: 40 }} />
                   <Box>
-                    <Typography variant="h3" fontWeight="700" sx={{ mb: 1 }}>
+                    <Typography variant="h3" sx={{ fontWeight: '700', mb: 1 }}>
                       {t('audit.title')}
                     </Typography>
                     <Typography variant="h6" sx={{ opacity: 0.9 }}>
@@ -104,14 +104,14 @@ const DietAuditSelectorPage = () => {
                   </Box>
                 </Box>
 
-                <Box display="flex" gap={3} sx={{ mt: 3 }}>
-                  <Box display="flex" alignItems="center" gap={1}>
+                <Box sx={{ display: 'flex', gap: 3, mt: 3 }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <RestaurantIcon sx={{ fontSize: 20 }} />
                     <Typography variant="body2" sx={{ opacity: 0.9 }}>
                       {t('audit.summariesCount', { count: data?.totalElements || 0 })}
                     </Typography>
                   </Box>
-                  <Box display="flex" alignItems="center" gap={1}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <VisibilityIcon sx={{ fontSize: 20 }} />
                     <Typography variant="body2" sx={{ opacity: 0.9 }}>
                       {t('audit.historyAvailable')}
@@ -138,13 +138,6 @@ const DietAuditSelectorPage = () => {
                   placeholder={t('audit.searchByDate')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.5)' }} />
-                      </InputAdornment>
-                    ),
-                  }}
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
@@ -159,6 +152,15 @@ const DietAuditSelectorPage = () => {
                       '&.Mui-focused fieldset': {
                         borderColor: '#4caf50',
                       },
+                    },
+                  }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.5)' }} />
+                        </InputAdornment>
+                      ),
                     },
                   }}
                 />
@@ -185,7 +187,7 @@ const DietAuditSelectorPage = () => {
                   borderBottom: theme.palette.card.border,
                 }}
               >
-                <Typography variant="h5" fontWeight="600" color="white">
+                <Typography variant="h5" sx={{ fontWeight: '600', color: 'white' }}>
                   {t('audit.summariesList')}
                 </Typography>
               </Box>
@@ -242,7 +244,7 @@ const DietAuditSelectorPage = () => {
                             />
                           </TableCell>
                           <TableCell>
-                            <Box display="flex" alignItems="center" gap={1}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                               <CalendarIcon
                                 sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.5)' }}
                               />
@@ -250,22 +252,25 @@ const DietAuditSelectorPage = () => {
                             </Box>
                           </TableCell>
                           <TableCell align="right">
-                            <Typography variant="body2" fontWeight="600" color="#ff9800">
+                            <Typography
+                              variant="body2"
+                              sx={{ fontWeight: '600', color: '#ff9800' }}
+                            >
                               {dietSummary.kcal.toFixed(0)}
                             </Typography>
                           </TableCell>
                           <TableCell align="right">
-                            <Typography variant="body2" color="#2196f3">
+                            <Typography variant="body2" sx={{ color: '#2196f3' }}>
                               {dietSummary.protein.toFixed(1)}g
                             </Typography>
                           </TableCell>
                           <TableCell align="right">
-                            <Typography variant="body2" color="#4caf50">
+                            <Typography variant="body2" sx={{ color: '#4caf50' }}>
                               {dietSummary.carbohydrates.toFixed(1)}g
                             </Typography>
                           </TableCell>
                           <TableCell align="right">
-                            <Typography variant="body2" color="#fdd835">
+                            <Typography variant="body2" sx={{ color: '#fdd835' }}>
                               {dietSummary.fat.toFixed(1)}g
                             </Typography>
                           </TableCell>
@@ -300,7 +305,7 @@ const DietAuditSelectorPage = () => {
                     ) : (
                       <TableRow>
                         <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
-                          <Typography variant="h6" color="rgba(255, 255, 255, 0.5)">
+                          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
                             {t('audit.noResults')}
                           </Typography>
                         </TableCell>

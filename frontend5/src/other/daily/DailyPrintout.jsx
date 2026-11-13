@@ -95,7 +95,7 @@ export default function DailyPrintout() {
           }}
         >
           <TrendingUp sx={{ fontSize: 22 }} />
-          <Typography variant="subtitle1" fontWeight="600">
+          <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
             {t('daily.history')}
           </Typography>
         </Box>
@@ -125,7 +125,7 @@ export default function DailyPrintout() {
                   }}
                 >
                   <StyledTableCell>
-                    <Typography variant="body2" fontWeight="600">
+                    <Typography variant="body2" sx={{ fontWeight: '600' }}>
                       {daily.date}
                     </Typography>
                   </StyledTableCell>
@@ -192,12 +192,14 @@ export default function DailyPrintout() {
                   count={data?.totalElements || 0}
                   rowsPerPage={size}
                   page={page}
-                  SelectProps={{
-                    inputProps: { 'aria-label': 'rows per page' },
-                    native: true,
-                  }}
                   onPageChange={handleChangePage}
                   onRowsPerPageChange={handleChangeRowsPerPage}
+                  slotProps={{
+                    select: {
+                      inputProps: { 'aria-label': 'rows per page' },
+                      native: true,
+                    },
+                  }}
                 />
               </StyledTableRow>
             </TableFooter>
