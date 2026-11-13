@@ -74,12 +74,15 @@ public class MealControllerTest extends AbstractE2ETest {
                 .withProducts(20)
                 .withMealRecipes(10, 5);
 
+        // ID przepisu losuje Faker — bierzemy pierwszy wygenerowany zamiast wpisanej na sztywno liczby
+        Long mealId = testData.getMealRecipes().getFirst().getId();
+
         // when
         String responseBody = RestAssured
                 .given()
                     .accept(ContentType.JSON)
                 .when()
-                    .get("/api/v1/food/meal/34/ingredients")
+                    .get("/api/v1/food/meal/{id}/ingredients", mealId)
                 .then()
                     .statusCode(HttpStatus.OK.value())
                     .contentType(ContentType.JSON)
