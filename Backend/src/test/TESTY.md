@@ -59,7 +59,7 @@ Baza: `AbstractE2ETest` — pełny kontekst Springa (`RANDOM_PORT`), realna baza
 |---|---|---|
 | `shouldReturnMealCategories` | Brak przygotowanych danych | `GET /api/v1/food/meal/categories` → `200 OK`, JSON identyczny (strict) z `expected/food/meal_categories.json` |
 | `shouldReturnMealTypes` | Brak przygotowanych danych | `GET /api/v1/food/meal/types` → `200 OK`, JSON identyczny (strict) z `expected/food/meal_types.json` |
-| `shouldReturnSortedMealIngredients` | Wygenerowano usera, 20 produktów, 10 przepisów (po 5 składników) | `GET /api/v1/food/meal/34/ingredients` → `200 OK`, treść zgodna (strict) z `expected/food/meal_ingredients.json` (składniki posortowane) |
+| `shouldReturnSortedMealIngredients` | Wygenerowano usera, 20 produktów, 10 przepisów (po 5 składników) | `GET /api/v1/food/meal/{id}/ingredients` (ID pierwszego wygenerowanego przepisu) → `200 OK`, treść zgodna (strict) z `expected/food/meal_ingredients.json` (składniki posortowane) |
 | `shouldReturnMeals` | Wygenerowano usera, 20 produktów, 10 przepisów; filtr: pusta nazwa, kategoria/typ/popularność = `ALL`, sort po nazwie | `GET /api/v1/food/meal` z parametrami → `200 OK`, treść zgodna (lenient — dodatkowe pola jak `productId`/`mealRecipeId` są dozwolone) z `expected/food/meal_search.json` |
 
 ### 2.2 `ProductControllerTest` (E2E)
