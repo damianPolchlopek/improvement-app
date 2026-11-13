@@ -60,6 +60,8 @@ Kluczowe: **hasło do keystore'a ma jedno źródło prawdy — GitHub Secret `SS
 
 > **Ręczny start aplikacji na serwerze (`java -jar …`) nie zadziała** — brakuje sekretów (`DB_USERNAME`, `DB_PASSWORD`…), w logu pojawi się np. `password authentication failed for user "${DB_USERNAME}"`. Żeby (re)startować aplikację, zrób push na `main` albo *Re-run* ostatniego workflow w GitHub Actions.
 
+> **Locale UTF-8:** deploy ustawia `LANG`/`LC_ALL=en_US.UTF-8` przed startem JVM. Sesja `ssh … bash` nie wczytuje profilu, więc bez tego JVM koduje ścieżki w ASCII i pobieranie z Google Drive plików z polskimi znakami w nazwie (np. przepisy przy init Food) kończy się `InvalidPathException`.
+
 Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHub Secret → czy był deploy po zmianie → `keystore.env` na serwerze → `keystore.p12` (czy powstał po ostatniej odnowie z tym hasłem).
 
 ---
