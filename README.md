@@ -131,10 +131,10 @@ Frontend to aplikacja React (Create React App). Pozwala użytkownikowi:
 - **Material UI v7** (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/x-data-grid`, `@mui/x-date-pickers`)
 - **React Router** (`react-router-dom`) – routing
 - **React Query** (`@tanstack/react-query`) – pobieranie danych i cache
-- **Axios** (REST), **universal-cookie**, **i18next** / **react-i18next** (wielojęzyczność)
+- **Axios** (REST), **i18next** / **react-i18next** (wielojęzyczność)
 - **Recharts** – wykresy i statystyki
 - **WebSocket** (`@stomp/stompjs`, `sockjs-client`, `stompjs`)
-- **jwt-decode**, **dayjs**, **moment** – obsługa tokenów i dat
+- **dayjs**, **moment** – obsługa dat
 - **Prettier** – formatowanie kodu
 
 Pełna lista zależności w [frontend5/package.json](frontend5/package.json).

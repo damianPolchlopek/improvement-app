@@ -94,8 +94,6 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
 - **Axios** – komunikacja HTTP z backendem
 - **WebSockety** (`@stomp/stompjs`, `sockjs-client`, `stompjs`) – komunikacja w czasie rzeczywistym
 - **Recharts** – wykresy i wizualizacja danych
-- **Universal-cookie** – obsługa cookies
-- **jwt-decode** – dekodowanie tokenów JWT po stronie klienta
 
 ---
 
