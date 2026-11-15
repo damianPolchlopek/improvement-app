@@ -10,9 +10,6 @@ touch deploy.lock
 # 2. Zachowaj obecną wersję na wypadek rollbacku
 if [ -f app.jar ]; then
   cp app.jar app.previous.jar
-elif [ -f improvement-app-backend-0.0.1-SNAPSHOT.jar ]; then
-  # Jednorazowo: przy pierwszym deployu poprzednia wersja ma jeszcze starą nazwę
-  cp improvement-app-backend-0.0.1-SNAPSHOT.jar app.previous.jar
 fi
 
 # 3. Nowa wersja na miejsce obecnej
