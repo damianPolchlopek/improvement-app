@@ -74,8 +74,8 @@ Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHu
 | **Let's Encrypt** | Wystawca bezpłatnych certyfikatów DV.                                          | Globalnie zaufany; 90‑dniowe certyfikaty wymuszają pełną automatyzację. |
 | **OpenSSL 3**     | Konwersja PEM → PKCS#12 dla Spring Boota.                                      | Standardowy pakiet kryptograficzny, preinstalowany.                     |
 | **Cron**          | Harmonogram wywołań `acme.sh --cron`.                                          | Dostępny bez uprawnień root.                                            |
-| **pkill / pgrep** | Zabicie starej instancji JVM przy deployu (GitHub Actions).                    | Jedna linijka, brak PID‑file.                                           |
-| **nohup … &**     | Uruchomienie Spring Boot w tle przy deployu (GitHub Actions).                  | Nie wymaga `systemd`, działa w każdym shellsessie.                      |
+| **pkill / pgrep** | Zatrzymanie starej instancji JVM przy deployu i sprawdzanie procesu przez watchdog ([`Backend/Deploy`](../Deploy/README.md)). | Jedna linijka, brak PID‑file.                                           |
+| **nohup … &**     | Uruchomienie Spring Boot w tle (`Backend/Deploy/start.sh`).                    | Nie wymaga `systemd`, działa w każdym shellsessie.                      |
 | **GitHub Actions**| Deploy skryptu hooka + odświeżanie hasła w `keystore.env` przy każdym pushu.   | Ten sam pipeline i tak już SSH'uje na serwer przy każdym deployu.       |
 | **Spring Boot 3** | Aplikacja docelowa; terminacja TLS.                                            | Embedded Tomcat upraszcza konfigurację (bez nginx).                     |
 
@@ -191,7 +191,6 @@ curl -k https://grindtrack.pl:37786/actuator/health  # 200 = OK
 ## Opcjonalne usprawnienia
 
 * **Reverse‑proxy (nginx/Traefik)** – HTTP/2, gzip, cache, rate‑limit.
-* **Watchdog procesu** – `nohup` nie restartuje aplikacji po crashu; prosty cron co kilka minut sprawdzający `pgrep` zredukowałby ryzyko długich, niezauważonych przestojów (jak w incydencie z maja 2026). Uwaga: sam restart z crona wymagałby sekretów na serwerze, więc watchdog powinien raczej wyzwalać workflow GitHub Actions (np. `workflow_dispatch` przez API) albo tylko powiadamiać.
 * **Fail2ban / Caddy WAF** – blokada brute‑force na endpointy.
 
 ---

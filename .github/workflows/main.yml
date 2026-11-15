@@ -19,11 +19,13 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H s2.small.pl >> ~/.ssh/known_hosts
 
-      - name: Deploy cert-renewal hook script
+      - name: Upload server scripts (cert hook, start, deploy, watchdog)
         run: |
           ssh mutarexx@s2.small.pl "mkdir -p /home/mutarexx/backend/scripts /home/mutarexx/backend/certs /home/mutarexx/logs"
-          scp Backend/Cert/scripts/convert_and_restart.sh mutarexx@s2.small.pl:/home/mutarexx/backend/scripts/convert_and_restart.sh
-          ssh mutarexx@s2.small.pl "chmod +x /home/mutarexx/backend/scripts/convert_and_restart.sh"
+          scp Backend/Cert/scripts/convert_and_restart.sh \
+              Backend/Deploy/start.sh Backend/Deploy/deploy.sh Backend/Deploy/watchdog.sh \
+              mutarexx@s2.small.pl:/home/mutarexx/backend/scripts/
+          ssh mutarexx@s2.small.pl "chmod +x /home/mutarexx/backend/scripts/*.sh"
 
       # === BACKEND ===
       - name: Set up Java 21
@@ -39,11 +41,14 @@ jobs:
           chmod +x mvnw
           ./mvnw clean package -DskipTests
 
+      # Nowy jar czeka obok działającego - podmienia go dopiero deploy.sh
       - name: Upload backend jar to server
         run: |
-          scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/backend/improvement-app-backend-0.0.1-SNAPSHOT.jar
+          scp Backend/target/*.jar mutarexx@s2.small.pl:/home/mutarexx/backend/app.new.jar
 
-      - name: Restart backend on server and wait for start
+      # Sekrety lądują w plikach na serwerze (chmod 600): app.env czyta start.sh (także przy
+      # restarcie z watchdoga, gdy sesji z GitHuba już nie ma), keystore.env - hook odnowy certu
+      - name: Write secrets to server
         env:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
@@ -65,14 +70,16 @@ jobs:
             printf 'export DB_USERNAME=%q\n'           "$DB_USERNAME"
             printf 'export DB_PASSWORD=%q\n'           "$DB_PASSWORD"
             printf 'export SSL_KEYSTORE_PASSWORD=%q\n' "$SSL_KEYSTORE_PASSWORD"
-            echo 'export JAVA_VERSION="21"'
-            # Bez locale UTF-8 JVM koduje ścieżki w ASCII i pliki z polskimi znakami w nazwie rzucają InvalidPathException
-            echo 'export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8'
-            echo 'umask 077; printf "export SSL_KEYSTORE_PASSWORD=%q\n" "$SSL_KEYSTORE_PASSWORD" > /home/mutarexx/backend/certs/keystore.env'
-            echo 'pkill -f improvement-app-backend-0.0.1-SNAPSHOT.jar || true'
-            echo 'sleep 2'
-            echo 'nohup java -Xms32m -Xmx192m -XX:MaxMetaspaceSize=160m -XX:CompressedClassSpaceSize=48m -XX:ReservedCodeCacheSize=32m -XX:+UseSerialGC -jar /home/mutarexx/backend/improvement-app-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=smallhost --server.port=37786 > /home/mutarexx/logs/stdout.log 2>&1 &'
-          } | ssh mutarexx@s2.small.pl bash
+          } | ssh mutarexx@s2.small.pl "umask 077; cat > /home/mutarexx/backend/app.env"
+
+          printf 'export SSL_KEYSTORE_PASSWORD=%q\n' "$SSL_KEYSTORE_PASSWORD" \
+            | ssh mutarexx@s2.small.pl "umask 077; cat > /home/mutarexx/backend/certs/keystore.env"
+
+      # Podmiana wersji + health check; gdy nowa wersja nie wstanie, deploy.sh wraca do
+      # poprzedniej i kończy się błędem - job się zatrzymuje, frontend nie jest wdrażany
+      - name: Deploy backend (health check + rollback)
+        run: |
+          ssh mutarexx@s2.small.pl /home/mutarexx/backend/scripts/deploy.sh
 
 
       # === FRONTEND ===

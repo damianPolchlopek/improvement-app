@@ -108,7 +108,7 @@ docker build -t improvement-app-backend .
 docker run -p 8080:8080 improvement-app-backend
 ```
 
-**Healthcheck**: endpoint zdrowia dostępny pod `/actuator/health` (eksponowane także `info`, `metrics`, `prometheus`).
+**Healthcheck**: endpoint zdrowia dostępny pod `/actuator/health` — publiczny, zwraca tylko status (używa go deploy). Eksponowane są także `info`, `metrics`, `prometheus`, ale wymagają zalogowania. Wskaźnik poczty (SMTP) jest wyłączony, żeby chwilowa awaria Gmaila nie dawała statusu `DOWN`.
 
 ---
 
@@ -175,6 +175,8 @@ Compose uruchamia: backend (port 8080, profil `compose`), frontend (port 3000), 
 ## CI/CD
 
 Deploy realizowany jest przez **GitHub Actions** ([.github/workflows/main.yml](.github/workflows/main.yml)): po pushu na gałąź `main` budowany jest backend (Maven) i frontend (npm), a artefakty wgrywane są przez SSH na serwer produkcyjny. Sekrety (klucze API, dane SMTP, JWT itd.) przechowywane są w GitHub Secrets.
+
+Backend podmienia skrypt [`Backend/Deploy/deploy.sh`](Backend/Deploy/README.md): po starcie nowej wersji sprawdza `/actuator/health`, a gdy przez 3 minuty nie ma `UP` — wraca do poprzedniego jara, workflow kończy się błędem i frontend nie jest wdrażany. Watchdog z crona (`watchdog.sh`) podnosi aplikację, jeśli proces padnie.
 
 Aktualizacje zależności proponuje **Renovate** ([renovate.json](renovate.json):
 - PR-y raz w tygodniu (poniedziałek przed 9:00 czasu polskiego); łatki bezpieczeństwa przychodzą od razu,

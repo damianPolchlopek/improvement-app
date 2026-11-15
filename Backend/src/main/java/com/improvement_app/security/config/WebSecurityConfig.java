@@ -102,6 +102,10 @@ public class WebSecurityConfig {
                         // WebSocketAuthChannelInterceptor
                         .requestMatchers("/error").permitAll()
 
+                        // Health check dla deploy.sh - zwraca tylko {"status":"UP"}, bez szczegółów.
+                        // Pozostałe endpointy actuatora (metrics, prometheus) wymagają logowania.
+                        .requestMatchers("/actuator/health").permitAll()
+
                         // Publiczne endpointy
                         .requestMatchers("/api/v1/auth/signin").permitAll()
                         .requestMatchers("/api/v1/auth/signup").permitAll()

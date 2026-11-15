@@ -111,6 +111,11 @@ management:
   endpoint:
     prometheus:
       enabled: true
+  health:
+    # Chwilowy problem z SMTP (Gmail) nie oznacza, że aplikacja nie działa - inaczej
+    # /actuator/health zwracałby 503, a deploy.sh cofałby poprawną wersję
+    mail:
+      enabled: false
 
 #logging:
 #   level:
