@@ -178,6 +178,8 @@ Deploy realizowany jest przez **GitHub Actions** ([.github/workflows/main.yml](.
 
 Backend podmienia skrypt [`Backend/Deploy/deploy.sh`](Backend/Deploy/README.md): po starcie nowej wersji sprawdza `/actuator/health`, a gdy przez 3 minuty nie ma `UP` — wraca do poprzedniego jara, workflow kończy się błędem i frontend nie jest wdrażany. Watchdog z crona (`watchdog.sh`) podnosi aplikację, jeśli proces padnie.
 
+Kopie zapasowe bazy robi osobny workflow ([`backup.yml`](.github/workflows/backup.yml)): codziennie `pg_dump` z serwera, szyfrowanie (`age`) i wysyłka na prywatny Google Drive, retencja 7 dziennych i 4 tygodniowych kopii, a raz w miesiącu test odtwarzania. Konfiguracja: [Backend/Backup/README.md](Backend/Backup/README.md).
+
 Aktualizacje zależności proponuje **Renovate** ([renovate.json](renovate.json):
 - PR-y raz w tygodniu (poniedziałek przed 9:00 czasu polskiego); łatki bezpieczeństwa przychodzą od razu,
 - wersje opublikowane co najmniej 3 dni temu,

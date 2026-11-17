@@ -1,0 +1,177 @@
+name: Database backup
+
+# Codzienna kopia bazy produkcyjnej -> zaszyfrowana -> prywatny Google Drive.
+# Retencja: 7 dziennych + 4 tygodniowe. 1. dnia miesiąca (albo na żądanie) test odtwarzania.
+# Konfiguracja i ręczne odtwarzanie: Backend/Backup/README.md
+
+on:
+  schedule:
+    - cron: '0 2 * * *'     # codziennie 2:00 UTC (3:00 zimą, 4:00 latem w Polsce)
+  workflow_dispatch:         # przycisk "Run workflow", np. przed ryzykowną migracją
+    inputs:
+      restore_test:
+        description: 'Po zrobieniu kopii wykonaj też test odtwarzania'
+        type: boolean
+        default: false
+
+# Dwie kopie naraz nie mają sensu - druga poczeka na pierwszą
+concurrency:
+  group: database-backup
+  cancel-in-progress: false
+
+env:
+  # Folder na Google Drive (remote "gdrive" z rclone.conf)
+  REMOTE: gdrive:improvement-app-backup
+  # Wersja Postgresa do testu odtwarzania - co najmniej taka jak "pg_dump --version" na serwerze
+  PG_VERSION: '16'
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    outputs:
+      file: ${{ steps.name.outputs.file }}
+      restore_test: ${{ steps.name.outputs.restore_test }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H s2.small.pl >> ~/.ssh/known_hosts
+
+      - name: Install age and rclone
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y age rclone
+
+      - name: Configure rclone (Google Drive)
+        env:
+          RCLONE_CONFIG_CONTENT: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          mkdir -p ~/.config/rclone
+          printf '%s\n' "$RCLONE_CONFIG_CONTENT" > ~/.config/rclone/rclone.conf
+          chmod 600 ~/.config/rclone/rclone.conf
+
+      - name: Choose file name
+        id: name
+        run: |
+          file="improvement-app-$(date -u +%F).dump.age"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "FILE=$file" >> "$GITHUB_ENV"
+
+          # Test odtwarzania: 1. dnia miesiąca albo gdy zaznaczono go przy ręcznym uruchomieniu
+          if [ "$(date -u +%d)" = "01" ] || [ "${{ inputs.restore_test }}" = "true" ]; then
+            echo "restore_test=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Dump database (pg_dump on server)
+        run: |
+          ssh mutarexx@s2.small.pl sh -s < Backend/Backup/dump.sh > backup.dump
+
+          # Kopia w formacie custom zaczyna się od "PGDMP" - inaczej coś poszło nie tak
+          head -c 5 backup.dump | grep -q PGDMP
+          ls -l backup.dump
+
+      - name: Encrypt
+        env:
+          AGE_PUBLIC_KEY: ${{ vars.BACKUP_AGE_PUBLIC_KEY }}
+        run: |
+          age --recipient "$AGE_PUBLIC_KEY" --output "$FILE" backup.dump
+          rm backup.dump
+
+      - name: Upload to Google Drive
+        run: |
+          rclone copyto "$FILE" "$REMOTE/daily/$FILE"
+
+          # W niedzielę (dzień 7) ta sama kopia trafia też do weekly/
+          if [ "$(date -u +%u)" = "7" ]; then
+            rclone copyto "$FILE" "$REMOTE/weekly/$FILE"
+          fi
+
+      - name: Delete old copies (keep 7 daily, 4 weekly)
+        run: |
+          # Nazwy zawierają datę, więc po posortowaniu najstarsze są na początku.
+          # "head -n -7" = wszystkie oprócz 7 ostatnich. Usunięte pliki trafiają do kosza na Drive.
+          rclone lsf "$REMOTE/daily/" | sort | head -n -7 | while read -r old; do
+            echo "Usuwam daily/$old"
+            rclone deletefile "$REMOTE/daily/$old"
+          done
+
+          rclone lsf "$REMOTE/weekly/" | sort | head -n -4 | while read -r old; do
+            echo "Usuwam weekly/$old"
+            rclone deletefile "$REMOTE/weekly/$old"
+          done
+
+  restore-test:
+    needs: backup
+    if: needs.backup.outputs.restore_test == 'true'
+    runs-on: ubuntu-latest
+    env:
+      FILE: ${{ needs.backup.outputs.file }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Install age and rclone
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y age rclone
+
+      - name: Configure rclone (Google Drive)
+        env:
+          RCLONE_CONFIG_CONTENT: ${{ secrets.RCLONE_CONFIG }}
+        run: |
+          mkdir -p ~/.config/rclone
+          printf '%s\n' "$RCLONE_CONFIG_CONTENT" > ~/.config/rclone/rclone.conf
+          chmod 600 ~/.config/rclone/rclone.conf
+
+      # Pobieramy kopię z Drive, a nie z poprzedniego joba - test sprawdza też, że wysyłka się udała
+      - name: Download and decrypt backup
+        env:
+          AGE_PRIVATE_KEY: ${{ secrets.BACKUP_AGE_PRIVATE_KEY }}
+        run: |
+          rclone copyto "$REMOTE/daily/$FILE" backup.dump.age
+
+          printf '%s\n' "$AGE_PRIVATE_KEY" > age-key.txt
+          age --decrypt --identity age-key.txt --output backup.dump backup.dump.age
+          rm age-key.txt
+
+      - name: Start empty PostgreSQL
+        run: |
+          docker run -d --name restore -e POSTGRES_PASSWORD=restore postgres:$PG_VERSION
+
+          # Czekaj maks. 60 s, aż baza przyjmie połączenia
+          proba=1
+          while ! docker exec restore pg_isready -U postgres; do
+            if [ $proba -ge 30 ]; then
+              echo "PostgreSQL nie wystartował"
+              exit 1
+            fi
+            sleep 2
+            proba=$((proba + 1))
+          done
+
+      - name: Restore backup
+        run: |
+          docker cp backup.dump restore:/tmp/backup.dump
+          docker exec restore createdb -U postgres p2222_food
+
+          # --no-owner/--no-privileges: w kontenerze nie ma użytkownika z produkcji
+          # --exit-on-error: każdy błąd odtwarzania kończy test porażką
+          docker exec restore pg_restore -U postgres --dbname=p2222_food \
+            --no-owner --no-privileges --exit-on-error /tmp/backup.dump
+
+      - name: Check restored data
+        run: |
+          {
+            echo "### Test odtwarzania: $FILE"
+            echo ""
+            echo "| Tabela | Wiersze |"
+            echo "|---|---|"
+            docker exec -i restore psql -U postgres -d p2222_food -qAt < Backend/Backup/restore-check.sql
+          } >> "$GITHUB_STEP_SUMMARY"
