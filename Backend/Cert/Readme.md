@@ -1,4 +1,4 @@
-# Automatyczne odnawianie certyfikatów TLS dla Spring Boot 3 *(środowisko współdzielone, brak `sudo`)*
+# Automatyczne odnawianie certyfikatów TLS dla Spring Boot 4 *(środowisko współdzielone, brak `sudo`)*
 
 ---
 
@@ -23,7 +23,7 @@
 └──────────────────────┘   (B) restart appki   └──────────┬──────────────────┘
           │                 z sekretami w env             │  (4) podmiana keystore.p12
           │                                    ┌──────────▼───────────────┐
-          └───────────────────────────────────▶│     Spring Boot 3        │
+          └───────────────────────────────────▶│     Spring Boot 4        │
                                                │ (embedded Tomcat HTTPS,  │
                                                │  SSL bundle hot reload)  │
                                                └──────────────────────────┘
@@ -77,7 +77,7 @@ Jeśli coś nie działa po zmianie hasła — sprawdzaj w tej kolejności: GitHu
 | **pkill / pgrep** | Zatrzymanie starej instancji JVM przy deployu i sprawdzanie procesu przez watchdog ([`Backend/Deploy`](../Deploy/README.md)). | Jedna linijka, brak PID‑file.                                           |
 | **nohup … &**     | Uruchomienie Spring Boot w tle (`Backend/Deploy/start.sh`).                    | Nie wymaga `systemd`, działa w każdym shellsessie.                      |
 | **GitHub Actions**| Deploy skryptu hooka + odświeżanie hasła w `keystore.env` przy każdym pushu.   | Ten sam pipeline i tak już SSH'uje na serwer przy każdym deployu.       |
-| **Spring Boot 3** | Aplikacja docelowa; terminacja TLS.                                            | Embedded Tomcat upraszcza konfigurację (bez nginx).                     |
+| **Spring Boot 4** | Aplikacja docelowa; terminacja TLS.                                            | Embedded Tomcat upraszcza konfigurację (bez nginx).                     |
 
 ---
 

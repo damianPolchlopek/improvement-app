@@ -86,7 +86,7 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
 
 - **Vite** – builder i dev server
 - **React** (v19)
-- **Material UI** (`@mui/material`, `@mui/icons-material`, `@mui/lab`, `@mui/x-data-grid`, `@mui/x-date-pickers`)
+- **Material UI** (`@mui/material`, `@mui/icons-material`, `@mui/x-data-grid`, `@mui/x-date-pickers`)
 - **React Router** (`react-router-dom`) – routing aplikacji
 - **React Query** (`@tanstack/react-query`) – obsługa zapytań i cache
 - **i18next** + **react-i18next** – internacjonalizacja i tłumaczenia
