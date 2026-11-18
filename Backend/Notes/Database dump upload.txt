@@ -1,0 +1,40 @@
+1. Pobieranie kopi z Google drive i odszyfrowanie
+
+rclone lsf gdrive:improvement-app-backup/daily/
+rclone copyto gdrive:improvement-app-backup/daily/improvement-app-2026-11-17.dump.age backup.dump.age
+age --decrypt --identity backup-key.txt --output backup.dump backup.dump.age
+
+2. Wykonanie backupu
+
+pg_dump --format=custom --host=pgsql2.small.pl \
+    --username=p2222_food --dbname=p2222_food > ~/before-restore.dump
+
+3. Zatrzymanie aplikacji
+
+touch ~/backend/deploy.lock
+pkill -f /home/mutarexx/backend/app.jar
+sleep 10
+pkill -9 -f /home/mutarexx/backend/app.jar
+pgrep -f /home/mutarexx/backend/app.jar
+
+4. Usuniecie starej bazy danych
+
+psql --host=pgsql2.small.pl --username=p2222_food --dbname=p2222_food \
+    --set=ON_ERROR_STOP=1 -c 'DROP OWNED BY CURRENT_USER CASCADE;' -c 'CREATE SCHEMA IF NOT EXISTS public;'
+
+Sprawdzenie czy baza jest pusta
+
+psql --host=pgsql2.small.pl --username=p2222_food --dbname=p2222_food \
+  -c "SELECT count(*) FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog','information_schema');"
+
+5. Wgranie kopii bazy danych
+
+pg_restore --no-owner --no-privileges --exit-on-error \
+  --host=pgsql2.small.pl --username=p2222_food --dbname=p2222_food \
+  ~/backup.dump
+
+6. Uruchomienie aplikacji
+
+rm -f ~/backend/deploy.lock
+~/backend/scripts/watchdog.sh
+
