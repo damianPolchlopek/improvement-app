@@ -31,7 +31,7 @@ Backend Improvement App to modularna aplikacja napisana w Javie 21 z użyciem Sp
 - **Springdoc OpenAPI** – Swagger UI (`/swagger-ui.html`)
 - **JWT (jjwt)**, **BCrypt**, **OAuth2 (Google)** – uwierzytelnianie i autoryzacja
 - **Apache POI** (Excel), **Jsoup** (HTML)
-- **Log4j2**, **Micrometer / Prometheus** – logowanie i metryki
+- **SLF4J + Logback** (domyślny w Spring Boot, konfiguracja w `application*.yaml`), **Micrometer / Prometheus** – logowanie i metryki
 - **Lombok** – ograniczenie boilerplate
 - **Maven** (wrapper `mvnw`) – budowanie
 - **Testy** – JUnit, Spring Security Test, Testcontainers (PostgreSQL), REST Assured, Datafaker

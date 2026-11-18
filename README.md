@@ -74,7 +74,7 @@ Backend obsługuje całą logikę biznesową, autoryzację, dostęp do baz danyc
 - **Springdoc OpenAPI** – dokumentacja REST (Swagger UI pod `/swagger-ui.html`)
 - **Bezpieczeństwo** – JWT (jjwt), BCrypt, OAuth2 (Google)
 - **Apache POI / Jsoup** – obsługa plików Excel oraz parsowanie HTML
-- **Log4j2 + Micrometer / Prometheus** – logowanie i metryki
+- **SLF4J + Logback / Micrometer + Prometheus** – logowanie i metryki
 - **Maven** – budowanie i zarządzanie zależnościami (wrapper `mvnw`)
 - **Testy** – JUnit, Spring Security Test, Testcontainers (PostgreSQL), REST Assured, Datafaker
 
