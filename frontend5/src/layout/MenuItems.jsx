@@ -4,6 +4,7 @@ import {
   MaximumExerciseViewUrl,
   TrainingAddUrl,
   TrainingStatisticUrl,
+  TrainingTemplatesUrl,
   FoodViewUrl,
   FoodAddUrl,
   CalculateIngredientsUrl,
@@ -28,6 +29,7 @@ import {
   Add as AddIcon,
   Visibility as VisibilityIcon,
   ShowChart as ShowChartIcon,
+  ListAlt as ListAltIcon,
   CalendarToday as CalendarTodayIcon,
   AttachMoney as AttachMoneyIcon,
 } from '@mui/icons-material';
@@ -45,6 +47,7 @@ export const MENU_ITEMS = (t) => [
       { name: t('menu.view'), path: TrainingViewUrl, icon: <VisibilityIcon /> },
       { name: t('menu.exercises'), path: ExerciseViewUrl, icon: <VisibilityIcon /> },
       { name: t('menu.maximum'), path: MaximumExerciseViewUrl, icon: <VisibilityIcon /> },
+      { name: t('menu.templates'), path: TrainingTemplatesUrl, icon: <ListAltIcon /> },
       { name: t('menu.add'), path: TrainingAddUrl, icon: <AddIcon /> },
       { name: t('menu.statistic'), path: TrainingStatisticUrl, icon: <ShowChartIcon /> },
     ],

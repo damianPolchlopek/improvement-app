@@ -25,6 +25,7 @@ import {
   FOOD,
   ADD,
   STATISTICS,
+  TEMPLATES,
   SHOPPING,
   PRODUCTS,
   WEEKLY,
@@ -56,6 +57,9 @@ const MaximumExerciseView = lazy(
   () => import('./training/maximumTrainingView/MaximumExerciseView.jsx')
 );
 const TrainingStatistic = lazy(() => import('./training/trainingStatistic/TrainingStatistics.jsx'));
+const TrainingTemplatesView = lazy(
+  () => import('./training/trainingTemplates/TrainingTemplatesView.jsx')
+);
 const ShoppingListView = lazy(() => import('./shopping/ShoppingListPage.jsx'));
 const MealView = lazy(() => import('./food/foodView/MealView.jsx'));
 const AddDietDayView = lazy(() => import('./food/addDietDay/AddDietDayView.jsx'));
@@ -180,6 +184,14 @@ const router = createBrowserRouter([
               import('./training/trainingStatistic/TrainingStatistics.jsx').then((module) =>
                 module.loader()
               ),
+          },
+          {
+            path: TEMPLATES,
+            element: (
+              <Suspense fallback={suspenseFallback}>
+                <TrainingTemplatesView />
+              </Suspense>
+            ),
           },
         ],
       },

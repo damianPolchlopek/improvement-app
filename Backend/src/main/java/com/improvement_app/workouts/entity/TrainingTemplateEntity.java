@@ -39,6 +39,7 @@ public class TrainingTemplateEntity extends AuditableEntity {
                     @Index(name = "idx_training_template_exercise_name", columnList = "exercise_name_id")
             }
     )
+    @OrderColumn(name = "position") // kolejność ćwiczeń z pliku szablonu, liczona od 0
     private List<ExerciseNameEntity> exercises = new ArrayList<>();
 
     public TrainingTemplateEntity(String name) {

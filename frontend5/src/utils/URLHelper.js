@@ -6,6 +6,7 @@ export const EXERCISES = 'exercises';
 export const MAXIMUM = 'maximum';
 export const ADD = 'add';
 export const STATISTICS = 'statistics';
+export const TEMPLATES = 'templates';
 
 export const HomeViewUrl = `${APP}/`;
 
@@ -14,6 +15,7 @@ export const ExerciseViewUrl = `${APP}/${TRAINING}/${EXERCISES}`;
 export const MaximumExerciseViewUrl = `${APP}/${TRAINING}/${MAXIMUM}`;
 export const TrainingAddUrl = `${APP}/${TRAINING}/${ADD}`;
 export const TrainingStatisticUrl = `${APP}/${TRAINING}/${STATISTICS}`;
+export const TrainingTemplatesUrl = `${APP}/${TRAINING}/${TEMPLATES}`;
 
 export const FOOD = 'food';
 export const EDIT = 'edit';

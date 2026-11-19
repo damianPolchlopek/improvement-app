@@ -24,6 +24,11 @@ public class TrainingTemplateService {
                 .orElseThrow(() -> new TrainingTemplateNotFoundException(trainingTypeName));
     }
 
+    @Transactional(readOnly = true)
+    public List<TrainingTemplateEntity> getAllTrainingTemplates() {
+        return trainingTemplateRepository.findAllByOrderByNameAsc();
+    }
+
     @Transactional
     public List<TrainingTemplateEntity> recreateTemplates(List<TrainingTemplateEntity> templates) {
         trainingTemplateRepository.deleteAllInBatch();

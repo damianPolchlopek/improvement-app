@@ -125,6 +125,7 @@ Wsparcie paginacji i uniwersalnych odpowiedzi REST (`ListResponse`, `Page`, `Pag
 ### `workouts/`
 Treningi: ćwiczenia, plany i szablony, statystyki, rekordy. Zawiera konwertery oraz obiekty `request`/`response`.
 Import treningów z Google Drive (`/api/v1/drive/initApplication`) podmienia tylko treningi zalogowanego użytkownika; nazwy ćwiczeń i szablony treningowe to wspólne słowniki odtwarzane przy każdym imporcie.
+Szablony treningów obsługuje `TrainingTemplateController`: `GET /api/v1/training-templates` zwraca wszystkie szablony (posortowane po nazwie) z listą ćwiczeń, a `GET /api/v1/training-templates/{template}` zwraca jeden szablon po skrócie typu (np. `A`, `C1`). Ćwiczenia w szablonie są zwracane w kolejności z pliku na Drive – przechowuje ją kolumna `position` w tabeli łączącej `workout.training_template_exercise` (`@OrderColumn`, liczona od 0).
 
 ---
 

@@ -98,3 +98,7 @@ databaseChangeLog:
   - include:
       file: 0024_create_shopping_item_table/changelog.yaml
       relativeToChangelogFile: true
+
+  - include:
+      file: 0025_add_training_template_exercise_position/changelog.yaml
+      relativeToChangelogFile: true

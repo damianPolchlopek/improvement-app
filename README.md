@@ -119,7 +119,7 @@ docker run -p 8080:8080 improvement-app-backend
 Frontend to aplikacja React (Create React App). Pozwala użytkownikowi:
 - Przeglądać, dodawać i filtrować produkty spożywcze oraz posiłki
 - Generować i analizować dzienne podsumowania diety oraz statystyki
-- Planować treningi i korzystać z szablonów treningowych
+- Planować treningi i korzystać z szablonów treningowych (widok „Trening → Szablony” listuje wszystkie szablony i ich ćwiczenia)
 - Śledzić finanse i notowania kryptowalut
 - Zarządzać listami zakupów oraz zadaniami okresowymi
 - Logować się (JWT lub Google OAuth2) i zarządzać profilem

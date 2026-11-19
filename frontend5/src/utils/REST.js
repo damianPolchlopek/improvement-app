@@ -11,6 +11,7 @@ const serverUrl = import.meta.env.VITE_API_URL;
 const apiV1 = 'api/v1/';
 const exercise = 'exercises/';
 const training = 'trainings/';
+const trainingTemplates = 'training-templates';
 const dictionary = 'dictionary/';
 const exerciseType = 'type';
 const exerciseName = 'name';
@@ -158,8 +159,12 @@ export default class REST {
     return get(serverUrl + apiV1 + exercise + dictionary + exerciseType);
   }
 
+  static getAllTrainingTemplates() {
+    return get(serverUrl + apiV1 + trainingTemplates);
+  }
+
   static getTrainingTemplate(type) {
-    return get(serverUrl + apiV1 + exercise + dictionary + 'training/' + type);
+    return get(serverUrl + apiV1 + trainingTemplates + '/' + type);
   }
 
   static initTrainingModule() {
