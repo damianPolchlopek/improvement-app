@@ -17,14 +17,6 @@ export const TRAINING_TYPES = [
   { value: 'C', label: 'Hipertroficzny C' },
   { value: 'D', label: 'Hipertroficzny D' },
   { value: 'E', label: 'Basen' },
-  { value: 'A1', label: 'Siłowy A1' },
-  { value: 'B1', label: 'Siłowy B1' },
-  { value: 'C1', label: 'Hipertroficzny C1' },
-  { value: 'D1', label: 'Hipertroficzny D1' },
-  { value: 'B2', label: 'Siłowy B2' },
-  { value: 'A2', label: 'Siłowy A2' },
-  { value: 'C2', label: 'Hipertroficzny C2' },
-  { value: 'D2', label: 'Hipertroficzny D2' },
 ];
 
 export default function TrainingTypeSelector({ setTrainingType, value, size = 'medium', label }) {

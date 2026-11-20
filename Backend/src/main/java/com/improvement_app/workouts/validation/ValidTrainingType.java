@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Pattern(regexp = "^(A1|A2|B1|B2|A|B|C1|C2|C|D1|D2|D|E|K1|K2|K3|KARDIO|F1|F2|F)$",
+@Pattern(regexp = "^(A|B|C|D|E|K1|K2|K3|KARDIO|F1|F2|F)$",
         message = "Nieprawidłowy typ treningu")
 @Constraint(validatedBy = {})
 public @interface ValidTrainingType {

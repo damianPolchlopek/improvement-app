@@ -35,7 +35,7 @@ public class TrainingTemplateController {
     }
 
     @Operation(summary = "Pobierz szablon treningu",
-            description = "Zwraca szablon treningu po skrócie typu (np. A, C1)")
+            description = "Zwraca szablon treningu po skrócie typu (np. A, K1)")
     @GetMapping(value = "/{template}", produces = MediaType.APPLICATION_JSON_VALUE)
     public TrainingTemplateResponse getTrainingTemplate(@PathVariable String template) {
         return trainingTemplateService.getTrainingTemplate(template)
