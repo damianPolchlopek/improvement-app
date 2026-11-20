@@ -47,12 +47,5 @@ export const INFORMATION = 'information';
 export const FinanceViewUrl = `${APP}/${FINANCE}/${VIEW}`;
 export const FinanceConfigUrl = `${APP}/${FINANCE}/${INFORMATION}`;
 
-export const PROJECTS = 'projects';
-export const TimerChallenge = 'timer-challenge';
-export const HolidayPicker = 'vacations';
-
-export const TimerChallengeUrl = `${APP}/${PROJECTS}/${TimerChallenge}`;
-export const HolidayPickerUrl = `${APP}/${PROJECTS}/${HolidayPicker}`;
-
 export const AUDIT = 'audit';
 export const AuditFoodUrl = `${APP}/${AUDIT}`;

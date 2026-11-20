@@ -133,7 +133,7 @@ Frontend to aplikacja React (Create React App). Pozwala użytkownikowi:
 - **React Query** (`@tanstack/react-query`) – pobieranie danych i cache
 - **Axios** (REST), **i18next** / **react-i18next** (wielojęzyczność)
 - **Recharts** – wykresy i statystyki
-- **WebSocket** (`@stomp/stompjs`, `sockjs-client`, `stompjs`)
+- **WebSocket** (`@stomp/stompjs`, `sockjs-client`)
 - **dayjs** – obsługa dat
 - **Prettier** – formatowanie kodu
 

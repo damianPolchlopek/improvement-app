@@ -77,7 +77,7 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
   - `utils/` – Funkcje pomocnicze i komunikacja z API (axios)
   - `assets/` – Zasoby statyczne
   - **Moduły funkcjonalne:** `food/`, `training/`, `finance/`, `shopping/`, `other/`,
-    `audit/`, `home/`, `login/`, `projects/`
+    `audit/`, `home/`, `login/`
 - `public/` – Statyczne zasoby serwowane bez przetwarzania (favicon, manifest)
 
 ---
@@ -90,9 +90,9 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
 - **React Router** (`react-router-dom`) – routing aplikacji
 - **React Query** (`@tanstack/react-query`) – obsługa zapytań i cache
 - **i18next** + **react-i18next** – internacjonalizacja i tłumaczenia
-- **Day.js** i **Moment.js** – operacje na datach
+- **Day.js** – operacje na datach
 - **Axios** – komunikacja HTTP z backendem
-- **WebSockety** (`@stomp/stompjs`, `sockjs-client`, `stompjs`) – komunikacja w czasie rzeczywistym
+- **WebSockety** (`@stomp/stompjs`, `sockjs-client`) – komunikacja w czasie rzeczywistym
 - **Recharts** – wykresy i wizualizacja danych
 
 ---
@@ -139,7 +139,6 @@ Aplikacja posiada wsparcie dla wielu języków dzięki **i18next** i **react-i18
 Do komunikacji w czasie rzeczywistym wykorzystywane są biblioteki:
 - **@stomp/stompjs**
 - **sockjs-client**
-- **stompjs**
 
 Połączenie (`LogComponent`, kolejka `/user/queue/messages` — każdy użytkownik dostaje tylko własne komunikaty) działa tylko dla zalogowanego użytkownika — SockJS wysyła cookie z JWT przy handshake'u. Kanał jest tylko do odbioru: backend odrzuca wiadomości wysyłane przez klienta.
 

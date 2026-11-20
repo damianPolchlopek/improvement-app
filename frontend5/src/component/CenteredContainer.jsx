@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Box } from '@mui/material';
 
 const CenteredContainer = ({ children }) => {
@@ -15,10 +14,6 @@ const CenteredContainer = ({ children }) => {
       {children}
     </Box>
   );
-};
-
-CenteredContainer.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default CenteredContainer;

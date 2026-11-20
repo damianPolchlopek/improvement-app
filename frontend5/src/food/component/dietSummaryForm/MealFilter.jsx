@@ -8,7 +8,6 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 import SearchIcon from '@mui/icons-material/Search';
@@ -88,10 +87,3 @@ export default function MealFilter({
     </Toolbar>
   );
 }
-
-MealFilter.propTypes = {
-  mealPopularity: PropTypes.string.isRequired,
-  setMealPopularity: PropTypes.func.isRequired,
-  searchTerm: PropTypes.string.isRequired,
-  setSearchTerm: PropTypes.func.isRequired,
-};

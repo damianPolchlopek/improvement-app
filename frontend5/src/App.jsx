@@ -33,14 +33,11 @@ import {
   OTHER,
   AUDIT,
   SignUpUrl,
-  TimerChallenge,
-  HolidayPicker,
   LoginUrl,
   LogoutUrl,
   FINANCE,
   VIEW,
   INFORMATION,
-  PROJECTS,
   VerifyEmailUrl,
   OAuth2CallbackUrl,
 } from './utils/URLHelper';
@@ -71,8 +68,6 @@ const DailyView = lazy(() => import('./other/daily/DailyView'));
 const FinanceView = lazy(() => import('./finance/view/FinanceView.jsx'));
 const FinanceInformation = lazy(() => import('./finance/FinanceInformation.jsx'));
 const SignUpView = lazy(() => import('./login/SignUpView'));
-const TimerChallengeMain = lazy(() => import('./projects/timerChallenge/TimerChallengeMain'));
-const HolidayPickerMain = lazy(() => import('./projects/holidayPicker/HolidayPickerMain'));
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
 const OAuth2CallbackPage = lazy(() => import('./login/OAuth2CallbackPage.jsx'));
@@ -310,27 +305,6 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={suspenseFallback}>
                 <DietAuditPage />
-              </Suspense>
-            ),
-          },
-        ],
-      },
-      {
-        path: PROJECTS,
-        children: [
-          {
-            path: TimerChallenge,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <TimerChallengeMain />
-              </Suspense>
-            ),
-          },
-          {
-            path: HolidayPicker,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <HolidayPickerMain />
               </Suspense>
             ),
           },

@@ -32,9 +32,6 @@ i18n.use(initReactI18next).init({
           other: 'Other',
           weekly: 'Weekly',
           daily: 'Daily',
-          timerChallenge: 'Timer Challenge',
-          projects: 'Projects',
-          vacations: 'Vacations',
           audit: 'Audit',
         },
         chart: {
@@ -598,9 +595,6 @@ i18n.use(initReactI18next).init({
           other: 'Inne',
           weekly: 'Tygodniowy',
           daily: 'Dzienny',
-          timerChallenge: 'Wyzwanie Czasowe',
-          projects: 'Projekty',
-          vacations: 'Urlopy',
           audit: 'Audyt',
         },
         chart: {

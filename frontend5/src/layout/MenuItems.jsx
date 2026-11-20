@@ -14,8 +14,6 @@ import {
   ShoppingViewUrl,
   WeeklyViewUrl,
   DailyViewUrl,
-  TimerChallengeUrl,
-  HolidayPickerUrl,
   HomeViewUrl,
   AuditFoodUrl,
 } from '../utils/URLHelper';
@@ -77,14 +75,6 @@ export const MENU_ITEMS = (t) => [
       { name: t('menu.shopping'), path: ShoppingViewUrl, icon: <ShoppingBagIcon /> },
       { name: t('menu.weekly'), path: WeeklyViewUrl, icon: <VisibilityIcon /> },
       { name: t('menu.daily'), path: DailyViewUrl, icon: <VisibilityIcon /> },
-    ],
-  },
-  {
-    category: t('menu.projects'),
-    icon: <CalendarTodayIcon />,
-    subPages: [
-      { name: t('menu.timerChallenge'), path: TimerChallengeUrl, icon: <VisibilityIcon /> },
-      { name: t('menu.vacations'), path: HolidayPickerUrl, icon: <VisibilityIcon /> },
     ],
   },
   {
