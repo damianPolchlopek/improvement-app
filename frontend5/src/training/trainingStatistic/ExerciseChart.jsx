@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -35,7 +35,7 @@ export const CHART_COLORS = [
 ];
 
 function formatAxisDate(tickItem) {
-  return moment(tickItem).format('DD/MM/YYYY');
+  return dayjs(tickItem).format('DD/MM/YYYY');
 }
 
 const CustomTooltip = ({ active, payload, label, t }) => {

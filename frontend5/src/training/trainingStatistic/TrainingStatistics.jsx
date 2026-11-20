@@ -24,7 +24,6 @@ import {
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
-import moment from 'moment';
 import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid';
 import { useLoaderData } from 'react-router-dom';
@@ -37,11 +36,11 @@ import { alpha } from '@mui/material/styles';
 
 // Backend expects dd-MM-yyyy path params (see StatisticController).
 function formatApiDate(epoch) {
-  return moment(epoch).format('DD-MM-YYYY');
+  return dayjs(epoch).format('DD-MM-YYYY');
 }
 
 // Default range start when "All" is selected – early enough to cover all data.
-const ALL_TIME_BEGIN = moment('2015-01-01').valueOf();
+const ALL_TIME_BEGIN = dayjs('2015-01-01').valueOf();
 
 const RANGE_PRESETS = [
   { key: '1M', months: 1 },
@@ -85,7 +84,7 @@ export default function TrainingStatistic() {
   const [isTemplateLoading, setIsTemplateLoading] = useState(false);
   const [chartType, setChartType] = useState('Capacity');
   const [beginDate, setBeginDate] = useState(ALL_TIME_BEGIN);
-  const [endDate, setEndDate] = useState(moment().add(1, 'day').valueOf());
+  const [endDate, setEndDate] = useState(dayjs().add(1, 'day').valueOf());
 
   // One query per selected exercise; merged into a single series-per-exercise dataset.
   const queryResults = useQueries({
@@ -111,7 +110,7 @@ export default function TrainingStatistic() {
     queryResults.forEach((result, index) => {
       const name = selectedExercises[index];
       (result.data || []).forEach((point) => {
-        const epoch = moment(point.localDate).valueOf();
+        const epoch = dayjs(point.localDate).valueOf();
         const row = byDate.get(epoch) || { localDate: epoch };
         row[name] = point.value;
         byDate.set(epoch, row);
@@ -121,10 +120,10 @@ export default function TrainingStatistic() {
   }, [queryResults, selectedExercises]);
 
   const applyPreset = (preset) => {
-    const end = moment().add(1, 'day');
+    const end = dayjs().add(1, 'day');
     setEndDate(end.valueOf());
     setBeginDate(
-      preset.months ? moment().subtract(preset.months, 'month').valueOf() : ALL_TIME_BEGIN
+      preset.months ? dayjs().subtract(preset.months, 'month').valueOf() : ALL_TIME_BEGIN
     );
   };
 
