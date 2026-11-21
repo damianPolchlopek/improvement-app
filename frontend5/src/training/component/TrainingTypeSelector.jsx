@@ -8,6 +8,8 @@ export const TRAINING_TYPES = [
   { value: 'F1', label: 'F1' },
   { value: 'F2', label: 'F2' },
   { value: 'F', label: '5x5' },
+  { value: 'F3A', label: 'FBW#3-A' },
+  { value: 'F3B', label: 'FBW#3-B' },
   { value: 'K1', label: 'Kettle K1' },
   { value: 'K2', label: 'Kettle K2' },
   { value: 'K3', label: 'Kettle K3' },

@@ -13,6 +13,8 @@ public enum ExerciseType {
     FBW_F("FBW#2-F"),
     FBW_F_1("FBW#1-F1"),
     FBW_F_2("FBW#1-F2"),
+    FBW_3_A("FBW#3-A"),
+    FBW_3_B("FBW#3-B"),
     KETTLE_K1("Kettle#1-K1");
 
     private final String value;

@@ -16,7 +16,9 @@ public class TrainingTypeConverter {
             Map.entry("KARDIO", "KARDIO"),
             Map.entry("F", "FBW_F"),
             Map.entry("F1", "FBW_F_1"),
-            Map.entry("F2", "FBW_F_2")
+            Map.entry("F2", "FBW_F_2"),
+            Map.entry("F3A", "FBW_3_A"),
+            Map.entry("F3B", "FBW_3_B")
     );
 
     private static final Map<String, String> TEMPLATE_NAME_BY_CODE = Map.ofEntries(
@@ -31,7 +33,9 @@ public class TrainingTypeConverter {
             Map.entry("KARDIO", "Kardio"),
             Map.entry("F", "FBW#2-F"),
             Map.entry("F1", "FBW#1-F1"),
-            Map.entry("F2", "FBW#1-F2")
+            Map.entry("F2", "FBW#1-F2"),
+            Map.entry("F3A", "FBW#3-A"),
+            Map.entry("F3B", "FBW#3-B")
     );
 
     private TrainingTypeConverter() {
