@@ -5,7 +5,6 @@ import com.improvement_app.food.infrastructure.entity.meals.ProductEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ProductMapper {
@@ -53,7 +52,7 @@ public class ProductMapper {
 
         return entities.stream()
                 .map(this::toDomain)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<ProductEntity> toEntity(List<Product> products) {
@@ -63,6 +62,6 @@ public class ProductMapper {
 
         return products.stream()
                 .map(this::toEntity)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

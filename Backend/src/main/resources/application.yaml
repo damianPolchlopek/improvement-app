@@ -6,6 +6,12 @@ server:
 spring:
   profiles:
     active: dev
+  # Wirtualne wątki (Java 21+) dla żądań HTTP Tomcata, @Async/@Scheduled i WebSocketów.
+  # Aplikacja głównie czeka na bazę i zewnętrzne API, więc wątki nie blokują się bez potrzeby.
+  # Liczbę równoległych zapytań do bazy dalej ogranicza pula Hikari (maximum-pool-size).
+  threads:
+    virtual:
+      enabled: true
   security:
     enabled: false
     oauth2:

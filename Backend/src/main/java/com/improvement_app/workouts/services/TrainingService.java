@@ -65,7 +65,7 @@ public class TrainingService {
 
         TrainingEntity latestTraining = trainingRepository.findTopByUserIdOrderByDateDesc(userId)
                 .orElse(null);
-        ExerciseType type = ExerciseType.fromValue(exerciseRequest.get(0).getType());
+        ExerciseType type = ExerciseType.fromValue(exerciseRequest.getFirst().type());
         String trainingName = DriveFilesHelper.generateFileName(type, latestTraining);
 
         TrainingEntity training = TrainingEntity.from(exerciseRequest);

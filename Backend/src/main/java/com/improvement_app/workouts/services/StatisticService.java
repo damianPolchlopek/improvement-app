@@ -14,8 +14,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 @Slf4j
 @Service
@@ -105,7 +105,7 @@ public class StatisticService {
     private List<ChartPoint> scaleLists(List<Double> values, List<LocalDate> dates) {
         return IntStream.range(0, dates.size())
                 .mapToObj(i -> new ChartPoint(dates.get(i), values.get(i)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

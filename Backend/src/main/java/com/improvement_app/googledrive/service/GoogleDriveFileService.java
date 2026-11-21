@@ -20,7 +20,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -50,7 +49,7 @@ public class GoogleDriveFileService {
 
         return allFiles.stream()
                 .map(DriveFileItemDTO::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public String getGoogleDriveObjectId(final String googleDriveFileName,
@@ -77,7 +76,7 @@ public class GoogleDriveFileService {
                 .map(DriveFileItemDTO::new)
                 .toList();
 
-        return responseList.get(0).getId();
+        return responseList.getFirst().getId();
     }
 
     private List<File> getAllFiles(final Drive.Files.List request) {

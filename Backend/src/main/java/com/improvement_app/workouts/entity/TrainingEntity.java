@@ -64,12 +64,12 @@ public class TrainingEntity extends AuditableEntity {
 
     public static TrainingEntity from(List<ExerciseRequest> trainingRequest) {
         List<ExerciseEntity> exercises = ExerciseEntity.create(trainingRequest);
-        ExerciseRequest exerciseRequest = trainingRequest.get(0);
+        ExerciseRequest exerciseRequest = trainingRequest.getFirst();
 
         return new TrainingEntity(
                 LocalDate.now(),
-                exerciseRequest.getTrainingName(),
-                ExercisePlace.fromString(exerciseRequest.getPlace()),
+                exerciseRequest.trainingName(),
+                ExercisePlace.fromString(exerciseRequest.place()),
                 exercises
         );
     }

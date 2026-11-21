@@ -6,7 +6,6 @@ import com.improvement_app.food.ui.requests.calculate.CalculateMealRequest;
 import com.improvement_app.food.ui.requests.create.CreateDailyMealIngredientRequest;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public record UpdateDailyMealRequest(
         Long id,
@@ -38,7 +37,7 @@ public record UpdateDailyMealRequest(
     public CalculateMealRequest toCalculateMealRequest() {
         List<CalculateMealIngredientRequest> collect = this.ingredients.stream()
                 .map(UpdateDailyMealIngredientRequest::toCalculateMealIngredientRequest)
-                .collect(Collectors.toList());
+                .toList();
 
         return new CalculateMealRequest(
                 kcal,

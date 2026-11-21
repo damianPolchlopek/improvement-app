@@ -48,9 +48,9 @@ public class ExerciseSetEntity extends AuditableEntity {
 
     public static List<ExerciseSetEntity> fromString(ExerciseRequest request) {
         return DriveFilesHelper.parseExerciseSets(
-                request.getType(),
-                request.getReps(),
-                request.getWeight()
+                request.type(),
+                request.reps(),
+                request.weight()
         );
     }
 }

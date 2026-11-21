@@ -73,9 +73,9 @@ public class ExerciseEntity extends AuditableEntity {
         for (ExerciseRequest request : exerciseRequests) {
             List<ExerciseSetEntity> sets = ExerciseSetEntity.fromString(request);
             ExerciseEntity exerciseEntity = new ExerciseEntity(
-                    ExerciseName.fromValue(request.getName()),
-                    ExerciseType.fromValue(request.getType()),
-                    ExerciseProgress.fromValue(request.getProgress()),
+                    ExerciseName.fromValue(request.name()),
+                    ExerciseType.fromValue(request.type()),
+                    ExerciseProgress.fromValue(request.progress()),
                     sets
             );
 

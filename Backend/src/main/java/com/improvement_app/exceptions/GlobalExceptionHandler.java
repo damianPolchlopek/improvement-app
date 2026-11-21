@@ -20,7 +20,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -70,7 +69,7 @@ public class GlobalExceptionHandler {
                 .getFieldErrors()
                 .stream()
                 .map(this::mapToFieldValidationError)
-                .collect(Collectors.toList());
+                .toList();
 
         ValidationErrorResponse errorResponse = ValidationErrorResponse.builder()
                 .code("VALIDATION_FAILED")
@@ -92,7 +91,7 @@ public class GlobalExceptionHandler {
         List<FieldValidationError> fieldErrors = e.getConstraintViolations()
                 .stream()
                 .map(this::mapToFieldValidationError)
-                .collect(Collectors.toList());
+                .toList();
 
         ValidationErrorResponse errorResponse = ValidationErrorResponse.builder()
                 .code("CONSTRAINT_VIOLATION")

@@ -108,8 +108,8 @@ class AuthServiceTest {
             assertThat(result.refreshToken()).isEqualTo("refresh-token");
 
             // then – info o userze
-            assertThat(result.userInfo().getUsername()).isEqualTo("testuser");
-            assertThat(result.userInfo().getEmail()).isEqualTo("test@example.com");
+            assertThat(result.userInfo().username()).isEqualTo("testuser");
+            assertThat(result.userInfo().email()).isEqualTo("test@example.com");
 
             // then – efekty uboczne na encji
             assertThat(user.getFailedLoginAttempts()).isZero();

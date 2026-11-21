@@ -291,12 +291,12 @@ public class DriveFilesHelper {
 
             for (int i = 0; i < exercises.size(); ++i) {
                 final ExerciseRequest exercise = exercises.get(i);
-                final String exerciseType = exercise.getType();
-                final String exercisePlace = exercise.getPlace();
-                final String exerciseName = exercise.getName();
-                final String exerciseReps = exercise.getReps();
-                final String exerciseWeight = exercise.getWeight();
-                final String exerciseProgress = exercise.getProgress();
+                final String exerciseType = exercise.type();
+                final String exercisePlace = exercise.place();
+                final String exerciseName = exercise.name();
+                final String exerciseReps = exercise.reps();
+                final String exerciseWeight = exercise.weight();
+                final String exerciseProgress = exercise.progress();
 
                 final Row row = sheet.createRow(i);
                 Cell cell = row.createCell(0);

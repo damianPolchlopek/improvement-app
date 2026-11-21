@@ -9,7 +9,7 @@ stages:
 
 maven-build:
   stage: build
-  image: maven:3.8.5-openjdk-17
+  image: maven:3.10-eclipse-temurin-25
   script: "mvn package -B"
   artifacts:
     paths:

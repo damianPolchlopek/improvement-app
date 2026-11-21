@@ -1,6 +1,6 @@
 # Improvement App
 
-Improvement App to aplikacja webowa wspierająca codzienne nawyki: zarządzanie dietą i produktami spożywczymi, planowanie treningów, śledzenie finansów (w tym kryptowalut), listy zakupów oraz zadania okresowe. Składa się z backendu (Spring Boot + Java 21) oraz frontendu (React 19 + Material UI).
+Improvement App to aplikacja webowa wspierająca codzienne nawyki: zarządzanie dietą i produktami spożywczymi, planowanie treningów, śledzenie finansów (w tym kryptowalut), listy zakupów oraz zadania okresowe. Składa się z backendu (Spring Boot + Java 25) oraz frontendu (React 19 + Material UI).
 
 ## Szybki start
 
@@ -37,7 +37,7 @@ Po starcie: frontend → http://localhost:3000, backend → http://localhost:808
 
 ```
 improvement-app/
-├── Backend/            # Spring Boot 4.1.2, Java 21 (REST API, WebSocket)
+├── Backend/            # Spring Boot 4.1.2, Java 25 (REST API, WebSocket)
 ├── frontend5/          # React 19 + Material UI (Vite)
 ├── StartupScripts/     # Skrypty inicjalizujące bazę (postgres/)
 ├── docker-compose.yml  # Uruchomienie całego stacku (backend, frontend, Postgres, pgAdmin)
@@ -67,7 +67,7 @@ Backend obsługuje całą logikę biznesową, autoryzację, dostęp do baz danyc
 
 ### Architektura i technologie
 
-- **Java 21 + Spring Boot 4.1.2** – Security, Web, Data JPA, Validation, WebSocket, Mail, OAuth2 Client, Actuator
+- **Java 25 + Spring Boot 4.1.2** – Security, Web, Data JPA, Validation, WebSocket, Mail, OAuth2 Client, Actuator
 - **Baza danych** – PostgreSQL (JPA/Hibernate, pula połączeń HikariCP)
 - **Liquibase** – migracje schematu bazy (`src/main/resources/db/changelog`)
 - **Hibernate Envers** – audyt zmian encji

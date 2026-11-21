@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class UserDetailsImpl implements UserDetails {
@@ -44,8 +43,8 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(UserEntity userEntity) {
         List<GrantedAuthority> authorities = userEntity.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
+                .<GrantedAuthority>map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .toList();
 
         return new UserDetailsImpl(
                 userEntity.getId(),

@@ -6,7 +6,7 @@
 export PATH=/usr/local/bin:/usr/bin:/bin
 
 # Wybór wersji Javy na small.pl
-export JAVA_VERSION=21
+export JAVA_VERSION=25
 
 # Wczytaj sekrety (hasło do bazy, JWT itd.) jako zmienne środowiskowe.
 # Plik zapisuje GitHub Actions przy każdym deployu (chmod 600).

@@ -1,43 +1,26 @@
 package com.improvement_app.workouts.request;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
 
 import java.time.LocalDate;
 
-@Data
-public class ExerciseRequest {
+public record ExerciseRequest(
+        String id,
+        String type,
+        String place,
+        @NotEmpty String trainingName,
+        LocalDate date,
+        String name,
+        String progress,
+        @NotEmpty String reps,
+        @NotEmpty String weight,
+        int index
+) {
 
-    private String id;
-    private String type;
-    private String place;
-
-    @NotEmpty
-    private String trainingName;
-    private LocalDate date;
-
-    private String name;
-    private String progress;
-
-    @NotEmpty
-    private String reps;
-
-    @NotEmpty
-    private String weight;
-    private int index;
-
+    // Wygodny konstruktor bez id (używany m.in. w testach)
     public ExerciseRequest(String type, String place, String name,
                            String progress, LocalDate date, String reps, String weight, String trainingName,
                            int index) {
-        this.type = type;
-        this.place = place;
-        this.name = name;
-        this.progress = progress;
-        this.date = date;
-        this.trainingName = trainingName;
-        this.reps = reps;
-        this.weight = weight;
-        this.index = index;
+        this(null, type, place, trainingName, date, name, progress, reps, weight, index);
     }
-
 }

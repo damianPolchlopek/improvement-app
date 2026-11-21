@@ -20,7 +20,6 @@ import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -104,7 +103,7 @@ public class GenericAuditService {
                     );
                 })
                 .sorted((a, b) -> b.revisionNumber().compareTo(a.revisionNumber()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }
