@@ -9,6 +9,7 @@ import com.improvement_app.workouts.validation.ValidTrainingType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @Validated
 @Tag(name = "Training API", description = "Controller to handle all operation on training database.")
 @RestController
@@ -55,8 +57,10 @@ public class TrainingController {
 
     @Operation(summary = "Dodaj nowy trening", description = "Zapisuje trening w bazie i przesyła kopię na Google Drive")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainingDayResponse> addTraining(@Valid @RequestBody List<ExerciseRequest> exercises,
+    public ResponseEntity<TrainingDayResponse> addTraining(@RequestBody List<@Valid ExerciseRequest> exercises,
                                                            @AuthenticationPrincipal(expression = "id") Long userId) {
+
+        log.info("[addTraining] Training: {}", exercises);
 
         TrainingEntity training = trainingService.addTraining(userId, exercises);
 

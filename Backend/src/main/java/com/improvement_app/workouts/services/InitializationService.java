@@ -159,10 +159,18 @@ public class InitializationService {
             File file = filePathService.getDownloadedFile(fileItem.getName());
             List<String> values = DriveFilesHelper.parseExcelSimpleFile(file);
 
+            List<String> missingExercises = values.stream()
+                    .filter(value -> !exerciseMap.containsKey(value))
+                    .toList();
+            if (!missingExercises.isEmpty()) {
+                log.error("Szablon {} zawiera ćwiczenia spoza pliku {}: {}",
+                        fileItem.getName(), EXERCISE_NAMES_FILE_NAME, missingExercises);
+                return null;
+            }
+
             TrainingTemplateEntity trainingTemplateEntity = new TrainingTemplateEntity(fileItem.getName());
             for (String value : values) {
-                ExerciseNameEntity exerciseNameEntity = exerciseMap.get(value);
-                trainingTemplateEntity.addExercise(exerciseNameEntity);
+                trainingTemplateEntity.addExercise(exerciseMap.get(value));
             }
 
             return trainingTemplateEntity;

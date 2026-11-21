@@ -8,7 +8,7 @@ public record ExerciseRequest(
         String id,
         String type,
         String place,
-        @NotEmpty String trainingName,
+        String trainingName,
         LocalDate date,
         String name,
         String progress,
