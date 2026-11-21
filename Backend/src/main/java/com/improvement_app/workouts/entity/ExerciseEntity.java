@@ -4,7 +4,7 @@ import com.improvement_app.audit.basic.AuditableEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseName;
 import com.improvement_app.workouts.entity.enums.ExerciseProgress;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -67,10 +67,10 @@ public class ExerciseEntity extends AuditableEntity {
         this.name = exerciseName;
     }
 
-    public static List<ExerciseEntity> create(List<ExerciseRequest> exerciseRequests) {
+    public static List<ExerciseEntity> create(List<AddExerciseRequest> exerciseRequests) {
         List<ExerciseEntity> result = new ArrayList<>();
 
-        for (ExerciseRequest request : exerciseRequests) {
+        for (AddExerciseRequest request : exerciseRequests) {
             List<ExerciseSetEntity> sets = ExerciseSetEntity.fromString(request);
             ExerciseEntity exerciseEntity = new ExerciseEntity(
                     ExerciseName.fromValue(request.name()),

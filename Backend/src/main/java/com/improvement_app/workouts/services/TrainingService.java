@@ -9,7 +9,7 @@ import com.improvement_app.workouts.entity.TrainingEntity;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import com.improvement_app.workouts.repository.TrainingEntityRepository;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ public class TrainingService {
     }
 
     @Transactional
-    public TrainingEntity addTraining(Long userId, List<ExerciseRequest> exerciseRequest) {
+    public TrainingEntity addTraining(Long userId, List<AddExerciseRequest> exerciseRequest) {
         if (exerciseRequest == null || exerciseRequest.isEmpty()) {
             throw new IllegalArgumentException("Lista ćwiczeń nie może być pusta");
         }
@@ -68,8 +68,7 @@ public class TrainingService {
         ExerciseType type = ExerciseType.fromValue(exerciseRequest.getFirst().type());
         String trainingName = DriveFilesHelper.generateFileName(type, latestTraining);
 
-        TrainingEntity training = TrainingEntity.from(exerciseRequest);
-        training.setName(trainingName);
+        TrainingEntity training = TrainingEntity.from(exerciseRequest, trainingName);
         training.setUser(userEntity);
 
         // Google Drive is the source of truth — upload first.
@@ -82,7 +81,7 @@ public class TrainingService {
     }
 
     @Transactional
-    private void uploadTrainingToDrive(List<ExerciseRequest> exercises, String trainingName) {
+    private void uploadTrainingToDrive(List<AddExerciseRequest> exercises, String trainingName) {
         String excelFileLocation = filePathService.getExcelPath(trainingName);
         DriveFilesHelper.createExcelFile(exercises, excelFileLocation);
         File file = new File(excelFileLocation);

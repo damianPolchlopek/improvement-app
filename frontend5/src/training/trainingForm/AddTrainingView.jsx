@@ -22,7 +22,7 @@ import { CheckCircle, FitnessCenter } from '@mui/icons-material';
 
 export default function AddTrainingView() {
   const [isSimpleForm, setIsSimpleForm] = useState(true);
-  const [trainingType, setTrainingType] = useState('F'); // domyślnie 5x5
+  const [trainingType, setTrainingType] = useState('F3A');
   const { t } = useTranslation();
   const theme = useTheme();
 

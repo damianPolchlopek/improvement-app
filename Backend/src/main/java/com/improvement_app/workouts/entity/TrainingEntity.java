@@ -3,7 +3,7 @@ package com.improvement_app.workouts.entity;
 import com.improvement_app.audit.basic.AuditableEntity;
 import com.improvement_app.security.entity.UserEntity;
 import com.improvement_app.workouts.entity.enums.ExercisePlace;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,13 +62,13 @@ public class TrainingEntity extends AuditableEntity {
         }
     }
 
-    public static TrainingEntity from(List<ExerciseRequest> trainingRequest) {
+    public static TrainingEntity from(List<AddExerciseRequest> trainingRequest, String trainingName) {
         List<ExerciseEntity> exercises = ExerciseEntity.create(trainingRequest);
-        ExerciseRequest exerciseRequest = trainingRequest.getFirst();
+        AddExerciseRequest exerciseRequest = trainingRequest.getFirst();
 
         return new TrainingEntity(
                 LocalDate.now(),
-                exerciseRequest.trainingName(),
+                trainingName,
                 ExercisePlace.fromString(exerciseRequest.place()),
                 exercises
         );

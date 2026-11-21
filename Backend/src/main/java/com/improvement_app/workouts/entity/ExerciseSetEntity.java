@@ -1,7 +1,7 @@
 package com.improvement_app.workouts.entity;
 
 import com.improvement_app.audit.basic.AuditableEntity;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 import com.improvement_app.workouts.helpers.DriveFilesHelper;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class ExerciseSetEntity extends AuditableEntity {
         return rep * weight;
     }
 
-    public static List<ExerciseSetEntity> fromString(ExerciseRequest request) {
+    public static List<ExerciseSetEntity> fromString(AddExerciseRequest request) {
         return DriveFilesHelper.parseExerciseSets(
                 request.type(),
                 request.reps(),

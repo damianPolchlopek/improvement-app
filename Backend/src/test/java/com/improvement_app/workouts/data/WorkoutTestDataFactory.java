@@ -10,7 +10,7 @@ import com.improvement_app.workouts.entity.enums.ExerciseName;
 import com.improvement_app.workouts.entity.enums.ExercisePlace;
 import com.improvement_app.workouts.entity.enums.ExerciseProgress;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -86,12 +86,11 @@ public final class WorkoutTestDataFactory {
     }
 
     /** Buduje minimalny, walidny request używany w POST /exercises/addTraining. */
-    public static ExerciseRequest request(ExerciseType type, ExerciseName name, String reps, String weight) {
-        return new ExerciseRequest(
+    public static AddExerciseRequest request(ExerciseType type, ExerciseName name, String reps, String weight) {
+        return new AddExerciseRequest(
                 type.getValue(), ExercisePlace.GYM.getValue(),
                 name.getValue(), ExerciseProgress.NO_CHANGE.getValue(),
-                LocalDate.now(), reps, weight,
-                "001 - 28.05.2024r. - A",
+                reps, weight,
                 0
         );
     }

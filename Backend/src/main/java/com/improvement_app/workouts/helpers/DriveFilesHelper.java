@@ -9,7 +9,7 @@ import com.improvement_app.workouts.entity.enums.ExerciseProgress;
 import com.improvement_app.workouts.entity.enums.ExerciseType;
 import com.improvement_app.workouts.exceptions.*;
 import com.improvement_app.workouts.helpers.parse_rep_and_weight_strategy.*;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -267,7 +267,7 @@ public class DriveFilesHelper {
         return parts[1].trim();
     }
 
-    public static void createExcelFile(final List<ExerciseRequest> exercises,
+    public static void createExcelFile(final List<AddExerciseRequest> exercises,
                                        final String fileLocation) {
 
         try (XSSFWorkbook workbook = new XSSFWorkbook()) {
@@ -290,7 +290,7 @@ public class DriveFilesHelper {
             style.setVerticalAlignment(VerticalAlignment.CENTER);
 
             for (int i = 0; i < exercises.size(); ++i) {
-                final ExerciseRequest exercise = exercises.get(i);
+                final AddExerciseRequest exercise = exercises.get(i);
                 final String exerciseType = exercise.type();
                 final String exercisePlace = exercise.place();
                 final String exerciseName = exercise.name();

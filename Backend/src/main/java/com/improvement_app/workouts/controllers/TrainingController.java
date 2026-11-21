@@ -2,7 +2,7 @@ package com.improvement_app.workouts.controllers;
 
 import com.improvement_app.common.web.ApiVersions;
 import com.improvement_app.workouts.entity.TrainingEntity;
-import com.improvement_app.workouts.request.ExerciseRequest;
+import com.improvement_app.workouts.request.AddExerciseRequest;
 import com.improvement_app.workouts.response.TrainingDayResponse;
 import com.improvement_app.workouts.services.TrainingService;
 import com.improvement_app.workouts.validation.ValidTrainingType;
@@ -57,10 +57,8 @@ public class TrainingController {
 
     @Operation(summary = "Dodaj nowy trening", description = "Zapisuje trening w bazie i przesyła kopię na Google Drive")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TrainingDayResponse> addTraining(@RequestBody List<@Valid ExerciseRequest> exercises,
+    public ResponseEntity<TrainingDayResponse> addTraining(@RequestBody List<@Valid AddExerciseRequest> exercises,
                                                            @AuthenticationPrincipal(expression = "id") Long userId) {
-
-        log.info("[addTraining] Training: {}", exercises);
 
         TrainingEntity training = trainingService.addTraining(userId, exercises);
 
