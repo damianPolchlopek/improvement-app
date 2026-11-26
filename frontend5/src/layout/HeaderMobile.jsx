@@ -4,14 +4,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 function HeaderMobile({ onDrawerToggle }) {
   return (
-    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
       <IconButton
-        size="large"
-        aria-label="account of current user"
+        aria-label="open navigation"
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={onDrawerToggle}
         color="inherit"
+        edge="start"
       >
         <MenuIcon />
       </IconButton>
