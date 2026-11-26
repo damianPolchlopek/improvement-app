@@ -2,10 +2,11 @@ import React from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../../utils/REST';
 import { useTranslation } from 'react-i18next';
-import { Collapse, Table, TableBody, TableHead, CircularProgress } from '@mui/material';
+import { Box, Collapse, Skeleton, Table, TableBody, TableHead } from '@mui/material';
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
 import MealRow from './MealRow';
+import { HAIRLINE } from '../foodStyles';
 
 const popularityTranslation = new Map([
   ['ALL', 'All'],
@@ -45,8 +46,10 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
   if (isLoading) {
     return (
       <StyledTableRow>
-        <StyledTableCell colSpan={2} align="center">
-          <CircularProgress />
+        <StyledTableCell colSpan={2} sx={{ px: 2 }}>
+          {[0, 1, 2].map((i) => (
+            <Skeleton key={i} height={36} />
+          ))}
         </StyledTableCell>
       </StyledTableRow>
     );
@@ -66,33 +69,48 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
     <StyledTableRow>
       <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
-          <Table size="small">
-            <TableHead>
-              <StyledTableRow>
-                <StyledTableCell padding="checkbox"></StyledTableCell>
-                <StyledTableCell padding="checkbox"></StyledTableCell>
-                <StyledTableCell>{t('food.name')}</StyledTableCell>
-                <StyledTableCell>{t('food.kcal')}</StyledTableCell>
-                <StyledTableCell>{t('food.protein')}</StyledTableCell>
-                <StyledTableCell>{t('food.carbs')}</StyledTableCell>
-                <StyledTableCell>{t('food.fat')}</StyledTableCell>
-                <StyledTableCell>{t('food.amount')}</StyledTableCell>
-              </StyledTableRow>
-            </TableHead>
-            <TableBody>
-              {mealList.length === 0 ? (
+          <Box
+            sx={{
+              mx: { xs: 0, md: 2 },
+              mb: 2,
+              borderRadius: 2,
+              border: HAIRLINE,
+              bgcolor: 'rgba(0,0,0,0.15)',
+              overflow: 'hidden',
+            }}
+          >
+            <Table size="small">
+              <TableHead>
                 <StyledTableRow>
-                  <StyledTableCell colSpan={8} align="center">
-                    {t('food.noMealsFound')}
-                  </StyledTableCell>
+                  <StyledTableCell padding="checkbox"></StyledTableCell>
+                  <StyledTableCell padding="checkbox"></StyledTableCell>
+                  <StyledTableCell>{t('food.name')}</StyledTableCell>
+                  <StyledTableCell align="right">{t('food.kcal')}</StyledTableCell>
+                  <StyledTableCell align="right">{t('food.protein')}</StyledTableCell>
+                  <StyledTableCell align="right">{t('food.carbs')}</StyledTableCell>
+                  <StyledTableCell align="right">{t('food.fat')}</StyledTableCell>
+                  <StyledTableCell align="right">{t('food.amount')}</StyledTableCell>
                 </StyledTableRow>
-              ) : (
-                mealList.map((meal, index) => (
-                  <MealRow key={meal.id || index} meal={{ ...meal, mealCategory }} index={index} />
-                ))
-              )}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {mealList.length === 0 ? (
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={8} align="center">
+                      {t('food.noMealsFound')}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ) : (
+                  mealList.map((meal, index) => (
+                    <MealRow
+                      key={meal.id || index}
+                      meal={{ ...meal, mealCategory }}
+                      index={index}
+                    />
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </Box>
         </Collapse>
       </StyledTableCell>
     </StyledTableRow>

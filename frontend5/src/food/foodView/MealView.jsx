@@ -1,41 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import REST from '../../utils/REST';
-import SingleMeal from './SingleMeal';
-import CenteredContainer from '../../component/CenteredContainer';
 import { useTranslation } from 'react-i18next';
-
-import {
-  Box,
-  Card,
-  CardContent,
-  FormControl,
-  IconButton,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  CircularProgress,
-  Toolbar,
-  Typography,
-  useTheme,
-} from '@mui/material';
-
+import { Box, Skeleton, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import { Restaurant, Search as SearchIcon, Clear as ClearIcon } from '@mui/icons-material';
+import { SearchOff } from '@mui/icons-material';
+
+import REST from '../../utils/REST';
+import MealCard from './MealCard';
+import MealDetailsPanel from './MealDetailsPanel';
+import MealViewHeader from './MealViewHeader';
+
+const CARD_GRID_SIZE = { xs: 12, sm: 6, lg: 4, xl: 3 };
+
+// Liczba kart w rzędzie – musi odpowiadać CARD_GRID_SIZE.
+function useColumnsPerRow() {
+  const theme = useTheme();
+  const xl = useMediaQuery(theme.breakpoints.up('xl'));
+  const lg = useMediaQuery(theme.breakpoints.up('lg'));
+  const sm = useMediaQuery(theme.breakpoints.up('sm'));
+  if (xl) return 4;
+  if (lg) return 3;
+  if (sm) return 2;
+  return 1;
+}
 
 export default function MealView() {
   const { t } = useTranslation();
-  const theme = useTheme();
+  const columns = useColumnsPerRow();
 
   const [mealName, setMealName] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [mealCategory, setMealCategory] = useState('Obiad');
   const [mealType, setMealType] = useState('All');
-
-  const labelIdCategory = 'meal-category-select';
-  const labelIdType = 'meal-type-select';
+  const [selectedMealId, setSelectedMealId] = useState(null);
 
   // Debounce: nie odpytujemy backendu na każdy znak.
   useEffect(() => {
@@ -43,7 +40,6 @@ export default function MealView() {
     return () => clearTimeout(id);
   }, [searchInput]);
 
-  // 🍽️ Pobierz listę kategorii i typów posiłków
   const { data: mealCategoryList = [] } = useQuery({
     queryKey: ['mealCategories'],
     queryFn: REST.getMealCategoryList,
@@ -62,168 +58,80 @@ export default function MealView() {
   } = useQuery({
     queryKey: ['meals', mealCategory, mealType, mealName],
     queryFn: () => REST.getMealList(mealCategory, mealType, mealName, 'ALL', 'name', false),
-    enabled: !!mealCategory && !!mealType, // upewnij się że są dostępne
+    enabled: !!mealCategory && !!mealType,
     staleTime: 1000 * 60 * 5,
   });
 
-  const handleChange = (event, field) => {
-    const value = event.target.value;
+  // Panel szczegółów wstawiamy za ostatnią kartą rzędu, w którym jest wybrany posiłek.
+  const selectedIndex = mealList.findIndex((meal) => meal.id === selectedMealId);
+  const panelAfterIndex =
+    selectedIndex < 0
+      ? -1
+      : Math.min((Math.floor(selectedIndex / columns) + 1) * columns, mealList.length) - 1;
 
-    switch (field) {
-      case 'mealCategory':
-        setMealCategory(value);
-        break;
-      case 'mealType':
-        setMealType(value);
-        break;
-      default:
-        break;
-    }
-  };
+  const toggleMeal = (meal) => setSelectedMealId((id) => (id === meal.id ? null : meal.id));
+  const closePanel = () => setSelectedMealId(null);
 
-  if (isError) {
-    return (
-      <CenteredContainer>
-        <Card elevation={6} sx={{ borderRadius: 3, p: 3, maxWidth: 600 }}>
-          <CardContent sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ color: 'error' }}>
-              {t('food.error')}: {error?.message || t('food.unknownError')}
-            </Typography>
-          </CardContent>
-        </Card>
-      </CenteredContainer>
-    );
-  }
+  useEffect(() => {
+    if (selectedMealId == null) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setSelectedMealId(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedMealId]);
 
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={6}
-            sx={{
-              borderRadius: 3,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <Restaurant sx={{ fontSize: 32 }} />
-                <Typography variant="h4" sx={{ fontWeight: '600' }}>
-                  {t('food.browseMeals')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {t('food.browseMealsDesc')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1400, mx: 'auto' }}>
+      <MealViewHeader
+        meals={mealList}
+        loading={isLoading}
+        searchInput={searchInput}
+        onSearchChange={setSearchInput}
+        categories={mealCategoryList}
+        category={mealCategory}
+        onCategoryChange={setMealCategory}
+        types={mealTypeList}
+        type={mealType}
+        onTypeChange={setMealType}
+      />
 
-        {/* Filters */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3 }}>
-            <Toolbar
-              sx={{
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                columnGap: 2,
-                rowGap: 1.5,
-                py: 1.5,
-                minHeight: 'auto',
-              }}
-            >
-              <TextField
-                size="small"
-                placeholder={t('food.searchMeal')}
-                value={searchInput}
-                onChange={(event) => setSearchInput(event.target.value)}
-                sx={{ minWidth: 220 }}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                    endAdornment: searchInput ? (
-                      <InputAdornment position="end">
-                        <IconButton
-                          size="small"
-                          aria-label="clear search"
-                          onClick={() => setSearchInput('')}
-                        >
-                          <ClearIcon fontSize="small" />
-                        </IconButton>
-                      </InputAdornment>
-                    ) : null,
-                  },
-                }}
-              />
-
-              {mealCategoryList.length > 0 && (
-                <FormControl size="small" sx={{ minWidth: 160 }}>
-                  <InputLabel id={labelIdCategory}>{t('food.mealCategory')}</InputLabel>
-                  <Select
-                    labelId={labelIdCategory}
-                    value={mealCategory}
-                    onChange={(event) => handleChange(event, 'mealCategory')}
-                    label={t('food.mealCategory')}
-                  >
-                    {mealCategoryList.map((cat, index) => (
-                      <MenuItem key={index} value={cat}>
-                        {cat}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-
-              {mealTypeList.length > 0 && (
-                <FormControl size="small" sx={{ minWidth: 160 }}>
-                  <InputLabel id={labelIdType}>{t('food.mealType')}</InputLabel>
-                  <Select
-                    labelId={labelIdType}
-                    value={mealType}
-                    onChange={(event) => handleChange(event, 'mealType')}
-                    label={t('food.mealType')}
-                  >
-                    {mealTypeList.map((type, index) => (
-                      <MenuItem key={index} value={type}>
-                        {type}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            </Toolbar>
-          </Card>
-        </Grid>
-
-        {/* Results */}
-        <Grid size={12}>
-          {isLoading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-              <CircularProgress size={40} />
-            </Box>
-          ) : mealList.length === 0 ? (
-            <Box sx={{ textAlign: 'center', py: 4 }}>
-              <Typography sx={{ color: 'text.secondary' }}>{t('food.noMealsFound')}</Typography>
-            </Box>
-          ) : (
-            <Grid container spacing={3}>
-              {mealList.map((meal, index) => (
-                <Grid key={index} size={{ xs: 12, md: 6 }}>
-                  <SingleMeal meal={meal} />
-                </Grid>
-              ))}
+      {/* Wyniki */}
+      {isError ? (
+        <Box sx={{ textAlign: 'center', py: 8 }}>
+          <Typography sx={{ color: 'error.main' }}>
+            {t('food.error')}: {error?.message || t('food.unknownError')}
+          </Typography>
+        </Box>
+      ) : isLoading ? (
+        <Grid container spacing={2}>
+          {Array.from({ length: 8 }).map((_, index) => (
+            <Grid key={index} size={CARD_GRID_SIZE}>
+              <Skeleton variant="rounded" height={168} sx={{ borderRadius: 2.5 }} />
             </Grid>
-          )}
+          ))}
         </Grid>
-      </Grid>
+      ) : mealList.length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 8, color: 'text.secondary' }}>
+          <SearchOff sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />
+          <Typography>{t('food.noMealsFound')}</Typography>
+        </Box>
+      ) : (
+        <Grid container spacing={2}>
+          {mealList.map((meal, index) => (
+            <React.Fragment key={meal.id}>
+              <Grid size={CARD_GRID_SIZE}>
+                <MealCard meal={meal} selected={selectedMealId === meal.id} onSelect={toggleMeal} />
+              </Grid>
+              {index === panelAfterIndex && (
+                <Grid size={12}>
+                  <MealDetailsPanel meal={mealList[selectedIndex]} onClose={closePanel} />
+                </Grid>
+              )}
+            </React.Fragment>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 }

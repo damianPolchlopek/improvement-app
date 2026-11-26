@@ -7,6 +7,7 @@ import { useMealSelection } from '../../context/MealSelectionContext';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 import { Button, CircularProgress } from '@mui/material';
+import { AddCircleOutlined, Save } from '@mui/icons-material';
 
 export default function AddDietDayView() {
   const { t } = useTranslation();
@@ -50,7 +51,11 @@ export default function AddDietDayView() {
   };
 
   return (
-    <DietDaySummaryForm>
+    <DietDaySummaryForm
+      icon={<AddCircleOutlined />}
+      title={t('food.addDietDay')}
+      description={t('food.addDietDayDesc')}
+    >
       <Button
         variant="contained"
         onClick={handleSave}
@@ -58,7 +63,9 @@ export default function AddDietDayView() {
         startIcon={
           createDietSummaryMutation.isLoading ? (
             <CircularProgress color="inherit" size={20} />
-          ) : null
+          ) : (
+            <Save />
+          )
         }
       >
         {t('food.saveDietDay')}

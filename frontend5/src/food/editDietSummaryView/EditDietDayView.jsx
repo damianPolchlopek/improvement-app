@@ -3,6 +3,7 @@ import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
 import { Button, CircularProgress } from '@mui/material';
+import { EditCalendar, Save } from '@mui/icons-material';
 
 import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 
@@ -59,7 +60,13 @@ export default function EditDietDayView() {
   return (
     selectedMeals && (
       <>
-        <DietDaySummaryForm>
+        <DietDaySummaryForm
+          icon={<EditCalendar />}
+          title={t('food.editDietDay')}
+          description={
+            mealsDietDay.date ? t('food.editDietDayDesc', { date: mealsDietDay.date }) : null
+          }
+        >
           <Button
             variant="contained"
             onClick={handleUpdate}
@@ -67,7 +74,9 @@ export default function EditDietDayView() {
             startIcon={
               updateDietSummaryMutation.isLoading ? (
                 <CircularProgress color="inherit" size={20} />
-              ) : null
+              ) : (
+                <Save />
+              )
             }
           >
             {t('food.updateDietDay')}

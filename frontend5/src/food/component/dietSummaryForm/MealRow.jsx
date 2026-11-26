@@ -6,6 +6,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
 import { formatInput } from '../../../utils/common';
+import { MACRO_COLORS } from '../../foodView/macroColors';
 import { useMealSelection } from '../../../context/MealSelectionContext';
 import MealIngredientsTable from './MealIngredientsTable';
 import { useMealRecalculation } from '../../../context/useMealRecalculation';
@@ -96,7 +97,12 @@ export default function MealRow({ meal: single, index }) {
     <>
       <StyledTableRow key={index} selected={isItemSelected}>
         <StyledTableCell sx={{ width: '50px' }}>
-          <IconButton aria-label="expand ingredients" size="small" onClick={toggleIngredientsOpen}>
+          <IconButton
+            aria-label="expand ingredients"
+            aria-expanded={isIngredientsOpen}
+            size="small"
+            onClick={toggleIngredientsOpen}
+          >
             {isIngredientsOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </StyledTableCell>
@@ -105,19 +111,30 @@ export default function MealRow({ meal: single, index }) {
           <Checkbox color="primary" checked={isItemSelected} onClick={handleCheckboxClick} />
         </StyledTableCell>
 
-        <StyledTableCell onClick={handleMealToggle}>{meal.name}</StyledTableCell>
-
-        <StyledTableCell onClick={handleMealToggle}>{formatInput(meal.kcal)}</StyledTableCell>
-
-        <StyledTableCell onClick={handleMealToggle}>{formatInput(meal.protein)}</StyledTableCell>
-
-        <StyledTableCell onClick={handleMealToggle}>
-          {formatInput(meal.carbohydrates)}
+        <StyledTableCell
+          onClick={handleMealToggle}
+          sx={{ cursor: 'pointer', fontWeight: isItemSelected ? 500 : 400 }}
+        >
+          {meal.name}
         </StyledTableCell>
 
-        <StyledTableCell onClick={handleMealToggle}>{formatInput(meal.fat)}</StyledTableCell>
+        {[
+          ['kcal', meal.kcal],
+          ['protein', meal.protein],
+          ['carbohydrates', meal.carbohydrates],
+          ['fat', meal.fat],
+        ].map(([macro, value]) => (
+          <StyledTableCell
+            key={macro}
+            align="right"
+            onClick={handleMealToggle}
+            sx={{ cursor: 'pointer', color: MACRO_COLORS[macro].text }}
+          >
+            {formatInput(value)}
+          </StyledTableCell>
+        ))}
 
-        <StyledTableCell onClick={handleAmountInputClick}>
+        <StyledTableCell align="right" onClick={handleAmountInputClick}>
           <TextField
             value={currentAmount}
             size="small"

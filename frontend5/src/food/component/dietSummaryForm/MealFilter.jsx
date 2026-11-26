@@ -1,18 +1,9 @@
 import { useEffect, useState } from 'react';
-import {
-  IconButton,
-  InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import Button from '@mui/material/Button';
-import SearchIcon from '@mui/icons-material/Search';
-import ClearIcon from '@mui/icons-material/Clear';
+import { RestartAlt } from '@mui/icons-material';
 import { useMealSelection } from '../../../context/MealSelectionContext';
+import SearchField from '../SearchField';
 
 export default function MealFilter({
   mealPopularity,
@@ -30,60 +21,60 @@ export default function MealFilter({
     return () => clearTimeout(id);
   }, [searchInput, setSearchTerm]);
 
+  const popularityOptions = [
+    { value: 'HIGH', label: t('food.popular') },
+    { value: 'LOW', label: t('food.rare') },
+    { value: 'ALL', label: t('food.all') },
+  ];
+
   return (
-    <Toolbar
+    <Box
       sx={{
+        display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',
         columnGap: 2,
         rowGap: 1.5,
+        px: 2,
         py: 1.5,
-        minHeight: 'auto',
       }}
     >
-      <Typography>{t('food.mealPopularity')}</Typography>
-
-      <Select
-        value={mealPopularity}
-        onChange={(e) => setMealPopularity(e.target.value)}
-        size="small"
-      >
-        <MenuItem value="ALL">{t('food.all')}</MenuItem>
-        <MenuItem value="HIGH">{t('food.popular')}</MenuItem>
-        <MenuItem value="LOW">{t('food.rare')}</MenuItem>
-      </Select>
-
-      <TextField
-        size="small"
-        placeholder={t('food.searchMeal')}
+      <SearchField
         value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-        sx={{ minWidth: 220 }}
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon fontSize="small" />
-              </InputAdornment>
-            ),
-            endAdornment: searchInput ? (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  aria-label="clear search"
-                  onClick={() => setSearchInput('')}
-                >
-                  <ClearIcon fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ) : null,
-          },
-        }}
+        onChange={setSearchInput}
+        placeholder={t('food.searchMeal')}
       />
 
-      <Button variant="contained" sx={{ marginLeft: 'auto' }} onClick={clearSelections}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          {t('food.mealPopularity')}
+        </Typography>
+        {popularityOptions.map((option) => {
+          const active = option.value === mealPopularity;
+          return (
+            <Chip
+              key={option.value}
+              label={option.label}
+              size="small"
+              clickable
+              color={active ? 'primary' : 'default'}
+              variant={active ? 'filled' : 'outlined'}
+              onClick={() => setMealPopularity(option.value)}
+              sx={{ fontWeight: active ? 600 : 400 }}
+            />
+          );
+        })}
+      </Box>
+
+      <Button
+        variant="text"
+        size="small"
+        startIcon={<RestartAlt />}
+        sx={{ ml: 'auto', color: 'text.secondary' }}
+        onClick={clearSelections}
+      >
         {t('food.clearSelections')}
       </Button>
-    </Toolbar>
+    </Box>
   );
 }
