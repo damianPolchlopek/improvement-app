@@ -1,27 +1,18 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { Box, ButtonBase, Collapse, Skeleton, Typography } from '@mui/material';
+import { KeyboardArrowDown, ListAlt, SearchOff } from '@mui/icons-material';
+
 import REST from '../../utils/REST';
-
-import {
-  Box,
-  Card,
-  Chip,
-  Collapse,
-  List,
-  ListItemButton,
-  ListItemText,
-  ListSubheader,
-  Typography,
-  useTheme,
-} from '@mui/material';
-import { ExpandLess, ExpandMore, ListAlt } from '@mui/icons-material';
-
 import ErrorAlert from '../../component/error/ErrorAlert';
-import PageLoader from '../../component/loader/PageLoader';
-import InformationComponent from '../../component/InformationComponent';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
+import SearchField from '../../food/component/SearchField';
+import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { ROW_LINE } from '../component/trainingTableSx';
+import { typeGroup } from '../trainingView/trainingWeeks';
 
-// "Siłowy#1-A" -> "Siłowy"; names without '#' fall into their own group
+// "Siłowy#1-A" -> "Siłowy"; nazwy bez '#' tworzą własną grupę
 const groupOf = (name) => name.split('#')[0].trim() || name;
 
 function groupTemplates(templates) {
@@ -34,9 +25,97 @@ function groupTemplates(templates) {
   return [...groups.entries()];
 }
 
+function TemplateRow({ template, isOpen, onToggle }) {
+  const { t } = useTranslation();
+  const panelId = `template-${template.id}`;
+
+  return (
+    <Box sx={{ borderTop: ROW_LINE }}>
+      <ButtonBase
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
+          pl: { xs: 2, md: 3 },
+          pr: 2,
+          py: 1.1,
+          textAlign: 'left',
+          bgcolor: isOpen ? 'rgba(144, 202, 249, 0.06)' : 'transparent',
+          transition: 'background-color 150ms',
+          '&:hover': { bgcolor: isOpen ? 'rgba(144, 202, 249, 0.08)' : 'rgba(255,255,255,0.03)' },
+        }}
+      >
+        <Box
+          sx={{
+            width: 9,
+            height: 9,
+            flexShrink: 0,
+            borderRadius: '50%',
+            bgcolor: typeGroup(template.name).dot,
+          }}
+        />
+        <Typography component="span" sx={{ flex: 1, minWidth: 0, fontWeight: 500 }} noWrap>
+          {template.name}
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary', whiteSpace: 'nowrap' }}>
+          {t('training.exercisesInTemplate', { count: template.exercises.length })}
+        </Typography>
+        <KeyboardArrowDown
+          sx={{
+            color: 'text.secondary',
+            transition: 'transform 200ms',
+            transform: isOpen ? 'rotate(180deg)' : 'none',
+          }}
+        />
+      </ButtonBase>
+
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
+        <Box
+          component="ol"
+          id={panelId}
+          sx={{ m: 0, pl: { xs: 2, md: '53px' }, pr: 2, pb: 1.25, pt: 0.25, listStyle: 'none' }}
+        >
+          {template.exercises.map((exercise, index) => (
+            <Box
+              component="li"
+              key={`${exercise}-${index}`}
+              sx={{ display: 'flex', alignItems: 'center', gap: 1.25, py: 0.5 }}
+            >
+              <Box
+                component="span"
+                sx={{
+                  flexShrink: 0,
+                  width: 22,
+                  height: 22,
+                  borderRadius: '50%',
+                  bgcolor: 'rgba(144, 202, 249, 0.16)',
+                  color: 'primary.main',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {index + 1}
+              </Box>
+              <Typography variant="body2">{exercise}</Typography>
+            </Box>
+          ))}
+        </Box>
+      </Collapse>
+    </Box>
+  );
+}
+
+// Szablony treningów pogrupowane według planu; kliknięcie szablonu rozwija jego ćwiczenia.
 export default function TrainingTemplatesView() {
   const { t } = useTranslation();
-  const theme = useTheme();
+  const [search, setSearch] = useState('');
   const [openIds, setOpenIds] = useState(() => new Set());
 
   const { data, isLoading, isError, error } = useQuery({
@@ -47,7 +126,19 @@ export default function TrainingTemplatesView() {
   });
 
   const templates = useMemo(() => data?.content ?? [], [data]);
-  const groups = useMemo(() => groupTemplates(templates), [templates]);
+  const query = search.trim().toLowerCase();
+  const groups = useMemo(
+    () =>
+      groupTemplates(
+        templates.filter(
+          (template) =>
+            !query ||
+            template.name.toLowerCase().includes(query) ||
+            template.exercises.some((exercise) => exercise.toLowerCase().includes(query))
+        )
+      ),
+    [templates, query]
+  );
 
   const toggle = (id) =>
     setOpenIds((prev) => {
@@ -57,84 +148,66 @@ export default function TrainingTemplatesView() {
       return next;
     });
 
-  if (isLoading) return <PageLoader text={t('training.loadingTemplates')} />;
-  if (isError) return <ErrorAlert error={error} />;
-
   return (
-    <Box sx={{ py: 4, maxWidth: 900, mx: 'auto', px: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 0.5 }}>
-        <ListAlt sx={{ fontSize: 28 }} />
-        <Typography variant="h5" sx={{ fontWeight: 600 }}>
-          {t('training.templates')}
-        </Typography>
-        <Chip
-          size="small"
-          label={`${t('training.templatesCount')}: ${templates.length}`}
-          sx={{ ml: 'auto' }}
-        />
-      </Box>
-      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-        {t('training.templatesDesc')}
-      </Typography>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1000, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<ListAlt />}
+        title={t('training.templates')}
+        description={t('training.templatesDesc')}
+        statLabel={t('training.templatesCount')}
+        statValue={templates.length}
+        statLoading={isLoading}
+        actions={
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder={t('training.searchTemplate')}
+          />
+        }
+      />
 
-      {templates.length === 0 ? (
-        <InformationComponent>{t('training.noTemplates')}</InformationComponent>
+      {isError ? (
+        <ErrorAlert error={error} />
+      ) : isLoading ? (
+        <Box sx={{ ...surfaceSx, p: 2 }}>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} height={44} />
+          ))}
+        </Box>
+      ) : groups.length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 8, color: 'text.secondary' }}>
+          <SearchOff sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />
+          <Typography>
+            {templates.length === 0
+              ? t('training.noTemplates')
+              : t('training.noTemplatesMatching', { query: search.trim() })}
+          </Typography>
+        </Box>
       ) : (
-        <Card
-          elevation={1}
-          sx={{ borderRadius: 2, border: theme.palette.card?.border, overflow: 'hidden' }}
-        >
-          <List dense disablePadding>
-            {groups.map(([group, items]) => (
-              <li key={group}>
-                <ul style={{ padding: 0 }}>
-                  <ListSubheader
-                    sx={{ lineHeight: '32px', fontWeight: 600, bgcolor: 'background.surface' }}
-                  >
-                    {group}
-                  </ListSubheader>
-                  {items.map((template) => {
-                    const isOpen = openIds.has(template.id);
-                    return (
-                      <Box key={template.id}>
-                        <ListItemButton
-                          onClick={() => toggle(template.id)}
-                          selected={isOpen}
-                          aria-expanded={isOpen}
-                        >
-                          <ListItemText
-                            primary={template.name}
-                            slotProps={{ primary: { sx: { fontWeight: 500 } } }}
-                          />
-                          <Typography variant="caption" sx={{ color: 'text.secondary', mr: 1 }}>
-                            {t('training.exercisesInTemplate', {
-                              count: template.exercises.length,
-                            })}
-                          </Typography>
-                          {isOpen ? <ExpandLess /> : <ExpandMore />}
-                        </ListItemButton>
-                        <Collapse in={isOpen} timeout="auto" unmountOnExit>
-                          <Box component="ol" sx={{ m: 0, py: 1, pl: 6, pr: 2 }}>
-                            {template.exercises.map((exercise, index) => (
-                              <Typography
-                                key={`${exercise}-${index}`}
-                                component="li"
-                                variant="body2"
-                                sx={{ py: 0.25 }}
-                              >
-                                {exercise}
-                              </Typography>
-                            ))}
-                          </Box>
-                        </Collapse>
-                      </Box>
-                    );
-                  })}
-                </ul>
-              </li>
-            ))}
-          </List>
-        </Card>
+        <Box sx={surfaceSx}>
+          {groups.map(([group, items], index) => (
+            <Box key={group} component="section" sx={{ borderTop: index > 0 ? HAIRLINE : 0 }}>
+              <Box
+                sx={{ display: 'flex', alignItems: 'baseline', gap: 1, px: 2, pt: 1.5, pb: 0.75 }}
+              >
+                <Typography component="h2" sx={{ fontSize: 14, fontWeight: 500 }}>
+                  {group}
+                </Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  · {t('training.templatesInGroup', { count: items.length })}
+                </Typography>
+              </Box>
+              {items.map((template) => (
+                <TemplateRow
+                  key={template.id}
+                  template={template}
+                  isOpen={openIds.has(template.id)}
+                  onToggle={() => toggle(template.id)}
+                />
+              ))}
+            </Box>
+          ))}
+        </Box>
       )}
     </Box>
   );

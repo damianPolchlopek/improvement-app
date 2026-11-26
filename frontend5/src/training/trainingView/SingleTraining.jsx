@@ -13,21 +13,16 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material';
-import {
-  ArrowBack,
-  ArrowDropDown,
-  ArrowDropUp,
-  KeyboardArrowDown,
-  TrendingFlat,
-  TrendingUp,
-} from '@mui/icons-material';
+import { ArrowBack, KeyboardArrowDown, TrendingFlat, TrendingUp } from '@mui/icons-material';
 
 import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import { localeOf, typeGroup, typeLabel } from './trainingWeeks';
+import { averageWeight } from '../component/sets';
+import SetPills from '../component/SetPills';
+import WeightDelta from '../component/WeightDelta';
 
 const ROW_LINE = '1px solid rgba(255,255,255,0.06)';
 
@@ -67,113 +62,6 @@ function ProgressTag({ progress }) {
       {style?.icon}
       {style ? t(`training.progress.${style.key}`) : progress}
     </Box>
-  );
-}
-
-// "5/5/5" + "50/50/55" -> [{ reps: '5', weight: '50' }, ...]; null dla wartości z jednostkami
-// (kardio: "5 km", "12 km/h") albo gdy liczba serii w powtórzeniach i ciężarze się różni.
-function toSets(reps, weight) {
-  const repsParts = String(reps ?? '')
-    .split('/')
-    .map((part) => part.trim());
-  const weightParts = String(weight ?? '')
-    .split('/')
-    .map((part) => part.trim());
-  const isNumber = (part) => part !== '' && Number.isFinite(Number(part));
-  if (
-    repsParts.length !== weightParts.length ||
-    !repsParts.every(isNumber) ||
-    !weightParts.every(isNumber)
-  ) {
-    return null;
-  }
-  return repsParts.map((r, i) => ({ reps: r, weight: weightParts[i] }));
-}
-
-// Serie jako "pigułki": 5×50  5×50  5×55.
-function SetPills({ reps, weight }) {
-  const sets = toSets(reps, weight);
-  if (!sets) {
-    return (
-      <Typography variant="body2" component="span" sx={{ color: 'text.secondary' }}>
-        {reps} · {weight}
-      </Typography>
-    );
-  }
-  return (
-    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-      {sets.map((set, index) => (
-        <Box
-          key={index}
-          component="span"
-          sx={{
-            px: 0.75,
-            borderRadius: 1,
-            bgcolor: 'rgba(255,255,255,0.06)',
-            fontSize: 13,
-            lineHeight: 1.8,
-            whiteSpace: 'nowrap',
-            fontVariantNumeric: 'tabular-nums',
-          }}
-        >
-          {set.reps}
-          <Box component="span" sx={{ color: 'text.secondary', mx: 0.25 }}>
-            ×
-          </Box>
-          {set.weight}
-        </Box>
-      ))}
-    </Box>
-  );
-}
-
-// Średni ciężar ze wszystkich serii (zwykła średnia, bez ważenia powtórzeniami).
-const averageWeight = (exercise) => {
-  const sets = exercise && toSets(exercise.reps, exercise.weight);
-  return sets ? sets.reduce((sum, set) => sum + Number(set.weight), 0) / sets.length : null;
-};
-
-// Zaokrąglenie do 0,1 kg – także po to, by błędy zmiennoprzecinkowe nie dawały fałszywych ▲/▼.
-const roundKg = (value) => Math.round(value * 10) / 10;
-
-// Zmiana średniego ciężaru serii względem poprzedniego wykonania ćwiczenia: ▲ 5 kg / ▼ 2,5 kg / =.
-function WeightDelta({ current, previous }) {
-  const { t, i18n } = useTranslation();
-  const locale = localeOf(i18n.language);
-  const now = averageWeight(current);
-  const before = averageWeight(previous);
-  if (now == null || before == null) return null;
-
-  const diff = roundKg(now - before);
-  const Icon = diff > 0 ? ArrowDropUp : ArrowDropDown;
-  const previousDate = previous.date ? new Date(previous.date).toLocaleDateString(locale) : '';
-  const previousSets = toSets(previous.reps, previous.weight)
-    .map((set) => `${set.reps}×${set.weight}`)
-    .join(', ');
-
-  return (
-    <Tooltip title={`${t('training.previousTime')} ${previousDate}: ${previousSets}`}>
-      <Box
-        component="span"
-        sx={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          fontSize: 13,
-          whiteSpace: 'nowrap',
-          fontVariantNumeric: 'tabular-nums',
-          color: diff > 0 ? '#5DCAA5' : diff < 0 ? '#F09595' : 'text.secondary',
-        }}
-      >
-        {diff === 0 ? (
-          '='
-        ) : (
-          <>
-            <Icon fontSize="small" sx={{ ml: -0.5 }} aria-label={diff > 0 ? '▲' : '▼'} />
-            {`${Math.abs(diff).toLocaleString(locale)} kg`}
-          </>
-        )}
-      </Box>
-    </Tooltip>
   );
 }
 

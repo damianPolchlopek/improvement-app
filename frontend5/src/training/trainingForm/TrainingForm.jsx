@@ -13,18 +13,19 @@ import {
   TextField,
   Typography,
   Box,
-  Card,
   IconButton,
   Tooltip,
-  useTheme,
 } from '@mui/material';
 
-import { alpha } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../utils/REST.js';
 import ErrorAlert from '../../component/error/ErrorAlert.jsx';
+import { HAIRLINE } from '../../food/component/foodStyles';
+import SetPills from '../component/SetPills';
+import { weightChange } from '../component/sets';
+import { localeOf } from '../trainingView/trainingWeeks';
 
 import { TrainingViewUrl } from '../../utils/URLHelper.js';
 import {
@@ -34,8 +35,18 @@ import {
   KeyboardArrowUp,
   KeyboardArrowDown,
   FitnessCenter,
-  Send,
+  Save,
+  ArrowDropUp,
+  ArrowDropDown,
 } from '@mui/icons-material';
+
+const ROW_LINE = '1px solid rgba(255,255,255,0.06)';
+const VOLUME_COLOR = '#5DCAA5';
+const UP_COLOR = '#5DCAA5';
+const DOWN_COLOR = '#F09595';
+
+// Ciemniejsze tło pól – jak w wyszukiwarkach modułu food.
+const inputSx = { '& .MuiInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' } };
 
 function withStableKey(exercise, fallbackIndex) {
   // _key zawsze string — porównujemy go z atrybutem data-key (zawsze string)
@@ -81,12 +92,23 @@ const computeVolume = (reps, weight) => {
   return Math.round(v);
 };
 
+// Szablon = ostatnia sesja, więc wczytane reps/weight są referencją "ostatnio".
+function seedLastByName(exercises) {
+  const seed = {};
+  for (const ex of exercises) {
+    if (ex.name && !(ex.name in seed)) {
+      seed[ex.name] = { reps: ex.reps ?? '', weight: ex.weight ?? '' };
+    }
+  }
+  return seed;
+}
+
 export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(() => exercises.map(withStableKey));
   const [prevExercises, setPrevExercises] = useState(exercises);
   const [validationError, setValidationError] = useState('');
   // name -> { reps, weight } z ostatniej sesji (podpowiedź "ostatnio")
-  const [lastByName, setLastByName] = useState({});
+  const [lastByName, setLastByName] = useState(() => seedLastByName(exercises));
 
   const nameInputRefs = useRef({});
   const pendingFocusKey = useRef(null);
@@ -99,9 +121,9 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     exerciseProgresses = [],
     exerciseTypes = [],
   } = useLoaderData() || {};
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const locale = localeOf(i18n.language);
   const navigate = useNavigate();
-  const theme = useTheme();
 
   const nameOptions = useMemo(() => exerciseNames.map((en) => en.name), [exerciseNames]);
   const nameOptionsSet = useMemo(() => new Set(nameOptions), [nameOptions]);
@@ -124,13 +146,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     setPrevExercises(exercises);
     setExercisesFields(exercises.map(withStableKey));
 
-    const seed = {};
-    for (const ex of exercises) {
-      if (ex.name && !(ex.name in seed)) {
-        seed[ex.name] = { reps: ex.reps ?? '', weight: ex.weight ?? '' };
-      }
-    }
-    setLastByName(seed);
+    setLastByName(seedLastByName(exercises));
   }
 
   // Po dodaniu wiersza (Enter na ostatnim polu) ustaw kursor w nazwie nowego ćwiczenia
@@ -327,64 +343,68 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     }
   };
 
+  // Łączna objętość treningu (tylko wiersze z liczbowymi seriami).
+  const totalVolume = exercisesFields.reduce((sum, f) => {
+    if (!isNumericSeries(f.reps) || !isNumericSeries(f.weight)) return sum;
+    if (String(f.reps).split('/').length !== String(f.weight).split('/').length) return sum;
+    return sum + computeVolume(f.reps, f.weight);
+  }, 0);
+
   if (exercisesFields.length === 0) {
     return (
-      <Card
-        elevation={0}
-        sx={{ py: 6, textAlign: 'center', border: '1px dashed', borderColor: 'divider' }}
+      <Box
+        sx={{
+          py: 6,
+          px: 2,
+          textAlign: 'center',
+          borderRadius: 2.5,
+          border: '1px dashed rgba(255,255,255,0.16)',
+        }}
       >
-        <FitnessCenter sx={{ fontSize: 56, color: 'text.secondary', mb: 2 }} />
-        <Typography variant="h6" sx={{ color: 'text.secondary' }} gutterBottom>
+        <FitnessCenter sx={{ fontSize: 40, color: 'text.secondary', opacity: 0.6, mb: 1 }} />
+        <Typography sx={{ fontWeight: 500 }} gutterBottom>
           {t('training.noExercisesInTraining')}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
           {t('training.loadTemplateOrAdd')}
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<Add />}
-          onClick={() => addFields(-1)}
-          sx={{ borderRadius: 25, px: 4 }}
-        >
+        <Button variant="contained" startIcon={<Add />} onClick={() => addFields(-1)}>
           {t('training.addFirstExercise')}
         </Button>
-      </Card>
+      </Box>
     );
   }
 
-  const gridCols = '36px minmax(150px, 1fr) 140px 150px 132px';
+  const gridCols = {
+    xs: '28px minmax(0, 1fr)',
+    md: '28px minmax(160px, 1fr) 150px 170px 132px',
+  };
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
       {/* Nagłówek kolumn (raz) */}
       <Box
         sx={{
-          display: 'grid',
+          display: { xs: 'none', md: 'grid' },
           gridTemplateColumns: gridCols,
           gap: 1,
-          px: 1,
-          py: 1,
-          borderBottom: '2px solid',
-          borderColor: 'divider',
+          px: 1.5,
+          pb: 1,
+          borderBottom: HAIRLINE,
+          '& > *': { fontSize: 12, fontWeight: 500, color: 'text.secondary' },
         }}
       >
-        <Typography variant="caption" sx={{ color: 'text.secondary', textAlign: 'center' }}>
+        <Typography variant="caption" sx={{ textAlign: 'center' }}>
           #
         </Typography>
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {t('exercise.name')}
-        </Typography>
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {t('exercise.reps')}
-        </Typography>
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          {t('exercise.weight')} (kg)
-        </Typography>
+        <Typography variant="caption">{t('exercise.name')}</Typography>
+        <Typography variant="caption">{t('exercise.reps')}</Typography>
+        <Typography variant="caption">{t('exercise.weight')} (kg)</Typography>
         <span />
       </Box>
 
       {/* Wiersze ćwiczeń */}
-      <Box sx={{ mb: 3 }}>
+      <Box sx={{ mb: 1.5 }}>
         {exercisesFields.map((input, index) => {
           const err = rowError(input);
           const formatError = err === 'series' || err === 'number';
@@ -392,13 +412,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           let meta = null;
           if (err === 'series') {
             meta = (
-              <Typography variant="caption" sx={{ color: 'error' }}>
+              <Typography variant="caption" sx={{ color: 'error.light' }}>
                 {t('training.seriesMismatch', { n: index + 1 })}
               </Typography>
             );
           } else if (err === 'number') {
             meta = (
-              <Typography variant="caption" sx={{ color: 'error' }}>
+              <Typography variant="caption" sx={{ color: 'error.light' }}>
                 {t('training.invalidNumber', { n: index + 1 })}
               </Typography>
             );
@@ -407,9 +427,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
             if (isNumericSeries(input.reps) && isNumericSeries(input.weight)) {
               const count = String(input.reps).split('/').length;
               if (count === String(input.weight).split('/').length) {
-                parts.push(t('training.setsCount', { count }));
                 parts.push(
-                  t('training.volumeShort', { value: computeVolume(input.reps, input.weight) })
+                  <span key="sets">{t('training.setsCount', { count })}</span>,
+                  <Box key="volume" component="span" sx={{ color: VOLUME_COLOR }}>
+                    {t('training.volumeShort', {
+                      value: computeVolume(input.reps, input.weight).toLocaleString(locale),
+                    })}
+                  </Box>
                 );
               }
             }
@@ -419,12 +443,51 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
               (last.reps || last.weight) &&
               (last.reps !== input.reps || last.weight !== input.weight)
             ) {
-              parts.push(`${t('training.lastTime')}: ${last.reps} / ${last.weight}`);
+              const diff = weightChange(input, last);
+              parts.push(
+                <Box
+                  key="last"
+                  component="span"
+                  sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}
+                >
+                  {t('training.lastTime')}
+                  <SetPills reps={last.reps} weight={last.weight} size={12} />
+                  {diff != null && diff !== 0 && (
+                    <Box
+                      component="span"
+                      sx={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        color: diff > 0 ? UP_COLOR : DOWN_COLOR,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {diff > 0 ? (
+                        <ArrowDropUp fontSize="small" sx={{ mx: -0.5 }} />
+                      ) : (
+                        <ArrowDropDown fontSize="small" sx={{ mx: -0.5 }} />
+                      )}
+                      {Math.abs(diff).toLocaleString(locale)} kg
+                    </Box>
+                  )}
+                </Box>
+              );
             }
             if (parts.length) {
               meta = (
-                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                  {parts.join('  ·  ')}
+                <Typography
+                  variant="caption"
+                  component="div"
+                  sx={{
+                    color: 'text.secondary',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    alignItems: 'center',
+                    columnGap: 2,
+                    rowGap: 0.5,
+                  }}
+                >
+                  {parts}
                 </Typography>
               );
             }
@@ -435,13 +498,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
               key={input._key}
               data-key={input._key}
               sx={{
-                px: 1,
+                px: 1.5,
                 py: 1,
                 borderLeft: '3px solid',
                 borderColor: formatError ? 'error.main' : 'transparent',
-                borderBottom: '1px solid',
-                borderBottomColor: 'divider',
-                '&:hover': { bgcolor: 'action.hover' },
+                borderBottom: ROW_LINE,
+                transition: 'background-color 150ms',
+                '&:hover, &:focus-within': { bgcolor: 'rgba(255,255,255,0.03)' },
               }}
             >
               <Box
@@ -452,9 +515,23 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   alignItems: 'center',
                 }}
               >
-                <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    mx: 'auto',
+                    borderRadius: '50%',
+                    bgcolor: 'rgba(144, 202, 249, 0.16)',
+                    color: 'primary.main',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   {index + 1}
-                </Typography>
+                </Box>
 
                 <Autocomplete
                   freeSolo
@@ -464,6 +541,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   options={nameOptions}
                   inputValue={input.name || ''}
                   onInputChange={(event, newValue) => handleNameChange(index, newValue ?? '')}
+                  sx={inputSx}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -482,6 +560,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   placeholder="5/5/5/5/5"
                   value={input.reps}
                   onChange={(event) => handleFormChange(index, 'reps', event)}
+                  sx={{ ...inputSx, gridColumn: { xs: 2, md: 'auto' } }}
                 />
 
                 <TextField
@@ -490,10 +569,19 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   placeholder="50/50/50/50/50"
                   value={input.weight}
                   onChange={(event) => handleFormChange(index, 'weight', event)}
-                  error={err === 'series' || err === 'number'}
+                  error={formatError}
+                  sx={{ ...inputSx, gridColumn: { xs: 2, md: 'auto' } }}
                 />
 
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gridColumn: { xs: 2, md: 'auto' },
+                    color: 'text.secondary',
+                    '& .MuiIconButton-root': { color: 'inherit' },
+                  }}
+                >
                   <Tooltip title={t('training.moveUp')}>
                     <span>
                       <IconButton
@@ -525,9 +613,9 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     <span>
                       <IconButton
                         size="small"
-                        color="error"
                         disabled={exercisesFields.length <= 1}
                         onClick={() => removeFields(index)}
+                        sx={{ '&:hover': { color: 'error.main' } }}
                       >
                         <DeleteOutlined fontSize="small" />
                       </IconButton>
@@ -541,13 +629,13 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                 <Box
                   sx={{
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(3, 1fr)',
+                    gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' },
                     gap: 1,
                     mt: 1,
-                    pl: '44px',
+                    pl: '36px',
                   }}
                 >
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="small" fullWidth sx={inputSx}>
                     <InputLabel>{t('exercise.type')}</InputLabel>
                     <Select
                       value={input.type}
@@ -562,7 +650,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     </Select>
                   </FormControl>
 
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="small" fullWidth sx={inputSx}>
                     <InputLabel>{t('exercise.place')}</InputLabel>
                     <Select
                       value={input.place}
@@ -577,7 +665,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     </Select>
                   </FormControl>
 
-                  <FormControl size="small" fullWidth>
+                  <FormControl size="small" fullWidth sx={inputSx}>
                     <InputLabel>{t('exercise.progress')}</InputLabel>
                     <Select
                       value={input.progress}
@@ -594,74 +682,78 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                 </Box>
               )}
 
-              {meta && <Box sx={{ pl: '44px', mt: 0.5 }}>{meta}</Box>}
+              {meta && <Box sx={{ pl: '36px', mt: 0.75 }}>{meta}</Box>}
             </Box>
           );
         })}
       </Box>
 
       {/* Dodaj ćwiczenie */}
-      <Box sx={{ mb: 3 }}>
-        <Button
-          variant="outlined"
-          startIcon={<Add />}
-          onClick={() => addFields(exercisesFields.length - 1)}
-          sx={{ borderRadius: 25, px: 3 }}
-        >
-          {t('training.addAnotherExercise')}
-        </Button>
-      </Box>
+      <Button
+        variant="text"
+        size="small"
+        startIcon={<Add />}
+        onClick={() => addFields(exercisesFields.length - 1)}
+        sx={{ mb: 2, ml: 0.5 }}
+      >
+        {t('training.addAnotherExercise')}
+      </Button>
 
-      {/* Pasek zapisu */}
-      <Box sx={{ position: 'sticky', bottom: 16, zIndex: 1000, textAlign: 'center' }}>
+      {(validationError || isError) && (
+        <Box sx={{ mb: 2 }}>
+          {validationError && (
+            <FormHelperText error sx={{ fontSize: '0.9rem', mx: 1.5 }}>
+              {validationError}
+            </FormHelperText>
+          )}
+          {isError && <ErrorAlert error={error} />}
+        </Box>
+      )}
+
+      {/* Pasek zapisu – przyklejony do dołu ekranu */}
+      <Box
+        sx={{
+          position: 'sticky',
+          bottom: 16,
+          zIndex: 10,
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: 2,
+          px: 2,
+          py: 1.25,
+          borderRadius: 3,
+          bgcolor: 'rgba(23, 37, 47, 0.95)',
+          border: HAIRLINE,
+          boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+        }}
+      >
+        <Box sx={{ minWidth: 0, flex: '1 1 240px' }}>
+          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+            {t('training.exercisesInTemplate', { count: exercisesFields.length })}
+            {totalVolume > 0 && (
+              <Box component="span" sx={{ color: VOLUME_COLOR, ml: 1.5 }}>
+                {t('training.volumeShort', { value: totalVolume.toLocaleString(locale) })}
+              </Box>
+            )}
+          </Typography>
+          <Typography
+            variant="caption"
+            sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'block' } }}
+          >
+            {t('training.saveHint')}
+          </Typography>
+        </Box>
         <Button
           variant="contained"
-          size="large"
           type="submit"
           disabled={isPending || exercisesFields.length === 0}
-          startIcon={isPending ? null : <Send />}
-          sx={{
-            minWidth: 220,
-            py: 1.5,
-            borderRadius: 25,
-            fontSize: '1.05rem',
-            fontWeight: 'bold',
-            background: `linear-gradient(45deg, ${theme.palette.success.dark}, ${theme.palette.success.main})`,
-            boxShadow: `0 4px 15px ${alpha(theme.palette.success.main, 0.4)}`,
-            '&:hover': {
-              background: `linear-gradient(45deg, ${theme.palette.success.dark}, ${theme.palette.success.light})`,
-              boxShadow: `0 6px 20px ${alpha(theme.palette.success.main, 0.6)}`,
-            },
-            '&:disabled': { background: 'rgba(0,0,0,0.12)', boxShadow: 'none' },
-          }}
+          startIcon={isPending ? <CircularProgress size={18} color="inherit" /> : <Save />}
+          sx={{ px: 3 }}
         >
-          {isPending ? (
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <CircularProgress size={20} color="inherit" />
-              {t('messages.submitting')}
-            </Box>
-          ) : (
-            t('training.saveTraining')
-          )}
+          {isPending ? t('messages.submitting') : t('training.saveTraining')}
         </Button>
-        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mt: 1 }}>
-          {t('training.saveHint')}
-        </Typography>
       </Box>
-
-      {validationError && (
-        <Box sx={{ mt: 2 }}>
-          <FormHelperText error sx={{ fontSize: '0.95rem', textAlign: 'center' }}>
-            {validationError}
-          </FormHelperText>
-        </Box>
-      )}
-
-      {isError && (
-        <Box sx={{ mt: 3 }}>
-          <ErrorAlert error={error} />
-        </Box>
-      )}
     </form>
   );
 }

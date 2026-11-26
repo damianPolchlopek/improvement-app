@@ -1,38 +1,29 @@
 import React, { useMemo, useState } from 'react';
 import { useQueries, keepPreviousData } from '@tanstack/react-query';
-import REST, { queryClient } from '../../utils/REST';
-import ExerciseChart, { CHART_COLORS } from './ExerciseChart';
-import { TRAINING_TYPES } from '../component/TrainingTypeSelector';
 import { useTranslation } from 'react-i18next';
+import { useLoaderData } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import {
   Autocomplete,
-  TextField,
-  CircularProgress,
-  Card,
-  CardContent,
-  Typography,
   Box,
-  Stack,
   Chip,
+  CircularProgress,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
-  Alert,
-  useTheme,
+  Typography,
 } from '@mui/material';
-
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Analytics, ShowChart, SearchOff } from '@mui/icons-material';
 
-import dayjs from 'dayjs';
-import Grid from '@mui/material/Grid';
-import { useLoaderData } from 'react-router-dom';
-
+import REST, { queryClient } from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
-import InformationComponent from '../../component/InformationComponent';
-
-import { Analytics, TrendingUp } from '@mui/icons-material';
-import { alpha } from '@mui/material/styles';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
+import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import ExerciseChart, { CHART_COLORS } from './ExerciseChart';
+import { TRAINING_TYPES } from '../component/TrainingTypeSelector';
 
 // Backend expects dd-MM-yyyy path params (see StatisticController).
 function formatApiDate(epoch) {
@@ -50,30 +41,24 @@ const RANGE_PRESETS = [
   { key: 'all', months: null },
 ];
 
+// Ciemniejsze tło pól – jak w wyszukiwarkach modułu food.
+// MUI X v8+: pickery renderują PickersOutlinedInput zamiast OutlinedInput.
 const fieldSx = {
-  // MUI X v8+: pickery renderują PickersOutlinedInput zamiast OutlinedInput
-  '& .MuiOutlinedInput-root, & .MuiPickersOutlinedInput-root': {
-    borderRadius: 2,
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    color: 'text.primary',
-    '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.25)' },
-    '&:hover fieldset': { borderColor: 'success.main' },
-    '&.Mui-focused fieldset': { borderColor: 'success.main' },
-  },
-  '& .MuiInputLabel-root': {
-    color: 'text.secondary',
-    '&.Mui-focused': { color: 'success.main' },
-  },
-  '& .MuiIconButton-root': { color: 'text.primary' },
-  '& .MuiAutocomplete-popupIndicator, & .MuiAutocomplete-clearIndicator': {
-    color: 'text.primary',
-  },
+  '& .MuiInputBase-root, & .MuiPickersInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' },
 };
+
+function Placeholder({ icon, children }) {
+  return (
+    <Box sx={{ textAlign: 'center', py: 10, color: 'text.secondary' }}>
+      {icon}
+      <Typography>{children}</Typography>
+    </Box>
+  );
+}
 
 export default function TrainingStatistic() {
   const exerciseNames = useLoaderData() || [];
   const { t, i18n } = useTranslation();
-  const theme = useTheme();
 
   const dateFormat = i18n.language === 'pl' ? 'DD/MM/YYYY' : 'MM/DD/YYYY';
 
@@ -85,6 +70,7 @@ export default function TrainingStatistic() {
   const [chartType, setChartType] = useState('Capacity');
   const [beginDate, setBeginDate] = useState(ALL_TIME_BEGIN);
   const [endDate, setEndDate] = useState(dayjs().add(1, 'day').valueOf());
+  const [activePreset, setActivePreset] = useState('all');
 
   // One query per selected exercise; merged into a single series-per-exercise dataset.
   const queryResults = useQueries({
@@ -120,11 +106,11 @@ export default function TrainingStatistic() {
   }, [queryResults, selectedExercises]);
 
   const applyPreset = (preset) => {
-    const end = dayjs().add(1, 'day');
-    setEndDate(end.valueOf());
+    setEndDate(dayjs().add(1, 'day').valueOf());
     setBeginDate(
       preset.months ? dayjs().subtract(preset.months, 'month').valueOf() : ALL_TIME_BEGIN
     );
+    setActivePreset(preset.key);
   };
 
   // Manual edits to the exercise list detach it from the loaded template.
@@ -152,277 +138,222 @@ export default function TrainingStatistic() {
   };
 
   const handleChangeBeginDate = (newValue) => {
-    if (newValue && newValue.isValid()) setBeginDate(newValue.valueOf());
+    if (newValue && newValue.isValid()) {
+      setBeginDate(newValue.valueOf());
+      setActivePreset(null);
+    }
   };
 
   const handleChangeEndDate = (newValue) => {
-    if (newValue && newValue.isValid()) setEndDate(newValue.valueOf());
+    if (newValue && newValue.isValid()) {
+      setEndDate(newValue.valueOf());
+      setActivePreset(null);
+    }
   };
 
-  if (exerciseNames.length === 0) {
-    return (
-      <Box sx={{ minHeight: '100vh', py: 4 }}>
-        <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto', px: 2 }}>
-          <Grid size={12}>
-            <InformationComponent>Trainings have not been added yet!</InformationComponent>
-          </Grid>
-        </Grid>
-      </Box>
-    );
-  }
+  const metricLabel = chartType === 'Weight' ? t('chart.weight') : t('chart.capacity');
 
   return (
-    <Box sx={{ py: 3, minHeight: '100vh' }}>
-      <Grid container spacing={2} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Compact controls toolbar */}
-        <Grid size={12}>
-          <Card
-            elevation={6}
-            sx={{
-              borderRadius: 3,
-              border: theme.palette.card.border,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              textAlign: 'left',
-            }}
+    <Box sx={{ py: 3, px: 2, maxWidth: 1400, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<Analytics />}
+        title={t('chart.title')}
+        description={t('chart.subtitle')}
+        statLabel={t('chart.dataPointsLabel')}
+        statValue={chartData.length}
+        statLoading={isLoading}
+        actions={
+          <ToggleButtonGroup
+            value={chartType}
+            exclusive
+            onChange={(event, value) => value && setChartType(value)}
+            size="small"
+            aria-label={t('chart.chartType')}
+            sx={{ '& .MuiToggleButton-root': { px: 2, textTransform: 'none' } }}
           >
-            <CardContent sx={{ p: 2.5, '&:last-child': { pb: 2.5 } }}>
-              <Stack direction="row" sx={{ alignItems: 'center', gap: 1.5, mb: 2 }}>
-                <Analytics sx={{ color: 'success.main' }} />
-                <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                  {t('chart.title')}
-                </Typography>
-              </Stack>
-
-              <Stack direction={{ xs: 'column', md: 'row' }} sx={{ gap: 2, alignItems: 'stretch' }}>
-                {/* Exercises (multi-select) */}
-                <Autocomplete
-                  multiple
-                  disableCloseOnSelect
-                  id="exercise-name-autocomplete"
-                  value={selectedExercises}
-                  options={exerciseNames}
-                  onChange={(event, newValue) => handleExercisesChange(newValue)}
-                  sx={{ flex: 1, minWidth: 240 }}
-                  renderValue={(value, getItemProps) =>
-                    value.map((option, index) => {
-                      const { key, ...tagProps } = getItemProps({ index });
-                      return (
-                        <Chip
-                          key={key}
-                          label={option}
-                          size="small"
-                          {...tagProps}
-                          sx={{
-                            backgroundColor: CHART_COLORS[index % CHART_COLORS.length],
-                            color: '#0b1c25',
-                            fontWeight: 700,
-                            '& .MuiChip-deleteIcon': { color: 'rgba(0,0,0,0.5)' },
-                          }}
-                        />
-                      );
-                    })
-                  }
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('chart.exercises')}
-                      placeholder={t('chart.selectExercises')}
-                      variant="outlined"
-                      sx={fieldSx}
-                    />
-                  )}
-                />
-
-                {/* Load all exercises from a training template */}
-                <Autocomplete
-                  id="training-template-autocomplete"
-                  value={selectedTemplate}
-                  options={TRAINING_TYPES}
-                  getOptionLabel={(option) => option.label}
-                  isOptionEqualToValue={(option, val) => option.value === val.value}
-                  onChange={(event, option) => handleTemplateChange(option)}
-                  loading={isTemplateLoading}
-                  sx={{ minWidth: 220 }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('chart.fromTemplate')}
-                      placeholder={t('chart.selectTemplate')}
-                      variant="outlined"
-                      sx={fieldSx}
-                      slotProps={{
-                        ...params.slotProps,
-                        input: {
-                          ...params.slotProps.input,
-                          endAdornment: (
-                            <>
-                              {isTemplateLoading ? (
-                                <CircularProgress size={18} sx={{ color: 'success.main' }} />
-                              ) : null}
-                              {params.slotProps.input.endAdornment}
-                            </>
-                          ),
-                        },
-                      }}
-                    />
-                  )}
-                />
-
-                {/* Metric toggle */}
-                <ToggleButtonGroup
-                  value={chartType}
-                  exclusive
-                  onChange={(event, value) => value && setChartType(value)}
-                  size="small"
-                  sx={{
-                    alignSelf: { xs: 'flex-start', md: 'center' },
-                    '& .MuiToggleButton-root': {
-                      color: 'text.secondary',
-                      borderColor: 'rgba(255,255,255,0.25)',
-                      px: 2,
-                    },
-                    '& .Mui-selected': {
-                      color: `${theme.palette.success.contrastText} !important`,
-                      backgroundColor: `${theme.palette.success.main} !important`,
-                      fontWeight: 700,
-                    },
-                  }}
-                >
-                  <ToggleButton value="Weight">{t('chart.weight')}</ToggleButton>
-                  <ToggleButton value="Capacity">{t('chart.capacity')}</ToggleButton>
-                </ToggleButtonGroup>
-              </Stack>
-
-              {/* Date range row */}
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                sx={{ gap: 2, alignItems: { xs: 'stretch', sm: 'center' }, mt: 2 }}
-              >
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label={t('chart.beginDate')}
-                    value={dayjs(beginDate)}
-                    onChange={handleChangeBeginDate}
-                    format={dateFormat}
-                    slotProps={{ textField: { size: 'small', sx: { ...fieldSx, minWidth: 160 } } }}
+            <ToggleButton value="Weight">{t('chart.weight')}</ToggleButton>
+            <ToggleButton value="Capacity">{t('chart.capacity')}</ToggleButton>
+          </ToggleButtonGroup>
+        }
+      >
+        <Box
+          sx={{
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1fr) 240px' },
+            gap: 1.5,
+          }}
+        >
+          {/* Exercises (multi-select) */}
+          <Autocomplete
+            multiple
+            disableCloseOnSelect
+            size="small"
+            id="exercise-name-autocomplete"
+            value={selectedExercises}
+            options={exerciseNames}
+            onChange={(event, newValue) => handleExercisesChange(newValue)}
+            renderValue={(value, getItemProps) =>
+              value.map((option, index) => {
+                const { key, ...tagProps } = getItemProps({ index });
+                const color = CHART_COLORS[index % CHART_COLORS.length];
+                return (
+                  <Chip
+                    key={key}
+                    label={option}
+                    size="small"
+                    variant="outlined"
+                    {...tagProps}
+                    icon={
+                      <Box
+                        component="span"
+                        sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: color }}
+                      />
+                    }
+                    sx={{ borderColor: color, '& .MuiChip-icon': { ml: 1, mr: -0.25 } }}
                   />
-                  <DatePicker
-                    label={t('chart.endDate')}
-                    value={dayjs(endDate)}
-                    onChange={handleChangeEndDate}
-                    format={dateFormat}
-                    slotProps={{ textField: { size: 'small', sx: { ...fieldSx, minWidth: 160 } } }}
-                  />
-                </LocalizationProvider>
+                );
+              })
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('chart.exercises')}
+                placeholder={selectedExercises.length ? '' : t('chart.selectExercises')}
+                sx={fieldSx}
+              />
+            )}
+          />
 
-                <Stack direction="row" sx={{ gap: 1, flexWrap: 'wrap' }}>
-                  {RANGE_PRESETS.map((preset) => (
-                    <Chip
-                      key={preset.key}
-                      label={preset.months ? preset.key : t('chart.allTime')}
-                      onClick={() => applyPreset(preset)}
-                      variant="outlined"
-                      size="small"
-                      sx={{
-                        color: 'text.primary',
-                        borderColor: 'rgba(255,255,255,0.3)',
-                        '&:hover': {
-                          borderColor: 'success.main',
-                          backgroundColor: alpha(theme.palette.success.main, 0.12),
-                        },
-                      }}
-                    />
-                  ))}
-                </Stack>
-              </Stack>
-            </CardContent>
-          </Card>
-        </Grid>
+          {/* Load all exercises from a training template */}
+          <Autocomplete
+            size="small"
+            id="training-template-autocomplete"
+            value={selectedTemplate}
+            options={TRAINING_TYPES}
+            getOptionLabel={(option) => option.label}
+            isOptionEqualToValue={(option, val) => option.value === val.value}
+            onChange={(event, option) => handleTemplateChange(option)}
+            loading={isTemplateLoading}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('chart.fromTemplate')}
+                placeholder={t('chart.selectTemplate')}
+                sx={fieldSx}
+                slotProps={{
+                  ...params.slotProps,
+                  input: {
+                    ...params.slotProps.input,
+                    endAdornment: (
+                      <>
+                        {isTemplateLoading ? <CircularProgress size={18} /> : null}
+                        {params.slotProps.input.endAdornment}
+                      </>
+                    ),
+                  },
+                }}
+              />
+            )}
+          />
+        </Box>
 
-        {/* Chart */}
-        <Grid size={12}>
-          <Card
-            elevation={8}
-            sx={{
-              borderRadius: 3,
-              bgcolor: 'background.surface',
-              border: theme.palette.card.border,
-              overflow: 'hidden',
-            }}
-          >
-            <Box
-              sx={{
-                px: 3,
-                py: 2,
-                background: theme.palette.card.header,
-                color: 'text.primary',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-              }}
-            >
-              <TrendingUp />
-              <Box sx={{ textAlign: 'left' }}>
-                <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {chartType === 'Weight' ? t('chart.weight') : t('chart.capacity')}
-                </Typography>
-                <Typography variant="caption" sx={{ opacity: 0.85 }}>
-                  {selectedExercises.length > 0
-                    ? `${selectedExercises.length} ${t('chart.exercises')} · ${chartData.length} ${t('chart.dataPoints')}`
-                    : t('chart.subtitle')}
-                </Typography>
-              </Box>
-            </Box>
+        {/* Date range */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: 1.5,
+            mt: 0.5,
+            width: '100%',
+          }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label={t('chart.beginDate')}
+              value={dayjs(beginDate)}
+              onChange={handleChangeBeginDate}
+              format={dateFormat}
+              slotProps={{ textField: { size: 'small', sx: { ...fieldSx, width: 170 } } }}
+            />
+            <DatePicker
+              label={t('chart.endDate')}
+              value={dayjs(endDate)}
+              onChange={handleChangeEndDate}
+              format={dateFormat}
+              slotProps={{ textField: { size: 'small', sx: { ...fieldSx, width: 170 } } }}
+            />
+          </LocalizationProvider>
 
-            <CardContent sx={{ p: { xs: 1.5, sm: 3 } }}>
-              {selectedExercises.length === 0 ? (
-                <Alert severity="info" sx={{ borderRadius: 2 }}>
-                  {t('chart.noExercisesSelected')}
-                </Alert>
-              ) : isLoading && chartData.length === 0 ? (
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    py: 8,
-                  }}
-                >
-                  <CircularProgress size={48} sx={{ mb: 2, color: 'success.main' }} />
-                  <Typography variant="body1" sx={{ color: 'text.primary' }}>
-                    {t('chart.loadingChart')}
-                  </Typography>
-                </Box>
-              ) : errorResult ? (
-                <Alert
-                  severity="error"
-                  sx={{
-                    borderRadius: 2,
-                    backgroundColor: alpha(theme.palette.error.main, 0.1),
-                    color: 'text.primary',
-                    border: `1px solid ${alpha(theme.palette.error.main, 0.3)}`,
-                    '& .MuiAlert-icon': { color: 'error.main' },
-                  }}
-                >
-                  <ErrorAlert error={errorResult.error} />
-                </Alert>
-              ) : chartData.length === 0 ? (
-                <Alert severity="info" sx={{ borderRadius: 2 }}>
-                  {t('chart.noData')}
-                </Alert>
-              ) : (
-                <ExerciseChart
-                  data={chartData}
-                  series={selectedExercises}
-                  beginDate={beginDate}
-                  endDate={endDate}
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', ml: { md: 'auto' } }}>
+            {RANGE_PRESETS.map((preset) => {
+              const active = preset.key === activePreset;
+              return (
+                <Chip
+                  key={preset.key}
+                  label={preset.months ? preset.key : t('chart.allTime')}
+                  onClick={() => applyPreset(preset)}
+                  clickable
+                  color={active ? 'primary' : 'default'}
+                  variant={active ? 'filled' : 'outlined'}
+                  aria-pressed={active}
+                  sx={{ fontWeight: active ? 600 : 400 }}
                 />
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              );
+            })}
+          </Box>
+        </Box>
+      </FoodPageHeader>
+
+      {/* Chart */}
+      <Box sx={surfaceSx}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: 1,
+            px: 2.5,
+            py: 1.5,
+            borderBottom: HAIRLINE,
+          }}
+        >
+          <Typography sx={{ fontWeight: 500 }}>{metricLabel}</Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            · {selectedExercises.length} {t('chart.exercises').toLowerCase()} · {chartData.length}{' '}
+            {t('chart.dataPoints')}
+          </Typography>
+        </Box>
+
+        <Box sx={{ p: { xs: 1.5, sm: 2.5 } }}>
+          {exerciseNames.length === 0 ? (
+            <Placeholder icon={<ShowChart sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />}>
+              {t('training.noTrainings')}
+            </Placeholder>
+          ) : selectedExercises.length === 0 ? (
+            <Placeholder icon={<ShowChart sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />}>
+              {t('chart.noExercisesSelected')}
+            </Placeholder>
+          ) : isLoading && chartData.length === 0 ? (
+            <Placeholder icon={<CircularProgress size={36} sx={{ mb: 2 }} />}>
+              {t('chart.loadingChart')}
+            </Placeholder>
+          ) : errorResult ? (
+            <ErrorAlert error={errorResult.error} />
+          ) : chartData.length === 0 ? (
+            <Placeholder icon={<SearchOff sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />}>
+              {t('chart.noData')}
+            </Placeholder>
+          ) : (
+            <ExerciseChart
+              data={chartData}
+              series={selectedExercises}
+              beginDate={beginDate}
+              endDate={endDate}
+            />
+          )}
+        </Box>
+      </Box>
     </Box>
   );
 }

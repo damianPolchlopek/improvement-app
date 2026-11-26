@@ -1,21 +1,36 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
+import {
+  Box,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
+import { EmojiEvents } from '@mui/icons-material';
 
-import DataTable from '../../component/table/DataTable';
+import REST from '../../utils/REST';
+import ErrorAlert from '../../component/error/ErrorAlert';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
+import { surfaceSx } from '../../food/component/foodStyles';
+import TrainingTypeChips from '../component/TrainingTypeChips';
+import SetPills from '../component/SetPills';
+import { toSets } from '../component/sets';
+import { DATE_FORMAT, trainingTableSx } from '../component/trainingTableSx';
+import { localeOf } from '../trainingView/trainingWeeks';
 
-import { Box, Card, CardContent, Toolbar, Typography, useTheme } from '@mui/material';
+const RECORD_COLOR = '#F0997B';
 
-import Grid from '@mui/material/Grid';
-import { FitnessCenter, TrendingUp, BarChart } from '@mui/icons-material';
-
-import TrainingTypeSelector from '../component/TrainingTypeSelector';
-
+// Najlepsze wyniki w ćwiczeniach danego typu treningu – rekord po rekordzie.
 export default function MaximumExerciseView() {
   const [trainingType, setTrainingType] = useState('A');
-  const { t } = useTranslation();
-  const theme = useTheme();
+  const { t, i18n } = useTranslation();
+  const locale = localeOf(i18n.language);
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['ath-training', trainingType],
@@ -24,127 +39,105 @@ export default function MaximumExerciseView() {
     gcTime: 1000 * 60 * 10,
   });
 
-  const maximumExerciseColumns = [
-    {
-      key: 'date',
-      label: t('exercise.date'),
-      accessor: 'date',
-      render: (value) => (
-        <Typography variant="body1" sx={{ fontWeight: '500' }}>
-          {value}
-        </Typography>
-      ),
-    },
-    {
-      key: 'name',
-      label: t('exercise.name'),
-      accessor: 'name',
-    },
-    {
-      key: 'reps',
-      label: t('exercise.reps'),
-      accessor: 'reps',
-      align: 'right',
-    },
-    {
-      key: 'weight',
-      label: t('exercise.weight'),
-      accessor: 'weight',
-      align: 'right',
-    },
-  ];
+  const records = data?.content ?? [];
 
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={2}
-            sx={{
-              borderRadius: 3,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <BarChart sx={{ fontSize: 32 }} />
-                <Typography variant="h4" sx={{ fontWeight: '600' }}>
-                  {t('training.maxResults')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {t('training.maxResultsDesc')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1100, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<EmojiEvents />}
+        title={t('training.maxResults')}
+        description={t('training.maxResultsDesc')}
+        statLabel={t('training.recordsLabel')}
+        statValue={records.length}
+        statLoading={isLoading}
+      >
+        <TrainingTypeChips value={trainingType} onChange={setTrainingType} />
+      </FoodPageHeader>
 
-        {/* Filters + stats */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3 }}>
-            <Toolbar
-              sx={{
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                columnGap: 3,
-                rowGap: 1.5,
-                py: 1.5,
-                minHeight: 'auto',
-              }}
-            >
-              <TrainingTypeSelector
-                value={trainingType}
-                setTrainingType={setTrainingType}
-                size="small"
-                label={t('training.type')}
-              />
-
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <FitnessCenter fontSize="small" color="action" />
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {t('training.maxRecordsCount')}
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                  {data?.content?.length || 0}
-                </Typography>
-              </Box>
-            </Toolbar>
-          </Card>
-        </Grid>
-
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Box
-              sx={{
-                p: 2,
-                background: theme.palette.card.header,
-                color: 'text.primary',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-              }}
-            >
-              <TrendingUp sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                {t('training.bestResultsForType', { type: trainingType })}
-              </Typography>
+      {isError ? (
+        <ErrorAlert error={error} />
+      ) : (
+        <Box sx={surfaceSx}>
+          {isLoading ? (
+            <Box sx={{ px: 2, py: 1 }}>
+              {Array.from({ length: 6 }).map((_, index) => (
+                <Skeleton key={index} height={44} />
+              ))}
             </Box>
-
-            <DataTable
-              data={data?.content}
-              isLoading={isLoading}
-              isError={isError}
-              error={error}
-              columns={maximumExerciseColumns}
-              loadingMessage={t('training.loadingMaxResults')}
-              emptyMessage={t('training.noMaxRecords')}
-            />
-          </Card>
-        </Grid>
-      </Grid>
+          ) : records.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 8, color: 'text.secondary' }}>
+              <EmojiEvents sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />
+              <Typography>{t('training.noMaxRecords')}</Typography>
+            </Box>
+          ) : (
+            <TableContainer>
+              <Table size="small" sx={trainingTableSx}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ width: 32 }}>#</TableCell>
+                    <TableCell>{t('exercise.name')}</TableCell>
+                    <TableCell>{t('exercise.date')}</TableCell>
+                    <TableCell>{t('training.sets')}</TableCell>
+                    <TableCell align="right">{t('training.heaviestSetLabel')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {records.map((exercise, index) => {
+                    const sets = toSets(exercise.reps, exercise.weight);
+                    const heaviest = sets
+                      ? Math.max(...sets.map((set) => Number(set.weight)))
+                      : null;
+                    return (
+                      <TableRow key={exercise.id ?? `${exercise.name}-${index}`}>
+                        <TableCell sx={{ color: 'text.secondary' }}>{index + 1}</TableCell>
+                        <TableCell sx={{ fontWeight: 500 }}>{exercise.name}</TableCell>
+                        <TableCell
+                          sx={{
+                            color: 'text.secondary',
+                            whiteSpace: 'nowrap',
+                            fontVariantNumeric: 'tabular-nums',
+                          }}
+                        >
+                          {exercise.date
+                            ? new Date(exercise.date).toLocaleDateString(locale, DATE_FORMAT)
+                            : '—'}
+                        </TableCell>
+                        <TableCell>
+                          <SetPills reps={exercise.reps} weight={exercise.weight} />
+                        </TableCell>
+                        <TableCell
+                          align="right"
+                          sx={{ whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}
+                        >
+                          {heaviest != null ? (
+                            <Box
+                              component="span"
+                              sx={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 0.5,
+                                color: RECORD_COLOR,
+                                fontWeight: 500,
+                              }}
+                            >
+                              <EmojiEvents sx={{ fontSize: 16 }} />
+                              {heaviest.toLocaleString(locale)} kg
+                            </Box>
+                          ) : (
+                            <Box component="span" sx={{ color: 'text.secondary' }}>
+                              {exercise.weight}
+                            </Box>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }

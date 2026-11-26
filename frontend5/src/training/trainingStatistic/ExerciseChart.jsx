@@ -16,7 +16,6 @@ import {
 } from 'recharts';
 
 import { Box, Button, Typography, useTheme } from '@mui/material';
-import { alpha } from '@mui/material/styles';
 import { ZoomOutMap } from '@mui/icons-material';
 
 // Single source of truth for series colors. The order matches the order of the
@@ -46,9 +45,9 @@ const CustomTooltip = ({ active, payload, label, t }) => {
   return (
     <Box
       sx={{
-        backgroundColor: 'rgba(0, 0, 0, 0.85)',
-        border: '1px solid rgba(255, 255, 255, 0.15)',
-        borderRadius: 1.5,
+        backgroundColor: '#17252f',
+        border: '1px solid rgba(255, 255, 255, 0.08)',
+        borderRadius: 2,
         p: 1.5,
         minWidth: 160,
       }}
@@ -81,7 +80,7 @@ const CustomTooltip = ({ active, payload, label, t }) => {
               {entry.dataKey}
             </Typography>
           </Box>
-          <Typography variant="body2" sx={{ fontWeight: 700, color: 'text.primary' }}>
+          <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.primary' }}>
             {entry.value}
           </Typography>
         </Box>
@@ -164,24 +163,11 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
           minHeight: 32,
         }}
       >
-        <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
           {t('chart.zoomHint')}
         </Typography>
         {zoom && (
-          <Button
-            size="small"
-            variant="outlined"
-            startIcon={<ZoomOutMap />}
-            onClick={resetZoom}
-            sx={{
-              color: 'text.primary',
-              borderColor: 'rgba(255,255,255,0.3)',
-              '&:hover': {
-                borderColor: 'success.main',
-                backgroundColor: alpha(theme.palette.success.main, 0.12),
-              },
-            }}
-          >
+          <Button size="small" variant="outlined" startIcon={<ZoomOutMap />} onClick={resetZoom}>
             {t('chart.resetZoom')}
           </Button>
         )}
@@ -238,7 +224,7 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
                 x1={refAreaLeft}
                 x2={refAreaRight}
                 strokeOpacity={0.3}
-                fill={theme.palette.success.main}
+                fill={theme.palette.primary.main}
                 fillOpacity={0.15}
               />
             )}
