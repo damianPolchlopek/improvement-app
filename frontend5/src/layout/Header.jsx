@@ -79,7 +79,7 @@ function ResponsiveAppBar({ onDrawerToggle }) {
 
           <Tooltip title={t('header.openSettings')}>
             <IconButton onClick={(event) => setAnchorElUser(event.currentTarget)} sx={{ p: 0.5 }}>
-              <Avatar sx={{ bgcolor: 'rgba(255, 255, 255, 0.12)', color: 'text.primary' }}>
+              <Avatar sx={{ bgcolor: 'toolbar.selected', color: 'text.primary' }}>
                 <PersonIcon fontSize="small" />
               </Avatar>
             </IconButton>

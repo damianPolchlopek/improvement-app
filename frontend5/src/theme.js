@@ -18,18 +18,18 @@ let theme = createTheme({
       header: 'linear-gradient(90deg, #1e3a52 0%, #2d5374 100%)',
       border: '1px solid rgba(255, 255, 255, 0.1)',
     },
-    // Toolbar używa tego samego stalowego gradientu co nagłówki kart (`card.header`),
-    // pasek podstron ma kolor paneli (#1a2e3d), a szybka akcja zielony akcent z widoków.
+    // Toolbar „grafit + zieleń”: neutralny, prawie czarny pasek, który nie konkuruje
+    // z gradientowymi nagłówkami kart; zielony akcent (#4caf50) jak w widokach.
     toolbar: {
-      background: 'linear-gradient(90deg, #1e3a52 0%, #2d5374 100%)',
-      subBackground: '#1a2e3d',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      indicator: '#ffffff',
+      background: '#1c2329',
+      subBackground: '#161c21',
+      border: '1px solid rgba(255, 255, 255, 0.07)',
+      indicator: '#4caf50',
       accent: '#4caf50',
-      text: 'rgba(255, 255, 255, 0.6)',
-      hover: 'rgba(255, 255, 255, 0.06)',
-      selected: 'rgba(255, 255, 255, 0.18)',
-      subSelected: 'rgba(255, 255, 255, 0.1)',
+      text: '#8b98a5',
+      hover: 'rgba(255, 255, 255, 0.05)',
+      selected: '#2a333b',
+      subSelected: '#2a333b',
     },
   },
   typography: {

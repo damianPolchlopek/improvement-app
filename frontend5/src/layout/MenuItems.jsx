@@ -40,7 +40,7 @@ import {
 } from '@mui/icons-material';
 
 // `basePath` służy do wykrycia aktywnego modułu w toolbarze (prefiks ścieżki),
-// `quickAction` wyciąga podstronę na prawą stronę paska podnawigacji.
+// `quickAction` wyciąga podstronę na początek paska podnawigacji.
 export const MENU_ITEMS = (t) => [
   {
     category: t('menu.home'),

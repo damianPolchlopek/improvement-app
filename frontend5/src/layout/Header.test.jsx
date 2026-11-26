@@ -31,7 +31,7 @@ describe('Header', () => {
     await i18n.changeLanguage('pl');
   });
 
-  it('marks the active module and its sub-page, with "Add" as a quick action', () => {
+  it('marks the active module and its sub-page, with "Add" as the leading quick action', () => {
     renderAt('/app/training/statistics');
 
     expect(currentLinks()).toEqual(['Trening', 'Statystyka']);
@@ -40,7 +40,7 @@ describe('Header', () => {
       within(subNav)
         .getAllByRole('link')
         .map((link) => link.textContent)
-    ).toEqual(['Widok', 'Ćwiczenia', 'Maksimum', 'Szablony', 'Statystyka', 'Dodaj']);
+    ).toEqual(['Dodaj', 'Widok', 'Ćwiczenia', 'Maksimum', 'Szablony', 'Statystyka']);
   });
 
   it('hides the sub-navigation for single-page modules like Home', () => {

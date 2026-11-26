@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Container } from '@mui/material';
+import { Box, Button, Container, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import { isPathActive } from './MenuItems';
@@ -56,24 +56,6 @@ function SubNavigation({ pathname, module }) {
             '&::-webkit-scrollbar': { display: 'none' },
           }}
         >
-          {pages.map((page) => {
-            const active = isPathActive(pathname, page.path);
-            return (
-              <Button
-                key={page.path}
-                component={Link}
-                to={page.path}
-                size="small"
-                aria-current={active ? 'page' : undefined}
-                sx={linkSx(active)}
-              >
-                {page.name}
-              </Button>
-            );
-          })}
-
-          <Box sx={{ flex: 1 }} />
-
           {quickActions.map((page) => {
             const active = isPathActive(pathname, page.path);
             return (
@@ -85,6 +67,26 @@ function SubNavigation({ pathname, module }) {
                 startIcon={page.icon}
                 aria-current={active ? 'page' : undefined}
                 sx={quickActionSx}
+              >
+                {page.name}
+              </Button>
+            );
+          })}
+
+          {quickActions.length > 0 && (
+            <Divider orientation="vertical" flexItem sx={{ my: 1, mx: 0.75 }} />
+          )}
+
+          {pages.map((page) => {
+            const active = isPathActive(pathname, page.path);
+            return (
+              <Button
+                key={page.path}
+                component={Link}
+                to={page.path}
+                size="small"
+                aria-current={active ? 'page' : undefined}
+                sx={linkSx(active)}
               >
                 {page.name}
               </Button>
