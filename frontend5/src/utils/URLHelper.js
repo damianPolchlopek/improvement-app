@@ -43,9 +43,11 @@ export const OAuth2CallbackUrl = `/oauth2/callback`;
 
 export const FINANCE = 'finance';
 export const INFORMATION = 'information';
+export const LIVE = 'live';
 
 export const FinanceViewUrl = `${APP}/${FINANCE}/${VIEW}`;
 export const FinanceConfigUrl = `${APP}/${FINANCE}/${INFORMATION}`;
+export const FinanceLiveUrl = `${APP}/${FINANCE}/${LIVE}`;
 
 export const AUDIT = 'audit';
 export const AuditFoodUrl = `${APP}/${AUDIT}`;

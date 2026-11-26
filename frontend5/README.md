@@ -78,6 +78,17 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
   - `assets/` – Zasoby statyczne
   - **Moduły funkcjonalne:** `food/`, `training/`, `finance/`, `shopping/`, `other/`,
     `audit/`, `home/`, `login/`
+  - `finance/live/` – widok „Na żywo”: pasek notowań na żywo z widgetu TradingView „Tickers”
+    (BTC, ETH, dominacja USDT, złoto, srebro, S&P 500, Nasdaq 100, ropa WTI) oraz
+    zwijane sekcje z wykresami z widgetu TradingView. „Kryptowaluty”: BTC i ETH (Binance);
+    „Indeksy giełdowe”: S&P 500 i Nasdaq 100 (`FOREXCOM:SPXUSD`, `FOREXCOM:NSXUSD`);
+    „Metale”: złoto i srebro (`OANDA:XAUUSD`, `OANDA:XAGUSD`); „Analiza makro”: dominacja USDT
+    (`CRYPTOCAP:USDT.D`) z paskiem stref obok wykresu (zakresy w `UsdtZoneBar.jsx`, bieżąca
+    wartość z CoinMarketCap), dominacja BTC (`CRYPTOCAP:BTC.D`) i Others
+    (`CRYPTOCAP:OTHERS.D`); „Derywatywy”: open interest
+    (`*.P_OI` × cena kontraktu, czyli wartość w USDT)
+    i funding rate (`*.P_FR`) z Binance i Coinbase. Domyślnie świece dzienne (1D); historia, zoom i wybór
+    okresu są wbudowane w widget; bez kluczy API.
 - `public/` – Statyczne zasoby serwowane bez przetwarzania (favicon, manifest)
 
 ---

@@ -38,6 +38,7 @@ import {
   FINANCE,
   VIEW,
   INFORMATION,
+  LIVE,
   VerifyEmailUrl,
   OAuth2CallbackUrl,
 } from './utils/URLHelper';
@@ -67,6 +68,7 @@ const WeeklyRecordView = lazy(() => import('./other/weekly/WeeklyRecordsView.jsx
 const DailyView = lazy(() => import('./other/daily/DailyView'));
 const FinanceView = lazy(() => import('./finance/view/FinanceView.jsx'));
 const FinanceInformation = lazy(() => import('./finance/FinanceInformation.jsx'));
+const LiveMarketView = lazy(() => import('./finance/live/LiveMarketView.jsx'));
 const SignUpView = lazy(() => import('./login/SignUpView'));
 const ErrorPage = lazy(() => import('./layout/ErrorPage'));
 const EmailVerification = lazy(() => import('./login/EmailVerification.jsx'));
@@ -284,6 +286,14 @@ const router = createBrowserRouter([
             element: (
               <Suspense fallback={suspenseFallback}>
                 <FinanceInformation />
+              </Suspense>
+            ),
+          },
+          {
+            path: LIVE,
+            element: (
+              <Suspense fallback={suspenseFallback}>
+                <LiveMarketView />
               </Suspense>
             ),
           },

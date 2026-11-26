@@ -11,6 +11,7 @@ import {
   FoodProductUrl,
   FinanceViewUrl,
   FinanceConfigUrl,
+  FinanceLiveUrl,
   ShoppingViewUrl,
   WeeklyViewUrl,
   DailyViewUrl,
@@ -30,6 +31,7 @@ import {
   ListAlt as ListAltIcon,
   CalendarToday as CalendarTodayIcon,
   AttachMoney as AttachMoneyIcon,
+  Sensors as SensorsIcon,
 } from '@mui/icons-material';
 
 export const MENU_ITEMS = (t) => [
@@ -65,6 +67,7 @@ export const MENU_ITEMS = (t) => [
     icon: <AttachMoneyIcon />,
     subPages: [
       { name: t('menu.view'), path: FinanceViewUrl, icon: <VisibilityIcon /> },
+      { name: t('menu.live'), path: FinanceLiveUrl, icon: <SensorsIcon /> },
       { name: t('menu.information'), path: FinanceConfigUrl, icon: <InventoryIcon /> },
     ],
   },
