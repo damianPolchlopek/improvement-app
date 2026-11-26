@@ -63,7 +63,7 @@ const LogComponent = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <MessageIcon fontSize="small" sx={{ color: 'text.secondary' }} />
-          <Typography variant="body2" sx={{ fontWeight: 600, color: 'text.secondary' }}>
+          <Typography variant="body2" sx={{ fontWeight: 500, color: 'text.secondary' }}>
             {t('home.activityLog')}
           </Typography>
         </Box>

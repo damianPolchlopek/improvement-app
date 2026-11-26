@@ -4,24 +4,27 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid';
-import { Box, Button, Card, Chip, TextField, Typography, useTheme } from '@mui/material';
-import { alpha } from '@mui/material/styles';
+import { Box, Button, Card, Chip, TextField, Typography } from '@mui/material';
 import {
   Check as CheckIcon,
   FitnessCenter,
   MonitorWeight,
   Restaurant,
+  Schedule,
   TaskAlt,
 } from '@mui/icons-material';
 
 import REST, { queryClient } from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 import { FoodAddUrl, TrainingAddUrl } from '../utils/URLHelper';
-import { MODULES, moduleStatus } from './dashboardStatus';
+import { MODULE_COLORS } from './dashboardStatus';
 
 const DATE_FORMAT = 'DD-MM-YYYY';
 const DAILY_FIELDS = ['health', 'exercise', 'book', 'software'];
 const WEIGHT_PATTERN = /^\d+([.,]\d+)?$/;
+
+// Wystarcza na najwyższą akcję (pole wagi z komunikatem błędu + przycisk).
+const TILE_MIN_HEIGHT = 236;
 
 const ICONS = {
   diet: <Restaurant fontSize="small" />,
@@ -30,15 +33,10 @@ const ICONS = {
   weekly: <MonitorWeight fontSize="small" />,
 };
 
-const MODULE_COLORS = { diet: 'warning', training: 'success', daily: 'primary', weekly: 'info' };
-
 // Każdy moduł ma stałe miejsce: zaległy pokazuje akcję, wykonany tylko kolejny termin
 function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
   const { t } = useTranslation();
-  const theme = useTheme();
-  const color = status.due
-    ? theme.palette[MODULE_COLORS[moduleKey]].main
-    : theme.palette.success.main;
+  const colors = MODULE_COLORS[moduleKey];
 
   let caption = t('home.noEntries');
   if (!status.due) {
@@ -56,46 +54,89 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
   }
 
   return (
-    <Box
+    <Card
+      elevation={0}
+      component="section"
+      aria-label={t(`home.module.${moduleKey}`)}
       sx={{
         p: 2,
         height: '100%',
-        borderRadius: 2,
-        border: `1px solid ${alpha(color, status.due ? 0.45 : 0.25)}`,
-        backgroundColor: alpha(color, status.due ? 0.06 : 0.04),
+        // Stała wysokość: kafle są równe niezależnie od tego, czy pokazują akcję.
+        minHeight: TILE_MIN_HEIGHT,
+        boxSizing: 'border-box',
+        display: 'flex',
+        flexDirection: 'column',
+        borderRadius: 2.5,
+        bgcolor: 'rgba(29, 42, 51, 0.9)',
+        border: '1px solid',
+        borderColor: status.due ? 'rgba(239, 159, 39, 0.35)' : 'rgba(255,255,255,0.08)',
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: status.due ? 1.5 : 0 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <Box
           sx={{
-            width: 36,
-            height: 36,
+            width: 40,
+            height: 40,
             flexShrink: 0,
-            borderRadius: '50%',
+            borderRadius: 2.5,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color,
-            backgroundColor: alpha(color, 0.15),
+            bgcolor: colors.bg,
+            color: colors.text,
           }}
         >
-          {status.due ? ICONS[moduleKey] : <CheckIcon fontSize="small" />}
+          {ICONS[moduleKey]}
         </Box>
-        <Box sx={{ minWidth: 0 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+        <Box sx={{ minWidth: 0, flex: 1 }}>
+          <Typography sx={{ fontWeight: 500, lineHeight: 1.3 }}>
             {t(`home.module.${moduleKey}`)}
           </Typography>
           <Typography
             variant="caption"
             component="div"
-            sx={{ color: status.due ? 'error.main' : 'text.secondary' }}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.5,
+              color: status.due ? '#FAC775' : '#5DCAA5',
+            }}
           >
+            {status.due ? <Schedule sx={{ fontSize: 14 }} /> : <CheckIcon sx={{ fontSize: 14 }} />}
             {caption}
           </Typography>
         </Box>
       </Box>
-      {status.due && children}
-    </Box>
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: status.due ? 'flex-start' : 'center',
+          mt: 2,
+          pt: 1.5,
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
+        {status.due ? (
+          children
+        ) : (
+          <Typography
+            variant="body2"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 0.75,
+              color: 'text.secondary',
+            }}
+          >
+            <CheckIcon sx={{ fontSize: 18, color: '#5DCAA5' }} />
+            {t('home.nothingToDo')}
+          </Typography>
+        )}
+      </Box>
+    </Card>
   );
 }
 
@@ -180,7 +221,7 @@ function WeeklyAction() {
           setWeight(event.target.value);
           setInvalid(false);
         }}
-        sx={{ mb: 1.5 }}
+        sx={{ mb: 1.5, '& .MuiInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' } }}
       />
       <Button type="submit" size="small" variant="outlined" disabled={isPending}>
         {t('home.saveWeight')}
@@ -197,21 +238,9 @@ function LinkAction({ to, label }) {
   );
 }
 
-export default function TodayPanel({ summary }) {
-  const { t, i18n } = useTranslation();
-  const theme = useTheme();
-
-  const modules = MODULES.map((module) => ({
-    ...module,
-    status: moduleStatus(summary[module.lastField], module.rhythm),
-  }));
-  const doneCount = modules.filter((module) => !module.status.due).length;
-
-  const dateLabel = new Intl.DateTimeFormat(i18n.language, {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  }).format(new Date());
+// Kafle modułów na dziś (status liczy HomeView – potrzebuje go też nagłówek).
+export default function TodayPanel({ modules, summary }) {
+  const { t } = useTranslation();
 
   const actions = {
     daily: <DailyAction />,
@@ -221,57 +250,19 @@ export default function TodayPanel({ summary }) {
   };
 
   return (
-    <Card
-      elevation={3}
-      sx={{
-        p: { xs: 2, sm: 3 },
-        mb: 4,
-        borderRadius: 3,
-        background: theme.palette.card.header,
-        border: theme.palette.card.border,
-      }}
-    >
-      <Typography
-        variant="body2"
-        sx={{ color: 'text.secondary', '&::first-letter': { textTransform: 'uppercase' } }}
-      >
-        {dateLabel}
-      </Typography>
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1.5 }}>
-        {doneCount === modules.length
-          ? t('home.allDone')
-          : t('home.todayProgress', { done: doneCount, total: modules.length })}
-      </Typography>
-
-      {/* Pasek postępu: jeden segment na moduł */}
-      <Box sx={{ display: 'flex', gap: 0.75, mb: 3 }} aria-hidden="true">
-        {modules.map((module, index) => (
-          <Box
-            key={module.key}
-            sx={{
-              flex: 1,
-              height: 6,
-              borderRadius: 3,
-              backgroundColor: index < doneCount ? 'success.main' : 'action.selected',
-            }}
-          />
-        ))}
-      </Box>
-
-      <Grid container spacing={2}>
-        {modules.map((module) => (
-          <Grid key={module.key} size={{ xs: 12, sm: 6, lg: 3 }}>
-            <ModuleTile
-              moduleKey={module.key}
-              status={module.status}
-              rhythm={module.rhythm}
-              lastDate={summary[module.lastField]}
-            >
-              {actions[module.key]}
-            </ModuleTile>
-          </Grid>
-        ))}
-      </Grid>
-    </Card>
+    <Grid container spacing={2} sx={{ mb: 3 }}>
+      {modules.map((module) => (
+        <Grid key={module.key} size={{ xs: 12, sm: 6, lg: 3 }}>
+          <ModuleTile
+            moduleKey={module.key}
+            status={module.status}
+            rhythm={module.rhythm}
+            lastDate={summary[module.lastField]}
+          >
+            {actions[module.key]}
+          </ModuleTile>
+        </Grid>
+      ))}
+    </Grid>
   );
 }
