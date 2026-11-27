@@ -1,5 +1,5 @@
 import { alpha, createTheme } from '@mui/material/styles';
-import { ACCENTS, LINE_COLOR, STATUS, SURFACE } from './tokens';
+import { ACCENTS, FONT_FAMILY, LINE_COLOR, STATUS, SURFACE } from './tokens';
 
 // Jeden kolor przewodni aplikacji: przyciski, zaznaczenia, linki, wskaźnik w toolbarze.
 // Jasny odcień zieleni z palety akcentów – czytelny na ciemnym tle (przyciski dostają ciemny tekst).
@@ -27,8 +27,8 @@ let theme = createTheme({
       strong: alpha(PRIMARY, 0.16),
     },
     background: {
-      default: 'radial-gradient( #123146, #202c34)',
-      paper: '#1d1d1d',
+      default: SURFACE.page,
+      paper: SURFACE.card,
     },
     // Tokeny z tokens.js – dostępne w `sx` jako np. 'surface.field', 'status.up', 'accent.teal.dot'.
     accent: ACCENTS,
@@ -58,7 +58,8 @@ let theme = createTheme({
       fontSize: 26,
       letterSpacing: 0.5,
     },
-    fontFamily: 'Roboto, sans-serif',
+    // Arial wprost (świadomy wybór zamiast Roboto) – taki sam wygląd na każdym systemie.
+    fontFamily: FONT_FAMILY,
   },
   shape: {
     borderRadius: 8,

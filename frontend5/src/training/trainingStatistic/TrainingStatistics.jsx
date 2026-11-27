@@ -22,7 +22,8 @@ import REST, { queryClient } from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
 import { fieldSx, HAIRLINE, surfaceSx } from '../../tokens';
-import ExerciseChart, { CHART_COLORS } from './ExerciseChart';
+import ExerciseChart from './ExerciseChart';
+import { MAX_SERIES, assignSeriesColors } from './seriesColors';
 import { TRAINING_TYPES } from '../component/TrainingTypeSelector';
 
 // Backend expects dd-MM-yyyy path params (see StatisticController).
@@ -59,6 +60,10 @@ export default function TrainingStatistic() {
   const [selectedExercises, setSelectedExercises] = useState(() =>
     exerciseNames.length > 0 ? [exerciseNames[0]] : []
   );
+  // Kolor każdego ćwiczenia zostaje z nim, dopóki jest na wykresie (patrz assignSeriesColors).
+  const [seriesColors, setSeriesColors] = useState(() => assignSeriesColors({}, selectedExercises));
+  // Ile ćwiczeń z wczytanego szablonu nie zmieściło się na wykresie (limit MAX_SERIES).
+  const [templateOverflow, setTemplateOverflow] = useState(0);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [isTemplateLoading, setIsTemplateLoading] = useState(false);
   const [chartType, setChartType] = useState('Capacity');
@@ -107,15 +112,25 @@ export default function TrainingStatistic() {
     setActivePreset(preset.key);
   };
 
+  // Wykres pokazuje najwyżej MAX_SERIES ćwiczeń – kolory serii się nie powtarzają.
+  const selectExercises = (names) => {
+    const limited = names.slice(0, MAX_SERIES);
+    setSelectedExercises(limited);
+    setSeriesColors((previous) => assignSeriesColors(previous, limited));
+    return names.length - limited.length;
+  };
+
   // Manual edits to the exercise list detach it from the loaded template.
   const handleExercisesChange = (newValue) => {
-    setSelectedExercises(newValue);
+    selectExercises(newValue);
     setSelectedTemplate(null);
+    setTemplateOverflow(0);
   };
 
   // Load every exercise that belongs to the chosen training template into the chart.
   const handleTemplateChange = async (option) => {
     setSelectedTemplate(option);
+    setTemplateOverflow(0);
     if (!option) return;
 
     setIsTemplateLoading(true);
@@ -125,7 +140,7 @@ export default function TrainingStatistic() {
         queryFn: () => REST.getTrainingTemplate(option.value),
         staleTime: 1000 * 60 * 10,
       });
-      setSelectedExercises(template?.exercises ?? []);
+      setTemplateOverflow(selectExercises(template?.exercises ?? []));
     } finally {
       setIsTemplateLoading(false);
     }
@@ -186,11 +201,14 @@ export default function TrainingStatistic() {
             id="exercise-name-autocomplete"
             value={selectedExercises}
             options={exerciseNames}
+            getOptionDisabled={(option) =>
+              selectedExercises.length >= MAX_SERIES && !selectedExercises.includes(option)
+            }
             onChange={(event, newValue) => handleExercisesChange(newValue)}
             renderValue={(value, getItemProps) =>
               value.map((option, index) => {
                 const { key, ...tagProps } = getItemProps({ index });
-                const color = CHART_COLORS[index % CHART_COLORS.length];
+                const color = seriesColors[option];
                 return (
                   <Chip
                     key={key}
@@ -214,6 +232,16 @@ export default function TrainingStatistic() {
                 {...params}
                 label={t('chart.exercises')}
                 placeholder={selectedExercises.length ? '' : t('chart.selectExercises')}
+                helperText={
+                  templateOverflow > 0
+                    ? t('chart.templateTrimmed', {
+                        count: MAX_SERIES,
+                        total: selectedExercises.length + templateOverflow,
+                      })
+                    : selectedExercises.length >= MAX_SERIES
+                      ? t('chart.maxSeries', { count: MAX_SERIES })
+                      : undefined
+                }
                 sx={fieldSx}
               />
             )}
@@ -342,6 +370,7 @@ export default function TrainingStatistic() {
             <ExerciseChart
               data={chartData}
               series={selectedExercises}
+              colors={seriesColors}
               beginDate={beginDate}
               endDate={endDate}
             />

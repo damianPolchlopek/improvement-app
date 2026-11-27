@@ -2,6 +2,9 @@
 // `theme.js` wpina je do palety MUI (np. `bgcolor: 'surface.field'`, `color: 'status.up'`
 // w `sx`), a stałe poniżej służą tam, gdzie potrzebny jest gotowy string (ramki, recharts).
 
+// Czcionka interfejsu: Arial (Helvetica tam, gdzie Ariala brak). Musi się zgadzać z index.css.
+export const FONT_FAMILY = "Arial, 'Helvetica Neue', Helvetica, sans-serif";
+
 // Rodziny barw akcentów. `dot` – kropka / wypełnienie paska, `bg` – ciemne tło kafelka lub
 // etykiety, `text` – jasny tekst na `bg`, `light` – średnio jasny odcień do liczb na ciemnym tle.
 export const ACCENTS = {
@@ -11,6 +14,28 @@ export const ACCENTS = {
   teal: { dot: '#1D9E75', bg: '#085041', text: '#9FE1CB', light: '#5DCAA5' },
   amber: { dot: '#EF9F27', bg: '#633806', text: '#FAC775', light: '#FAC775' },
   gray: { dot: '#888780', bg: '#444441', text: '#D3D1C7', light: '#B4B2A9' },
+};
+
+// Kolory serii na wykresach (kategoryczne), w stałej kolejności – nigdy nie zapętlane, więc
+// wykres pokazuje najwyżej CHART_SERIES.length serii. Kolejność zwalidowana skryptem dataviz
+// na tle karty (SURFACE.card #213748): jasność w paśmie L 0.48–0.67, kontrast ≥ 3:1, sąsiednie pary
+// rozróżnialne przy daltonizmie (ΔE ≥ 9.0) i normalnym widzeniu (ΔE ≥ 18.6).
+// Zmieniając kolory lub kolejność – zwaliduj ponownie.
+export const CHART_SERIES = [
+  ACCENTS.blue.dot,
+  ACCENTS.coral.dot,
+  ACCENTS.teal.dot,
+  '#C98500', // ciemniejszy amber – ACCENTS.amber.dot jest za jasny na wykres
+  '#D4537E', // magenta
+  '#0CA30C', // zieleń
+  ACCENTS.purple.dot,
+  '#E66767', // czerwień
+];
+
+// Linie pomocnicze wykresów: siatka i osie mają być ciche.
+export const CHART_LINES = {
+  grid: 'rgba(255,255,255,0.08)',
+  axis: 'rgba(255,255,255,0.16)',
 };
 
 // Kolory znaczeniowe: wzrost / spadek, wykonane / zaległe.
@@ -24,12 +49,15 @@ export const STATUS = {
 };
 
 // Powierzchnie, od najniższej do najwyżej położonej.
+// Strona i karty mają pełne (nieprzezroczyste) kolory: płaski granat (odcień ze środka
+// dawnego gradientu) pod spodem, karty o stopień jaśniejsze, kafle jeszcze o stopień.
 export const SURFACE = {
-  card: 'rgba(29, 42, 51, 0.6)', // karta sekcji / tabeli
-  tile: 'rgba(29, 42, 51, 0.9)', // kafel w siatce (posiłek, moduł na Home)
-  sticky: '#1c2a33', // nieprzezroczyste tło przyklejonej kolumny
-  overlay: 'rgba(23, 37, 47, 0.95)', // panel nakładany na treść
-  dialog: '#17252f', // dialog, tooltip wykresu
+  page: '#1a2d3d', // tło strony (body)
+  card: '#213748', // karta sekcji / tabeli, Paper (menu, szuflada)
+  tile: '#253c4e', // kafel w siatce (posiłek, moduł na Home)
+  sticky: '#213748', // tło przyklejonej kolumny w karcie (= card)
+  overlay: '#1d3242', // panel nakładany na treść
+  dialog: '#1d3242', // dialog, tooltip wykresu
   field: 'rgba(0,0,0,0.18)', // tło pól formularzy
   inset: 'rgba(0,0,0,0.15)', // wpuszczony blok wewnątrz karty
   subtle: 'rgba(255,255,255,0.04)', // kafelek statystyki

@@ -72,11 +72,20 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
   - `theme.js` – Konfiguracja motywu Material UI; wpina tokeny z `tokens.js` do palety, więc w `sx`
     można pisać np. `bgcolor: 'surface.field'`, `color: 'status.up'`, `bgcolor: 'primaryTint.strong'`.
     Jeden kolor przewodni (`PRIMARY` = jasna zieleń `ACCENTS.teal.light`) dla przycisków, zaznaczeń,
-    linków i wskaźnika toolbara; `success` / `warning` / `error` też pochodzą z tokenów (`STATUS`)
+    linków i wskaźnika toolbara; `success` / `warning` / `error` też pochodzą z tokenów (`STATUS`).
+    Tło: płaski granat `SURFACE.page` (#1a2d3d, odcień z dawnego gradientu), karty i Paper
+    w pełnym kolorze `SURFACE.card` (#213748), kafle `SURFACE.tile` – bez gradientów
+    i przezroczystości.
+    Czcionka: Arial (`FONT_FAMILY` w `tokens.js`, ta sama wartość w `index.css`) – bez ładowania
+    zewnętrznych fontów
   - `tokens.js` – Jedno źródło wyglądu: paleta akcentów (`ACCENTS`: coral, purple, blue, teal, amber,
     gray – każdy z `dot` / `bg` / `text` / `light`), kolory znaczeniowe (`STATUS`), powierzchnie
     (`SURFACE`), linie (`HAIRLINE`, `ROW_LINE`) oraz wspólne style (`surfaceSx`, `fieldSx`,
-    `calmTableSx`, `dialogPaperSx`). Nowe kolory dodajemy tutaj, nie na sztywno w komponentach
+    `calmTableSx`, `dialogPaperSx`). Nowe kolory dodajemy tutaj, nie na sztywno w komponentach.
+    Wykresy: `CHART_SERIES` – 8 kolorów serii w stałej, zwalidowanej kolejności (kontrast
+    i rozróżnialność przy daltonizmie na ciemnym tle karty), bez zapętlania – wykres ćwiczeń
+    pokazuje najwyżej 8 serii, a kolor zostaje przy ćwiczeniu (`trainingStatistic/seriesColors.js`);
+    `CHART_LINES` – ciche linie siatki i osi
   - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table`)
   - `context/` – Konteksty React (m.in. stan globalny)
   - `layout/` – Elementy układu strony (nawigacja, szkielet widoku)

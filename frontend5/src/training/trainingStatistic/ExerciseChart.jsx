@@ -17,22 +17,7 @@ import {
 
 import { Box, Button, Typography, useTheme } from '@mui/material';
 import { ZoomOutMap } from '@mui/icons-material';
-import { HAIRLINE } from '../../tokens';
-
-// Single source of truth for series colors. The order matches the order of the
-// selected exercises, so the chips in the picker and the lines here stay in sync.
-export const CHART_COLORS = [
-  '#4caf50',
-  '#ff9800',
-  '#42a5f5',
-  '#ec407a',
-  '#ab47bc',
-  '#26c6da',
-  '#ffca28',
-  '#8d6e63',
-  '#ef5350',
-  '#5c6bc0',
-];
+import { CHART_LINES, HAIRLINE, SURFACE } from '../../tokens';
 
 function formatAxisDate(tickItem) {
   return dayjs(tickItem).format('DD/MM/YYYY');
@@ -90,7 +75,8 @@ const CustomTooltip = ({ active, payload, label, t }) => {
   );
 };
 
-export default function ExerciseChart({ data, series, beginDate, endDate }) {
+// `colors` – mapa ćwiczenie -> kolor serii (assignSeriesColors), wspólna z chipami w filtrze.
+export default function ExerciseChart({ data, series, colors, beginDate, endDate }) {
   const { t } = useTranslation();
   const theme = useTheme();
 
@@ -185,7 +171,7 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
             }
             onMouseUp={handleZoom}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
+            <CartesianGrid strokeDasharray="3 3" stroke={CHART_LINES.grid} vertical={false} />
             <XAxis
               dataKey="localDate"
               domain={xDomain}
@@ -193,29 +179,35 @@ export default function ExerciseChart({ data, series, beginDate, endDate }) {
               scale="time"
               type="number"
               tickFormatter={formatAxisDate}
-              stroke="rgba(255, 255, 255, 0.6)"
-              tick={{ fontSize: 12 }}
+              stroke={CHART_LINES.axis}
+              tick={{ fontSize: 12, fill: theme.palette.text.secondary }}
               minTickGap={32}
             />
             <YAxis
               domain={yDomain}
               allowDataOverflow
-              stroke="rgba(255, 255, 255, 0.6)"
-              tick={{ fontSize: 12 }}
+              stroke={CHART_LINES.axis}
+              tick={{ fontSize: 12, fill: theme.palette.text.secondary }}
               width={44}
             />
             <Tooltip content={(props) => <CustomTooltip {...props} t={t} />} />
-            <Legend wrapperStyle={{ paddingTop: 12 }} />
-            {series.map((name, index) => (
+            {/* Tekst legendy w kolorze tekstu – tożsamość serii niesie kolorowy znacznik obok. */}
+            <Legend
+              wrapperStyle={{ paddingTop: 12 }}
+              formatter={(value) => (
+                <span style={{ color: theme.palette.text.secondary }}>{value}</span>
+              )}
+            />
+            {series.map((name) => (
               <Line
                 key={name}
                 type="monotone"
                 dataKey={name}
                 name={name}
-                stroke={CHART_COLORS[index % CHART_COLORS.length]}
+                stroke={colors[name]}
                 strokeWidth={2}
-                dot={{ r: 3 }}
-                activeDot={{ r: 5 }}
+                dot={{ r: 4, fill: colors[name], stroke: SURFACE.sticky, strokeWidth: 2 }}
+                activeDot={{ r: 6, stroke: SURFACE.sticky, strokeWidth: 2 }}
                 connectNulls
                 isAnimationActive={false}
               />

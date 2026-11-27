@@ -1,15 +1,15 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
-import { STATUS } from '../../tokens';
+import { ACCENTS, STATUS } from '../../tokens';
 
 // USDT dominance zones (in %), read off the user's own TradingView analysis.
 // High USDT.D = money parked in stablecoins = market bottom; low = market top.
-// Edit here to move a zone.
+// Edit here to move a zone. Colors must be 6-digit hex (an alpha suffix is appended below).
 export const USDT_ZONES = [
-  { id: 'buyDip', from: 8.2, to: 9.4, color: '#ff9800' },
-  { id: 'takeProfit', from: 5.65, to: 7.15, color: '#fdd835' },
-  { id: 'sellTop', from: 3.7, to: 4.8, color: '#ff9800' },
+  { id: 'buyDip', from: 8.2, to: 9.4, color: ACCENTS.amber.dot },
+  { id: 'takeProfit', from: 5.65, to: 7.15, color: ACCENTS.amber.light },
+  { id: 'sellTop', from: 3.7, to: 4.8, color: ACCENTS.amber.dot },
 ];
 export const USDT_LOCAL_BOTTOM = 8.545;
 
