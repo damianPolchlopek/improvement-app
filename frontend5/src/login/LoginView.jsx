@@ -255,7 +255,7 @@ export default function LoginView() {
           color: 'text.primary',
           borderColor: 'line.strong',
           bgcolor: 'surface.field',
-          '&:hover': { borderColor: 'rgba(255,255,255,0.32)', bgcolor: 'surface.subtle' },
+          '&:hover': { borderColor: 'line.hover', bgcolor: 'surface.subtle' },
         }}
         onClick={() =>
           (window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`)

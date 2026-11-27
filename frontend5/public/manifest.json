@@ -1,6 +1,8 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mutarexx",
+  "name": "Mutarexx",
+  "description": "Dziennik diety, treningów, nawyków i finansów",
+  "lang": "pl",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +12,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1a2d3d",
+  "background_color": "#1a2d3d"
 }

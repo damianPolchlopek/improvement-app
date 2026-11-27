@@ -48,11 +48,14 @@ export const STATUS = {
   doneBg: 'rgba(29, 158, 117, 0.18)',
 };
 
+// Tło strony (body): oryginalny gradient radialny aplikacji.
+export const PAGE_BACKGROUND = 'radial-gradient(#123146, #202c34)';
+
 // Powierzchnie, od najniższej do najwyżej położonej.
-// Strona i karty mają pełne (nieprzezroczyste) kolory: płaski granat (odcień ze środka
-// dawnego gradientu) pod spodem, karty o stopień jaśniejsze, kafle jeszcze o stopień.
+// Tło strony: oryginalny gradient radialny (granat w środku, grafit na brzegach) – patrz
+// PAGE_BACKGROUND. Karty i kafle mają pełne (nieprzezroczyste) kolory.
 export const SURFACE = {
-  page: '#1a2d3d', // tło strony (body)
+  page: '#1a2d3d', // jednolity zamiennik tła tam, gdzie potrzebny jest pojedynczy kolor
   card: '#213748', // karta sekcji / tabeli, Paper (menu, szuflada)
   tile: '#253c4e', // kafel w siatce (posiłek, moduł na Home)
   sticky: '#213748', // tło przyklejonej kolumny w karcie (= card)

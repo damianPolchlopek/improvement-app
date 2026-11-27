@@ -82,6 +82,12 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <PublicLayout />,
+    // Nieznany adres poza /app trafia tutaj zamiast na domyślny ekran React Router.
+    errorElement: (
+      <Suspense fallback={suspenseFallback}>
+        <ErrorPage />
+      </Suspense>
+    ),
     children: [
       {
         index: true,

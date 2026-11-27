@@ -40,7 +40,7 @@ export default function DrawerComponent(props) {
           <Logo />
         </ListItem>
         {menuItems(t).map(({ category, subPages, icon }) => (
-          <Box key={category} sx={{ bgcolor: '#101F33' }}>
+          <Box key={category} sx={{ bgcolor: 'surface.inset' }}>
             <ListItem sx={{ ...category_style }}>
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText sx={{ color: 'text.primary' }}>{category}</ListItemText>

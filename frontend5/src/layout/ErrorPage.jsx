@@ -1,8 +1,8 @@
 import Navigator from './Drawer';
-import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
+import { Link, useRouteError, isRouteErrorResponse } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 function ErrorPage() {
   const { t } = useTranslation();
@@ -12,7 +12,8 @@ function ErrorPage() {
 
   let message = t('errorPage.notFound');
   if (isRouteErrorResponse(error)) {
-    message = `${error.status} ${error.statusText}`;
+    message =
+      error.status === 404 ? t('errorPage.notFound') : `${error.status} ${error.statusText}`;
   } else if (error instanceof Error) {
     message = error.message;
   } else if (typeof error === 'string') {
@@ -31,6 +32,9 @@ function ErrorPage() {
       <Box component="main" sx={{ textAlign: 'center', '& pre': { textAlign: 'left' } }}>
         <h1>{t('errorPage.title')}</h1>
         <p>{message}</p>
+        <Button component={Link} to="/app/" variant="contained" sx={{ mb: 3 }}>
+          {t('errorPage.backHome')}
+        </Button>
         {error instanceof Error && error.stack && (
           <pre style={{ whiteSpace: 'pre-wrap', color: 'crimson' }}>{error.stack}</pre>
         )}

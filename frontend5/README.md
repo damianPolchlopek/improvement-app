@@ -73,9 +73,9 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     można pisać np. `bgcolor: 'surface.field'`, `color: 'status.up'`, `bgcolor: 'primaryTint.strong'`.
     Jeden kolor przewodni (`PRIMARY` = jasna zieleń `ACCENTS.teal.light`) dla przycisków, zaznaczeń,
     linków i wskaźnika toolbara; `success` / `warning` / `error` też pochodzą z tokenów (`STATUS`).
-    Tło: płaski granat `SURFACE.page` (#1a2d3d, odcień z dawnego gradientu), karty i Paper
-    w pełnym kolorze `SURFACE.card` (#213748), kafle `SURFACE.tile` – bez gradientów
-    i przezroczystości.
+    Tło: oryginalny gradient radialny `PAGE_BACKGROUND` (#123146 → #202c34; `SURFACE.page`
+    #1a2d3d jako jednolity zamiennik), karty i Paper w pełnym kolorze `SURFACE.card` (#213748),
+    kafle `SURFACE.tile` – bez przezroczystości.
     Czcionka: Arial (`FONT_FAMILY` w `tokens.js`, ta sama wartość w `index.css`) – bez ładowania
     zewnętrznych fontów. Tabele mają wspólny wygląd z motywu (`MuiTableCell` / `MuiTableBody` /
     `MuiTableRow`: cienkie linie, nagłówek 12px, cyfry o stałej szerokości, podświetlenie wiersza),

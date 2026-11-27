@@ -33,7 +33,7 @@ const LanguageSwitcher = () => {
           fontWeight: 600,
           lineHeight: 1.6,
           color: 'toolbar.text',
-          borderColor: 'rgba(255, 255, 255, 0.15)',
+          borderColor: 'line.strong',
         },
         '& .MuiToggleButton-root.Mui-selected, & .MuiToggleButton-root.Mui-selected:hover': {
           color: 'text.primary',

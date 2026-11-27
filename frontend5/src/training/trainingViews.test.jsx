@@ -132,7 +132,7 @@ describe('training views', () => {
     expect(all).toHaveAttribute('aria-pressed', 'false');
     expect(REST.getTrainingStatistic).toHaveBeenCalledTimes(2);
     expect(
-      within(screen.getByRole('group', { name: 'Typ Wykresu' })).getByRole('button', {
+      within(screen.getByRole('group', { name: 'Typ wykresu' })).getByRole('button', {
         name: 'Objętość',
       })
     ).toHaveAttribute('aria-pressed', 'true');

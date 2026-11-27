@@ -102,7 +102,7 @@ describe('diet audit views', () => {
 
     fireEvent.click(row);
 
-    expect(await screen.findByText('Historia Zmian')).toBeInTheDocument();
+    expect(await screen.findByText('Historia zmian')).toBeInTheDocument();
     expect(REST.getRevisions).toHaveBeenCalledWith('7');
   });
 

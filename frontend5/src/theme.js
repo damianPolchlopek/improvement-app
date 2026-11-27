@@ -1,5 +1,14 @@
 import { alpha, createTheme } from '@mui/material/styles';
-import { ACCENTS, FONT_FAMILY, HAIRLINE, LINE_COLOR, ROW_LINE, STATUS, SURFACE } from './tokens';
+import {
+  ACCENTS,
+  FONT_FAMILY,
+  HAIRLINE,
+  LINE_COLOR,
+  PAGE_BACKGROUND,
+  ROW_LINE,
+  STATUS,
+  SURFACE,
+} from './tokens';
 
 // Jeden kolor przewodni aplikacji: przyciski, zaznaczenia, linki, wskaźnik w toolbarze.
 // Jasny odcień zieleni z palety akcentów – czytelny na ciemnym tle (przyciski dostają ciemny tekst).
@@ -77,7 +86,8 @@ theme = {
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          background: theme.palette.background.default,
+          backgroundColor: theme.palette.background.default,
+          backgroundImage: PAGE_BACKGROUND,
         },
       },
     },

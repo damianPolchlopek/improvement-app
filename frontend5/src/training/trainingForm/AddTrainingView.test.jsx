@@ -85,7 +85,7 @@ describe('AddTrainingView', () => {
     await screen.findByDisplayValue('Wiosłowanie');
     expect(screen.queryByLabelText('Miejsce')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Tryb Zaawansowany' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tryb zaawansowany' }));
 
     expect(await screen.findAllByText('Miejsce')).not.toHaveLength(0);
   });
