@@ -14,7 +14,7 @@ export const MODULE_COLORS = {
   diet: ACCENTS.coral,
   training: ACCENTS.purple,
   daily: ACCENTS.blue,
-  weekly: ACCENTS.teal,
+  weekly: ACCENTS.pink,
 };
 
 export function moduleStatus(lastIso, rhythm, today = dayjs()) {

@@ -65,7 +65,7 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
 
 ## Struktura katalogów
 
-- `index.html` – Punkt wejścia Vite (ładuje `src/index.jsx`); zastąpił `public/index.html` z czasów Create React App
+- `index.html` – Punkt wejścia Vite (ładuje `src/index.jsx`); zastąpił stary `public/index.html` z czasów Create React App (usunięty). Język `pl`, kolor paska przeglądarki (`theme-color`) i `public/manifest.json` w kolorze tła aplikacji (`SURFACE.page`)
 - `src/` – Główny kod źródłowy aplikacji
   - `index.jsx` – Renderowanie komponentu `<App />`
   - `App.jsx` – Główny komponent aplikacji (routing, layout)
@@ -75,7 +75,7 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     linków i wskaźnika toolbara; `success` / `warning` / `error` też pochodzą z tokenów (`STATUS`).
     Tło: oryginalny gradient radialny `PAGE_BACKGROUND` (#123146 → #202c34; `SURFACE.page`
     #1a2d3d jako jednolity zamiennik), karty i Paper w pełnym kolorze `SURFACE.card` (#213748),
-    kafle `SURFACE.tile` – bez przezroczystości.
+    kafle `SURFACE.tile` w tym samym kolorze co nagłówek strony (#213748).
     Czcionka: Arial (`FONT_FAMILY` w `tokens.js`, ta sama wartość w `index.css`) – bez ładowania
     zewnętrznych fontów. Tabele mają wspólny wygląd z motywu (`MuiTableCell` / `MuiTableBody` /
     `MuiTableRow`: cienkie linie, nagłówek 12px, cyfry o stałej szerokości, podświetlenie wiersza),
@@ -83,8 +83,11 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     `'& .MuiTableCell-root'`. `MuiCard` to płaska karta z cienką ramką; `Grid`, `Alert` i `Chip`
     mają domyślne zachowanie MUI (bez globalnego wyśrodkowania i pogrubienia). Tekst nie jest też
     wyśrodkowany globalnie (`.App` w `App.css`) – widok, który chce go wyśrodkować, ustawia to sam
-  - `tokens.js` – Jedno źródło wyglądu: paleta akcentów (`ACCENTS`: coral, purple, blue, teal, amber,
-    gray – każdy z `dot` / `bg` / `text` / `light`), kolory znaczeniowe (`STATUS`), powierzchnie
+  - `tokens.js` – Jedno źródło wyglądu: paleta akcentów (`ACCENTS`: coral, purple, blue, pink, green,
+    teal, amber, red, gray – każdy z `dot` / `bg` / `text` / `light`), kolory stanów (`STATUS`).
+    Zasada: teal (zrobione / wzrost / dodano), amber (zaległe / uwaga) i red (spadek / usunięto)
+    oznaczają wyłącznie stan; moduły i kategorie (Home, nawyki, typy treningu, zakupy) używają
+    pozostałych barw. Wyjątek: makroskładniki w module food zostają przy swoich kolorach. Dalej: powierzchnie
     (`SURFACE`), linie (`HAIRLINE`, `ROW_LINE`) oraz wspólne style (`surfaceSx`, `fieldSx`,
     `dialogPaperSx`). Nowe kolory dodajemy tutaj, nie na sztywno w komponentach.
     Wykresy: `CHART_SERIES` – 8 kolorów serii w stałej, zwalidowanej kolejności (kontrast
@@ -93,7 +96,7 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     `CHART_LINES` – ciche linie siatki i osi
   - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table/DataTable`)
   - `context/` – Konteksty React (m.in. stan globalny)
-  - `layout/` – Elementy układu strony (nawigacja, szkielet widoku)
+  - `layout/` – Elementy układu strony (nawigacja, szkielet widoku); `ErrorPage` obsługuje błędy i nieznane adresy zarówno w `/app`, jak i na trasach publicznych
   - `language/` – Konfiguracja tłumaczeń (`i18n.js`) i przełącznik języka
   - `utils/` – Funkcje pomocnicze i komunikacja z API (axios)
   - `assets/` – Zasoby statyczne
@@ -145,7 +148,7 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
 
 ## Testowanie
 
-Projekt korzysta z **Vitest** (środowisko `jsdom`) oraz **React Testing Library** (`@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`). Konfiguracja testów znajduje się w [`vite.config.js`](vite.config.js), plik startowy to `src/setupTests.js`. Testy znajdują się w plikach z rozszerzeniem `.test.js` / `.test.jsx`.
+Projekt korzysta z **Vitest** (środowisko `jsdom`) oraz **React Testing Library** (`@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`). Konfiguracja testów znajduje się w [`vite.config.js`](vite.config.js), plik startowy to `src/setupTests.js` (m.in. limit oczekiwania `findBy…` / `waitFor` podniesiony do 5 s, bo przy pełnym przebiegu domyślna 1 s bywała za krótka). Testy znajdują się w plikach z rozszerzeniem `.test.js` / `.test.jsx`.
 
 Uruchom testy:
 ```bash

@@ -7,8 +7,6 @@ import { Box, Button } from '@mui/material';
 function ErrorPage() {
   const { t } = useTranslation();
   const error = useRouteError();
-  // Tymczasowe logowanie diagnostyczne — pokazuje prawdziwą przyczynę błędu trasy
-  console.error('Route error:', error);
 
   let message = t('errorPage.notFound');
   if (isRouteErrorResponse(error)) {

@@ -21,7 +21,7 @@ import { ACCENTS, surfaceSx } from '../../tokens';
 import TrainingTypeChips from '../component/TrainingTypeChips';
 import SetPills from '../component/SetPills';
 import { toSets } from '../component/sets';
-import { DATE_FORMAT } from '../component/trainingTableSx';
+import { DATE_FORMAT } from '../component/dateFormat';
 import { localeOf } from '../trainingView/trainingWeeks';
 
 const RECORD_COLOR = ACCENTS.coral.light;

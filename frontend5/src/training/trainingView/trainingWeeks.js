@@ -17,9 +17,9 @@ export function parseTrainingName(name) {
 // `bg` / `text` – ciemne tło i jasny tekst (motyw aplikacji jest ciemny), `dot` – kropka w filtrze.
 export const TYPE_GROUPS = [
   { key: 'strength', match: ['siłowy'], ...ACCENTS.purple },
-  { key: 'hypertrophy', match: ['hipertroficzny'], ...ACCENTS.teal },
+  { key: 'hypertrophy', match: ['hipertroficzny'], ...ACCENTS.green },
   { key: 'fbw', match: ['fbw', '5x5'], ...ACCENTS.coral },
-  { key: 'kettle', match: ['kettle'], ...ACCENTS.amber },
+  { key: 'kettle', match: ['kettle'], ...ACCENTS.pink },
   { key: 'cardio', match: [], ...ACCENTS.gray },
 ];
 

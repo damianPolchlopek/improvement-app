@@ -23,7 +23,7 @@ import TrainingTypeChips from '../component/TrainingTypeChips';
 import SetPills from '../component/SetPills';
 import WeightDelta from '../component/WeightDelta';
 import { localeOf, typeLabel } from '../trainingView/trainingWeeks';
-import { DATE_FORMAT } from '../component/trainingTableSx';
+import { DATE_FORMAT } from '../component/dateFormat';
 
 // Nieprzezroczyste tło (≈ tło karty na tle strony) – kolumna daty przykleja się przy przewijaniu.
 const STICKY_BG = SURFACE.sticky;

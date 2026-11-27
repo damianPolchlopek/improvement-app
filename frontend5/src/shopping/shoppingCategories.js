@@ -2,7 +2,7 @@ import { ACCENTS } from '../tokens';
 
 // Kolory kategorii listy zakupów z palety akcentów.
 const CATEGORY_COLORS = {
-  GROCERY: ACCENTS.teal,
+  GROCERY: ACCENTS.green,
   CLOTHES: ACCENTS.purple,
   ELECTRONICS: ACCENTS.blue,
   PHARMACY: ACCENTS.coral,

@@ -2,9 +2,9 @@ import { ACCENTS } from '../../tokens';
 
 // Nawyki dziennika z kolorami z palety akcentów.
 export const DAILY_HABITS = [
-  { key: 'health', ...ACCENTS.teal },
+  { key: 'health', ...ACCENTS.pink },
   { key: 'exercise', ...ACCENTS.purple },
-  { key: 'book', ...ACCENTS.amber },
+  { key: 'book', ...ACCENTS.green },
   { key: 'software', ...ACCENTS.blue },
 ];
 

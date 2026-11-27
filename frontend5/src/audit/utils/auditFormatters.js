@@ -53,11 +53,11 @@ const getRelativeTime = (date) => {
 };
 
 // Typy rewizji: kolor z palety akcentów (`accent.dot/bg/text/light`) i ikona MUI.
-// Dodano = teal, zmieniono = blue, usunięto = coral – te same kolory w całym module.
+// Dodano = teal i usunięto = red (barwy stanów), zmieniono = blue.
 export const REVISION_TYPES = {
   ADD: { labelKey: 'audit.added', accent: ACCENTS.teal, Icon: AddIcon },
   MOD: { labelKey: 'audit.modified', accent: ACCENTS.blue, Icon: EditIcon },
-  DEL: { labelKey: 'audit.removed', accent: ACCENTS.coral, Icon: DeleteIcon },
+  DEL: { labelKey: 'audit.removed', accent: ACCENTS.red, Icon: DeleteIcon },
 };
 
 export const formatRevisionType = (type) => {

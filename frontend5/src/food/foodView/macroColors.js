@@ -4,6 +4,7 @@ import { ACCENTS } from '../../tokens';
 // `bar` – wypełnienie paska proporcji, `text` – jaśniejszy odcień do liczb na ciemnym tle.
 const macro = (accent) => ({ bar: accent.dot, text: accent.light });
 
+// Wyjątek od zasady barw stanów (tokens.js): makro zostają przy swoich klasycznych kolorach.
 export const MACRO_COLORS = {
   kcal: macro(ACCENTS.coral),
   protein: macro(ACCENTS.blue),
