@@ -1,32 +1,18 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
+import { Box, Chip, Skeleton } from '@mui/material';
+import { ListAlt } from '@mui/icons-material';
 
-import {
-  Box,
-  Card,
-  CardContent,
-  Toolbar,
-  Typography,
-  useTheme,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { Category, ListAlt } from '@mui/icons-material';
-
-import PageLoader from '../../component/loader/PageLoader';
+import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
 import WeeklyForm from './WeeklyForm';
 import WeeklyRecordsTable from './WeeklyRecordsTable';
 
 export default function WeeklyRecordsView() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const { t } = useTranslation();
-  const theme = useTheme();
 
   const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
     queryKey: ['weekly-record-categories'],
@@ -52,107 +38,48 @@ export default function WeeklyRecordsView() {
 
   const recordsList = records || [];
 
-  if (categoriesLoading) {
-    return <PageLoader text={t('messages.loading')} />;
-  }
-
-  if (isError) {
-    return <ErrorAlert error={error} />;
-  }
-
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={2}
-            sx={{
-              borderRadius: 3,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <ListAlt sx={{ fontSize: 32 }} />
-                <Typography variant="h4" sx={{ fontWeight: '600' }}>
-                  {t('weekly.title')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {t('weekly.subtitle')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1100, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<ListAlt />}
+        title={t('weekly.title')}
+        description={t('weekly.subtitle')}
+        statLabel={t('weekly.recordsInCategory')}
+        statValue={recordsList.length}
+        statLoading={categoriesLoading || recordsLoading}
+      >
+        {categoriesLoading
+          ? [0, 1, 2].map((i) => (
+              <Skeleton key={i} variant="rounded" width={90} height={32} sx={{ borderRadius: 4 }} />
+            ))
+          : categories.map((category) => {
+              const active = category === effectiveCategory;
+              return (
+                <Chip
+                  key={category}
+                  label={category}
+                  clickable
+                  color={active ? 'primary' : 'default'}
+                  variant={active ? 'filled' : 'outlined'}
+                  aria-pressed={active}
+                  onClick={() => setSelectedCategory(category)}
+                  sx={{ fontWeight: active ? 600 : 400 }}
+                />
+              );
+            })}
+      </FoodPageHeader>
 
-        {/* Filters + stats */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3 }}>
-            <Toolbar
-              sx={{
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                columnGap: 3,
-                rowGap: 1.5,
-                py: 1.5,
-                minHeight: 'auto',
-              }}
-            >
-              <FormControl size="small" sx={{ minWidth: 200 }}>
-                <InputLabel>{t('weekly.selectCategory')}</InputLabel>
-                <Select
-                  value={effectiveCategory}
-                  label={t('weekly.selectCategory')}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
-                      {category}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+      <WeeklyForm categories={categories} defaultCategory={effectiveCategory} />
 
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <ListAlt fontSize="small" color="action" />
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {t('weekly.recordsInCategory')}
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                  {recordsLoading ? '...' : recordsList.length}
-                </Typography>
-              </Box>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Category fontSize="small" color="action" />
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {t('weekly.availableCategories')}
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                  {categories.length}
-                </Typography>
-              </Box>
-            </Toolbar>
-          </Card>
-        </Grid>
-
-        {/* Add form */}
-        <Grid size={12}>
-          <WeeklyForm categories={categories} defaultCategory={effectiveCategory} />
-        </Grid>
-
-        {/* Table Section */}
-        <Grid size={12}>
-          {recordsLoading ? (
-            <PageLoader text={t('weekly.loadingRecords')} />
-          ) : (
-            <WeeklyRecordsTable records={recordsList} />
-          )}
-        </Grid>
-      </Grid>
+      {isError ? (
+        <ErrorAlert error={error} />
+      ) : (
+        <WeeklyRecordsTable
+          records={recordsList}
+          category={effectiveCategory}
+          isLoading={categoriesLoading || recordsLoading}
+        />
+      )}
     </Box>
   );
 }

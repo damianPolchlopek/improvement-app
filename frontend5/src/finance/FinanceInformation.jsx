@@ -1,169 +1,140 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
 import {
+  Box,
   Table,
   TableBody,
+  TableCell,
   TableContainer,
   TableHead,
-  Paper,
+  TableRow,
   Typography,
-  Box,
-  Card,
-  CardContent,
-  Stack,
-  Divider,
-  useTheme,
-  List,
-  ListItem,
-  ListItemText,
 } from '@mui/material';
+import { Info } from '@mui/icons-material';
 
-import Grid from '@mui/material/Grid';
-import { Info, TrendingUp, CalendarToday } from '@mui/icons-material';
+import FoodPageHeader from '../food/component/FoodPageHeader';
+import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
+import { financeTableSx, ROW_LINE } from './financeStyles';
 
-import StyledTableCell from '../component/table/StyledTableCell';
-import StyledTableRow from '../component/table/StyledTableRow';
+const CYCLE_YEARS = ['2013', '2017', '2021'];
+const CYCLE_ROWS = [
+  { key: 'btcDrops', values: ['86%', '84%', '78%'] },
+  { key: 'bullCycles', values: [142, 152, 151] },
+  { key: 'bearCycles', values: [59, 50, 52] },
+  { key: 'fullCycles', values: [201, 202, 203] },
+];
+const NOTES = ['note1', 'note2', 'note3', 'note4', 'note5', 'note6', 'note7', 'note8'];
+const NOTE5_ITEMS = ['note5item1', 'note5item2', 'note5item3', 'note5item4'];
+
+function SectionTitle({ children }) {
+  return (
+    <Box sx={{ px: 2, py: 1.5, borderBottom: HAIRLINE }}>
+      <Typography component="h2" sx={{ fontWeight: 500 }}>
+        {children}
+      </Typography>
+    </Box>
+  );
+}
 
 export default function FinanceInformation() {
   const { t } = useTranslation();
-  const theme = useTheme();
 
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={2}
-            sx={{
-              borderRadius: 3,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <Info sx={{ fontSize: 32 }} />
-                <Typography variant="h4" sx={{ fontWeight: '600' }}>
-                  {t('finance.marketInfo')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {t('finance.marketInfoDesc')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1100, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<Info />}
+        title={t('finance.marketInfo')}
+        description={t('finance.marketInfoDesc')}
+        statLabel={t('finance.cyclesLabel')}
+        statValue={CYCLE_YEARS.length}
+      />
 
-        {/* Historical Cycles Table */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+      <Box component="section" sx={{ ...surfaceSx, mb: 3 }}>
+        <SectionTitle>{t('finance.btcCycles')}</SectionTitle>
+        <TableContainer>
+          <Table size="small" sx={financeTableSx}>
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                {CYCLE_YEARS.map((year) => (
+                  <TableCell key={year} align="right">
+                    {year}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {CYCLE_ROWS.map((row) => (
+                <TableRow key={row.key}>
+                  <TableCell sx={{ fontWeight: 500 }}>{t(`finance.${row.key}`)}</TableCell>
+                  {row.values.map((value, index) => (
+                    <TableCell key={CYCLE_YEARS[index]} align="right">
+                      {value}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+
+      <Box component="section" sx={surfaceSx}>
+        <SectionTitle>{t('finance.notesTitle')}</SectionTitle>
+        <Box component="ol" sx={{ m: 0, px: 2, py: 0.5, listStyle: 'none' }}>
+          {NOTES.map((note, index) => (
             <Box
+              component="li"
+              key={note}
               sx={{
-                p: 2,
-                background: theme.palette.card.header,
-                color: 'text.primary',
                 display: 'flex',
-                alignItems: 'center',
-                gap: 2,
+                gap: 1.5,
+                py: 1.25,
+                borderTop: index > 0 ? ROW_LINE : 0,
               }}
             >
-              <TrendingUp sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                {t('finance.btcCycles')}
-              </Typography>
+              <Box
+                component="span"
+                sx={{
+                  flexShrink: 0,
+                  width: 22,
+                  height: 22,
+                  mt: 0.125,
+                  borderRadius: '50%',
+                  bgcolor: 'rgba(144, 202, 249, 0.16)',
+                  color: 'primary.main',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {index + 1}
+              </Box>
+              <Box sx={{ minWidth: 0 }}>
+                <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
+                  {t(`finance.${note}`)}
+                </Typography>
+                {note === 'note5' && (
+                  <Box component="ul" sx={{ m: 0, mt: 0.75, pl: 2.5 }}>
+                    {NOTE5_ITEMS.map((item) => (
+                      <Typography
+                        key={item}
+                        component="li"
+                        variant="body2"
+                        sx={{ color: 'text.secondary', py: 0.25 }}
+                      >
+                        {t(`finance.${item}`)}
+                      </Typography>
+                    ))}
+                  </Box>
+                )}
+              </Box>
             </Box>
-
-            <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-              <Table>
-                <TableHead>
-                  <StyledTableRow>
-                    <StyledTableCell sx={{ fontWeight: 'bold' }}>-</StyledTableCell>
-                    <StyledTableCell sx={{ fontWeight: 'bold' }}>2013</StyledTableCell>
-                    <StyledTableCell sx={{ fontWeight: 'bold' }}>2017</StyledTableCell>
-                    <StyledTableCell sx={{ fontWeight: 'bold' }}>2021</StyledTableCell>
-                  </StyledTableRow>
-                </TableHead>
-                <TableBody>
-                  <StyledTableRow>
-                    <StyledTableCell sx={{ fontWeight: '600' }}>
-                      {t('finance.btcDrops')}
-                    </StyledTableCell>
-                    <StyledTableCell>86%</StyledTableCell>
-                    <StyledTableCell>84%</StyledTableCell>
-                    <StyledTableCell>78%</StyledTableCell>
-                  </StyledTableRow>
-
-                  <StyledTableRow>
-                    <StyledTableCell sx={{ fontWeight: '600' }}>
-                      {t('finance.bullCycles')}
-                    </StyledTableCell>
-                    <StyledTableCell>142</StyledTableCell>
-                    <StyledTableCell>152</StyledTableCell>
-                    <StyledTableCell>151</StyledTableCell>
-                  </StyledTableRow>
-
-                  <StyledTableRow>
-                    <StyledTableCell sx={{ fontWeight: '600' }}>
-                      {t('finance.bearCycles')}
-                    </StyledTableCell>
-                    <StyledTableCell>59</StyledTableCell>
-                    <StyledTableCell>50</StyledTableCell>
-                    <StyledTableCell>52</StyledTableCell>
-                  </StyledTableRow>
-
-                  <StyledTableRow>
-                    <StyledTableCell sx={{ fontWeight: '600' }}>
-                      {t('finance.fullCycles')}
-                    </StyledTableCell>
-                    <StyledTableCell>201</StyledTableCell>
-                    <StyledTableCell>202</StyledTableCell>
-                    <StyledTableCell>203</StyledTableCell>
-                  </StyledTableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
-        </Grid>
-
-        {/* Notes */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3 }}>
-            <CardContent sx={{ p: 3 }}>
-              <Stack divider={<Divider />} spacing={2}>
-                <Typography variant="body1">{t('finance.note1')}</Typography>
-                <Typography variant="body1">{t('finance.note2')}</Typography>
-                <Typography variant="body1">{t('finance.note3')}</Typography>
-                <Typography variant="body1">{t('finance.note4')}</Typography>
-                <Box>
-                  <Typography variant="body1" sx={{ mb: 1 }}>
-                    {t('finance.note5')}
-                  </Typography>
-                  <List dense disablePadding>
-                    <ListItem disableGutters>
-                      <ListItemText primary={t('finance.note5item1')} />
-                    </ListItem>
-                    <ListItem disableGutters>
-                      <ListItemText primary={t('finance.note5item2')} />
-                    </ListItem>
-                    <ListItem disableGutters>
-                      <ListItemText primary={t('finance.note5item3')} />
-                    </ListItem>
-                    <ListItem disableGutters>
-                      <ListItemText primary={t('finance.note5item4')} />
-                    </ListItem>
-                  </List>
-                </Box>
-                <Typography variant="body1">{t('finance.note6')}</Typography>
-                <Typography variant="body1">{t('finance.note7')}</Typography>
-                <Typography variant="body1">{t('finance.note8')}</Typography>
-              </Stack>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 }

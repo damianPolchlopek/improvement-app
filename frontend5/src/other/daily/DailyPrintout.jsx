@@ -1,59 +1,71 @@
-import React from 'react';
-import { useQuery, useMutation, keepPreviousData } from '@tanstack/react-query';
-import REST, { queryClient } from '../../utils/REST';
+import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-
 import {
+  Box,
+  IconButton,
+  Skeleton,
   Table,
   TableBody,
+  TableCell,
   TableContainer,
   TableHead,
-  TableFooter,
   TablePagination,
-  Paper,
-  Card,
-  Box,
+  TableRow,
+  Tooltip,
   Typography,
-  Chip,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  useTheme,
 } from '@mui/material';
-import { TrendingUp } from '@mui/icons-material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from 'react';
+import { Check, DeleteOutlined, EventBusy } from '@mui/icons-material';
 
-import StyledTableCell from '../../component/table/StyledTableCell';
-import StyledTableRow from '../../component/table/StyledTableRow';
-import PageLoader from '../../component/loader/PageLoader';
+import REST, { queryClient } from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
+import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import ConfirmDeleteDialog from '../component/ConfirmDeleteDialog';
+import { DAILY_HABITS, otherTableSx, parseApiDate } from '../component/otherStyles';
 
-export default function DailyPrintout() {
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const { t } = useTranslation();
-  const theme = useTheme();
+function HabitCell({ done, habit }) {
+  return (
+    <TableCell align="center">
+      {done ? (
+        <Box
+          component="span"
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 24,
+            height: 24,
+            borderRadius: '50%',
+            bgcolor: habit.bg,
+            color: habit.text,
+          }}
+        >
+          <Check sx={{ fontSize: 16 }} aria-label="✓" />
+        </Box>
+      ) : (
+        <Box component="span" sx={{ color: 'text.disabled' }} aria-label="—">
+          —
+        </Box>
+      )}
+    </TableCell>
+  );
+}
+
+// Historia dziennika: data, nawyki (✓ / —), wynik dnia i usuwanie z potwierdzeniem.
+export default function DailyPrintout({ query, page, size, onPageChange, onSizeChange }) {
+  const { t, i18n } = useTranslation();
   const { showSnackbar } = useSnackbar();
   // Wpis czekający na potwierdzenie usunięcia (historii nie da się odtworzyć, więc pytamy)
   const [toDelete, setToDelete] = useState(null);
-
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['daily-list', page, size],
-    queryFn: () => REST.getDaily(page, size),
-    placeholderData: keepPreviousData,
-    staleTime: 1000 * 60 * 5,
-  });
+  const { data, isLoading, isError, error } = query;
+  const locale = i18n.language === 'en' ? 'en-GB' : 'pl-PL';
 
   const { mutate: deleteDaily, isPending: isDeleting } = useMutation({
     mutationFn: (daily) => REST.deleteDaily(daily.id),
     onSuccess: (_, daily) => {
       queryClient.invalidateQueries({ queryKey: ['daily-list'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-summary'] });
       showSnackbar(t('daily.deleteSuccess', { date: daily.date }), 'success');
     },
     onError: (_, daily) => {
@@ -63,171 +75,127 @@ export default function DailyPrintout() {
     retry: false,
   });
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setSize(+event.target.value);
-    setPage(0);
-  };
-
-  if (isLoading) {
-    return <PageLoader text={t('messages.loading')} />;
-  }
-
   if (isError) {
     return <ErrorAlert error={error} />;
   }
 
+  const entries = data?.content ?? [];
+
   return (
-    <Box sx={{ py: 2 }}>
-      <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-        {/* Header */}
-        <Box
-          sx={{
-            p: 2,
-            background: theme.palette.card.header,
-            color: 'text.primary',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2,
-          }}
-        >
-          <TrendingUp sx={{ fontSize: 22 }} />
-          <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-            {t('daily.history')}
-          </Typography>
+    <Box component="section" sx={surfaceSx}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'baseline',
+          gap: 1,
+          px: 2,
+          py: 1.5,
+          borderBottom: HAIRLINE,
+        }}
+      >
+        <Typography component="h2" sx={{ fontWeight: 500 }}>
+          {t('daily.history')}
+        </Typography>
+      </Box>
+
+      {isLoading ? (
+        <Box sx={{ px: 2, py: 1 }}>
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} height={44} />
+          ))}
         </Box>
-
-        {/* Table */}
-        <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-          <Table>
+      ) : entries.length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 8, color: 'text.secondary' }}>
+          <EventBusy sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />
+          <Typography>{t('daily.noEntries')}</Typography>
+        </Box>
+      ) : (
+        <TableContainer>
+          <Table size="small" sx={otherTableSx}>
             <TableHead>
-              <StyledTableRow>
-                <StyledTableCell>{t('daily.date')}</StyledTableCell>
-                <StyledTableCell>{t('daily.health')}</StyledTableCell>
-                <StyledTableCell>{t('daily.exercise')}</StyledTableCell>
-                <StyledTableCell>{t('daily.book')}</StyledTableCell>
-                <StyledTableCell>{t('daily.software')}</StyledTableCell>
-                <StyledTableCell>{t('daily.actions')}</StyledTableCell>
-              </StyledTableRow>
+              <TableRow>
+                <TableCell>{t('daily.date')}</TableCell>
+                {DAILY_HABITS.map((habit) => (
+                  <TableCell key={habit.key} align="center">
+                    {t(`daily.${habit.key}`)}
+                  </TableCell>
+                ))}
+                <TableCell align="right">{t('daily.score')}</TableCell>
+                <TableCell align="right" sx={{ width: 56 }} />
+              </TableRow>
             </TableHead>
-
             <TableBody>
-              {data?.content?.map((daily, index) => (
-                <StyledTableRow
-                  key={daily.id || index}
-                  sx={{
-                    '&:hover': {
-                      backgroundColor: theme.palette.action.hover,
-                    },
-                  }}
-                >
-                  <StyledTableCell>
-                    <Typography variant="body2" sx={{ fontWeight: '600' }}>
-                      {daily.date}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Chip
-                      label={daily.health ? t('common.yes') : t('common.no')}
-                      color={daily.health ? 'success' : 'error'}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Chip
-                      label={daily.exercise ? t('common.yes') : t('common.no')}
-                      color={daily.exercise ? 'success' : 'error'}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Chip
-                      label={daily.book ? t('common.yes') : t('common.no')}
-                      color={daily.book ? 'success' : 'error'}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Chip
-                      label={daily.software ? t('common.yes') : t('common.no')}
-                      color={daily.software ? 'success' : 'error'}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ width: '80px' }}>
-                    <IconButton
-                      aria-label="delete daily"
-                      size="small"
-                      onClick={() => setToDelete(daily)}
-                      disabled={isDeleting}
+              {entries.map((daily, index) => {
+                const date = parseApiDate(daily.date);
+                const score = DAILY_HABITS.filter((habit) => daily[habit.key]).length;
+                return (
+                  <TableRow key={daily.id || index}>
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums' }}>
+                        {daily.date}
+                      </Typography>
+                      {date && (
+                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                          {date.toLocaleDateString(locale, { weekday: 'long' })}
+                        </Typography>
+                      )}
+                    </TableCell>
+                    {DAILY_HABITS.map((habit) => (
+                      <HabitCell key={habit.key} habit={habit} done={Boolean(daily[habit.key])} />
+                    ))}
+                    <TableCell
+                      align="right"
                       sx={{
-                        backgroundColor: theme.palette.error.light,
-                        color: theme.palette.error.main,
-                        '&:hover': {
-                          backgroundColor: theme.palette.error.main,
-                          color: 'text.primary',
-                        },
+                        fontVariantNumeric: 'tabular-nums',
+                        color: score === DAILY_HABITS.length ? '#5DCAA5' : 'text.secondary',
+                        fontWeight: score === DAILY_HABITS.length ? 500 : 400,
                       }}
                     >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+                      {score}/{DAILY_HABITS.length}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Tooltip title={t('common.delete')}>
+                        <IconButton
+                          aria-label={t('common.delete')}
+                          size="small"
+                          onClick={() => setToDelete(daily)}
+                          disabled={isDeleting}
+                          sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}
+                        >
+                          <DeleteOutlined fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
-
-            <TableFooter>
-              <StyledTableRow>
-                <TablePagination
-                  size="small"
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={6}
-                  count={data?.totalElements || 0}
-                  rowsPerPage={size}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  slotProps={{
-                    select: {
-                      inputProps: { 'aria-label': 'rows per page' },
-                      native: true,
-                    },
-                  }}
-                />
-              </StyledTableRow>
-            </TableFooter>
           </Table>
         </TableContainer>
-      </Card>
+      )}
 
-      <Dialog open={toDelete !== null} onClose={() => !isDeleting && setToDelete(null)}>
-        <DialogTitle>{t('daily.deleteConfirmTitle')}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            {t('daily.deleteConfirmText', { date: toDelete?.date })}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setToDelete(null)} disabled={isDeleting}>
-            {t('common.cancel')}
-          </Button>
-          <Button
-            color="error"
-            variant="contained"
-            onClick={() => deleteDaily(toDelete)}
-            disabled={isDeleting}
-          >
-            {t('common.delete')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {!isLoading && (
+        <TablePagination
+          component="div"
+          size="small"
+          rowsPerPageOptions={[5, 10, 25]}
+          count={data?.totalElements || 0}
+          rowsPerPage={size}
+          page={page}
+          onPageChange={(event, newPage) => onPageChange(newPage)}
+          onRowsPerPageChange={(event) => onSizeChange(+event.target.value)}
+          sx={{ borderTop: HAIRLINE }}
+        />
+      )}
+
+      <ConfirmDeleteDialog
+        open={toDelete !== null}
+        title={t('daily.deleteConfirmTitle')}
+        text={t('daily.deleteConfirmText', { date: toDelete?.date })}
+        pending={isDeleting}
+        onCancel={() => setToDelete(null)}
+        onConfirm={() => deleteDaily(toDelete)}
+      />
     </Box>
   );
 }

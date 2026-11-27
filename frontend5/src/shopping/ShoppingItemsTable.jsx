@@ -1,29 +1,31 @@
 import React from 'react';
-import {
-  Card,
-  Table,
-  TableBody,
-  TableContainer,
-  TableHead,
-  Paper,
-  Box,
-  Typography,
-  IconButton,
-  useTheme,
-} from '@mui/material';
-import { ShoppingBasket } from '@mui/icons-material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import {
+  Box,
+  IconButton,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+import { CheckCircleOutlined, RemoveShoppingCart } from '@mui/icons-material';
+
 import REST, { queryClient } from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
-import StyledTableCell from '../component/table/StyledTableCell';
-import StyledTableRow from '../component/table/StyledTableRow';
+import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
+import { otherTableSx } from '../other/component/otherStyles';
+import { categoryColor } from './shoppingCategories';
 
-export default function ShoppingItemsTable({ items }) {
+// Lista zakupów – produkt po produkcie. Kategoria pokazywana tylko w widoku "Wszystkie".
+export default function ShoppingItemsTable({ items, showCategory, title, isLoading }) {
   const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
-  const theme = useTheme();
 
   // Bez potwierdzenia — usunięcie produktu to "odhaczenie" go z listy zakupów
   const { mutate: deleteItem, isPending: isDeleting } = useMutation({
@@ -39,81 +41,97 @@ export default function ShoppingItemsTable({ items }) {
   });
 
   return (
-    <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
+    <Box component="section" sx={surfaceSx}>
       <Box
         sx={{
-          p: 2,
-          background: theme.palette.card.header,
-          color: 'text.primary',
           display: 'flex',
-          alignItems: 'center',
-          gap: 2,
+          alignItems: 'baseline',
+          gap: 1,
+          px: 2,
+          py: 1.5,
+          borderBottom: HAIRLINE,
         }}
       >
-        <ShoppingBasket sx={{ fontSize: 22 }} />
-        <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-          {t('shopping.itemsList')}
+        <Typography component="h2" sx={{ fontWeight: 500 }}>
+          {title || t('shopping.itemsList')}
         </Typography>
+        {!isLoading && (
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            · {t('shopping.itemsCount', { count: items.length })}
+          </Typography>
+        )}
       </Box>
 
-      <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-        <Table>
-          <TableHead>
-            <StyledTableRow>
-              <StyledTableCell>{t('shopping.name')}</StyledTableCell>
-              <StyledTableCell>{t('shopping.category')}</StyledTableCell>
-              <StyledTableCell>{t('shopping.actions')}</StyledTableCell>
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>
-            {items.length > 0 ? (
-              items.map((item) => (
-                <StyledTableRow
-                  key={item.id}
-                  sx={{ '&:hover': { backgroundColor: theme.palette.action.hover } }}
-                >
-                  <StyledTableCell>
-                    <Typography variant="body2" sx={{ fontWeight: '600' }}>
-                      {item.name}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Typography variant="body2">
-                      {t(`shopping.categories.${item.category}`)}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell sx={{ width: '100px' }}>
-                    <IconButton
-                      aria-label="delete product"
-                      size="small"
-                      onClick={() => deleteItem(item)}
-                      disabled={isDeleting}
-                      sx={{
-                        backgroundColor: theme.palette.error.light,
-                        color: theme.palette.error.main,
-                        '&:hover': {
-                          backgroundColor: theme.palette.error.main,
-                          color: 'text.primary',
-                        },
-                      }}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell colSpan={3} align="center">
-                  <Typography variant="body1" sx={{ color: 'text.secondary', py: 4 }}>
-                    {t('shopping.noItems')}
-                  </Typography>
-                </StyledTableCell>
-              </StyledTableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Card>
+      {isLoading ? (
+        <Box sx={{ px: 2, py: 1 }}>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <Skeleton key={index} height={44} />
+          ))}
+        </Box>
+      ) : items.length === 0 ? (
+        <Box sx={{ textAlign: 'center', py: 8, color: 'text.secondary' }}>
+          <RemoveShoppingCart sx={{ fontSize: 40, mb: 1, opacity: 0.6 }} />
+          <Typography>{t('shopping.noItems')}</Typography>
+        </Box>
+      ) : (
+        <TableContainer>
+          <Table size="small" sx={otherTableSx}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ width: 32 }}>#</TableCell>
+                <TableCell>{t('shopping.name')}</TableCell>
+                {showCategory && <TableCell>{t('shopping.category')}</TableCell>}
+                <TableCell align="right" sx={{ width: 56 }} />
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {items.map((item, index) => {
+                const colors = categoryColor(item.category);
+                return (
+                  <TableRow key={item.id}>
+                    <TableCell sx={{ color: 'text.secondary' }}>{index + 1}</TableCell>
+                    <TableCell sx={{ fontWeight: 500 }}>{item.name}</TableCell>
+                    {showCategory && (
+                      <TableCell>
+                        <Box
+                          component="span"
+                          sx={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 0.75,
+                            px: 1,
+                            borderRadius: 1.5,
+                            fontSize: 12,
+                            lineHeight: 1.9,
+                            bgcolor: colors.bg,
+                            color: colors.text,
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {t(`shopping.categories.${item.category}`)}
+                        </Box>
+                      </TableCell>
+                    )}
+                    <TableCell align="right">
+                      <Tooltip title={t('shopping.markBought')}>
+                        <IconButton
+                          aria-label={t('shopping.markBought')}
+                          size="small"
+                          onClick={() => deleteItem(item)}
+                          disabled={isDeleting}
+                          sx={{ color: 'text.secondary', '&:hover': { color: '#5DCAA5' } }}
+                        >
+                          <CheckCircleOutlined fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </Box>
   );
 }

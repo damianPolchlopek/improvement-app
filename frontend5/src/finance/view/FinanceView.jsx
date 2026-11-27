@@ -1,31 +1,25 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import REST from '../../utils/REST';
-
 import {
+  Box,
+  Skeleton,
   Table,
   TableBody,
+  TableCell,
   TableContainer,
   TableHead,
-  Paper,
+  TableRow,
   Typography,
-  Box,
-  Card,
-  CardContent,
-  Toolbar,
-  useTheme,
 } from '@mui/material';
+import { Analytics } from '@mui/icons-material';
 
-import Grid from '@mui/material/Grid';
-import { TrendingUp, TrendingDown, Analytics, ShowChart } from '@mui/icons-material';
-
-import StyledTableCell from '../../component/table/StyledTableCell';
-import StyledTableRow from '../../component/table/StyledTableRow';
-import CryptoPricesTableRow from './CryptoPricesTableRow';
-
-import PageLoader from '../../component/loader/PageLoader';
+import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
+import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { financeTableSx } from '../financeStyles';
+import CryptoPricesTableRow from './CryptoPricesTableRow';
 import { COIN_LIST } from './COIN_LIST';
 
 function datediff(first, second) {
@@ -39,9 +33,22 @@ function calculateDays(prevDate) {
   return datediff(firstDate, newDate);
 }
 
+// Kafelek liczby jak w podsumowaniu dnia modułu food.
+function StatTile({ label, value }) {
+  return (
+    <Box
+      sx={{ flex: '1 1 160px', bgcolor: 'rgba(255,255,255,0.04)', borderRadius: 2, px: 1.5, py: 1 }}
+    >
+      <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }} noWrap>
+        {label}
+      </Typography>
+      <Typography sx={{ fontSize: 22, fontWeight: 500, lineHeight: 1.4 }}>{value}</Typography>
+    </Box>
+  );
+}
+
 export default function FinanceView() {
   const { t } = useTranslation();
-  const theme = useTheme();
 
   const {
     data: cryptoDataResponse,
@@ -69,132 +76,79 @@ export default function FinanceView() {
   const isError = errorPrices || errorDesc;
   const error = priceError || descError;
 
-  if (isLoading) {
-    return <PageLoader text={t('finance.loadingCrypto')} />;
-  }
-
-  if (isError) {
-    return <ErrorAlert error={error} />;
-  }
-
   const cryptoData = cryptoDataResponse?.data || cryptoDataResponse;
   const btcStats = cryptoDescription?.BTC;
 
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={2}
-            sx={{
-              borderRadius: 3,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <Analytics sx={{ fontSize: 32 }} />
-                <Typography variant="h4" sx={{ fontWeight: '600' }}>
-                  {t('finance.cryptoPrices')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {t('finance.cryptoPricesDesc')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Bitcoin Statistics */}
-        {btcStats && (
-          <Grid size={12}>
-            <Card elevation={2} sx={{ borderRadius: 3 }}>
-              <Toolbar
-                sx={{
-                  flexWrap: 'wrap',
-                  alignItems: 'center',
-                  columnGap: 4,
-                  rowGap: 1.5,
-                  py: 1.5,
-                  minHeight: 'auto',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <TrendingUp fontSize="small" color="action" />
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {t('finance.weeksFromAth')}
-                  </Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                    {(calculateDays(btcStats.athDate) / 7).toFixed(1)}
-                  </Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <TrendingUp fontSize="small" color="action" />
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {t('finance.weeksFromBottom')}
-                  </Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                    {(calculateDays('2022-11-21') / 7).toFixed(1)}
-                  </Typography>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <TrendingDown fontSize="small" color="action" />
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    {t('finance.weeksToHalving')}
-                  </Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                    {((calculateDays('2024-04-26') / 7) * -1).toFixed(1)}
-                  </Typography>
-                </Box>
-              </Toolbar>
-            </Card>
-          </Grid>
-        )}
-
-        {/* Main Crypto Table */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3, overflow: 'hidden' }}>
-            <Box
-              sx={{
-                p: 2,
-                background: theme.palette.card.header,
-                color: 'text.primary',
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-              }}
-            >
-              <ShowChart sx={{ fontSize: 22 }} />
-              <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                {t('finance.cryptoTable')}
-              </Typography>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1400, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<Analytics />}
+        title={t('finance.cryptoPrices')}
+        description={t('finance.cryptoPricesDesc')}
+        statLabel={t('finance.coinsLabel')}
+        statValue={COIN_LIST.length}
+      >
+        {isLoading ? (
+          <Skeleton variant="rounded" height={58} sx={{ width: '100%', borderRadius: 2 }} />
+        ) : (
+          btcStats && (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.5, width: '100%' }}>
+              <StatTile
+                label={t('finance.weeksFromAth')}
+                value={(calculateDays(btcStats.athDate) / 7).toFixed(1)}
+              />
+              <StatTile
+                label={t('finance.weeksFromBottom')}
+                value={(calculateDays('2022-11-21') / 7).toFixed(1)}
+              />
+              <StatTile
+                label={t('finance.weeksToHalving')}
+                value={((calculateDays('2024-04-26') / 7) * -1).toFixed(1)}
+              />
             </Box>
+          )
+        )}
+      </FoodPageHeader>
 
-            <TableContainer component={Paper} sx={{ borderRadius: 0 }}>
-              <Table>
+      {isError ? (
+        <ErrorAlert error={error} />
+      ) : (
+        <Box component="section" sx={surfaceSx}>
+          <Box sx={{ px: 2, py: 1.5, borderBottom: HAIRLINE }}>
+            <Typography component="h2" sx={{ fontWeight: 500 }}>
+              {t('finance.cryptoTable')}
+            </Typography>
+          </Box>
+
+          {isLoading ? (
+            <Box sx={{ px: 2, py: 1 }}>
+              {COIN_LIST.map((symbol) => (
+                <Skeleton key={symbol} height={40} />
+              ))}
+            </Box>
+          ) : (
+            <TableContainer>
+              <Table size="small" sx={financeTableSx}>
                 <TableHead>
-                  <StyledTableRow>
-                    <StyledTableCell>#</StyledTableCell>
-                    <StyledTableCell>{t('finance.name')}</StyledTableCell>
-                    <StyledTableCell>{t('finance.price')}</StyledTableCell>
-                    <StyledTableCell>24h</StyledTableCell>
-                    <StyledTableCell>7d</StyledTableCell>
-                    <StyledTableCell>30d</StyledTableCell>
-                    <StyledTableCell>90d</StyledTableCell>
-                    <StyledTableCell>{t('finance.athDate')}</StyledTableCell>
-                    <StyledTableCell>ATH</StyledTableCell>
-                    <StyledTableCell>{t('finance.fromAth')}</StyledTableCell>
-                  </StyledTableRow>
+                  <TableRow>
+                    <TableCell>#</TableCell>
+                    <TableCell>{t('finance.name')}</TableCell>
+                    <TableCell align="right">{t('finance.price')}</TableCell>
+                    <TableCell align="right">24h</TableCell>
+                    <TableCell align="right">7d</TableCell>
+                    <TableCell align="right">30d</TableCell>
+                    <TableCell align="right">90d</TableCell>
+                    <TableCell>{t('finance.athDate')}</TableCell>
+                    <TableCell align="right">ATH</TableCell>
+                    <TableCell align="right">{t('finance.fromAth')}</TableCell>
+                  </TableRow>
                 </TableHead>
                 <TableBody>
                   {cryptoData &&
                     cryptoDescription &&
-                    COIN_LIST.map((symbol) => (
+                    COIN_LIST.filter(
+                      (symbol) => cryptoData[symbol] && cryptoDescription[symbol]
+                    ).map((symbol) => (
                       <CryptoPricesTableRow
                         key={symbol}
                         symbol={symbol}
@@ -205,9 +159,9 @@ export default function FinanceView() {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Card>
-        </Grid>
-      </Grid>
+          )}
+        </Box>
+      )}
     </Box>
   );
 }

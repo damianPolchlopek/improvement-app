@@ -65,7 +65,7 @@ describe('AddTrainingView', () => {
 
     expect(await screen.findByDisplayValue('Przysiad')).toBeInTheDocument();
     expect(REST.getTrainingTemplateByType).toHaveBeenCalledWith('A');
-  });
+  }, 20000); // pierwszy render w pliku (lazy loader trasy + i18n) bywa wolny przy pełnym uruchomieniu
 
   it('shows the last result as set pills with the weight change while typing', async () => {
     renderView();

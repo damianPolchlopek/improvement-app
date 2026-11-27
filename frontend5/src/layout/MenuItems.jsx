@@ -88,9 +88,9 @@ export const MENU_ITEMS = (t) => [
     basePath: `${APP}/${OTHER}`,
     icon: <CalendarTodayIcon />,
     subPages: [
-      { name: t('menu.shopping'), path: ShoppingViewUrl, icon: <ShoppingBagIcon /> },
-      { name: t('menu.weekly'), path: WeeklyViewUrl, icon: <VisibilityIcon /> },
       { name: t('menu.daily'), path: DailyViewUrl, icon: <VisibilityIcon /> },
+      { name: t('menu.weekly'), path: WeeklyViewUrl, icon: <VisibilityIcon /> },
+      { name: t('menu.shopping'), path: ShoppingViewUrl, icon: <ShoppingBagIcon /> },
     ],
   },
   {

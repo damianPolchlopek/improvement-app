@@ -1,23 +1,31 @@
 import React from 'react';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+
+import { HAIRLINE } from '../../food/component/foodStyles';
 
 import TradingViewChart, { TV_STYLE } from './TradingViewChart';
 
 const CHART_HEIGHT = 360;
 
+// Płaska karta wykresu: ciemniejsze tło i cienka ramka (jak wnętrza kart w module food).
+export const chartCardSx = {
+  borderRadius: 2,
+  overflow: 'hidden',
+  bgcolor: 'rgba(0,0,0,0.15)',
+  border: HAIRLINE,
+};
+
 function ChartCard({ title, subtitle, children }) {
   return (
-    <Paper variant="outlined" sx={{ borderRadius: 2, overflow: 'hidden' }}>
+    <Box sx={chartCardSx}>
       <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, px: 2, py: 1 }}>
-        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-          {title}
-        </Typography>
+        <Typography sx={{ fontWeight: 500 }}>{title}</Typography>
         <Typography variant="caption" sx={{ color: 'text.secondary' }}>
           {subtitle}
         </Typography>
       </Box>
       {children}
-    </Paper>
+    </Box>
   );
 }
 

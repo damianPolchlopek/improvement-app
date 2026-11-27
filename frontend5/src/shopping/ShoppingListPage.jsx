@@ -1,34 +1,21 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import REST from '../utils/REST';
 import { useTranslation } from 'react-i18next';
+import { Box, Chip, Skeleton } from '@mui/material';
+import { ShoppingCart } from '@mui/icons-material';
 
-import {
-  Box,
-  Card,
-  CardContent,
-  Toolbar,
-  Typography,
-  useTheme,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from '@mui/material';
-import Grid from '@mui/material/Grid';
-import { ShoppingCart, ListAlt } from '@mui/icons-material';
-
-import PageLoader from '../component/loader/PageLoader';
+import REST from '../utils/REST';
 import ErrorAlert from '../component/error/ErrorAlert';
+import FoodPageHeader from '../food/component/FoodPageHeader';
 import ShoppingForm from './ShoppingForm';
 import ShoppingItemsTable from './ShoppingItemsTable';
+import { categoryColor } from './shoppingCategories';
 
 const ALL = 'ALL';
 
 export default function ShoppingListPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const { t } = useTranslation();
-  const theme = useTheme();
 
   const {
     data: categoriesData,
@@ -60,100 +47,72 @@ export default function ShoppingListPage() {
 
   const itemsList = items || [];
 
-  if (categoriesLoading) {
-    return <PageLoader text={t('messages.loading')} />;
-  }
-
-  if (isCategoriesError || isError) {
-    return <ErrorAlert error={categoriesError || error} />;
-  }
-
   return (
-    <Box sx={{ py: 4 }}>
-      <Grid container spacing={3} sx={{ maxWidth: 1400, mx: 'auto', px: 2 }}>
-        {/* Header Section */}
-        <Grid size={12}>
-          <Card
-            elevation={2}
-            sx={{
-              borderRadius: 3,
-              background: theme.palette.card.header,
-              color: 'text.primary',
-              mb: 2,
-            }}
-          >
-            <CardContent sx={{ p: 3 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                <ShoppingCart sx={{ fontSize: 32 }} />
-                <Typography variant="h4" sx={{ fontWeight: '600' }}>
-                  {t('shopping.title')}
-                </Typography>
-              </Box>
-              <Typography variant="body1" sx={{ opacity: 0.9 }}>
-                {t('shopping.subtitle')}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1000, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<ShoppingCart />}
+        title={t('shopping.title')}
+        description={t('shopping.subtitle')}
+        statLabel={t('shopping.itemsInCategory')}
+        statValue={itemsList.length}
+        statLoading={categoriesLoading || itemsLoading}
+      >
+        {categoriesLoading
+          ? [0, 1, 2, 3].map((i) => (
+              <Skeleton key={i} variant="rounded" width={90} height={32} sx={{ borderRadius: 4 }} />
+            ))
+          : categories.map((category) => {
+              const active = category === effectiveCategory;
+              const colors = category === ALL ? null : categoryColor(category);
+              return (
+                <Chip
+                  key={category}
+                  label={t(`shopping.categories.${category}`)}
+                  clickable
+                  variant={active ? 'filled' : 'outlined'}
+                  color={active && !colors ? 'primary' : 'default'}
+                  aria-pressed={active}
+                  onClick={() => setSelectedCategory(category)}
+                  icon={
+                    colors ? (
+                      <Box
+                        component="span"
+                        sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: colors.dot }}
+                      />
+                    ) : undefined
+                  }
+                  sx={{
+                    fontWeight: active ? 600 : 400,
+                    '& .MuiChip-icon': { ml: 1.25, mr: -0.25 },
+                    ...(active && colors
+                      ? {
+                          bgcolor: colors.bg,
+                          color: colors.text,
+                          '&:hover': { bgcolor: colors.bg },
+                        }
+                      : {}),
+                  }}
+                />
+              );
+            })}
+      </FoodPageHeader>
 
-        {/* Filters + stats */}
-        <Grid size={12}>
-          <Card elevation={2} sx={{ borderRadius: 3 }}>
-            <Toolbar
-              sx={{
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                columnGap: 3,
-                rowGap: 1.5,
-                py: 1.5,
-                minHeight: 'auto',
-              }}
-            >
-              <FormControl size="small" sx={{ minWidth: 200 }}>
-                <InputLabel>{t('shopping.selectCategory')}</InputLabel>
-                <Select
-                  value={effectiveCategory}
-                  label={t('shopping.selectCategory')}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                >
-                  {categories.map((category) => (
-                    <MenuItem key={category} value={category}>
-                      {t(`shopping.categories.${category}`)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <ListAlt fontSize="small" color="action" />
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                  {t('shopping.itemsInCategory')}
-                </Typography>
-                <Typography variant="subtitle1" sx={{ fontWeight: '600' }}>
-                  {itemsLoading ? '...' : itemsList.length}
-                </Typography>
-              </Box>
-            </Toolbar>
-          </Card>
-        </Grid>
-
-        {/* Add form */}
-        <Grid size={12}>
+      {isCategoriesError || isError ? (
+        <ErrorAlert error={categoriesError || error} />
+      ) : (
+        <>
           <ShoppingForm
             categories={itemCategories}
             defaultCategory={effectiveCategory === ALL ? '' : effectiveCategory}
           />
-        </Grid>
-
-        {/* Table Section */}
-        <Grid size={12}>
-          {itemsLoading ? (
-            <PageLoader text={t('messages.loading')} />
-          ) : (
-            <ShoppingItemsTable items={itemsList} />
-          )}
-        </Grid>
-      </Grid>
+          <ShoppingItemsTable
+            items={itemsList}
+            showCategory={effectiveCategory === ALL}
+            title={effectiveCategory ? t(`shopping.categories.${effectiveCategory}`) : ''}
+            isLoading={categoriesLoading || itemsLoading}
+          />
+        </>
+      )}
     </Box>
   );
 }

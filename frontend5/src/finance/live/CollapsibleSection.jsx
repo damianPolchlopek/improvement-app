@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Box, ButtonBase, Card, Collapse, Typography } from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import { Box, ButtonBase, Collapse, Typography } from '@mui/material';
+import { KeyboardArrowDown } from '@mui/icons-material';
+
+import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
 
 const STORAGE_PREFIX = 'finance.live.section.';
 
@@ -36,32 +38,48 @@ export default function CollapsibleSection({ id, title, actions, defaultOpen = f
     });
   };
 
-  // Same surface as the live-prices bar above (elevation 2, rounded) so the page reads as
-  // one set of panels.
+  // Ta sama płaska powierzchnia co pasek notowań i nagłówek, więc strona czyta się jako
+  // jeden zestaw paneli (jak w module food).
   return (
-    <Card elevation={2} sx={{ borderRadius: 3, px: 2, py: 1, textAlign: 'left' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minHeight: 40 }}>
+    <Box component="section" sx={{ ...surfaceSx, textAlign: 'left' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          minHeight: 52,
+          pr: 2,
+          borderBottom: open ? HAIRLINE : 0,
+        }}
+      >
         <ButtonBase
           onClick={toggle}
           aria-expanded={open}
-          sx={{ borderRadius: 1, px: 0.5, py: 0.5, mr: 'auto', gap: 0.5 }}
+          sx={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            alignSelf: 'stretch',
+            px: 2,
+            gap: 1,
+            '&:hover': { bgcolor: 'rgba(255,255,255,0.03)' },
+          }}
         >
-          <ExpandMore
+          <Typography component="h2" sx={{ fontWeight: 500, mr: 'auto' }}>
+            {title}
+          </Typography>
+          <KeyboardArrowDown
             sx={{
-              transition: 'transform 0.2s',
-              transform: open ? 'rotate(0deg)' : 'rotate(-90deg)',
+              transition: 'transform 200ms',
+              transform: open ? 'rotate(180deg)' : 'none',
               color: 'text.secondary',
             }}
           />
-          <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-            {title}
-          </Typography>
         </ButtonBase>
         {open && actions}
       </Box>
       <Collapse in={open} unmountOnExit>
-        <Box sx={{ pt: 1, pb: 1 }}>{children}</Box>
+        <Box sx={{ p: 2 }}>{children}</Box>
       </Collapse>
-    </Card>
+    </Box>
   );
 }

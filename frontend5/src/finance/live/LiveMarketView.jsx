@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Box, Card, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Sensors } from '@mui/icons-material';
 
 import REST from '../../utils/REST';
 import TradingViewChart from './TradingViewChart';
@@ -9,7 +10,9 @@ import TradingViewTickers from './TradingViewTickers';
 import DerivativesCharts from './DerivativesCharts';
 import CollapsibleSection from './CollapsibleSection';
 import UsdtZoneBar from './UsdtZoneBar';
-import ChartGrid from './ChartGrid';
+import ChartGrid, { chartCardSx } from './ChartGrid';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
+import { surfaceSx } from '../../food/component/foodStyles';
 
 // Live quotes in the top bar, all from TradingView's "Tickers" widget so they share one style
 // (FOREXCOM index CFDs stand in for the S&P 500 and Nasdaq 100, which free widgets lack).
@@ -84,25 +87,30 @@ export default function LiveMarketView() {
     ?.market_cap_dominance;
 
   return (
-    <Box sx={{ py: 3 }}>
-      <Box sx={{ maxWidth: 1400, mx: 'auto', px: 2, display: 'grid', gap: 2 }}>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1400, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<Sensors />}
+        title={t('finance.live.title')}
+        description={t('finance.live.description')}
+        statLabel={t('finance.live.usdtDominance')}
+        statValue={typeof usdtDominance === 'number' ? `${usdtDominance.toFixed(2)}%` : '—'}
+      />
+
+      <Box sx={{ display: 'grid', gap: 2 }}>
         {/* Live quotes */}
-        <Card elevation={2} sx={{ borderRadius: 3, px: 2.5, py: 1.5, display: 'grid', gap: 1 }}>
+        <Box sx={{ ...surfaceSx, px: 2.5, py: 1.5, display: 'grid', gap: 1 }}>
           {tickerRows.map((symbols) => (
             <TradingViewTickers key={symbols[0].proName} symbols={symbols} />
           ))}
-        </Card>
+        </Box>
 
         <CollapsibleSection id="crypto" title={t('finance.live.crypto')}>
           <ChartGrid charts={CRYPTO_CHARTS} />
         </CollapsibleSection>
 
         <CollapsibleSection id="macro" title={t('finance.live.macro')}>
-          <Paper variant="outlined" sx={{ borderRadius: 2, overflow: 'hidden' }}>
-            <Typography
-              variant="subtitle1"
-              sx={{ fontWeight: 600, px: 2, py: 1, textAlign: 'left' }}
-            >
+          <Box sx={chartCardSx}>
+            <Typography sx={{ fontWeight: 500, px: 2, py: 1, textAlign: 'left' }}>
               {t('finance.live.usdtDominance')}
             </Typography>
             <Box
@@ -119,7 +127,7 @@ export default function LiveMarketView() {
                 <UsdtZoneBar value={usdtDominance} />
               </Box>
             </Box>
-          </Paper>
+          </Box>
           <Box sx={{ mt: 2 }}>
             <ChartGrid
               columns={1}
