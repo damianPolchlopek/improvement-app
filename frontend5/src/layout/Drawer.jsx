@@ -10,6 +10,8 @@ import {
   ListItemText,
 } from '@mui/material';
 
+import { Link } from 'react-router-dom';
+
 import Logo from './Logo';
 
 import { useTranslation } from 'react-i18next';
@@ -47,7 +49,13 @@ export default function DrawerComponent(props) {
             </ListItem>
             {subPages.map(({ name, icon, path }) => (
               <ListItem disablePadding key={name}>
-                <ListItemButton sx={item} href={path}>
+                {/* Link routera (bez przeładowania strony); po wyborze menu się zamyka. */}
+                <ListItemButton
+                  sx={item}
+                  component={Link}
+                  to={path}
+                  onClick={() => props.onClose?.()}
+                >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{name}</ListItemText>
                 </ListItemButton>

@@ -10,7 +10,7 @@ export default function AuthCard({ title, description, maxWidth = 420, footer, c
   return (
     <Box
       sx={{
-        minHeight: 'calc(100vh - 32px)',
+        minHeight: 'calc(100dvh - 32px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

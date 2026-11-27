@@ -24,7 +24,7 @@ export default function OAuth2CallbackPage() {
   }, [searchParams, navigate]);
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100dvh' }}>
       <CircularProgress />
     </Box>
   );

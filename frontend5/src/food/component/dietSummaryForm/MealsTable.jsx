@@ -42,7 +42,7 @@ export default function MealsTable() {
       <TableContainer>
         <Table
           aria-label="collapsible table"
-          sx={{ minWidth: 700, width: '100%', tableLayout: 'fixed' }}
+          sx={{ minWidth: { md: 700 }, width: '100%', tableLayout: 'fixed' }}
         >
           <TableBody>
             {MEAL_CATEGORIES.map((category) => (

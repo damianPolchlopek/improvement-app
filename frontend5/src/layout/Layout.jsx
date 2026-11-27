@@ -102,7 +102,7 @@ export default function Layout() {
   };
 
   return (
-    <Box sx={{ display: 'flex', flex: '100vh' }}>
+    <Box sx={{ display: 'flex', flex: '100dvh' }}>
       <TokenRefreshNotification />
 
       <Drawer
@@ -112,9 +112,12 @@ export default function Layout() {
         onClose={handleDrawerToggle}
       />
 
-      <Box sx={{ flex: 1 }}>
+      {/* minWidth: 0 – bez tego szeroka tabela rozpycha element flex ponad ekran,
+          zamiast przewijać się wewnątrz własnego TableContainera (ważne na telefonie). */}
+      <Box sx={{ flex: 1, minWidth: 0 }}>
         {token !== null ? <Header onDrawerToggle={handleDrawerToggle} /> : null}
-        <Box component="main" sx={{ flex: 1, py: 6, px: 4 }}>
+        {/* Strony mają własny padding (px: 2, py: 3), więc na telefonie layout nie dokłada drugiego. */}
+        <Box component="main" sx={{ flex: 1, py: { xs: 0, md: 6 }, px: { xs: 0, md: 4 } }}>
           <Outlet />
         </Box>
       </Box>

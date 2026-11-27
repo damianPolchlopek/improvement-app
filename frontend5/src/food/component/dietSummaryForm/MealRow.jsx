@@ -7,6 +7,7 @@ import { formatInput } from '../../../utils/common';
 import { MACRO_COLORS } from '../../foodView/macroColors';
 import { useMealSelection } from '../../../context/MealSelectionContext';
 import MealIngredientsTable from './MealIngredientsTable';
+import { DESKTOP_ONLY_CELL } from './mealTableCells';
 import { useMealRecalculation } from '../../../context/useMealRecalculation';
 
 export default function MealRow({ meal: single, index }) {
@@ -94,7 +95,7 @@ export default function MealRow({ meal: single, index }) {
   return (
     <>
       <TableRow key={index} selected={isItemSelected}>
-        <TableCell sx={{ width: '50px' }}>
+        <TableCell sx={{ width: { sm: '50px' } }}>
           <IconButton
             aria-label="expand ingredients"
             aria-expanded={isIngredientsOpen}
@@ -126,7 +127,11 @@ export default function MealRow({ meal: single, index }) {
             key={macro}
             align="right"
             onClick={handleMealToggle}
-            sx={{ cursor: 'pointer', color: MACRO_COLORS[macro].text }}
+            sx={{
+              cursor: 'pointer',
+              color: MACRO_COLORS[macro].text,
+              ...(macro !== 'kcal' && DESKTOP_ONLY_CELL),
+            }}
           >
             {formatInput(value)}
           </TableCell>

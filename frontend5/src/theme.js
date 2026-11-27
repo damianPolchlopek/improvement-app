@@ -150,6 +150,12 @@ theme = {
       },
     },
     MuiTooltip: {
+      // Na dotyku MUI domyślnie wymaga przytrzymania 700ms – tooltip z informacją (makro,
+      // poprzedni trening) pokazujemy po zwykłym tapnięciu i trzymamy dłużej, żeby dało się przeczytać.
+      defaultProps: {
+        enterTouchDelay: 0,
+        leaveTouchDelay: 3000,
+      },
       styleOverrides: {
         tooltip: {
           borderRadius: 4,

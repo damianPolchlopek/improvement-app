@@ -14,7 +14,10 @@ const EMPTY_FILTERS = { dateFrom: null, dateTo: null, revisionType: 'ALL', searc
 
 const dateFieldSx = {
   ...fieldSx,
-  width: 160,
+  // Na telefonie dwie daty dzielą wiersz po równo, od `sm` stałe 160px.
+  width: { sm: 160 },
+  flex: { xs: '1 1 140px', sm: '0 0 auto' },
+  minWidth: 0,
   '& input[type="date"]::-webkit-calendar-picker-indicator': { filter: 'invert(0.8)' },
 };
 

@@ -15,12 +15,16 @@ import {
   YAxis,
 } from 'recharts';
 
-import { Box, Button, Typography, useTheme } from '@mui/material';
+import { Box, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { ZoomOutMap } from '@mui/icons-material';
 import { CHART_LINES, HAIRLINE, SURFACE } from '../../tokens';
 
 function formatAxisDate(tickItem) {
   return dayjs(tickItem).format('DD/MM/YYYY');
+}
+
+function formatShortAxisDate(tickItem) {
+  return dayjs(tickItem).format('DD/MM');
 }
 
 const CustomTooltip = ({ active, payload, label, t }) => {
@@ -79,6 +83,8 @@ const CustomTooltip = ({ active, payload, label, t }) => {
 export default function ExerciseChart({ data, series, colors, beginDate, endDate }) {
   const { t } = useTranslation();
   const theme = useTheme();
+  // Na telefonie: niższy wykres, krótsze daty na osi i mniejszy margines.
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   // Drag-to-zoom state: refArea* track the live selection, zoom holds the applied range.
   const [refAreaLeft, setRefAreaLeft] = useState('');
@@ -161,10 +167,10 @@ export default function ExerciseChart({ data, series, colors, beginDate, endDate
       </Box>
 
       <Box sx={{ userSelect: 'none', cursor: 'crosshair' }}>
-        <ResponsiveContainer width="100%" height={460}>
+        <ResponsiveContainer width="100%" height={isMobile ? 300 : 460}>
           <LineChart
             data={data}
-            margin={{ top: 8, right: 24, left: 4, bottom: 8 }}
+            margin={{ top: 8, right: isMobile ? 8 : 24, left: isMobile ? 0 : 4, bottom: 8 }}
             onMouseDown={(e) => e?.activeLabel != null && setRefAreaLeft(Number(e.activeLabel))}
             onMouseMove={(e) =>
               refAreaLeft !== '' && e?.activeLabel != null && setRefAreaRight(Number(e.activeLabel))
@@ -178,7 +184,7 @@ export default function ExerciseChart({ data, series, colors, beginDate, endDate
               allowDataOverflow
               scale="time"
               type="number"
-              tickFormatter={formatAxisDate}
+              tickFormatter={isMobile ? formatShortAxisDate : formatAxisDate}
               stroke={CHART_LINES.axis}
               tick={{ fontSize: 12, fill: theme.palette.text.secondary }}
               minTickGap={32}
@@ -188,7 +194,7 @@ export default function ExerciseChart({ data, series, colors, beginDate, endDate
               allowDataOverflow
               stroke={CHART_LINES.axis}
               tick={{ fontSize: 12, fill: theme.palette.text.secondary }}
-              width={44}
+              width={isMobile ? 36 : 44}
             />
             <Tooltip content={(props) => <CustomTooltip {...props} t={t} />} />
             {/* Tekst legendy w kolorze tekstu – tożsamość serii niesie kolorowy znacznik obok. */}

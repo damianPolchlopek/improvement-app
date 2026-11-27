@@ -6,7 +6,7 @@ export default function PageLoader({ text }) {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '100dvh',
         py: 4,
         display: 'flex',
         flexDirection: 'column',

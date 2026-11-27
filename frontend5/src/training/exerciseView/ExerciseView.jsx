@@ -36,8 +36,10 @@ const tableSx = {
     zIndex: 1,
     bgcolor: STICKY_BG,
     borderRight: HAIRLINE,
-    minWidth: 120,
+    minWidth: { xs: 96, sm: 120 },
   },
+  // Węższe kolumny ćwiczeń na telefonie – więcej ćwiczeń widać bez przewijania.
+  '& .MuiTableCell-root.exercise-col': { minWidth: { xs: 140, sm: 180 } },
 };
 
 // Historia treningów danego typu: wiersz = sesja, kolumna = ćwiczenie z szablonu.
@@ -139,7 +141,7 @@ export default function ExerciseView() {
                       {t('training.date')}
                     </TableCell>
                     {exerciseNames.map((name) => (
-                      <TableCell key={name} sx={{ minWidth: 180 }}>
+                      <TableCell key={name} className="exercise-col">
                         {name}
                       </TableCell>
                     ))}

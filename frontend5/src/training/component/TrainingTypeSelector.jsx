@@ -44,7 +44,10 @@ export default function TrainingTypeSelector({ setTrainingType, value, size = 'm
   if (!label) return select;
 
   return (
-    <FormControl size={size} sx={{ minWidth: 200 }}>
+    <FormControl
+      size={size}
+      sx={{ minWidth: { xs: 0, sm: 200 }, width: { xs: '100%', sm: 'auto' } }}
+    >
       <InputLabel>{label}</InputLabel>
       {select}
     </FormControl>

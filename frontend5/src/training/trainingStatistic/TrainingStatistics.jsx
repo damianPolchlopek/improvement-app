@@ -34,6 +34,14 @@ function formatApiDate(epoch) {
 // Default range start when "All" is selected – early enough to cover all data.
 const ALL_TIME_BEGIN = dayjs('2015-01-01').valueOf();
 
+// Dwie daty obok siebie: na telefonie dzielą szerokość po równo, od `sm` mają stałe 170px.
+const dateFieldSx = {
+  ...fieldSx,
+  width: { sm: 170 },
+  flex: { xs: '1 1 140px', sm: '0 0 auto' },
+  minWidth: 0,
+};
+
 const RANGE_PRESETS = [
   { key: '1M', months: 1 },
   { key: '3M', months: 3 },
@@ -297,14 +305,14 @@ export default function TrainingStatistic() {
               value={dayjs(beginDate)}
               onChange={handleChangeBeginDate}
               format={dateFormat}
-              slotProps={{ textField: { size: 'small', sx: { ...fieldSx, width: 170 } } }}
+              slotProps={{ textField: { size: 'small', sx: dateFieldSx } }}
             />
             <DatePicker
               label={t('chart.endDate')}
               value={dayjs(endDate)}
               onChange={handleChangeEndDate}
               format={dateFormat}
-              slotProps={{ textField: { size: 'small', sx: { ...fieldSx, width: 170 } } }}
+              slotProps={{ textField: { size: 'small', sx: dateFieldSx } }}
             />
           </LocalizationProvider>
 

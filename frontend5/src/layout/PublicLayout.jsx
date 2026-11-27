@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 export default function PublicLayout() {
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+    <Box sx={{ display: 'flex', minHeight: '100dvh' }}>
       <Box
         component="main"
         sx={{
@@ -12,7 +12,7 @@ export default function PublicLayout() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
+          minHeight: '100dvh',
         }}
       >
         <Outlet />

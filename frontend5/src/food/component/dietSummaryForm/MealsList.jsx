@@ -14,6 +14,10 @@ import {
 } from '@mui/material';
 import MealRow from './MealRow';
 import { HAIRLINE } from '../../../tokens';
+import { DESKTOP_ONLY_CELL } from './mealTableCells';
+
+// Ciaśniejsze komórki na telefonie (domyślnie 16px z każdej strony).
+const mealTableSx = { '& .MuiTableCell-root': { px: { xs: 0.75, sm: 2 } } };
 
 const popularityTranslation = new Map([
   ['ALL', 'All'],
@@ -83,19 +87,25 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
               borderRadius: 2,
               border: HAIRLINE,
               bgcolor: 'surface.inset',
-              overflow: 'hidden',
+              overflowX: 'auto',
             }}
           >
-            <Table size="small">
+            <Table size="small" sx={mealTableSx}>
               <TableHead>
                 <TableRow>
                   <TableCell padding="checkbox"></TableCell>
                   <TableCell padding="checkbox"></TableCell>
                   <TableCell>{t('food.name')}</TableCell>
                   <TableCell align="right">{t('food.kcal')}</TableCell>
-                  <TableCell align="right">{t('food.protein')}</TableCell>
-                  <TableCell align="right">{t('food.carbs')}</TableCell>
-                  <TableCell align="right">{t('food.fat')}</TableCell>
+                  <TableCell align="right" sx={DESKTOP_ONLY_CELL}>
+                    {t('food.protein')}
+                  </TableCell>
+                  <TableCell align="right" sx={DESKTOP_ONLY_CELL}>
+                    {t('food.carbs')}
+                  </TableCell>
+                  <TableCell align="right" sx={DESKTOP_ONLY_CELL}>
+                    {t('food.fat')}
+                  </TableCell>
                   <TableCell align="right">{t('food.amount')}</TableCell>
                 </TableRow>
               </TableHead>
