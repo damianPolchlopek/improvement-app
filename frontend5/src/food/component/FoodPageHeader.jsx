@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Divider, Skeleton, Typography } from '@mui/material';
-import { surfaceSx, HAIRLINE } from './foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 
 // Wspólny nagłówek widoków modułu food:
 // ikona + tytuł + opis, opcjonalna jedna liczba (np. liczba posiłków),
@@ -37,7 +37,7 @@ export default function FoodPageHeader({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                bgcolor: 'rgba(255, 255, 255, 0.06)',
+                bgcolor: 'surface.chip',
                 color: 'text.primary',
               }}
             >

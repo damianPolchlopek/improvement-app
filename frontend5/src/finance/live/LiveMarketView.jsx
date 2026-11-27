@@ -12,7 +12,7 @@ import CollapsibleSection from './CollapsibleSection';
 import UsdtZoneBar from './UsdtZoneBar';
 import ChartGrid, { chartCardSx } from './ChartGrid';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx } from '../../food/component/foodStyles';
+import { surfaceSx } from '../../tokens';
 
 // Live quotes in the top bar, all from TradingView's "Tickers" widget so they share one style
 // (FOREXCOM index CFDs stand in for the S&P 500 and Nasdaq 100, which free widgets lack).

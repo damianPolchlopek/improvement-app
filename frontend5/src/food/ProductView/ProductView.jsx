@@ -8,7 +8,8 @@ import REST from '../../utils/REST';
 import DataTable from '../../component/table/DataTable';
 import FoodPageHeader from '../component/FoodPageHeader';
 import SearchField from '../component/SearchField';
-import { surfaceSx, foodTableSx } from '../component/foodStyles';
+import { foodTableSx } from '../component/foodStyles';
+import { surfaceSx } from '../../tokens';
 import { MACRO_COLORS, formatMacro } from '../foodView/macroColors';
 
 function MacroValue({ value, macro, unit = 'g' }) {
@@ -192,7 +193,7 @@ export default function ProductView() {
             sx: {
               ...foodTableSx,
               '& .MuiTableCell-root': { px: 2, py: 1.1 },
-              '& tbody .MuiTableRow-root:hover': { bgcolor: 'rgba(255,255,255,0.03)' },
+              '& tbody .MuiTableRow-root:hover': { bgcolor: 'surface.hoverStrong' },
             },
           }}
         />

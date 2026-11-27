@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, ButtonBase, Collapse, Typography } from '@mui/material';
 import { KeyboardArrowDown } from '@mui/icons-material';
 
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 
 const STORAGE_PREFIX = 'finance.live.section.';
 
@@ -61,7 +61,7 @@ export default function CollapsibleSection({ id, title, actions, defaultOpen = f
             alignSelf: 'stretch',
             px: 2,
             gap: 1,
-            '&:hover': { bgcolor: 'rgba(255,255,255,0.03)' },
+            '&:hover': { bgcolor: 'surface.hoverStrong' },
           }}
         >
           <Typography component="h2" sx={{ fontWeight: 500, mr: 'auto' }}>

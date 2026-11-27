@@ -18,7 +18,7 @@ import { CheckCircleOutlined, RemoveShoppingCart } from '@mui/icons-material';
 
 import REST, { queryClient } from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
-import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../tokens';
 import { otherTableSx } from '../other/component/otherStyles';
 import { categoryColor } from './shoppingCategories';
 
@@ -119,7 +119,7 @@ export default function ShoppingItemsTable({ items, showCategory, title, isLoadi
                           size="small"
                           onClick={() => deleteItem(item)}
                           disabled={isDeleting}
-                          sx={{ color: 'text.secondary', '&:hover': { color: '#5DCAA5' } }}
+                          sx={{ color: 'text.secondary', '&:hover': { color: 'status.done' } }}
                         >
                           <CheckCircleOutlined fontSize="small" />
                         </IconButton>

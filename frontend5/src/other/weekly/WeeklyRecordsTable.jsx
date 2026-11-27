@@ -18,7 +18,7 @@ import { DeleteOutlined, PlaylistRemove } from '@mui/icons-material';
 
 import REST, { queryClient } from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 import ConfirmDeleteDialog from '../component/ConfirmDeleteDialog';
 import { otherTableSx } from '../component/otherStyles';
 

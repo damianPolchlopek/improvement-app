@@ -18,7 +18,8 @@ import REST from '../../utils/REST';
 import DietStatisticTableRow from './DietStatisticTableRow';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../component/FoodPageHeader';
-import { surfaceSx, foodTableSx, HAIRLINE } from '../component/foodStyles';
+import { foodTableSx } from '../component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 
 export default function DietStatisticView() {
   const [page, setPage] = useState(0);

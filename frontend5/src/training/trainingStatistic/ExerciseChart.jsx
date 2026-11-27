@@ -17,6 +17,7 @@ import {
 
 import { Box, Button, Typography, useTheme } from '@mui/material';
 import { ZoomOutMap } from '@mui/icons-material';
+import { HAIRLINE } from '../../tokens';
 
 // Single source of truth for series colors. The order matches the order of the
 // selected exercises, so the chips in the picker and the lines here stay in sync.
@@ -45,8 +46,8 @@ const CustomTooltip = ({ active, payload, label, t }) => {
   return (
     <Box
       sx={{
-        backgroundColor: '#17252f',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        bgcolor: 'surface.dialog',
+        border: HAIRLINE,
         borderRadius: 2,
         p: 1.5,
         minWidth: 160,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
+import { STATUS } from '../../tokens';
 
 // USDT dominance zones (in %), read off the user's own TradingView analysis.
 // High USDT.D = money parked in stablecoins = market bottom; low = market top.
@@ -83,7 +84,7 @@ export default function UsdtZoneBar({ value, height = 420 }) {
             position: 'relative',
             flex: 1,
             borderRadius: 1,
-            bgcolor: 'rgba(255,255,255,0.04)',
+            bgcolor: 'surface.subtle',
             border: '1px solid',
             borderColor: 'divider',
           }}
@@ -125,12 +126,12 @@ export default function UsdtZoneBar({ value, height = 420 }) {
               left: 0,
               right: 0,
               top: `${topPercent(USDT_LOCAL_BOTTOM)}%`,
-              borderTop: '1px dashed #4caf50',
+              borderTop: `1px dashed ${STATUS.up}`,
             }}
           >
             <Typography
               variant="caption"
-              sx={{ position: 'absolute', right: 4, top: 1, fontSize: 10, color: '#81c784' }}
+              sx={{ position: 'absolute', right: 4, top: 1, fontSize: 10, color: 'status.up' }}
             >
               {t('finance.live.localBottom')} {USDT_LOCAL_BOTTOM}%
             </Typography>

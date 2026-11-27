@@ -7,7 +7,7 @@ import { AddCircleOutlined } from '@mui/icons-material';
 import REST from '../../utils/REST';
 import TrainingForm from './TrainingForm';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx } from '../../food/component/foodStyles';
+import { surfaceSx } from '../../tokens';
 import TrainingTypeChips from '../component/TrainingTypeChips';
 
 export default function AddTrainingView() {

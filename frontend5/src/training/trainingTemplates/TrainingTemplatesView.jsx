@@ -8,8 +8,7 @@ import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
 import SearchField from '../../food/component/SearchField';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
-import { ROW_LINE } from '../component/trainingTableSx';
+import { HAIRLINE, ROW_LINE, surfaceSx } from '../../tokens';
 import { typeGroup } from '../trainingView/trainingWeeks';
 
 // "Siłowy#1-A" -> "Siłowy"; nazwy bez '#' tworzą własną grupę
@@ -44,9 +43,9 @@ function TemplateRow({ template, isOpen, onToggle }) {
           pr: 2,
           py: 1.1,
           textAlign: 'left',
-          bgcolor: isOpen ? 'rgba(144, 202, 249, 0.06)' : 'transparent',
+          bgcolor: isOpen ? 'primaryTint.subtle' : 'transparent',
           transition: 'background-color 150ms',
-          '&:hover': { bgcolor: isOpen ? 'rgba(144, 202, 249, 0.08)' : 'rgba(255,255,255,0.03)' },
+          '&:hover': { bgcolor: isOpen ? 'primaryTint.selected' : 'surface.hoverStrong' },
         }}
       >
         <Box
@@ -92,7 +91,7 @@ function TemplateRow({ template, isOpen, onToggle }) {
                   width: 22,
                   height: 22,
                   borderRadius: '50%',
-                  bgcolor: 'rgba(144, 202, 249, 0.16)',
+                  bgcolor: 'primaryTint.strong',
                   color: 'primary.main',
                   fontSize: 11,
                   fontWeight: 600,

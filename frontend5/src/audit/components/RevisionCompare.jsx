@@ -1,36 +1,30 @@
 // features/diet-audit/components/RevisionCompare.jsx
+// Wybór dwóch rewizji i porównanie: makroskładniki przed / po oraz zmiany w posiłkach.
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRevisionComparison } from '../hooks/useDietAudit';
 import { useParams } from 'react-router-dom';
-import { formatMacroChange, getMacroChangeColor } from '../utils/auditFormatters';
-import MealChangesList from './MealChangesList';
-
+import { Alert, Box, Button, ButtonBase, CircularProgress, Typography } from '@mui/material';
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Chip,
-  CircularProgress,
-  Alert,
-  useTheme,
-  alpha,
-  Divider,
-} from '@mui/material';
-
-import {
-  CompareArrows as CompareArrowsIcon,
-  TrendingUp as TrendingUpIcon,
-  TrendingDown as TrendingDownIcon,
-  Remove as RemoveIcon,
-  Check as CheckIcon,
   ArrowForward as ArrowForwardIcon,
+  Check as CheckIcon,
+  CompareArrows as CompareArrowsIcon,
+  TrendingDown as TrendingDownIcon,
+  TrendingFlat as TrendingFlatIcon,
+  TrendingUp as TrendingUpIcon,
 } from '@mui/icons-material';
 
-import Grid from '@mui/material/Grid';
+import { useRevisionComparison } from '../hooks/useDietAudit';
+import {
+  formatMacroChange,
+  formatRevisionType,
+  formatTimestamp,
+  getMacroChangeColor,
+} from '../utils/auditFormatters';
+import MealChangesList from './MealChangesList';
+import { AccentIcon, MacroTiles, Section } from './auditUi';
+import { formatMacro } from '../../food/foodView/macroColors';
+import { HAIRLINE } from '../../tokens';
 
 const RevisionCompare = ({
   dietSummaryId,
@@ -39,152 +33,114 @@ const RevisionCompare = ({
   availableRevisions,
 }) => {
   const { t } = useTranslation();
-  const theme = useTheme();
   const { dietSummaryId: paramDietSummaryId } = useParams();
   const actualDietSummaryId = dietSummaryId || paramDietSummaryId;
 
   const needsSelection = selectedRevisions.length < 2;
 
-  const olderRevisionNumber = selectedRevisions[0]?.revisionNumber;
-  const newerRevisionNumber = selectedRevisions[1]?.revisionNumber;
-
   const {
     data: comparisonData,
     isLoading,
     isError,
-  } = useRevisionComparison(actualDietSummaryId, olderRevisionNumber, newerRevisionNumber);
+  } = useRevisionComparison(
+    actualDietSummaryId,
+    selectedRevisions[0]?.revisionNumber,
+    selectedRevisions[1]?.revisionNumber
+  );
 
   if (needsSelection) {
     return (
-      <Card
-        elevation={6}
-        sx={{
-          borderRadius: 3,
-          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-        }}
+      <Section
+        icon={<CompareArrowsIcon fontSize="small" sx={{ color: 'text.secondary' }} />}
+        title={t('audit.selectTwo')}
+        actions={
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            {selectedRevisions.length === 1
+              ? t('audit.selectSecond')
+              : t('audit.selectedCount', { count: selectedRevisions.length })}
+          </Typography>
+        }
       >
-        <CardContent sx={{ p: 4 }}>
-          <Box sx={{ textAlign: 'center', mb: 4 }}>
-            <CompareArrowsIcon sx={{ fontSize: 64, color: 'rgba(255, 255, 255, 0.3)', mb: 2 }} />
-            <Typography variant="h5" sx={{ fontWeight: '600', color: 'white', mb: 1 }}>
-              {t('audit.selectTwo')}
-            </Typography>
-            <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              {t('audit.selectedCount', { count: selectedRevisions.length })}
-            </Typography>
+        <Box
+          sx={{
+            p: 2,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: 1,
+          }}
+        >
+          {availableRevisions.map((revision) => {
+            const order = selectedRevisions.findIndex(
+              (r) => r.revisionNumber === revision.revisionNumber
+            );
+            const isSelected = order !== -1;
+            const typeInfo = formatRevisionType(revision.revisionType);
+            const time = formatTimestamp(revision.revisionTimestamp);
 
-            {selectedRevisions.length === 1 && (
-              <Alert
-                severity="info"
+            return (
+              <ButtonBase
+                key={revision.revisionNumber}
+                onClick={() => onRevisionSelect(revision)}
+                aria-pressed={isSelected}
                 sx={{
-                  mt: 3,
-                  backgroundColor: 'rgba(33, 150, 243, 0.1)',
-                  color: 'white',
-                  border: '1px solid rgba(33, 150, 243, 0.3)',
-                  '& .MuiAlert-icon': {
-                    color: '#2196f3',
-                  },
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.25,
+                  p: 1.25,
+                  textAlign: 'left',
+                  borderRadius: 2,
+                  bgcolor: isSelected ? 'primaryTint.subtle' : 'surface.tile',
+                  border: '1px solid',
+                  borderColor: isSelected ? 'primary.main' : 'line.hairline',
+                  '&:hover': { borderColor: isSelected ? 'primary.main' : 'line.hover' },
                 }}
               >
-                {t('audit.selectSecond')}
-              </Alert>
-            )}
-          </Box>
-
-          {/* Lista dostępnych rewizji */}
-          <Grid container spacing={2}>
-            {availableRevisions.map((revision) => {
-              const isSelected = selectedRevisions.some(
-                (r) => r.revisionNumber === revision.revisionNumber
-              );
-              const selectionOrder = selectedRevisions.findIndex(
-                (r) => r.revisionNumber === revision.revisionNumber
-              );
-
-              return (
-                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={revision.revisionNumber}>
-                  <Card
-                    onClick={() => onRevisionSelect(revision)}
-                    elevation={isSelected ? 8 : 2}
+                <AccentIcon accent={typeInfo.accent} Icon={typeInfo.Icon} size={28} />
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                    #{revision.revisionNumber}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
+                    {time.date}, {time.time}
+                  </Typography>
+                </Box>
+                {isSelected && (
+                  <Box
                     sx={{
-                      cursor: 'pointer',
-                      borderRadius: 2,
-                      transition: 'all 0.3s ease',
-                      background: isSelected
-                        ? 'linear-gradient(145deg, #243441 0%, #2d4a5a 100%)'
-                        : 'rgba(255, 255, 255, 0.05)',
-                      border: isSelected
-                        ? '2px solid #4caf50'
-                        : '1px solid rgba(255, 255, 255, 0.1)',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        boxShadow: '0 8px 24px rgba(76, 175, 80, 0.3)',
-                        border: '2px solid rgba(76, 175, 80, 0.5)',
-                      },
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 0.5,
+                      fontSize: 12,
+                      color: 'primary.main',
                     }}
                   >
-                    <CardContent sx={{ p: 2 }}>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'start',
-                          mb: 1,
-                        }}
-                      >
-                        <Typography variant="h6" sx={{ fontWeight: '700', color: 'white' }}>
-                          #{revision.revisionNumber}
-                        </Typography>
-                        {isSelected && (
-                          <Chip
-                            label={selectionOrder === 0 ? t('audit.older') : t('audit.newer')}
-                            size="small"
-                            icon={<CheckIcon />}
-                            sx={{
-                              backgroundColor: 'rgba(76, 175, 80, 0.3)',
-                              color: '#4caf50',
-                              fontWeight: 600,
-                            }}
-                          />
-                        )}
-                      </Box>
-                      <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                        {new Date(revision.revisionTimestamp).toLocaleString('pl-PL')}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </CardContent>
-      </Card>
+                    <CheckIcon sx={{ fontSize: 14 }} />
+                    {order === 0 ? t('audit.older') : t('audit.newer')}
+                  </Box>
+                )}
+              </ButtonBase>
+            );
+          })}
+        </Box>
+      </Section>
     );
   }
 
-  // Loading state
   if (isLoading) {
     return (
-      <Card
-        elevation={6}
-        sx={{
-          borderRadius: 3,
-          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          p: 8,
-          textAlign: 'center',
-        }}
-      >
-        <CircularProgress size={60} sx={{ mb: 3, color: '#4caf50' }} />
-        <Typography variant="h6" sx={{ color: 'white', fontWeight: '600' }}>
-          {t('audit.loadingComparison')}
-        </Typography>
-      </Card>
+      <Section>
+        <Box
+          sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1.5, py: 6 }}
+        >
+          <CircularProgress size={20} />
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('audit.loadingComparison')}
+          </Typography>
+        </Box>
+      </Section>
     );
   }
 
-  // Error state
   if (isError || !comparisonData) {
     return <Alert severity="error">{t('audit.comparisonError')}</Alert>;
   }
@@ -193,305 +149,129 @@ const RevisionCompare = ({
     comparisonData;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      {/* Header z wybranymi wersjami */}
-      <Card
-        elevation={8}
-        sx={{
-          borderRadius: 4,
-          background: theme.palette.card.header,
-          border: theme.palette.card.border,
-          overflow: 'hidden',
-        }}
-      >
-        <CardContent sx={{ p: 4 }}>
-          <Box
-            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <CompareArrowsIcon sx={{ fontSize: 32, color: 'white' }} />
-              <Typography variant="h4" sx={{ fontWeight: '700', color: 'white' }}>
-                {t('audit.versionComparison')}
-              </Typography>
-            </Box>
-
-            <Button
-              variant="outlined"
-              onClick={() => onRevisionSelect(null)}
-              sx={{
-                borderColor: 'rgba(255, 255, 255, 0.3)',
-                color: 'white',
-                '&:hover': {
-                  borderColor: 'rgba(255, 255, 255, 0.5)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                },
-              }}
-            >
-              {t('audit.selectOther')}
-            </Button>
-          </Box>
-
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, md: 5 }}>
-              <VersionInfo
-                title={t('audit.olderVersion')}
-                revision={olderRevision}
-                color="rgba(255, 152, 0, 0.3)"
-                borderColor="rgba(255, 152, 0, 0.5)"
-              />
-            </Grid>
-
-            <Grid
-              size={{ xs: 12, md: 2 }}
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <ArrowForwardIcon sx={{ fontSize: 40, color: '#4caf50' }} />
-            </Grid>
-
-            <Grid size={{ xs: 12, md: 5 }}>
-              <VersionInfo
-                title={t('audit.newerVersion')}
-                revision={newerRevision}
-                color="rgba(76, 175, 80, 0.3)"
-                borderColor="rgba(76, 175, 80, 0.5)"
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Zmiany w makroskładnikach */}
-      <Card
-        elevation={6}
-        sx={{
-          borderRadius: 3,
-          background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-        }}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Section
+        icon={<CompareArrowsIcon fontSize="small" sx={{ color: 'text.secondary' }} />}
+        title={t('audit.versionComparison')}
+        actions={
+          <Button size="small" onClick={() => onRevisionSelect(null)}>
+            {t('audit.selectOther')}
+          </Button>
+        }
       >
         <Box
           sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr auto 1fr' },
+            alignItems: 'center',
+            gap: 2,
             p: 2,
-            background: theme.palette.card.header,
-            borderBottom: theme.palette.card.border,
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: '600', color: 'white' }}>
-            {t('audit.macroChanges')}
-          </Typography>
+          <VersionInfo title={t('audit.olderVersion')} revision={olderRevision} />
+          <ArrowForwardIcon
+            sx={{
+              color: 'text.secondary',
+              justifySelf: 'center',
+              transform: { xs: 'rotate(90deg)', md: 'none' },
+            }}
+          />
+          <VersionInfo title={t('audit.newerVersion')} revision={newerRevision} highlight />
         </Box>
 
-        <CardContent sx={{ p: 3 }}>
-          <Grid container spacing={3}>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange
-                label={t('audit.calories')}
-                changeDetail={macroChanges.kcal}
-                unit="kcal"
-                color="#ff9800"
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange
-                label={t('food.protein')}
-                changeDetail={macroChanges.protein}
-                unit="g"
-                color="#2196f3"
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange
-                label={t('audit.carbohydrates')}
-                changeDetail={macroChanges.carbohydrates}
-                unit="g"
-                color="#4caf50"
-              />
-            </Grid>
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-              <MacroChange
-                label={t('food.fat')}
-                changeDetail={macroChanges.fat}
-                unit="g"
-                color="#fdd835"
-              />
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
+        <Box sx={{ px: 2, pb: 2, pt: 2, borderTop: HAIRLINE }}>
+          <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
+            {t('audit.macroChanges')}
+          </Typography>
+          <MacroTiles
+            t={t}
+            render={(key, unit, color) => (
+              <MacroChange changeDetail={macroChanges[key]} unit={unit} color={color} />
+            )}
+          />
+        </Box>
+      </Section>
 
-      {/* Zmiany w posiłkach */}
-      <MealChangesList
-        changes={{
-          mealsAdded,
-          mealsRemoved,
-          mealsModified,
-        }}
-      />
+      <MealChangesList changes={{ mealsAdded, mealsRemoved, mealsModified }} />
     </Box>
   );
 };
 
-// Helper Components
-const VersionInfo = ({ title, revision, color, borderColor }) => {
+const VersionInfo = ({ title, revision, highlight = false }) => {
   const { t } = useTranslation();
+  const time = formatTimestamp(revision.revisionTimestamp);
+  const rows = [
+    [t('audit.revision'), `#${revision.revisionNumber}`],
+    [t('audit.date'), time.date],
+    [t('audit.time'), time.time],
+    [t('audit.calories'), `${formatMacro(revision.dietSummary.kcal)} kcal`],
+  ];
+
   return (
-    <Card
-      elevation={4}
+    <Box
       sx={{
+        p: 1.5,
         borderRadius: 2,
-        background: color,
-        border: `2px solid ${borderColor}`,
-        height: '100%',
+        bgcolor: highlight ? 'primaryTint.subtle' : 'surface.subtle',
+        border: '1px solid',
+        borderColor: highlight ? 'primaryTint.strong' : 'line.hairline',
       }}
     >
-      <CardContent sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: '600', color: 'white', mb: 2 }}>
-          {title}
-        </Typography>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-              {t('audit.revision')}:
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
-              #{revision.revisionNumber}
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-              {t('audit.date')}:
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
-              {new Date(revision.revisionTimestamp).toLocaleDateString('pl-PL')}
-            </Typography>
-          </Box>
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-              {t('audit.time')}:
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
-              {new Date(revision.revisionTimestamp).toLocaleTimeString('pl-PL')}
-            </Typography>
-          </Box>
-
-          <Divider sx={{ my: 1, borderColor: 'rgba(255, 255, 255, 0.2)' }} />
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-              {t('audit.calories')}:
-            </Typography>
-            <Typography variant="body2" sx={{ fontWeight: '600', color: 'white' }}>
-              {revision.dietSummary.kcal.toFixed(1)} kcal
-            </Typography>
-          </Box>
+      <Typography variant="body2" sx={{ fontWeight: 500, mb: 1 }}>
+        {title}
+      </Typography>
+      {rows.map(([label, value]) => (
+        <Box
+          key={label}
+          sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, py: 0.25 }}
+        >
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            {label}
+          </Typography>
+          <Typography variant="caption" sx={{ fontVariantNumeric: 'tabular-nums' }}>
+            {value}
+          </Typography>
         </Box>
-      </CardContent>
-    </Card>
+      ))}
+    </Box>
   );
 };
 
-const MacroChange = ({ label, changeDetail, unit, color }) => {
+const MacroChange = ({ changeDetail, unit, color }) => {
   const { oldValue, newValue, diff, percentChange } = changeDetail;
   const changeColor = getMacroChangeColor(diff);
   const hasChange = Math.abs(diff) > 0.1;
-
-  const getChangeIcon = () => {
-    if (diff > 0) return <TrendingUpIcon sx={{ fontSize: 16 }} />;
-    if (diff < 0) return <TrendingDownIcon sx={{ fontSize: 16 }} />;
-    return <RemoveIcon sx={{ fontSize: 16 }} />;
-  };
+  const TrendIcon = diff > 0 ? TrendingUpIcon : diff < 0 ? TrendingDownIcon : TrendingFlatIcon;
 
   return (
-    <Card
-      elevation={2}
-      sx={{
-        borderRadius: 2,
-        background: 'rgba(0, 0, 0, 0.2)',
-        border: `1px solid ${alpha(color, 0.3)}`,
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: `0 4px 12px ${alpha(color, 0.3)}`,
-        },
-      }}
-    >
-      <CardContent sx={{ p: 2 }}>
+    <Box sx={{ fontVariantNumeric: 'tabular-nums' }}>
+      <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, flexWrap: 'wrap' }}>
+        <Typography sx={{ fontSize: 18, fontWeight: 500, color }}>
+          {formatMacro(newValue)}
+          <Typography component="span" variant="caption" sx={{ color: 'text.secondary', ml: 0.5 }}>
+            {unit}
+          </Typography>
+        </Typography>
         <Typography
           variant="caption"
-          sx={{
-            color: 'rgba(255, 255, 255, 0.7)',
-            mb: 1.5,
-            display: 'block',
-            textTransform: 'uppercase',
-            letterSpacing: 1,
-            fontWeight: 600,
-          }}
+          sx={{ color: 'text.secondary', textDecoration: 'line-through' }}
         >
-          {label}
+          {formatMacro(oldValue)}
         </Typography>
-
-        {/* Stara wartość */}
-        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1 }}>
-          <Typography
-            variant="h6"
-            sx={{
-              textDecoration: 'line-through',
-              color: 'rgba(255, 255, 255, 0.4)',
-              fontWeight: 500,
-            }}
-          >
-            {oldValue.toFixed(1)}
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.4)' }}>
-            {unit}
-          </Typography>
-        </Box>
-
-        {/* Nowa wartość */}
-        <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 2 }}>
-          <Typography variant="h5" sx={{ fontWeight: '700', color }}>
-            {newValue.toFixed(1)}
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-            {unit}
-          </Typography>
-        </Box>
-
-        {/* Zmiana */}
-        {hasChange && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              pt: 1.5,
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-            }}
-          >
-            <Chip
-              icon={getChangeIcon()}
-              label={formatMacroChange(diff)}
-              size="small"
-              sx={{
-                backgroundColor: alpha(changeColor, 0.2),
-                color: changeColor,
-                fontWeight: 700,
-                border: `1px solid ${alpha(changeColor, 0.3)}`,
-                '& .MuiChip-icon': {
-                  color: changeColor,
-                },
-              }}
-            />
-            <Typography variant="caption" sx={{ fontWeight: '600', color: changeColor }}>
-              {percentChange.toFixed(1)}%
-            </Typography>
-          </Box>
-        )}
-      </CardContent>
-    </Card>
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.5,
+          fontSize: 12,
+          color: hasChange ? changeColor : 'text.secondary',
+        }}
+      >
+        <TrendIcon sx={{ fontSize: 14 }} />
+        {hasChange ? `${formatMacroChange(diff)} (${percentChange.toFixed(1)}%)` : '—'}
+      </Box>
+    </Box>
   );
 };
 

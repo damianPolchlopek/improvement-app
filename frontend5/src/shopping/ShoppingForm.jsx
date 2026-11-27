@@ -6,8 +6,7 @@ import { AddShoppingCart } from '@mui/icons-material';
 
 import REST, { queryClient } from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
-import { surfaceSx } from '../food/component/foodStyles';
-import { fieldSx } from '../other/component/otherStyles';
+import { fieldSx, surfaceSx } from '../tokens';
 import { categoryColor } from './shoppingCategories';
 
 // Dodawanie produktu w jednym rzędzie: nazwa, kategoria, przycisk (Enter zapisuje).

@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { ACCENTS } from '../tokens';
 
 // Co ile dni oczekujemy wpisu w danym module — od tego zależy, czy jest "na dziś"
 export const MODULES = [
@@ -8,12 +9,12 @@ export const MODULES = [
   { key: 'weekly', lastField: 'lastWeekly', daysField: 'weeklyDays', rhythm: 7 },
 ];
 
-// Kolory modułów (spójne z paletą food/training): `dot` – akcent, `bg` / `text` – kafelek ikony.
+// Kolory modułów z palety akcentów: `dot` – akcent, `bg` / `text` – kafelek ikony.
 export const MODULE_COLORS = {
-  diet: { dot: '#D85A30', bg: '#712B13', text: '#F5C4B3' },
-  training: { dot: '#7F77DD', bg: '#3C3489', text: '#CECBF6' },
-  daily: { dot: '#378ADD', bg: '#0C447C', text: '#B5D4F4' },
-  weekly: { dot: '#1D9E75', bg: '#085041', text: '#9FE1CB' },
+  diet: ACCENTS.coral,
+  training: ACCENTS.purple,
+  daily: ACCENTS.blue,
+  weekly: ACCENTS.teal,
 };
 
 export function moduleStatus(lastIso, rhythm, today = dayjs()) {

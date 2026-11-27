@@ -37,7 +37,7 @@ export default function MacroBar({ protein, carbohydrates, fat, height = 6 }) {
           height,
           borderRadius: height / 2,
           overflow: 'hidden',
-          bgcolor: 'rgba(255,255,255,0.08)',
+          bgcolor: 'surface.track',
           gap: '2px',
         }}
       >

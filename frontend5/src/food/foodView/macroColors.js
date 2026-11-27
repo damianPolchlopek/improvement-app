@@ -1,10 +1,14 @@
+import { ACCENTS } from '../../tokens';
+
 // Stałe kolory makroskładników używane w widoku posiłków.
 // `bar` – wypełnienie paska proporcji, `text` – jaśniejszy odcień do liczb na ciemnym tle.
+const macro = (accent) => ({ bar: accent.dot, text: accent.light });
+
 export const MACRO_COLORS = {
-  kcal: { bar: '#D85A30', text: '#F0997B' },
-  protein: { bar: '#378ADD', text: '#85B7EB' },
-  carbohydrates: { bar: '#EF9F27', text: '#FAC775' },
-  fat: { bar: '#1D9E75', text: '#5DCAA5' },
+  kcal: macro(ACCENTS.coral),
+  protein: macro(ACCENTS.blue),
+  carbohydrates: macro(ACCENTS.amber),
+  fat: macro(ACCENTS.teal),
 };
 
 // Kolejność grup składników zwracanych przez /meal/{id}/ingredients.

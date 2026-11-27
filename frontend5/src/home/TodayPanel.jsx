@@ -18,6 +18,7 @@ import REST, { queryClient } from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 import { FoodAddUrl, TrainingAddUrl } from '../utils/URLHelper';
 import { MODULE_COLORS } from './dashboardStatus';
+import { ROW_LINE } from '../tokens';
 
 const DATE_FORMAT = 'DD-MM-YYYY';
 const DAILY_FIELDS = ['health', 'exercise', 'book', 'software'];
@@ -67,9 +68,9 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
         display: 'flex',
         flexDirection: 'column',
         borderRadius: 2.5,
-        bgcolor: 'rgba(29, 42, 51, 0.9)',
+        bgcolor: 'surface.tile',
         border: '1px solid',
-        borderColor: status.due ? 'rgba(239, 159, 39, 0.35)' : 'rgba(255,255,255,0.08)',
+        borderColor: status.due ? 'status.dueBorder' : 'line.hairline',
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -99,7 +100,7 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
               display: 'flex',
               alignItems: 'center',
               gap: 0.5,
-              color: status.due ? '#FAC775' : '#5DCAA5',
+              color: status.due ? 'status.due' : 'status.done',
             }}
           >
             {status.due ? <Schedule sx={{ fontSize: 14 }} /> : <CheckIcon sx={{ fontSize: 14 }} />}
@@ -115,7 +116,7 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
           justifyContent: status.due ? 'flex-start' : 'center',
           mt: 2,
           pt: 1.5,
-          borderTop: '1px solid rgba(255,255,255,0.06)',
+          borderTop: ROW_LINE,
         }}
       >
         {status.due ? (
@@ -131,7 +132,7 @@ function ModuleTile({ moduleKey, status, rhythm, lastDate, children }) {
               color: 'text.secondary',
             }}
           >
-            <CheckIcon sx={{ fontSize: 18, color: '#5DCAA5' }} />
+            <CheckIcon sx={{ fontSize: 18, color: 'status.done' }} />
             {t('home.nothingToDo')}
           </Typography>
         )}
@@ -221,7 +222,7 @@ function WeeklyAction() {
           setWeight(event.target.value);
           setInvalid(false);
         }}
-        sx={{ mb: 1.5, '& .MuiInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' } }}
+        sx={{ mb: 1.5, '& .MuiInputBase-root': { bgcolor: 'surface.field' } }}
       />
       <Button type="submit" size="small" variant="outlined" disabled={isPending}>
         {t('home.saveWeight')}

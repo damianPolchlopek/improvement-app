@@ -22,7 +22,7 @@ import { useLoaderData, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '../../utils/REST.js';
 import ErrorAlert from '../../component/error/ErrorAlert.jsx';
-import { HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, LINE_COLOR, ROW_LINE, STATUS } from '../../tokens';
 import SetPills from '../component/SetPills';
 import { weightChange } from '../component/sets';
 import { localeOf } from '../trainingView/trainingWeeks';
@@ -40,13 +40,12 @@ import {
   ArrowDropDown,
 } from '@mui/icons-material';
 
-const ROW_LINE = '1px solid rgba(255,255,255,0.06)';
-const VOLUME_COLOR = '#5DCAA5';
-const UP_COLOR = '#5DCAA5';
-const DOWN_COLOR = '#F09595';
+const VOLUME_COLOR = STATUS.up;
+const UP_COLOR = STATUS.up;
+const DOWN_COLOR = STATUS.down;
 
 // Ciemniejsze tło pól – jak w wyszukiwarkach modułu food.
-const inputSx = { '& .MuiInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' } };
+const inputSx = { '& .MuiInputBase-root': { bgcolor: 'surface.field' } };
 
 function withStableKey(exercise, fallbackIndex) {
   // _key zawsze string — porównujemy go z atrybutem data-key (zawsze string)
@@ -358,7 +357,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           px: 2,
           textAlign: 'center',
           borderRadius: 2.5,
-          border: '1px dashed rgba(255,255,255,0.16)',
+          border: `1px dashed ${LINE_COLOR.strong}`,
         }}
       >
         <FitnessCenter sx={{ fontSize: 40, color: 'text.secondary', opacity: 0.6, mb: 1 }} />
@@ -504,7 +503,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                 borderColor: formatError ? 'error.main' : 'transparent',
                 borderBottom: ROW_LINE,
                 transition: 'background-color 150ms',
-                '&:hover, &:focus-within': { bgcolor: 'rgba(255,255,255,0.03)' },
+                '&:hover, &:focus-within': { bgcolor: 'surface.hoverStrong' },
               }}
             >
               <Box
@@ -521,7 +520,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                     height: 24,
                     mx: 'auto',
                     borderRadius: '50%',
-                    bgcolor: 'rgba(144, 202, 249, 0.16)',
+                    bgcolor: 'primaryTint.strong',
                     color: 'primary.main',
                     fontSize: 12,
                     fontWeight: 600,
@@ -723,7 +722,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           px: 2,
           py: 1.25,
           borderRadius: 3,
-          bgcolor: 'rgba(23, 37, 47, 0.95)',
+          bgcolor: 'surface.overlay',
           border: HAIRLINE,
           boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
         }}

@@ -1,5 +1,6 @@
 // Pomocnicze funkcje widoku treningów pogrupowanego tygodniami.
 import { TRAINING_TYPES } from '../component/TrainingTypeSelector';
+import { ACCENTS } from '../../tokens';
 
 // Backend zapisuje w nazwie tylko kod typu (część po "-" z ExerciseType, np. "Siłowy#1-A" -> "A"):
 // "412 - 24.11.2026r. - A" -> { name, number: '412', date: Date, type: 'A' }
@@ -15,17 +16,11 @@ export function parseTrainingName(name) {
 // Grupy typów treningu: filtr w nagłówku i kolor etykiety dnia.
 // `bg` / `text` – ciemne tło i jasny tekst (motyw aplikacji jest ciemny), `dot` – kropka w filtrze.
 export const TYPE_GROUPS = [
-  { key: 'strength', match: ['siłowy'], bg: '#3C3489', text: '#CECBF6', dot: '#7F77DD' },
-  {
-    key: 'hypertrophy',
-    match: ['hipertroficzny'],
-    bg: '#085041',
-    text: '#9FE1CB',
-    dot: '#1D9E75',
-  },
-  { key: 'fbw', match: ['fbw', '5x5'], bg: '#712B13', text: '#F5C4B3', dot: '#D85A30' },
-  { key: 'kettle', match: ['kettle'], bg: '#633806', text: '#FAC775', dot: '#EF9F27' },
-  { key: 'cardio', match: [], bg: '#444441', text: '#D3D1C7', dot: '#888780' },
+  { key: 'strength', match: ['siłowy'], ...ACCENTS.purple },
+  { key: 'hypertrophy', match: ['hipertroficzny'], ...ACCENTS.teal },
+  { key: 'fbw', match: ['fbw', '5x5'], ...ACCENTS.coral },
+  { key: 'kettle', match: ['kettle'], ...ACCENTS.amber },
+  { key: 'cardio', match: [], ...ACCENTS.gray },
 ];
 
 // Kod typu z nazwy treningu -> grupa. Uwaga: "FBW#3-A/B" i "Siłowy#1-A/B" dają ten sam kod,

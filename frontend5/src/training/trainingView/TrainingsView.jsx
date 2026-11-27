@@ -8,7 +8,7 @@ import REST from '../../utils/REST';
 import SingleTraining from './SingleTraining';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 import {
   TYPE_GROUPS,
   groupByWeek,

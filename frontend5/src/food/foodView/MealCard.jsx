@@ -21,12 +21,12 @@ export default function MealCard({ meal, selected, onSelect }) {
       sx={{
         height: '100%',
         borderRadius: 2.5,
-        bgcolor: 'rgba(29, 42, 51, 0.9)',
+        bgcolor: 'surface.tile',
         border: '1px solid',
-        borderColor: selected ? 'primary.main' : 'rgba(255,255,255,0.08)',
+        borderColor: selected ? 'primary.main' : 'line.hairline',
         transition: 'border-color 150ms, transform 150ms',
         '&:hover': {
-          borderColor: selected ? 'primary.main' : 'rgba(255,255,255,0.22)',
+          borderColor: selected ? 'primary.main' : 'line.hover',
           transform: 'translateY(-2px)',
         },
       }}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import appLogo from '../assets/logo.png';
-import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../tokens';
 
 // Wspólna karta logowania / rejestracji w stylu modułów (płaska powierzchnia, cienka ramka):
 // logo, tytuł z opisem, treść i opcjonalna stopka (np. link do drugiego formularza).
@@ -27,7 +27,7 @@ export default function AuthCard({ title, description, maxWidth = 420, footer, c
                 height: 48,
                 flexShrink: 0,
                 borderRadius: 2.5,
-                bgcolor: 'rgba(255,255,255,0.06)',
+                bgcolor: 'surface.chip',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

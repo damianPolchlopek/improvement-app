@@ -8,7 +8,7 @@ import { CloudDownload, FitnessCenter, Restaurant, Today } from '@mui/icons-mate
 import REST, { queryClient } from '../utils/REST';
 import ErrorAlert from '../component/error/ErrorAlert';
 import FoodPageHeader from '../food/component/FoodPageHeader';
-import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../tokens';
 import LogComponent from './LogComponent';
 import TodayPanel from './TodayPanel';
 import ActivityMosaic from './ActivityMosaic';
@@ -26,7 +26,7 @@ function ProgressSegments({ modules }) {
               flex: 1,
               height: 6,
               borderRadius: 3,
-              bgcolor: module.status.due ? 'rgba(255,255,255,0.08)' : MODULE_COLORS[module.key].dot,
+              bgcolor: module.status.due ? 'surface.track' : MODULE_COLORS[module.key].dot,
             }}
           />
         </Tooltip>

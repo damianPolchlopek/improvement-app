@@ -13,7 +13,7 @@ export default function Input({ label, id, error, helperText, ...props }) {
       fullWidth
       error={!!error}
       helperText={error || helperText || ' '}
-      sx={{ '& .MuiInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' } }}
+      sx={{ '& .MuiInputBase-root': { bgcolor: 'surface.field' } }}
     />
   );
 }

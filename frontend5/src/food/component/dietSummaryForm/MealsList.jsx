@@ -6,7 +6,7 @@ import { Box, Collapse, Skeleton, Table, TableBody, TableHead } from '@mui/mater
 import StyledTableCell from '../../../component/table/StyledTableCell';
 import StyledTableRow from '../../../component/table/StyledTableRow';
 import MealRow from './MealRow';
-import { HAIRLINE } from '../foodStyles';
+import { HAIRLINE } from '../../../tokens';
 
 const popularityTranslation = new Map([
   ['ALL', 'All'],
@@ -75,7 +75,7 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
               mb: 2,
               borderRadius: 2,
               border: HAIRLINE,
-              bgcolor: 'rgba(0,0,0,0.15)',
+              bgcolor: 'surface.inset',
               overflow: 'hidden',
             }}
           >

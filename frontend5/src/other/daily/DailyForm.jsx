@@ -9,8 +9,8 @@ import dayjs from 'dayjs';
 
 import REST, { queryClient } from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
-import { surfaceSx } from '../../food/component/foodStyles';
-import { DAILY_HABITS, fieldSx } from '../component/otherStyles';
+import { fieldSx, surfaceSx } from '../../tokens';
+import { DAILY_HABITS } from '../component/otherStyles';
 
 // Ten sam format co w historii wpisów i w API (dd-MM-yyyy)
 const DATE_FORMAT = 'DD-MM-YYYY';

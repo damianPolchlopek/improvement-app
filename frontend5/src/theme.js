@@ -1,31 +1,48 @@
-import { createTheme } from '@mui/material/styles';
+import { alpha, createTheme } from '@mui/material/styles';
+import { ACCENTS, LINE_COLOR, STATUS, SURFACE } from './tokens';
+
+// Jeden kolor przewodni aplikacji: przyciski, zaznaczenia, linki, wskaźnik w toolbarze.
+// Jasny odcień zieleni z palety akcentów – czytelny na ciemnym tle (przyciski dostają ciemny tekst).
+const PRIMARY = ACCENTS.teal.light;
 
 let theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#90caf9',
+      main: PRIMARY,
     },
-    secondary: {
-      main: '#f48fb1',
+    success: {
+      main: STATUS.done,
+    },
+    warning: {
+      main: STATUS.due,
+    },
+    error: {
+      main: STATUS.down,
+    },
+    // Przezroczyste odcienie koloru przewodniego (rozwinięty / zaznaczony wiersz, plakietka).
+    primaryTint: {
+      subtle: alpha(PRIMARY, 0.06),
+      selected: alpha(PRIMARY, 0.08),
+      strong: alpha(PRIMARY, 0.16),
     },
     background: {
       default: 'radial-gradient( #123146, #202c34)',
       paper: '#1d1d1d',
-      surface: '#202c34',
     },
-    card: {
-      header: 'linear-gradient(90deg, #1e3a52 0%, #2d5374 100%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-    },
-    // Toolbar „grafit + zieleń”: neutralny, prawie czarny pasek, który nie konkuruje
-    // z gradientowymi nagłówkami kart; zielony akcent (#4caf50) jak w widokach.
+    // Tokeny z tokens.js – dostępne w `sx` jako np. 'surface.field', 'status.up', 'accent.teal.dot'.
+    accent: ACCENTS,
+    status: STATUS,
+    surface: SURFACE,
+    line: LINE_COLOR,
+    // Toolbar „grafit + zieleń”: neutralny, prawie czarny pasek; akcent to kolor przewodni.
     toolbar: {
       background: '#1c2329',
       subBackground: '#161c21',
       border: '1px solid rgba(255, 255, 255, 0.07)',
-      indicator: '#4caf50',
-      accent: '#4caf50',
+      indicator: PRIMARY,
+      accent: PRIMARY,
+      accentHover: alpha(PRIMARY, 0.1),
       text: '#8b98a5',
       hover: 'rgba(255, 255, 255, 0.05)',
       selected: '#2a333b',

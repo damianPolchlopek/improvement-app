@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-import { HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE } from '../../tokens';
 
 import TradingViewChart, { TV_STYLE } from './TradingViewChart';
 
@@ -11,7 +11,7 @@ const CHART_HEIGHT = 360;
 export const chartCardSx = {
   borderRadius: 2,
   overflow: 'hidden',
-  bgcolor: 'rgba(0,0,0,0.15)',
+  bgcolor: 'surface.inset',
   border: HAIRLINE,
 };
 

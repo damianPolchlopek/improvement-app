@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useMealSelection } from '../../../context/MealSelectionContext';
 import MacroBar from '../../foodView/MacroBar';
 import { MACRO_COLORS, formatMacro } from '../../foodView/macroColors';
-import { surfaceSx } from '../foodStyles';
+import { surfaceSx } from '../../../tokens';
 
 // Podsumowanie wybranego dnia: suma kcal i makro, proporcje oraz lista wybranych posiłków.
 export default function MealsDaySummary() {
@@ -40,10 +40,7 @@ export default function MealsDaySummary() {
         }}
       >
         {stats.map((stat) => (
-          <Box
-            key={stat.key}
-            sx={{ bgcolor: 'rgba(255,255,255,0.04)', borderRadius: 2, px: 1.5, py: 1 }}
-          >
+          <Box key={stat.key} sx={{ bgcolor: 'surface.subtle', borderRadius: 2, px: 1.5, py: 1 }}>
             <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }} noWrap>
               {stat.label}
             </Typography>

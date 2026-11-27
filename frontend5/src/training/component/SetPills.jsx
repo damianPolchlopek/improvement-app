@@ -20,7 +20,7 @@ export default function SetPills({ reps, weight, size = 13 }) {
           sx={{
             px: 0.75,
             borderRadius: 1,
-            bgcolor: 'rgba(255,255,255,0.06)',
+            bgcolor: 'surface.chip',
             fontSize: size,
             lineHeight: 1.8,
             whiteSpace: 'nowrap',

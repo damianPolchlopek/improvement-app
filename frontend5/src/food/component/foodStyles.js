@@ -1,15 +1,5 @@
-// Wspólne style widoków modułu food (ciemny motyw aplikacji).
-
-export const SURFACE_BG = 'rgba(29, 42, 51, 0.6)';
-export const HAIRLINE = '1px solid rgba(255,255,255,0.08)';
-
-// Płaska karta-powierzchnia: jedno tło, cienka ramka, bez gradientów i cieni.
-export const surfaceSx = {
-  borderRadius: 3,
-  bgcolor: SURFACE_BG,
-  border: HAIRLINE,
-  overflow: 'hidden',
-};
+// Style tabel modułu food (ciemny motyw aplikacji). Kolory i powierzchnie – w src/tokens.js.
+import { HAIRLINE, ROW_LINE } from '../../tokens';
 
 // Nadpisuje StyledTableCell/StyledTableRow (czarny nagłówek, paski) na spokojną tabelę.
 // Podwójne klasy podbijają specyficzność ponad style z `styled()`.
@@ -23,12 +13,12 @@ export const foodTableSx = {
     whiteSpace: 'nowrap',
   },
   '& .MuiTableCell-root.MuiTableCell-body': {
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    borderBottom: ROW_LINE,
   },
   '& .MuiTableRow-root.MuiTableRow-root:nth-of-type(odd)': {
     bgcolor: 'transparent',
   },
   '& .MuiTableRow-root.MuiTableRow-root.Mui-selected': {
-    bgcolor: 'rgba(144, 202, 249, 0.08)',
+    bgcolor: 'primaryTint.selected',
   },
 };

@@ -21,7 +21,7 @@ import { Analytics, ShowChart, SearchOff } from '@mui/icons-material';
 import REST, { queryClient } from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { fieldSx, HAIRLINE, surfaceSx } from '../../tokens';
 import ExerciseChart, { CHART_COLORS } from './ExerciseChart';
 import { TRAINING_TYPES } from '../component/TrainingTypeSelector';
 
@@ -40,12 +40,6 @@ const RANGE_PRESETS = [
   { key: '12M', months: 12 },
   { key: 'all', months: null },
 ];
-
-// Ciemniejsze tło pól – jak w wyszukiwarkach modułu food.
-// MUI X v8+: pickery renderują PickersOutlinedInput zamiast OutlinedInput.
-const fieldSx = {
-  '& .MuiInputBase-root, & .MuiPickersInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' },
-};
 
 function Placeholder({ icon, children }) {
   return (

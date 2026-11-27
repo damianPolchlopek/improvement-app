@@ -186,7 +186,7 @@ export default function SignUpView() {
     return (
       <AuthCard title={t('signup.successTitle')} maxWidth={520} footer={footer}>
         <Box sx={{ textAlign: 'center', mb: 3 }}>
-          <MarkEmailRead sx={{ fontSize: 48, color: '#5DCAA5', mb: 1 }} />
+          <MarkEmailRead sx={{ fontSize: 48, color: 'status.done', mb: 1 }} />
           <Typography sx={{ mb: 1 }}>{success}</Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             {t('signup.redirectInfo')}

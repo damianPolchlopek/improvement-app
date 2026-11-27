@@ -69,7 +69,14 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
 - `src/` – Główny kod źródłowy aplikacji
   - `index.jsx` – Renderowanie komponentu `<App />`
   - `App.jsx` – Główny komponent aplikacji (routing, layout)
-  - `theme.js` – Konfiguracja motywu Material UI
+  - `theme.js` – Konfiguracja motywu Material UI; wpina tokeny z `tokens.js` do palety, więc w `sx`
+    można pisać np. `bgcolor: 'surface.field'`, `color: 'status.up'`, `bgcolor: 'primaryTint.strong'`.
+    Jeden kolor przewodni (`PRIMARY` = jasna zieleń `ACCENTS.teal.light`) dla przycisków, zaznaczeń,
+    linków i wskaźnika toolbara; `success` / `warning` / `error` też pochodzą z tokenów (`STATUS`)
+  - `tokens.js` – Jedno źródło wyglądu: paleta akcentów (`ACCENTS`: coral, purple, blue, teal, amber,
+    gray – każdy z `dot` / `bg` / `text` / `light`), kolory znaczeniowe (`STATUS`), powierzchnie
+    (`SURFACE`), linie (`HAIRLINE`, `ROW_LINE`) oraz wspólne style (`surfaceSx`, `fieldSx`,
+    `calmTableSx`, `dialogPaperSx`). Nowe kolory dodajemy tutaj, nie na sztywno w komponentach
   - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table`)
   - `context/` – Konteksty React (m.in. stan globalny)
   - `layout/` – Elementy układu strony (nawigacja, szkielet widoku)
@@ -78,6 +85,11 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
   - `assets/` – Zasoby statyczne
   - **Moduły funkcjonalne:** `food/`, `training/`, `finance/`, `shopping/`, `other/`,
     `audit/`, `home/`, `login/`
+  - `audit/` – historia zmian podsumowań diety: lista podsumowań, oś czasu rewizji (rozwijane
+    wiersze, szczegóły pobierane przy rozwinięciu), filtry w nagłówku i porównanie dwóch wersji.
+    Typy zmian mają stałe kolory z palety akcentów (`REVISION_TYPES` w
+    `audit/utils/auditFormatters.js`: dodano = teal, zmieniono = blue, usunięto = coral), a
+    makroskładniki te same kolory co w module food (`MACRO_COLORS`)
   - `finance/live/` – widok „Na żywo”: pasek notowań na żywo z widgetu TradingView „Tickers”
     (BTC, ETH, dominacja USDT, złoto, srebro, S&P 500, Nasdaq 100, ropa WTI) oraz
     zwijane sekcje z wykresami z widgetu TradingView. „Kryptowaluty”: BTC i ETH (Binance);

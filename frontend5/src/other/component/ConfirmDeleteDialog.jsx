@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { DeleteOutlined } from '@mui/icons-material';
 
-import { SURFACE_BG, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, SURFACE, dialogPaperSx } from '../../tokens';
 
 // Potwierdzenie trwałego usunięcia (jak w module food): tytuł, opis i podsumowanie usuwanego wpisu.
 export default function ConfirmDeleteDialog({
@@ -34,7 +34,7 @@ export default function ConfirmDeleteDialog({
       fullWidth
       slotProps={{
         paper: {
-          sx: { borderRadius: 3, bgcolor: '#17252f', backgroundImage: 'none', border: HAIRLINE },
+          sx: dialogPaperSx,
         },
       }}
     >
@@ -48,7 +48,7 @@ export default function ConfirmDeleteDialog({
           {text}
         </Typography>
         {details && (
-          <Box sx={{ p: 1.5, bgcolor: SURFACE_BG, borderRadius: 2, border: HAIRLINE }}>
+          <Box sx={{ p: 1.5, bgcolor: SURFACE.card, borderRadius: 2, border: HAIRLINE }}>
             {details}
           </Box>
         )}

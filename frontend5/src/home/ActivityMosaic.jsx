@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import { Box, Typography } from '@mui/material';
 
-import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../tokens';
 import { MODULES, MODULE_COLORS } from './dashboardStatus';
 
 const HISTORY_DAYS = 35;
@@ -69,7 +69,7 @@ export default function ActivityMosaic({ summary }) {
                     sx={{
                       aspectRatio: '1',
                       borderRadius: '3px',
-                      bgcolor: hasEntry ? color : 'rgba(255,255,255,0.06)',
+                      bgcolor: hasEntry ? color : 'surface.chip',
                       outline: index === HISTORY_DAYS - 1 ? '1.5px solid' : 'none',
                       outlineColor: 'primary.main',
                       outlineOffset: '1px',

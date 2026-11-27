@@ -17,7 +17,7 @@ import { Analytics } from '@mui/icons-material';
 import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 import { financeTableSx } from '../financeStyles';
 import CryptoPricesTableRow from './CryptoPricesTableRow';
 import { COIN_LIST } from './COIN_LIST';
@@ -36,9 +36,7 @@ function calculateDays(prevDate) {
 // Kafelek liczby jak w podsumowaniu dnia modułu food.
 function StatTile({ label, value }) {
   return (
-    <Box
-      sx={{ flex: '1 1 160px', bgcolor: 'rgba(255,255,255,0.04)', borderRadius: 2, px: 1.5, py: 1 }}
-    >
+    <Box sx={{ flex: '1 1 160px', bgcolor: 'surface.subtle', borderRadius: 2, px: 1.5, py: 1 }}>
       <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }} noWrap>
         {label}
       </Typography>

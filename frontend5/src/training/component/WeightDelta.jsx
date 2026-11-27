@@ -25,7 +25,7 @@ export default function WeightDelta({ current, previous }) {
           fontSize: 13,
           whiteSpace: 'nowrap',
           fontVariantNumeric: 'tabular-nums',
-          color: diff > 0 ? '#5DCAA5' : diff < 0 ? '#F09595' : 'text.secondary',
+          color: diff > 0 ? 'status.up' : diff < 0 ? 'status.down' : 'text.secondary',
         }}
       >
         {diff === 0 ? (

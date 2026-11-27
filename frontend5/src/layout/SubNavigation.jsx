@@ -3,6 +3,7 @@ import { Box, Button, Container, Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 import { isPathActive } from './MenuItems';
+import { ROW_LINE } from '../tokens';
 
 const linkSx = (active) => ({
   flexShrink: 0,
@@ -25,7 +26,7 @@ const quickActionSx = {
   fontWeight: 500,
   whiteSpace: 'nowrap',
   color: 'toolbar.accent',
-  '&:hover': { bgcolor: 'rgba(76, 175, 80, 0.1)' },
+  '&:hover': { bgcolor: 'toolbar.accentHover' },
 };
 
 // Dolny poziom toolbara: podstrony aktywnego modułu. Moduły z jedną podstroną
@@ -40,7 +41,7 @@ function SubNavigation({ pathname, module }) {
     <Box
       sx={{
         bgcolor: 'toolbar.subBackground',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+        borderBottom: ROW_LINE,
       }}
     >
       <Container maxWidth="xl">

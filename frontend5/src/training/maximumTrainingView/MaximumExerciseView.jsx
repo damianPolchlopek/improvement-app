@@ -17,14 +17,14 @@ import { EmojiEvents } from '@mui/icons-material';
 import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx } from '../../food/component/foodStyles';
+import { ACCENTS, surfaceSx } from '../../tokens';
 import TrainingTypeChips from '../component/TrainingTypeChips';
 import SetPills from '../component/SetPills';
 import { toSets } from '../component/sets';
 import { DATE_FORMAT, trainingTableSx } from '../component/trainingTableSx';
 import { localeOf } from '../trainingView/trainingWeeks';
 
-const RECORD_COLOR = '#F0997B';
+const RECORD_COLOR = ACCENTS.coral.light;
 
 // Najlepsze wyniki w ćwiczeniach danego typu treningu – rekord po rekordzie.
 export default function MaximumExerciseView() {

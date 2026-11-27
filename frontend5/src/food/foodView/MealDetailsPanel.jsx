@@ -7,6 +7,7 @@ import { ExpandLess, OpenInNew, Kitchen, MenuBook } from '@mui/icons-material';
 import REST from '../../utils/REST';
 import MacroBar from './MacroBar';
 import { MACRO_COLORS, INGREDIENT_CATEGORY_ORDER, formatMacro } from './macroColors';
+import { ROW_LINE } from '../../tokens';
 
 function SectionTitle({ icon, children }) {
   return (
@@ -54,7 +55,7 @@ function Ingredients({ mealId }) {
             justifyContent: 'space-between',
             gap: 2,
             py: 0.75,
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            borderBottom: ROW_LINE,
           }}
         >
           <Typography variant="body2">{ingredient.name}</Typography>
@@ -88,7 +89,7 @@ function Recipe({ steps }) {
               width: 24,
               height: 24,
               borderRadius: '50%',
-              bgcolor: 'rgba(144, 202, 249, 0.16)',
+              bgcolor: 'primaryTint.strong',
               color: 'primary.main',
               fontSize: 12,
               fontWeight: 600,
@@ -142,7 +143,7 @@ export default function MealDetailsPanel({ meal, onClose }) {
       aria-label={meal.name}
       sx={{
         borderRadius: 2.5,
-        bgcolor: 'rgba(23, 37, 47, 0.95)',
+        bgcolor: 'surface.overlay',
         border: '1px solid',
         borderColor: 'primary.main',
         p: { xs: 2, md: 3 },

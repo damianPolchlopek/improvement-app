@@ -6,8 +6,7 @@ import { Add } from '@mui/icons-material';
 
 import REST, { queryClient } from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
-import { surfaceSx } from '../../food/component/foodStyles';
-import { fieldSx } from '../component/otherStyles';
+import { fieldSx, surfaceSx } from '../../tokens';
 
 // Dodawanie rekordu w jednym rzędzie: nazwa, kategoria, przycisk.
 export default function WeeklyForm({ categories, defaultCategory }) {

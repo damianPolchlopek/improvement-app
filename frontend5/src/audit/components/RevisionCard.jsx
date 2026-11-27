@@ -1,392 +1,156 @@
 // features/diet-audit/components/RevisionCard.jsx
+// Rozwijany wiersz rewizji. Szczegóły (makro, posiłki) pobierane dopiero po rozwinięciu.
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Box, ButtonBase, CircularProgress, Collapse, Typography } from '@mui/material';
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material';
+
 import { useRevisionDetails } from '../hooks/useDietAudit';
 import { formatRevisionType, formatTimestamp } from '../utils/auditFormatters';
-
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Chip,
-  alpha,
-  Collapse,
-  IconButton,
-  CircularProgress,
-} from '@mui/material';
-
-import { ExpandMore as ExpandMoreIcon, LocalDining as LocalDiningIcon } from '@mui/icons-material';
-
-import Grid from '@mui/material/Grid';
+import { AccentIcon, MacroInline, MacroTiles, MacroValue } from './auditUi';
+import { ROW_LINE } from '../../tokens';
 
 const RevisionCard = ({ revision, onClick, isSelected }) => {
   const { t } = useTranslation();
   const { dietSummaryId } = useParams();
-  const [expanded, setExpanded] = useState(false);
 
-  // Lazy loading - pobierz pełne dane dopiero gdy karta jest wybrana
+  // Lazy loading – pełne dane tylko dla rozwiniętej rewizji
   const { data: fullRevision, isLoading: isLoadingDetails } = useRevisionDetails(
     dietSummaryId,
-    isSelected ? revision.revisionNumber : null // Pobieraj tylko gdy wybrana
+    isSelected ? revision.revisionNumber : null
   );
 
   const typeInfo = formatRevisionType(revision.revisionType);
   const timeInfo = formatTimestamp(revision.revisionTimestamp);
-
-  const handleExpandClick = (e) => {
-    e.stopPropagation();
-    setExpanded(!expanded);
-  };
-
-  // Używamy pełnych danych jeśli są dostępne, w przeciwnym razie podstawowych
   const dietSummary = fullRevision?.dietSummary;
   const meals = dietSummary?.meals || [];
-  const hasFullData = !!dietSummary;
 
   return (
-    <Card
-      onClick={onClick}
-      elevation={isSelected ? 12 : 6}
+    <Box
       sx={{
-        borderRadius: 3,
-        cursor: 'pointer',
-        transition: 'all 0.3s ease',
-        background: isSelected
-          ? 'linear-gradient(145deg, #243441 0%, #2d4a5a 100%)'
-          : 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-        border: isSelected ? `2px solid ${typeInfo.color}` : '1px solid rgba(255, 255, 255, 0.1)',
-        position: 'relative',
-        overflow: 'visible',
-        '&:hover': {
-          transform: 'translateY(-4px)',
-          boxShadow: `0 8px 24px ${alpha(typeInfo.color, 0.3)}`,
-          border: `2px solid ${alpha(typeInfo.color, 0.6)}`,
-        },
-        '&::before': isSelected
-          ? {
-              content: '""',
-              position: 'absolute',
-              top: -2,
-              left: -2,
-              right: -2,
-              bottom: -2,
-              background: `linear-gradient(45deg, ${alpha(typeInfo.color, 0.3)}, transparent)`,
-              borderRadius: 3,
-              zIndex: -1,
-              filter: 'blur(10px)',
-            }
-          : {},
+        borderTop: ROW_LINE,
+        '&:first-of-type': { borderTop: 0 },
+        bgcolor: isSelected ? 'primaryTint.subtle' : 'transparent',
       }}
     >
-      <CardContent sx={{ p: 3 }}>
-        {/* Header */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 3 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box
-              sx={{
-                fontSize: '2.5rem',
-                filter: `drop-shadow(0 0 8px ${alpha(typeInfo.color, 0.6)})`,
-                transition: 'all 0.3s ease',
-              }}
-            >
-              {typeInfo.icon}
-            </Box>
-
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: '700', color: 'white' }}>
-                {t('audit.revisionNo', { number: revision.revisionNumber })}
-              </Typography>
-              <Chip
-                label={typeInfo.label}
-                size="small"
-                sx={{
-                  mt: 0.5,
-                  backgroundColor: typeInfo.bgColor,
-                  color: typeInfo.color,
-                  fontWeight: 600,
-                  border: `1px solid ${alpha(typeInfo.color, 0.3)}`,
-                  fontSize: '0.75rem',
-                }}
-              />
-            </Box>
-          </Box>
-
-          <Box sx={{ textAlign: 'right' }}>
-            <Typography
-              variant="body2"
-              sx={{ color: 'rgba(255, 255, 255, 0.9)', fontWeight: '600', mb: 0.5 }}
-            >
-              {timeInfo.time}
-            </Typography>
-            <Chip
-              label={timeInfo.relative}
-              size="small"
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontSize: '0.7rem',
-                height: '20px',
-              }}
-            />
-          </Box>
+      <ButtonBase
+        onClick={onClick}
+        aria-expanded={isSelected}
+        sx={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
+          px: 2,
+          py: 1.25,
+          textAlign: 'left',
+          '&:hover': { bgcolor: isSelected ? 'primaryTint.selected' : 'surface.hoverStrong' },
+        }}
+      >
+        <AccentIcon accent={typeInfo.accent} Icon={typeInfo.Icon} size={32} />
+        <Box sx={{ flex: 1, minWidth: 0 }}>
+          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+            {t('audit.revisionNo', { number: revision.revisionNumber })}
+          </Typography>
+          <Typography variant="caption" sx={{ color: typeInfo.accent.light }}>
+            {typeInfo.label}
+          </Typography>
         </Box>
+        <Box sx={{ textAlign: 'right', flexShrink: 0 }}>
+          <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums' }}>
+            {timeInfo.time}
+          </Typography>
+          <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            {timeInfo.relative}
+          </Typography>
+        </Box>
+        <ExpandMoreIcon
+          fontSize="small"
+          sx={{
+            color: 'text.secondary',
+            transform: isSelected ? 'rotate(180deg)' : 'none',
+            transition: 'transform .2s',
+          }}
+        />
+      </ButtonBase>
 
-        {/* Loading State lub Macros Summary */}
-        {isSelected && isLoadingDetails ? (
-          <Card
-            elevation={0}
-            sx={{
-              background: 'rgba(0, 0, 0, 0.2)',
-              borderRadius: 2,
-              mb: 3,
-              p: 2,
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 2,
-                py: 3,
-              }}
-            >
-              <CircularProgress size={24} sx={{ color: '#4caf50' }} />
-              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                {t('audit.loadingDetails')}
+      <Collapse in={isSelected} timeout="auto" unmountOnExit>
+        <Box sx={{ px: 2, pb: 2, pt: 0.5 }}>
+          {isLoadingDetails || !dietSummary ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, py: 2 }}>
+              {isLoadingDetails && <CircularProgress size={18} />}
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                {isLoadingDetails ? t('audit.loadingDetails') : t('audit.clickToSee')}
               </Typography>
             </Box>
-          </Card>
-        ) : isSelected && hasFullData ? (
-          <>
-            {/* Macros Summary - pokazuj tylko gdy mamy pełne dane */}
-            <Card
-              elevation={0}
-              sx={{
-                background: 'rgba(0, 0, 0, 0.2)',
-                borderRadius: 2,
-                mb: 3,
-                border: '1px solid rgba(255, 255, 255, 0.05)',
-              }}
-            >
-              <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-                <Grid container spacing={2}>
-                  <Grid size={3}>
-                    <MacroDisplay
-                      label={t('audit.calories')}
-                      value={dietSummary.kcal}
-                      unit="kcal"
-                      color="#ff9800"
-                    />
-                  </Grid>
-                  <Grid size={3}>
-                    <MacroDisplay
-                      label={t('food.protein')}
-                      value={dietSummary.protein}
-                      unit="g"
-                      color="#2196f3"
-                    />
-                  </Grid>
-                  <Grid size={3}>
-                    <MacroDisplay
-                      label={t('food.carbs')}
-                      value={dietSummary.carbohydrates}
-                      unit="g"
-                      color="#4caf50"
-                    />
-                  </Grid>
-                  <Grid size={3}>
-                    <MacroDisplay
-                      label={t('food.fat')}
-                      value={dietSummary.fat}
-                      unit="g"
-                      color="#fdd835"
-                    />
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+          ) : (
+            <>
+              <MacroTiles
+                t={t}
+                render={(key, unit, color) => (
+                  <MacroValue value={dietSummary[key]} unit={unit} color={color} />
+                )}
+              />
 
-            {/* Footer Info */}
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                pb: expanded ? 2 : 0,
-                borderBottom: expanded ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <LocalDiningIcon sx={{ fontSize: 18, color: 'rgba(255, 255, 255, 0.6)' }} />
-                <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  flexWrap: 'wrap',
+                  gap: 1,
+                  mt: 2,
+                  mb: 1,
+                }}
+              >
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   {t('audit.mealsCount', { count: meals.length })}
+                </Typography>
+                <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                  {t('audit.dietDate')}:{' '}
+                  <Box component="span" sx={{ color: 'text.primary' }}>
+                    {dietSummary.date}
+                  </Box>
                 </Typography>
               </Box>
 
-              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                {t('audit.dietDate')}:{' '}
-                <strong style={{ color: 'white' }}>{dietSummary.date}</strong>
-              </Typography>
-
-              {meals.length > 0 && (
-                <IconButton
-                  onClick={handleExpandClick}
+              {meals.map((meal, index) => (
+                <Box
+                  key={meal.id || index}
                   sx={{
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    },
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    justifyContent: 'space-between',
+                    gap: 2,
+                    py: 0.75,
+                    borderTop: ROW_LINE,
                   }}
                 >
-                  <ExpandMoreIcon />
-                </IconButton>
-              )}
-            </Box>
-
-            {/* Expandable Meals Preview */}
-            {meals.length > 0 && (
-              <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <Box sx={{ mt: 2, pt: 2 }}>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color: 'rgba(255, 255, 255, 0.6)',
-                      mb: 2,
-                      display: 'block',
-                      textTransform: 'uppercase',
-                      letterSpacing: 1,
-                      fontWeight: 600,
-                    }}
-                  >
-                    {t('audit.mealsList')}
+                  <Typography variant="body2" sx={{ minWidth: 0 }} noWrap>
+                    {meal.name}
+                    <Typography
+                      component="span"
+                      variant="caption"
+                      sx={{ color: 'text.secondary', ml: 1 }}
+                    >
+                      {meal.portionMultiplier}×
+                    </Typography>
                   </Typography>
-
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                    {meals.map((meal, index) => (
-                      <MealCard key={meal.id || index} meal={meal} index={index} />
-                    ))}
-                  </Box>
+                  <MacroInline
+                    t={t}
+                    kcal={meal.cachedKcal}
+                    protein={meal.cachedProtein}
+                    carbohydrates={meal.cachedCarbohydrates}
+                    fat={meal.cachedFat}
+                  />
                 </Box>
-              </Collapse>
-            )}
-          </>
-        ) : isSelected ? (
-          <Card
-            elevation={0}
-            sx={{
-              background: 'rgba(0, 0, 0, 0.2)',
-              borderRadius: 2,
-              mb: 3,
-              p: 2,
-            }}
-          >
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }} align="center">
-              {t('audit.clickToSee')}
-            </Typography>
-          </Card>
-        ) : (
-          <Card
-            elevation={0}
-            sx={{
-              background: 'rgba(0, 0, 0, 0.2)',
-              borderRadius: 2,
-              mb: 3,
-              p: 2,
-            }}
-          >
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.6)' }} align="center">
-              {t('audit.clickToSee')}
-            </Typography>
-          </Card>
-        )}
-      </CardContent>
-    </Card>
-  );
-};
-
-// Helper Components
-const MacroDisplay = ({ label, value, unit, color }) => (
-  <Box sx={{ textAlign: 'center' }}>
-    <Typography
-      variant="caption"
-      sx={{
-        color: 'rgba(255, 255, 255, 0.6)',
-        mb: 0.5,
-        display: 'block',
-        textTransform: 'uppercase',
-        fontSize: '0.65rem',
-        letterSpacing: 0.5,
-      }}
-    >
-      {label}
-    </Typography>
-    <Typography variant="h6" sx={{ fontWeight: '700', color, lineHeight: 1 }}>
-      {value.toFixed(1)}
-    </Typography>
-    <Typography
-      component="span"
-      variant="caption"
-      sx={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '0.65rem' }}
-    >
-      {unit}
-    </Typography>
-  </Box>
-);
-
-const MealCard = ({ meal, index }) => {
-  const { t } = useTranslation();
-  return (
-    <Card
-      elevation={0}
-      sx={{
-        background: 'rgba(255, 255, 255, 0.05)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        borderRadius: 2,
-      }}
-    >
-      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-              <Chip
-                label={`#${index + 1}`}
-                size="small"
-                sx={{
-                  height: '20px',
-                  fontSize: '0.7rem',
-                  backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                  color: '#4caf50',
-                  fontWeight: 700,
-                }}
-              />
-              <Typography variant="body2" sx={{ color: 'white', fontWeight: '600' }}>
-                {meal.name}
-              </Typography>
-            </Box>
-
-            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              {t('audit.portion')}: {meal.portionMultiplier}x
-            </Typography>
-          </Box>
-
-          <Box sx={{ textAlign: 'right' }}>
-            <Typography variant="h6" sx={{ fontWeight: '700', color: '#ff9800' }}>
-              {meal.cachedKcal.toFixed(0)}
-            </Typography>
-            <Typography variant="caption" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-              kcal
-            </Typography>
-          </Box>
+              ))}
+            </>
+          )}
         </Box>
-      </CardContent>
-    </Card>
+      </Collapse>
+    </Box>
   );
 };
 

@@ -23,20 +23,19 @@ import { localeOf, typeGroup, typeLabel } from './trainingWeeks';
 import { averageWeight } from '../component/sets';
 import SetPills from '../component/SetPills';
 import WeightDelta from '../component/WeightDelta';
-
-const ROW_LINE = '1px solid rgba(255,255,255,0.06)';
+import { ROW_LINE } from '../../tokens';
 
 // Wartości ExerciseProgress z backendu ("Zwiększyć" / "Zostawić").
 const PROGRESS_STYLES = {
   Zwiększyć: {
     key: 'increase',
     icon: <TrendingUp sx={{ fontSize: 14 }} />,
-    sx: { bgcolor: 'rgba(29, 158, 117, 0.18)', color: '#5DCAA5' },
+    sx: { bgcolor: 'status.doneBg', color: 'status.done' },
   },
   Zostawić: {
     key: 'keep',
     icon: <TrendingFlat sx={{ fontSize: 14 }} />,
-    sx: { bgcolor: 'rgba(255,255,255,0.06)', color: 'text.secondary' },
+    sx: { bgcolor: 'surface.chip', color: 'text.secondary' },
   },
 };
 
@@ -56,7 +55,7 @@ function ProgressTag({ progress }) {
         borderRadius: 1.5,
         fontSize: 12,
         whiteSpace: 'nowrap',
-        ...(style?.sx ?? { bgcolor: 'rgba(255,255,255,0.06)', color: 'text.secondary' }),
+        ...(style?.sx ?? { bgcolor: 'surface.chip', color: 'text.secondary' }),
       }}
     >
       {style?.icon}
@@ -154,9 +153,9 @@ export default function SingleTraining({ training }) {
           pr: 2,
           py: 1,
           textAlign: 'left',
-          bgcolor: isOpen ? 'rgba(144, 202, 249, 0.06)' : 'transparent',
+          bgcolor: isOpen ? 'primaryTint.subtle' : 'transparent',
           transition: 'background-color 150ms',
-          '&:hover': { bgcolor: isOpen ? 'rgba(144, 202, 249, 0.08)' : 'rgba(255,255,255,0.03)' },
+          '&:hover': { bgcolor: isOpen ? 'primaryTint.selected' : 'surface.hoverStrong' },
         }}
       >
         <Box

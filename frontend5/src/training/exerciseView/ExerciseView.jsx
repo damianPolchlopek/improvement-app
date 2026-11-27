@@ -18,16 +18,15 @@ import { History } from '@mui/icons-material';
 import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, ROW_LINE, SURFACE, surfaceSx } from '../../tokens';
 import TrainingTypeChips from '../component/TrainingTypeChips';
 import SetPills from '../component/SetPills';
 import WeightDelta from '../component/WeightDelta';
 import { localeOf, typeLabel } from '../trainingView/trainingWeeks';
 import { DATE_FORMAT } from '../component/trainingTableSx';
 
-const ROW_LINE = '1px solid rgba(255,255,255,0.06)';
 // Nieprzezroczyste tło (≈ tło karty na tle strony) – kolumna daty przykleja się przy przewijaniu.
-const STICKY_BG = '#1c2a33';
+const STICKY_BG = SURFACE.sticky;
 
 const tableSx = {
   '& .MuiTableCell-root': {
@@ -46,7 +45,7 @@ const tableSx = {
   },
   '& .MuiTableBody-root .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 },
   '& .MuiTableBody-root .MuiTableRow-root:hover .MuiTableCell-root': {
-    bgcolor: 'rgba(255,255,255,0.02)',
+    bgcolor: 'surface.hover',
   },
   '& .MuiTableCell-root.sticky-col': {
     position: 'sticky',

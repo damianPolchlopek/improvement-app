@@ -6,7 +6,7 @@ import { Login as LoginIcon } from '@mui/icons-material';
 import { useInput } from './hooks/useInput';
 import Input from './Input';
 import AuthCard from './AuthCard';
-import { HAIRLINE } from '../food/component/foodStyles';
+import { HAIRLINE } from '../tokens';
 import { redirect, Form, Link as RouterLink, useActionData, useNavigation } from 'react-router-dom';
 import { setTokens } from './Authentication';
 import { HomeViewUrl, SignUpUrl } from '../utils/URLHelper';
@@ -253,9 +253,9 @@ export default function LoginView() {
         sx={{
           textTransform: 'none',
           color: 'text.primary',
-          borderColor: 'rgba(255,255,255,0.16)',
-          bgcolor: 'rgba(0,0,0,0.18)',
-          '&:hover': { borderColor: 'rgba(255,255,255,0.32)', bgcolor: 'rgba(255,255,255,0.04)' },
+          borderColor: 'line.strong',
+          bgcolor: 'surface.field',
+          '&:hover': { borderColor: 'rgba(255,255,255,0.32)', bgcolor: 'surface.subtle' },
         }}
         onClick={() =>
           (window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`)

@@ -14,7 +14,7 @@ export default function SearchField({ value, onChange, placeholder, sx }) {
       onChange={(event) => onChange(event.target.value)}
       sx={{
         width: { xs: '100%', sm: 300 },
-        '& .MuiInputBase-root': { bgcolor: 'rgba(0,0,0,0.18)' },
+        '& .MuiInputBase-root': { bgcolor: 'surface.field' },
         ...sx,
       }}
       slotProps={{

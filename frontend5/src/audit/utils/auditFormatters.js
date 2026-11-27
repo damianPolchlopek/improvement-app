@@ -1,6 +1,14 @@
 // features/diet-audit/utils/auditFormatters.js
 
+import {
+  Add as AddIcon,
+  DeleteOutlined as DeleteIcon,
+  Edit as EditIcon,
+  HelpOutlined as HelpIcon,
+} from '@mui/icons-material';
+
 import i18n from '../../language/i18n';
+import { ACCENTS } from '../../tokens';
 
 const localeMap = { pl: 'pl-PL', en: 'en-US' };
 const currentLocale = () => localeMap[i18n.language] || 'en-US';
@@ -44,36 +52,18 @@ const getRelativeTime = (date) => {
   return date.toLocaleDateString(currentLocale());
 };
 
-export const formatRevisionType = (type) => {
-  const types = {
-    ADD: {
-      label: i18n.t('audit.added'),
-      color: '#4caf50',
-      icon: '➕',
-      bgColor: 'rgba(76, 175, 80, 0.1)',
-    },
-    MOD: {
-      label: i18n.t('audit.modified'),
-      color: '#2196f3',
-      icon: '✏️',
-      bgColor: 'rgba(33, 150, 243, 0.1)',
-    },
-    DEL: {
-      label: i18n.t('audit.removed'),
-      color: '#f44336',
-      icon: '🗑️',
-      bgColor: 'rgba(244, 67, 54, 0.1)',
-    },
-  };
+// Typy rewizji: kolor z palety akcentów (`accent.dot/bg/text/light`) i ikona MUI.
+// Dodano = teal, zmieniono = blue, usunięto = coral – te same kolory w całym module.
+export const REVISION_TYPES = {
+  ADD: { labelKey: 'audit.added', accent: ACCENTS.teal, Icon: AddIcon },
+  MOD: { labelKey: 'audit.modified', accent: ACCENTS.blue, Icon: EditIcon },
+  DEL: { labelKey: 'audit.removed', accent: ACCENTS.coral, Icon: DeleteIcon },
+};
 
-  return (
-    types[type] || {
-      label: type,
-      color: 'rgba(255, 255, 255, 0.7)',
-      icon: '❓',
-      bgColor: 'rgba(255, 255, 255, 0.05)',
-    }
-  );
+export const formatRevisionType = (type) => {
+  const info = REVISION_TYPES[type];
+  if (!info) return { label: type, accent: ACCENTS.gray, Icon: HelpIcon };
+  return { label: i18n.t(info.labelKey), accent: info.accent, Icon: info.Icon };
 };
 
 export const formatMacroChange = (value) => {
@@ -81,8 +71,9 @@ export const formatMacroChange = (value) => {
   return `${sign}${value.toFixed(1)}`;
 };
 
+// Ścieżka palety do `sx`: wzrost / spadek / bez zmian.
 export const getMacroChangeColor = (value) => {
-  if (value > 0) return '#4caf50'; // green
-  if (value < 0) return '#f44336'; // red
-  return 'rgba(255, 255, 255, 0.7)'; // gray
+  if (value > 0) return 'status.up';
+  if (value < 0) return 'status.down';
+  return 'text.secondary';
 };

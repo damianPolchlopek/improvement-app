@@ -32,7 +32,8 @@ import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import MacroBar from '../foodView/MacroBar';
 import { MACRO_COLORS, formatMacro } from '../foodView/macroColors';
-import { foodTableSx, SURFACE_BG, HAIRLINE } from '../component/foodStyles';
+import { foodTableSx } from '../component/foodStyles';
+import { HAIRLINE, SURFACE, dialogPaperSx } from '../../tokens';
 
 function MacroCell({ value, macro, unit = 'g', strong = false }) {
   return (
@@ -168,7 +169,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                 my: 1.5,
                 ml: { md: 7 },
                 borderRadius: 2,
-                bgcolor: 'rgba(0,0,0,0.15)',
+                bgcolor: 'surface.inset',
                 border: HAIRLINE,
                 overflow: 'hidden',
               }}
@@ -215,7 +216,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
         fullWidth
         slotProps={{
           paper: {
-            sx: { borderRadius: 3, bgcolor: '#17252f', backgroundImage: 'none', border: HAIRLINE },
+            sx: dialogPaperSx,
           },
         }}
       >
@@ -229,7 +230,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
             {t('food.deleteConfirmation')}
           </Typography>
 
-          <Box sx={{ p: 1.5, bgcolor: SURFACE_BG, borderRadius: 2, border: HAIRLINE }}>
+          <Box sx={{ p: 1.5, bgcolor: SURFACE.card, borderRadius: 2, border: HAIRLINE }}>
             <Typography variant="body2">
               {t('food.date')}: <strong>{formattedDate}</strong>
             </Typography>

@@ -20,7 +20,7 @@ import { Check, DeleteOutlined, EventBusy } from '@mui/icons-material';
 import REST, { queryClient } from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
-import { surfaceSx, HAIRLINE } from '../../food/component/foodStyles';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 import ConfirmDeleteDialog from '../component/ConfirmDeleteDialog';
 import { DAILY_HABITS, otherTableSx, parseApiDate } from '../component/otherStyles';
 
@@ -147,7 +147,7 @@ export default function DailyPrintout({ query, page, size, onPageChange, onSizeC
                       align="right"
                       sx={{
                         fontVariantNumeric: 'tabular-nums',
-                        color: score === DAILY_HABITS.length ? '#5DCAA5' : 'text.secondary',
+                        color: score === DAILY_HABITS.length ? 'status.done' : 'text.secondary',
                         fontWeight: score === DAILY_HABITS.length ? 500 : 400,
                       }}
                     >

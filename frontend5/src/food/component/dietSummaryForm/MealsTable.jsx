@@ -4,7 +4,8 @@ import { Box, Table, TableBody, TableContainer } from '@mui/material';
 
 import MealFilter from './MealFilter';
 import MealCategoryRow from './MealCategoryRow';
-import { surfaceSx, foodTableSx, HAIRLINE } from '../foodStyles';
+import { foodTableSx } from '../foodStyles';
+import { HAIRLINE, surfaceSx } from '../../../tokens';
 
 // components/MealTable/
 // ├── MealCategoryRow.jsx     (pojedyncza kategoria posiłków)

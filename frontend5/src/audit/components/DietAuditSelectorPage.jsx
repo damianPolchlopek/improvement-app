@@ -3,64 +3,39 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useDietSummaries } from '../hooks/useDietSummaries';
-
 import {
   Box,
-  Container,
-  Typography,
-  Card,
-  CardContent,
-  TextField,
+  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
   TablePagination,
-  Chip,
-  useTheme,
-  InputAdornment,
-  IconButton,
+  TableRow,
   Tooltip,
+  Typography,
 } from '@mui/material';
+import { ChevronRight, History as HistoryIcon } from '@mui/icons-material';
 
-import {
-  History as HistoryIcon,
-  Search as SearchIcon,
-  Visibility as VisibilityIcon,
-  CalendarToday as CalendarIcon,
-  Restaurant as RestaurantIcon,
-} from '@mui/icons-material';
-
-import Grid from '@mui/material/Grid';
-
+import { useDietSummaries } from '../hooks/useDietSummaries';
 import PageLoader from '../../component/loader/PageLoader';
 import ErrorAlert from '../../component/error/ErrorAlert';
+import FoodPageHeader from '../../food/component/FoodPageHeader';
+import SearchField from '../../food/component/SearchField';
+import { MACRO_COLORS, formatMacro } from '../../food/foodView/macroColors';
+import { HAIRLINE, calmTableSx, surfaceSx } from '../../tokens';
+
+const numberCell = { fontVariantNumeric: 'tabular-nums' };
 
 const DietAuditSelectorPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const theme = useTheme();
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
 
   const { data, isLoading, isError, error } = useDietSummaries(page, size);
-
-  const handleViewAudit = (dietSummaryId) => {
-    navigate(`/app/audit/${dietSummaryId}`);
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeSize = (event) => {
-    setSize(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   if (isLoading) {
     return <PageLoader text={t('audit.loadingSummaries')} />;
@@ -74,277 +49,122 @@ const DietAuditSelectorPage = () => {
     item.date.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const openAudit = (dietSummaryId) => navigate(`/app/audit/${dietSummaryId}`);
+
   return (
-    <Box sx={{ py: 4, minHeight: '100vh' }}>
-      <Container maxWidth="xl" sx={{ width: '70%' }}>
-        {/* Header Section */}
-        <Grid container spacing={3}>
-          <Grid size={12}>
-            <Card
-              elevation={8}
-              sx={{
-                borderRadius: 4,
-                background: theme.palette.card.header,
-                color: 'white',
-                mb: 4,
-                overflow: 'hidden',
-                border: theme.palette.card.border,
-              }}
-            >
-              <CardContent sx={{ p: 4 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-                  <HistoryIcon sx={{ fontSize: 40 }} />
-                  <Box>
-                    <Typography variant="h3" sx={{ fontWeight: '700', mb: 1 }}>
-                      {t('audit.title')}
-                    </Typography>
-                    <Typography variant="h6" sx={{ opacity: 0.9 }}>
-                      {t('audit.titleDesc')}
-                    </Typography>
-                  </Box>
-                </Box>
+    <Box sx={{ py: 3, px: 2, maxWidth: 1100, mx: 'auto' }}>
+      <FoodPageHeader
+        icon={<HistoryIcon />}
+        title={t('audit.title')}
+        description={t('audit.titleDesc')}
+        statLabel={t('audit.summariesList')}
+        statValue={data?.totalElements ?? 0}
+        actions={
+          <SearchField
+            value={searchTerm}
+            onChange={setSearchTerm}
+            placeholder={t('audit.searchByDate')}
+          />
+        }
+      />
 
-                <Box sx={{ display: 'flex', gap: 3, mt: 3 }}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <RestaurantIcon sx={{ fontSize: 20 }} />
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                      {t('audit.summariesCount', { count: data?.totalElements || 0 })}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <VisibilityIcon sx={{ fontSize: 20 }} />
-                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
-                      {t('audit.historyAvailable')}
-                    </Typography>
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
+      <Box sx={surfaceSx}>
+        <TableContainer>
+          <Table size="small" sx={calmTableSx}>
+            <TableHead>
+              <TableRow>
+                <TableCell>{t('audit.date')}</TableCell>
+                <TableCell align="right">{t('audit.calories')}</TableCell>
+                <TableCell align="right">{t('food.protein')}</TableCell>
+                <TableCell align="right">{t('food.carbs')}</TableCell>
+                <TableCell align="right">{t('food.fat')}</TableCell>
+                <TableCell align="right">{t('audit.meals')}</TableCell>
+                <TableCell padding="checkbox" />
+              </TableRow>
+            </TableHead>
 
-          {/* Search Bar */}
-          <Grid size={12}>
-            <Card
-              elevation={6}
-              sx={{
-                borderRadius: 3,
-                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-            >
-              <CardContent sx={{ p: 3 }}>
-                <TextField
-                  fullWidth
-                  placeholder={t('audit.searchByDate')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  sx={{
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 2,
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: 'white',
-                      '& fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.3)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: '#4caf50',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: '#4caf50',
-                      },
-                    },
-                  }}
-                  slotProps={{
-                    input: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.5)' }} />
-                        </InputAdornment>
-                      ),
-                    },
-                  }}
-                />
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Table */}
-          <Grid size={12}>
-            <Card
-              elevation={8}
-              sx={{
-                borderRadius: 4,
-                overflow: 'hidden',
-                background: 'linear-gradient(145deg, #1a2e3d 0%, #243441 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-              }}
-            >
-              {/* Table Header */}
-              <Box
-                sx={{
-                  p: 3,
-                  background: theme.palette.card.header,
-                  borderBottom: theme.palette.card.border,
-                }}
-              >
-                <Typography variant="h5" sx={{ fontWeight: '600', color: 'white' }}>
-                  {t('audit.summariesList')}
-                </Typography>
-              </Box>
-
-              {/* Table Content */}
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow
-                      sx={{
-                        '& th': {
-                          backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                          color: 'rgba(255, 255, 255, 0.9)',
-                          fontWeight: 600,
-                          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                        },
-                      }}
+            <TableBody>
+              {filteredData && filteredData.length > 0 ? (
+                filteredData.map((dietSummary) => (
+                  <TableRow
+                    key={dietSummary.id}
+                    hover
+                    onClick={() => openAudit(dietSummary.id)}
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    <TableCell>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        {dietSummary.date}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        #{dietSummary.id}
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ ...numberCell, color: MACRO_COLORS.kcal.text, fontWeight: 500 }}
                     >
-                      <TableCell>ID</TableCell>
-                      <TableCell>{t('audit.date')}</TableCell>
-                      <TableCell align="right">{t('audit.calories')}</TableCell>
-                      <TableCell align="right">{t('food.protein')}</TableCell>
-                      <TableCell align="right">{t('food.carbs')}</TableCell>
-                      <TableCell align="right">{t('food.fat')}</TableCell>
-                      <TableCell align="center">{t('audit.meals')}</TableCell>
-                      <TableCell align="center">{t('food.actions')}</TableCell>
-                    </TableRow>
-                  </TableHead>
-
-                  <TableBody>
-                    {filteredData && filteredData.length > 0 ? (
-                      filteredData.map((dietSummary) => (
-                        <TableRow
-                          key={dietSummary.id}
-                          sx={{
-                            '&:hover': {
-                              backgroundColor: 'rgba(76, 175, 80, 0.05)',
-                            },
-                            '& td': {
-                              color: 'rgba(255, 255, 255, 0.9)',
-                              borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
-                            },
+                      {Math.round(dietSummary.kcal)}
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ ...numberCell, color: MACRO_COLORS.protein.text }}
+                    >
+                      {formatMacro(dietSummary.protein)} g
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ ...numberCell, color: MACRO_COLORS.carbohydrates.text }}
+                    >
+                      {formatMacro(dietSummary.carbohydrates)} g
+                    </TableCell>
+                    <TableCell align="right" sx={{ ...numberCell, color: MACRO_COLORS.fat.text }}>
+                      {formatMacro(dietSummary.fat)} g
+                    </TableCell>
+                    <TableCell align="right" sx={numberCell}>
+                      {dietSummary.meals.length}
+                    </TableCell>
+                    <TableCell padding="checkbox">
+                      <Tooltip title={t('audit.viewHistory')}>
+                        <IconButton
+                          size="small"
+                          aria-label={t('audit.viewHistory')}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            openAudit(dietSummary.id);
                           }}
                         >
-                          <TableCell>
-                            <Chip
-                              label={`#${dietSummary.id}`}
-                              size="small"
-                              sx={{
-                                backgroundColor: 'rgba(33, 150, 243, 0.2)',
-                                color: '#2196f3',
-                                fontWeight: 600,
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <CalendarIcon
-                                sx={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.5)' }}
-                              />
-                              {dietSummary.date}
-                            </Box>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: '600', color: '#ff9800' }}
-                            >
-                              {dietSummary.kcal.toFixed(0)}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography variant="body2" sx={{ color: '#2196f3' }}>
-                              {dietSummary.protein.toFixed(1)}g
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography variant="body2" sx={{ color: '#4caf50' }}>
-                              {dietSummary.carbohydrates.toFixed(1)}g
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography variant="body2" sx={{ color: '#fdd835' }}>
-                              {dietSummary.fat.toFixed(1)}g
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="center">
-                            <Chip
-                              label={dietSummary.meals.length}
-                              size="small"
-                              sx={{
-                                backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                                color: '#4caf50',
-                                fontWeight: 600,
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            <Tooltip title={t('audit.viewHistory')}>
-                              <IconButton
-                                onClick={() => handleViewAudit(dietSummary.id)}
-                                sx={{
-                                  color: '#4caf50',
-                                  '&:hover': {
-                                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                                  },
-                                }}
-                              >
-                                <HistoryIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={8} align="center" sx={{ py: 8 }}>
-                          <Typography variant="h6" sx={{ color: 'rgba(255, 255, 255, 0.5)' }}>
-                            {t('audit.noResults')}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                          <ChevronRight fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={7} align="center" sx={{ py: 6, color: 'text.secondary' }}>
+                    {t('audit.noResults')}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-              {/* Pagination */}
-              <Box
-                sx={{
-                  background: theme.palette.card.header,
-                  borderTop: theme.palette.card.border,
-                }}
-              >
-                <TablePagination
-                  component="div"
-                  count={data?.totalElements || 0}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={size}
-                  onRowsPerPageChange={handleChangeSize}
-                  rowsPerPageOptions={[5, 10, 25, 50]}
-                  sx={{
-                    color: 'white',
-                    '& .MuiTablePagination-selectIcon': {
-                      color: 'white',
-                    },
-                    '& .MuiTablePagination-actions button': {
-                      color: 'white',
-                    },
-                  }}
-                />
-              </Box>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
+        <TablePagination
+          component="div"
+          count={data?.totalElements || 0}
+          page={page}
+          onPageChange={(event, newPage) => setPage(newPage)}
+          rowsPerPage={size}
+          onRowsPerPageChange={(event) => {
+            setSize(parseInt(event.target.value, 10));
+            setPage(0);
+          }}
+          rowsPerPageOptions={[5, 10, 25, 50]}
+          sx={{ borderTop: HAIRLINE }}
+        />
+      </Box>
     </Box>
   );
 };

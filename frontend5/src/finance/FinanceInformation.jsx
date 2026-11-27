@@ -13,8 +13,8 @@ import {
 import { Info } from '@mui/icons-material';
 
 import FoodPageHeader from '../food/component/FoodPageHeader';
-import { surfaceSx, HAIRLINE } from '../food/component/foodStyles';
-import { financeTableSx, ROW_LINE } from './financeStyles';
+import { HAIRLINE, ROW_LINE, surfaceSx } from '../tokens';
+import { financeTableSx } from './financeStyles';
 
 const CYCLE_YEARS = ['2013', '2017', '2021'];
 const CYCLE_ROWS = [
@@ -101,7 +101,7 @@ export default function FinanceInformation() {
                   height: 22,
                   mt: 0.125,
                   borderRadius: '50%',
-                  bgcolor: 'rgba(144, 202, 249, 0.16)',
+                  bgcolor: 'primaryTint.strong',
                   color: 'primary.main',
                   fontSize: 11,
                   fontWeight: 600,
