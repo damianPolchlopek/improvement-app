@@ -18,7 +18,6 @@ import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
 import { HAIRLINE, surfaceSx } from '../../tokens';
-import { financeTableSx } from '../financeStyles';
 import CryptoPricesTableRow from './CryptoPricesTableRow';
 import { COIN_LIST } from './COIN_LIST';
 
@@ -126,7 +125,7 @@ export default function FinanceView() {
             </Box>
           ) : (
             <TableContainer>
-              <Table size="small" sx={financeTableSx}>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>

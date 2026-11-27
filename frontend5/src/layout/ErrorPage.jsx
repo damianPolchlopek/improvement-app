@@ -28,13 +28,13 @@ function ErrorPage() {
         />
       </Box>
       {/* <Navigator  /> */}
-      <main>
+      <Box component="main" sx={{ textAlign: 'center', '& pre': { textAlign: 'left' } }}>
         <h1>{t('errorPage.title')}</h1>
         <p>{message}</p>
         {error instanceof Error && error.stack && (
           <pre style={{ whiteSpace: 'pre-wrap', color: 'crimson' }}>{error.stack}</pre>
         )}
-      </main>
+      </Box>
     </>
   );
 }

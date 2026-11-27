@@ -1,7 +1,5 @@
 import React from 'react';
-import { TextField } from '@mui/material';
-import StyledTableCell from '../../../component/table/StyledTableCell';
-import StyledTableRow from '../../../component/table/StyledTableRow';
+import { TableCell, TableRow, TextField } from '@mui/material';
 
 export default function IngredientRow({ ingredient, ingredientAmount, onAmountChange }) {
   const handleAmountChange = (e) => {
@@ -10,9 +8,9 @@ export default function IngredientRow({ ingredient, ingredientAmount, onAmountCh
   };
 
   return (
-    <StyledTableRow>
-      <StyledTableCell>{ingredient.name}</StyledTableCell>
-      <StyledTableCell>
+    <TableRow>
+      <TableCell>{ingredient.name}</TableCell>
+      <TableCell>
         <TextField
           value={ingredientAmount}
           size="small"
@@ -27,8 +25,8 @@ export default function IngredientRow({ ingredient, ingredientAmount, onAmountCh
             },
           }}
         />
-      </StyledTableCell>
-      <StyledTableCell>{ingredient.unit}</StyledTableCell>
-    </StyledTableRow>
+      </TableCell>
+      <TableCell>{ingredient.unit}</TableCell>
+    </TableRow>
   );
 }

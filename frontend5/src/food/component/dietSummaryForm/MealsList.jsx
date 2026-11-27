@@ -2,9 +2,16 @@ import React from 'react';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import REST from '../../../utils/REST';
 import { useTranslation } from 'react-i18next';
-import { Box, Collapse, Skeleton, Table, TableBody, TableHead } from '@mui/material';
-import StyledTableCell from '../../../component/table/StyledTableCell';
-import StyledTableRow from '../../../component/table/StyledTableRow';
+import {
+  Box,
+  Collapse,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import MealRow from './MealRow';
 import { HAIRLINE } from '../../../tokens';
 
@@ -45,29 +52,29 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
 
   if (isLoading) {
     return (
-      <StyledTableRow>
-        <StyledTableCell colSpan={2} sx={{ px: 2 }}>
+      <TableRow>
+        <TableCell colSpan={2} sx={{ px: 2 }}>
           {[0, 1, 2].map((i) => (
             <Skeleton key={i} height={36} />
           ))}
-        </StyledTableCell>
-      </StyledTableRow>
+        </TableCell>
+      </TableRow>
     );
   }
 
   if (isError) {
     return (
-      <StyledTableRow>
-        <StyledTableCell colSpan={2} align="center">
+      <TableRow>
+        <TableCell colSpan={2} align="center">
           {t('food.errorLoadingMeals')}
-        </StyledTableCell>
-      </StyledTableRow>
+        </TableCell>
+      </TableRow>
     );
   }
 
   return (
-    <StyledTableRow>
-      <StyledTableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
+    <TableRow>
+      <TableCell sx={{ paddingBottom: 0, paddingTop: 0 }} colSpan={2}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <Box
             sx={{
@@ -81,24 +88,24 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
           >
             <Table size="small">
               <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell padding="checkbox"></StyledTableCell>
-                  <StyledTableCell padding="checkbox"></StyledTableCell>
-                  <StyledTableCell>{t('food.name')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('food.kcal')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('food.protein')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('food.carbs')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('food.fat')}</StyledTableCell>
-                  <StyledTableCell align="right">{t('food.amount')}</StyledTableCell>
-                </StyledTableRow>
+                <TableRow>
+                  <TableCell padding="checkbox"></TableCell>
+                  <TableCell padding="checkbox"></TableCell>
+                  <TableCell>{t('food.name')}</TableCell>
+                  <TableCell align="right">{t('food.kcal')}</TableCell>
+                  <TableCell align="right">{t('food.protein')}</TableCell>
+                  <TableCell align="right">{t('food.carbs')}</TableCell>
+                  <TableCell align="right">{t('food.fat')}</TableCell>
+                  <TableCell align="right">{t('food.amount')}</TableCell>
+                </TableRow>
               </TableHead>
               <TableBody>
                 {mealList.length === 0 ? (
-                  <StyledTableRow>
-                    <StyledTableCell colSpan={8} align="center">
+                  <TableRow>
+                    <TableCell colSpan={8} align="center">
                       {t('food.noMealsFound')}
-                    </StyledTableCell>
-                  </StyledTableRow>
+                    </TableCell>
+                  </TableRow>
                 ) : (
                   mealList.map((meal, index) => (
                     <MealRow
@@ -112,7 +119,7 @@ export default function MealsList({ isOpen, mealCategory, mealPopularity, search
             </Table>
           </Box>
         </Collapse>
-      </StyledTableCell>
-    </StyledTableRow>
+      </TableCell>
+    </TableRow>
   );
 }

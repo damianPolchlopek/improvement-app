@@ -4,7 +4,6 @@ import { Box, Table, TableBody, TableContainer } from '@mui/material';
 
 import MealFilter from './MealFilter';
 import MealCategoryRow from './MealCategoryRow';
-import { foodTableSx } from '../foodStyles';
 import { HAIRLINE, surfaceSx } from '../../../tokens';
 
 // components/MealTable/
@@ -43,7 +42,7 @@ export default function MealsTable() {
       <TableContainer>
         <Table
           aria-label="collapsible table"
-          sx={{ ...foodTableSx, minWidth: 700, width: '100%', tableLayout: 'fixed' }}
+          sx={{ minWidth: 700, width: '100%', tableLayout: 'fixed' }}
         >
           <TableBody>
             {MEAL_CATEGORIES.map((category) => (

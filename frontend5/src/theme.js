@@ -1,5 +1,5 @@
 import { alpha, createTheme } from '@mui/material/styles';
-import { ACCENTS, FONT_FAMILY, LINE_COLOR, STATUS, SURFACE } from './tokens';
+import { ACCENTS, FONT_FAMILY, HAIRLINE, LINE_COLOR, ROW_LINE, STATUS, SURFACE } from './tokens';
 
 // Jeden kolor przewodni aplikacji: przyciski, zaznaczenia, linki, wskaźnik w toolbarze.
 // Jasny odcień zieleni z palety akcentów – czytelny na ciemnym tle (przyciski dostają ciemny tekst).
@@ -190,25 +190,59 @@ theme = {
         },
       },
     },
+    // Płaska karta jak `surfaceSx`: cienka jasna ramka, bez nakładki elevation i bez cienia.
     MuiCard: {
       styleOverrides: {
         root: {
-          textAlign: 'center',
-          borderRadius: 16,
-          transition: 'all 0.3s ease',
-          border: '1px solid rgba(0,0,0,0.08)',
-          '&:hover': {
-            boxShadow: '0 8px 25px rgba(0,0,0,0.12)',
-          },
+          borderRadius: 12,
+          border: HAIRLINE,
+          backgroundImage: 'none',
         },
       },
     },
-    MuiChip: {
+    // Tabele: cienkie linie, nagłówek 12px, liczby o stałej szerokości cyfr – w całej aplikacji.
+    // Tabela z innymi odstępami nadpisuje je przez `sx` na <Table> ('& .MuiTableCell-root').
+    MuiTableCell: {
       styleOverrides: {
         root: {
-          fontWeight: 'bold',
-          fontSize: '0.9rem',
-          minWidth: 45,
+          padding: '9px 16px',
+          verticalAlign: 'middle',
+          borderBottom: ROW_LINE,
+          fontVariantNumeric: 'tabular-nums',
+        },
+        head: {
+          paddingTop: 8,
+          paddingBottom: 8,
+          fontSize: 12,
+          fontWeight: 500,
+          color: theme.palette.text.secondary,
+          whiteSpace: 'nowrap',
+          borderBottom: HAIRLINE,
+        },
+        // Przywracają odstępy MUI, które nadpisałby `root.padding`.
+        paddingCheckbox: {
+          width: 48,
+          padding: '0 0 0 4px',
+        },
+        paddingNone: {
+          padding: 0,
+        },
+      },
+    },
+    MuiTableBody: {
+      styleOverrides: {
+        root: {
+          '& .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 },
+          '& .MuiTableRow-root:hover .MuiTableCell-root': { backgroundColor: SURFACE.hover },
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          '&.Mui-selected, &.Mui-selected:hover': {
+            backgroundColor: theme.palette.primaryTint.selected,
+          },
         },
       },
     },
@@ -222,31 +256,6 @@ theme = {
     MuiDesktopDatePicker: {
       defaultProps: {
         inputFormat: 'DD/MM/YYYY',
-      },
-    },
-    MuiAlert: {
-      styleOverrides: {
-        root: {
-          marginBottom: '16px',
-          textAlign: 'center',
-        },
-        message: {
-          width: '100%',
-          textAlign: 'center',
-        },
-      },
-    },
-    MuiGrid: {
-      defaultProps: {
-        spacing: 3,
-      },
-      // MUI v9 usunął system props, więc justifyContent/alignItems w defaultProps
-      // byłyby ignorowane — te same domyślne wartości ustawiamy jako style
-      styleOverrides: {
-        root: {
-          justifyContent: 'center',
-          alignItems: 'center',
-        },
       },
     },
   },

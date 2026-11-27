@@ -32,7 +32,6 @@ import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import MacroBar from '../foodView/MacroBar';
 import { MACRO_COLORS, formatMacro } from '../foodView/macroColors';
-import { foodTableSx } from '../component/foodStyles';
 import { HAIRLINE, SURFACE, dialogPaperSx } from '../../tokens';
 
 function MacroCell({ value, macro, unit = 'g', strong = false }) {
@@ -174,7 +173,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
                 overflow: 'hidden',
               }}
             >
-              <Table size="small" sx={foodTableSx}>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>{t('food.name')}</TableCell>

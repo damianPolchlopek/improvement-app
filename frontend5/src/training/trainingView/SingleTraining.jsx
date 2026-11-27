@@ -23,7 +23,6 @@ import { localeOf, typeGroup, typeLabel } from './trainingWeeks';
 import { averageWeight } from '../component/sets';
 import SetPills from '../component/SetPills';
 import WeightDelta from '../component/WeightDelta';
-import { ROW_LINE } from '../../tokens';
 
 // Wartości ExerciseProgress z backendu ("Zwiększyć" / "Zostawić").
 const PROGRESS_STYLES = {
@@ -82,25 +81,12 @@ function PreviousWeightDelta({ exercise }) {
   return <WeightDelta current={exercise} previous={previous} />;
 }
 
-// Tabela ćwiczeń: kolumny wyrównane między wierszami, treść wyśrodkowana w pionie.
+// Tabela ćwiczeń: gęstsza niż domyślna z motywu i wyrównana do krawędzi rozwiniętego wiersza.
 const exerciseTableSx = {
-  '& .MuiTableCell-root': {
-    px: 1.5,
-    py: 0.9,
-    verticalAlign: 'middle',
-    lineHeight: 1.5,
-    borderBottom: ROW_LINE,
-  },
+  '& .MuiTableCell-root': { px: 1.5, py: 0.9, lineHeight: 1.5 },
   '& .MuiTableCell-root:first-of-type': { pl: 0 },
   '& .MuiTableCell-root:last-of-type': { pr: 0 },
-  '& .MuiTableCell-head': {
-    fontSize: 12,
-    fontWeight: 500,
-    color: 'text.secondary',
-    whiteSpace: 'nowrap',
-    py: 0.75,
-  },
-  '& .MuiTableBody-root .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 },
+  '& .MuiTableCell-head': { py: 0.75 },
 };
 
 // Jeden trening w tygodniu: etykieta dnia, typ, data i numer.

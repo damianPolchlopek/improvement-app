@@ -14,7 +14,6 @@ import { Info } from '@mui/icons-material';
 
 import FoodPageHeader from '../food/component/FoodPageHeader';
 import { HAIRLINE, ROW_LINE, surfaceSx } from '../tokens';
-import { financeTableSx } from './financeStyles';
 
 const CYCLE_YEARS = ['2013', '2017', '2021'];
 const CYCLE_ROWS = [
@@ -52,7 +51,7 @@ export default function FinanceInformation() {
       <Box component="section" sx={{ ...surfaceSx, mb: 3 }}>
         <SectionTitle>{t('finance.btcCycles')}</SectionTitle>
         <TableContainer>
-          <Table size="small" sx={financeTableSx}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell />

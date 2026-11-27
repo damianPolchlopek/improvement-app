@@ -20,7 +20,6 @@ import REST, { queryClient } from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import { HAIRLINE, surfaceSx } from '../../tokens';
 import ConfirmDeleteDialog from '../component/ConfirmDeleteDialog';
-import { otherTableSx } from '../component/otherStyles';
 
 // Rekordy wybranej kategorii – rekord po rekordzie, usuwanie z potwierdzeniem.
 export default function WeeklyRecordsTable({ records, category, isLoading }) {
@@ -77,7 +76,7 @@ export default function WeeklyRecordsTable({ records, category, isLoading }) {
         </Box>
       ) : (
         <TableContainer>
-          <Table size="small" sx={otherTableSx}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: 32 }}>#</TableCell>

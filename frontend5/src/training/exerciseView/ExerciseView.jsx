@@ -18,7 +18,7 @@ import { History } from '@mui/icons-material';
 import REST from '../../utils/REST';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
-import { HAIRLINE, ROW_LINE, SURFACE, surfaceSx } from '../../tokens';
+import { HAIRLINE, SURFACE, surfaceSx } from '../../tokens';
 import TrainingTypeChips from '../component/TrainingTypeChips';
 import SetPills from '../component/SetPills';
 import WeightDelta from '../component/WeightDelta';
@@ -28,25 +28,8 @@ import { DATE_FORMAT } from '../component/trainingTableSx';
 // Nieprzezroczyste tło (≈ tło karty na tle strony) – kolumna daty przykleja się przy przewijaniu.
 const STICKY_BG = SURFACE.sticky;
 
+// Odstępy i linie z motywu; tutaj tylko przyklejona kolumna daty.
 const tableSx = {
-  '& .MuiTableCell-root': {
-    px: 2,
-    py: 1.25,
-    verticalAlign: 'middle',
-    borderBottom: ROW_LINE,
-  },
-  '& .MuiTableCell-head': {
-    fontSize: 12,
-    fontWeight: 500,
-    color: 'text.secondary',
-    whiteSpace: 'nowrap',
-    py: 1,
-    borderBottom: HAIRLINE,
-  },
-  '& .MuiTableBody-root .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 },
-  '& .MuiTableBody-root .MuiTableRow-root:hover .MuiTableCell-root': {
-    bgcolor: 'surface.hover',
-  },
   '& .MuiTableCell-root.sticky-col': {
     position: 'sticky',
     left: 0,

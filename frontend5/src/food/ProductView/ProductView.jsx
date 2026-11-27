@@ -8,7 +8,6 @@ import REST from '../../utils/REST';
 import DataTable from '../../component/table/DataTable';
 import FoodPageHeader from '../component/FoodPageHeader';
 import SearchField from '../component/SearchField';
-import { foodTableSx } from '../component/foodStyles';
 import { surfaceSx } from '../../tokens';
 import { MACRO_COLORS, formatMacro } from '../foodView/macroColors';
 
@@ -190,10 +189,11 @@ export default function ProductView() {
           }}
           tableProps={{
             size: 'small',
+            // Wiersze produktów są klikalne – wyraźniejsze podświetlenie niż domyślne z motywu.
             sx: {
-              ...foodTableSx,
-              '& .MuiTableCell-root': { px: 2, py: 1.1 },
-              '& tbody .MuiTableRow-root:hover': { bgcolor: 'surface.hoverStrong' },
+              '& tbody .MuiTableRow-root:hover .MuiTableCell-root': {
+                bgcolor: 'surface.hoverStrong',
+              },
             },
           }}
         />

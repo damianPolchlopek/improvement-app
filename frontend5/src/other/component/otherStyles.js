@@ -1,4 +1,4 @@
-import { ACCENTS, calmTableSx } from '../../tokens';
+import { ACCENTS } from '../../tokens';
 
 // Nawyki dziennika z kolorami z palety akcentów.
 export const DAILY_HABITS = [
@@ -7,9 +7,6 @@ export const DAILY_HABITS = [
   { key: 'book', ...ACCENTS.amber },
   { key: 'software', ...ACCENTS.blue },
 ];
-
-// Spokojna tabela modułu other (wspólna definicja w src/tokens.js).
-export const otherTableSx = calmTableSx;
 
 // Wiersz "dd-MM-yyyy" z API -> Date (bez pluginu dayjs do parsowania formatów).
 export function parseApiDate(value) {

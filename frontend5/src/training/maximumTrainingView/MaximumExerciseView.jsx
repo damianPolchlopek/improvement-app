@@ -21,7 +21,7 @@ import { ACCENTS, surfaceSx } from '../../tokens';
 import TrainingTypeChips from '../component/TrainingTypeChips';
 import SetPills from '../component/SetPills';
 import { toSets } from '../component/sets';
-import { DATE_FORMAT, trainingTableSx } from '../component/trainingTableSx';
+import { DATE_FORMAT } from '../component/trainingTableSx';
 import { localeOf } from '../trainingView/trainingWeeks';
 
 const RECORD_COLOR = ACCENTS.coral.light;
@@ -71,7 +71,7 @@ export default function MaximumExerciseView() {
             </Box>
           ) : (
             <TableContainer>
-              <Table size="small" sx={trainingTableSx}>
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ width: 32 }}>#</TableCell>

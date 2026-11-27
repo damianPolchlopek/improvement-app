@@ -1,15 +1,15 @@
 import {
   Table,
   TableBody,
+  TableCell,
   TableContainer,
   TableHead,
+  TableRow,
   Paper,
   Box,
   CircularProgress,
   Typography,
 } from '@mui/material';
-import StyledTableRow from './StyledTableRow';
-import StyledTableCell from './StyledTableCell';
 import ErrorAlert from '../error/ErrorAlert';
 import { useTranslation } from 'react-i18next';
 
@@ -55,25 +55,22 @@ export default function DataTable({
     <TableContainer component={Paper} {...containerProps}>
       <Table aria-label="data table" {...tableProps}>
         <TableHead>
-          <StyledTableRow>
+          <TableRow>
             {columns.map((column, index) => (
-              <StyledTableCell
+              <TableCell
                 key={column.key || index}
                 align={column.align || 'left'}
                 sx={column.headerSx}
               >
                 {column.label}
-              </StyledTableCell>
+              </TableCell>
             ))}
-          </StyledTableRow>
+          </TableRow>
         </TableHead>
 
         <TableBody>
           {data.map((row, rowIndex) => (
-            <StyledTableRow
-              key={row.id || rowIndex}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
+            <TableRow key={row.id || rowIndex}>
               {columns.map((column, colIndex) => {
                 const cellValue = column.accessor
                   ? typeof column.accessor === 'function'
@@ -82,7 +79,7 @@ export default function DataTable({
                   : row[column.key];
 
                 return (
-                  <StyledTableCell
+                  <TableCell
                     key={column.key || colIndex}
                     align={column.align || 'left'}
                     sx={column.cellSx}
@@ -90,10 +87,10 @@ export default function DataTable({
                     style={{ cursor: onCellClick ? 'pointer' : 'default' }}
                   >
                     {column.render ? column.render(cellValue, row) : cellValue}
-                  </StyledTableCell>
+                  </TableCell>
                 );
               })}
-            </StyledTableRow>
+            </TableRow>
           ))}
         </TableBody>
       </Table>

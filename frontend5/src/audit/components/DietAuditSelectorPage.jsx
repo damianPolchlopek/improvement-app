@@ -24,7 +24,7 @@ import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../../food/component/FoodPageHeader';
 import SearchField from '../../food/component/SearchField';
 import { MACRO_COLORS, formatMacro } from '../../food/foodView/macroColors';
-import { HAIRLINE, calmTableSx, surfaceSx } from '../../tokens';
+import { HAIRLINE, surfaceSx } from '../../tokens';
 
 const numberCell = { fontVariantNumeric: 'tabular-nums' };
 
@@ -70,7 +70,7 @@ const DietAuditSelectorPage = () => {
 
       <Box sx={surfaceSx}>
         <TableContainer>
-          <Table size="small" sx={calmTableSx}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>{t('audit.date')}</TableCell>

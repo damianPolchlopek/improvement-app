@@ -1,8 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Collapse, Table, TableBody, TableHead } from '@mui/material';
-import StyledTableCell from '../../../component/table/StyledTableCell';
-import StyledTableRow from '../../../component/table/StyledTableRow';
+import { Box, Collapse, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import IngredientRow from './IngredientRow';
 
 export default function MealIngredientsTable({
@@ -18,17 +16,17 @@ export default function MealIngredientsTable({
   };
 
   return (
-    <StyledTableRow>
-      <StyledTableCell colSpan={8} sx={{ paddingBottom: 0, paddingTop: 0 }}>
+    <TableRow>
+      <TableCell colSpan={8} sx={{ paddingBottom: 0, paddingTop: 0 }}>
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <Box sx={{ ml: { xs: 0, md: 7 }, my: 1, maxWidth: 560 }}>
             <Table size="small">
               <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>{t('food.name')}</StyledTableCell>
-                  <StyledTableCell>{t('food.amount')}</StyledTableCell>
-                  <StyledTableCell>{t('food.unit')}</StyledTableCell>
-                </StyledTableRow>
+                <TableRow>
+                  <TableCell>{t('food.name')}</TableCell>
+                  <TableCell>{t('food.amount')}</TableCell>
+                  <TableCell>{t('food.unit')}</TableCell>
+                </TableRow>
               </TableHead>
               <TableBody>
                 {meal.ingredients.map((ingredient, idx) => {
@@ -51,7 +49,7 @@ export default function MealIngredientsTable({
             </Table>
           </Box>
         </Collapse>
-      </StyledTableCell>
-    </StyledTableRow>
+      </TableCell>
+    </TableRow>
   );
 }

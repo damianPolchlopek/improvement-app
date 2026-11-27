@@ -19,7 +19,6 @@ import { CheckCircleOutlined, RemoveShoppingCart } from '@mui/icons-material';
 import REST, { queryClient } from '../utils/REST';
 import { useSnackbar } from '../component/snackbar/SnackbarProvider';
 import { HAIRLINE, surfaceSx } from '../tokens';
-import { otherTableSx } from '../other/component/otherStyles';
 import { categoryColor } from './shoppingCategories';
 
 // Lista zakupów – produkt po produkcie. Kategoria pokazywana tylko w widoku "Wszystkie".
@@ -75,7 +74,7 @@ export default function ShoppingItemsTable({ items, showCategory, title, isLoadi
         </Box>
       ) : (
         <TableContainer>
-          <Table size="small" sx={otherTableSx}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell sx={{ width: 32 }}>#</TableCell>

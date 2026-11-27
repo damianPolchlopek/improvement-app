@@ -77,16 +77,21 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     w pełnym kolorze `SURFACE.card` (#213748), kafle `SURFACE.tile` – bez gradientów
     i przezroczystości.
     Czcionka: Arial (`FONT_FAMILY` w `tokens.js`, ta sama wartość w `index.css`) – bez ładowania
-    zewnętrznych fontów
+    zewnętrznych fontów. Tabele mają wspólny wygląd z motywu (`MuiTableCell` / `MuiTableBody` /
+    `MuiTableRow`: cienkie linie, nagłówek 12px, cyfry o stałej szerokości, podświetlenie wiersza),
+    więc zwykłe `<Table>` nie potrzebuje `sx` – tylko tabela z innymi odstępami nadpisuje
+    `'& .MuiTableCell-root'`. `MuiCard` to płaska karta z cienką ramką; `Grid`, `Alert` i `Chip`
+    mają domyślne zachowanie MUI (bez globalnego wyśrodkowania i pogrubienia). Tekst nie jest też
+    wyśrodkowany globalnie (`.App` w `App.css`) – widok, który chce go wyśrodkować, ustawia to sam
   - `tokens.js` – Jedno źródło wyglądu: paleta akcentów (`ACCENTS`: coral, purple, blue, teal, amber,
     gray – każdy z `dot` / `bg` / `text` / `light`), kolory znaczeniowe (`STATUS`), powierzchnie
     (`SURFACE`), linie (`HAIRLINE`, `ROW_LINE`) oraz wspólne style (`surfaceSx`, `fieldSx`,
-    `calmTableSx`, `dialogPaperSx`). Nowe kolory dodajemy tutaj, nie na sztywno w komponentach.
+    `dialogPaperSx`). Nowe kolory dodajemy tutaj, nie na sztywno w komponentach.
     Wykresy: `CHART_SERIES` – 8 kolorów serii w stałej, zwalidowanej kolejności (kontrast
     i rozróżnialność przy daltonizmie na ciemnym tle karty), bez zapętlania – wykres ćwiczeń
     pokazuje najwyżej 8 serii, a kolor zostaje przy ćwiczeniu (`trainingStatistic/seriesColors.js`);
     `CHART_LINES` – ciche linie siatki i osi
-  - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table`)
+  - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table/DataTable`)
   - `context/` – Konteksty React (m.in. stan globalny)
   - `layout/` – Elementy układu strony (nawigacja, szkielet widoku)
   - `language/` – Konfiguracja tłumaczeń (`i18n.js`) i przełącznik języka

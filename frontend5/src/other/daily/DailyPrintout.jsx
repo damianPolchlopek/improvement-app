@@ -22,7 +22,7 @@ import ErrorAlert from '../../component/error/ErrorAlert';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import { HAIRLINE, surfaceSx } from '../../tokens';
 import ConfirmDeleteDialog from '../component/ConfirmDeleteDialog';
-import { DAILY_HABITS, otherTableSx, parseApiDate } from '../component/otherStyles';
+import { DAILY_HABITS, parseApiDate } from '../component/otherStyles';
 
 function HabitCell({ done, habit }) {
   return (
@@ -111,7 +111,7 @@ export default function DailyPrintout({ query, page, size, onPageChange, onSizeC
         </Box>
       ) : (
         <TableContainer>
-          <Table size="small" sx={otherTableSx}>
+          <Table size="small">
             <TableHead>
               <TableRow>
                 <TableCell>{t('daily.date')}</TableCell>

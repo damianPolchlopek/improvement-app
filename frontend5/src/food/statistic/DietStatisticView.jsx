@@ -18,7 +18,6 @@ import REST from '../../utils/REST';
 import DietStatisticTableRow from './DietStatisticTableRow';
 import ErrorAlert from '../../component/error/ErrorAlert';
 import FoodPageHeader from '../component/FoodPageHeader';
-import { foodTableSx } from '../component/foodStyles';
 import { HAIRLINE, surfaceSx } from '../../tokens';
 
 export default function DietStatisticView() {
@@ -54,7 +53,7 @@ export default function DietStatisticView() {
       ) : (
         <Box sx={surfaceSx}>
           <TableContainer>
-            <Table size="small" sx={{ ...foodTableSx, '& .MuiTableCell-root': { px: 2 } }}>
+            <Table size="small">
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ width: 56 }} />

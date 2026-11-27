@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { IconButton, Checkbox, TextField } from '@mui/material';
+import { IconButton, Checkbox, TableCell, TableRow, TextField } from '@mui/material';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import StyledTableCell from '../../../component/table/StyledTableCell';
-import StyledTableRow from '../../../component/table/StyledTableRow';
 import { formatInput } from '../../../utils/common';
 import { MACRO_COLORS } from '../../foodView/macroColors';
 import { useMealSelection } from '../../../context/MealSelectionContext';
@@ -95,8 +93,8 @@ export default function MealRow({ meal: single, index }) {
 
   return (
     <>
-      <StyledTableRow key={index} selected={isItemSelected}>
-        <StyledTableCell sx={{ width: '50px' }}>
+      <TableRow key={index} selected={isItemSelected}>
+        <TableCell sx={{ width: '50px' }}>
           <IconButton
             aria-label="expand ingredients"
             aria-expanded={isIngredientsOpen}
@@ -105,18 +103,18 @@ export default function MealRow({ meal: single, index }) {
           >
             {isIngredientsOpen ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </StyledTableCell>
+        </TableCell>
 
-        <StyledTableCell>
+        <TableCell>
           <Checkbox color="primary" checked={isItemSelected} onClick={handleCheckboxClick} />
-        </StyledTableCell>
+        </TableCell>
 
-        <StyledTableCell
+        <TableCell
           onClick={handleMealToggle}
           sx={{ cursor: 'pointer', fontWeight: isItemSelected ? 500 : 400 }}
         >
           {meal.name}
-        </StyledTableCell>
+        </TableCell>
 
         {[
           ['kcal', meal.kcal],
@@ -124,17 +122,17 @@ export default function MealRow({ meal: single, index }) {
           ['carbohydrates', meal.carbohydrates],
           ['fat', meal.fat],
         ].map(([macro, value]) => (
-          <StyledTableCell
+          <TableCell
             key={macro}
             align="right"
             onClick={handleMealToggle}
             sx={{ cursor: 'pointer', color: MACRO_COLORS[macro].text }}
           >
             {formatInput(value)}
-          </StyledTableCell>
+          </TableCell>
         ))}
 
-        <StyledTableCell align="right" onClick={handleAmountInputClick}>
+        <TableCell align="right" onClick={handleAmountInputClick}>
           <TextField
             value={currentAmount}
             size="small"
@@ -150,8 +148,8 @@ export default function MealRow({ meal: single, index }) {
               },
             }}
           />
-        </StyledTableCell>
-      </StyledTableRow>
+        </TableCell>
+      </TableRow>
 
       <MealIngredientsTable
         isOpen={isIngredientsOpen}

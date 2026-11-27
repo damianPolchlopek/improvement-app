@@ -97,25 +97,3 @@ export const dialogPaperSx = {
 export const fieldSx = {
   '& .MuiInputBase-root, & .MuiPickersInputBase-root': { bgcolor: SURFACE.field },
 };
-
-// Spokojna tabela: cienkie linie, nagłówek 12px, treść wyśrodkowana w pionie.
-export const calmTableSx = {
-  '& .MuiTableCell-root': {
-    px: 2,
-    py: 1.1,
-    verticalAlign: 'middle',
-    borderBottom: ROW_LINE,
-  },
-  '& .MuiTableCell-head': {
-    fontSize: 12,
-    fontWeight: 500,
-    color: 'text.secondary',
-    whiteSpace: 'nowrap',
-    py: 1,
-    borderBottom: HAIRLINE,
-  },
-  '& .MuiTableBody-root .MuiTableRow-root:last-of-type .MuiTableCell-root': { borderBottom: 0 },
-  '& .MuiTableBody-root .MuiTableRow-root:hover .MuiTableCell-root': {
-    bgcolor: SURFACE.hover,
-  },
-};
