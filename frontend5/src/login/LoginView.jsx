@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import REST from '../utils/REST';
 import { useTranslation } from 'react-i18next';
-import { Button, Typography, Alert, Box, CircularProgress, Divider } from '@mui/material';
-import Grid from '@mui/material/Grid';
+import { Button, Alert, Box, CircularProgress, Link } from '@mui/material';
+import { Login as LoginIcon } from '@mui/icons-material';
 import { useInput } from './hooks/useInput';
 import Input from './Input';
-import CenteredContainer from '../component/CenteredContainer';
-import StyledPaper from '../component/StyledPaper';
-import { redirect, Form, useActionData, useNavigation } from 'react-router-dom';
+import AuthCard from './AuthCard';
+import { HAIRLINE } from '../food/component/foodStyles';
+import { redirect, Form, Link as RouterLink, useActionData, useNavigation } from 'react-router-dom';
 import { setTokens } from './Authentication';
-import { HomeViewUrl } from '../utils/URLHelper';
+import { HomeViewUrl, SignUpUrl } from '../utils/URLHelper';
 import {
   getErrorInfo,
   getResendMessages,
@@ -113,14 +113,7 @@ export default function LoginView() {
 
     return (
       errorVisible && (
-        <Alert
-          severity={errorInfo.severity}
-          sx={{
-            mb: 2,
-            textAlign: 'center',
-          }}
-          onClose={() => setErrorVisible(false)}
-        >
+        <Alert severity={errorInfo.severity} sx={{ mb: 2 }} onClose={() => setErrorVisible(false)}>
           <strong>{errorInfo.title}</strong>
           <br />
           {message || errorInfo.message}
@@ -162,14 +155,7 @@ export default function LoginView() {
     if (!resendSuccess) return null;
 
     return (
-      <Alert
-        severity="success"
-        sx={{
-          mb: 2,
-          textAlign: 'center',
-        }}
-        onClose={() => setResendSuccess(false)}
-      >
+      <Alert severity="success" sx={{ mb: 2 }} onClose={() => setResendSuccess(false)}>
         <strong>{resendMessages.success.title}</strong>
         <br />
         {resendMessages.success.message}
@@ -182,14 +168,7 @@ export default function LoginView() {
     if (!resendError) return null;
 
     return (
-      <Alert
-        severity="error"
-        sx={{
-          mb: 2,
-          textAlign: 'center',
-        }}
-        onClose={() => setResendError(null)}
-      >
+      <Alert severity="error" sx={{ mb: 2 }} onClose={() => setResendError(null)}>
         <strong>{resendMessages.error.title}</strong>
         <br />
         {resendError}
@@ -198,90 +177,93 @@ export default function LoginView() {
   };
 
   return (
-    <CenteredContainer>
-      <StyledPaper>
-        <Form method="post">
-          <Grid container>
-            <Grid size={12}>
-              <Typography variant="h5" component="div">
-                {t('login.loginPanel')}
-              </Typography>
-            </Grid>
+    <AuthCard
+      title={t('login.title')}
+      description={t('login.description')}
+      footer={
+        <>
+          {t('login.noAccount')}{' '}
+          <Link component={RouterLink} to={SignUpUrl} underline="hover">
+            {t('login.signUp')}
+          </Link>
+        </>
+      }
+    >
+      {renderResendSuccess()}
+      {renderResendError()}
+      {renderError()}
 
-            {/* Wyświetlanie błędów */}
-            <Grid size={12}>
-              {renderResendSuccess()}
-              {renderResendError()}
-              {renderError()}
-            </Grid>
+      <Box component={Form} method="post" sx={{ display: 'grid', gap: 0.5 }}>
+        <Input
+          label={t('login.username')}
+          id="username"
+          name="username"
+          autoComplete="username"
+          autoFocus
+          onBlur={handleUsernameBlur}
+          onChange={handleUsernameChange}
+          value={enteredUsername}
+          error={usernameIsInvalid && t('login.validation.usernameRequired')}
+          disabled={isSubmitting}
+        />
+        <Input
+          label={t('login.password')}
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChange}
+          value={enteredPassword}
+          error={passwordIsInvalid && t('login.validation.passwordRequired')}
+          disabled={isSubmitting}
+        />
+        <Button
+          variant="contained"
+          size="large"
+          type="submit"
+          fullWidth
+          disabled={isSubmitting || usernameIsInvalid || passwordIsInvalid}
+          startIcon={isSubmitting ? <CircularProgress size={18} color="inherit" /> : <LoginIcon />}
+        >
+          {isSubmitting ? t('login.submitting') : t('login.submit')}
+        </Button>
+      </Box>
 
-            <Grid size={12}>
-              <Input
-                label={t('login.username')}
-                id="username"
-                name="username"
-                onBlur={handleUsernameBlur}
-                onChange={handleUsernameChange}
-                value={enteredUsername}
-                error={usernameIsInvalid && t('login.validation.usernameRequired')}
-                disabled={isSubmitting}
-              />
-            </Grid>
+      {/* Własny separator – globalny styl Divider w motywie dodaje tło */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
+          my: 2.5,
+          color: 'text.secondary',
+          fontSize: 12,
+          '&::before, &::after': { content: '""', flex: 1, borderTop: HAIRLINE },
+        }}
+      >
+        {t('login.or')}
+      </Box>
 
-            <Grid size={12}>
-              <Input
-                label={t('login.password')}
-                id="password"
-                name="password"
-                type="password"
-                onBlur={handlePasswordBlur}
-                onChange={handlePasswordChange}
-                value={enteredPassword}
-                error={passwordIsInvalid && t('login.validation.passwordRequired')}
-                disabled={isSubmitting}
-              />
-            </Grid>
-
-            <Grid size={12}>
-              <Button
-                variant="contained"
-                sx={{ width: '25vh' }}
-                type="submit"
-                disabled={isSubmitting || usernameIsInvalid || passwordIsInvalid}
-              >
-                {isSubmitting ? t('login.submitting') : t('login.submit')}
-              </Button>
-            </Grid>
-
-            <Grid size={12}>
-              <Button
-                variant="outlined"
-                sx={{
-                  width: '25vh',
-                  backgroundColor: '#fff',
-                  borderColor: '#dadce0',
-                  color: '#3c4043',
-                  textTransform: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    backgroundColor: '#f8f9fa',
-                    borderColor: '#dadce0',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
-                  },
-                  gap: 1,
-                }}
-                onClick={() =>
-                  (window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`)
-                }
-              >
-                <GoogleIcon />
-                {t('login.loginWithGoogle')}
-              </Button>
-            </Grid>
-          </Grid>
-        </Form>
-      </StyledPaper>
-    </CenteredContainer>
+      <Button
+        variant="outlined"
+        size="large"
+        fullWidth
+        startIcon={<GoogleIcon />}
+        sx={{
+          textTransform: 'none',
+          color: 'text.primary',
+          borderColor: 'rgba(255,255,255,0.16)',
+          bgcolor: 'rgba(0,0,0,0.18)',
+          '&:hover': { borderColor: 'rgba(255,255,255,0.32)', bgcolor: 'rgba(255,255,255,0.04)' },
+        }}
+        onClick={() =>
+          (window.location.href = `${import.meta.env.VITE_API_URL}oauth2/authorization/google`)
+        }
+      >
+        {t('login.loginWithGoogle')}
+      </Button>
+    </AuthCard>
   );
 }
 

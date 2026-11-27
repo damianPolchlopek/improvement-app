@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import REST from '../utils/REST';
 
-import { Button, Typography, Alert, CircularProgress, Box } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Link, Typography } from '@mui/material';
+import { MarkEmailRead, PersonAdd } from '@mui/icons-material';
 
-import Grid from '@mui/material/Grid';
-import CenteredContainer from '../component/CenteredContainer';
+import AuthCard from './AuthCard';
+import { LoginUrl } from '../utils/URLHelper';
 import Input from './Input';
 import { useInput } from './hooks/useInput';
-import StyledPaper from '../component/StyledPaper';
 
 export default function SignUpView() {
   const { t } = useTranslation();
@@ -150,7 +150,7 @@ export default function SignUpView() {
 
       // Automatyczne przekierowanie po 10 sekundach
       setTimeout(() => {
-        navigate('/login');
+        navigate(LoginUrl);
       }, 10000);
     } catch (err) {
       processBackendError(err);
@@ -173,144 +173,148 @@ export default function SignUpView() {
     }
   };
 
+  const footer = (
+    <>
+      {t('signup.alreadyHaveAccount')}{' '}
+      <Link component={RouterLink} to={LoginUrl} underline="hover">
+        {t('signup.login')}
+      </Link>
+    </>
+  );
+
   if (showSuccessMessage) {
     return (
-      <CenteredContainer>
-        <StyledPaper sx={{ maxWidth: 600, width: '100%' }}>
-          <Alert severity="success" sx={{ mb: 3 }}>
-            <Typography variant="h6">{t('signup.successTitle')}</Typography>
-            <Typography variant="body1" sx={{ mt: 1 }}>
-              {success}
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1 }}>
-              {t('signup.redirectInfo')}
-            </Typography>
-          </Alert>
+      <AuthCard title={t('signup.successTitle')} maxWidth={520} footer={footer}>
+        <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <MarkEmailRead sx={{ fontSize: 48, color: '#5DCAA5', mb: 1 }} />
+          <Typography sx={{ mb: 1 }}>{success}</Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('signup.redirectInfo')}
+          </Typography>
+        </Box>
 
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
-            <Button variant="outlined" onClick={handleResendVerification} fullWidth>
-              {t('signup.resendEmailButton')}
-            </Button>
-
-            <Button variant="contained" onClick={() => navigate('/login')} fullWidth>
-              {t('signup.goToLogin')}
-            </Button>
-          </Box>
-        </StyledPaper>
-      </CenteredContainer>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1.5 }}>
+          <Button variant="outlined" onClick={handleResendVerification} fullWidth>
+            {t('signup.resendEmailButton')}
+          </Button>
+          <Button variant="contained" onClick={() => navigate(LoginUrl)} fullWidth>
+            {t('signup.goToLogin')}
+          </Button>
+        </Box>
+      </AuthCard>
     );
   }
 
   return (
-    <CenteredContainer>
-      <StyledPaper sx={{ maxWidth: 600, width: '100%' }}>
-        <Typography variant="h5" component="div" sx={{ mb: 1 }}>
-          {t('signup.title')}
-        </Typography>
-        <Typography variant="body2" sx={{ mb: 3 }}>
-          {t('signup.alreadyHaveAccount')} <a href="/login">{t('signup.login')}</a>
-        </Typography>
+    <AuthCard
+      title={t('signup.title')}
+      description={t('signup.description')}
+      maxWidth={520}
+      footer={footer}
+    >
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 3 }}>
-            {error}
-          </Alert>
-        )}
-
-        <Grid container spacing={2}>
-          {/* Nowe pola: Imię i Nazwisko obok siebie na większych ekranach */}
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Input
-              label={t('signup.name')}
-              id="name"
-              name="name"
-              onBlur={handleNameBlur}
-              onChange={handleNameChange}
-              value={enteredName}
-              error={(nameIsInvalid && t('signup.nameError')) || fieldErrors.name}
-            />
-          </Grid>
-
-          <Grid size={{ xs: 12, sm: 6 }}>
-            <Input
-              label={t('signup.surname')}
-              id="surname"
-              name="surname"
-              onBlur={handleSurnameBlur}
-              onChange={handleSurnameChange}
-              value={enteredSurname}
-              error={(surnameIsInvalid && t('signup.surnameError')) || fieldErrors.surname}
-            />
-          </Grid>
-
-          <Grid size={12}>
-            <Input
-              label={t('signup.username')}
-              id="username"
-              name="username"
-              onBlur={handleUsernameBlur}
-              onChange={handleUsernameChange}
-              value={enteredUsername}
-              error={(usernameIsInvalid && t('signup.usernameError')) || fieldErrors.username}
-            />
-          </Grid>
-
-          <Grid size={12}>
-            <Input
-              label={t('signup.email')}
-              id="email"
-              name="email"
-              type="email"
-              onBlur={handleEmailBlur}
-              onChange={handleEmailChange}
-              value={enteredEmail}
-              error={(emailIsInvalid && t('signup.emailError')) || fieldErrors.email}
-            />
-          </Grid>
-
-          <Grid size={12}>
-            <Input
-              label={t('signup.password')}
-              id="password"
-              name="password"
-              type="password"
-              onBlur={handlePasswordBlur}
-              onChange={handlePasswordChange}
-              value={enteredPassword}
-              error={(passwordIsInvalid && t('signup.passwordError')) || fieldErrors.password}
-            />
-          </Grid>
-
-          <Grid size={12}>
-            <Input
-              label={t('signup.confirmPassword')}
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              onBlur={handleConfirmPasswordBlur}
-              onChange={handleConfirmPasswordChange}
-              value={enteredConfirmPassword}
-              error={
-                (confirmPasswordIsInvalid && t('signup.confirmPasswordError')) ||
-                fieldErrors.confirmPassword
-              }
-            />
-          </Grid>
-
-          <Grid size={12}>
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              onClick={submitSignUpReq}
-              disabled={isLoading}
-              sx={{ mt: 2, py: 1.5 }}
-            >
-              {isLoading ? <CircularProgress size={24} /> : t('signup.signUp')}
-            </Button>
-          </Grid>
-        </Grid>
-      </StyledPaper>
-    </CenteredContainer>
+      <Box
+        component="form"
+        noValidate
+        onSubmit={(event) => {
+          event.preventDefault();
+          submitSignUpReq();
+        }}
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+          columnGap: 1.5,
+          rowGap: 0.5,
+        }}
+      >
+        <Input
+          label={t('signup.name')}
+          id="name"
+          name="name"
+          autoComplete="given-name"
+          autoFocus
+          onBlur={handleNameBlur}
+          onChange={handleNameChange}
+          value={enteredName}
+          error={(nameIsInvalid && t('signup.nameError')) || fieldErrors.name}
+        />
+        <Input
+          label={t('signup.surname')}
+          id="surname"
+          name="surname"
+          autoComplete="family-name"
+          onBlur={handleSurnameBlur}
+          onChange={handleSurnameChange}
+          value={enteredSurname}
+          error={(surnameIsInvalid && t('signup.surnameError')) || fieldErrors.surname}
+        />
+        <Box sx={{ gridColumn: '1 / -1' }}>
+          <Input
+            label={t('signup.username')}
+            id="username"
+            name="username"
+            autoComplete="username"
+            onBlur={handleUsernameBlur}
+            onChange={handleUsernameChange}
+            value={enteredUsername}
+            error={(usernameIsInvalid && t('signup.usernameError')) || fieldErrors.username}
+          />
+        </Box>
+        <Box sx={{ gridColumn: '1 / -1' }}>
+          <Input
+            label={t('signup.email')}
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            onBlur={handleEmailBlur}
+            onChange={handleEmailChange}
+            value={enteredEmail}
+            error={(emailIsInvalid && t('signup.emailError')) || fieldErrors.email}
+          />
+        </Box>
+        <Input
+          label={t('signup.password')}
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="new-password"
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChange}
+          value={enteredPassword}
+          error={(passwordIsInvalid && t('signup.passwordError')) || fieldErrors.password}
+        />
+        <Input
+          label={t('signup.confirmPassword')}
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          autoComplete="new-password"
+          onBlur={handleConfirmPasswordBlur}
+          onChange={handleConfirmPasswordChange}
+          value={enteredConfirmPassword}
+          error={
+            (confirmPasswordIsInvalid && t('signup.confirmPasswordError')) ||
+            fieldErrors.confirmPassword
+          }
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          size="large"
+          disabled={isLoading}
+          startIcon={isLoading ? <CircularProgress size={18} color="inherit" /> : <PersonAdd />}
+          sx={{ gridColumn: '1 / -1', mt: 0.5 }}
+        >
+          {t('signup.signUp')}
+        </Button>
+      </Box>
+    </AuthCard>
   );
 }
