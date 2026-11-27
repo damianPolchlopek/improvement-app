@@ -245,10 +245,10 @@ const router = createBrowserRouter([
         path: OTHER,
         children: [
           {
-            path: SHOPPING,
+            path: DAILY,
             element: (
               <Suspense fallback={suspenseFallback}>
-                <ShoppingListView />
+                <DailyView />
               </Suspense>
             ),
           },
@@ -261,10 +261,10 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: DAILY,
+            path: SHOPPING,
             element: (
               <Suspense fallback={suspenseFallback}>
-                <DailyView />
+                <ShoppingListView />
               </Suspense>
             ),
           },
