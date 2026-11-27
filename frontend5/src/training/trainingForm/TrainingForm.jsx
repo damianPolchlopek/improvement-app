@@ -130,7 +130,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (payload) => REST.addTraining(payload),
     onSuccess: () => {
-      queryClient.invalidateQueries(['training-names', 0, 25]);
+      queryClient.invalidateQueries({ queryKey: ['training-names'] }); // wszystkie strony listy
       navigate(TrainingViewUrl);
     },
     onError: (err) => {
@@ -709,10 +709,11 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
         </Box>
       )}
 
-      {/* Pasek zapisu – przyklejony do dołu ekranu */}
+      {/* Pasek zapisu – na desktopie przyklejony do dołu ekranu; na telefonie zwykły
+          element pod listą ćwiczeń, żeby nie zasłaniał pól przy wpisywaniu. */}
       <Box
         sx={{
-          position: 'sticky',
+          position: { xs: 'static', md: 'sticky' },
           bottom: 16,
           zIndex: 10,
           display: 'flex',
@@ -724,7 +725,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
           borderRadius: 3,
           bgcolor: 'surface.overlay',
           border: HAIRLINE,
-          boxShadow: '0 8px 24px rgba(0,0,0,0.35)',
+          boxShadow: { xs: 'none', md: '0 8px 24px rgba(0,0,0,0.35)' },
         }}
       >
         <Box sx={{ minWidth: 0, flex: '1 1 240px' }}>

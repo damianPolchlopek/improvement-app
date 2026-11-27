@@ -3,13 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
 import REST from '../../utils/REST';
-import { useMealSelection } from '../../context/MealSelectionContext';
+import { MealSelectionProvider, useMealSelection } from '../../context/MealSelectionContext';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
 import DietDaySummaryForm from '../component/dietSummaryForm/DietDaySummaryForm';
 import { Button, CircularProgress } from '@mui/material';
 import { AddCircleOutlined, Save } from '@mui/icons-material';
 
+// Własny stan wyboru posiłków na każde wejście w widok: nic nie przechodzi
+// z edycji innego dnia ani z poprzedniego (zapisanego) dodawania.
 export default function AddDietDayView() {
+  return (
+    <MealSelectionProvider>
+      <AddDietDayContent />
+    </MealSelectionProvider>
+  );
+}
+
+function AddDietDayContent() {
   const { t } = useTranslation();
   const { showSnackbar } = useSnackbar();
   const navigate = useNavigate();
@@ -32,7 +42,7 @@ export default function AddDietDayView() {
       return REST.createDietSummary(dietDayToSave);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['diet-summaries']);
+      queryClient.invalidateQueries({ queryKey: ['diet-summaries'] });
       showSnackbar(t('food.dietDaySaved'), 'success');
       navigate('/app/food/statistics');
     },
@@ -59,9 +69,9 @@ export default function AddDietDayView() {
       <Button
         variant="contained"
         onClick={handleSave}
-        disabled={createDietSummaryMutation.isLoading || selectedMeals.length === 0}
+        disabled={createDietSummaryMutation.isPending || selectedMeals.length === 0}
         startIcon={
-          createDietSummaryMutation.isLoading ? (
+          createDietSummaryMutation.isPending ? (
             <CircularProgress color="inherit" size={20} />
           ) : (
             <Save />

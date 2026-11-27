@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
+import PageLoader from '../component/loader/PageLoader.jsx';
 
 export default function PublicLayout() {
   return (
@@ -15,7 +16,9 @@ export default function PublicLayout() {
           minHeight: '100dvh',
         }}
       >
-        <Outlet />
+        <Suspense fallback={<PageLoader />}>
+          <Outlet />
+        </Suspense>
       </Box>
     </Box>
   );

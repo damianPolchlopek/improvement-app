@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import REST from '../../utils/REST';
 import { useTranslation } from 'react-i18next';
 
@@ -11,18 +10,24 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useLoaderData } from 'react-router-dom';
 import { queryClient } from '../../utils/REST';
 import { useSnackbar } from '../../component/snackbar/SnackbarProvider';
-import { useMealSelection } from '../../context/MealSelectionContext';
+import { MealSelectionProvider, useMealSelection } from '../../context/MealSelectionContext';
 
+// Stan wyboru startuje z posiłków edytowanego dnia i żyje tylko w tym widoku.
+// key = id dnia: przejście do edycji innego dnia (ta sama trasa) zaczyna od nowa.
 export default function EditDietDayView() {
   const mealsDietDay = useLoaderData();
+  return (
+    <MealSelectionProvider key={mealsDietDay.id} initialSelected={mealsDietDay.meals ?? []}>
+      <EditDietDayContent mealsDietDay={mealsDietDay} />
+    </MealSelectionProvider>
+  );
+}
+
+function EditDietDayContent({ mealsDietDay }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showSnackbar } = useSnackbar();
-  const { selectedMeals, setSelectedMeals } = useMealSelection();
-
-  useEffect(() => {
-    setSelectedMeals(mealsDietDay.meals);
-  }, [mealsDietDay, setSelectedMeals]);
+  const { selectedMeals } = useMealSelection();
 
   // Mutation: edit diet summary
   const updateDietSummaryMutation = useMutation({
@@ -44,7 +49,7 @@ export default function EditDietDayView() {
       return REST.updateDietSummary(objectToUpdate);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['diet-summaries']);
+      queryClient.invalidateQueries({ queryKey: ['diet-summaries'] });
       navigate('/app/food/statistics');
       showSnackbar(t('food.updatedDietSummary'), 'success');
     },
@@ -70,9 +75,9 @@ export default function EditDietDayView() {
           <Button
             variant="contained"
             onClick={handleUpdate}
-            disabled={updateDietSummaryMutation.isLoading}
+            disabled={updateDietSummaryMutation.isPending}
             startIcon={
-              updateDietSummaryMutation.isLoading ? (
+              updateDietSummaryMutation.isPending ? (
                 <CircularProgress color="inherit" size={20} />
               ) : (
                 <Save />

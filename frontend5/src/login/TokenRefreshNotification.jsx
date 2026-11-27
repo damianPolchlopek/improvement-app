@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { getTokenDuration } from '../login/Authentication.js';
+import { getRefreshTokenDuration } from '../login/Authentication.js';
+
+// Ostrzegamy przed końcem całej sesji (refresh token). Access token odświeża się
+// sam w interceptorze, więc jego wygaśnięcie nie jest dla użytkownika istotne.
 
 export default function TokenRefreshNotification() {
   const { t } = useTranslation();
@@ -10,7 +13,7 @@ export default function TokenRefreshNotification() {
 
   useEffect(() => {
     const checkTokenExpiration = () => {
-      const tokenDuration = getTokenDuration();
+      const tokenDuration = getRefreshTokenDuration();
       const minutesLeft = Math.ceil(tokenDuration / (1000 * 60));
 
       if (minutesLeft <= 2 && minutesLeft > 0) {

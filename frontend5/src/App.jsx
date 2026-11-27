@@ -16,7 +16,7 @@ import { action as loginAction } from './login/LoginView.jsx';
 import { queryClient } from './utils/REST.js';
 
 import SnackbarProvider from './component/snackbar/SnackbarProvider.jsx';
-import { MealSelectionProvider } from './context/MealSelectionContext.jsx';
+import PageLoader from './component/loader/PageLoader.jsx';
 
 import {
   TRAINING,
@@ -76,18 +76,21 @@ const OAuth2CallbackPage = lazy(() => import('./login/OAuth2CallbackPage.jsx'));
 const DietAuditSelectorPage = lazy(() => import('./audit/components/DietAuditSelectorPage.jsx'));
 const DietAuditPage = lazy(() => import('./audit/components/DietAuditPage.jsx'));
 
-const suspenseFallback = <p></p>;
+// Granice Suspense dla stron są w Layout/PublicLayout (wokół <Outlet/>), więc trasy
+// nie muszą się opakowywać same, a ładowanie strony nie ukrywa nagłówka ani menu.
+// ErrorPage jest leniwy i renderuje się poza layoutem → potrzebuje własnej granicy.
+const errorElement = (
+  <Suspense fallback={<PageLoader />}>
+    <ErrorPage />
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <PublicLayout />,
     // Nieznany adres poza /app trafia tutaj zamiast na domyślny ekran React Router.
-    errorElement: (
-      <Suspense fallback={suspenseFallback}>
-        <ErrorPage />
-      </Suspense>
-    ),
+    errorElement,
     children: [
       {
         index: true,
@@ -100,11 +103,7 @@ const router = createBrowserRouter([
       },
       {
         path: SignUpUrl,
-        element: (
-          <Suspense fallback={suspenseFallback}>
-            <SignUpView />
-          </Suspense>
-        ),
+        element: <SignUpView />,
       },
       {
         path: LogoutUrl,
@@ -112,30 +111,18 @@ const router = createBrowserRouter([
       },
       {
         path: VerifyEmailUrl,
-        element: (
-          <Suspense fallback={suspenseFallback}>
-            <EmailVerification />
-          </Suspense>
-        ),
+        element: <EmailVerification />,
       },
       {
         path: OAuth2CallbackUrl,
-        element: (
-          <Suspense fallback={suspenseFallback}>
-            <OAuth2CallbackPage />
-          </Suspense>
-        ),
+        element: <OAuth2CallbackPage />,
       },
     ],
   },
   {
     path: '/app',
-    element: (
-      <Suspense fallback={suspenseFallback}>
-        <Layout theme={theme} />
-      </Suspense>
-    ),
-    errorElement: <ErrorPage />,
+    element: <Layout theme={theme} />,
+    errorElement,
     loader: tokenLoader,
     children: [
       { index: true, element: <HomeView /> },
@@ -144,45 +131,25 @@ const router = createBrowserRouter([
         children: [
           {
             path: VIEW,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <TrainingsView />
-              </Suspense>
-            ),
+            element: <TrainingsView />,
           },
           {
             path: EXERCISES,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <ExerciseView />
-              </Suspense>
-            ),
+            element: <ExerciseView />,
           },
           {
             path: MAXIMUM,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <MaximumExerciseView />
-              </Suspense>
-            ),
+            element: <MaximumExerciseView />,
           },
           {
             path: ADD,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <AddTrainingView />
-              </Suspense>
-            ),
+            element: <AddTrainingView />,
             loader: () =>
               import('./training/trainingForm/TrainingForm.jsx').then((module) => module.loader()),
           },
           {
             path: STATISTICS,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <TrainingStatistic />
-              </Suspense>
-            ),
+            element: <TrainingStatistic />,
             loader: () =>
               import('./training/trainingStatistic/TrainingStatistics.jsx').then((module) =>
                 module.loader()
@@ -190,11 +157,7 @@ const router = createBrowserRouter([
           },
           {
             path: TEMPLATES,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <TrainingTemplatesView />
-              </Suspense>
-            ),
+            element: <TrainingTemplatesView />,
           },
         ],
       },
@@ -203,27 +166,15 @@ const router = createBrowserRouter([
         children: [
           {
             path: VIEW,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <MealView />
-              </Suspense>
-            ),
+            element: <MealView />,
           },
           {
             path: ADD,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <AddDietDayView />
-              </Suspense>
-            ),
+            element: <AddDietDayView />,
           },
           {
             path: ':id/edit',
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <EditDietDayView />
-              </Suspense>
-            ),
+            element: <EditDietDayView />,
             loader: ({ params }) =>
               import('./food/editDietSummaryView/EditDietDayView.jsx').then((module) =>
                 module.loader({ params })
@@ -231,19 +182,11 @@ const router = createBrowserRouter([
           },
           {
             path: STATISTICS,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <DietStatisticView />
-              </Suspense>
-            ),
+            element: <DietStatisticView />,
           },
           {
             path: PRODUCTS,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <ProductView />
-              </Suspense>
-            ),
+            element: <ProductView />,
           },
         ],
       },
@@ -252,27 +195,15 @@ const router = createBrowserRouter([
         children: [
           {
             path: DAILY,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <DailyView />
-              </Suspense>
-            ),
+            element: <DailyView />,
           },
           {
             path: WEEKLY,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <WeeklyRecordView />
-              </Suspense>
-            ),
+            element: <WeeklyRecordView />,
           },
           {
             path: SHOPPING,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <ShoppingListView />
-              </Suspense>
-            ),
+            element: <ShoppingListView />,
           },
         ],
       },
@@ -281,27 +212,15 @@ const router = createBrowserRouter([
         children: [
           {
             path: VIEW,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <FinanceView />
-              </Suspense>
-            ),
+            element: <FinanceView />,
           },
           {
             path: INFORMATION,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <FinanceInformation />
-              </Suspense>
-            ),
+            element: <FinanceInformation />,
           },
           {
             path: LIVE,
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <LiveMarketView />
-              </Suspense>
-            ),
+            element: <LiveMarketView />,
           },
         ],
       },
@@ -310,19 +229,11 @@ const router = createBrowserRouter([
         children: [
           {
             path: '',
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <DietAuditSelectorPage />
-              </Suspense>
-            ),
+            element: <DietAuditSelectorPage />,
           },
           {
             path: ':dietSummaryId',
-            element: (
-              <Suspense fallback={suspenseFallback}>
-                <DietAuditPage />
-              </Suspense>
-            ),
+            element: <DietAuditPage />,
           },
         ],
       },
@@ -337,11 +248,12 @@ function App() {
 
       <QueryClientProvider client={queryClient}>
         <SnackbarProvider>
-          <MealSelectionProvider>
-            <Box className="App">
+          <Box className="App">
+            {/* Layout i PublicLayout są leniwe — ta granica obsługuje ich pierwsze ładowanie */}
+            <Suspense fallback={<PageLoader />}>
               <RouterProvider router={router} />
-            </Box>
-          </MealSelectionProvider>
+            </Suspense>
+          </Box>
         </SnackbarProvider>
       </QueryClientProvider>
     </ThemeProvider>

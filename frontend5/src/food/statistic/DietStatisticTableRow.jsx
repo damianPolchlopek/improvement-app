@@ -68,7 +68,7 @@ export default function DietStatisticTableRow({ dietSummary }) {
   } = useMutation({
     mutationFn: (id) => REST.deleteDietSummaries(id),
     onSuccess: () => {
-      queryClient.invalidateQueries(['diet-summaries']);
+      queryClient.invalidateQueries({ queryKey: ['diet-summaries'] });
       showSnackbar(t('food.deleteSuccess', { date: dietSummary.date }), 'success');
     },
     onError: () => {

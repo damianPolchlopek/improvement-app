@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { QueryClient } from '@tanstack/react-query';
 import { LoginUrl } from './URLHelper';
+import { clearTokens, setAccessTokenExpiresAt } from '../login/session';
 
 export const queryClient = new QueryClient();
 
@@ -53,10 +54,7 @@ const flushQueue = (error) => {
 };
 
 const forceLogout = () => {
-  sessionStorage.removeItem('isLoggedIn');
-  sessionStorage.removeItem('accessTokenExpiresAt');
-  sessionStorage.removeItem('refreshTokenExpiresAt');
-  sessionStorage.removeItem('role');
+  clearTokens();
   // Interceptor żyje poza Reactem → twarde przekierowanie na login
   if (!window.location.pathname.startsWith(LoginUrl)) {
     window.location.assign(LoginUrl);
@@ -95,9 +93,7 @@ axios.interceptors.response.use(
     try {
       const { data } = await axios.post(serverUrl + apiV1 + 'auth/refresh-token', {});
       // Zaktualizuj lokalny zapis czasu wygaśnięcia (bookkeeping front-endu)
-      if (data?.accessTokenExpiresAt) {
-        sessionStorage.setItem('accessTokenExpiresAt', data.accessTokenExpiresAt.toString());
-      }
+      setAccessTokenExpiresAt(data?.accessTokenExpiresAt);
       flushQueue(null);
       return axios(config); // ponów oryginalny request — nowe cookie jest już ustawione
     } catch (refreshError) {

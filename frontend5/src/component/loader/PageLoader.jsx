@@ -1,12 +1,13 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-export default function PageLoader({ text }) {
+// minHeight: domyślnie cały ekran; wewnątrz layoutu (pod nagłówkiem) mniej.
+export default function PageLoader({ text, minHeight = '100dvh' }) {
   const { t } = useTranslation();
   return (
     <Box
       sx={{
-        minHeight: '100dvh',
+        minHeight,
         py: 4,
         display: 'flex',
         flexDirection: 'column',

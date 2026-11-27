@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useCallback, useEffect } from 'react';
+import { createContext, useState, useContext, useCallback } from 'react';
 import { useDietCalculation } from './useDietCalculation';
 
 // Create the context
@@ -14,23 +14,12 @@ export function MealSelectionProvider({ children, initialSelected = [] }) {
     }))
   );
 
-  const [dietSummary, setDietSummary] = useState(EMPTY_SUMMARY);
+  // Podsumowanie liczone przez react-query (klucz = wybrane posiłki), więc
+  // wynik zawsze odpowiada aktualnemu wyborowi — bez ręcznego setState z odpowiedzi.
+  const { data: dietSummary } = useDietCalculation(selectedMeals);
 
-  const { calculateDiet } = useDietCalculation();
-  const { mutate: calculateDietMutate } = calculateDiet; // stabilna referencja (react-query)
-
-  // Przelicz dietę, gdy zmienią się wybrane posiłki.
-  // Reset do zer jest wartością pochodną (poniżej), więc tu nie ma synchronicznego setState.
-  useEffect(() => {
-    if (selectedMeals.length === 0) return;
-
-    calculateDietMutate(selectedMeals, {
-      onSuccess: (response) => setDietSummary(response),
-    });
-  }, [selectedMeals, calculateDietMutate]);
-
-  // Gdy brak posiłków, pokazujemy zera bez dodatkowego setState/renderu
-  const summary = selectedMeals.length > 0 ? dietSummary : EMPTY_SUMMARY;
+  // Gdy brak posiłków, pokazujemy zera od razu (bez czekania na debounce)
+  const summary = selectedMeals.length > 0 ? (dietSummary ?? EMPTY_SUMMARY) : EMPTY_SUMMARY;
 
   // Check if a meal is selected by ID
   const isMealSelected = useCallback(

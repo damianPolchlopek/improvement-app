@@ -95,8 +95,10 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     pokazuje najwyżej 8 serii, a kolor zostaje przy ćwiczeniu (`trainingStatistic/seriesColors.js`);
     `CHART_LINES` – ciche linie siatki i osi
   - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table/DataTable`)
-  - `context/` – Konteksty React (m.in. stan globalny)
-  - `layout/` – Elementy układu strony (nawigacja, szkielet widoku); `ErrorPage` obsługuje błędy i nieznane adresy zarówno w `/app`, jak i na trasach publicznych
+  - `context/` – Konteksty React; `MealSelectionContext` (wybór posiłków + podsumowanie makro) nie jest
+    globalny – każdy widok dodawania/edycji dnia diety ma własny provider
+  - `layout/` – Elementy układu strony (nawigacja, szkielet widoku); `Layout` i `PublicLayout` mają granicę
+    `Suspense` wokół `<Outlet/>`, więc leniwie ładowana strona pokazuje `PageLoader` pod nagłówkiem; `ErrorPage` obsługuje błędy i nieznane adresy zarówno w `/app`, jak i na trasach publicznych
   - `language/` – Konfiguracja tłumaczeń (`i18n.js`) i przełącznik języka
   - `utils/` – Funkcje pomocnicze i komunikacja z API (axios)
   - `assets/` – Zasoby statyczne
