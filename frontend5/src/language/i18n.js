@@ -177,6 +177,7 @@ i18n.use(initReactI18next).init({
           setsCount: '{{count}} sets',
           volumeShort: 'Σ {{value}} kg',
           duplicateExercise: 'Duplicate exercise',
+          insertSlash: 'Insert /',
           moveUp: 'Move up',
           moveDown: 'Move down',
           seriesMismatch: 'Exercise #{{n}}: the number of sets in reps and weight must match.',
@@ -879,6 +880,7 @@ i18n.use(initReactI18next).init({
           setsCount: '{{count}} serie',
           volumeShort: 'Σ {{value}} kg',
           duplicateExercise: 'Duplikuj ćwiczenie',
+          insertSlash: 'Wstaw /',
           moveUp: 'Przenieś w górę',
           moveDown: 'Przenieś w dół',
           seriesMismatch:

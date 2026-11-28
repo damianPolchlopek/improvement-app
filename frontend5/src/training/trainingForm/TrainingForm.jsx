@@ -282,6 +282,42 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     setField(index, attribut, event.target.value);
   };
 
+  // Przycisk "/" (mobile): wstawia separator serii w miejscu kursora, bez chowania klawiatury.
+  const insertSlash = (index, attribut, event) => {
+    const el = event.currentTarget.parentElement.querySelector('input');
+    if (!el) return;
+    const value = String(exercisesFields[index][attribut] ?? '');
+    const start = el.selectionStart ?? value.length;
+    const end = el.selectionEnd ?? value.length;
+    setField(index, attribut, value.slice(0, start) + '/' + value.slice(end));
+    el.focus();
+    requestAnimationFrame(() => el.setSelectionRange(start + 1, start + 1));
+  };
+
+  const slashButton = (index, attribut) => (
+    <Button
+      variant="outlined"
+      color="inherit"
+      tabIndex={-1}
+      aria-label={t('training.insertSlash')}
+      onMouseDown={(e) => e.preventDefault()}
+      onClick={(e) => insertSlash(index, attribut, e)}
+      sx={{
+        display: { xs: 'inline-flex', md: 'none' },
+        minWidth: 32,
+        width: 32,
+        height: 40,
+        p: 0,
+        flex: 'none',
+        fontSize: 16,
+        color: 'text.secondary',
+        borderColor: LINE_COLOR.strong,
+      }}
+    >
+      /
+    </Button>
+  );
+
   // Pobiera ostatnie reps/weight dla nazwy i (jeśli puste) podpowiada w pustych wierszach
   const ensureLastForName = (name) => {
     if (!name || !nameOptionsSet.has(name)) return;
@@ -644,24 +680,30 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
                   )}
                 />
 
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="5/5/5/5/5"
-                  value={input.reps}
-                  onChange={(event) => handleFormChange(index, 'reps', event)}
-                  sx={{ ...inputSx, gridColumn: { xs: 2, md: 'auto' } }}
-                />
+                <Box sx={{ display: 'flex', gap: 0.75, gridColumn: { xs: 2, md: 'auto' } }}>
+                  {slashButton(index, 'reps')}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="5/5/5/5/5"
+                    value={input.reps}
+                    onChange={(event) => handleFormChange(index, 'reps', event)}
+                    sx={inputSx}
+                  />
+                </Box>
 
-                <TextField
-                  fullWidth
-                  size="small"
-                  placeholder="50/50/50/50/50"
-                  value={input.weight}
-                  onChange={(event) => handleFormChange(index, 'weight', event)}
-                  error={formatError}
-                  sx={{ ...inputSx, gridColumn: { xs: 2, md: 'auto' } }}
-                />
+                <Box sx={{ display: 'flex', gap: 0.75, gridColumn: { xs: 2, md: 'auto' } }}>
+                  {slashButton(index, 'weight')}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    placeholder="50/50/50/50/50"
+                    value={input.weight}
+                    onChange={(event) => handleFormChange(index, 'weight', event)}
+                    error={formatError}
+                    sx={inputSx}
+                  />
+                </Box>
 
                 <Box
                   sx={{
