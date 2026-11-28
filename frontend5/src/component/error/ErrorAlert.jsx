@@ -5,11 +5,28 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 
+function fallbackMessage(error, t) {
+  if (!error?.response) return t('common.networkError'); // brak sieci / timeout
+  const { status } = error.response;
+  if (status === 401 || status === 403) return t('common.sessionExpired');
+  return t('common.unexpectedError', { status });
+}
+
 export default function ErrorAlert({ error, severity = 'error' }) {
   const { t } = useTranslation();
+  if (!error) return null;
+
   const isBackendError = error?.response?.data?.code && error?.response?.data?.message;
 
-  if (!isBackendError) return null;
+  // Błąd spoza formatu backendu (sieć, timeout, wygasła sesja, proxy...) —
+  // zwięzły komunikat zamiast cichego `null`.
+  if (!isBackendError) {
+    return (
+      <Alert severity={severity} sx={{ maxWidth: 600, mx: 'auto', mt: 2 }}>
+        {fallbackMessage(error, t)}
+      </Alert>
+    );
+  }
 
   const { code, message, timestamp, details } = error.response.data;
 

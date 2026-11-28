@@ -53,7 +53,10 @@ public class AuthController {
             HttpServletResponse response) {
 
         String rawRefreshToken = cookieManager.extractCookie(request, AuthCookieManager.REFRESH_COOKIE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Brak refresh tokena"));
+                .orElseThrow(() -> {
+                    log.warn("Refresh token rejected: no refresh_token cookie in request");
+                    return new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Brak refresh tokena");
+                });
 
         AuthService.RefreshResult result = authService.refreshToken(rawRefreshToken);
 

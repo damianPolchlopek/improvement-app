@@ -61,6 +61,7 @@ public class TrainingController {
                                                            @AuthenticationPrincipal(expression = "id") Long userId) {
 
         TrainingEntity training = trainingService.addTraining(userId, exercises);
+        log.info("Training {} saved for user {} ({} exercises)", training.getId(), userId, exercises.size());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -104,14 +104,19 @@ public class AuthService {
             String username = claims.getSubject();
 
             UserEntity userEntity = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found"));
+                    .orElseThrow(() -> {
+                        log.warn("Refresh token rejected: user {} not found", username);
+                        return new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found");
+                    });
 
             String newAccessToken = jwtUtils.generateJwtToken(username, userEntity.getRolesString());
             long expiresAt = System.currentTimeMillis() + securityProperties.getJwt().getAccessTokenExpirationMs();
 
+            log.info("Access token refreshed for user: {}", username);
             return new RefreshResult(newAccessToken, expiresAt);
 
         } catch (JwtException e) {
+            log.warn("Refresh token rejected: {}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Refresh token niepoprawny");
         }
     }

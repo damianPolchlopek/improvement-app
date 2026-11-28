@@ -1,7 +1,8 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import REST from '../../utils/REST';
 
 import {
+  Alert,
   Autocomplete,
   Button,
   CircularProgress,
@@ -102,12 +103,46 @@ function seedLastByName(exercises) {
   return seed;
 }
 
+const DRAFT_KEY = 'trainingDraft';
+const DRAFT_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 3; // starszy szkic traktujemy jako nieaktualny
+
+function readDraft() {
+  try {
+    const draft = JSON.parse(localStorage.getItem(DRAFT_KEY));
+    if (!draft || !Array.isArray(draft.fields) || draft.fields.length === 0) return null;
+    if (Date.now() - draft.savedAt > DRAFT_MAX_AGE_MS) return null;
+    return draft;
+  } catch {
+    return null;
+  }
+}
+
+function writeDraft(fields) {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ savedAt: Date.now(), fields }));
+  } catch {
+    // brak miejsca / tryb prywatny — szkic to tylko zabezpieczenie
+  }
+}
+
+function clearDraft() {
+  try {
+    localStorage.removeItem(DRAFT_KEY);
+  } catch {
+    // jw.
+  }
+}
+
 export default function TrainingForm({ exercises, isSimpleForm }) {
   const [exercisesFields, setExercisesFields] = useState(() => exercises.map(withStableKey));
   const [prevExercises, setPrevExercises] = useState(exercises);
   const [validationError, setValidationError] = useState('');
   // name -> { reps, weight } z ostatniej sesji (podpowiedź "ostatnio")
   const [lastByName, setLastByName] = useState(() => seedLastByName(exercises));
+  // dirty = użytkownik coś zmienił (szablon sam w sobie nie jest szkiciem)
+  const [dirty, setDirty] = useState(false);
+  // Niezapisany trening z poprzedniej wizyty, czekający na decyzję: przywróć / odrzuć
+  const [pendingDraft, setPendingDraft] = useState(readDraft);
 
   const nameInputRefs = useRef({});
   const pendingFocusKey = useRef(null);
@@ -130,6 +165,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (payload) => REST.addTraining(payload),
     onSuccess: () => {
+      clearDraft();
       queryClient.invalidateQueries({ queryKey: ['training-names'] }); // wszystkie strony listy
       navigate(TrainingViewUrl);
     },
@@ -144,9 +180,60 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   if (exercises !== prevExercises) {
     setPrevExercises(exercises);
     setExercisesFields(exercises.map(withStableKey));
+    setDirty(false); // świeży szablon to nie edycja — nie nadpisuj nim szkicu
 
     setLastByName(seedLastByName(exercises));
   }
+
+  // Każda zmiana wprowadzona przez użytkownika idzie przez editFields → oznacza formularz
+  // jako edytowany, a efekt niżej zapisuje szkic.
+  const editFields = useCallback((updater) => {
+    setDirty(true);
+    setExercisesFields(updater);
+  }, []);
+
+  // Szkic w localStorage — trening wpisywany przez godzinę nie może przepaść przez
+  // wygasłą sesję, timeout czy przeładowanie karty. Dopóki użytkownik nie zdecyduje
+  // o znalezionym szkicu, nie nadpisujemy go.
+  useEffect(() => {
+    if (dirty && !pendingDraft) writeDraft(exercisesFields);
+  }, [exercisesFields, dirty, pendingDraft]);
+
+  const restoreDraft = () => {
+    setExercisesFields(pendingDraft.fields);
+    setDirty(true);
+    setPendingDraft(null);
+  };
+
+  const discardDraft = () => {
+    clearDraft();
+    setPendingDraft(null);
+  };
+
+  const draftBanner = pendingDraft && (
+    <Alert
+      severity="info"
+      sx={{ mb: 2, py: 0, alignItems: 'center' }}
+      action={
+        <>
+          <Button color="inherit" size="small" onClick={restoreDraft}>
+            {t('training.restoreDraft')}
+          </Button>
+          <Button color="inherit" size="small" onClick={discardDraft}>
+            {t('training.discardDraft')}
+          </Button>
+        </>
+      }
+    >
+      {t('training.draftFound', {
+        n: pendingDraft.fields.length,
+        date: new Date(pendingDraft.savedAt).toLocaleString(locale, {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        }),
+      })}
+    </Alert>
+  );
 
   // Po dodaniu wiersza (Enter na ostatnim polu) ustaw kursor w nazwie nowego ćwiczenia
   useEffect(() => {
@@ -184,7 +271,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   }
 
   const setField = (index, attribut, value) => {
-    setExercisesFields((prev) => {
+    editFields((prev) => {
       const data = [...prev];
       data[index] = { ...data[index], [attribut]: value };
       return data;
@@ -210,7 +297,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
         setLastByName((prev) => ({ ...prev, [name]: val }));
 
         if (val.reps || val.weight) {
-          setExercisesFields((prev) =>
+          editFields((prev) =>
             prev.map((row) =>
               row.name === name && !String(row.reps).trim() && !String(row.weight).trim()
                 ? { ...row, reps: val.reps, weight: val.weight }
@@ -231,7 +318,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     const cached = lastByName[newName];
     if (cached) {
       if (cached.reps || cached.weight) {
-        setExercisesFields((prev) =>
+        editFields((prev) =>
           prev.map((row, i) =>
             i === index && !String(row.reps).trim() && !String(row.weight).trim()
               ? { ...row, reps: cached.reps, weight: cached.weight }
@@ -247,7 +334,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   // Nowe wiersze dziedziczą typ/miejsce z sąsiada — sensowny domyślny kontekst
   // i zabezpieczenie przed pustym typem (backend wymaga prawidłowego typu).
   const addFields = (index) => {
-    setExercisesFields((prev) => {
+    editFields((prev) => {
       const data = [...prev];
       const base = prev[index] || {};
       data.splice(index + 1, 0, { ...emptyRow(), type: base.type ?? '', place: base.place ?? '' });
@@ -258,12 +345,12 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   const addRowAndFocus = () => {
     const last = exercisesFields[exercisesFields.length - 1] || {};
     const row = { ...emptyRow(), type: last.type ?? '', place: last.place ?? '' };
-    setExercisesFields((prev) => [...prev, row]);
+    editFields((prev) => [...prev, row]);
     pendingFocusKey.current = row._key;
   };
 
   const duplicateRow = (index) => {
-    setExercisesFields((prev) => {
+    editFields((prev) => {
       const data = [...prev];
       data.splice(index + 1, 0, { ...data[index], _key: crypto.randomUUID() });
       return data;
@@ -271,11 +358,11 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
   };
 
   const removeFields = (index) => {
-    setExercisesFields((prev) => prev.filter((_, i) => i !== index));
+    editFields((prev) => prev.filter((_, i) => i !== index));
   };
 
   const moveRow = (index, dir) => {
-    setExercisesFields((prev) => {
+    editFields((prev) => {
       const target = index + dir;
       if (target < 0 || target >= prev.length) return prev;
       const data = [...prev];
@@ -296,7 +383,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
       const key = rowEl.getAttribute('data-key');
       event.preventDefault();
       event.stopPropagation();
-      setExercisesFields((prev) => {
+      editFields((prev) => {
         const index = prev.findIndex((f) => String(f._key) === key);
         if (index === -1) return prev;
         const target = index + (event.key === 'ArrowUp' ? -1 : 1);
@@ -308,7 +395,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
     };
     document.addEventListener('keydown', onKeyDown, true);
     return () => document.removeEventListener('keydown', onKeyDown, true);
-  }, []);
+  }, [editFields]);
 
   // Enter = następne pole (na ostatnim dodaj wiersz); Ctrl/Cmd+Enter = zapis
   const handleKeyDown = (event) => {
@@ -351,26 +438,29 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
 
   if (exercisesFields.length === 0) {
     return (
-      <Box
-        sx={{
-          py: 6,
-          px: 2,
-          textAlign: 'center',
-          borderRadius: 2.5,
-          border: `1px dashed ${LINE_COLOR.strong}`,
-        }}
-      >
-        <FitnessCenter sx={{ fontSize: 40, color: 'text.secondary', opacity: 0.6, mb: 1 }} />
-        <Typography sx={{ fontWeight: 500 }} gutterBottom>
-          {t('training.noExercisesInTraining')}
-        </Typography>
-        <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
-          {t('training.loadTemplateOrAdd')}
-        </Typography>
-        <Button variant="contained" startIcon={<Add />} onClick={() => addFields(-1)}>
-          {t('training.addFirstExercise')}
-        </Button>
-      </Box>
+      <>
+        {draftBanner}
+        <Box
+          sx={{
+            py: 6,
+            px: 2,
+            textAlign: 'center',
+            borderRadius: 2.5,
+            border: `1px dashed ${LINE_COLOR.strong}`,
+          }}
+        >
+          <FitnessCenter sx={{ fontSize: 40, color: 'text.secondary', opacity: 0.6, mb: 1 }} />
+          <Typography sx={{ fontWeight: 500 }} gutterBottom>
+            {t('training.noExercisesInTraining')}
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary', mb: 3 }}>
+            {t('training.loadTemplateOrAdd')}
+          </Typography>
+          <Button variant="contained" startIcon={<Add />} onClick={() => addFields(-1)}>
+            {t('training.addFirstExercise')}
+          </Button>
+        </Box>
+      </>
     );
   }
 
@@ -381,6 +471,7 @@ export default function TrainingForm({ exercises, isSimpleForm }) {
 
   return (
     <form ref={formRef} onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
+      {draftBanner}
       {/* Nagłówek kolumn (raz) */}
       <Box
         sx={{

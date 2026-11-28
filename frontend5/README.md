@@ -94,7 +94,9 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
     i rozróżnialność przy daltonizmie na ciemnym tle karty), bez zapętlania – wykres ćwiczeń
     pokazuje najwyżej 8 serii, a kolor zostaje przy ćwiczeniu (`trainingStatistic/seriesColors.js`);
     `CHART_LINES` – ciche linie siatki i osi
-  - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table/DataTable`)
+  - `component/` – Współdzielone komponenty (`error`, `loader`, `snackbar`, `table/DataTable`);
+    `error/ErrorAlert` pokazuje szczegóły błędu w formacie backendu (`code` + `message`), a każdy
+    inny błąd (brak sieci, timeout, wygasła sesja) jako krótki komunikat – nigdy nie milczy
   - `context/` – Konteksty React; `MealSelectionContext` (wybór posiłków + podsumowanie makro) nie jest
     globalny – każdy widok dodawania/edycji dnia diety ma własny provider
   - `layout/` – Elementy układu strony (nawigacja, szkielet widoku); `Layout` i `PublicLayout` mają granicę
@@ -104,6 +106,9 @@ Adres backendu, z którym łączy się frontend, konfigurowany jest zmienną `VI
   - `assets/` – Zasoby statyczne
   - **Moduły funkcjonalne:** `food/`, `training/`, `finance/`, `shopping/`, `other/`,
     `audit/`, `home/`, `login/`
+  - `training/trainingForm/` – formularz dodawania treningu zapisuje na bieżąco szkic w
+    `localStorage` (`trainingDraft`, ważny 3 dni). Po powrocie do formularza (np. po nieudanym
+    zapisie) pasek nad listą proponuje „Przywróć / Odrzuć”, a udany zapis usuwa szkic
   - `audit/` – historia zmian podsumowań diety: lista podsumowań, oś czasu rewizji (rozwijane
     wiersze, szczegóły pobierane przy rozwinięciu), filtry w nagłówku i porównanie dwóch wersji.
     Typy zmian mają stałe kolory z palety akcentów (`REVISION_TYPES` w
